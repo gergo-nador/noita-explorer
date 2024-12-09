@@ -1,0 +1,1656 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/. -->
+<!DOCTYPE html>
+<html lang="en-US" dir="ltr" platform="win" style="--font-family: Helvetica, Arial, sans-serif; --font-weight: normal;"><head>
+    <title id="reader-title">Create a Component Library Fast🚀(using Vite's library mode) - DEV Community</title>
+    <meta http-equiv="Content-Security-Policy" content="default-src chrome:; img-src data: *; media-src *; object-src 'none'">
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type">
+    <meta name="viewport" content="width=device-width; user-scalable=0">
+    <link rel="stylesheet" href="chrome://global/skin/design-system/tokens-brand.css">
+    <link rel="stylesheet" href="chrome://global/skin/aboutReader.css" type="text/css">
+    <link rel="localization" href="toolkit/about/aboutReader.ftl">
+    <link rel="localization" href="toolkit/branding/brandings.ftl">
+    <script type="module" src="chrome://global/content/reader/moz-slider.mjs"></script>
+    <script type="module" src="chrome://global/content/reader/color-input.mjs"></script>
+    <script type="module" src="chrome://global/content/elements/named-deck.js"></script>
+  <link rel="stylesheet" href="chrome://global/skin/narrate-improved.css"><link rel="shortcut icon" href="https://media2.dev.to/dynamic/image/width=32,height=,fit=scale-down,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F8j7kvp660rqzt99zui8e.png"></head>
+
+  <body class="dark loaded" style="--content-width: 30em; --font-size: 16px;">
+    <div class="top-anchor"></div>
+
+    <div id="toolbar" class="toolbar-container">
+      <div class="toolbar reader-toolbar">
+        <div class="reader-controls" articledir="ltr">
+          <button class="close-button toolbar-button" aria-labelledby="toolbar-close" data-telemetry-id="reader-close">
+            <span class="hover-label" id="toolbar-close" data-l10n-id="about-reader-toolbar-close">Close Reader View</span>
+          </button>
+          <ul class="dropdown improved-style-dropdown" id="improved-text-menu">
+            <li>
+              <button class="dropdown-toggle toolbar-button improved-style-button" aria-labelledby="toolbar-text-layout-controls" data-telemetry-id="reader-text-layout-controls">
+                <span class="hover-label" id="toolbar-text-layout-controls" data-l10n-id="about-reader-toolbar-text-layout-controls">Text and layout</span>
+              </button>
+            </li>
+            <li class="dropdown-popup" id="text-layout-controls" tabindex="-1">
+              <h2 data-l10n-id="about-reader-text-header" id="about-reader-text-header">Text</h2>
+              <div id="text-size-controls">
+                <span data-l10n-id="about-reader-text-size-label" id="about-reader-text-size-label">Text size</span>
+                <div class="text-size-buttons buttonrow">
+                  <button class="text-size-minus-button" data-l10n-id="about-reader-toolbar-minus" data-telemetry-id="text-size-minus-button" title="Decrease font size"></button>
+                  <button class="text-size-plus-button" data-l10n-id="about-reader-toolbar-plus" data-telemetry-id="text-size-plus-button" title="Increase font size"></button>
+                </div>
+              </div>
+              <div id="font-controls">
+                <div id="font-type-dropdown" class="dropdown-selector">
+                  <label for="font-type-selector" data-l10n-id="about-reader-font-type-selector-label">Font</label>
+                  <select name="font-type-selector" id="font-type-selector" data-telemetry-id="font-type-selector"><option data-l10n-id="about-reader-font-type-sans-serif" value="sans-serif" selected="selected">Sans-serif</option><option data-l10n-id="about-reader-font-type-serif" value="serif">Serif</option><option data-l10n-id="about-reader-font-type-monospace" value="monospace">Monospace</option></select>
+                </div>
+                <div id="font-weight-dropdown" class="dropdown-selector">
+                  <label for="font-weight-selector" data-l10n-id="about-reader-font-weight-selector-label">Font weight</label>
+                  <select name="font-weight-selector" id="font-weight-selector" data-telemetry-id="font-weight-selector"><option data-l10n-id="about-reader-font-weight-regular" value="regular" selected="selected">Regular</option><option data-l10n-id="about-reader-font-weight-light" value="light">Light</option><option data-l10n-id="about-reader-font-weight-bold" value="bold">Bold</option></select>
+                </div>
+              </div>
+              <hr>
+              <h2 data-l10n-id="about-reader-layout-header" id="about-reader-layout-header">Layout</h2>
+              <div id="content-width-slider" class="slider-container"><moz-slider min="1" max="9" value="3" ticks="9" tick-labels="[]" data-l10n-id="about-reader-content-width-label" data-l10n-attrs="label" slider-icon="chrome://global/skin/reader/content-width-20.svg" data-telemetry-id="content-width-slider" label="Content width"></moz-slider></div>
+              <div id="line-spacing-slider" class="slider-container"><moz-slider min="1" max="9" value="4" ticks="9" tick-labels="[]" data-l10n-id="about-reader-line-spacing-label" data-l10n-attrs="label" slider-icon="chrome://global/skin/reader/line-spacing-20.svg" data-telemetry-id="line-spacing-slider" label="Line spacing"></moz-slider></div>
+              <hr>
+              <details id="about-reader-advanced-layout">
+                <summary class="accordion-header">
+                  <h2 data-l10n-id="about-reader-advanced-layout-header" id="about-reader-advanced-layout-header">Advanced</h2>
+                  <span class="chevron-icon"></span>
+                </summary>
+                <div id="character-spacing-slider" class="slider-container"><moz-slider min="1" max="9" value="0" ticks="9" tick-labels="[&quot;Standard&quot;, &quot;Wide&quot;]" data-l10n-id="about-reader-character-spacing-label" data-l10n-attrs="label" slider-icon="chrome://global/skin/reader/character-spacing-20.svg" data-telemetry-id="character-spacing-slider" label="Character spacing"></moz-slider></div>
+                <div id="word-spacing-slider" class="slider-container"><moz-slider min="1" max="9" value="0" ticks="9" tick-labels="[&quot;Standard&quot;, &quot;Wide&quot;]" data-l10n-id="about-reader-word-spacing-label" data-l10n-attrs="label" slider-icon="chrome://global/skin/reader/word-spacing-20.svg" data-telemetry-id="word-spacing-slider" label="Word spacing"></moz-slider></div>
+                <label for="text-alignment-buttons" data-l10n-id="about-reader-text-alignment-label">Text alignment</label>
+                <div class="text-alignment-buttons radiorow" id="text-alignment-buttons"><input id="radio-itemleft-align-button" type="radio" class="radio-button" name="text-alignment" data-telemetry-id="left-align-button" checked="checked"><label for="radio-itemleft-align-button" class="left-align-button" data-l10n-id="about-reader-text-alignment-left" checked="true" title="Align text left"></label><input id="radio-itemcenter-align-button" type="radio" class="radio-button" name="text-alignment" data-telemetry-id="center-align-button"><label for="radio-itemcenter-align-button" class="center-align-button" data-l10n-id="about-reader-text-alignment-center" title="Align text center"></label><input id="radio-itemright-align-button" type="radio" class="radio-button" name="text-alignment" data-telemetry-id="right-align-button"><label for="radio-itemright-align-button" class="right-align-button" data-l10n-id="about-reader-text-alignment-right" title="Align text right"></label></div>
+                <button class="text-layout-reset-button reset-button" data-l10n-id="about-reader-reset-button">Reset defaults</button>
+              </details>
+            </li>
+          </ul>
+          <ul class="dropdown style-dropdown" id="regular-text-menu" hidden="">
+            <li>
+              <button class="dropdown-toggle toolbar-button style-button" aria-labelledby="toolbar-type-controls" data-telemetry-id="reader-type-controls">
+                <span class="hover-label" id="toolbar-type-controls" data-l10n-id="about-reader-toolbar-type-controls">Type controls</span>
+              </button>
+            </li>
+            <li class="dropdown-popup">
+              <div class="font-type-buttons radiorow"></div>
+              <div class="font-size-buttons buttonrow">
+                <button class="minus-button" data-l10n-id="about-reader-toolbar-minus" title="Decrease font size"></button>
+                <span class="font-size-value"></span>
+                <button class="plus-button" data-l10n-id="about-reader-toolbar-plus" title="Increase font size"></button>
+              </div>
+              <div class="content-width-buttons buttonrow">
+                <button class="content-width-minus-button" data-l10n-id="about-reader-toolbar-contentwidthminus" title="Decrease Content Width"></button>
+                <span class="content-width-value"></span>
+                <button class="content-width-plus-button" data-l10n-id="about-reader-toolbar-contentwidthplus" title="Increase Content Width"></button>
+              </div>
+              <div class="line-height-buttons buttonrow">
+                <button class="line-height-minus-button" data-l10n-id="about-reader-toolbar-lineheightminus" title="Decrease Line Height"></button>
+                <span class="line-height-value"></span>
+                <button class="line-height-plus-button" data-l10n-id="about-reader-toolbar-lineheightplus" title="Increase Line Height"></button>
+              </div>
+              <div class="color-scheme-buttons radiorow" id="regular-color-scheme" hidden=""></div>
+            </li>
+          </ul>
+          <ul class="dropdown colors-dropdown" id="custom-colors-color-scheme">
+            <li>
+              <button class="dropdown-toggle toolbar-button colors-button" aria-labelledby="toolbar-color-controls" data-telemetry-id="reader-color-controls">
+                <span class="hover-label" id="toolbar-color-controls" data-l10n-id="about-reader-toolbar-theme-controls">Theme</span>
+              </button>
+            </li>
+            <li class="dropdown-popup" id="color-controls">
+              <h2 data-l10n-id="about-reader-colors-menu-header" id="about-reader-colors-menu-header">Theme</h2>
+              <button-group aria-labelledby="about-reader-colors-menu-header" role="tablist">
+                <button is="named-deck-button" deck="tabs-deck" name="fxtheme" data-l10n-id="about-reader-fxtheme-tab" data-telemetry-id="colors-menu-default-tab" id="tabs-deck-button-fxtheme" role="tab" aria-selected="true" tabindex="0" selected="">Default</button>
+                <button is="named-deck-button" deck="tabs-deck" name="customtheme" data-l10n-id="about-reader-customtheme-tab" data-telemetry-id="colors-menu-custom-tab" id="tabs-deck-button-customtheme" role="tab" aria-selected="false" tabindex="-1">Custom</button>
+              </button-group>
+              <named-deck id="tabs-deck" is-tabbed="" selected-view="fxtheme">
+                <div name="fxtheme" class="colors-menu-color-scheme-buttons radiorow" aria-labelledby="tabs-deck-button-fxtheme" role="tabpanel" slot="selected"><input id="radio-itemauto-button" type="radio" class="radio-button" name="color-scheme" data-telemetry-id="auto-button" checked="checked"><label for="radio-itemauto-button" class="auto-button" data-l10n-id="about-reader-color-auto-theme" checked="true" title="Auto theme">Auto</label><input id="radio-itemlight-button" type="radio" class="radio-button" name="color-scheme" data-telemetry-id="light-button"><label for="radio-itemlight-button" class="light-button" data-l10n-id="about-reader-color-light-theme" title="Light theme">Light</label><input id="radio-itemdark-button" type="radio" class="radio-button" name="color-scheme" data-telemetry-id="dark-button"><label for="radio-itemdark-button" class="dark-button" data-l10n-id="about-reader-color-dark-theme" title="Dark theme">Dark</label><input id="radio-itemsepia-button" type="radio" class="radio-button" name="color-scheme" data-telemetry-id="sepia-button"><label for="radio-itemsepia-button" class="sepia-button" data-l10n-id="about-reader-color-sepia-theme" title="Sepia theme">Sepia</label><input id="radio-itemcontrast-button" type="radio" class="radio-button" name="color-scheme" data-telemetry-id="contrast-button"><label for="radio-itemcontrast-button" class="contrast-button" data-l10n-id="about-reader-color-contrast-theme" title="Contrast theme">Contrast</label><input id="radio-itemgray-button" type="radio" class="radio-button" name="color-scheme" data-telemetry-id="gray-button"><label for="radio-itemgray-button" class="gray-button" data-l10n-id="about-reader-color-gray-theme" title="Gray theme">Gray</label></div>
+                <div name="customtheme" aria-labelledby="tabs-deck-button-customtheme" role="tabpanel" slot="">
+                  <ul class="custom-colors-selection"><li><color-input prop-name="foreground" data-l10n-id="about-reader-custom-colors-foreground" data-telemetry-id="custom-color-picker-foreground" color="#14151A" title="Edit color">Text</color-input></li><li><color-input prop-name="background" data-l10n-id="about-reader-custom-colors-background" data-telemetry-id="custom-color-picker-background" color="#FFFFFF" title="Edit color">Background</color-input></li><li><color-input prop-name="unvisited-links" data-l10n-id="about-reader-custom-colors-unvisited-links" data-telemetry-id="custom-color-picker-unvisited-links" color="#0060DF" title="Edit color">Unvisited links</color-input></li><li><color-input prop-name="visited-links" data-l10n-id="about-reader-custom-colors-visited-links" data-telemetry-id="custom-color-picker-visited-links" color="#321C64" title="Edit color">Visited links</color-input></li><li><color-input prop-name="selection-highlight" data-l10n-id="about-reader-custom-colors-selection-highlight" data-telemetry-id="custom-color-picker-selection-highlight" color="#FFFFCC" title="Edit color">Highlighter for read aloud</color-input></li></ul>
+                  <button class="custom-colors-reset-button reset-button" data-l10n-id="about-reader-reset-button">Reset defaults</button>
+                </div>
+              </named-deck>
+            </li>
+          </ul>
+        <ul class="dropdown narrate-dropdown"><li><button class="dropdown-toggle toolbar-button narrate-toggle" data-telemetry-id="reader-listen" aria-label="Read aloud (N)"><span class="hover-label">Read aloud (N)</span></button></li><li class="dropdown-popup"><h2 id="narrate-header">Read aloud</h2><div class="narrate-row narrate-control"><button class="narrate-skip-previous" disabled="disabled" aria-keyshortcuts="ArrowLeft" title="Back (←)"></button><button class="narrate-start-stop" aria-keyshortcuts="N" title="Start (N)"></button><button class="narrate-skip-next" disabled="disabled" aria-keyshortcuts="ArrowRight" title="Forward (→)"></button></div><div class="narrate-row narrate-rate"><span class="narrate-rate-icon slow" title="Slow down narration"></span><input class="narrate-rate-input" value="0" step="5" max="100" min="-100" type="range" aria-label="Choose a narration speed from -100 to 100, where 0 is the default speed." title="Speed"><span class="narrate-rate-icon fast" title="Speed up narration"></span></div><hr><h2 id="voice-header">Voice</h2><div class="narrate-row narrate-voices"><div class="voiceselect voice-select"><button class="select-toggle" aria-controls="voice-options" aria-expanded="false" role="combobox" aria-labelledby="voice-header">
+      <span class="label"></span> <span class="current-voice">Default</span>
+    </button>
+    <div class="options" id="voice-options" role="listbox" style="max-height: 895px;"><button data-value="automatic" class="option selected" tabindex="-1" role="option" aria-selected="true">Default</button><button data-value="urn:moz-tts:sapi:Microsoft David - English (United States)?en-US" class="option" tabindex="-1" role="option">Microsoft David - English (United States)</button><button data-value="urn:moz-tts:sapi:Microsoft David Desktop - English (United States)?en-US" class="option" tabindex="-1" role="option">Microsoft David Desktop - English (United States)</button><button data-value="urn:moz-tts:sapi:Microsoft Mark - English (United States)?en-US" class="option" tabindex="-1" role="option">Microsoft Mark - English (United States)</button><button data-value="urn:moz-tts:sapi:Microsoft Zira - English (United States)?en-US" class="option" tabindex="-1" role="option">Microsoft Zira - English (United States)</button><button data-value="urn:moz-tts:sapi:Microsoft Zira Desktop - English (United States)?en-US" class="option" tabindex="-1" role="option">Microsoft Zira Desktop - English (United States)</button></div></div></div></li></ul><button data-buttonid="pocket-button" data-telemetry-id="reader-save-to-pocket" class="toolbar-button pocket-button" aria-labelledby="label-pocket-button" style="background-image: url(&quot;chrome://global/skin/icons/pocket.svg&quot;);"><span class="hover-label" id="label-pocket-button" data-l10n-id="about-reader-toolbar-savetopocket">Save to Pocket</span></button></div>
+      </div>
+    </div>
+
+    <div class="container" style="--line-height: 1.6em; --letter-spacing: -0.03em; --word-spacing: -0.05em; --text-alignment: start; --block-img-margin-right: unset; --block-img-margin-left: unset;" lang="en" dir="ltr">
+      <div class="header reader-header reader-show-element">
+        <a class="domain reader-domain" href="https://dev.to/receter/how-to-create-a-react-component-library-using-vites-library-mode-4lma">dev.to</a>
+        <div class="domain-border"></div>
+        <h1 class="reader-title">Create a Component Library Fast🚀(using Vite's library mode)</h1>
+        <div class="credits reader-credits">Andreas Riedmüller</div>
+        <div class="meta-data">
+          <div class="reader-estimated-time" data-l10n-args="{&quot;range&quot;:&quot;23–29&quot;,&quot;rangePlural&quot;:&quot;other&quot;}" data-l10n-id="about-reader-estimated-read-time" dir="ltr">23–29 minutes</div>
+        </div>
+      </div>
+
+      <hr>
+
+      <div class="content">
+        <div class="moz-reader-content reader-show-element"><div id="readability-page-1" class="page"><div data-article-id="1448803" id="article-body">
+              <p>If you are managing multiple React applications and 
+want consistency across your user interfaces, sooner or later you'll 
+find that you need a component library.</p>
+
+<p>When I first wanted to create a React component library, it took me a
+ lot of time to find a setup that met all my requirements and wasn't too
+ complicated. </p>
+
+<p>A guide like this would've spared me a great amount of energy 
+wrestling with this stuff myself. I hope it can help you as much as it 
+would have helped me.</p>
+
+<p>This post covers setting up and publishing a React component library,
+ including configuring your build process and publishing your package to
+ npm so you and/or others can use it. </p>
+
+<p><strong>I've done my best to keep all configurations simple and concise, using default settings whenever possible.</strong></p>
+
+<p>When you are done, you can install your library like any other npm package:<br>
+</p>
+
+<div>
+<pre><code>npm <span>install</span> @username/my-component-library
+</code></pre>
+<div>
+<p>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Enter fullscreen mode</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Exit fullscreen mode</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</p>
+</div>
+</div>
+
+
+
+<p>And use it like:<br>
+</p>
+
+<div>
+<pre><code><span>import</span> <span>{</span> <span>Button</span> <span>}</span> <span>from</span> <span>`@username/my-component-library`</span><span>;</span>
+
+<span>function</span> <span>MyComponent</span><span>()</span> <span>{</span>
+  <span>return</span> <span>&lt;</span><span>Button</span><span>&gt;</span>Click me!<span>&lt;/</span><span>Button</span><span>&gt;</span>
+<span>}</span>
+</code></pre>
+<div>
+<p>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Enter fullscreen mode</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Exit fullscreen mode</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</p>
+</div>
+</div>
+
+
+
+<h2>
+  <a name="before-we-start" href="#before-we-start">
+  </a>
+  Before we start
+</h2>
+
+<p>Before we dig into the implementation details, I would like to 
+elaborate on some technical details regarding the setup of the library.</p>
+
+<h3>
+  <a name="fully-tree-shakeable" href="#fully-tree-shakeable">
+  </a>
+  🌳Fully tree shakeable
+</h3>
+
+<p>For me it was particularly important that only necessary code ends up
+ in the final application. When you import a component, it only includes
+ the necessary JS and CSS styles. Pretty cool, right?</p>
+
+<h3>
+  <a name="compiled-css-modules" href="#compiled-css-modules">
+  </a>
+  🦑Compiled CSS modules
+</h3>
+
+<p>The components are styled with <a href="https://github.com/css-modules/css-modules" target="_blank" rel="noopener noreferrer">CSS modules</a>.
+ When building the library, these styles will get transformed to normal 
+CSS style sheets. This means that the consuming application will not 
+even be required to support CSS modules. </p>
+
+<p>As a bonus compiling the CSS modules avoids a <a href="https://stackoverflow.com/questions/71294870/how-to-publish-a-react-component-with-css-modules-that-can-be-consumed-by-both" target="_blank" rel="noopener noreferrer">compatibility issue</a> and  the package can be consumed in both, environments that support named imports for CSS modules, and environments that don't.</p>
+
+<p>(In the future I want to extend this tutorial to use <a href="https://vanilla-extract.style/" target="_blank" rel="noopener noreferrer">vanilla-extract</a> instead.)</p>
+
+<h3>
+  <a name="typescript" href="#typescript">
+  </a>
+  😎TypeScript
+</h3>
+
+<p>While the library is written in <a href="https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html" target="_blank" rel="noopener noreferrer">TypeScript</a>,
+ it can be consumed in any "normal" JavaScript project as well. If you 
+never used TypeScript before, give it a try. It not only forces you to 
+write cleaner code, but also helps your AI coding assistant make better 
+suggestions 😉</p>
+
+<p>OK enough reading, now let's have some fun!</p>
+
+<h2>
+  <a name="1-setup-a-new-vite-project" href="#1-setup-a-new-vite-project">
+  </a>
+  1. Setup a new Vite project
+</h2>
+
+<p>If you have never worked with <a href="https://vitejs.dev/" target="_blank" rel="noopener noreferrer">Vite</a>, think of it as a replacement for <a href="https://medium.com/@dawid.niegrebecki/create-react-app-is-dead-what-to-use-instead-fcdd46b70295" target="_blank" rel="noopener noreferrer">Create React App</a>. Just a few commands and you are ready to go.<br>
+</p>
+
+<div>
+<pre><code>npm create vite@latest
+? Project name: › my-component-library
+? Select a framework: › React
+? Select a variant: › TypeScript
+<span>cd </span>my-component-library
+npm i
+</code></pre>
+<div>
+<p>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Enter fullscreen mode</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Exit fullscreen mode</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</p>
+</div>
+</div>
+
+
+
+<p>That's it, your new Vite/React project is ready to go.</p>
+
+<p><a href="https://dev.to/receter/two-things-i-do-every-time-i-set-up-a-new-node-project-1mg3">Here are two things I recommend you to do right after installing Vite.<br>
+</a></p>
+<h2>
+  <a name="2-basic-build-setup" href="#2-basic-build-setup">
+  </a>
+  2. Basic build setup
+</h2>
+
+<p>You can now run <code>npm run dev</code> and browse to the url 
+provided by Vite. While working on your library, this is a place where 
+you can easily import your library and actually see your components. 
+Think of all code inside the <code>src</code> folder as your demo page.</p>
+
+<p>The actual library code will reside in another folder. Let's create this folder and name it <code>lib</code>. You could also name it differently, but <code>lib</code> is a solid choice.</p>
+
+<p>The main entry point of your library will be a file named <code>main.ts</code> inside of <code>lib</code>. When installing the library you can import everything that is exported from this file.<br>
+</p>
+
+<div>
+<pre><code> 📂my-component-library
+ +┣ 📂lib
+ +┃ ┗ 📜main.ts
+  ┣ 📂public
+  ┣ 📂src
+  …
+</code></pre>
+<div>
+<p>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Enter fullscreen mode</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Exit fullscreen mode</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</p>
+</div>
+</div>
+
+
+
+<h2>
+  <a name="vite-library-mode" href="#vite-library-mode">
+  </a>
+  Vite Library Mode
+</h2>
+
+<p>At this time, if you build the project with <code>npm run build</code> Vite will transpile the code inside <code>src</code> to the <code>dist</code> folder. This is default Vite behavior.</p>
+
+<p>For now you will use the demo page for development purposes only. So 
+there is no need to transpile this part of the project yet. Instead you 
+want to transpile and ship the code inside of <code>lib</code>.</p>
+
+<p>This is where Vite's <em>Library Mode</em> comes into play. It was 
+designed specifically for building/transpiling libraries. To activate 
+this mode, simply specify your library entry point in vite.config.ts.</p>
+
+<p>Like so:<br>
+</p>
+
+<div>
+<pre><code><span>import { defineConfig } from 'vite'
+</span><span>+ import { resolve } from 'path'
+</span><span>import react from '@vitejs/plugin-react'
+</span><span>
+</span><span>export default defineConfig({
+</span>  plugins: [react()],
+<span>+  build: {
++    lib: {
++      entry: resolve(__dirname, 'lib/main.ts'),
++      formats: ['es']
++    }
+</span>  }
+})
+</code></pre>
+<div>
+<p>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Enter fullscreen mode</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Exit fullscreen mode</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</p>
+</div>
+</div>
+
+
+
+<blockquote>
+<p>💡 The default formats are <code>'es'</code> and <code>'umd'</code>. For your component library 'es' is all you need. This also removes the necessity for adding the <code>name</code> property.</p>
+
+<p>💡 If your TypeScript linter complains about <code>'path'</code> and <code>__dirname</code> just install the types for node: <code>npm i @types/node -D</code></p>
+</blockquote>
+
+<ul>
+<li>📘 Library mode <a href="https://vitejs.dev/guide/build.html#library-mode" target="_blank" rel="noopener noreferrer">docs</a>
+</li>
+<li>📘 <code>lib</code> mode <a href="https://vitejs.dev/config/build-options.html#build-lib" target="_blank" rel="noopener noreferrer">docs</a>
+</li>
+</ul>
+
+<h3>
+  <a name="typescript-and-library-mode" href="#typescript-and-library-mode">
+  </a>
+  TypeScript and library mode
+</h3>
+
+<p>The <code>tsconfig.json</code> created by Vite only includes the folder <code>src</code>. To enable TypeScript for your newly created <code>lib</code> folder as well you need to add it to the TypeScript configuration file like this:<br>
+</p>
+
+<div>
+<pre><code><span>-   "include": ["src"],
+</span><span>+   "include": ["src", "lib"],
+</span></code></pre>
+<div>
+<p>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Enter fullscreen mode</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Exit fullscreen mode</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</p>
+</div>
+</div>
+
+
+
+<p>Although TypeScript needs to be enabled for both the <code>src</code> and <code>lib</code> folders, it is better to not include <code>src</code> when building the library.</p>
+
+<p>To ensure only the <code>lib</code> directory is included during the 
+build process you can create a separate TypeScript configuration file 
+specifically for building. </p>
+
+<blockquote>
+<p>💡 Implementing this separate configuration helps avoid TypeScript errors when you import components directly from the <code>dist</code> folder on the demo page and those components haven't been built yet.</p>
+
+<p>⚠️ For Vite 5 please read <a href="https://dev.to/receter/comment/2i1ol">my comment</a> on the new Typscript config structure.<br>
+</p>
+</blockquote>
+
+<div>
+<pre><code> 📂my-component-library
+  ┣ …
+  ┣ 📜tsconfig.json
+ +┣ 📜tsconfig-build.json
+  …
+</code></pre>
+<div>
+<p>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Enter fullscreen mode</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Exit fullscreen mode</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</p>
+</div>
+</div>
+
+
+
+<p>The only difference is that the build config includes only the <code>lib</code> directory, whereas the default configuration includes both <code>lib</code> and <code>src</code></p>
+
+<p><code>📜tsconfig-build.json</code><br>
+</p>
+
+<div>
+<pre><code><span>{</span><span>
+  </span><span>"extends"</span><span>:</span><span> </span><span>"./tsconfig.json"</span><span>,</span><span>
+  </span><span>"include"</span><span>:</span><span> </span><span>[</span><span>"lib"</span><span>]</span><span>
+</span><span>}</span><span>
+</span></code></pre>
+<div>
+<p>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Enter fullscreen mode</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Exit fullscreen mode</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</p>
+</div>
+</div>
+
+
+
+<p>To use <code>tsconfig-build.json</code> for building you need to pass the configuration file to <code>tsc</code> in the build script in your package.json:<br>
+</p>
+
+<div>
+<pre><code>  "scripts": {
+    …
+<span>-   "build": "tsc &amp;&amp; vite build",
+</span><span>+   "build": "tsc --p ./tsconfig-build.json &amp;&amp; vite build",
+</span></code></pre>
+<div>
+<p>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Enter fullscreen mode</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Exit fullscreen mode</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</p>
+</div>
+</div>
+
+
+
+<p>Finally you will also need to copy the file <code>vite-env.d.ts</code> from <code>src</code> to <code>lib</code>. Without this file Typescript will miss some types definitions provided by Vite when building (because we don't include <code>src</code> anymore).</p>
+
+<p>You can now execute <code>npm run build</code> once more and this is what you will see in your dist folder:<br>
+</p>
+
+<div>
+<pre><code> 📂dist
+  ┣ 📜my-component-library.js
+  ┗ 📜vite.svg
+</code></pre>
+<div>
+<p>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Enter fullscreen mode</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Exit fullscreen mode</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</p>
+</div>
+</div>
+
+
+
+<blockquote>
+<p>💡 The name of the output file is identical with the <code>name</code> property in your package.json per default. This can be changed in the Vite config (<code>build.lib.fileName</code>) but we will do something else about this later.</p>
+</blockquote>
+
+<p>The file <code>vite.svg</code> is in your <code>dist</code> folder because Vite copies all files from the <code>public</code> directory to the output folder. Let's disable this behavior:<br>
+</p>
+
+<div>
+<pre><code><span>build: {
+</span><span>+  copyPublicDir: false,
+</span>…
+}
+</code></pre>
+<div>
+<p>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Enter fullscreen mode</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Exit fullscreen mode</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</p>
+</div>
+</div>
+
+
+
+<blockquote>
+<p>You can read a more detailed explanation here: <a href="https://stackoverflow.com/questions/75276160/why-is-the-file-vite-svg-in-the-dist-folder-when-building-with-vite-library" target="_blank" rel="noopener noreferrer">Why is the file vite.svg in the dist folder?</a></p>
+</blockquote>
+
+<h3>
+  <a name="building-the-types" href="#building-the-types">
+  </a>
+  Building the types
+</h3>
+
+<p>As this is a Typescript library you also want to ship type 
+definitions with your package. Fortunately there is a Vite plugin that 
+does exactly this: <a href="https://github.com/qmhc/vite-plugin-dts" target="_blank" rel="noopener noreferrer">vite-plugin-dts</a><br>
+</p>
+
+<div>
+<pre><code>npm i vite-plugin-dts <span>-D</span>
+</code></pre>
+<div>
+<p>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Enter fullscreen mode</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Exit fullscreen mode</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</p>
+</div>
+</div>
+
+
+
+<p>Per default <code>dts</code> will generate types for both <code>src</code> and <code>lib</code> because both folders are included in the project's <code>.tsconfig</code>. This is why we need to pass one configuration parameter: <code>include: ['lib']</code>.<br>
+</p>
+
+<div>
+<pre><code>// vite.config.ts
+<span>+import dts from 'vite-plugin-dts'
+</span>…
+  plugins: [
+    react(),
+<span>+   dts({ include: ['lib'] })
+</span>  ],
+…
+</code></pre>
+<div>
+<p>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Enter fullscreen mode</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Exit fullscreen mode</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</p>
+</div>
+</div>
+
+
+
+<blockquote>
+<p>💡 It would also work to <code>exclude: ['src']</code> or use a different Typescript config file for building.</p>
+</blockquote>
+
+<p>To test things out, let's add some actual code to your library. Open <code>lib/main.ts</code> and export something, for example:<br>
+</p>
+
+<div>
+<pre><code>lib/main.ts
+export function helloAnything(thing: string): string {
+  return `Hello ${thing}!`
+}
+</code></pre>
+<div>
+<p>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Enter fullscreen mode</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Exit fullscreen mode</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</p>
+</div>
+</div>
+
+
+
+<p>Then run <code>npm run build</code> to transpile your code. If the content of your <code>dist</code> folder looks like below you should be all set 🥳:<br>
+</p>
+
+<div>
+<pre><code> 📂dist
+  ┣ 📜main.d.ts
+  ┗ 📜my-component-library.js
+</code></pre>
+<div>
+<p>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Enter fullscreen mode</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Exit fullscreen mode</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</p>
+</div>
+</div>
+
+
+
+<blockquote>
+<p>💡 Don't be shy, open the files and see what the program did for you!</p>
+</blockquote>
+
+<h2>
+  <a name="3-what-is-a-react-component-library-without-components" href="#3-what-is-a-react-component-library-without-components">
+  </a>
+  3. What is a React component library without components?
+</h2>
+
+<p>We didn't do all of this just to export a <code>helloAnything</code> function. So let's add some meat 🍖 (or tofu 🌱 or both) to our library.</p>
+
+<p>Let's go with three very common basic components: A button, a label, and a text input.<br>
+</p>
+
+<div>
+<pre><code> 📂my-component-library
+  ┣ 📂lib
+ +┃ ┣ 📂components
+ +┃ ┃ ┣ 📂Button
+ +┃ ┃ ┃ ┗ 📜index.tsx
+ +┃ ┃ ┣ 📂Input
+ +┃ ┃ ┃ ┗ 📜index.tsx
+ +┃ ┃ ┗ 📂Label
+ +┃ ┃   ┗ 📜index.tsx
+  ┃ ┗ 📜main.ts
+  …
+</code></pre>
+<div>
+<p>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Enter fullscreen mode</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Exit fullscreen mode</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</p>
+</div>
+</div>
+
+
+
+<p>And a very basic implementation for these components:<br>
+</p>
+
+<div>
+<pre><code><span>// lib/components/Button/index.tsx</span>
+<span>export</span> <span>function</span> <span>Button</span><span>(</span><span>props</span><span>:</span> <span>React</span><span>.</span><span>ButtonHTMLAttributes</span><span>&lt;</span><span>HTMLButtonElement</span><span>&gt;</span><span>)</span> <span>{</span>
+  <span>return</span> <span>&lt;</span><span>button</span> <span>{...</span><span>props</span><span>}</span> <span>/</span><span>&gt;
+</span><span>}</span>
+</code></pre>
+<div>
+<p>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Enter fullscreen mode</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Exit fullscreen mode</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</p>
+</div>
+</div>
+
+
+
+
+
+<div>
+<pre><code><span>// lib/components/Input/index.tsx</span>
+<span>export</span> <span>function</span> <span>Input</span><span>(</span><span>props</span><span>:</span> <span>React</span><span>.</span><span>InputHTMLAttributes</span><span>&lt;</span><span>HTMLInputElement</span><span>&gt;</span><span>)</span> <span>{</span>
+  <span>return</span> <span>&lt;</span><span>input</span> <span>{...</span><span>props</span><span>}</span> <span>/</span><span>&gt;
+</span><span>}</span>
+</code></pre>
+<div>
+<p>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Enter fullscreen mode</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Exit fullscreen mode</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</p>
+</div>
+</div>
+
+
+
+
+
+<div>
+<pre><code><span>// lib/components/Label/index.tsx</span>
+<span>export</span> <span>function</span> <span>Label</span><span>(</span><span>props</span><span>:</span> <span>React</span><span>.</span><span>LabelHTMLAttributes</span><span>&lt;</span><span>HTMLLabelElement</span><span>&gt;</span><span>)</span> <span>{</span>
+  <span>return</span> <span>&lt;</span><span>label</span> <span>{...</span><span>props</span><span>}</span> <span>/</span><span>&gt;
+</span><span>}</span>
+</code></pre>
+<div>
+<p>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Enter fullscreen mode</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Exit fullscreen mode</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</p>
+</div>
+</div>
+
+
+
+<p>Finally export the components from the library's main file:<br>
+</p>
+
+<div>
+<pre><code><span>// lib/main.ts</span>
+<span>export</span> <span>{</span> <span>Button</span> <span>}</span> <span>from</span> <span>'</span><span>./components/Button</span><span>'</span>
+<span>export</span> <span>{</span> <span>Input</span> <span>}</span> <span>from</span> <span>'</span><span>./components/Input</span><span>'</span>
+<span>export</span> <span>{</span> <span>Label</span> <span>}</span> <span>from</span> <span>'</span><span>./components/Label</span><span>'</span>
+</code></pre>
+<div>
+<p>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Enter fullscreen mode</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Exit fullscreen mode</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</p>
+</div>
+</div>
+
+
+
+<p>If you <code>npm run build</code> again you will notice that the transpiled file <code>my-component-library.js</code> now has <strong>78kb</strong> 😮</p>
+
+<p>The implementation of the components above contains React JSX code and therefore <code>react</code> (and <code>react/jsx-runtime</code>) gets bundled as well.</p>
+
+<p>As this library will be used in projects that have React installed 
+anyways, you can externalize this dependencies to remove the code from 
+bundle:<br>
+</p>
+
+<div>
+<pre><code>//vite.config.ts
+  build: {
+    …
+<span>+   rollupOptions: {
++     external: ['react', 'react/jsx-runtime'],
++   }
+</span>  }
+</code></pre>
+<div>
+<p>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Enter fullscreen mode</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Exit fullscreen mode</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</p>
+</div>
+</div>
+
+
+
+<h2>
+  <a name="4-add-some-styles" href="#4-add-some-styles">
+  </a>
+  4. Add some styles
+</h2>
+
+<p>As mentioned in the beginning, this library will use <a href="https://github.com/css-modules/css-modules" target="_blank" rel="noopener noreferrer">CSS modules</a> to style the components. </p>
+
+<p>CSS modules are supported by Vite per default. All you have to do is to create CSS files that end with <code>.module.css</code>.<br>
+</p>
+
+<div>
+<pre><code> 📂my-component-library
+  ┣ 📂lib
+  ┃ ┣ 📂components
+  ┃ ┃ ┣ 📂Button
+  ┃ ┃ ┃ ┣ 📜index.tsx
+<span>+ ┃ ┃ ┃ ┗ 📜styles.module.css
+</span>  ┃ ┃ ┣ 📂Input
+  ┃ ┃ ┃ ┣ 📜index.tsx
+<span>+ ┃ ┃ ┃ ┗ 📜styles.module.css
+</span>  ┃ ┃ ┗ 📂Label
+  ┃ ┃   ┣ 📜index.tsx
+<span>+ ┃ ┃   ┗ 📜styles.module.css
+</span>  ┃ ┗ 📜main.ts
+  …
+</code></pre>
+<div>
+<p>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Enter fullscreen mode</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Exit fullscreen mode</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</p>
+</div>
+</div>
+
+
+
+<p>And add some basic CSS classes:<br>
+</p>
+
+<div>
+<pre><code><span>/* lib/components/Button/styles.module.css */</span>
+<span>.button</span> <span>{</span>
+    <span>padding</span><span>:</span> <span>1rem</span><span>;</span>
+<span>}</span>
+</code></pre>
+<div>
+<p>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Enter fullscreen mode</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Exit fullscreen mode</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</p>
+</div>
+</div>
+
+
+
+
+
+<div>
+<pre><code><span>/* lib/components/Input/styles.module.css */</span>
+<span>.input</span> <span>{</span>
+    <span>padding</span><span>:</span> <span>1rem</span><span>;</span>
+<span>}</span>
+</code></pre>
+<div>
+<p>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Enter fullscreen mode</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Exit fullscreen mode</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</p>
+</div>
+</div>
+
+
+
+
+
+<div>
+<pre><code><span>/* lib/components/Label/styles.module.css */</span>
+<span>.label</span> <span>{</span>
+    <span>font-weight</span><span>:</span> <span>bold</span><span>;</span>
+<span>}</span>
+</code></pre>
+<div>
+<p>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Enter fullscreen mode</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Exit fullscreen mode</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</p>
+</div>
+</div>
+
+
+
+<p>And import/use them inside your components eg:<br>
+</p>
+
+<div>
+<pre><code><span>import</span> <span>styles</span> <span>from</span> <span>'</span><span>./styles.module.css</span><span>'</span>
+
+<span>export</span> <span>function</span> <span>Button</span><span>(</span><span>props</span><span>:</span> <span>React</span><span>.</span><span>ButtonHTMLAttributes</span><span>&lt;</span><span>HTMLButtonElement</span><span>&gt;</span><span>)</span> <span>{</span>
+  <span>const</span> <span>{</span> <span>className</span><span>,</span> <span>...</span><span>restProps</span> <span>}</span> <span>=</span> <span>props</span>
+  <span>return</span> <span>&lt;</span><span>button</span> <span>className</span><span>=</span><span>{</span><span>`</span><span>${</span><span>className</span><span>}</span><span> </span><span>${</span><span>styles</span><span>.</span><span>button</span><span>}</span><span>`</span><span>}</span> <span>{...</span><span>restProps</span><span>}</span> <span>/</span><span>&gt;
+</span><span>}</span>
+</code></pre>
+<div>
+<p>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Enter fullscreen mode</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Exit fullscreen mode</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</p>
+</div>
+</div>
+
+
+
+<h3>
+  <a name="ship-your-style" href="#ship-your-style">
+  </a>
+  ⛴️ Ship your style
+</h3>
+
+<p>After transpiling your library you will notice that there is a new file in your distribution folder:<br>
+</p>
+
+<div>
+<pre><code> 📂dist
+  ┣ …
+  ┣ 📜my-component-library.js
+<span>+ ┗ 📜style.css
+</span></code></pre>
+<div>
+<p>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Enter fullscreen mode</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Exit fullscreen mode</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</p>
+</div>
+</div>
+
+
+
+<p>But there are two issues with this file:</p>
+
+<ol>
+<li>You need to manually import the file in the consuming application.</li>
+<li>It is one file that contains all styles for all components.</li>
+</ol>
+
+<h4>
+  <a name="import-the-css" href="#import-the-css">
+  </a>
+  Import the CSS
+</h4>
+
+<p>CSS files just can't easily be imported in JavaScript. Therefore, the
+ CSS file is generated separately, allowing the library user to decide 
+how to handle the file.</p>
+
+<p>But what if we were to assume that the application using the library has a bundler configuration that can handle CSS imports?</p>
+
+<p>For this to work, the transpiled JavaScript bundle must contain an 
+import statement for the CSS file. We are going to use yet another Vite 
+plugin (<a href="https://github.com/emosheeep/fe-tools/tree/master/packages/vite-plugin-lib-inject-css" target="_blank" rel="noopener noreferrer">vite-plugin-lib-inject-css</a>) that does exactly what we need with zero configuration.<br>
+</p>
+
+<div>
+<pre><code>npm i vite-plugin-lib-inject-css <span>-D</span>
+</code></pre>
+<div>
+<p>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Enter fullscreen mode</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Exit fullscreen mode</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</p>
+</div>
+</div>
+
+
+
+
+
+<div>
+<pre><code>// vite.config.ts
+<span>+import { libInjectCss } from 'vite-plugin-lib-inject-css'
+</span>…
+  plugins: [
+    react(),
+<span>+   libInjectCss(),
+</span>    dts({ include: ['lib'] })
+  ],
+…
+</code></pre>
+<div>
+<p>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Enter fullscreen mode</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Exit fullscreen mode</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</p>
+</div>
+</div>
+
+
+
+<p>Build the library and take a look at the top of your bundled JavaScript file (<code>dist/my-component-library.js</code>):<br>
+</p>
+
+<div>
+<pre><code><span>// dist/my-component-library.js</span>
+<span>import</span> <span>"</span><span>./main.css</span><span>"</span><span>;</span>
+<span>…</span>
+</code></pre>
+<div>
+<p>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Enter fullscreen mode</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Exit fullscreen mode</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</p>
+</div>
+</div>
+
+
+
+<blockquote>
+<p>💡 You may notice that the CSS filename has changed from style.css to
+ main.css. This change occurs because the plugin generates a separate 
+CSS file for each chunk, and in this case the name of the chunk comes 
+from the filename of the entry file.</p>
+</blockquote>
+
+<h4>
+  <a name="split-up-the-css" href="#split-up-the-css">
+  </a>
+  Split up the CSS
+</h4>
+
+<p>But there's still the second problem: when you import something from your library, <code>main.css</code> is also imported and all the CSS styles end up in your application bundle. Even if you only import the button.</p>
+
+<p>The <code>libInjectCSS</code> plugin generates a separate CSS file 
+for each chunk and includes an import statement at the beginning of each
+ chunk's output file.</p>
+
+<p>So if you split up the JavaScript code, you end up having separate 
+CSS files that only get imported when the according JavaScript files are
+ imported.</p>
+
+<p>One way of doing this would be to turn every file into an Rollup 
+entry point. And, it couldn't be better, there is a recommended way of 
+doing this right in the <a href="https://rollupjs.org/configuration-options/#input" target="_blank" rel="noopener noreferrer">Rollup documentation</a>:</p>
+
+<blockquote>
+<p>📘 If you want to convert a set of files to another format while 
+maintaining the file structure and export signatures, the recommended 
+way—instead of using output.preserveModules that may tree-shake exports 
+as well as emit virtual files created by plugins—is to turn every file 
+into an entry point.</p>
+</blockquote>
+
+<p>So let's add this to your configuration.</p>
+
+<p>First install <code>glob</code> as it will be required:<br>
+</p>
+
+<div>
+<pre><code>npm i glob <span>-D</span>
+</code></pre>
+<div>
+<p>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Enter fullscreen mode</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Exit fullscreen mode</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</p>
+</div>
+</div>
+
+
+
+<p>Then change your Vite config to this:<br>
+</p>
+
+<div>
+<pre><code>// vite.config.ts
+<span>-import { resolve } from 'path'
+</span><span>+import { extname, relative, resolve } from 'path'
++import { fileURLToPath } from 'node:url'
++import { glob } from 'glob'
+</span>…
+    rollupOptions: {
+      external: ['react', 'react/jsx-runtime'],
+<span>+     input: Object.fromEntries(
++       glob.sync('lib/**/*.{ts,tsx}', {
++         ignore: ["lib/**/*.d.ts"],
++       }).map(file =&gt; [
++         // The name of the entry point
++         // lib/nested/foo.ts becomes nested/foo
++         relative(
++           'lib',
++           file.slice(0, file.length - extname(file).length)
++         ),
++         // The absolute path to the entry file
++         // lib/nested/foo.ts becomes /project/lib/nested/foo.ts
++         fileURLToPath(new URL(file, import.meta.url))
++       ])
++     )
+</span>    }
+…
+</code></pre>
+<div>
+<p>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Enter fullscreen mode</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Exit fullscreen mode</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</p>
+</div>
+</div>
+
+
+
+<blockquote>
+<p>💡 The glob library helps you to specify a set of filenames. In this case it selects all files ending with <code>.ts</code> or <code>.tsx</code> and ignores <code>*.d.ts</code> files <a href="https://en.wikipedia.org/wiki/Glob_(programming)" target="_blank" rel="noopener noreferrer">Glob Wikipedia</a></p>
+</blockquote>
+
+<p>Now you end up with a bunch of JavaScript and CSS files in the root of your <code>dist</code> folder. It works, but it doesn't look particularly pretty, does it?<br>
+</p>
+
+<div>
+<pre><code>// vite.config.ts
+    rollupOptions: {
+…
+<span>+     output: {
++       assetFileNames: 'assets/[name][extname]',
++       entryFileNames: '[name].js',
++     }
+</span>    }
+…
+</code></pre>
+<div>
+<p>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Enter fullscreen mode</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Exit fullscreen mode</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</p>
+</div>
+</div>
+
+
+
+<p>Transpile the library again and all JavaScript files should now be in the same organized folder structure you have created in <code>lib</code> alongside with their type definitions. And the CSS files are inside a new folder called assets.</p>
+
+<p>Transpile the library again and all JavaScript files should now be in the same organized folder structure that you created in <code>lib</code> along with their types. And the CSS files are in a new folder called "assets". 🙌</p>
+
+<p>Notice that the name of the main file has changed from "my-component-library.js" to "main.js". That's great!</p>
+
+<h2>
+  <a name="4-a-few-last-steps-before-you-can-publish-the-package" href="#4-a-few-last-steps-before-you-can-publish-the-package">
+  </a>
+  4. A few last steps before you can publish the package
+</h2>
+
+<p>Your build setup is now ready, there are just a few things to consider before releasing your package.</p>
+
+<p>The <code>package.json</code> file will get published along with your
+ package files. And you need to make sure it contains all important 
+information about the package.</p>
+
+<h3>
+  <a name="main-file" href="#main-file">
+  </a>
+  Main file
+</h3>
+
+<p>Every npm package has a primary entry point, per default this file is <code>index.js</code> in the root of the package.</p>
+
+<p>Your library's primary entry point is now located at <code>dist/main.js</code>, so this needs to be set in your <code>package.json</code>. The same applies to the type's entry point: <code>dist/main.d.ts</code><br>
+</p>
+
+<div>
+<pre><code>// package.json
+{
+  "name": "my-component-library",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+<span>+ "main": "dist/main.js",
++ "types": "dist/main.d.ts",
+</span>  …
+</code></pre>
+<div>
+<p>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Enter fullscreen mode</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Exit fullscreen mode</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</p>
+</div>
+</div>
+
+
+
+<h3>
+  <a name="define-the-files-to-publish" href="#define-the-files-to-publish">
+  </a>
+  Define the files to publish
+</h3>
+
+<p>You should also define which files should be packed into your distributed package.<br>
+</p>
+
+<div>
+<pre><code>// package.json
+  …
+  "main": "dist/main.js",
+  "types": "dist/main.d.ts",
+<span>+ "files": [
++   "dist"
++ ],
+</span>  …
+</code></pre>
+<div>
+<p>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Enter fullscreen mode</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Exit fullscreen mode</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</p>
+</div>
+</div>
+
+
+
+<blockquote>
+<p>💡 Certain files like <code>package.json</code> or <code>README</code> are always included, regardless of settings: <a href="https://docs.npmjs.com/cli/v9/configuring-npm/package-json#files" target="_blank" rel="noopener noreferrer">Read the docs</a></p>
+</blockquote>
+
+<h3>
+  <a name="dependencies" href="#dependencies">
+  </a>
+  Dependencies
+</h3>
+
+<p>Now take a look at your <code>dependencies</code>: right now there should be only two <code>react</code> and <code>react-dom</code> and a couple of <code>devDependencies</code>.</p>
+
+<p>You can move those two to the <code>devDepedencies</code> as well. And additionally add them as <code>peerDependencies</code> so the consuming application is aware that it must have React installed to use this package.<br>
+</p>
+
+<div>
+<pre><code>// package.json
+<span>- "dependencies": {
+</span><span>+ "peerDependencies": {
+</span>    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+<span>+   "react": "^18.2.0",
++   "react-dom": "^18.2.0",
+</span>    …
+  }
+</code></pre>
+<div>
+<p>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Enter fullscreen mode</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Exit fullscreen mode</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</p>
+</div>
+</div>
+
+
+
+<blockquote>
+<p>💡 See this StackOverflow answer to learn more about the different types of dependencies: <a href="https://stackoverflow.com/questions/18875674/whats-the-difference-between-dependencies-devdependencies-and-peerdependencie" target="_blank" rel="noopener noreferrer">Link</a></p>
+</blockquote>
+
+<h3>
+  <a name="side-effects" href="#side-effects">
+  </a>
+  Side effects
+</h3>
+
+<p>To prevent the CSS files from being accidentally removed by the 
+consumer's tree-shaking efforts, you should also specify the generated 
+CSS as side effects:<br>
+</p>
+
+<div>
+<pre><code>// package.json
+<span>+ "sideEffects": [
++   "**/*.css"
++ ],
+</span></code></pre>
+<div>
+<p>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Enter fullscreen mode</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Exit fullscreen mode</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</p>
+</div>
+</div>
+
+
+
+<p>You can read more about <code>sideEffects</code> in the <a href="https://webpack.js.org/guides/tree-shaking/#mark-the-file-as-side-effect-free" target="_blank" rel="noopener noreferrer">webpack docs</a>. (Originally from Webpack, this field has developed into a common pattern that is now also supported by other bundlers) </p>
+
+<h3>
+  <a name="ensure-that-the-package-is-built" href="#ensure-that-the-package-is-built">
+  </a>
+  Ensure that the package is built
+</h3>
+
+<p>You can use the special lifecycle script <code>prepublishOnly</code> to  guarantee that your changes are always built before the package is published:<br>
+</p>
+
+<div>
+<pre><code>// package.json
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc &amp;&amp; vite build",
+    …
+<span>+   "prepublishOnly": "npm run build"
+</span>  },
+</code></pre>
+<div>
+<p>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Enter fullscreen mode</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Exit fullscreen mode</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</p>
+</div>
+</div>
+
+
+
+<h2>
+  <a name="5-demo-page-and-deployment" href="#5-demo-page-and-deployment">
+  </a>
+  5. Demo page and deployment
+</h2>
+
+<p>To just play around with your components on the demo page, you can 
+simply import the components directly from the root of your project. 
+This works because your <code>package.json</code> points to the transpiled main file <code>dist/main.ts</code>.<br>
+</p>
+
+<div>
+<pre><code><span>src</span><span>/</span><span>App</span><span>.</span><span>tsx</span>
+<span>…</span>
+<span>import</span> <span>{</span> <span>Button</span><span>,</span> <span>Label</span><span>,</span> <span>Input</span> <span>}</span> <span>from</span> <span>'</span><span>../</span><span>'</span><span>;</span>
+<span>…</span>
+</code></pre>
+<div>
+<p>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Enter fullscreen mode</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Exit fullscreen mode</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</p>
+</div>
+</div>
+
+
+
+<p>To publish your package, you just need to run <code>npm publish</code>. If you want to release your package to the public, you have to set <code>private: false</code> in your <code>package.json</code>.</p>
+
+<p>You can read more about publishing your package, including installing
+ it in a local project (without publishing) in these articles of mine:</p>
+
+<ul>
+<li><a href="https://dev.to/receter/the-minimal-setup-to-package-and-reuse-your-react-components-1063#publishinstall-your-package">Publish/install your package</a></li>
+<li><a href="https://dev.to/receter/automatically-publish-your-node-package-to-npm-with-pnpm-and-github-actions-22eg">Automatically publish you package with GitHub actions </a></li>
+</ul>
+
+<h2>
+  <a name="faqs" href="#faqs">
+  </a>
+  FAQs
+</h2>
+
+<h3>
+  <a name="i-have-an-issues-with-the-latest-version-of-create-vite" href="#i-have-an-issues-with-the-latest-version-of-create-vite">
+  </a>
+  I have an issues with the latest version of create vite
+</h3>
+
+<p>I did not yet update this article, following this guide you might run into some issues with the latest version of <code>create vite</code>. I did however create a branch with some modifications to work with <a href="mailto:vite@5.4.4">vite@5.4.4</a>: </p>
+
+<p><a href="https://github.com/receter/my-component-library/tree/revision-1" target="_blank" rel="noopener noreferrer">https://github.com/receter/my-component-library/tree/revision-1</a></p>
+
+<h3>
+  <a name="can-i-remove-the-css-imports-from-the-output" href="#can-i-remove-the-css-imports-from-the-output">
+  </a>
+  Can I remove the CSS imports from the output?
+</h3>
+
+<p>Yes, you can easily remove the <code>vite-plugin-lib-inject-css</code> plugin (and subsequential the <code>sideEffects</code> from your <code>package.json</code>)</p>
+
+<p>Having done that you will get one compiled stylesheet containing all required classes in <code>dist/assets/style.css</code>. Import/use this stylesheet in your application and you should be good to go.</p>
+
+<p>You will of course loose the CSS treeshaking feature which is made 
+possible by importing only the required CSS inside each component.</p>
+
+<p>I published a branch demonstrating this change here: <a href="https://github.com/receter/my-component-library/tree/no-css-injection" target="_blank" rel="noopener noreferrer">https://github.com/receter/my-component-library/tree/no-css-injection</a></p>
+
+<h3>
+  <a name="does-this-work-with-nextjs" href="#does-this-work-with-nextjs">
+  </a>
+  Does this work with Next.js?
+</h3>
+
+<p>Importing CSS from external npm packages works since Next.js 13.4:<br>
+<a href="https://github.com/vercel/next.js/discussions/27953#discussioncomment-5831478" target="_blank" rel="noopener noreferrer">https://github.com/vercel/next.js/discussions/27953#discussioncomment-5831478</a></p>
+
+<p>If you use an older version of Next.js you can install <a href="https://github.com/martpie/next-transpile-modules" target="_blank" rel="noopener noreferrer">next-transpile-modules</a></p>
+
+<p>Here is a Next.js demo repo: <a href="https://github.com/receter/my-nextjs-component-library-consumer" target="_blank" rel="noopener noreferrer">https://github.com/receter/my-nextjs-component-library-consumer</a></p>
+<h3>
+  <a name="error-cannot-find-module-ajvdistcore" href="#error-cannot-find-module-ajvdistcore">
+  </a>
+  Error: Cannot find module 'ajv/dist/core'
+</h3>
+
+<p>This error will happen if you are using <code>vite-plugin-dts@4</code> in combination with <code>--legacy-peer-deps</code>. The solution is to install <code>ajv@8</code> manually or stop using <code>--legacy-peer-deps</code>.<br>
+</p>
+
+<div>
+<pre><code>npm i ajv@8
+</code></pre>
+<div>
+<p>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Enter fullscreen mode</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Exit fullscreen mode</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</p>
+</div>
+</div>
+
+
+
+<p><a href="https://github.com/qmhc/vite-plugin-dts/issues/388" target="_blank" rel="noopener noreferrer">https://github.com/qmhc/vite-plugin-dts/issues/388</a></p>
+
+<h3>
+  <a name="how-to-use-storybook-for-my-library" href="#how-to-use-storybook-for-my-library">
+  </a>
+  How to use Storybook for my library?
+</h3>
+
+<p>To install Storybook run <code>npx storybook@latest init</code> and start adding your stories.</p>
+
+<p>If you add stories inside the <code>lib</code> folder you also need to make sure to exclude all <code>.stories.tsx</code> files from the glob pattern so the stories don't end up in your bundle.<br>
+</p>
+
+<div>
+<pre><code><span>glob</span><span>.</span><span>sync</span><span>(</span><span>'</span><span>lib/**/*.{ts,tsx}</span><span>'</span><span>,</span> <span>{</span> <span>ignore</span><span>:</span> <span>'</span><span>lib/**/*.stories.tsx</span><span>'</span><span>})</span>
+</code></pre>
+<div>
+<p>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Enter fullscreen mode</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><title>Exit fullscreen mode</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</p>
+</div>
+</div>
+
+
+
+<p>I have published a branch with Storybook here: <a href="https://github.com/receter/my-component-library/tree/storybook" target="_blank" rel="noopener noreferrer">https://github.com/receter/my-component-library/tree/storybook</a></p>
+
+<p><del>To be able to build Storybook you need to disable the <code>libInjectCss</code> plugin. Otherwise you will run into an <code>TypeError: Cannot convert undefined or null to object</code> error when running <code>npm run build-storybook</code> (Thanks <a href="https://dev.to/codalf">@codalf</a> for figuring that out!)</del></p>
+
+<p><strong>Update 26.03.2024:</strong> This issue (<a href="https://github.com/emosheeep/vite-plugin-lib-inject-css/issues/15" target="_blank" rel="noopener noreferrer">#15</a>) with <code>vite-plugin-lib-inject-css</code> and has been fixed in version <code>2.0.0</code> and the fix is not needed anymore.</p>
+
+<h2>
+  <a name="thanks-for-reading" href="#thanks-for-reading">
+  </a>
+  Thanks for reading!
+</h2>
+
+<p>If you did not follow along or something wasn't that clear, you can find the full source code with working examples on my <a href="https://github.com/receter?tab=repositories" target="_blank" rel="noopener noreferrer">GitHub Profile</a>:</p>
+
+<ul>
+<li><a href="https://github.com/receter/my-component-library" target="_blank" rel="noopener noreferrer">https://github.com/receter/my-component-library</a></li>
+<li>
+<a href="https://github.com/receter/my-component-library/tree/revision-1" target="_blank" rel="noopener noreferrer">https://github.com/receter/my-component-library/tree/revision-1</a> (Revision that works with latest Vite version)</li>
+<li><a href="https://github.com/receter/my-component-library-consumer" target="_blank" rel="noopener noreferrer">https://github.com/receter/my-component-library-consumer</a></li>
+<li><a href="https://www.npmjs.com/package/@receter/my-component-library" target="_blank" rel="noopener noreferrer">https://www.npmjs.com/package/@receter/my-component-library</a></li>
+</ul>
+
+<p>Fingers crossed you found it helpful, and I'm all ears for any thoughts you'd like to share.</p>
+
+
+          </div></div></div>
+      </div>
+
+      <div>
+        <div class="reader-message"></div>
+      </div>
+      <div aria-owns="toolbar"></div>
+    </div>
+  
+
+</body></html>
