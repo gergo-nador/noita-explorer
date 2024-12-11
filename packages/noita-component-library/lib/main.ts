@@ -9,3 +9,5 @@ export function hiAgain(thing: string): string {
 export function test1(hello: string): string {
   return "oohhh" + hello;
 }
+
+import {} from "@repo/model";
