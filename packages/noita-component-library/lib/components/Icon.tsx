@@ -1,8 +1,8 @@
-import error_icon from '../../../assets/icons/mods_newer.png';
-import info_icon from '../../../assets/icons/icon_info.png';
-import warning_icon from '../../../assets/icons/icon_warning.png';
-import checkmark from '../../../assets/icons/checkmark.png';
-import cross_large from '../../../assets/icons/cross_red_large.png';
+import error_icon from '../../assets/icons/mods_newer.png';
+import info_icon from '../../assets/icons/icon_info.png';
+import warning_icon from '../../assets/icons/icon_warning.png';
+import checkmark from '../../assets/icons/checkmark.png';
+import cross_large from '../../assets/icons/cross_red_large.png';
 import React from 'react';
 
 interface IconProps {

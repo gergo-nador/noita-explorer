@@ -3,9 +3,6 @@
     "build": {
       "dependsOn": ["^build"],
       "outputs": ["dist/**"]
-    },
-    "generate-barrels": {
-
     }
   },
   "extends": ["//"]

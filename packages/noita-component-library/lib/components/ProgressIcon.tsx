@@ -1,21 +1,19 @@
-import backgroundRegular from '../../../assets/progress-boxes/grid_box.png';
-import backgroundUnknown from '../../../assets/progress-boxes/grid_box_unknown.png';
-import backgroundLayerNew from '../../../assets/progress-boxes/grid_highlight_new.png';
+import backgroundRegular from '../../assets/progress-boxes/grid_box.png';
+import backgroundUnknown from '../../assets/progress-boxes/grid_box_unknown.png';
+import backgroundLayerNew from '../../assets/progress-boxes/grid_highlight_new.png';
 import React from 'react';
 import css from './ProgressIcon.module.css';
-
-import { NoitaSpellTypesDictionary } from '../../../common';
-import { zIndexManager } from '../../zIndexManager';
-import { Tooltip } from 'react-tooltip';
 import { Card } from './Card';
-import { useBool } from '../../hooks/useBool';
+import { useBool } from '../hooks/useBool';
+import { zIndexManager } from '../zIndexManager';
+import { Tooltip } from 'react-tooltip';
 
 interface ProgressIconProps {
   type: 'regular' | 'unknown' | 'new';
   icon: string;
   style?: React.CSSProperties;
   size?: number | string;
-  spellItemTypeId?: string;
+  spellBackground?: string;
 }
 
 export const ProgressIcon = ({
@@ -23,7 +21,7 @@ export const ProgressIcon = ({
   type = 'regular',
   size,
   style = {},
-  spellItemTypeId,
+  spellBackground,
 }: ProgressIconProps) => {
   const backgroundImage =
     type === 'unknown' ? backgroundUnknown : backgroundRegular;
@@ -54,23 +52,21 @@ export const ProgressIcon = ({
 
       {/* Specific background for the different types of spells on top
         of the main background */}
-      {!isUnknown &&
-        spellItemTypeId &&
-        spellItemTypeId in NoitaSpellTypesDictionary && (
-          <img
-            src={NoitaSpellTypesDictionary[spellItemTypeId].image}
-            alt={'bg image'}
-            style={{
-              position: 'absolute',
-              height: '94.11765%', // images are 16x16, background is 17x17 -> 16/17 = 94.11765
-              width: '94.11765%',
-              top: 0,
-              left: 0,
-              imageRendering: 'pixelated',
-              opacity: 0.6,
-            }}
-          />
-        )}
+      {!isUnknown && spellBackground && (
+        <img
+          src={spellBackground}
+          alt={'bg image'}
+          style={{
+            position: 'absolute',
+            height: '94.11765%', // images are 16x16, background is 17x17 -> 16/17 = 94.11765
+            width: '94.11765%',
+            top: 0,
+            left: 0,
+            imageRendering: 'pixelated',
+            opacity: 0.6,
+          }}
+        />
+      )}
 
       {/* Main image */}
       {!isUnknown && (

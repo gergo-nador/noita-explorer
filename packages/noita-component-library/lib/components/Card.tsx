@@ -1,9 +1,9 @@
-import css from './Card.module.css';
-import React from 'react';
+import css from "./Card.module.css";
+import React from "react";
 
 interface CardProps {
   children?: React.ReactNode | React.ReactNode[] | string;
-  color?: 'gray' | 'gold';
+  color?: "gray" | "gold";
 
   styling?: {
     borderBright?: string;
@@ -18,7 +18,7 @@ interface CardProps {
 
 export const Card = ({
   children,
-  color = 'gray',
+  color = "gray",
   styling,
   style,
   styleContent,
@@ -28,53 +28,52 @@ export const Card = ({
   const customStyles: { [key: string]: string } = {};
 
   if (styling?.borderDark !== undefined) {
-    customStyles['--border-dark'] = styling.borderDark;
+    customStyles["--border-dark"] = styling.borderDark;
   }
   if (styling?.borderBright !== undefined) {
-    customStyles['--border-bright'] = styling.borderBright;
+    customStyles["--border-bright"] = styling.borderBright;
   }
   if (styling?.background !== undefined) {
-    customStyles['--background'] = styling.background;
+    customStyles["--background"] = styling.background;
   }
   if (styling?.content !== undefined) {
-    customStyles['--content'] = styling.content;
+    customStyles["--content"] = styling.content;
   }
 
   if (styling?.backgroundImage !== undefined) {
-    console.log(styling.backgroundImage);
-    customStyles['--background'] = 'transparent';
-    customStyles['background'] = `url(${styling.backgroundImage})`;
+    customStyles["--background"] = "transparent";
+    customStyles["background"] = `url(${styling.backgroundImage})`;
   }
 
   return (
     <div style={style}>
       <div
-        className={`${css['grid-main']} ${css[color === 'gray' ? 'style-gray' : 'style-gold']}`}
+        className={`${css["grid-main"]} ${css[color === "gray" ? "style-gray" : "style-gold"]}`}
         style={customStyles as React.CSSProperties}
       >
-        <div className={css['border-bright']}></div>
-        <div className={css['grid-top-row']}>
-          <div className={css['border-dark']}></div>
-          <div className={css['border-bright']}></div>
+        <div className={css["border-bright"]}></div>
+        <div className={css["grid-top-row"]}>
+          <div className={css["border-dark"]}></div>
+          <div className={css["border-bright"]}></div>
         </div>
         <div></div>
-        <div className={css['grid-left-column']}>
-          <div className={css['border-dark']}></div>
-          <div className={css['border-bright']}></div>
+        <div className={css["grid-left-column"]}>
+          <div className={css["border-dark"]}></div>
+          <div className={css["border-bright"]}></div>
         </div>
-        <div className={css['content']} style={styleContent}>
+        <div className={css["content"]} style={styleContent}>
           {children}
         </div>
-        <div className={css['grid-right-column']}>
-          <div className={css['border-bright']}></div>
-          <div className={css['border-dark']}></div>
+        <div className={css["grid-right-column"]}>
+          <div className={css["border-bright"]}></div>
+          <div className={css["border-dark"]}></div>
         </div>
         <div></div>
-        <div className={css['grid-bottom-column']}>
-          <div className={css['border-bright']}></div>
-          <div className={css['border-dark']}></div>
+        <div className={css["grid-bottom-column"]}>
+          <div className={css["border-bright"]}></div>
+          <div className={css["border-dark"]}></div>
         </div>
-        <div className={css['border-bright']}></div>
+        <div className={css["border-bright"]}></div>
       </div>
     </div>
   );

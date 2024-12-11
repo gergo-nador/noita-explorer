@@ -1,6 +1,6 @@
 import css from './TabItem.module.css';
 import React from 'react';
-import { zIndexManager } from '../../zIndexManager';
+import { zIndexManager } from '../zIndexManager';
 
 interface TabItemProps {
   text: string;

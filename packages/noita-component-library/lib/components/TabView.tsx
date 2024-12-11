@@ -1,7 +1,7 @@
 import { Card } from './Card';
 import React from 'react';
 import { TabItem } from './TabItem';
-import { zIndexManager } from '../../zIndexManager';
+import { zIndexManager } from '../zIndexManager.ts';
 
 interface TabViewItem {
   title: string;
