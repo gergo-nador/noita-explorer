@@ -1,7 +1,7 @@
 import { Tooltip } from 'react-tooltip';
 import React, { useMemo } from 'react';
 import { Card } from './Card';
-import { zIndexManager } from '../../zIndexManager';
+import { zIndexManager } from '../zIndexManager';
 
 interface NoitaTooltipProps {
   content: string | React.ReactNode | React.ReactNode[] | undefined;

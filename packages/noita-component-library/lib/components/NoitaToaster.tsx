@@ -1,6 +1,6 @@
 import { useToaster } from 'react-hot-toast/headless';
 import { Card } from './Card';
-import React from 'react';
+import React, { LegacyRef } from 'react';
 
 export const NoitaToaster = () => {
   const { toasts, handlers } = useToaster();
@@ -37,7 +37,7 @@ export const NoitaToaster = () => {
         return (
           <div
             key={toast.id}
-            ref={ref}
+            ref={ref as LegacyRef<HTMLDivElement>}
             style={{
               position: 'absolute',
               width: 'max-content',
@@ -50,7 +50,7 @@ export const NoitaToaster = () => {
             }}
           >
             <Card
-              styling={toast.type === 'error' && stylings.error}
+              styling={toast.type === 'error' ? stylings.error : undefined}
               styleContent={{
                 display: 'flex',
                 gap: '10px',

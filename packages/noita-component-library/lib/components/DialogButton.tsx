@@ -1,7 +1,5 @@
-import {
-  ShowButtonDialogProps,
-  ShowCustomDialogProps,
-} from '../../stores/dialog';
+import { ShowButtonDialogProps } from '../ui-models/ShowDialogButtonProps.ts';
+import { ShowCustomDialogProps } from '../ui-models/ShowDialogCustomProps.ts';
 import { Button } from './Button';
 import { DialogCustom } from './DialogCustom';
 
@@ -29,11 +27,16 @@ export const DialogButton = ({
             justifyContent: 'space-evenly',
           }}
         >
-          {props.buttons.map((button) => (
-            <Button key={button.id} onClick={() => button.onClick()}>
-              {button.title}
-            </Button>
-          ))}
+          {props.buttons.map((button) => {
+            const onClick = () =>
+              typeof button.onClick === 'function' && button.onClick();
+
+            return (
+              <Button key={button.id} onClick={() => onClick()}>
+                {button.title}
+              </Button>
+            );
+          })}
         </div>
       </>
     ),

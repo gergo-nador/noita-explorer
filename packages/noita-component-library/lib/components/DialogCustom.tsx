@@ -1,4 +1,4 @@
-import { ShowCustomDialogProps } from '../../stores/dialog';
+import { ShowCustomDialogProps } from '../ui-models/ShowDialogCustomProps.ts';
 import React, { useRef } from 'react';
 import css from './Dialog.module.css';
 import { Card } from './Card';

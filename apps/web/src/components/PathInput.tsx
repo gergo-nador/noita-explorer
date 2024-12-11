@@ -1,7 +1,12 @@
-import { Button } from './Button';
-import { noitaAPI } from '../../ipcHandlers';
-import { ContextMenuItem, useContextMenuStore } from '../../stores/contextmenu';
-import { useToast } from '../../hooks/useToast';
+/*
+import { Button } from '@noita-explorer/noita-component-library/lib/components/Button.tsx';
+import { useToast } from '@noita-explorer/noita-component-library/lib/hooks/useToast.tsx';
+import {
+  ContextMenuItem,
+  useContextMenuStore,
+} from '@noita-explorer/noita-component-library/lib/ui-stores/context-menu-store.ts';
+/!*import { noitaAPI } from '../../ipcHandlers';
+ *!/
 
 interface PathInputProps {
   path?: string;
@@ -62,3 +67,4 @@ export const PathInput = ({
     </div>
   );
 };
+*/

@@ -1,7 +1,7 @@
 import { Menu, Item, Separator, useContextMenu } from 'react-contexify';
 
 import 'react-contexify/dist/ReactContexify.css';
-import { useContextMenuStore } from '../../stores/contextmenu';
+import { useContextMenuStore } from '../ui-stores/context-menu-store';
 import { useEffect } from 'react';
 
 const MENU_ID = 'menu-id';
@@ -23,9 +23,9 @@ export const ContextMenuWrapper = () => {
     }
 
     show({
-      event: event,
+      event: event as unknown as MouseEvent,
     });
-  }, [event, menuItems]);
+  }, [show, event, menuItems]);
 
   return (
     <div>

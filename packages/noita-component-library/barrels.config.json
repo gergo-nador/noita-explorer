@@ -1,0 +1,6 @@
+{
+  "directory": ["./lib"],
+  "delete": true,
+  "name": "main.tsx",
+  "exclude": ["vite-env.d.ts"]
+}
