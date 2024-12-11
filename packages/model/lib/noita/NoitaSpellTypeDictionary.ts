@@ -1,4 +1,4 @@
-import { StringKeyDictionary } from '../general/StringKeyDictionary';
+import { StringKeyDictionary } from '../common/StringKeyDictionary';
 import { NoitaSpellType } from './NoitaSpellType';
 
 export const NoitaSpellTypesDictionary: StringKeyDictionary<NoitaSpellType> = {
