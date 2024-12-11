@@ -9,6 +9,7 @@ function App() {
 
   return (
     <>
+      <span>Mizu</span>
       <Button onClick={() => console.log('Hi')}>Hello</Button>
       <div>
         <a href='https://vite.dev' target='_blank'>
