@@ -4,6 +4,7 @@
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
+    "dev:web": "turbo dev --filter=@noita-explorer/web",
     "lint": "turbo lint",
     "generate-barrels": "turbo generate-barrels",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""

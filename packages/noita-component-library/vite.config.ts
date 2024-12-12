@@ -23,5 +23,6 @@ export default defineConfig({
         entryFileNames: '[name].js',
       },
     },
+    chunkSizeWarningLimit: 10_000,
   },
 });

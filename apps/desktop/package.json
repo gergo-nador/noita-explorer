@@ -1,5 +1,5 @@
 {
-  "name": "desktop",
+  "name": "@noita-explorer/desktop",
   "productName": "desktop",
   "version": "1.0.0",
   "description": "My Electron application description",

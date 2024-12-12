@@ -6,13 +6,7 @@ import { StringKeyDictionary } from '../common/StringKeyDictionary';
 export interface NoitaAPI {
   config: {
     get: (key: string) => Promise<string>;
-    set: ({
-      key,
-      value,
-    }: {
-      key: string;
-      value: string | number | object | boolean;
-    }) => void;
+    set: ({ key, value }: { key: string; value: string }) => void;
   };
   noita: {
     dataFile: {
@@ -55,10 +49,12 @@ export interface NoitaAPI {
   };
   environment: {
     web: boolean;
-    desktop: {
-      isMacOs: boolean;
-      isLinux: boolean;
-      isWindows: boolean;
-    };
+    desktop:
+      | {
+          isMacOs: boolean;
+          isLinux: boolean;
+          isWindows: boolean;
+        }
+      | undefined;
   };
 }

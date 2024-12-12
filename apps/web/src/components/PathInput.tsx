@@ -7,7 +7,7 @@ import {
 import { noitaAPI } from '../ipcHandlers.ts';
 
 interface PathInputProps {
-  path: string;
+  path: string | undefined;
   displayPath?: string;
   setPath: (path: string) => void;
   dialogTitle?: string;
@@ -39,18 +39,30 @@ export const PathInput = ({
     {
       type: 'item',
       title: 'Open in Explorer',
+      disabled: path !== undefined,
       action: () => {
-        noitaAPI.dialog.openExplorer(path).catch((err) => console.log(err));
+        if (path === undefined) return;
+
+        noitaAPI.dialog.openExplorer(path).catch((err) => {
+          toast.error('Failed to open File Explorer');
+          console.log(err);
+        });
       },
     },
     {
       type: 'item',
       title: 'Copy',
+      disabled: path !== undefined,
       action: () => {
+        if (path === undefined) return;
+
         noitaAPI.clipboard
           .set(path)
           .then(() => toast.info('Path copied to clipboard'))
-          .catch((err) => console.log(err));
+          .catch((err) => {
+            toast.error('Failed to copy the path to clipboard');
+            console.log(err);
+          });
       },
     },
   ];

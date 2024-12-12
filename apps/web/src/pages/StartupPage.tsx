@@ -41,7 +41,7 @@ export const StartupPage = () => {
 
     asyncFunc()
       .then(() => console.log('cool'))
-      .catch((err) => console.error('err'));
+      .catch((err) => console.error(err));
   }, []);
 
   useEffect(() => {

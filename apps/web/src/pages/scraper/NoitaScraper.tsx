@@ -50,9 +50,9 @@ export const NoitaScraper = () => {
       return new Promise((_resolve, reject) => reject());
     }
 
-    const enemies = importResult.enemies.data;
-    const perks = importResult.perks.data;
-    const spells = importResult.spells.data;
+    const enemies = importResult.enemies.data ?? [];
+    const perks = importResult.perks.data ?? [];
+    const spells = importResult.spells.data ?? [];
 
     const now = new Date();
 
@@ -257,7 +257,7 @@ function ImportResultDisplay<T>({
         <div>
           Status: <StatusText status={result.status} />
         </div>
-        {result.error && <div>Error: {JSON.stringify(result.error)}</div>}
+        {!!result.error && <div>Error: {JSON.stringify(result.error)}</div>}
         {result.data && (
           <>
             <div>Count: {result.data.length}</div>

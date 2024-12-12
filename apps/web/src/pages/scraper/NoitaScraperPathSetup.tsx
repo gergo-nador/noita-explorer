@@ -104,8 +104,8 @@ export const NoitaScraperPathSetup = () => {
             <PathInput
               type={'file'}
               displayPath={
-                paths.commonCsv?.startsWith(paths.install)
-                  ? paths.commonCsv.substring(paths.install.length)
+                paths.commonCsv?.startsWith(paths.install ?? '')
+                  ? paths.commonCsv.substring((paths.install ?? '').length)
                   : (paths.commonCsv ?? 'Select common.csv...')
               }
               dialogTitle={'Select the common.csv file'}
@@ -138,8 +138,8 @@ export const NoitaScraperPathSetup = () => {
             <PathInput
               type={'directory'}
               displayPath={
-                paths.data?.startsWith(paths.NollaGamesNoita)
-                  ? paths.data.substring(paths.NollaGamesNoita.length)
+                paths.data?.startsWith(paths.NollaGamesNoita ?? '')
+                  ? paths.data.substring((paths.NollaGamesNoita ?? '').length)
                   : (paths.data ??
                     'Select the data folder (extracted data.wak)')
               }
@@ -157,8 +157,8 @@ export const NoitaScraperPathSetup = () => {
             <PathInput
               type={'directory'}
               displayPath={
-                paths.save00?.startsWith(paths.NollaGamesNoita)
-                  ? paths.save00.substring(paths.NollaGamesNoita.length)
+                paths.save00?.startsWith(paths.NollaGamesNoita ?? '')
+                  ? paths.save00.substring((paths.NollaGamesNoita ?? '').length)
                   : (paths.save00 ?? 'Select the save00 folder')
               }
               dialogTitle={'Select the save00 folder'}
