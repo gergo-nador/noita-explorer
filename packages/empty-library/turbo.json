@@ -1,7 +1,7 @@
 {
   "tasks": {
     "build": {
-      "dependsOn": ["^build"],
+      "dependsOn": ["^build", "generate-barrels"],
       "outputs": ["dist/**"]
     },
     "generate-barrels": {}

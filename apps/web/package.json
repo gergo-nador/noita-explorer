@@ -10,9 +10,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@noita-explorer/model": "*",
+    "@noita-explorer/noita-component-library": "*",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "@noita-explorer/noita-component-library": "*"
+    "react-particles": "^2.12.2",
+    "react-router-dom": "^7.0.2",
+    "tsparticles": "^3.7.1",
+    "tsparticles-slim": "^2.12.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.15.0",

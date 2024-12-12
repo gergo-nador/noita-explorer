@@ -1,15 +1,13 @@
-/*
-import { Button } from '@noita-explorer/noita-component-library/lib/components/Button.tsx';
-import { useToast } from '@noita-explorer/noita-component-library/lib/hooks/useToast.tsx';
 import {
+  Button,
+  useToast,
   ContextMenuItem,
   useContextMenuStore,
-} from '@noita-explorer/noita-component-library/lib/ui-stores/context-menu-store.ts';
-/!*import { noitaAPI } from '../../ipcHandlers';
- *!/
+} from '@noita-explorer/noita-component-library';
+import { noitaAPI } from '../ipcHandlers.ts';
 
 interface PathInputProps {
-  path?: string;
+  path: string;
   displayPath?: string;
   setPath: (path: string) => void;
   dialogTitle?: string;
@@ -67,4 +65,3 @@ export const PathInput = ({
     </div>
   );
 };
-*/
