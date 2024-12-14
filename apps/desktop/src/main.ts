@@ -23,7 +23,7 @@ const createWindow = () => {
   } else {
     mainWindow.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`));
   }*/
-    mainWindow.loadURL('http://localhost:5173');
+  mainWindow.loadURL('http://localhost:5174');
 
   // Open the DevTools.
   mainWindow.webContents.openDevTools();

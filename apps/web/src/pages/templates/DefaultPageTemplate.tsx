@@ -44,7 +44,7 @@ export const DefaultPageTemplate = ({
             marginTop: 10,
           }}
         >
-          <Button onClick={() => navigate(-1)}>Leave</Button>
+          <Button onClick={() => navigate('/')}>Leave</Button>
         </div>
       </div>
     </div>
