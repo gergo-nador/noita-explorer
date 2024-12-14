@@ -1,0 +1,5 @@
+{
+  "directory": ["./lib"],
+  "delete": true,
+  "name": "main.ts"
+}
