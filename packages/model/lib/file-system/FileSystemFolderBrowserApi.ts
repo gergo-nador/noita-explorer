@@ -5,4 +5,8 @@ export interface FileSystemFolderBrowserApi {
   getFile: (path: string) => Promise<FileSystemFile>;
   getFolder: (path: string) => Promise<FileSystemFolderBrowserApi>;
   listFilesFromFolder: () => Promise<FileSystemFile[]>;
+
+  path: {
+    join: (args: string[]) => Promise<string>;
+  };
 }

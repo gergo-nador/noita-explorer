@@ -1,5 +1,8 @@
 import { FileReadOptions } from './FileReadOptions';
 
 export interface FileSystemFile {
-  read: () => FileReadOptions;
+  getName: () => string;
+  getNameWithoutExtension: () => string;
+  read: FileReadOptions;
+  exists: () => Promise<boolean>;
 }

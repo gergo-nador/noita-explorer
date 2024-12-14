@@ -1,70 +1,60 @@
-import { NoitaTranslationsModel } from '../NoitaTranslations';
-import path from 'path';
 import { noitaPaths } from '../NoitaPaths';
 import {
-  checkPathExist,
-  readFileAsText,
-  readImageAsBase64,
-} from '../../utils/FileSystem';
-import {
-  NoitaSpell,
+  FileSystemFolderBrowserApi,
   NoitaConstants,
-  StringKeyDictionary,
-  SpellModifierUnit,
-} from '../../../common';
-import { trim } from '../../utils/StringUtils';
-import { parseLua } from '../../utils/LuaUtils';
-import { parseXmlFile, XmlWrapper } from '../../utils/XmlUtils';
+  NoitaSpell,
+  NoitaTranslationsModel,
+  SpellModifierNumberUnit,
+} from '@noita-explorer/model';
+import {
+  LuaWrapper,
+  parseXml,
+  proxiedPropertiesOf,
+  trim,
+  XmlWrapper,
+} from '@noita-explorer/tools';
 
-// https://noita.wiki.gg/wiki/Damage_Types
 export const readSpells = async ({
-  dataWakExtractedPath,
+  dataWakFolderBrowserApi,
   translationsModel,
 }: {
-  dataWakExtractedPath: string;
+  dataWakFolderBrowserApi: FileSystemFolderBrowserApi;
   translationsModel: NoitaTranslationsModel;
 }) => {
-  const spell_list_path = path.join(
-    dataWakExtractedPath,
+  const spellListLuaScriptPath = await dataWakFolderBrowserApi.path.join(
     noitaPaths.noitaDataWak.luaScripts.guns,
   );
+  const spellListLuaScriptFile = await dataWakFolderBrowserApi.getFile(
+    spellListLuaScriptPath,
+  );
+  const text = await spellListLuaScriptFile.read.asText();
+  const luaWrapper = LuaWrapper(text);
 
-  const text = await readFileAsText(spell_list_path);
-  const parsed = parseLua({ text });
+  const actionListStatement = luaWrapper
+    .findTopLevelAssignmentStatement('actions')
+    .first();
 
-  const action_list_statement = parsed.findAssignmentStatement({
-    variableName: 'actions',
-  });
-  const luaActionsArrayIterator = parsed.extractArrayObjectDeclaration({
-    statement: action_list_statement,
-  });
+  const luaActionsArray = actionListStatement.asArrayObjectDeclarationList();
 
   const spells: NoitaSpell[] = [];
 
-  for (const luaSpell of luaActionsArrayIterator) {
-    if (luaSpell['id'] === undefined || luaSpell['id'] === '') {
-      throw new Error(
-        'id is undefined or empty when extracting it from lua for spell ' +
-          JSON.stringify(luaSpell),
-      );
-    }
-
+  for (const luaSpell of luaActionsArray) {
     const spell: NoitaSpell = {
-      id: luaSpell['id'] as string,
-      name: luaSpell['name'] as string,
-      description: luaSpell['description'] as string,
+      id: luaSpell.getRequiredField('id').required.asString(),
+      name: luaSpell.getRequiredField('name').required.asString(),
+      description: luaSpell.getRequiredField('description').required.asString(),
       imageBase64: '',
-      type: luaSpell['type'] as string,
+      type: luaSpell.getRequiredField('type').required.asIdentifier(),
 
-      maxUses: luaSpell['max_uses'] as number | undefined,
-      price: luaSpell['price'] as number,
-      manaDrain: luaSpell['mana'] as number,
+      maxUses: luaSpell.getField('max_uses')?.asNumber(),
+      price: luaSpell.getRequiredField('price').required.asNumber(),
+      manaDrain: luaSpell.getRequiredField('mana').required.asNumber(),
       isDangerousBlast:
-        (luaSpell['is_dangerous_blast'] as boolean | undefined) ?? false,
+        luaSpell.getField('is_dangerous_blast')?.asBoolean() ?? false,
       neverUnlimited:
-        (luaSpell['never_unlimited'] as boolean | undefined) ?? false,
-      recursive: (luaSpell['recursive'] as boolean | undefined) ?? false,
-      spawnRequiredFlag: luaSpell['spawn_required_flag'] as string | undefined,
+        luaSpell.getField('never_unlimited')?.asBoolean() ?? false,
+      recursive: luaSpell.getField('recursive')?.asBoolean() ?? false,
+      spawnRequiredFlag: luaSpell.getField('spawn_required_flag')?.asString(),
 
       explosionDontDamageShooter: false,
       friendlyFire: false,
@@ -99,9 +89,9 @@ export const readSpells = async ({
 
     // Load the translation
     const spellName = trim({ text: spell.name, fromStart: '$' });
-    const spellNameTranslation = translationsModel.tryGetTranslation(spellName);
-    if (spellNameTranslation.exists) {
-      spell.name = spellNameTranslation.translation.en;
+    const spellNameTranslation = translationsModel.getTranslation(spellName);
+    if (spellNameTranslation) {
+      spell.name = spellNameTranslation.en;
     }
 
     const spellDescription = trim({
@@ -109,25 +99,35 @@ export const readSpells = async ({
       fromStart: '$',
     });
     const spellDescriptionTranslation =
-      translationsModel.tryGetTranslation(spellDescription);
-    if (spellDescriptionTranslation.exists) {
-      spell.description = spellDescriptionTranslation.translation.en;
+      translationsModel.getTranslation(spellDescription);
+    if (spellDescriptionTranslation) {
+      spell.description = spellDescriptionTranslation.en;
     }
 
     // load the image
-    const sprite: string = luaSpell['sprite'] as string;
-    const relativeImagePath = sprite.split('/').slice(1).join(path.sep);
-    const imagePath = path.join(dataWakExtractedPath, relativeImagePath);
-    spell.imageBase64 = await readImageAsBase64(imagePath);
+    const sprite: string = luaSpell
+      .getRequiredField('sprite')
+      .required.asString();
+    const imagePath = await dataWakFolderBrowserApi.path.join(
+      sprite.split('/'),
+    );
+    const imageFile = await dataWakFolderBrowserApi.getFile(imagePath);
+    spell.imageBase64 = await imageFile.read.asImageBase64();
 
     // load other data
 
     try {
-      const xmlFiles = luaSpell['related_projectiles'];
+      const xmlFiles = luaSpell.getField('related_projectiles')?.asArray();
       if (Array.isArray(xmlFiles)) {
-        for (const xmlFile of xmlFiles) {
-          if (typeof xmlFile !== 'string') continue;
-          await scrapeXmlSpellData(dataWakExtractedPath, xmlFile, spell);
+        for (const xmlFilePathValue of xmlFiles) {
+          const xmlFilePath = xmlFilePathValue.asString();
+          if (xmlFilePath !== undefined) {
+            await scrapeXmlSpellData(
+              dataWakFolderBrowserApi,
+              xmlFilePath,
+              spell,
+            );
+          }
         }
       }
     } catch (e) {
@@ -135,6 +135,7 @@ export const readSpells = async ({
       console.log('at spell', spell);
     }
 
+    // Multiply the damages by the damage multiplier
     const proxiedSpell = proxiedPropertiesOf(spell);
     const damages = [
       proxiedSpell.meleeDamage,
@@ -149,35 +150,67 @@ export const readSpells = async ({
       proxiedSpell.holyDamage,
     ];
     for (const damage of damages) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      if (damage in spell && spell[damage] !== undefined) {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
+      if (
+        damage !== undefined &&
+        damage in spell &&
+        spell[damage] !== undefined
+      ) {
         spell[damage] *= NoitaConstants.damageMultiplier;
       }
     }
 
-    const action = luaSpell['action'] as
-      | StringKeyDictionary<SpellModifierUnit>
-      | undefined;
-    if (action) {
-      spell.speedModifier = action['c.speed_multiplier'];
-      spell.fireRateWaitModifier = action['c.fire_rate_wait'];
-      spell.lifetimeModifier = action['c.lifetime_add'];
-      spell.spreadDegreesModifier = action['c.spread_degrees'];
-      spell.explosionDamageModifier = action['c.explosion_radius'];
-      spell.explosionRadiusModifier = action['c.damage_explosion_add'];
-      spell.iceDamageModifier = action['c.damage_ice_add'];
-      spell.reloadTimeModifier = action['current_reload_time'];
-      spell.recoilModifier = action['shot_effects.recoil_knockback'];
-      // TODO: friendly fire
-      // spell.friendlyFire = action['c.friendly_fire'];
+    const action = luaSpell.getField('action')?.asFunction();
+    if (action !== undefined) {
+      const actionStatements = action.getAssignments().map((a) => a.first());
 
-      spell.projectileDamageModifier = action['c.damage_projectile_add'];
-      if (spell.projectileDamageModifier) {
-        spell.projectileDamageModifier.value *= NoitaConstants.damageMultiplier;
+      for (const statement of actionStatements) {
+        const name = statement.getName();
+
+        const expressionParts = statement.asExpression();
+        const numberExpressions = expressionParts.filter(
+          (p) => typeof p.value === 'number',
+        );
+
+        if (numberExpressions.length === 0) {
+          continue;
+        }
+
+        let operator = numberExpressions[0].operator;
+        if (expressionParts.length === 1) operator = '=';
+
+        const modifierNumberUnit: SpellModifierNumberUnit = {
+          value: numberExpressions[0].value as number,
+          operator: operator,
+        };
+
+        if (name === 'c.speed_multiplier')
+          spell.speedModifier = modifierNumberUnit;
+        else if (name === 'c.fire_rate_wait')
+          spell.fireRateWaitModifier = modifierNumberUnit;
+        else if (name === 'c.lifetime_add')
+          spell.lifetimeModifier = modifierNumberUnit;
+        else if (name === 'c.spread_degrees')
+          spell.spreadDegreesModifier = modifierNumberUnit;
+        else if (name === 'c.explosion_radius')
+          spell.explosionRadiusModifier = modifierNumberUnit;
+        else if (name === 'c.damage_explosion_add')
+          spell.explosionDamageModifier = modifierNumberUnit;
+        else if (name === 'c.damage_ice_add')
+          spell.iceDamageModifier = modifierNumberUnit;
+        else if (name === 'c.damage_projectile_add')
+          spell.projectileDamageModifier = modifierNumberUnit;
+        else if (name === 'current_reload_time')
+          spell.reloadTimeModifier = modifierNumberUnit;
+        else if (name === 'shot_effects.recoil_knockback')
+          spell.recoilModifier = modifierNumberUnit;
       }
+
+      if (spell.projectileDamageModifier)
+        spell.projectileDamageModifier.value *= NoitaConstants.damageMultiplier;
+      if (spell.iceDamageModifier)
+        spell.iceDamageModifier.value *= NoitaConstants.damageMultiplier;
+      if (spell.explosionDamageModifier)
+        spell.explosionDamageModifier.value *= NoitaConstants.damageMultiplier;
     }
 
     spells.push(spell);
@@ -187,65 +220,80 @@ export const readSpells = async ({
 };
 
 const scrapeXmlSpellData = async (
-  rootPath: string,
+  dataWakFolderBrowserApi: FileSystemFolderBrowserApi,
   xmlRelativePath: string,
   spell: NoitaSpell,
 ) => {
-  const relativeXmlPath = xmlRelativePath.split('/').slice(1).join(path.sep);
-  const xmlPath = path.join(rootPath, relativeXmlPath);
+  const xmlFilePath = await dataWakFolderBrowserApi.path.join(
+    xmlRelativePath.split('/'),
+  );
+  const xmlFile = await dataWakFolderBrowserApi.getFile(xmlFilePath);
+  const xmlFileExists = await xmlFile.exists();
 
-  if (!checkPathExist(xmlPath)) return spell;
+  if (!xmlFileExists) return spell;
 
-  const xmlObj = await parseXmlFile(xmlPath);
+  const xmlText = await xmlFile.read.asText();
+  const xmlObj = await parseXml(xmlText);
   const xml = XmlWrapper(xmlObj);
 
   // this is in the main xml file
   const hitEffects = xml.findTagArray('HitEffectComponent');
   for (const hitEffect of hitEffects) {
     // specific for healhurt (Deadly Heal), in this xml will be the Regeneration Game effect
-    const effect = hitEffect.getAttribute('value_string');
+    const effect = hitEffect.getAttribute('value_string')?.asText();
     if (effect?.endsWith('.xml')) {
-      await scrapeXmlSpellData(rootPath, effect, spell);
+      await scrapeXmlSpellData(dataWakFolderBrowserApi, effect, spell);
     }
   }
 
   // this could come from the HitEffectComponent
   const gameEffects = xml.findTagArray('GameEffectComponent');
   for (const gameEffect of gameEffects) {
-    const effect = gameEffect.getAttribute('effect');
-    const frames = gameEffect.getAttributeNumber('frames');
+    const effect = gameEffect.getAttribute('effect')?.asText();
+    const frames = gameEffect.getAttribute('frames')?.asInt();
 
-    if (effect === 'REGENERATION' && frames > 0) {
+    if (effect === 'REGENERATION' && frames !== undefined && frames > 0) {
       spell.regenerationFrames = frames;
     }
   }
 
   const lifetimeComponent = xml.findNthTag('LifetimeComponent');
   if (lifetimeComponent !== undefined) {
-    spell.lifetime ??= lifetimeComponent.getAttributeNumber('lifetime');
+    spell.lifetime ??= lifetimeComponent.getAttribute('lifetime')?.asInt();
   }
 
   const projectileComponent = xml.findNthTag('ProjectileComponent', 0);
 
   if (projectileComponent !== undefined) {
-    spell.lifetime ??= projectileComponent.getAttributeNumber('lifetime');
-    spell.lifetimeRandomness ??= projectileComponent.getAttributeNumber(
-      'lifetime_randomness',
-    );
-    spell.projectileDamage ??= projectileComponent.getAttributeNumber('damage');
+    spell.lifetime ??= projectileComponent.getAttribute('lifetime')?.asInt();
+    spell.lifetimeRandomness ??= projectileComponent
+      .getAttribute('lifetime_randomness')
+      ?.asInt();
+    spell.projectileDamage ??= projectileComponent
+      .getAttribute('damage')
+      ?.asFloat();
 
     spell.explosionDontDamageShooter =
-      projectileComponent.getAttribute('explosion_dont_damage_shooter') === '1';
+      projectileComponent
+        .getAttribute('explosion_dont_damage_shooter')
+        ?.asBoolean() ?? false;
+
     spell.friendlyFire =
-      projectileComponent.getAttribute('friendly_fire') === '1';
+      projectileComponent.getAttribute('friendly_fire')?.asBoolean() ?? false;
 
     const damageGameEffectEntities = trim({
       text:
-        projectileComponent.getAttribute('damage_game_effect_entities') ?? '',
+        projectileComponent
+          .getAttribute('damage_game_effect_entities')
+          ?.asText() ?? '',
       fromEnd: ',',
     });
     if (damageGameEffectEntities?.endsWith('.xml')) {
-      await scrapeXmlSpellData(rootPath, damageGameEffectEntities, spell);
+      await scrapeXmlSpellData(
+        dataWakFolderBrowserApi,
+        damageGameEffectEntities,
+        spell,
+      );
     }
 
     const explosionConfig = projectileComponent.findNthTag(
@@ -254,40 +302,31 @@ const scrapeXmlSpellData = async (
     );
 
     if (explosionConfig !== undefined) {
-      spell.diggingPower ??= explosionConfig.getAttributeNumber('ray_energy');
-      spell.explosionDamage ??= explosionConfig.getAttributeNumber('damage');
-      spell.explosionRadius ??=
-        explosionConfig.getAttributeNumber('explosion_radius');
+      spell.diggingPower ??= explosionConfig
+        .getAttribute('ray_energy')
+        ?.asInt();
+      spell.explosionDamage ??= explosionConfig
+        .getAttribute('damage')
+        ?.asFloat();
+      spell.explosionRadius ??= explosionConfig
+        .getAttribute('explosion_radius')
+        ?.asInt();
     }
 
     const damageByType = projectileComponent.findNthTag('damage_by_type', 0);
     if (damageByType !== undefined) {
-      spell.healingDamage ??= damageByType.getAttributeNumber('healing');
-      spell.sliceDamage ??= damageByType.getAttributeNumber('slice');
-      spell.meleeDamage ??= damageByType.getAttributeNumber('melee');
-      spell.fireDamage ??= damageByType.getAttributeNumber('fire');
-      spell.drillDamage ??= damageByType.getAttributeNumber('drill');
-      spell.iceDamage ??= damageByType.getAttributeNumber('ice');
-      spell.holyDamage ??= damageByType.getAttributeNumber('holy');
-      spell.electricityDamage ??=
-        damageByType.getAttributeNumber('electricity');
+      spell.healingDamage ??= damageByType.getAttribute('healing')?.asFloat();
+      spell.sliceDamage ??= damageByType.getAttribute('slice')?.asFloat();
+      spell.meleeDamage ??= damageByType.getAttribute('melee')?.asFloat();
+      spell.fireDamage ??= damageByType.getAttribute('fire')?.asFloat();
+      spell.drillDamage ??= damageByType.getAttribute('drill')?.asFloat();
+      spell.iceDamage ??= damageByType.getAttribute('ice')?.asFloat();
+      spell.holyDamage ??= damageByType.getAttribute('holy')?.asFloat();
+      spell.electricityDamage ??= damageByType
+        .getAttribute('electricity')
+        ?.asFloat();
     }
   }
 
   return spell;
 };
-
-function proxiedPropertiesOf<TObj>(obj?: TObj) {
-  // https://stackoverflow.com/questions/33547583/safe-way-to-extract-property-names
-  return new Proxy(
-    {},
-    {
-      get: (_, prop) => prop,
-      set: () => {
-        throw Error('Set not supported');
-      },
-    },
-  ) as {
-    [P in keyof TObj]?: P;
-  };
-}

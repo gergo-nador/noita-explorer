@@ -1,44 +1,35 @@
-import path from 'path';
-import {
-  getFilesFromFolder,
-  readFileAsText,
-  readImageAsBase64,
-} from '../../utils/FileSystem';
-import { NoitaEnemy, StringKeyDictionary } from '../../../common';
-import { NoitaTranslationsModel } from '../NoitaTranslations';
 import { noitaPaths } from '../NoitaPaths';
-import { EOL } from 'os';
+import {
+  FileSystemFolderBrowserApi,
+  StringKeyDictionary,
+  NoitaEnemy,
+  NoitaTranslationsModel,
+} from '@noita-explorer/model';
 
 export const readEnemy = async ({
-  dataWakExtractedPath,
+  dataWakFolderBrowserApi,
   translationsModel,
 }: {
-  dataWakExtractedPath: string;
+  dataWakFolderBrowserApi: FileSystemFolderBrowserApi;
   translationsModel: NoitaTranslationsModel;
 }): Promise<NoitaEnemy[]> => {
-  const enemyFolder = path.join(
-    dataWakExtractedPath,
+  const animalsFolderPath = await dataWakFolderBrowserApi.path.join(
     noitaPaths.noitaDataWak.icons.animals,
   );
+  const animalsFolder =
+    await dataWakFolderBrowserApi.getFolder(animalsFolderPath);
 
-  const files = await getFilesFromFolder(enemyFolder);
+  const files = await animalsFolder.listFilesFromFolder();
   const noitaEnemies: NoitaEnemy[] = [];
 
-  let list: string[] = [];
+  let animalList: string[] = [];
 
   for (const file of files) {
-    const parsed = path.parse(file);
-    const filename = parsed.base;
-    const nameWithoutExtension = parsed.name;
+    const filename = file.getName();
+    const nameWithoutExtension = file.getNameWithoutExtension();
 
     if (filename === '_list.txt') {
-      const listPath = path.join(
-        dataWakExtractedPath,
-        noitaPaths.noitaDataWak.icons.animals,
-        filename,
-      );
-      const listTxt = await readFileAsText(listPath);
-      list = listTxt.split(EOL);
+      animalList = await file.read.asTextLines();
 
       continue;
     }
@@ -52,25 +43,19 @@ export const readEnemy = async ({
       basebot_soldier: 'Teloittaja',
     };
 
-    let animalName: string = '__empty__' + animalId;
+    let animalName: string;
     const translationId = 'animal_' + animalId;
-    const translationResult =
-      translationsModel.tryGetTranslation(translationId);
+    const translationResult = translationsModel.getTranslation(translationId);
 
-    if (translationResult.exists) {
-      animalName = translationResult.translation.en;
+    if (translationResult) {
+      animalName = translationResult.en;
     } else if (animalId in missingTranslationNames) {
       animalName = missingTranslationNames[animalId];
     } else {
       animalName = '__not_found__' + animalId;
     }
 
-    const imagePath = path.join(
-      dataWakExtractedPath,
-      noitaPaths.noitaDataWak.icons.animals,
-      file,
-    );
-    const imageBase64 = await readImageAsBase64(imagePath);
+    const imageBase64 = await file.read.asImageBase64();
 
     noitaEnemies.push({
       id: animalId,
@@ -79,15 +64,13 @@ export const readEnemy = async ({
     });
   }
 
-  // first sort by abc
-  //noitaEnemies.sort((a, b) => a.name.localeCompare(b.name));
-  // then sort by the list
+  // sort by the animal list
   noitaEnemies.sort((a, b) => {
-    let index1 = list.indexOf(a.id);
-    let index2 = list.indexOf(b.id);
+    let index1 = animalList.indexOf(a.id);
+    let index2 = animalList.indexOf(b.id);
 
-    if (index1 === -1) index1 = list.length;
-    if (index2 === -1) index2 = list.length;
+    if (index1 === -1) index1 = animalList.length;
+    if (index2 === -1) index2 = animalList.length;
 
     return index1 - index2;
   });

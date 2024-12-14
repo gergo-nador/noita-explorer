@@ -11,7 +11,7 @@ import { LuaExpressionPart } from './LuaExpressionPart';
 export interface LuaAssignmentWrapperType {
   getName: () => string;
   asExpression: () => LuaExpressionPart[];
-  asArrayObjectDeclarationIterator: () => Generator<LuaObjectDeclarationWrapperType>;
+  asArrayObjectDeclarationList: () => LuaObjectDeclarationWrapperType[];
 }
 
 export const LuaAssignmentWrapper = (
@@ -19,9 +19,15 @@ export const LuaAssignmentWrapper = (
   expression: Expression,
 ): LuaAssignmentWrapperType => {
   return {
-    getName: () => LuaValueWrapper(variable).asIdentifier(),
+    getName: () => {
+      const name = LuaValueWrapper(variable).asIdentifier();
+      if (name === undefined) {
+        throw new Error('identifier name is undefined.');
+      }
+      return name;
+    },
     asExpression: () => getExpressionValue(expression),
-    asArrayObjectDeclarationIterator: () =>
+    asArrayObjectDeclarationList: () =>
       processArrayObjectDeclaration(expression),
   };
 };
@@ -56,18 +62,25 @@ const getExpressionValue = (
   return [part];
 };
 
-function* processArrayObjectDeclaration(expression: Expression) {
+function processArrayObjectDeclaration(
+  expression: Expression,
+): LuaObjectDeclarationWrapperType[] {
   const array = LuaValueWrapper(expression).asArray();
   if (array === undefined) {
     throw new Error('array is undefined');
   }
 
+  const arr: LuaObjectDeclarationWrapperType[] = [];
+
   // loop through each object of the array
   for (const item of array) {
     const obj = item.asObject();
-    if (obj !== undefined) {
+    if (obj === undefined) {
       continue;
     }
-    yield obj;
+
+    arr.push(obj);
   }
+
+  return arr;
 }

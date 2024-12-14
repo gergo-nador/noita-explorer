@@ -7,7 +7,7 @@ export interface NoitaPerk extends NoitaProgressEntity {
   stackable: boolean;
   stackableIsRare: boolean;
   stackableMaximum: number | undefined;
-  stackableHowOftenReappears: number;
+  stackableHowOftenReappears: number | undefined;
   maxInPerkPool: number | undefined;
   usableByEnemies: boolean;
   oneOffEffect: boolean;

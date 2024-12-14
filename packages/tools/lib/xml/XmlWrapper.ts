@@ -1,4 +1,5 @@
 import { XmlAttributeReadOptions } from './XmlAttributeReadOptions';
+import { StringKeyDictionaryComposite } from '@noita-explorer/model';
 
 interface XmlWrapperType {
   _getCurrentXmlObj: () => object;
@@ -7,7 +8,9 @@ interface XmlWrapperType {
   getAttribute: (attributeName: string) => XmlAttributeReadOptions | undefined;
 }
 
-export const XmlWrapper = (xmlObj: object): XmlWrapperType => {
+export const XmlWrapper = (
+  xmlObj: StringKeyDictionaryComposite<string>,
+): XmlWrapperType => {
   if (xmlObj === undefined) {
     throw new Error('xmlObj is undefined');
   }
@@ -23,7 +26,10 @@ export const XmlWrapper = (xmlObj: object): XmlWrapperType => {
   };
 };
 
-const findTagArray = (xmlObject: object, name: string) => {
+const findTagArray = (
+  xmlObject: StringKeyDictionaryComposite<string>,
+  name: string,
+) => {
   const tag = findXmlTag(xmlObject, name);
 
   if (typeof tag !== 'object') {
@@ -36,7 +42,11 @@ const findTagArray = (xmlObject: object, name: string) => {
   return tag.map((t) => XmlWrapper(t));
 };
 
-const findNthTag = (xmlObject: object, name: string, index = 0) => {
+const findNthTag = (
+  xmlObject: StringKeyDictionaryComposite<string>,
+  name: string,
+  index = 0,
+) => {
   const tag = findXmlTag(xmlObject, name);
 
   if (typeof tag !== 'object') {
@@ -56,7 +66,7 @@ const findNthTag = (xmlObject: object, name: string, index = 0) => {
 };
 
 const getAttribute = (
-  xmlObject: object,
+  xmlObject: StringKeyDictionaryComposite<string>,
   name: string,
 ): XmlAttributeReadOptions | undefined => {
   if (!('$' in xmlObject) || typeof xmlObject['$'] !== 'object') {
@@ -65,7 +75,7 @@ const getAttribute = (
 
   const attributes = xmlObject['$'];
 
-  if (!(name in attributes)) {
+  if (attributes == null || !(name in attributes)) {
     return undefined;
   }
 
@@ -93,9 +103,9 @@ const getAttribute = (
 };
 
 const findXmlTag = (
-  xmlObject: object,
+  xmlObject: StringKeyDictionaryComposite<string>,
   tagName: string,
-): string | object | undefined => {
+): StringKeyDictionaryComposite<string> | string | undefined => {
   if (xmlObject === undefined) {
     throw new Error(`xmlObject is undefined for tag name ${tagName}`);
   }

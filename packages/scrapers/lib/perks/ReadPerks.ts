@@ -1,82 +1,78 @@
 import { noitaPaths } from '../NoitaPaths';
-import path from 'path';
-import { readFileAsText, readImageAsBase64 } from '../../utils/FileSystem';
-import { NoitaTranslationsModel } from '../NoitaTranslations';
-import { NoitaPerk } from '../../../common';
-import { trim } from '../../utils/StringUtils';
-import { parseLua } from '../../utils/LuaUtils';
+import {
+  FileSystemFolderBrowserApi,
+  NoitaTranslationsModel,
+  NoitaPerk,
+} from '@noita-explorer/model';
+import { LuaWrapper, trim } from '@noita-explorer/tools';
 
 export const readPerks = async ({
-  dataWakExtractedPath,
+  dataWakFolderBrowserApi,
   translationsModel,
 }: {
-  dataWakExtractedPath: string;
+  dataWakFolderBrowserApi: FileSystemFolderBrowserApi;
   translationsModel: NoitaTranslationsModel;
 }): Promise<NoitaPerk[]> => {
-  const perk_list_path = path.join(
-    dataWakExtractedPath,
+  const perkListLuaScriptPath = await dataWakFolderBrowserApi.path.join(
     noitaPaths.noitaDataWak.luaScripts.perks,
   );
+  const perkListLuaScriptFile = await dataWakFolderBrowserApi.getFile(
+    perkListLuaScriptPath,
+  );
 
-  const text = await readFileAsText(perk_list_path);
-  const parsed = parseLua({ text });
+  const text = await perkListLuaScriptFile.read.asText();
+  const parsed = LuaWrapper(text);
 
-  const perk_list_statement = parsed.findAssignmentStatement({
-    variableName: 'perk_list',
-  });
-  const luaPerkArrayIterator = parsed.extractArrayObjectDeclaration({
-    statement: perk_list_statement,
-  });
+  const perkListStatement = parsed
+    .findTopLevelAssignmentStatement('perk_list')
+    .first();
+  const luaPerkArray = perkListStatement.asArrayObjectDeclarationList();
 
   const perks: NoitaPerk[] = [];
 
-  for (const luaPerk of luaPerkArrayIterator) {
-    if (luaPerk['id'] === undefined) {
-      throw new Error(
-        'id is undefined when extracting it from lua for perk ' +
-          JSON.stringify(luaPerk),
-      );
-    }
-
+  for (const luaPerk of luaPerkArray) {
     const perk: NoitaPerk = {
-      id: luaPerk['id'] as string,
-      name: luaPerk['ui_name'] as string,
-      description: luaPerk['ui_description'] as string,
+      id: luaPerk.getRequiredField('id').required.asString(),
+      name: luaPerk.getRequiredField('ui_name').required.asString(),
+      description: luaPerk
+        .getRequiredField('ui_description')
+        .required.asString(),
       imageBase64: '',
 
       // stacking
-      stackableIsRare: (luaPerk['stackable_is_rare'] as boolean) ?? false,
-      stackable: luaPerk['stackable'] === 'STACKABLE_YES',
-      stackableMaximum: luaPerk['stackable_maximum'] as number | undefined,
-      stackableHowOftenReappears: luaPerk['stackable_how_often_reappears'] as
-        | number
-        | undefined,
+      stackableIsRare:
+        luaPerk.getField('stackable_is_rare')?.asBoolean() ?? false,
+      stackable: luaPerk.getField('stackable')?.asString() === 'STACKABLE_YES',
+      stackableMaximum: luaPerk.getField('stackable_maximum')?.asNumber(),
+      stackableHowOftenReappears: luaPerk
+        .getField('stackable_how_often_reappears')
+        ?.asNumber(),
 
       // perk pool
-      maxInPerkPool: luaPerk['max_in_perk_pool'] as number | undefined,
+      maxInPerkPool: luaPerk.getField('max_in_perk_pool')?.asNumber(),
       notInDefaultPerkPool:
-        (luaPerk['not_in_default_perk_pool'] as boolean) ?? false,
-
+        luaPerk.getField('not_in_default_perk_pool')?.asBoolean() ?? false,
       // others
-      doNotRemove: (luaPerk['do_not_remove'] as boolean) ?? false,
-      oneOffEffect: (luaPerk['one_off_effect'] as boolean) ?? false,
-      usableByEnemies: (luaPerk['usable_by_enemies'] as boolean) ?? false,
+      doNotRemove: luaPerk.getField('do_not_remove')?.asBoolean() ?? false,
+      oneOffEffect: luaPerk.getField('one_off_effect')?.asBoolean() ?? false,
+      usableByEnemies:
+        luaPerk.getField('usable_by_enemies')?.asBoolean() ?? false,
       gameEffects: [],
     };
 
     // add the game effects
-    for (const key in luaPerk) {
+    for (const key in luaPerk.keys) {
       if (key.startsWith('game_effect')) {
-        const gameEffect = luaPerk[key] as string;
+        const gameEffect = luaPerk.getRequiredField(key).required.asString();
         perk.gameEffects.push(gameEffect);
       }
     }
 
     // Load the translation
     const perkNameId = trim({ text: perk.name, fromStart: '$' });
-    const perkNameTranslation = translationsModel.tryGetTranslation(perkNameId);
-    if (perkNameTranslation.exists) {
-      perk.name = perkNameTranslation.translation.en;
+    const perkNameTranslation = translationsModel.getTranslation(perkNameId);
+    if (perkNameTranslation) {
+      perk.name = perkNameTranslation.en;
     }
 
     const perkDescription = trim({
@@ -84,15 +80,18 @@ export const readPerks = async ({
       fromStart: '$',
     });
     const perkDescriptionTranslation =
-      translationsModel.tryGetTranslation(perkDescription);
-    if (perkDescriptionTranslation.exists) {
-      perk.description = perkDescriptionTranslation.translation.en;
+      translationsModel.getTranslation(perkDescription);
+    if (perkDescriptionTranslation) {
+      perk.description = perkDescriptionTranslation.en;
     }
+
     // load the image
-    const ui_icon: string = luaPerk['perk_icon'] as string;
-    const relativePath = ui_icon.split('/').slice(1).join(path.sep);
-    const imagePath = path.join(dataWakExtractedPath, relativePath);
-    perk.imageBase64 = await readImageAsBase64(imagePath);
+    const ui_icon = luaPerk.getRequiredField('perk_icon').required.asString();
+    const imagePath = await dataWakFolderBrowserApi.path.join(
+      ui_icon.split('/'),
+    );
+    const imageFile = await dataWakFolderBrowserApi.getFile(imagePath);
+    perk.imageBase64 = await imageFile.read.asImageBase64();
 
     perks.push(perk);
   }

@@ -1,5 +1,5 @@
 import { Expression } from 'luaparse';
-import { trim } from '../StringUtils';
+import { trim } from '../common/StringUtils';
 import {
   LuaFunctionDeclarationWrapper,
   LuaFunctionDeclarationWrapperType,
@@ -10,10 +10,15 @@ import {
 } from './LuaObjectDeclarationWrapper';
 
 export interface LuaValueWrapperType {
+  required: {
+    asIdentifier: () => string;
+    asString: () => string;
+    asNumber: () => number;
+  };
   asIdentifier: () => string | undefined;
   asString: () => string | undefined;
   asNumber: () => number | undefined;
-  asBoolean: () => boolean | undefined;
+  asBoolean: (defaultValue?: boolean) => boolean | undefined;
   asArray: () => LuaValueWrapperType[] | undefined;
   asObject: () => LuaObjectDeclarationWrapperType | undefined;
   asFunction: () => LuaFunctionDeclarationWrapperType | undefined;
@@ -72,12 +77,12 @@ export const LuaValueWrapper = (field: Expression): LuaValueWrapperType => {
     return undefined;
   };
 
-  const getValueAsBooleanLiteral = () => {
+  const getValueAsBooleanLiteral = (defaultValue?: boolean) => {
     if (fieldValueType !== 'BooleanLiteral') {
-      return undefined;
+      return defaultValue;
     }
 
-    return fieldValue['value'];
+    return fieldValue['value'] ?? defaultValue;
   };
 
   const getValueAsArray = () => {
@@ -113,6 +118,12 @@ export const LuaValueWrapper = (field: Expression): LuaValueWrapperType => {
   };
 
   return {
+    required: {
+      asIdentifier: () =>
+        throwIfUndefined(getValueAsIdentifier(), 'identifier'),
+      asString: () => throwIfUndefined(getValueAsStringLiteral(), 'string'),
+      asNumber: () => throwIfUndefined(getValueAsNumericLiteral(), 'numeric'),
+    },
     asIdentifier: getValueAsIdentifier,
     asString: getValueAsStringLiteral,
     asNumber: getValueAsNumericLiteral,
@@ -121,4 +132,11 @@ export const LuaValueWrapper = (field: Expression): LuaValueWrapperType => {
     asObject: getValueAsObjectDeclaration,
     asFunction: getValueAsFunctionDeclaration,
   };
+};
+
+const throwIfUndefined = <T>(value: T | undefined, name: string): T => {
+  if (value === undefined) {
+    throw new Error(name + ' value is undefined');
+  }
+  return value;
 };

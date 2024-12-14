@@ -19,7 +19,7 @@ function lookForTopLevelAssignmentStatement(
   parsed: Chunk,
   variableName: string,
 ) {
-  let assignment: AssignmentStatement = undefined;
+  let assignment: AssignmentStatement | undefined = undefined;
 
   for (const statement of parsed.body) {
     if (
@@ -33,7 +33,7 @@ function lookForTopLevelAssignmentStatement(
     }
   }
 
-  if (assignment == undefined) {
+  if (assignment === undefined) {
     throw new Error(
       `'${variableName}' assignment not found in the lua script.`,
     );

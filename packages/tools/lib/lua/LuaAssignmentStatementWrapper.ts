@@ -5,6 +5,7 @@ import {
 } from './LuaAssignmentWrapper';
 
 export interface LuaAssignmentStatementWrapperType {
+  first: () => LuaAssignmentWrapperType;
   getAssignments: () => LuaAssignmentWrapperType[];
 }
 
@@ -12,6 +13,12 @@ export const LuaAssignmentStatementWrapper = (
   assignmentStatement: AssignmentStatement,
 ): LuaAssignmentStatementWrapperType => {
   return {
+    first: () => {
+      const variable = assignmentStatement.variables[0];
+      const expression = assignmentStatement.init[0];
+
+      return LuaAssignmentWrapper(variable, expression);
+    },
     getAssignments: () => {
       const arr: LuaAssignmentWrapperType[] = [];
       const assignmentCount = assignmentStatement.variables.length;
