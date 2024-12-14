@@ -1,3 +1,4 @@
+/*
 import {
   Button,
   Header,
@@ -183,3 +184,4 @@ export const NoitaScraperPathSetup = () => {
     </>
   );
 };
+*/

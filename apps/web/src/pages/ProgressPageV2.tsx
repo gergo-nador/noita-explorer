@@ -1,3 +1,4 @@
+/*
 import {
   ActiveProgressIcon,
   Button,
@@ -100,3 +101,4 @@ export const ProgressPageV2 = () => {
     />
   );
 };
+*/

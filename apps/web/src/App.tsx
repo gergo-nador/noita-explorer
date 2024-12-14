@@ -17,7 +17,7 @@ export const App = () => {
         .then(() => console.log('Settings Loaded'))
         .catch((err) => console.error('Settings Load error', err));
     }
-  }, [loaded]);
+  }, [loaded, load]);
 
   return (
     <>

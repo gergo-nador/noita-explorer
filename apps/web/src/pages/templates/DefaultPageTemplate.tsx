@@ -16,26 +16,36 @@ export const DefaultPageTemplate = ({
   return (
     <div
       style={{
-        minWidth: '100%',
-        minHeight: '100%',
+        width: '100%',
+        height: '100%',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
+        flexDirection: 'column',
       }}
     >
-      <Card
+      <div
         style={{
-          padding: 10,
-          maxWidth: '95%',
-          maxHeight: '90%',
-          ...style,
+          maxHeight: '100%',
+          width: '90%',
         }}
       >
-        {children}
-      </Card>
+        <Card
+          style={{
+            maxHeight: '80vh',
+            ...style,
+          }}
+        >
+          {children}
+        </Card>
 
-      <div>
-        <Button onClick={() => navigate(-1)}>Leave</Button>
+        <div
+          style={{
+            marginTop: 10,
+          }}
+        >
+          <Button onClick={() => navigate(-1)}>Leave</Button>
+        </div>
       </div>
     </div>
   );

@@ -2,8 +2,8 @@
     --border-width: 4px;
 
     display: grid;
-    grid-template-columns: var(--border-width) auto var(--border-width);
-    grid-template-rows: var(--border-width) auto var(--border-width);
+    grid-template-columns: var(--border-width) 1fr var(--border-width);
+    grid-template-rows: var(--border-width) 1fr var(--border-width);
 }
 
 .style-gray {
@@ -28,22 +28,22 @@
 
 .grid-top-row {
     display: grid;
-    grid-template-columns: auto var(--border-width) ;
+    grid-template-columns: 1fr var(--border-width) ;
 }
 
 .grid-left-column {
     display: grid;
-    grid-template-rows: auto var(--border-width);
+    grid-template-rows: 1fr var(--border-width);
 }
 
 .grid-right-column {
     display: grid;
-    grid-template-rows: var(--border-width) auto;
+    grid-template-rows: var(--border-width) 1fr;
 }
 
 .grid-bottom-column {
     display: grid;
-    grid-template-columns: var(--border-width) auto;
+    grid-template-columns: var(--border-width) 1fr;
 }
 
 .border-bright {

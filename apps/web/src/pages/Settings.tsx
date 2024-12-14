@@ -1,3 +1,4 @@
+/*
 import { Header, PathInput, Button } from '../noita-component-library';
 import { useSettingsStore } from '../stores/settings';
 import { PlatformR } from '../utils/PlatformR';
@@ -161,3 +162,4 @@ export const Settings = () => {
     </div>
   );
 };
+*/

@@ -5,6 +5,7 @@ import React from 'react';
 import { TeamFortress2 } from '../components/holidays/TeamFortress2';
 import { Halloween } from '../components/holidays/Halloween';
 import { Winter } from '../components/holidays/Winter';
+import { DefaultPageTemplate } from './templates/DefaultPageTemplate.tsx';
 
 export const NoitaHolidays = () => {
   const holidays: NoitaHoliday[] = [
@@ -58,33 +59,32 @@ export const NoitaHolidays = () => {
     },
   ];
   return (
-    <div
-      style={{
-        minWidth: '100%',
-        minHeight: '100%',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'column',
-      }}
-    >
+    <DefaultPageTemplate>
       <br />
       <br />
       <br />
-      <br />
-      {holidays.map((holiday) => (
-        <div style={{ width: '600px', maxWidth: '95%', marginBottom: 30 }}>
-          {holiday.reactComponent ?? (
-            <Card color={'gold'}>
-              <div style={{ marginBottom: 15 }}>
-                {holiday.title} - {holiday.datesText}
-              </div>
-              <div>{holiday.description}</div>
-            </Card>
-          )}
-        </div>
-      ))}
-    </div>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          flexDirection: 'column',
+        }}
+      >
+        {holidays.map((holiday) => (
+          <div style={{ width: '600px', maxWidth: '80%', marginBottom: 30 }}>
+            {holiday.reactComponent ?? (
+              <Card color={'gold'}>
+                <div style={{ marginBottom: 15 }}>
+                  {holiday.title} - {holiday.datesText}
+                </div>
+                <div>{holiday.description}</div>
+              </Card>
+            )}
+          </div>
+        ))}
+      </div>
+    </DefaultPageTemplate>
   );
 };
 

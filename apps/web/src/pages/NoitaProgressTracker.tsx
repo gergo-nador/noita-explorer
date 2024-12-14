@@ -1,3 +1,4 @@
+/*
 import {
   ActiveProgressIcon,
   Button,
@@ -137,3 +138,4 @@ export const NoitaProgressTracker = () => {
     </PageBaseCard>
   );
 };
+*/

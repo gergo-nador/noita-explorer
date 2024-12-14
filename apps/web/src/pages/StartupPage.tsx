@@ -1,3 +1,4 @@
+/*
 import { useSettingsStore } from '../stores/settings';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -89,3 +90,4 @@ export const StartupPage = () => {
     </div>
   );
 };
+*/
