@@ -1,0 +1,119 @@
+import {
+  Button,
+  Header,
+  NoitaTooltipWrapper,
+  useToast,
+} from '@noita-explorer/noita-component-library';
+import { useSettingsStore } from '../../stores/settings';
+import { noitaAPI } from '../../ipcHandlers';
+import { useNavigate } from 'react-router-dom';
+import { pages } from '../../routes/pages';
+import { useEffect, useState } from 'react';
+import { PageBottomComponent } from '../../components/PageBottomComponent';
+import { PathInput } from '../../components/PathInput.tsx';
+import { Flex } from '../../components/Flex.tsx';
+
+export const SetupDesktopPaths = () => {
+  const { paths, set: setPaths } = useSettingsStore();
+  const navigate = useNavigate();
+  const toast = useToast();
+  const [nextEnabled, setNextEnabled] = useState(false);
+
+  const [defaultPaths, setDefaultPaths] = useState<{
+    install: string | undefined;
+    NollaGamesNoita: string | undefined;
+  }>({
+    install: undefined,
+    NollaGamesNoita: undefined,
+  });
+
+  useEffect(() => {
+    Promise.all([
+      noitaAPI.noita.defaultPaths.installPathDefault(),
+      noitaAPI.noita.defaultPaths.nollaGamesNoitaDefault(),
+    ])
+      .then((result) => {
+        setDefaultPaths({
+          ...defaultPaths,
+          install: result[0],
+          NollaGamesNoita: result[1],
+        });
+      })
+      .catch((err) =>
+        console.error('Error while settings default paths: ', err),
+      );
+  }, []);
+
+  const autoFill = async () => {
+    const newPaths = {
+      ...paths,
+      install: paths.install ?? defaultPaths.install,
+      NollaGamesNoita: paths.NollaGamesNoita ?? defaultPaths.NollaGamesNoita,
+    };
+
+    toast.info('Autofill completed');
+
+    setPaths((state) => (state.paths = newPaths));
+  };
+
+  useEffect(() => {
+    if (!paths.install) setNextEnabled(false);
+    else if (!paths.NollaGamesNoita) setNextEnabled(false);
+    else setNextEnabled(true);
+  }, [paths]);
+
+  return (
+    <>
+      <Header title={'Step 1: Paths'}>
+        <div style={{ display: 'flex' }}>
+          <NoitaTooltipWrapper content={'Noita Install Folder'}>
+            <PathInput
+              type={'directory'}
+              displayPath={paths.install ?? 'Select Noita Install Folder...'}
+              startInIfPathEmpty={defaultPaths.install}
+              dialogTitle={'Select Noita Install Folder'}
+              path={paths.install}
+              setPath={(path) => {
+                setPaths(
+                  (state) => (state.paths = { ...paths, install: path }),
+                );
+              }}
+            />
+          </NoitaTooltipWrapper>
+        </div>
+        <div style={{ display: 'flex' }}>
+          <NoitaTooltipWrapper content={'NollaGamesNoita folder'}>
+            <PathInput
+              type={'directory'}
+              displayPath={
+                paths.NollaGamesNoita ?? 'Select the NollaGamesNoita folder'
+              }
+              startInIfPathEmpty={defaultPaths.NollaGamesNoita}
+              dialogTitle={'Select the NollaGamesNoita folder'}
+              path={paths.NollaGamesNoita}
+              setPath={(path) => {
+                setPaths(
+                  (state) =>
+                    (state.paths = { ...paths, NollaGamesNoita: path }),
+                );
+              }}
+            />
+          </NoitaTooltipWrapper>
+        </div>
+      </Header>
+
+      <PageBottomComponent>
+        <div></div>
+        <Flex gap={20}>
+          <Button onClick={() => autoFill()}>Auto fill</Button>
+          <Button
+            disabled={!nextEnabled}
+            onClick={() => navigate(pages.setup.scrape)}
+          >
+            Next
+          </Button>
+        </Flex>
+      </PageBottomComponent>
+    </>
+  );
+};

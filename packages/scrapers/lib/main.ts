@@ -3,6 +3,6 @@
  */
 
 export * from "./NoitaPaths";
-export * from "./enemies/ReadEnemy";
-export * from "./perks/ReadPerks";
-export * from "./spells/ReadSpells";
+export * from "./enemies/ScrapeEnemy";
+export * from "./perks/ScrapePerks";
+export * from "./spells/ScrapeSpells";

@@ -15,6 +15,19 @@ const noitaApi: NoitaAPI = {
       get: () => ipcRenderer.invoke('noita-data-file:get'),
       write: (obj) => ipcRenderer.invoke('noita-data-file:write', obj),
     },
+    defaultPaths: {
+      installPathDefault: () =>
+        ipcRenderer.invoke('noita-default-paths:install'),
+      nollaGamesNoitaDefault: () =>
+        ipcRenderer.invoke('noita-default-paths:nolla-games-noita'),
+    },
+  },
+  dialog: {
+    openFolderDialog: (args) =>
+      ipcRenderer.invoke('dialog:openDirectory', args),
+    openFileDialog: (args) => ipcRenderer.invoke('dialog:openFile', args),
+    openExplorer: (path: string) =>
+      ipcRenderer.invoke('dialog:openExplorer', path),
   },
   clipboard: {
     get: () => ipcRenderer.invoke('clipboard:get'),

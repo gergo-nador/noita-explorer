@@ -1,4 +1,3 @@
-/*
 import {
   Button,
   Card,
@@ -23,8 +22,13 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { pages } from '../../routes/pages';
 import { useNoitaDataWakStore } from '../../stores/NoitaDataWak';
+import {
+  scrapeEnemy,
+  scrapePerks,
+  scrapeSpells,
+} from '@noita-explorer/scrapers';
 
-export const NoitaScraper = () => {
+export const SetupDesktopDataWak = () => {
   const navigate = useNavigate();
   const [importResult, setImportResult] = useState<ImportResult>();
   const [isLoading, setIsLoading] = useState(false);
@@ -284,4 +288,3 @@ function ImportResultDisplay<T>({
     </Card>
   );
 }
-*/

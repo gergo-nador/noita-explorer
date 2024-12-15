@@ -6,7 +6,7 @@ import {
   NoitaTranslationsModel,
 } from '@noita-explorer/model';
 
-export const readEnemy = async ({
+export const scrapeEnemy = async ({
   dataWakFolderBrowserApi,
   translationsModel,
 }: {

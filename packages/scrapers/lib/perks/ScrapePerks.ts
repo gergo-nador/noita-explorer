@@ -6,7 +6,7 @@ import {
 } from '@noita-explorer/model';
 import { LuaWrapper, trim } from '@noita-explorer/tools';
 
-export const readPerks = async ({
+export const scrapePerks = async ({
   dataWakFolderBrowserApi,
   translationsModel,
 }: {

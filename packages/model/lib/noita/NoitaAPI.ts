@@ -11,18 +11,18 @@ export interface NoitaAPI {
       get: () => Promise<NoitaWakData>;
       write: (obj: NoitaWakData) => Promise<void>;
     };
-    /*defaultPaths: {
+    defaultPaths: {
       installPathDefault: () => Promise<string | undefined>;
       nollaGamesNoitaDefault: () => Promise<string | undefined>;
     };
-    save00: {
+    /*save00: {
       getEnemyStatistics: () => Promise<{
         enemies: StringKeyDictionary<EnemyStatistic>;
       }>;
       readFlags: () => Promise<{ spells: string[]; perks: string[] }>;
     };*/
   };
-  /*dialog: {
+  dialog: {
     openFolderDialog: (args?: {
       startIn?: string;
       title?: string;
@@ -35,7 +35,7 @@ export interface NoitaAPI {
 
     openExplorer: (path: string) => Promise<boolean>;
   };
-  path: {
+  /*path: {
     exist: (path: string) => Promise<boolean>;
     join: (paths: string[]) => Promise<string>;
   };*/

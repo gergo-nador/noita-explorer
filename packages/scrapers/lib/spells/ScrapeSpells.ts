@@ -14,7 +14,7 @@ import {
   XmlWrapper,
 } from '@noita-explorer/tools';
 
-export const readSpells = async ({
+export const scrapeSpells = async ({
   dataWakFolderBrowserApi,
   translationsModel,
 }: {

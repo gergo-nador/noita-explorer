@@ -5,6 +5,7 @@ import { NoitaSpell } from '../NoitaSpell';
 export interface NoitaWakData {
   scrapedAt: string;
   scrapedAtUnix: number;
+  version: number;
   enemies: NoitaEnemy[];
   perks: NoitaPerk[];
   spells: NoitaSpell[];

@@ -2,6 +2,7 @@ import { Button, useToast } from '@noita-explorer/noita-component-library';
 import { useNavigate } from 'react-router-dom';
 import { pages } from '../routes/pages';
 import { useNoitaDataWakStore } from '../stores/NoitaDataWak';
+import { noitaAPI } from '../ipcHandlers.ts';
 
 export const MainPage = () => {
   const navigate = useNavigate();
@@ -20,9 +21,12 @@ export const MainPage = () => {
         gap: 5,
       }}
     >
-      <Button decoration={'both'} onClick={() => navigate(pages.setup.paths)}>
-        Setup
-      </Button>
+      {!!noitaAPI.environment.desktop && (
+        <Button decoration={'both'} onClick={() => navigate(pages.setup.paths)}>
+          Setup
+        </Button>
+      )}
+
       <Button
         disabled={!noitaDataWakLoaded}
         decoration={'both'}

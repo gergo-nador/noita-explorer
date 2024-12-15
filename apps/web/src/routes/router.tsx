@@ -1,7 +1,10 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter, Outlet } from 'react-router-dom';
 import { MainPage } from '../pages/MainPage';
 
 import { NoitaHolidays } from '../pages/NoitaHolidays';
+import { DefaultPageTemplate } from '../pages/templates/DefaultPageTemplate.tsx';
+import { SetupDesktopPaths } from '../pages/scraper/SetupDesktopPaths.tsx';
+import { SetupDesktopDataWak } from '../pages/scraper/SetupDesktopDataWak.tsx';
 
 export const router = createBrowserRouter([
   {
@@ -26,7 +29,7 @@ export const router = createBrowserRouter([
       },
     ],
   },*/
-  /*{
+  {
     path: 'setup',
     element: (
       <DefaultPageTemplate>
@@ -34,10 +37,10 @@ export const router = createBrowserRouter([
       </DefaultPageTemplate>
     ),
     children: [
-      { path: 'paths', element: <NoitaScraperPathSetup /> },
-      { path: 'scrape', element: <NoitaScraper /> },
+      { path: 'paths', element: <SetupDesktopPaths /> },
+      { path: 'scrape', element: <SetupDesktopDataWak /> },
     ],
-  },*/
+  },
   {
     path: 'holidays',
     element: <NoitaHolidays />,

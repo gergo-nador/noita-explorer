@@ -1,5 +1,5 @@
 import { ipcMain } from 'electron';
-import { getConfig, setConfig } from '../persistence/ConfigStore';
+import { getConfig, setConfig } from '../persistence/config-store';
 
 export const registerConfigIpcHandlers = () => {
   ipcMain.handle('config:get', (event, key: string) => {

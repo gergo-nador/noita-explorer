@@ -24,4 +24,22 @@ export const Platform = {
 
     throw new Error('Platform not supported: ' + process.platform);
   },
+
+  selectValue: function selectValue<T>(args: {
+    windows: T;
+    macOs: T;
+    linux: T;
+  }): T {
+    if (isMacOs) {
+      return args.macOs;
+    }
+    if (isLinux) {
+      return args.linux;
+    }
+    if (isWindows) {
+      return args.windows;
+    }
+
+    throw new Error('Platform not supported: ' + process.platform);
+  },
 };

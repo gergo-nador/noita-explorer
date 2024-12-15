@@ -5,13 +5,8 @@ export interface SettingsState {
   paths: {
     // noita install folder path
     install: string | undefined;
-    commonCsv: string | undefined;
     // master data folder for noita saves
     NollaGamesNoita: string | undefined;
-    // save00 inside Nolla Games Noita
-    save00: string | undefined;
-    // Extracted data.wak path
-    data: string | undefined;
   };
   loaded: boolean;
   load: () => Promise<void>;
@@ -21,10 +16,7 @@ export interface SettingsState {
 export const useSettingsStore = create<SettingsState>((set, get) => ({
   paths: {
     install: undefined,
-    commonCsv: undefined,
     NollaGamesNoita: undefined,
-    save00: undefined,
-    data: undefined,
   },
   loaded: false,
   load: async () => {

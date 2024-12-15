@@ -9,6 +9,7 @@ import { noitaAPI } from '../ipcHandlers.ts';
 interface PathInputProps {
   path: string | undefined;
   displayPath?: string;
+  startInIfPathEmpty?: string;
   setPath: (path: string) => void;
   dialogTitle?: string;
   type: 'file' | 'directory';
@@ -17,6 +18,7 @@ interface PathInputProps {
 export const PathInput = ({
   path,
   displayPath,
+  startInIfPathEmpty,
   setPath,
   dialogTitle,
   type,
@@ -24,11 +26,17 @@ export const PathInput = ({
   const onPathSelect = () => {
     if (type === 'directory') {
       noitaAPI.dialog
-        .openFolderDialog({ startIn: path, title: dialogTitle })
+        .openFolderDialog({
+          startIn: path ?? startInIfPathEmpty,
+          title: dialogTitle,
+        })
         .then((folder) => folder && setPath(folder));
     } else if (type === 'file') {
       noitaAPI.dialog
-        .openFileDialog({ startIn: path, title: dialogTitle })
+        .openFileDialog({
+          startIn: path ?? startInIfPathEmpty,
+          title: dialogTitle,
+        })
         .then((file) => file && setPath(file));
     }
   };
