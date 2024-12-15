@@ -17,8 +17,12 @@ export const FileSystemFolderBrowserNode = (
     return checkPathExist(absolutePath);
   };
 
+  const getAbsolutePath = (relativePath: string) => {
+    return path.join(folderPath, relativePath);
+  };
+
   const getRelativeFolder = (relativePath: string) => {
-    const absolutePath = path.join(folderPath, relativePath);
+    const absolutePath = getAbsolutePath(relativePath);
     const isDir = fs.lstatSync(absolutePath).isDirectory();
 
     if (!isDir) {
@@ -33,6 +37,7 @@ export const FileSystemFolderBrowserNode = (
   const listFiles = async () => {
     const paths = await getPathsFromFolder(folderPath);
     return paths
+      .map((p) => getAbsolutePath(p))
       .filter((p) => fs.lstatSync(p).isFile())
       .map((f) => FileSystemFileNode(f));
   };
@@ -45,6 +50,7 @@ export const FileSystemFolderBrowserNode = (
       resolvePromise(checkRelativePathExists(path)),
     getFolder: (path) => resolvePromise(getRelativeFolder(path)),
     listFilesFromFolder: () => listFiles(),
-    getFile: (path) => resolvePromise(FileSystemFileNode(path)),
+    getFile: (path) =>
+      resolvePromise(FileSystemFileNode(getAbsolutePath(path))),
   };
 };

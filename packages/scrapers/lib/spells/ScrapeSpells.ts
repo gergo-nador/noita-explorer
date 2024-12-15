@@ -1,6 +1,7 @@
 import {
   FileSystemFolderBrowserApi,
   NoitaConstants,
+  noitaPaths,
   NoitaSpell,
   NoitaTranslation,
   SpellModifierNumberUnit,
@@ -13,7 +14,6 @@ import {
   trim,
   XmlWrapper,
 } from '@noita-explorer/tools';
-import { noitaPaths } from '../NoitaPaths';
 
 export const scrapeSpells = async ({
   dataWakFolderBrowserApi,
@@ -49,7 +49,7 @@ export const scrapeSpells = async ({
 
       maxUses: luaSpell.getField('max_uses')?.asNumber(),
       price: luaSpell.getRequiredField('price').required.asNumber(),
-      manaDrain: luaSpell.getRequiredField('mana').required.asNumber(),
+      manaDrain: luaSpell.getField('mana')?.asNumber(),
       isDangerousBlast:
         luaSpell.getField('is_dangerous_blast')?.asBoolean() ?? false,
       neverUnlimited:

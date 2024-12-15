@@ -14,18 +14,13 @@ const noitaApi: NoitaAPI = {
       exists: () => ipcRenderer.invoke('noita-data-file:is-ready'),
       get: () => ipcRenderer.invoke('noita-data-file:get'),
       write: (obj) => ipcRenderer.invoke('noita-data-file:write', obj),
+      scrape: () => ipcRenderer.invoke('noita-data-file:scrape'),
     },
     defaultPaths: {
       installPathDefault: () =>
         ipcRenderer.invoke('noita-default-paths:install'),
       nollaGamesNoitaDefault: () =>
         ipcRenderer.invoke('noita-default-paths:nolla-games-noita'),
-    },
-    fileAccessApis: {
-      translationsFile: () =>
-        ipcRenderer.invoke('noita-file-access:translations'),
-      dataWakExtracted: () =>
-        ipcRenderer.invoke('noita-file-access:data-wak-extracted'),
     },
   },
   dialog: {

@@ -1,6 +1,5 @@
 import { NoitaWakData } from './scraping/NoitaWakData';
-import { FileSystemFolderBrowserApi } from '../file-system/FileSystemFolderBrowserApi';
-import { FileSystemFile } from '../file-system/FileSystemFile';
+import { ImportResult } from './scraping/ImportResult.ts';
 
 export interface NoitaAPI {
   config: {
@@ -12,14 +11,11 @@ export interface NoitaAPI {
       exists: () => Promise<boolean>;
       get: () => Promise<NoitaWakData>;
       write: (obj: NoitaWakData) => Promise<void>;
+      scrape: () => Promise<ImportResult>;
     };
     defaultPaths: {
       installPathDefault: () => Promise<string | undefined>;
       nollaGamesNoitaDefault: () => Promise<string | undefined>;
-    };
-    fileAccessApis: {
-      dataWakExtracted: () => Promise<FileSystemFolderBrowserApi>;
-      translationsFile: () => Promise<FileSystemFile>;
     };
     /*save00: {
       getEnemyStatistics: () => Promise<{

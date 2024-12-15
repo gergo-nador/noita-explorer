@@ -4,6 +4,9 @@
       "dependsOn": ["^build", "generate-barrels"],
       "outputs": ["dist/**"]
     },
+    "dev": {
+      "dependsOn": ["^build"]
+    },
     "generate-barrels": {}
   },
   "extends": ["//"]

@@ -8,7 +8,7 @@ export interface NoitaSpell extends NoitaProgressEntity {
   // properties from gun_actions
   price: number;
   maxUses: number | undefined;
-  manaDrain: number;
+  manaDrain: number | undefined;
   neverUnlimited: boolean;
   recursive: boolean;
   isDangerousBlast: boolean;

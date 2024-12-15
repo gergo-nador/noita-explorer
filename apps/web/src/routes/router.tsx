@@ -3,8 +3,8 @@ import { MainPage } from '../pages/MainPage';
 
 import { NoitaHolidays } from '../pages/NoitaHolidays';
 import { DefaultPageTemplate } from '../pages/templates/DefaultPageTemplate.tsx';
-import { SetupDesktopPaths } from '../pages/scraper/SetupDesktopPaths.tsx';
-import { SetupDesktopDataWak } from '../pages/scraper/SetupDesktopDataWak.tsx';
+import { SetupDesktopPaths } from '../pages/setup/SetupDesktopPaths.tsx';
+import { SetupDesktopScraper } from '../pages/setup/SetupDesktopScraper.tsx';
 
 export const router = createBrowserRouter([
   {
@@ -38,7 +38,7 @@ export const router = createBrowserRouter([
     ),
     children: [
       { path: 'paths', element: <SetupDesktopPaths /> },
-      { path: 'scrape', element: <SetupDesktopDataWak /> },
+      { path: 'scrape', element: <SetupDesktopScraper /> },
     ],
   },
   {

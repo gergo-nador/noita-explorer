@@ -3,9 +3,9 @@ import {
   NoitaPerk,
   StringKeyDictionary,
   NoitaTranslation,
+  noitaPaths,
 } from '@noita-explorer/model';
 import { LuaWrapper, trim } from '@noita-explorer/tools';
-import { noitaPaths } from '../NoitaPaths';
 
 export const scrapePerks = async ({
   dataWakFolderBrowserApi,

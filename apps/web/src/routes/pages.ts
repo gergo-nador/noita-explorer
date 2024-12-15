@@ -1,6 +1,5 @@
 export const pages = {
-  startup: '/',
-  main: '/main',
+  main: '/',
   setup: {
     paths: '/setup/paths',
     scrape: '/setup/scrape',

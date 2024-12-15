@@ -2,7 +2,7 @@ import { NoitaEnemy } from '../NoitaEnemy';
 import { NoitaPerk } from '../NoitaPerk';
 import { NoitaSpell } from '../NoitaSpell';
 import { NoitaTranslation } from './NoitaTranslation';
-import { StringKeyDictionary } from '../../../dist/common/StringKeyDictionary';
+import { StringKeyDictionary } from '../../common/StringKeyDictionary';
 
 export interface NoitaWakData {
   scrapedAt: string;

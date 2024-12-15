@@ -13,13 +13,7 @@ export const NoitaTooltipWrapper = ({
   children,
 }: NoitaTooltipProps) => {
   const id = useMemo(() => {
-    if (!('randomUUID' in window.crypto)) {
-      return Math.floor(Math.random() * 100000000) + '';
-    }
-
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    return window.crypto.randomUUID();
+    return 'id-' + Math.floor(Math.random() * 100000000);
   }, []);
 
   return (

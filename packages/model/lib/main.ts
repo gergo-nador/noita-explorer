@@ -20,5 +20,6 @@ export * from "./noita/scraping/EnemyStatistics";
 export * from "./noita/scraping/ImportResult";
 export * from "./noita/scraping/ImportResultPart";
 export * from "./noita/scraping/ImportResultStatus";
+export * from "./noita/scraping/NoitaPaths";
 export * from "./noita/scraping/NoitaTranslation";
 export * from "./noita/scraping/NoitaWakData";

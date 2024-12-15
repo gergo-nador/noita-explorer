@@ -21,10 +21,6 @@ export function browserNoitaApi(): NoitaAPI {
         resolveCallbackPromise(() => config.set(key, value)),
     },
     noita: {
-      fileAccessApis: {
-        translationsFile: throwNotAllowedInThisModeError,
-        dataWakExtracted: throwNotAllowedInThisModeError,
-      },
       defaultPaths: {
         installPathDefault: throwNotAllowedInThisModeError,
         nollaGamesNoitaDefault: throwNotAllowedInThisModeError,
@@ -33,6 +29,7 @@ export function browserNoitaApi(): NoitaAPI {
         get: throwNotAllowedInThisModeError,
         exists: throwNotAllowedInThisModeError,
         write: throwNotAllowedInThisModeError,
+        scrape: throwNotAllowedInThisModeError,
       },
     },
     dialog: {

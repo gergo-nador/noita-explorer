@@ -5,19 +5,13 @@ import {
   NoitaTooltipWrapper,
   ProgressIcon,
   useBool,
-  useDialogStore,
   useToast,
 } from '@noita-explorer/noita-component-library';
 import {
   ImportResult,
   ImportResultPart,
   ImportResultStatus,
-  NoitaEnemy,
-  NoitaPerk,
-  NoitaSpell,
-  NoitaTranslation,
   NoitaWakData,
-  StringKeyDictionary,
 } from '@noita-explorer/model';
 import { PageBottomComponent } from '../../components/PageBottomComponent';
 import { Flex } from '../../components/Flex';
@@ -26,19 +20,12 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { pages } from '../../routes/pages';
 import { useNoitaDataWakStore } from '../../stores/NoitaDataWak';
-import {
-  readTranslations,
-  scrapeEnemy,
-  scrapePerks,
-  scrapeSpells,
-} from '@noita-explorer/scrapers';
 
-export const SetupDesktopDataWak = () => {
+export const SetupDesktopScraper = () => {
   const navigate = useNavigate();
   const [importResult, setImportResult] = useState<ImportResult>();
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
-  const { showButtonDialog } = useDialogStore();
   const { load: loadNoitaDataWak } = useNoitaDataWakStore();
 
   const [isFinishEnabled, setIsFinishEnabled] = useState(false);
@@ -46,104 +33,10 @@ export const SetupDesktopDataWak = () => {
   const scrape = async () => {
     setIsLoading(true);
 
-    let translations: StringKeyDictionary<NoitaTranslation>;
+    const result = await noitaAPI.noita.dataFile.scrape();
+    console.log(result);
+    setImportResult(result);
 
-    try {
-      const translationFile =
-        await noitaAPI.noita.fileAccessApis.translationsFile();
-      translations = await readTranslations({
-        translationFile: translationFile,
-      });
-    } catch (e) {
-      setImportResult({
-        translations: {
-          status: ImportResultStatus.FAILED,
-          error: {
-            message: JSON.stringify(e),
-            errorData: e,
-          },
-        },
-        enemies: {
-          status: ImportResultStatus.SKIPPED,
-        },
-        perks: {
-          status: ImportResultStatus.SKIPPED,
-        },
-        spells: {
-          status: ImportResultStatus.SKIPPED,
-        },
-      });
-      setIsLoading(false);
-      return;
-    }
-
-    const dataWakFolderBrowserApi =
-      await noitaAPI.noita.fileAccessApis.dataWakExtracted();
-
-    let perks: NoitaPerk[] = [];
-    let perkError: unknown | undefined = undefined;
-    try {
-      perks = await scrapePerks({
-        dataWakFolderBrowserApi: dataWakFolderBrowserApi,
-        translations: translations,
-      });
-    } catch (e) {
-      perkError = e;
-    }
-
-    let spells: NoitaSpell[] = [];
-    let spellsError: unknown | undefined = undefined;
-    try {
-      spells = await scrapeSpells({
-        dataWakFolderBrowserApi: dataWakFolderBrowserApi,
-        translations: translations,
-      });
-    } catch (e) {
-      spellsError = e;
-    }
-
-    let enemies: NoitaEnemy[] = [];
-    let enemiesError: unknown | undefined = undefined;
-    try {
-      enemies = await scrapeEnemy({
-        dataWakFolderBrowserApi: dataWakFolderBrowserApi,
-        translations: translations,
-      });
-    } catch (err) {
-      enemiesError = err;
-    }
-
-    setImportResult({
-      translations: {
-        status: ImportResultStatus.SUCCESS,
-        data: translations,
-        error: undefined,
-      },
-      perks: {
-        status:
-          perkError === undefined
-            ? ImportResultStatus.SUCCESS
-            : ImportResultStatus.FAILED,
-        data: perks,
-        error: perkError,
-      },
-      spells: {
-        status:
-          spellsError === undefined
-            ? ImportResultStatus.SUCCESS
-            : ImportResultStatus.FAILED,
-        data: spells,
-        error: spellsError,
-      },
-      enemies: {
-        status:
-          enemiesError === undefined
-            ? ImportResultStatus.SUCCESS
-            : ImportResultStatus.FAILED,
-        data: enemies,
-        error: enemiesError,
-      },
-    });
     setIsLoading(false);
   };
 
@@ -174,30 +67,14 @@ export const SetupDesktopDataWak = () => {
   };
 
   const finish = () => {
-    showButtonDialog({
-      title: 'This will save the scraped data. Do you want to continue?',
-      buttons: [
-        {
-          id: 'cancel',
-          title: 'No',
-          onClick: () => toast.warning('Action cancelled'),
-        },
-        {
-          id: 'accept',
-          title: 'Yes',
-          onClick: () => {
-            save()
-              .then((data) => loadNoitaDataWak(data))
-              .then(() => toast.success('Setup complete'))
-              .then(() => navigate(pages.main))
-              .catch((err) => {
-                toast.error('An error occured while saving the data');
-                console.error(err);
-              });
-          },
-        },
-      ],
-    });
+    save()
+      .then((data) => loadNoitaDataWak(data))
+      .then(() => toast.success('Setup complete'))
+      .then(() => navigate(pages.main))
+      .catch((err) => {
+        toast.error('An error occured while saving the data');
+        console.error(err);
+      });
   };
 
   useEffect(() => {
@@ -225,11 +102,7 @@ export const SetupDesktopDataWak = () => {
   return (
     <div>
       <Header title={'Scraper'}>
-        {isLoading ? (
-          <div>Loading...</div>
-        ) : (
-          <Button onClick={scrape}>Scrape Again</Button>
-        )}
+        {isLoading && <div>Loading...</div>}
         <br />
         {importResult && (
           <Flex style={{ gap: '10px' }}>
@@ -293,11 +166,13 @@ export const SetupDesktopDataWak = () => {
       </Header>
       <PageBottomComponent>
         <Flex gap={10}>
-          <Button onClick={() => navigate(pages.main)}>Cancel</Button>
           <Button onClick={() => navigate(pages.setup.paths)}>Back</Button>
         </Flex>
 
-        <Flex gap={10}>
+        <Flex gap={20}>
+          <Button onClick={scrape} disabled={isLoading}>
+            {isLoading ? 'Scraping...' : 'Scrape Again'}
+          </Button>
           <Button disabled={!isFinishEnabled} onClick={() => finish()}>
             Finish
           </Button>

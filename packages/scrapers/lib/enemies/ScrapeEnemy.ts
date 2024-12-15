@@ -3,8 +3,8 @@ import {
   StringKeyDictionary,
   NoitaEnemy,
   NoitaTranslation,
+  noitaPaths,
 } from '@noita-explorer/model';
-import { noitaPaths } from '../NoitaPaths';
 
 export const scrapeEnemy = async ({
   dataWakFolderBrowserApi,
