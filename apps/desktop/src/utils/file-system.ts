@@ -4,7 +4,7 @@ import { spawn } from 'child_process';
 import { Platform } from './Platform';
 import { trim } from '@noita-explorer/tools';
 
-export const getFilesFromFolder = (folder: string): Promise<string[]> => {
+export const getPathsFromFolder = (folder: string): Promise<string[]> => {
   return new Promise((resolve, reject) => {
     fs.readdir(folder, (err, files) => {
       if (err) {

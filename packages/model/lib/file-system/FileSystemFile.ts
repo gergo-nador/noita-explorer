@@ -4,5 +4,4 @@ export interface FileSystemFile {
   getName: () => string;
   getNameWithoutExtension: () => string;
   read: FileReadOptions;
-  exists: () => Promise<boolean>;
 }

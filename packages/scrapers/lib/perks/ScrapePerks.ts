@@ -1,17 +1,18 @@
-import { noitaPaths } from '../NoitaPaths';
 import {
   FileSystemFolderBrowserApi,
-  NoitaTranslationsModel,
   NoitaPerk,
+  StringKeyDictionary,
+  NoitaTranslation,
 } from '@noita-explorer/model';
 import { LuaWrapper, trim } from '@noita-explorer/tools';
+import { noitaPaths } from '../NoitaPaths';
 
 export const scrapePerks = async ({
   dataWakFolderBrowserApi,
-  translationsModel,
+  translations,
 }: {
   dataWakFolderBrowserApi: FileSystemFolderBrowserApi;
-  translationsModel: NoitaTranslationsModel;
+  translations: StringKeyDictionary<NoitaTranslation>;
 }): Promise<NoitaPerk[]> => {
   const perkListLuaScriptPath = await dataWakFolderBrowserApi.path.join(
     noitaPaths.noitaDataWak.luaScripts.perks,
@@ -70,7 +71,7 @@ export const scrapePerks = async ({
 
     // Load the translation
     const perkNameId = trim({ text: perk.name, fromStart: '$' });
-    const perkNameTranslation = translationsModel.getTranslation(perkNameId);
+    const perkNameTranslation = translations[perkNameId];
     if (perkNameTranslation) {
       perk.name = perkNameTranslation.en;
     }
@@ -79,8 +80,7 @@ export const scrapePerks = async ({
       text: perk.description,
       fromStart: '$',
     });
-    const perkDescriptionTranslation =
-      translationsModel.getTranslation(perkDescription);
+    const perkDescriptionTranslation = translations[perkDescription];
     if (perkDescriptionTranslation) {
       perk.description = perkDescriptionTranslation.en;
     }

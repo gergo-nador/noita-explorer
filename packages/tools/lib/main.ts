@@ -3,6 +3,7 @@
  */
 
 export * from "./common/crypto";
+export * from "./common/promises";
 export * from "./common/proxiedPropertiesOf";
 export * from "./common/StringUtils";
 export * from "./lua/LuaAssignmentStatementWrapper";

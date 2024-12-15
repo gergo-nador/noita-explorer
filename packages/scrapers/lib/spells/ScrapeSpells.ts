@@ -1,10 +1,10 @@
-import { noitaPaths } from '../NoitaPaths';
 import {
   FileSystemFolderBrowserApi,
   NoitaConstants,
   NoitaSpell,
-  NoitaTranslationsModel,
+  NoitaTranslation,
   SpellModifierNumberUnit,
+  StringKeyDictionary,
 } from '@noita-explorer/model';
 import {
   LuaWrapper,
@@ -13,13 +13,14 @@ import {
   trim,
   XmlWrapper,
 } from '@noita-explorer/tools';
+import { noitaPaths } from '../NoitaPaths';
 
 export const scrapeSpells = async ({
   dataWakFolderBrowserApi,
-  translationsModel,
+  translations,
 }: {
   dataWakFolderBrowserApi: FileSystemFolderBrowserApi;
-  translationsModel: NoitaTranslationsModel;
+  translations: StringKeyDictionary<NoitaTranslation>;
 }) => {
   const spellListLuaScriptPath = await dataWakFolderBrowserApi.path.join(
     noitaPaths.noitaDataWak.luaScripts.guns,
@@ -89,7 +90,7 @@ export const scrapeSpells = async ({
 
     // Load the translation
     const spellName = trim({ text: spell.name, fromStart: '$' });
-    const spellNameTranslation = translationsModel.getTranslation(spellName);
+    const spellNameTranslation = translations[spellName];
     if (spellNameTranslation) {
       spell.name = spellNameTranslation.en;
     }
@@ -98,8 +99,7 @@ export const scrapeSpells = async ({
       text: spell.description,
       fromStart: '$',
     });
-    const spellDescriptionTranslation =
-      translationsModel.getTranslation(spellDescription);
+    const spellDescriptionTranslation = translations[spellDescription];
     if (spellDescriptionTranslation) {
       spell.description = spellDescriptionTranslation.en;
     }
@@ -227,10 +227,11 @@ const scrapeXmlSpellData = async (
   const xmlFilePath = await dataWakFolderBrowserApi.path.join(
     xmlRelativePath.split('/'),
   );
-  const xmlFile = await dataWakFolderBrowserApi.getFile(xmlFilePath);
-  const xmlFileExists = await xmlFile.exists();
-
+  const xmlFileExists =
+    await dataWakFolderBrowserApi.checkRelativePathExists(xmlFilePath);
   if (!xmlFileExists) return spell;
+
+  const xmlFile = await dataWakFolderBrowserApi.getFile(xmlFilePath);
 
   const xmlText = await xmlFile.read.asText();
   const xmlObj = await parseXml(xmlText);

@@ -6,3 +6,4 @@ export * from "./NoitaPaths";
 export * from "./enemies/ScrapeEnemy";
 export * from "./perks/ScrapePerks";
 export * from "./spells/ScrapeSpells";
+export * from "./translations/ReadTranslations";

@@ -2,18 +2,22 @@ import {
   Button,
   Card,
   Header,
-  Icon,
   NoitaTooltipWrapper,
   ProgressIcon,
   useBool,
-  useToast,
   useDialogStore,
+  useToast,
 } from '@noita-explorer/noita-component-library';
 import {
   ImportResult,
-  ImportResultStatus,
   ImportResultPart,
+  ImportResultStatus,
+  NoitaEnemy,
+  NoitaPerk,
+  NoitaSpell,
+  NoitaTranslation,
   NoitaWakData,
+  StringKeyDictionary,
 } from '@noita-explorer/model';
 import { PageBottomComponent } from '../../components/PageBottomComponent';
 import { Flex } from '../../components/Flex';
@@ -23,6 +27,7 @@ import { useNavigate } from 'react-router-dom';
 import { pages } from '../../routes/pages';
 import { useNoitaDataWakStore } from '../../stores/NoitaDataWak';
 import {
+  readTranslations,
   scrapeEnemy,
   scrapePerks,
   scrapeSpells,
@@ -32,21 +37,114 @@ export const SetupDesktopDataWak = () => {
   const navigate = useNavigate();
   const [importResult, setImportResult] = useState<ImportResult>();
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState();
   const toast = useToast();
   const { showButtonDialog } = useDialogStore();
   const { load: loadNoitaDataWak } = useNoitaDataWakStore();
 
   const [isFinishEnabled, setIsFinishEnabled] = useState(false);
 
-  const scrape = () => {
+  const scrape = async () => {
     setIsLoading(true);
-    noitaAPI.noita.dataFile
-      .scrape()
-      .then((result) => setImportResult(result))
-      .then(() => setError(undefined))
-      .catch((err) => setError(err))
-      .then(() => setIsLoading(false));
+
+    let translations: StringKeyDictionary<NoitaTranslation>;
+
+    try {
+      const translationFile =
+        await noitaAPI.noita.fileAccessApis.translationsFile();
+      translations = await readTranslations({
+        translationFile: translationFile,
+      });
+    } catch (e) {
+      setImportResult({
+        translations: {
+          status: ImportResultStatus.FAILED,
+          error: {
+            message: JSON.stringify(e),
+            errorData: e,
+          },
+        },
+        enemies: {
+          status: ImportResultStatus.SKIPPED,
+        },
+        perks: {
+          status: ImportResultStatus.SKIPPED,
+        },
+        spells: {
+          status: ImportResultStatus.SKIPPED,
+        },
+      });
+      setIsLoading(false);
+      return;
+    }
+
+    const dataWakFolderBrowserApi =
+      await noitaAPI.noita.fileAccessApis.dataWakExtracted();
+
+    let perks: NoitaPerk[] = [];
+    let perkError: unknown | undefined = undefined;
+    try {
+      perks = await scrapePerks({
+        dataWakFolderBrowserApi: dataWakFolderBrowserApi,
+        translations: translations,
+      });
+    } catch (e) {
+      perkError = e;
+    }
+
+    let spells: NoitaSpell[] = [];
+    let spellsError: unknown | undefined = undefined;
+    try {
+      spells = await scrapeSpells({
+        dataWakFolderBrowserApi: dataWakFolderBrowserApi,
+        translations: translations,
+      });
+    } catch (e) {
+      spellsError = e;
+    }
+
+    let enemies: NoitaEnemy[] = [];
+    let enemiesError: unknown | undefined = undefined;
+    try {
+      enemies = await scrapeEnemy({
+        dataWakFolderBrowserApi: dataWakFolderBrowserApi,
+        translations: translations,
+      });
+    } catch (err) {
+      enemiesError = err;
+    }
+
+    setImportResult({
+      translations: {
+        status: ImportResultStatus.SUCCESS,
+        data: translations,
+        error: undefined,
+      },
+      perks: {
+        status:
+          perkError === undefined
+            ? ImportResultStatus.SUCCESS
+            : ImportResultStatus.FAILED,
+        data: perks,
+        error: perkError,
+      },
+      spells: {
+        status:
+          spellsError === undefined
+            ? ImportResultStatus.SUCCESS
+            : ImportResultStatus.FAILED,
+        data: spells,
+        error: spellsError,
+      },
+      enemies: {
+        status:
+          enemiesError === undefined
+            ? ImportResultStatus.SUCCESS
+            : ImportResultStatus.FAILED,
+        data: enemies,
+        error: enemiesError,
+      },
+    });
+    setIsLoading(false);
   };
 
   const save = (): Promise<NoitaWakData> => {
@@ -55,6 +153,7 @@ export const SetupDesktopDataWak = () => {
       return new Promise((_resolve, reject) => reject());
     }
 
+    const translations = importResult.translations.data ?? {};
     const enemies = importResult.enemies.data ?? [];
     const perks = importResult.perks.data ?? [];
     const spells = importResult.spells.data ?? [];
@@ -64,6 +163,8 @@ export const SetupDesktopDataWak = () => {
     const data: NoitaWakData = {
       scrapedAt: now.toISOString(),
       scrapedAtUnix: now.getTime(),
+      version: 1,
+      translations: translations,
       enemies: enemies,
       perks: perks,
       spells: spells,
@@ -130,13 +231,6 @@ export const SetupDesktopDataWak = () => {
           <Button onClick={scrape}>Scrape Again</Button>
         )}
         <br />
-
-        {error && (
-          <div>
-            <Icon type={'error'} size={20} />
-            {error}
-          </div>
-        )}
         {importResult && (
           <Flex style={{ gap: '10px' }}>
             {importResult.translations.status !==
@@ -147,8 +241,10 @@ export const SetupDesktopDataWak = () => {
                     Status:
                     <StatusText status={importResult.translations.status} />
                   </div>
-                  {importResult.translations.error && (
-                    <div>Error: {importResult.translations.error.message}</div>
+                  {!!importResult.translations.error && (
+                    <div>
+                      Error: {JSON.stringify(importResult.translations.error)}
+                    </div>
                   )}
                 </Header>
               </Card>

@@ -8,11 +8,12 @@ import {
 import path from 'path';
 import started from 'electron-squirrel-startup';
 import { Platform } from './utils/Platform';
-import { registerClipboardIpcHandlers } from './ipcHandlers/clipboard';
-import { registerConfigIpcHandlers } from './ipcHandlers/config';
-import { registerNoitaDataFileHandlers } from './ipcHandlers/noita-data-file';
-import { registerNoitaDefaultPathsHandlers } from './ipcHandlers/noita-default-paths';
-import { registerDialogHandlers } from './ipcHandlers/dialog';
+import { registerClipboardIpcHandlers } from './ipc-handlers/clipboard';
+import { registerConfigIpcHandlers } from './ipc-handlers/config';
+import { registerNoitaDataFileHandlers } from './ipc-handlers/noita-data-file';
+import { registerNoitaDefaultPathsHandlers } from './ipc-handlers/noita-default-paths';
+import { registerDialogHandlers } from './ipc-handlers/dialog';
+import { registerFileAccessHandlers } from './ipc-handlers/file-access-apis';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
@@ -25,6 +26,7 @@ const ipcHandlerRegisters = [
   registerNoitaDataFileHandlers,
   registerNoitaDefaultPathsHandlers,
   registerDialogHandlers,
+  registerFileAccessHandlers,
 ];
 
 const template: (MenuItemConstructorOptions | MenuItem)[] = [

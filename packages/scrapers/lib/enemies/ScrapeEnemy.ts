@@ -1,17 +1,17 @@
-import { noitaPaths } from '../NoitaPaths';
 import {
   FileSystemFolderBrowserApi,
   StringKeyDictionary,
   NoitaEnemy,
-  NoitaTranslationsModel,
+  NoitaTranslation,
 } from '@noita-explorer/model';
+import { noitaPaths } from '../NoitaPaths';
 
 export const scrapeEnemy = async ({
   dataWakFolderBrowserApi,
-  translationsModel,
+  translations,
 }: {
   dataWakFolderBrowserApi: FileSystemFolderBrowserApi;
-  translationsModel: NoitaTranslationsModel;
+  translations: StringKeyDictionary<NoitaTranslation>;
 }): Promise<NoitaEnemy[]> => {
   const animalsFolderPath = await dataWakFolderBrowserApi.path.join(
     noitaPaths.noitaDataWak.icons.animals,
@@ -45,7 +45,7 @@ export const scrapeEnemy = async ({
 
     let animalName: string;
     const translationId = 'animal_' + animalId;
-    const translationResult = translationsModel.getTranslation(translationId);
+    const translationResult = translations[translationId];
 
     if (translationResult) {
       animalName = translationResult.en;

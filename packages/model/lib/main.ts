@@ -15,7 +15,6 @@ export * from "./noita/NoitaProgressEntity";
 export * from "./noita/NoitaProtection";
 export * from "./noita/NoitaSpell";
 export * from "./noita/NoitaSpellType";
-export * from "./noita/NoitaTranslationModel";
 export * from "./noita/SpellModifierNumberUnit";
 export * from "./noita/scraping/EnemyStatistics";
 export * from "./noita/scraping/ImportResult";

@@ -21,7 +21,8 @@
   },
   "dependencies": {
     "@noita-explorer/model": "*",
-    "@noita-explorer/tools": "*"
+    "@noita-explorer/tools": "*",
+    "csv-parse": "^5.6.0"
   },
   "devDependencies": {
     "barrelsby": "^2.8.1",

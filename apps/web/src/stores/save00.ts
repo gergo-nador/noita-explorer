@@ -1,3 +1,4 @@
+/*
 import { create } from 'zustand';
 import { noitaAPI } from '../ipcHandlers';
 import { EnemyStatistic, StringKeyDictionary } from '@noita-explorer/model';
@@ -25,3 +26,4 @@ export const useSave00Store = create<Save00StoreState>((set) => ({
     });
   },
 }));
+*/

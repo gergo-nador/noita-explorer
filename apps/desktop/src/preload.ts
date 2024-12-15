@@ -21,6 +21,12 @@ const noitaApi: NoitaAPI = {
       nollaGamesNoitaDefault: () =>
         ipcRenderer.invoke('noita-default-paths:nolla-games-noita'),
     },
+    fileAccessApis: {
+      translationsFile: () =>
+        ipcRenderer.invoke('noita-file-access:translations'),
+      dataWakExtracted: () =>
+        ipcRenderer.invoke('noita-file-access:data-wak-extracted'),
+    },
   },
   dialog: {
     openFolderDialog: (args) =>
