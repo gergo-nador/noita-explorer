@@ -39,6 +39,8 @@
   },
   "license": "MIT",
   "dependencies": {
-    "electron-squirrel-startup": "^1.0.1"
+    "copy-paste": "^1.5.3",
+    "electron-squirrel-startup": "^1.0.1",
+    "electron-store": "^10.0.0"
   }
 }

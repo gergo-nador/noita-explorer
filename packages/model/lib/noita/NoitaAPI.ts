@@ -1,16 +1,17 @@
+import { NoitaWakData } from './scraping/NoitaWakData';
+
 export interface NoitaAPI {
   config: {
     get: (key: string) => Promise<string>;
-    set: ({ key, value }: { key: string; value: string }) => void;
+    set: ({ key, value }: { key: string; value: string }) => Promise<void>;
   };
-  /*noita: {
+  noita: {
     dataFile: {
       exists: () => Promise<boolean>;
       get: () => Promise<NoitaWakData>;
-      scrape: () => Promise<ImportResult>;
       write: (obj: NoitaWakData) => Promise<void>;
     };
-    defaultPaths: {
+    /*defaultPaths: {
       installPathDefault: () => Promise<string | undefined>;
       nollaGamesNoitaDefault: () => Promise<string | undefined>;
     };
@@ -19,8 +20,8 @@ export interface NoitaAPI {
         enemies: StringKeyDictionary<EnemyStatistic>;
       }>;
       readFlags: () => Promise<{ spells: string[]; perks: string[] }>;
-    };
-  };*/
+    };*/
+  };
   /*dialog: {
     openFolderDialog: (args?: {
       startIn?: string;

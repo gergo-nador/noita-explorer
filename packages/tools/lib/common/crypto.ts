@@ -49,8 +49,8 @@ async function aes({
     },
   };
 }
-
-/*function toAscii(str: string): Buffer {
+/*
+function toAscii(str: string): Buffer {
   const array = new Uint8Array(str.length);
 
   for (let i = 0; i < str.length; ++i) {
@@ -77,21 +77,19 @@ export async function decryptBuffer({
 
   return result.asText();
 }
-/*
-const key = stringToKey('SecretsOfTheAllS');
-const iv = stringToKey('ThreeEyesAreWatc');
+/*const key = stringToKey('WhenYouHaveNothingLeftToSeek'.slice(0, 16));
+const iv = stringToKey('PeopleWillRejoiceAndDance'.slice(0, 16));
 
-const content = fs.readFileSync(
-  'C:\\Users\\enbi8\\AppData\\LocalLow\\Nolla_Games_Noita\\save00\\stats\\_stats.salakieli',
-);
+const content = fs.readFileSync('data.wak');
 
 aes({
   content: content,
   key: key,
   iv: iv,
 }).then((result) => {
-  const text = result.asText();
+  const buff = result.asBuffer();
 
+  fs.writeFileSync('data.zip', buff);
   aes({
     content: Buffer.from(toAscii(text)),
     key: key,
@@ -99,5 +97,4 @@ aes({
   }).then((result) => {
     const buff = result.asBuffer();
   });
-});
-*/
+});*/
