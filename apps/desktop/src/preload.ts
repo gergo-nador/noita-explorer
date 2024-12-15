@@ -22,6 +22,12 @@ const noitaApi: NoitaAPI = {
       nollaGamesNoitaDefault: () =>
         ipcRenderer.invoke('noita-default-paths:nolla-games-noita'),
     },
+    save00: {
+      scrapeProgressFlags: () =>
+        ipcRenderer.invoke('save00:scrape-progress-flags'),
+      scrapeEnemyStatistics: () =>
+        ipcRenderer.invoke('save00:scrape-enemy-statistics'),
+    },
   },
   dialog: {
     openFolderDialog: (args) =>

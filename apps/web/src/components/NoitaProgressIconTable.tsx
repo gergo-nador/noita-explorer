@@ -1,20 +1,20 @@
 import React from 'react';
-import { NoitaProgressEntity } from '@noita-explorer/model';
+import { round } from '../utils/utils.ts';
 
 interface NoitaProgressIconTableProps {
-  data: NoitaProgressEntity[];
+  count: number;
+  unlocked?: number;
   name: string;
   columnCount: number;
   children: React.ReactNode | React.ReactNode[];
-  unlocked?: number;
 }
 
 export function NoitaProgressIconTable({
-  data,
+  count,
+  unlocked,
   name,
   columnCount,
   children,
-  unlocked,
 }: NoitaProgressIconTableProps) {
   return (
     <div style={{ width: '100%' }}>
@@ -22,10 +22,10 @@ export function NoitaProgressIconTable({
         <div style={{ marginBottom: 5 }}>
           <span style={{ fontSize: 22 }}>
             <span style={{ color: '#FFFFFFCC' }}>
-              {name} - {(unlocked / data.length) * 100}%
+              {name} - {round((100 * unlocked) / count, 1)}%
             </span>{' '}
             <span style={{ color: '#FFFFFF77' }}>
-              {unlocked}/{data.length}
+              {unlocked}/{count}
             </span>
           </span>
         </div>

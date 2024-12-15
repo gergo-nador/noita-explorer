@@ -17,6 +17,7 @@ export const noitaPaths = {
     translation_dev: ['data', 'translations', 'common_dev.csv'],
   },
   save00: {
+    folder: ['save00'],
     stats: ['stats'],
     sessions: ['stats', 'sessions'],
     flags: ['persistent', 'flags'],

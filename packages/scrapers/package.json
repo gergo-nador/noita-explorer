@@ -3,15 +3,14 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "main": "dist/main",
-  "types": "dist/main",
-  "files": [
-    "dist"
-  ],
+  "main": "dist/main.js",
+  "module": "dist/main.js",
+  "types": "dist/main.d.ts",
   "exports": {
     ".": {
       "import": "./dist/main.js",
-      "require": "./dist/main.js"
+      "require": "./dist/main.js",
+      "default": "./dist/main.js"
     }
   },
   "scripts": {

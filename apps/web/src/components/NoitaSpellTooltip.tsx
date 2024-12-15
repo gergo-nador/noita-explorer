@@ -24,7 +24,7 @@ import damageIceIcon from '../assets/icons/spells/icon_damage_ice.png';
 import damageHolyIcon from '../assets/icons/spells/icon_damage_holy.png';
 import { NoitaSpellTypesDictionary } from '../noita/NoitaSpellTypeDictionary.ts';
 
-interface NoitaSpellInfoTableProps {
+interface NoitaSpellTooltipProps {
   spell: NoitaSpell;
   isUnknown?: boolean;
 }
@@ -32,7 +32,7 @@ interface NoitaSpellInfoTableProps {
 export const NoitaSpellTooltip = ({
   spell,
   isUnknown,
-}: NoitaSpellInfoTableProps) => {
+}: NoitaSpellTooltipProps) => {
   const actionType = NoitaSpellTypesDictionary[spell.type];
 
   if (isUnknown) {

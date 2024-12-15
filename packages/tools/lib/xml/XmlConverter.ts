@@ -1,4 +1,4 @@
-import { parseStringPromise, Builder } from 'xml2js';
+import { Builder, parseStringPromise } from 'xml2js';
 import { StringKeyDictionaryComposite } from '@noita-explorer/model';
 
 export const parseXml = (

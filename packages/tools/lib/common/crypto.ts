@@ -60,7 +60,7 @@ function toAscii(str: string): Buffer {
   return Buffer.from(array);
 }*/
 
-export async function decryptBuffer({
+export async function aesBuffer({
   key,
   iv,
   buffer,

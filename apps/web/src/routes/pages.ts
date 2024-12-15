@@ -4,7 +4,7 @@ export const pages = {
     paths: '/setup/paths',
     scrape: '/setup/scrape',
   },
-  progressTracker: '/progress-tracker',
-  progressTrackerV2: '/progress-tracker-v2',
+  progressTracker: '/progress/tracker',
+  progressTrackerV2: '/progress/tracker-v2',
   holidays: '/holidays',
 };

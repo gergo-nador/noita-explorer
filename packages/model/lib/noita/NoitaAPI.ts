@@ -1,5 +1,8 @@
 import { NoitaWakData } from './scraping/NoitaWakData';
 import { ImportResult } from './scraping/ImportResult.ts';
+import { StringKeyDictionary } from '../common/StringKeyDictionary.ts';
+import { EnemyStatistic } from './scraping/EnemyStatistics.ts';
+import { NoitaProgressFlags } from './scraping/NoitaProgressFlags.ts';
 
 export interface NoitaAPI {
   config: {
@@ -17,12 +20,10 @@ export interface NoitaAPI {
       installPathDefault: () => Promise<string | undefined>;
       nollaGamesNoitaDefault: () => Promise<string | undefined>;
     };
-    /*save00: {
-      getEnemyStatistics: () => Promise<{
-        enemies: StringKeyDictionary<EnemyStatistic>;
-      }>;
-      readFlags: () => Promise<{ spells: string[]; perks: string[] }>;
-    };*/
+    save00: {
+      scrapeEnemyStatistics: () => Promise<StringKeyDictionary<EnemyStatistic>>;
+      scrapeProgressFlags: () => Promise<NoitaProgressFlags>;
+    };
   };
   dialog: {
     openFolderDialog: (args?: {

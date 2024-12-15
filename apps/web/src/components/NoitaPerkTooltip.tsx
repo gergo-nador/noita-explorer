@@ -3,7 +3,7 @@ import { Icon } from '@noita-explorer/noita-component-library';
 import { Flex } from './Flex';
 import { NoitaProtections } from '../noita/NoitaProtections.ts';
 
-interface NoitaPerkInfoTableProps {
+interface NoitaPerkTooltipProps {
   perk: NoitaPerk;
   isUnknown?: boolean;
 }
@@ -11,7 +11,7 @@ interface NoitaPerkInfoTableProps {
 export const NoitaPerkTooltip = ({
   perk,
   isUnknown,
-}: NoitaPerkInfoTableProps) => {
+}: NoitaPerkTooltipProps) => {
   const getBoolSign = (bool: boolean) => {
     return bool ? (
       <Icon type={'check'} alt={'Yes'} size={16} />

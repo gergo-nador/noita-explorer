@@ -31,6 +31,10 @@ export function browserNoitaApi(): NoitaAPI {
         write: throwNotAllowedInThisModeError,
         scrape: throwNotAllowedInThisModeError,
       },
+      save00: {
+        scrapeProgressFlags: throwNotAllowedInThisModeError,
+        scrapeEnemyStatistics: throwNotAllowedInThisModeError,
+      },
     },
     dialog: {
       openFileDialog: throwNotAllowedInThisModeError,

@@ -62,9 +62,13 @@ export const scrapePerks = async ({
     };
 
     // add the game effects
-    for (const key in luaPerk.keys) {
+    for (const key of luaPerk.keys) {
       if (key.startsWith('game_effect')) {
-        const gameEffect = luaPerk.getRequiredField(key).required.asString();
+        const gameEffect = luaPerk
+          .getRequiredField(key)
+          .required.asString()
+          .toUpperCase();
+
         perk.gameEffects.push(gameEffect);
       }
     }

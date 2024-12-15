@@ -5,14 +5,15 @@ import { NoitaHolidays } from '../pages/NoitaHolidays';
 import { DefaultPageTemplate } from '../pages/templates/DefaultPageTemplate.tsx';
 import { SetupDesktopPaths } from '../pages/setup/SetupDesktopPaths.tsx';
 import { SetupDesktopScraper } from '../pages/setup/SetupDesktopScraper.tsx';
+import { NoitaProgressTracker } from '../pages/progress/NoitaProgressTracker.tsx';
 
 export const router = createBrowserRouter([
   {
     path: '/',
     element: <MainPage />,
   },
-  /*{
-    path: 'pages',
+  {
+    path: 'progress',
     element: (
       <DefaultPageTemplate>
         <Outlet />
@@ -20,15 +21,15 @@ export const router = createBrowserRouter([
     ),
     children: [
       {
-        path: 'progress-tracker',
+        path: 'tracker',
         element: <NoitaProgressTracker />,
       },
-      {
-        path: 'progress-tracker-v2',
+      /*{
+        path: 'tracker-v2',
         element: <ProgressPageV2 />,
-      },
+      },*/
     ],
-  },*/
+  },
   {
     path: 'setup',
     element: (

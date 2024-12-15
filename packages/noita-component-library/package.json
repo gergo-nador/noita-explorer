@@ -1,5 +1,6 @@
 {
   "name": "@noita-explorer/noita-component-library",
+  "description": "Hello World",
   "private": true,
   "version": "1.0.0",
   "type": "module",
@@ -9,18 +10,17 @@
     "lint": "eslint .",
     "generate-barrels": "barrelsby --config barrels.config.json"
   },
-  "main": "dist/main",
-  "types": "dist/main",
-  "files": [
-    "dist"
-  ],
+  "main": "dist/main.js",
+  "module": "dist/main.js",
+  "types": "dist/main.d.ts",
   "sideEffects": [
     "**/*.css"
   ],
   "exports": {
     ".": {
       "import": "./dist/main.js",
-      "require": "./dist/main.js"
+      "require": "./dist/main.js",
+      "default": "./dist/main.js"
     }
   },
   "dependencies": {

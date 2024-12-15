@@ -116,8 +116,8 @@ export const scrapeSpells = async ({
 
     // load other data
 
+    const xmlFiles = luaSpell.getField('related_projectiles')?.asArray();
     try {
-      const xmlFiles = luaSpell.getField('related_projectiles')?.asArray();
       if (Array.isArray(xmlFiles)) {
         for (const xmlFilePathValue of xmlFiles) {
           const xmlFilePath = xmlFilePathValue.asString();

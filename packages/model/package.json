@@ -12,7 +12,8 @@
   "exports": {
     ".": {
       "import": "./dist/main.js",
-      "require": "./dist/main.js"
+      "require": "./dist/main.js",
+      "default": "./dist/main.js"
     }
   },
   "scripts": {
