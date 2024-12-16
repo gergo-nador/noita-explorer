@@ -5,11 +5,11 @@ import {
 import { useMemo } from 'react';
 import { useNoitaDataWakStore } from '../../stores/NoitaDataWak.ts';
 import { NoitaProgressIconTable } from '../../components/NoitaProgressIconTable.tsx';
-import { NoitaSpellTooltip } from '../../components/NoitaSpellTooltip.tsx';
-import { NoitaPerkTooltip } from '../../components/NoitaPerkTooltip.tsx';
+import { NoitaSpellTooltip } from '../../components/tooltips/NoitaSpellTooltip.tsx';
+import { NoitaPerkTooltip } from '../../components/tooltips/NoitaPerkTooltip.tsx';
 import { useSave00Store } from '../../stores/save00.ts';
 import { NoitaSpellTypesDictionary } from '../../noita/NoitaSpellTypeDictionary.ts';
-import { NoitaEnemyGroupTooltip } from '../../components/NoitaEnemyGroupTooltip.tsx';
+import { NoitaEnemyGroupTooltip } from '../../components/tooltips/NoitaEnemyGroupTooltip.tsx';
 import { useNoitaEnemyGroups } from '../../hooks/useNoitaEnemyGroups.ts';
 
 export const NoitaProgressTracker = () => {

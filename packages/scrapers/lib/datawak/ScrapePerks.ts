@@ -43,7 +43,8 @@ export const scrapePerks = async ({
       // stacking
       stackableIsRare:
         luaPerk.getField('stackable_is_rare')?.asBoolean() ?? false,
-      stackable: luaPerk.getField('stackable')?.asString() === 'STACKABLE_YES',
+      stackable:
+        luaPerk.getField('stackable')?.asIdentifier() === 'STACKABLE_YES',
       stackableMaximum: luaPerk.getField('stackable_maximum')?.asNumber(),
       stackableHowOftenReappears: luaPerk
         .getField('stackable_how_often_reappears')

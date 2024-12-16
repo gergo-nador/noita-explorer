@@ -1,7 +1,8 @@
 import { NoitaPerk } from '@noita-explorer/model';
 import { Icon } from '@noita-explorer/noita-component-library';
-import { Flex } from './Flex';
-import { NoitaProtections } from '../noita/NoitaProtections.ts';
+import { Flex } from '../Flex.tsx';
+import { NoitaProtections } from '../../noita/NoitaProtections.ts';
+import { BooleanIcon } from '../BooleanIcon.tsx';
 
 interface NoitaPerkTooltipProps {
   perk: NoitaPerk;
@@ -12,20 +13,12 @@ export const NoitaPerkTooltip = ({
   perk,
   isUnknown,
 }: NoitaPerkTooltipProps) => {
-  const getBoolSign = (bool: boolean) => {
-    return bool ? (
-      <Icon type={'check'} alt={'Yes'} size={16} />
-    ) : (
-      <Icon type={'cross'} alt={'No'} size={16} />
-    );
-  };
-
   if (isUnknown) {
     return <div>???</div>;
   }
 
   return (
-    <div style={{ maxWidth: '400px', minWidth: '300px' }}>
+    <div style={{ maxWidth: '400px', minWidth: '300px', lineHeight: '16px' }}>
       <Flex
         style={{
           justifyContent: 'space-between',
@@ -56,7 +49,7 @@ export const NoitaPerkTooltip = ({
           <tr>
             <td style={{ paddingRight: 20 }}>Stackable</td>
             <td style={{ textAlign: 'right' }}>
-              {getBoolSign(perk.stackable)}
+              <BooleanIcon value={perk.stackable} />
             </td>
           </tr>
           {perk.stackable && (
@@ -70,7 +63,9 @@ export const NoitaPerkTooltip = ({
                     </tr>
                     <tr>
                       <td>{perk.stackableMaximum ?? '-'}</td>
-                      <td>{getBoolSign(perk.stackableIsRare)}</td>
+                      <td>
+                        <BooleanIcon value={perk.stackableIsRare} />
+                      </td>
                     </tr>
                   </tbody>
                 </table>
@@ -78,9 +73,7 @@ export const NoitaPerkTooltip = ({
             </tr>
           )}
           <tr>
-            <td colSpan={3}>
-              <hr />
-            </td>
+            <td colSpan={3} style={{ height: 10 }}></td>
           </tr>
           <tr>
             <td colSpan={3}>Holy Mountain</td>
@@ -101,7 +94,9 @@ export const NoitaPerkTooltip = ({
                     </td>
                   </tr>
                   <tr>
-                    <td>{getBoolSign(!perk.notInDefaultPerkPool)}</td>
+                    <td>
+                      <BooleanIcon value={!perk.notInDefaultPerkPool} />
+                    </td>
                     <td>{perk.maxInPerkPool ?? '-'}</td>
                     <td>{perk.stackableHowOftenReappears ?? '-'}</td>
                   </tr>
@@ -110,9 +105,7 @@ export const NoitaPerkTooltip = ({
             </td>
           </tr>
           <tr>
-            <td colSpan={3}>
-              <hr />
-            </td>
+            <td colSpan={3} style={{ height: 10 }}></td>
           </tr>
           <tr>
             <td style={{ paddingRight: 20 }}>
@@ -120,13 +113,13 @@ export const NoitaPerkTooltip = ({
               nullifying altar
             </td>
             <td style={{ textAlign: 'right' }}>
-              {getBoolSign(perk.doNotRemove)}
+              <BooleanIcon value={perk.doNotRemove} />
             </td>
           </tr>
           <tr>
             <td style={{ paddingRight: 20 }}>One-Off Effect</td>
             <td style={{ textAlign: 'right' }}>
-              {getBoolSign(perk.oneOffEffect)}
+              <BooleanIcon value={perk.oneOffEffect} />
             </td>
           </tr>
         </tbody>

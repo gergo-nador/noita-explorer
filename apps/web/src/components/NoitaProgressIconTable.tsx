@@ -20,7 +20,7 @@ export function NoitaProgressIconTable({
     <div style={{ width: '100%' }}>
       {unlocked !== undefined && (
         <div style={{ marginBottom: 5 }}>
-          <span style={{ fontSize: 22 }}>
+          <span style={{ fontSize: 20 }}>
             <span style={{ color: '#FFFFFFCC' }}>
               {name} - {round((100 * unlocked) / count, 1)}%
             </span>{' '}

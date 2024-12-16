@@ -41,6 +41,7 @@ export const scrapeEnemy = async ({
       basebot_hidden: 'Vakoilija',
       basebot_neutralizer: 'Pysäyttäjä',
       basebot_soldier: 'Teloittaja',
+      roboguard_big: 'Kyrmyniska',
     };
 
     let animalName: string;

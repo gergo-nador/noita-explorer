@@ -167,6 +167,13 @@ export const scrapeSpells = async ({
         const name = statement.getName();
 
         const expressionParts = statement.asExpression();
+
+        if (name === 'c.friendly_fire') {
+          if (expressionParts.length > 0 && expressionParts[0].value === true)
+            spell.friendlyFire ??= true;
+          continue;
+        }
+
         const numberExpressions = expressionParts.filter(
           (p) => typeof p.value === 'number',
         );
@@ -279,8 +286,11 @@ const scrapeXmlSpellData = async (
         .getAttribute('explosion_dont_damage_shooter')
         ?.asBoolean() ?? false;
 
-    spell.friendlyFire =
-      projectileComponent.getAttribute('friendly_fire')?.asBoolean() ?? false;
+    if (
+      projectileComponent.getAttribute('friendly_fire')?.asBoolean() === true
+    ) {
+      spell.friendlyFire = true;
+    }
 
     const damageGameEffectEntities = trim({
       text:
