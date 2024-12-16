@@ -1,6 +1,6 @@
 import { NoitaAPI } from '@noita-explorer/model';
 import { localStorageConfig } from './localstorage-config.ts';
-import { resolveCallbackPromise } from '@noita-explorer/tools';
+import { resolveCallbackPromise, resolvePromise } from '@noita-explorer/tools';
 
 export function browserNoitaApi(): NoitaAPI {
   const config = localStorageConfig();
@@ -26,8 +26,8 @@ export function browserNoitaApi(): NoitaAPI {
         nollaGamesNoitaDefault: throwNotAllowedInThisModeError,
       },
       dataFile: {
-        get: throwNotAllowedInThisModeError,
-        exists: throwNotAllowedInThisModeError,
+        get: () => fetch('/noita_wak_data.json').then((r) => r.json()),
+        exists: () => resolvePromise(true),
         write: throwNotAllowedInThisModeError,
         scrape: throwNotAllowedInThisModeError,
       },
