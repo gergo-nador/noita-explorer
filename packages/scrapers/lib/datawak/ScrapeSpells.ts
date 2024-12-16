@@ -56,6 +56,7 @@ export const scrapeSpells = async ({
         luaSpell.getField('never_unlimited')?.asBoolean() ?? false,
       recursive: luaSpell.getField('recursive')?.asBoolean() ?? false,
       spawnRequiredFlag: luaSpell.getField('spawn_required_flag')?.asString(),
+      drawActions: undefined,
 
       explosionDontDamageShooter: false,
       friendlyFire: false,
@@ -218,6 +219,22 @@ export const scrapeSpells = async ({
         spell.iceDamageModifier.value *= NoitaConstants.damageMultiplier;
       if (spell.explosionDamageModifier)
         spell.explosionDamageModifier.value *= NoitaConstants.damageMultiplier;
+
+      const drawActionCall = action.findCallAssignment('draw_actions');
+      if (drawActionCall) {
+        const args = drawActionCall.arguments();
+        if (args && args.length > 0) {
+          const argsUnary = args[0].asUnary();
+
+          // for handling draw_actions( #deck, true ) for BURST_X
+          spell.drawActions =
+            argsUnary &&
+            argsUnary.operator === '#' &&
+            argsUnary.value.asIdentifier() === 'deck'
+              ? 'remaining'
+              : args[0].asNumber();
+        }
+      }
     }
 
     spells.push(spell);

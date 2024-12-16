@@ -22,6 +22,7 @@ export interface LuaValueWrapperType {
   asArray: () => LuaValueWrapperType[] | undefined;
   asObject: () => LuaObjectDeclarationWrapperType | undefined;
   asFunction: () => LuaFunctionDeclarationWrapperType | undefined;
+  asUnary: () => { operator: string; value: LuaValueWrapperType } | undefined;
 }
 
 export const LuaValueWrapper = (field: Expression): LuaValueWrapperType => {
@@ -117,6 +118,17 @@ export const LuaValueWrapper = (field: Expression): LuaValueWrapperType => {
     return LuaFunctionDeclarationWrapper(fieldValue);
   };
 
+  const getValueAsUnary = () => {
+    if (fieldValueType !== 'UnaryExpression') {
+      return undefined;
+    }
+
+    return {
+      operator: fieldValue.operator,
+      value: LuaValueWrapper(fieldValue.argument),
+    };
+  };
+
   return {
     required: {
       asIdentifier: () =>
@@ -131,6 +143,7 @@ export const LuaValueWrapper = (field: Expression): LuaValueWrapperType => {
     asArray: getValueAsArray,
     asObject: getValueAsObjectDeclaration,
     asFunction: getValueAsFunctionDeclaration,
+    asUnary: getValueAsUnary,
   };
 };
 

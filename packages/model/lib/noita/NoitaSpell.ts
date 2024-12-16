@@ -48,4 +48,5 @@ export interface NoitaSpell extends NoitaProgressEntity {
 
   // others
   spawnRequiredFlag: string | undefined;
+  drawActions: number | 'remaining' | undefined;
 }

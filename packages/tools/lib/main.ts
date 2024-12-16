@@ -8,6 +8,7 @@ export * from "./common/proxiedPropertiesOf";
 export * from "./common/StringUtils";
 export * from "./lua/LuaAssignmentStatementWrapper";
 export * from "./lua/LuaAssignmentWrapper";
+export * from "./lua/LuaCallStatementWrapper";
 export * from "./lua/LuaExpressionPart";
 export * from "./lua/LuaFunctionDeclarationWrapper";
 export * from "./lua/LuaObjectDeclarationWrapper";

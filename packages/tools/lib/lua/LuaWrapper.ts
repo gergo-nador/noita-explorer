@@ -4,7 +4,6 @@ import { LuaAssignmentStatementWrapper } from './LuaAssignmentStatementWrapper';
 export const LuaWrapper = (text: string) => {
   const parsed = parse(text);
   return {
-    _parsed: parsed,
     findTopLevelAssignmentStatement: (variableName: string) => {
       const assignmentStatement = lookForTopLevelAssignmentStatement(
         parsed,
