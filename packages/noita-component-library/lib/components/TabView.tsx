@@ -5,30 +5,34 @@ import { zIndexManager } from '../zIndexManager.ts';
 
 interface TabViewItem {
   title: string;
+  onClick?: () => void;
   content: React.ReactNode;
 }
 
 interface TabViewProps {
   tabs: TabViewItem[];
+  style?: React.CSSProperties;
+  styleCard?: React.CSSProperties;
 }
 
-export const TabView = ({ tabs }: TabViewProps) => {
+export const TabView = ({ tabs, style, styleCard }: TabViewProps) => {
   const [currentTab, setCurrentTab] = React.useState({
     index: 0,
     content: tabs.length > 0 ? tabs[0].content : undefined,
   });
 
   return (
-    <div>
+    <div style={style}>
       <div
         style={{
           display: 'grid',
           gridTemplateColumns: `20px repeat(${tabs.length}, 1fr) 20px`,
-          padding: '0 10px',
+          maxHeight: '100%',
+          maxWidth: '100%',
         }}
       >
         <div></div>
-        {tabs.map(({ title, content }, index) => {
+        {tabs.map(({ title, content, onClick }, index) => {
           const isActive = index === currentTab.index;
           return (
             <div>
@@ -40,12 +44,13 @@ export const TabView = ({ tabs }: TabViewProps) => {
                   position: 'relative',
                 }}
                 isActive={isActive}
-                onClick={() =>
+                onClick={() => {
                   setCurrentTab({
                     index: index,
                     content: content,
-                  })
-                }
+                  });
+                  if (typeof onClick === 'function') onClick();
+                }}
               />
             </div>
           );
@@ -56,6 +61,7 @@ export const TabView = ({ tabs }: TabViewProps) => {
             gridColumn: '1/-1',
             position: 'relative',
             zIndex: zIndexManager.tabs.card,
+            ...styleCard,
           }}
         >
           {currentTab.content}

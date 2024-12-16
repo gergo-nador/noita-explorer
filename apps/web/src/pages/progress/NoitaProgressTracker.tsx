@@ -2,7 +2,7 @@ import {
   ActiveProgressIcon,
   ProgressIcon,
 } from '@noita-explorer/noita-component-library';
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import { useNoitaDataWakStore } from '../../stores/NoitaDataWak.ts';
 import { NoitaProgressIconTable } from '../../components/NoitaProgressIconTable.tsx';
 import { NoitaSpellTooltip } from '../../components/NoitaSpellTooltip.tsx';
@@ -10,53 +10,16 @@ import { NoitaPerkTooltip } from '../../components/NoitaPerkTooltip.tsx';
 import { useSave00Store } from '../../stores/save00.ts';
 import { NoitaSpellTypesDictionary } from '../../noita/NoitaSpellTypeDictionary.ts';
 import { NoitaEnemyGroupTooltip } from '../../components/NoitaEnemyGroupTooltip.tsx';
-import {
-  StringKeyDictionary,
-  NoitaEnemyGroup,
-  EnemyStatistic,
-} from '@noita-explorer/model';
+import { useNoitaEnemyGroups } from '../../hooks/useNoitaEnemyGroups.ts';
 
 export const NoitaProgressTracker = () => {
   const { data } = useNoitaDataWakStore();
-  const { enemyStatistics, unlockedPerks, unlockedSpells, reload } =
-    useSave00Store();
+  const { enemyStatistics, unlockedPerks, unlockedSpells } = useSave00Store();
 
-  const enemies = useMemo(() => {
-    if (data?.enemies === undefined) return undefined;
-
-    const groups: StringKeyDictionary<{
-      enemyGroup: NoitaEnemyGroup;
-      statistics: StringKeyDictionary<EnemyStatistic>;
-    }> = {};
-
-    data.enemies.forEach((enemy, i) => {
-      // Remove '_left' or '_right' postfix if present
-      const baseId = enemy.id.replace(/(_left|_right)$/, '');
-
-      if (!(baseId in groups)) {
-        groups[baseId] = {
-          enemyGroup: {
-            baseId: baseId,
-            name: enemy.name,
-            index: i,
-            imageBase64: enemy.imageBase64,
-            enemies: [],
-          },
-          statistics: {},
-        };
-      }
-
-      groups[baseId].enemyGroup.enemies.push(enemy);
-
-      if (enemyStatistics && enemy.id in enemyStatistics) {
-        groups[baseId].statistics[enemy.id] = enemyStatistics[enemy.id];
-      }
-    });
-
-    const values = Object.values(groups);
-    values.sort((v1, v2) => v1.enemyGroup.index - v2.enemyGroup.index);
-    return values;
-  }, [data, enemyStatistics]);
+  const enemies = useNoitaEnemyGroups({
+    enemies: data?.enemies,
+    enemyStatistics: enemyStatistics,
+  });
 
   const unlockedEnemycount = useMemo(() => {
     if (data?.enemies === undefined) return 0;
@@ -64,10 +27,6 @@ export const NoitaProgressTracker = () => {
 
     return data.enemies.filter((e) => e.id in enemyStatistics).length;
   }, [data, enemyStatistics]);
-
-  useEffect(() => {
-    reload();
-  }, [reload]);
 
   if (!data) {
     return <div>Noita Data Wak is not loaded.</div>;

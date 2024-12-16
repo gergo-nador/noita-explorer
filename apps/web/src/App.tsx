@@ -9,6 +9,7 @@ import { useSettingsStore } from './stores/settings';
 import { useEffect } from 'react';
 import { useNoitaDataWakStore } from './stores/NoitaDataWak.ts';
 import { noitaAPI } from './ipcHandlers.ts';
+import { useSave00Store } from './stores/save00.ts';
 
 export const App = () => {
   return (
@@ -39,28 +40,36 @@ const InitialLoader = () => {
     setExists: noitaDataWakSetExist,
   } = useNoitaDataWakStore();
 
-  const loadNoitaDataWak = async () => {
-    const exists = await noitaAPI.noita.dataFile.exists();
-    if (exists) {
-      noitaDataWakSetExist(true);
-    } else {
-      noitaDataWakSetExist(false);
-      return;
-    }
-
-    const data = await noitaAPI.noita.dataFile.get();
-    if (data) {
-      noitaDataWakSet(data);
-    }
-  };
-
   useEffect(() => {
     if (noitaDataWakExists !== undefined) return;
+
+    const loadNoitaDataWak = async () => {
+      const exists = await noitaAPI.noita.dataFile.exists();
+      if (exists) {
+        noitaDataWakSetExist(true);
+      } else {
+        noitaDataWakSetExist(false);
+        return;
+      }
+
+      const data = await noitaAPI.noita.dataFile.get();
+      if (data) {
+        noitaDataWakSet(data);
+      }
+    };
 
     loadNoitaDataWak()
       .then(() => console.log('Data Wak loaded'))
       .catch((err) => console.error(err));
-  }, [noitaDataWakExists]);
+  }, [noitaDataWakExists, noitaDataWakSet, noitaDataWakSetExist]);
+
+  const { reload } = useSave00Store();
+
+  useEffect(() => {
+    reload()
+      .then(() => console.log('save00 loaded'))
+      .catch((err) => console.error(err));
+  }, [reload]);
 
   return <div></div>;
 };

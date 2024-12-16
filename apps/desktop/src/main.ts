@@ -45,6 +45,12 @@ const template: (MenuItemConstructorOptions | MenuItem)[] = [
           browserWindow.webContents.reload();
         },
       },
+      {
+        label: 'Go to Main Page',
+        click: (menuItem: MenuItem, browserWindow: BrowserWindow) => {
+          browserWindow.webContents.loadURL('https://localhost:4000');
+        },
+      },
       Platform.isMacOs ? { role: 'close' } : { role: 'quit' },
     ],
   },
