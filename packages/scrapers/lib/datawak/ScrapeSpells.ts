@@ -171,7 +171,7 @@ export const scrapeSpells = async ({
 
         if (name === 'c.friendly_fire') {
           if (expressionParts.length > 0 && expressionParts[0].value === true)
-            spell.friendlyFire ??= true;
+            spell.friendlyFire = true;
           continue;
         }
 

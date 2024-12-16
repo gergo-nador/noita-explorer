@@ -76,7 +76,7 @@ export const NoitaSpellTooltip = ({
     {
       text: 'Friendly Fire',
       value: <BooleanIcon value={spell.friendlyFire} />,
-      show: true,
+      show: spell.friendlyFire,
     },
   ];
 
