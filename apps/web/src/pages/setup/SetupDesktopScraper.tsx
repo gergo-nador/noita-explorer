@@ -166,7 +166,9 @@ export const SetupDesktopScraper = () => {
       </Header>
       <PageBottomComponent>
         <Flex gap={10}>
-          <Button onClick={() => navigate(pages.setup.paths)}>Back</Button>
+          <Button onClick={() => navigate(pages.setup.desktopPaths)}>
+            Back
+          </Button>
         </Flex>
 
         <Flex gap={20}>

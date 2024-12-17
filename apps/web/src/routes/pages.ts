@@ -1,8 +1,9 @@
 export const pages = {
   main: '/',
   setup: {
-    paths: '/setup/paths',
-    scrape: '/setup/scrape',
+    desktopPaths: '/setup/desktop-paths',
+    desktopScrape: '/setup/desktop-scrape',
+    webPaths: '/setup/web-paths',
   },
   progressTracker: '/progress-tracker',
   progressTrackerV2: {

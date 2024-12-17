@@ -71,6 +71,7 @@ export const scrapeEnemyStatistics = async ({
     }
   }
 
+  console.log(dict);
   /*
   <session biomes_visited_with_wands="0" damage_taken="0" dead="1" death_count="0" death_pos.x="-739.29" death_pos.y="4322" enemies_killed="60" gold="969" gold_all="1124" gold_infinite="0" healed="0" heart_containers="0" hp="160" items="14" kicks="0" killed_by="Haulikkohiisi's projectile" killed_by_extra="" places_visited="5" playtime="1005.4" playtime_str="0:16:45" projectiles_shot="0" streaks="0" teleports="0" wands_edited="0" world_seed="1619695370" >
   </session>

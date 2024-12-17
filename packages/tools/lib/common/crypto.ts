@@ -1,3 +1,5 @@
+import { Buffer } from 'buffer';
+
 function stringToKey(str: string): Uint8Array {
   function stringToHex(str: string): string {
     return Array.from(str)

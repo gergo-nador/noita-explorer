@@ -42,7 +42,7 @@ export const SetupDesktopPaths = () => {
       .catch((err) =>
         console.error('Error while settings default paths: ', err),
       );
-  }, []);
+  }, [setDefaultPaths, defaultPaths]);
 
   const autoFill = async () => {
     const newPaths = {
@@ -108,7 +108,7 @@ export const SetupDesktopPaths = () => {
           <Button onClick={() => autoFill()}>Auto fill</Button>
           <Button
             disabled={!nextEnabled}
-            onClick={() => navigate(pages.setup.scrape)}
+            onClick={() => navigate(pages.setup.desktopScrape)}
           >
             Next
           </Button>

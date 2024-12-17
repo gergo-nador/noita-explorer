@@ -22,7 +22,18 @@ export const MainPage = () => {
       }}
     >
       {!!noitaAPI.environment.desktop && (
-        <Button decoration={'both'} onClick={() => navigate(pages.setup.paths)}>
+        <Button
+          decoration={'both'}
+          onClick={() => navigate(pages.setup.desktopPaths)}
+        >
+          Setup
+        </Button>
+      )}
+      {noitaAPI.environment.web && (
+        <Button
+          decoration={'both'}
+          onClick={() => navigate(pages.setup.webPaths)}
+        >
           Setup
         </Button>
       )}

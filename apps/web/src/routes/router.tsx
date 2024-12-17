@@ -11,6 +11,7 @@ import { pages } from './pages.ts';
 import { NoitaProgressV2Perks } from '../pages/progress/progressv2/NoitaProgressV2Perks.tsx';
 import { NoitaProgressV2Spells } from '../pages/progress/progressv2/NoitaProgressV2Spells.tsx';
 import { NoitaProgressV2Enemies } from '../pages/progress/progressv2/NoitaProgressV2Enemies.tsx';
+import { SetupWebPaths } from '../pages/setup/SetupWebPaths.tsx';
 
 export const router = createBrowserRouter([
   {
@@ -59,8 +60,9 @@ export const router = createBrowserRouter([
       </DefaultPageTemplate>
     ),
     children: [
-      { path: 'paths', element: <SetupDesktopPaths /> },
-      { path: 'scrape', element: <SetupDesktopScraper /> },
+      { path: 'desktop-paths', element: <SetupDesktopPaths /> },
+      { path: 'desktop-scrape', element: <SetupDesktopScraper /> },
+      { path: 'web-paths', element: <SetupWebPaths /> },
     ],
   },
   {

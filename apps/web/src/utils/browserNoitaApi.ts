@@ -1,9 +1,21 @@
 import { NoitaAPI } from '@noita-explorer/model';
-import { localStorageConfig } from './localstorage-config.ts';
+import { idbKeyValConfig, localStorageStore } from './localstorage-config.ts';
 import { resolveCallbackPromise, resolvePromise } from '@noita-explorer/tools';
+import {
+  scrapeEnemyStatistics,
+  scrapeProgressFlags,
+} from '@noita-explorer/scrapers';
+import { FileSystemFolderBrowserWeb } from './FileSystemWeb.ts';
+import { useToast } from '@noita-explorer/noita-component-library';
 
 export function browserNoitaApi(): NoitaAPI {
-  const config = localStorageConfig();
+  const config = localStorageStore();
+  const fileAccessConfig = idbKeyValConfig<
+    FileSystemFileHandle | FileSystemDirectoryHandle
+  >();
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const toast = useToast();
 
   return {
     config: {
@@ -32,13 +44,85 @@ export function browserNoitaApi(): NoitaAPI {
         scrape: throwNotAllowedInThisModeError,
       },
       save00: {
-        scrapeProgressFlags: throwNotAllowedInThisModeError,
-        scrapeEnemyStatistics: throwNotAllowedInThisModeError,
+        scrapeProgressFlags: async () => {
+          const nollaGamesNoitaFolder = config.get(
+            'settings.paths.NollaGamesNoita',
+          );
+
+          if (nollaGamesNoitaFolder === undefined) {
+            toast.error('NollaGamesNoita folder is not set');
+            throw new Error('NollaGamesNoita folder is not set');
+          }
+
+          const nollaGamesNoitaBrowserHandle = await fileAccessConfig.get(
+            nollaGamesNoitaFolder,
+          );
+          if (nollaGamesNoitaBrowserHandle?.kind !== 'directory') {
+            toast.error('NollaGamesNoita folder is not a directory');
+            throw new Error('NollaGamesNoita folder is not a directory');
+          }
+
+          const save00BrowserHandle =
+            await nollaGamesNoitaBrowserHandle.getDirectoryHandle('save00');
+          const api = FileSystemFolderBrowserWeb(save00BrowserHandle);
+
+          return scrapeProgressFlags({ save00BrowserApi: api });
+        },
+        scrapeEnemyStatistics: async () => {
+          const nollaGamesNoitaFolder = config.get(
+            'settings.paths.NollaGamesNoita',
+          );
+
+          if (nollaGamesNoitaFolder === undefined) {
+            toast.error('NollaGamesNoita folder is not set');
+            throw new Error('NollaGamesNoita folder is not set');
+          }
+
+          const nollaGamesNoitaBrowserHandle = await fileAccessConfig.get(
+            nollaGamesNoitaFolder,
+          );
+          if (nollaGamesNoitaBrowserHandle?.kind !== 'directory') {
+            toast.error('NollaGamesNoita folder is not a directory');
+            throw new Error('NollaGamesNoita folder is not a directory');
+          }
+
+          const save00BrowserHandle =
+            await nollaGamesNoitaBrowserHandle.getDirectoryHandle('save00');
+          const api = FileSystemFolderBrowserWeb(save00BrowserHandle);
+
+          const result = await scrapeEnemyStatistics({ save00BrowserApi: api });
+          console.log(result);
+          return result;
+        },
       },
     },
     dialog: {
-      openFileDialog: throwNotAllowedInThisModeError,
-      openFolderDialog: throwNotAllowedInThisModeError,
+      openFileDialog: async () => {
+        if (
+          !('showOpenFilePicker' in window) ||
+          typeof window.showOpenFilePicker !== 'function'
+        ) {
+          toast.error('This browser does not support file access.');
+          return;
+        }
+
+        const fileHandle = await window.showOpenFilePicker();
+        await fileAccessConfig.set(fileHandle.name, fileHandle);
+        return fileHandle.name;
+      },
+      openFolderDialog: async () => {
+        if (
+          !('showDirectoryPicker' in window) ||
+          typeof window.showDirectoryPicker !== 'function'
+        ) {
+          toast.error('This browser does not support file access.');
+          return;
+        }
+
+        const dirHandle = await window.showDirectoryPicker();
+        await fileAccessConfig.set(dirHandle.name, dirHandle);
+        return dirHandle.name;
+      },
       openExplorer: throwNotAllowedInThisModeError,
     },
     environment: {
