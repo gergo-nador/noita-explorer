@@ -1,0 +1,17 @@
+export interface NoitaSession {
+  id: string;
+  buildName: string;
+  seed: number;
+  playTime: number;
+
+  dead: boolean;
+  deathPosX: number;
+  deathPosY: number;
+  damageTaken: number;
+  enemiesKilled: number;
+  killedBy: string | undefined;
+
+  gold: number;
+  goldAll: number;
+  goldInfinite: boolean;
+}

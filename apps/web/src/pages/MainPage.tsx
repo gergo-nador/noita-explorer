@@ -3,10 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import { pages } from '../routes/pages';
 import { useNoitaDataWakStore } from '../stores/NoitaDataWak';
 import { noitaAPI } from '../ipcHandlers.ts';
+import { useSave00Store } from '../stores/save00.ts';
 
 export const MainPage = () => {
   const navigate = useNavigate();
   const { loaded: noitaDataWakLoaded } = useNoitaDataWakStore();
+  const { loaded: sessionsLoaded } = useSave00Store();
   const toast = useToast();
 
   return (
@@ -44,19 +46,19 @@ export const MainPage = () => {
         onClick={() => navigate(pages.progressTracker)}
         onDisabledClick={() =>
           toast.error(
-            'Noita Data is not set up. Please click on the Setup menu',
+            'Noita Data is not set up. Please click on the Setup menu.',
           )
         }
       >
         Progress Tracker
       </Button>
       <Button
-        disabled={!noitaDataWakLoaded}
         decoration={'both'}
+        disabled={!noitaDataWakLoaded}
         onClick={() => navigate(pages.progressTrackerV2.perks)}
         onDisabledClick={() =>
           toast.error(
-            'Noita Data is not set up. Please click on the Setup menu',
+            'Noita Data is not set up. Please click on the Setup menu.',
           )
         }
       >
@@ -64,6 +66,18 @@ export const MainPage = () => {
       </Button>
       <Button decoration={'both'} onClick={() => navigate(pages.holidays)}>
         Holidays
+      </Button>
+      <Button
+        decoration={'both'}
+        disabled={!sessionsLoaded}
+        onClick={() => navigate(pages.sessions)}
+        onDisabledClick={() =>
+          toast.error(
+            'To view sessions you need to set up reading from save00 folder.',
+          )
+        }
+      >
+        Sessions
       </Button>
     </div>
   );

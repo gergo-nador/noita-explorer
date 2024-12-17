@@ -4,6 +4,7 @@ import { resolveCallbackPromise, resolvePromise } from '@noita-explorer/tools';
 import {
   scrapeEnemyStatistics,
   scrapeProgressFlags,
+  scrapeSessions,
 } from '@noita-explorer/scrapers';
 import { FileSystemFolderBrowserWeb } from './FileSystemWeb.ts';
 import { useToast } from '@noita-explorer/noita-component-library';
@@ -16,6 +17,28 @@ export function browserNoitaApi(): NoitaAPI {
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const toast = useToast();
+
+  const getSave00FolderHandle = async () => {
+    const nollaGamesNoitaFolder = config.get('settings.paths.NollaGamesNoita');
+
+    if (nollaGamesNoitaFolder === undefined) {
+      toast.error('NollaGamesNoita folder is not set');
+      throw new Error('NollaGamesNoita folder is not set');
+    }
+
+    const nollaGamesNoitaBrowserHandle = await fileAccessConfig.get(
+      nollaGamesNoitaFolder,
+    );
+    if (nollaGamesNoitaBrowserHandle?.kind !== 'directory') {
+      toast.error('NollaGamesNoita folder is not a directory');
+      throw new Error('NollaGamesNoita folder is not a directory');
+    }
+
+    const save00BrowserHandle =
+      await nollaGamesNoitaBrowserHandle.getDirectoryHandle('save00');
+
+    return FileSystemFolderBrowserWeb(save00BrowserHandle);
+  };
 
   return {
     config: {
@@ -45,54 +68,16 @@ export function browserNoitaApi(): NoitaAPI {
       },
       save00: {
         scrapeProgressFlags: async () => {
-          const nollaGamesNoitaFolder = config.get(
-            'settings.paths.NollaGamesNoita',
-          );
-
-          if (nollaGamesNoitaFolder === undefined) {
-            toast.error('NollaGamesNoita folder is not set');
-            throw new Error('NollaGamesNoita folder is not set');
-          }
-
-          const nollaGamesNoitaBrowserHandle = await fileAccessConfig.get(
-            nollaGamesNoitaFolder,
-          );
-          if (nollaGamesNoitaBrowserHandle?.kind !== 'directory') {
-            toast.error('NollaGamesNoita folder is not a directory');
-            throw new Error('NollaGamesNoita folder is not a directory');
-          }
-
-          const save00BrowserHandle =
-            await nollaGamesNoitaBrowserHandle.getDirectoryHandle('save00');
-          const api = FileSystemFolderBrowserWeb(save00BrowserHandle);
-
+          const api = await getSave00FolderHandle();
           return scrapeProgressFlags({ save00BrowserApi: api });
         },
         scrapeEnemyStatistics: async () => {
-          const nollaGamesNoitaFolder = config.get(
-            'settings.paths.NollaGamesNoita',
-          );
-
-          if (nollaGamesNoitaFolder === undefined) {
-            toast.error('NollaGamesNoita folder is not set');
-            throw new Error('NollaGamesNoita folder is not set');
-          }
-
-          const nollaGamesNoitaBrowserHandle = await fileAccessConfig.get(
-            nollaGamesNoitaFolder,
-          );
-          if (nollaGamesNoitaBrowserHandle?.kind !== 'directory') {
-            toast.error('NollaGamesNoita folder is not a directory');
-            throw new Error('NollaGamesNoita folder is not a directory');
-          }
-
-          const save00BrowserHandle =
-            await nollaGamesNoitaBrowserHandle.getDirectoryHandle('save00');
-          const api = FileSystemFolderBrowserWeb(save00BrowserHandle);
-
-          const result = await scrapeEnemyStatistics({ save00BrowserApi: api });
-          console.log(result);
-          return result;
+          const api = await getSave00FolderHandle();
+          return await scrapeEnemyStatistics({ save00BrowserApi: api });
+        },
+        scrapeSessions: async () => {
+          const api = await getSave00FolderHandle();
+          return await scrapeSessions({ save00BrowserApi: api });
         },
       },
     },

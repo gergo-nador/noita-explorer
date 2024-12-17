@@ -2,6 +2,7 @@ import { ipcMain } from 'electron';
 import {
   scrapeEnemyStatistics,
   scrapeProgressFlags,
+  scrapeSessions,
 } from '@noita-explorer/scrapers';
 import { getConfig } from '../persistence/config-store';
 import path from 'path';
@@ -38,6 +39,22 @@ export const registerSave00Handlers = () => {
     const save00FolderBrowserApi = FileSystemFolderBrowserNode(save00Folder);
 
     return await scrapeEnemyStatistics({
+      save00BrowserApi: save00FolderBrowserApi,
+    });
+  });
+  ipcMain.handle('save00:scrape-sessions', async () => {
+    const nollaGamesNoita = getConfig(
+      'settings.paths.NollaGamesNoita',
+    ) as string;
+
+    const save00Folder = path.join(
+      nollaGamesNoita,
+      ...noitaPaths.save00.folder,
+    );
+
+    const save00FolderBrowserApi = FileSystemFolderBrowserNode(save00Folder);
+
+    return await scrapeSessions({
       save00BrowserApi: save00FolderBrowserApi,
     });
   });

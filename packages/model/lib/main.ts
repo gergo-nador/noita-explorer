@@ -14,6 +14,7 @@ export * from "./noita/NoitaEnemyGroup";
 export * from "./noita/NoitaPerk";
 export * from "./noita/NoitaProgressEntity";
 export * from "./noita/NoitaProtection";
+export * from "./noita/NoitaSession";
 export * from "./noita/NoitaSpell";
 export * from "./noita/NoitaSpellType";
 export * from "./noita/SpellModifierNumberUnit";

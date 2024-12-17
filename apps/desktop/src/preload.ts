@@ -27,6 +27,7 @@ const noitaApi: NoitaAPI = {
         ipcRenderer.invoke('save00:scrape-progress-flags'),
       scrapeEnemyStatistics: () =>
         ipcRenderer.invoke('save00:scrape-enemy-statistics'),
+      scrapeSessions: () => ipcRenderer.invoke('save00:scrape-sessions'),
     },
   },
   dialog: {

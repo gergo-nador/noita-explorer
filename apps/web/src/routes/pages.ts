@@ -12,4 +12,5 @@ export const pages = {
     enemies: '/progress-tracker-v2/enemies',
   },
   holidays: '/holidays',
+  sessions: '/sessions',
 };

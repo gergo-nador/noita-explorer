@@ -12,6 +12,7 @@ import { NoitaProgressV2Perks } from '../pages/progress/progressv2/NoitaProgress
 import { NoitaProgressV2Spells } from '../pages/progress/progressv2/NoitaProgressV2Spells.tsx';
 import { NoitaProgressV2Enemies } from '../pages/progress/progressv2/NoitaProgressV2Enemies.tsx';
 import { SetupWebPaths } from '../pages/setup/SetupWebPaths.tsx';
+import { NoitaSessions } from '../pages/NoitaSessions.tsx';
 
 export const router = createBrowserRouter([
   {
@@ -68,5 +69,13 @@ export const router = createBrowserRouter([
   {
     path: 'holidays',
     element: <NoitaHolidays />,
+  },
+  {
+    path: 'sessions',
+    element: (
+      <DefaultPageTemplate>
+        <NoitaSessions />
+      </DefaultPageTemplate>
+    ),
   },
 ]);

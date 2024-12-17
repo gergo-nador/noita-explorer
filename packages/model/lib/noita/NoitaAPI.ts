@@ -3,6 +3,7 @@ import { ImportResult } from './scraping/ImportResult.ts';
 import { StringKeyDictionary } from '../common/StringKeyDictionary.ts';
 import { EnemyStatistic } from './scraping/EnemyStatistics.ts';
 import { NoitaProgressFlags } from './scraping/NoitaProgressFlags.ts';
+import { NoitaSession } from './NoitaSession.ts';
 
 export interface NoitaAPI {
   config: {
@@ -23,6 +24,7 @@ export interface NoitaAPI {
     save00: {
       scrapeEnemyStatistics: () => Promise<StringKeyDictionary<EnemyStatistic>>;
       scrapeProgressFlags: () => Promise<NoitaProgressFlags>;
+      scrapeSessions: () => Promise<NoitaSession[]>;
     };
   };
   dialog: {

@@ -7,4 +7,5 @@ export * from "./datawak/ScrapePerks";
 export * from "./datawak/ScrapeSpells";
 export * from "./save00/ScrapeEnemyStatistics";
 export * from "./save00/ScrapeProgressFlags";
+export * from "./save00/ScrapeSessions";
 export * from "./translations/ReadTranslations";
