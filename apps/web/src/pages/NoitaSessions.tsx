@@ -24,6 +24,26 @@ export const NoitaSessions = () => {
         flexDirection: 'column',
       }}
     >
+      <div>TODO: </div>
+      <div>
+        Sort by (ascending, descending):
+        <ul>
+          <li>play time</li>
+          <li>played at</li>
+          <li>kills</li>
+          <li>gold/gold all</li>
+        </ul>
+      </div>
+      <div>
+        Filter by
+        <ul>
+          <li>killed by</li>
+          <li>gold infinite</li>
+          <li>noita build</li>
+        </ul>
+      </div>
+      <br />
+      <br />
       {sessionsSorted.map((session) => (
         <Card>
           <div>{session.id}</div>
