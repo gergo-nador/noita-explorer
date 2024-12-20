@@ -3,6 +3,8 @@
  */
 
 export * from "./common/crypto";
+export * from "./common/groups";
+export * from "./common/map";
 export * from "./common/promises";
 export * from "./common/proxiedPropertiesOf";
 export * from "./common/StringUtils";

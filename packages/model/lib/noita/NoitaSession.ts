@@ -3,6 +3,7 @@ export interface NoitaSession {
   buildName: string;
   seed: number;
   playTime: number;
+  startedAt: Date;
 
   dead: boolean;
   deathPosX: number;

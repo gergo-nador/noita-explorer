@@ -72,6 +72,7 @@ export const scrapeSessions = async ({
       buildName: stats.getAttribute('BUILD_NAME')?.asText() ?? 'No Build Name',
       seed: innerStats.getAttribute('world_seed')?.asInt() ?? 0,
       playTime: innerStats.getAttribute('playtime')?.asFloat() ?? -1,
+      startedAt: parseDate(baseId),
 
       dead: innerStats.getAttribute('dead')?.asBoolean() ?? false,
       deathPosX: innerStats.getAttribute('death_pos.x')?.asFloat() ?? 0,
@@ -93,3 +94,14 @@ export const scrapeSessions = async ({
 
   return sessions;
 };
+
+function parseDate(input: string): Date {
+  const year = parseInt(input.slice(0, 4), 10);
+  const month = parseInt(input.slice(4, 6), 10) - 1; // Months are 0-based in JavaScript/TypeScript
+  const day = parseInt(input.slice(6, 8), 10);
+  const hours = parseInt(input.slice(9, 11), 10);
+  const minutes = parseInt(input.slice(11, 13), 10);
+  const seconds = parseInt(input.slice(13, 15), 10);
+
+  return new Date(year, month, day, hours, minutes, seconds);
+}
