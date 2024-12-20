@@ -1,8 +1,26 @@
 import { useSave00Store } from '../stores/save00.ts';
 import { useMemo } from 'react';
-import { Card } from '@noita-explorer/noita-component-library';
+import {
+  Card,
+  Header,
+  Icon,
+  NoitaTooltipWrapper,
+} from '@noita-explorer/noita-component-library';
 import { Flex } from '../components/Flex.tsx';
-import { groupBy, mapDictionary } from '@noita-explorer/tools';
+import {
+  avgBy,
+  groupBy,
+  mapDictionary,
+  maxBy,
+  minBy,
+  secondsToTimeString,
+  sumBy,
+} from '@noita-explorer/tools';
+import { round } from '@noita-explorer/tools';
+
+import lifetimeIcon from '../assets/icons/spells/lifetime.webp';
+import dieIcon from '../assets/icons/die2.png';
+import moneyIcon from '../assets/icons/money.png';
 
 export const NoitaSessions = () => {
   const { sessions } = useSave00Store();
@@ -25,8 +43,27 @@ export const NoitaSessions = () => {
 
     return groupBy(sessionsSorted, (session) =>
       session.startedAt.toLocaleDateString(),
-    ).asDict();
+    );
   }, [sessionsSorted]);
+
+  if (sessions === undefined || sessionsGroupedByDay === undefined) {
+    return <div>Sessions are not loaded</div>;
+  }
+
+  const statsMostPlayedOneDay = maxBy(
+    sessionsGroupedByDay.asArray(),
+    (arr) => arr.length,
+  ).value;
+
+  const statsAvgPlayPerDay = avgBy(
+    sessionsGroupedByDay.asArray(),
+    (arr) => arr.length,
+  );
+
+  const sumPlaytime = sumBy(sessions, (s) => s.playTime);
+
+  const statsFirstDayPlayed = minBy(sessions, (s) => s.startedAt.getTime()).item
+    ?.startedAt;
 
   return (
     <Flex
@@ -56,35 +93,70 @@ export const NoitaSessions = () => {
       <div>
         Statistics
         <ul>
-          <li>First day played (time since then)</li>
-          <li>most played on days</li>
-          <li>average game per game day</li>
+          <li>
+            First day played (time since then):{' '}
+            {statsFirstDayPlayed?.toLocaleDateString()}
+          </li>
+          <li>Most played on one day: {statsMostPlayedOneDay}</li>
+          <li>
+            average game per game day: {round(statsAvgPlayPerDay ?? 0, 2)}
+          </li>
+          <li>Sum Playtime: {secondsToTimeString(sumPlaytime)}</li>
         </ul>
       </div>
       <br />
       <br />
-      {sessionsGroupedByDay &&
-        mapDictionary(sessionsGroupedByDay, (key, sessions) => (
-          <div style={{ marginBottom: 20 }}>
-            <div>{key}</div>
-            <Flex
-              gap={20}
-              style={{
-                flexDirection: 'column',
-              }}
-            >
-              {sessions.map((session) => (
-                <Card>
-                  <div>{session.id}</div>
-                  <div>{session.buildName}</div>
-                  <div>{session.seed}</div>
-                  <div>{session.playTime}</div>
-                  <div>{session.startedAt.toLocaleTimeString()}</div>
-                </Card>
-              ))}
-            </Flex>
-          </div>
-        ))}
+      {mapDictionary(sessionsGroupedByDay.asDict(), (key, sessions) => (
+        <Header title={key} key={key}>
+          <Flex
+            gap={20}
+            style={{
+              flexDirection: 'column',
+            }}
+          >
+            {sessions.map((session) => (
+              <Card key={session.id}>
+                <div
+                  style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}
+                >
+                  <div>
+                    <div>
+                      <Icon type={'custom'} src={dieIcon} size={18} />{' '}
+                      {session.seed}
+                    </div>
+                    <div>
+                      <Icon type={'custom'} src={lifetimeIcon} size={20} />
+                      {secondsToTimeString(session.playTime)}
+                    </div>
+                    <div>
+                      <Icon type={'custom'} src={moneyIcon} size={20} />
+                      {session.goldInfinite && <span>∞</span>}
+                      {!session.goldInfinite && (
+                        <NoitaTooltipWrapper
+                          content={
+                            <div style={{ fontSize: 18 }}>gold / all gold</div>
+                          }
+                        >
+                          <span>
+                            {session.gold} / {session.goldAll}
+                          </span>
+                        </NoitaTooltipWrapper>
+                      )}
+                    </div>
+                  </div>
+                  <div style={{ textAlign: 'right' }}>
+                    <div>
+                      <span className={'text-secondary'}>Started at</span>{' '}
+                      <span>{session.startedAt.toLocaleTimeString()}</span>
+                    </div>
+                    <div className={'text-secondary'}>{session.buildName}</div>
+                  </div>
+                </div>
+              </Card>
+            ))}
+          </Flex>
+        </Header>
+      ))}
     </Flex>
   );
 };

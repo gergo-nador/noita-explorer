@@ -13,6 +13,7 @@
     "@noita-explorer/model": "*",
     "@noita-explorer/noita-component-library": "*",
     "@noita-explorer/scrapers": "*",
+    "@noita-explorer/tools": "*",
     "buffer": "^6.0.3",
     "idb-keyval": "^3.0.0",
     "react": "^18.3.1",

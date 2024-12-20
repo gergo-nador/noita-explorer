@@ -1,5 +1,5 @@
 import { Tooltip } from 'react-tooltip';
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Card } from './Card';
 import { zIndexManager } from '../zIndexManager';
 
@@ -12,13 +12,15 @@ export const NoitaTooltipWrapper = ({
   content,
   children,
 }: NoitaTooltipProps) => {
+  const [isMouseHovered, setMouseHovered] = useState(false);
+
   const id = useMemo(() => {
     return 'id-' + Math.floor(Math.random() * 100000000);
   }, []);
 
   return (
     <>
-      {content !== undefined && (
+      {content !== undefined && isMouseHovered && (
         <Tooltip
           id={id}
           style={{
@@ -29,6 +31,7 @@ export const NoitaTooltipWrapper = ({
           }}
           anchorSelect={`#${id}`}
           opacity={1}
+          isOpen={true}
         >
           <Card
             styling={{
@@ -40,7 +43,13 @@ export const NoitaTooltipWrapper = ({
         </Tooltip>
       )}
 
-      <span id={id}>{children}</span>
+      <span
+        id={id}
+        onMouseEnter={() => setMouseHovered(true)}
+        onMouseLeave={() => setMouseHovered(false)}
+      >
+        {children}
+      </span>
     </>
   );
 };

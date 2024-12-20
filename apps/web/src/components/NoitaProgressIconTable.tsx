@@ -1,5 +1,5 @@
 import React from 'react';
-import { round } from '../utils/utils.ts';
+import { round } from '@noita-explorer/tools';
 
 interface NoitaProgressIconTableProps {
   count: number;
