@@ -24,7 +24,11 @@ export const App = () => {
 };
 
 const InitialLoader = () => {
-  const { load: loadSettings, loaded: settingsLoaded } = useSettingsStore();
+  const {
+    load: loadSettings,
+    loaded: settingsLoaded,
+    paths,
+  } = useSettingsStore();
 
   useEffect(() => {
     if (settingsLoaded) return;
@@ -69,7 +73,7 @@ const InitialLoader = () => {
     reload()
       .then(() => console.log('save00 loaded'))
       .catch((err) => console.error(err));
-  }, [reload]);
+  }, [reload, paths.NollaGamesNoita]);
 
   return <div></div>;
 };

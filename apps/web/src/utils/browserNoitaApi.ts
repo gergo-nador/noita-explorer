@@ -1,6 +1,5 @@
 import { NoitaAPI } from '@noita-explorer/model';
-import { idbKeyValConfig, localStorageStore } from './localstorage-config.ts';
-import { resolveCallbackPromise, resolvePromise } from '@noita-explorer/tools';
+import { resolvePromise } from '@noita-explorer/tools';
 import {
   scrapeEnemyStatistics,
   scrapeProgressFlags,
@@ -8,21 +7,22 @@ import {
 } from '@noita-explorer/scrapers';
 import { FileSystemFolderBrowserWeb } from './FileSystemWeb.ts';
 import { useToast } from '@noita-explorer/noita-component-library';
+import { noitaDb } from './databases.ts';
 
 export function browserNoitaApi(): NoitaAPI {
-  const config = localStorageStore();
-  const fileAccessConfig = idbKeyValConfig<
-    FileSystemFileHandle | FileSystemDirectoryHandle
-  >();
-
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const toast = useToast();
 
   const getSave00FolderHandle = async () => {
-    const nollaGamesNoitaFolder = config.get('settings.paths.NollaGamesNoita');
+    const db = await noitaDb;
+    const config = db.config;
+    const fileAccessConfig = db.fileAccess;
+
+    const nollaGamesNoitaFolder = await config.get(
+      'settings.paths.NollaGamesNoita',
+    );
 
     if (nollaGamesNoitaFolder === undefined) {
-      toast.error('NollaGamesNoita folder is not set');
       throw new Error('NollaGamesNoita folder is not set');
     }
 
@@ -30,7 +30,6 @@ export function browserNoitaApi(): NoitaAPI {
       nollaGamesNoitaFolder,
     );
     if (nollaGamesNoitaBrowserHandle?.kind !== 'directory') {
-      toast.error('NollaGamesNoita folder is not a directory');
       throw new Error('NollaGamesNoita folder is not a directory');
     }
 
@@ -42,18 +41,18 @@ export function browserNoitaApi(): NoitaAPI {
 
   return {
     config: {
-      get: (key) => {
-        return new Promise((resolve, reject) => {
-          const result = config.get(key);
-          if (result !== undefined) {
-            resolve(result);
-          } else {
-            reject();
-          }
-        });
+      get: async (key) => {
+        const db = await noitaDb;
+        const config = db.config;
+
+        return await config.get(key);
       },
-      set: ({ key, value }) =>
-        resolveCallbackPromise(() => config.set(key, value)),
+      set: async ({ key, value }) => {
+        const db = await noitaDb;
+        const config = db.config;
+
+        await config.set(key, value);
+      },
     },
     noita: {
       defaultPaths: {
@@ -91,6 +90,9 @@ export function browserNoitaApi(): NoitaAPI {
           return;
         }
 
+        const db = await noitaDb;
+        const fileAccessConfig = db.fileAccess;
+
         const fileHandle = await window.showOpenFilePicker();
         await fileAccessConfig.set(fileHandle.name, fileHandle);
         return fileHandle.name;
@@ -103,6 +105,9 @@ export function browserNoitaApi(): NoitaAPI {
           toast.error('This browser does not support file access.');
           return;
         }
+
+        const db = await noitaDb;
+        const fileAccessConfig = db.fileAccess;
 
         const dirHandle = await window.showDirectoryPicker();
         await fileAccessConfig.set(dirHandle.name, dirHandle);

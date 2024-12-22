@@ -7,7 +7,7 @@ import { NoitaSession } from './NoitaSession.ts';
 
 export interface NoitaAPI {
   config: {
-    get: (key: string) => Promise<string>;
+    get: (key: string) => Promise<string | undefined>;
     set: ({ key, value }: { key: string; value: string }) => Promise<void>;
   };
   noita: {
