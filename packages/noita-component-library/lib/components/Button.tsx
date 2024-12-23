@@ -9,6 +9,7 @@ interface ButtonProps {
   disabled?: boolean;
   onClick?: () => void;
   onDisabledClick?: () => void;
+  textStyle?: React.CSSProperties;
 }
 
 export const Button = ({
@@ -17,6 +18,7 @@ export const Button = ({
   decoration,
   disabled,
   onDisabledClick,
+  textStyle = {},
 }: ButtonProps) => {
   const iconSize = 6;
   const buttonRef = useRef<HTMLButtonElement>();
@@ -48,7 +50,7 @@ export const Button = ({
   return (
     <div className={css['container']}>
       <button
-        className={css['button-content']}
+        className={`${css['button-content']}`}
         onClick={buttonOnClick}
         ref={buttonRef as MutableRefObject<HTMLButtonElement>}
         style={{
@@ -71,7 +73,8 @@ export const Button = ({
 
         <span
           style={{
-            color: disabled ? '#FFFFFFAA' : 'inherit',
+            ...textStyle,
+            color: disabled ? '#FFFFFFAA' : (textStyle.color ?? 'inherit'),
           }}
         >
           {children}

@@ -2,7 +2,7 @@ import { createBrowserRouter, Outlet } from 'react-router-dom';
 import { MainPage } from '../pages/MainPage';
 
 import { NoitaHolidays } from '../pages/NoitaHolidays';
-import { DefaultPageTemplate } from '../pages/templates/DefaultPageTemplate.tsx';
+import { CardPageTemplate } from '../pages/templates/CardPageTemplate.tsx';
 import { SetupDesktopPaths } from '../pages/setup/SetupDesktopPaths.tsx';
 import { SetupDesktopScraper } from '../pages/setup/SetupDesktopScraper.tsx';
 import { NoitaProgressTracker } from '../pages/progress/NoitaProgressTracker.tsx';
@@ -12,7 +12,8 @@ import { NoitaProgressV2Perks } from '../pages/progress/progressv2/NoitaProgress
 import { NoitaProgressV2Spells } from '../pages/progress/progressv2/NoitaProgressV2Spells.tsx';
 import { NoitaProgressV2Enemies } from '../pages/progress/progressv2/NoitaProgressV2Enemies.tsx';
 import { SetupWebPaths } from '../pages/setup/SetupWebPaths.tsx';
-import { NoitaSessions } from '../pages/NoitaSessions.tsx';
+import { NoitaSessions } from '../pages/sessions/NoitaSessions.tsx';
+import { EmptyPageTemplate } from '../pages/templates/EmptyPageTemplate.tsx';
 
 export const router = createBrowserRouter([
   {
@@ -22,9 +23,9 @@ export const router = createBrowserRouter([
   {
     path: 'progress-tracker',
     element: (
-      <DefaultPageTemplate>
+      <CardPageTemplate>
         <NoitaProgressTracker />
-      </DefaultPageTemplate>
+      </CardPageTemplate>
     ),
   },
   {
@@ -56,9 +57,9 @@ export const router = createBrowserRouter([
   {
     path: 'setup',
     element: (
-      <DefaultPageTemplate>
+      <CardPageTemplate>
         <Outlet />
-      </DefaultPageTemplate>
+      </CardPageTemplate>
     ),
     children: [
       { path: 'desktop-paths', element: <SetupDesktopPaths /> },
@@ -73,9 +74,9 @@ export const router = createBrowserRouter([
   {
     path: 'sessions',
     element: (
-      <DefaultPageTemplate>
+      <EmptyPageTemplate>
         <NoitaSessions />
-      </DefaultPageTemplate>
+      </EmptyPageTemplate>
     ),
   },
 ]);

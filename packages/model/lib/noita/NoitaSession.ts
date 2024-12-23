@@ -10,7 +10,8 @@ export interface NoitaSession {
   deathPosY: number;
   damageTaken: number;
   enemiesKilled: number;
-  killedBy: string | undefined;
+  killedByEntity: string | undefined;
+  killedByReason: string | undefined;
 
   gold: number;
   goldAll: number;

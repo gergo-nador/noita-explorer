@@ -5,7 +5,7 @@ import React from 'react';
 import { TeamFortress2 } from '../components/holidays/TeamFortress2';
 import { Halloween } from '../components/holidays/Halloween';
 import { Winter } from '../components/holidays/Winter';
-import { DefaultPageTemplate } from './templates/DefaultPageTemplate.tsx';
+import { CardPageTemplate } from './templates/CardPageTemplate.tsx';
 
 export const NoitaHolidays = () => {
   const holidays: NoitaHoliday[] = [
@@ -59,7 +59,7 @@ export const NoitaHolidays = () => {
     },
   ];
   return (
-    <DefaultPageTemplate>
+    <CardPageTemplate>
       <br />
       <br />
       <br />
@@ -84,7 +84,7 @@ export const NoitaHolidays = () => {
           </div>
         ))}
       </div>
-    </DefaultPageTemplate>
+    </CardPageTemplate>
   );
 };
 

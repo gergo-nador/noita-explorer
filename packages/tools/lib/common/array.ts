@@ -73,3 +73,30 @@ export const avgBy = <T>(items: T[], by: (t: T) => number) => {
   const sum = sumBy(items, by);
   return sum / items.length;
 };
+
+export const toggleItemInList = <T>(list: T[], item: T) => {
+  const copy = [...list];
+
+  if (copy.includes(item)) {
+    const index = copy.indexOf(item);
+    copy.splice(index, 1);
+    return copy;
+  }
+
+  copy.push(item);
+  return copy;
+};
+
+export const asDict = <T>(
+  items: T[],
+  keySelector: (t: T) => string,
+): StringKeyDictionary<T> => {
+  const dict: StringKeyDictionary<T> = {};
+
+  for (const item of items) {
+    const key = keySelector(item);
+    dict[key] = item;
+  }
+
+  return dict;
+};

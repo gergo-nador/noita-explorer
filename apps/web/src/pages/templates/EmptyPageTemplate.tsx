@@ -1,17 +1,17 @@
-import { Button, TabView } from '@noita-explorer/noita-component-library';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Button } from '@noita-explorer/noita-component-library';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { constants } from '../../constants.ts';
 
-interface TabLink {
-  title: string;
-  href: string;
+interface EmptyPageTemplateProps {
+  children?: React.ReactNode | React.ReactNode[];
+  style?: React.CSSProperties;
 }
 
-interface TabPageTemplateProps {
-  tabs: TabLink[];
-}
-
-export const TabPageTemplate = ({ tabs }: TabPageTemplateProps) => {
+export const EmptyPageTemplate = ({
+  children,
+  style = {},
+}: EmptyPageTemplateProps) => {
   const navigate = useNavigate();
 
   return (
@@ -31,16 +31,9 @@ export const TabPageTemplate = ({ tabs }: TabPageTemplateProps) => {
           width: '90%',
         }}
       >
-        <TabView
-          styleCard={{
-            maxHeight: constants.pageHeight,
-          }}
-          tabs={tabs.map((t) => ({
-            title: t.title,
-            content: <Outlet />,
-            onClick: () => navigate(t.href),
-          }))}
-        />
+        <div style={{ maxHeight: constants.pageHeight, ...style }}>
+          {children}
+        </div>
 
         <div
           style={{

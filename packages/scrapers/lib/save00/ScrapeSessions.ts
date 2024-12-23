@@ -79,13 +79,23 @@ export const scrapeSessions = async ({
       deathPosY: innerStats.getAttribute('death_pos.y')?.asFloat() ?? 0,
       damageTaken: innerStats.getAttribute('damage_taken')?.asFloat() ?? 0,
       enemiesKilled: innerStats.getAttribute('enemies_killed')?.asInt() ?? 0,
-      killedBy: innerStats.getAttribute('killed_by')?.asText(),
+      killedByEntity: undefined,
+      killedByReason: undefined,
 
       gold: innerStats.getAttribute('gold')?.asInt() ?? 0,
       goldAll: innerStats.getAttribute('gold_all')?.asInt() ?? 0,
       goldInfinite:
         innerStats.getAttribute('gold_infinite')?.asBoolean() ?? false,
     };
+
+    const killedBy = innerStats.getAttribute('killed_by')?.asText();
+    if (killedBy !== undefined) {
+      const killedBySplit = killedBy.split(' | ');
+      if (killedBySplit.length === 2) {
+        session.killedByEntity = killedBySplit[0];
+        session.killedByReason = killedBySplit[1];
+      }
+    }
 
     sessions.push(session);
   }

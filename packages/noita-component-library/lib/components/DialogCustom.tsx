@@ -29,7 +29,13 @@ export const DialogCustom = ({
   return (
     <div className={css['container']} onClick={onClickContainer} ref={ref}>
       <div className={css['dialog']}>
-        <Card>{props.children}</Card>
+        <Card
+          style={{
+            maxHeight: '90vh',
+          }}
+        >
+          {props.children}
+        </Card>
       </div>
     </div>
   );
