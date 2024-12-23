@@ -138,45 +138,49 @@ export const NoitaSessionsFilterAdvanced = ({
           style={{ display: 'grid', gridTemplateColumns: 'auto auto', gap: 10 }}
         >
           <div>
-            {killedByEntity.map((entity) => (
-              <Button
-                onClick={() =>
-                  setFilters({
-                    ...filters,
-                    killedByEntity: toggleItemInList(
-                      filters.killedByEntity,
-                      entity,
-                    ),
-                  })
-                }
-                textStyle={activeTextFilterDecoration(
-                  filters.killedByEntity.includes(entity),
-                )}
-              >
-                {entity === '' ? 'None' : entity} (
-                {killedByEntityMap[entity]?.value})
-              </Button>
-            ))}
+            <div style={{ position: 'sticky', top: 0 }}>
+              {killedByEntity.map((entity) => (
+                <Button
+                  onClick={() =>
+                    setFilters({
+                      ...filters,
+                      killedByEntity: toggleItemInList(
+                        filters.killedByEntity,
+                        entity,
+                      ),
+                    })
+                  }
+                  textStyle={activeTextFilterDecoration(
+                    filters.killedByEntity.includes(entity),
+                  )}
+                >
+                  {entity === '' ? 'None' : entity} (
+                  {killedByEntityMap[entity]?.value})
+                </Button>
+              ))}
+            </div>
           </div>
           <div>
-            {killedByReason.map((reason) => (
-              <Button
-                onClick={() =>
-                  setFilters({
-                    ...filters,
-                    killedByReasons: toggleItemInList(
-                      filters.killedByReasons,
-                      reason,
-                    ),
-                  })
-                }
-                textStyle={activeTextFilterDecoration(
-                  filters.killedByReasons.includes(reason),
-                )}
-              >
-                {reason} ({killedByReasonMap[reason]?.value})
-              </Button>
-            ))}
+            <div style={{ position: 'sticky', top: 0 }}>
+              {killedByReason.map((reason) => (
+                <Button
+                  onClick={() =>
+                    setFilters({
+                      ...filters,
+                      killedByReasons: toggleItemInList(
+                        filters.killedByReasons,
+                        reason,
+                      ),
+                    })
+                  }
+                  textStyle={activeTextFilterDecoration(
+                    filters.killedByReasons.includes(reason),
+                  )}
+                >
+                  {reason} ({killedByReasonMap[reason]?.value})
+                </Button>
+              ))}
+            </div>
           </div>
         </div>
       </Header>

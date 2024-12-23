@@ -21,7 +21,7 @@ export const NoitaSessionsFilter = ({
   setFilters,
 }: NoitaSessionsFilterProps) => {
   const noitaBuilds = [...new Set(sessions.map((s) => s.buildName))];
-  const [showAdvancedDialog, setShowAdvancedDialog] = useState(true);
+  const [showAdvancedDialog, setShowAdvancedDialog] = useState(false);
 
   const activeTextFilterDecoration = (isActive: boolean) =>
     isActive ? { textDecoration: 'underline', color: 'gold' } : {};
