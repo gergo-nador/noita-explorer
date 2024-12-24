@@ -1,5 +1,5 @@
 {
-  "directory": ["./lib"],
+  "directory": ["./src"],
   "delete": true,
   "name": "main.ts"
 }

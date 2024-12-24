@@ -3,10 +3,10 @@ import { resolve } from 'path';
 import dts from 'vite-plugin-dts';
 
 export default defineConfig({
-  plugins: [dts({ include: ['lib'], tsconfigPath: 'tsconfig.build.json' })],
+  plugins: [dts({ include: ['src'] })],
   build: {
     lib: {
-      entry: resolve(__dirname, 'lib/main.ts'),
+      entry: resolve(__dirname, 'src/main.ts'),
       formats: ['es'],
     },
     rollupOptions: {
