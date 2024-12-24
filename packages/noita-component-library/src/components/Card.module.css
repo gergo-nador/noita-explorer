@@ -1,0 +1,55 @@
+.grid-main {
+    --border-width: 4px;
+
+    display: grid;
+    grid-template-columns: var(--border-width) 1fr var(--border-width);
+    grid-template-rows: var(--border-width) 1fr var(--border-width);
+}
+
+.style-gray {
+    --border-bright: #B49F81;
+    --border-dark: #948064;
+    --background: #0E0D0CF2;
+    --content: white;
+}
+
+.style-gold {
+    --border-bright: #EDA949;
+    --border-dark: #C98930;
+    --background: #000000D4;
+    --content: white;
+}
+
+.content {
+    padding: 15px;
+    background: var(--background);
+    color: var(--content);
+}
+
+.grid-top-row {
+    display: grid;
+    grid-template-columns: 1fr var(--border-width) ;
+}
+
+.grid-left-column {
+    display: grid;
+    grid-template-rows: 1fr var(--border-width);
+}
+
+.grid-right-column {
+    display: grid;
+    grid-template-rows: var(--border-width) 1fr;
+}
+
+.grid-bottom-column {
+    display: grid;
+    grid-template-columns: var(--border-width) 1fr;
+}
+
+.border-bright {
+    background: var(--border-bright);
+}
+.border-dark {
+    background: var(--border-dark);
+}
+
