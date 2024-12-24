@@ -1,7 +1,7 @@
 import { Button, Header } from '@noita-explorer/noita-component-library';
 import { NoitaSession, StringKeyDictionary } from '@noita-explorer/model';
 import { NoitaSessionFilters } from './NoitaSessions.tsx';
-import { asDict, toggleItemInList } from '@noita-explorer/tools';
+import { arrayHelpers } from '@noita-explorer/tools/common';
 import { useMemo } from 'react';
 
 interface NoitaSessionsFilterAdvancedProps {
@@ -60,7 +60,7 @@ export const NoitaSessionsFilterAdvanced = ({
     const killedByEntityMap: StringKeyDictionary<{
       value: number;
       relatedReasons: string[];
-    }> = asDict(killedByEntityArr, (item) => item.key);
+    }> = arrayHelpers.asDict(killedByEntityArr, (item) => item.key);
 
     const killedByReasonArr = killedByReason.map((reason) => {
       const sessionsKilledByReason = sessions.filter(
@@ -84,7 +84,7 @@ export const NoitaSessionsFilterAdvanced = ({
     const killedByReasonMap: StringKeyDictionary<{
       value: number;
       relatedEntities: string[];
-    }> = asDict(killedByReasonArr, (item) => item.key);
+    }> = arrayHelpers.asDict(killedByReasonArr, (item) => item.key);
 
     return [killedByEntityMap, killedByReasonMap];
   }, [sessions, killedByEntity, killedByReason]);
@@ -117,7 +117,7 @@ export const NoitaSessionsFilterAdvanced = ({
                 onClick={() =>
                   setFilters({
                     ...filters,
-                    builds: toggleItemInList(filters.builds, b),
+                    builds: arrayHelpers.toggleItemInList(filters.builds, b),
                   })
                 }
                 textStyle={activeTextFilterDecoration(
@@ -144,7 +144,7 @@ export const NoitaSessionsFilterAdvanced = ({
                   onClick={() =>
                     setFilters({
                       ...filters,
-                      killedByEntity: toggleItemInList(
+                      killedByEntity: arrayHelpers.toggleItemInList(
                         filters.killedByEntity,
                         entity,
                       ),
@@ -167,7 +167,7 @@ export const NoitaSessionsFilterAdvanced = ({
                   onClick={() =>
                     setFilters({
                       ...filters,
-                      killedByReasons: toggleItemInList(
+                      killedByReasons: arrayHelpers.toggleItemInList(
                         filters.killedByReasons,
                         reason,
                       ),

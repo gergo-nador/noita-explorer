@@ -1,8 +1,8 @@
-export const resolvePromise = <T>(val: T): Promise<T> => {
+const fromValue = <T>(val: T): Promise<T> => {
   return new Promise<T>((resolve) => resolve(val));
 };
 
-export const resolveCallbackPromise = <T>(callback: () => T): Promise<T> => {
+const fromCallback = <T>(callback: () => T): Promise<T> => {
   return new Promise<T>((resolve, reject) => {
     try {
       const result = callback();
@@ -11,4 +11,9 @@ export const resolveCallbackPromise = <T>(callback: () => T): Promise<T> => {
       reject(e);
     }
   });
+};
+
+export const promiseHelper = {
+  fromValue: fromValue,
+  fromCallback: fromCallback,
 };

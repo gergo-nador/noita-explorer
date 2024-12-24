@@ -6,7 +6,12 @@ export default defineConfig({
   plugins: [dts({ include: ['src'] })],
   build: {
     lib: {
-      entry: resolve(__dirname, 'src/main.ts'),
+      entry: {
+        main: resolve(__dirname, 'src/main.ts'),
+        common: resolve(__dirname, 'src/common/main.ts'),
+        lua: resolve(__dirname, 'src/lua/main.ts'),
+        xml: resolve(__dirname, 'src/xml/main.ts'),
+      },
       formats: ['es'],
     },
     rollupOptions: {

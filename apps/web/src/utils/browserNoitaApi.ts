@@ -3,7 +3,7 @@ import {
   NoitaAPI,
   StringKeyDictionary,
 } from '@noita-explorer/model';
-import { resolvePromise } from '@noita-explorer/tools';
+import { promiseHelper } from '@noita-explorer/tools';
 import {
   scrapeEnemyStatistics,
   scrapeProgressFlags,
@@ -80,7 +80,7 @@ export function browserNoitaApi(): NoitaAPI {
       },
       dataFile: {
         get: () => fetch('/noita_wak_data.json').then((r) => r.json()),
-        exists: () => resolvePromise(true),
+        exists: () => promiseHelper.fromValue(true),
         write: throwNotAllowedInThisModeError,
         scrape: throwNotAllowedInThisModeError,
       },

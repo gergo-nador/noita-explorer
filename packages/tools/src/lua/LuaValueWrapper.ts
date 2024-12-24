@@ -1,5 +1,5 @@
 import { Expression } from 'luaparse';
-import { trim } from '../common/StringUtils';
+import { stringHelpers } from '../common/string.ts';
 import {
   LuaFunctionDeclarationWrapper,
   LuaFunctionDeclarationWrapperType,
@@ -53,7 +53,7 @@ export const LuaValueWrapper = (field: Expression): LuaValueWrapperType => {
     const tempValue: string = fieldValue['raw'] ?? '';
     // the string literal signs are also included in the
     // raw values, so let's remove them
-    return trim({
+    return stringHelpers.trim({
       text: tempValue,
       fromStart: '"',
       fromEnd: '"',

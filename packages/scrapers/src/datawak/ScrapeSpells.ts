@@ -8,12 +8,11 @@ import {
   StringKeyDictionary,
 } from '@noita-explorer/model';
 import {
-  LuaWrapper,
-  parseXml,
   proxiedPropertiesOf,
-  trim,
-  XmlWrapper,
-} from '@noita-explorer/tools';
+  stringHelpers,
+} from '@noita-explorer/tools/common';
+import { LuaWrapper } from '@noita-explorer/tools/lua';
+import { parseXml, XmlWrapper } from '@noita-explorer/tools/xml';
 
 export const scrapeSpells = async ({
   dataWakFolderBrowserApi,
@@ -90,13 +89,13 @@ export const scrapeSpells = async ({
     };
 
     // Load the translation
-    const spellName = trim({ text: spell.name, fromStart: '$' });
+    const spellName = stringHelpers.trim({ text: spell.name, fromStart: '$' });
     const spellNameTranslation = translations[spellName];
     if (spellNameTranslation) {
       spell.name = spellNameTranslation.en;
     }
 
-    const spellDescription = trim({
+    const spellDescription = stringHelpers.trim({
       text: spell.description,
       fromStart: '$',
     });
@@ -309,7 +308,7 @@ const scrapeXmlSpellData = async (
       spell.friendlyFire = true;
     }
 
-    const damageGameEffectEntities = trim({
+    const damageGameEffectEntities = stringHelpers.trim({
       text:
         projectileComponent
           .getAttribute('damage_game_effect_entities')

@@ -1,5 +1,5 @@
 import { NoitaSession, StringKeyDictionary } from '@noita-explorer/model';
-import { mapDictionary, secondsToTimeString } from '@noita-explorer/tools';
+import { dictionaryHelpers, timeHelpers } from '@noita-explorer/tools';
 import {
   Button,
   Card,
@@ -24,7 +24,7 @@ export const NoitaSessionsList = ({
 }: NoitaSessionsListProps) => {
   const items = useMemo(
     () =>
-      mapDictionary(sessionsGrouped, (key, val) => ({
+      dictionaryHelpers.mapDictionary(sessionsGrouped, (key, val) => ({
         key: key,
         val: val,
       })),
@@ -75,7 +75,7 @@ export const NoitaSessionsList = ({
                     </div>
                     <div>
                       <Icon type={'custom'} src={lifetimeIcon} size={20} />
-                      {secondsToTimeString(session.playTime)}
+                      {timeHelpers.secondsToTimeString(session.playTime)}
                     </div>
                     <div>
                       <Icon type={'custom'} src={moneyIcon} size={20} />

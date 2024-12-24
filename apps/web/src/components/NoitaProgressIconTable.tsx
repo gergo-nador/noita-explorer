@@ -1,5 +1,5 @@
 import React from 'react';
-import { round } from '@noita-explorer/tools';
+import { mathHelpers } from '@noita-explorer/tools/common';
 
 interface NoitaProgressIconTableProps {
   count: number;
@@ -22,7 +22,7 @@ export function NoitaProgressIconTable({
         <div style={{ marginBottom: 5 }}>
           <span style={{ fontSize: 20 }}>
             <span style={{ color: '#FFFFFFCC' }}>
-              {name} - {round((100 * unlocked) / count, 1)}%
+              {name} - {mathHelpers.round((100 * unlocked) / count, 1)}%
             </span>{' '}
             <span style={{ color: '#FFFFFF77' }}>
               {unlocked}/{count}

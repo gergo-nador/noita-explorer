@@ -3,6 +3,9 @@ import {
   NoitaTranslation,
   StringKeyDictionary,
 } from '@noita-explorer/model';
+
+// as this code can be run in both the browser and in node.js, the
+// browser version needs to be imported as that can cope with both.
 import { parse } from 'csv-parse/browser/esm';
 
 export const readTranslations = async ({

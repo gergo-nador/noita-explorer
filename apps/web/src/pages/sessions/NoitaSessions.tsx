@@ -1,6 +1,6 @@
 import { useSave00Store } from '../../stores/save00.ts';
 import { useMemo, useState } from 'react';
-import { groupBy } from '@noita-explorer/tools';
+import { arrayHelpers } from '@noita-explorer/tools';
 import { CardPageHeight } from '../../components/CardPageHeight.tsx';
 import { NoitaSessionsFilter } from './NoitaSessionsFilter.tsx';
 import { NoitaSessionsList } from './NoitaSessionsList.tsx';
@@ -74,7 +74,7 @@ export const NoitaSessions = () => {
       return undefined;
     }
 
-    return groupBy(sessionsSorted, (session) =>
+    return arrayHelpers.groupBy(sessionsSorted, (session) =>
       session.startedAt.toLocaleDateString(),
     );
   }, [sessionsSorted]);

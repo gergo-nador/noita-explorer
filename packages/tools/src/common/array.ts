@@ -1,6 +1,6 @@
 import { StringKeyDictionary } from '@noita-explorer/model';
 
-export const groupBy = <T>(items: T[], by: (t: T) => string) => {
+const groupBy = <T>(items: T[], by: (t: T) => string) => {
   const groups: StringKeyDictionary<T[]> = items.reduce(
     (groups, item) => {
       const val = by(item);
@@ -21,7 +21,7 @@ export const groupBy = <T>(items: T[], by: (t: T) => string) => {
   };
 };
 
-export const maxBy = <T>(
+const maxBy = <T>(
   items: T[],
   by: (t: T) => number,
 ): { item: T | undefined; value: number } => {
@@ -41,7 +41,7 @@ export const maxBy = <T>(
   );
 };
 
-export const minBy = <T>(
+const minBy = <T>(
   items: T[],
   by: (t: T) => number,
 ): { item: T | undefined; value: number } => {
@@ -61,11 +61,11 @@ export const minBy = <T>(
   );
 };
 
-export const sumBy = <T>(items: T[], by: (t: T) => number) => {
+const sumBy = <T>(items: T[], by: (t: T) => number) => {
   return items.reduce((sum, item) => sum + by(item), 0);
 };
 
-export const avgBy = <T>(items: T[], by: (t: T) => number) => {
+const avgBy = <T>(items: T[], by: (t: T) => number) => {
   if (items.length === 0) {
     return undefined;
   }
@@ -74,7 +74,7 @@ export const avgBy = <T>(items: T[], by: (t: T) => number) => {
   return sum / items.length;
 };
 
-export const toggleItemInList = <T>(list: T[], item: T) => {
+const toggleItemInList = <T>(list: T[], item: T) => {
   const copy = [...list];
 
   if (copy.includes(item)) {
@@ -87,7 +87,7 @@ export const toggleItemInList = <T>(list: T[], item: T) => {
   return copy;
 };
 
-export const asDict = <T>(
+const asDict = <T>(
   items: T[],
   keySelector: (t: T) => string,
 ): StringKeyDictionary<T> => {
@@ -99,4 +99,14 @@ export const asDict = <T>(
   }
 
   return dict;
+};
+
+export const arrayHelpers = {
+  groupBy: groupBy,
+  maxBy: maxBy,
+  minBy: minBy,
+  sumBy: sumBy,
+  avgBy: avgBy,
+  asDict: asDict,
+  toggleItemInList: toggleItemInList,
 };

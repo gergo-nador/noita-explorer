@@ -5,7 +5,9 @@ import {
   noitaPaths,
   StringKeyDictionary,
 } from '@noita-explorer/model';
-import { aesBuffer, parseXml, XmlWrapper } from '@noita-explorer/tools';
+
+import { parseXml, XmlWrapper } from '@noita-explorer/tools/xml';
+import { aesBuffer } from '@noita-explorer/tools/common';
 
 export const scrapeEnemyStatistics = async ({
   save00BrowserApi,

@@ -5,7 +5,7 @@ import {
   NoitaTranslation,
   noitaPaths,
 } from '@noita-explorer/model';
-import { LuaWrapper, trim } from '@noita-explorer/tools';
+import { LuaWrapper, stringHelpers } from '@noita-explorer/tools';
 
 export const scrapePerks = async ({
   dataWakFolderBrowserApi,
@@ -75,13 +75,13 @@ export const scrapePerks = async ({
     }
 
     // Load the translation
-    const perkNameId = trim({ text: perk.name, fromStart: '$' });
+    const perkNameId = stringHelpers.trim({ text: perk.name, fromStart: '$' });
     const perkNameTranslation = translations[perkNameId];
     if (perkNameTranslation) {
       perk.name = perkNameTranslation.en;
     }
 
-    const perkDescription = trim({
+    const perkDescription = stringHelpers.trim({
       text: perk.description,
       fromStart: '$',
     });

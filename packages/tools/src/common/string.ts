@@ -1,4 +1,4 @@
-export const trim = ({
+const trim = ({
   text,
   fromEnd,
   fromStart,
@@ -20,4 +20,8 @@ export const trim = ({
   }
 
   return text;
+};
+
+export const stringHelpers = {
+  trim: trim,
 };

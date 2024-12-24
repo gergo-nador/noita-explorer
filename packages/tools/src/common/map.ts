@@ -1,6 +1,6 @@
 import { StringKeyDictionary } from '@noita-explorer/model';
 
-export const mapDictionary = <T, U>(
+const mapDictionary = <T, U>(
   value: StringKeyDictionary<T>,
   callback: (key: string, t: T) => U,
 ): U[] => {
@@ -13,4 +13,8 @@ export const mapDictionary = <T, U>(
   }
 
   return results;
+};
+
+export const dictionaryHelpers = {
+  mapDictionary: mapDictionary,
 };

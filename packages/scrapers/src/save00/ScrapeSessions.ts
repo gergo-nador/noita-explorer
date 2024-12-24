@@ -5,7 +5,7 @@ import {
   StringKeyDictionary,
 } from '@noita-explorer/model';
 import { NoitaSession } from '@noita-explorer/model';
-import { parseXml, XmlWrapper } from '@noita-explorer/tools';
+import { parseXml, XmlWrapper } from '@noita-explorer/tools/xml';
 
 export const scrapeSessions = async ({
   save00BrowserApi,

@@ -6,7 +6,7 @@ import {
 import { NoitaSession } from '@noita-explorer/model';
 import { NoitaSessionFilters } from './NoitaSessions.tsx';
 import { NoitaSessionsFilterAdvanced } from './NoitaSessionsFilterAdvanced.tsx';
-import { toggleItemInList } from '@noita-explorer/tools';
+import { arrayHelpers } from '@noita-explorer/tools/common';
 import { useState } from 'react';
 
 interface NoitaSessionsFilterProps {
@@ -63,7 +63,7 @@ export const NoitaSessionsFilter = ({
                 onClick={() =>
                   setFilters({
                     ...filters,
-                    builds: toggleItemInList(filters.builds, b),
+                    builds: arrayHelpers.toggleItemInList(filters.builds, b),
                   })
                 }
                 textStyle={activeTextFilterDecoration(

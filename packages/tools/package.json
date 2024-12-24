@@ -7,9 +7,20 @@
   "module": "dist/main.js",
   "types": "dist/main.d.ts",
   "exports": {
+    "./common": {
+      "import": "./dist/common.js",
+      "types": "./dist/common/main.d.ts"
+    },
+    "./lua": {
+      "import": "./dist/lua.js",
+      "types": "./dist/lua/main.d.ts"
+    },
+    "./xml": {
+      "import": "./dist/xml.js",
+      "types": "./dist/xml/main.d.ts"
+    },
     ".": {
       "import": "./dist/main.js",
-      "require": "./dist/main.js",
       "default": "./dist/main.js"
     }
   },
