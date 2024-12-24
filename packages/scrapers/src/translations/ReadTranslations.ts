@@ -1,5 +1,5 @@
 import {
-  FileSystemFile,
+  FileSystemFileAccess,
   NoitaTranslation,
   StringKeyDictionary,
 } from '@noita-explorer/model';
@@ -11,7 +11,7 @@ import { parse } from 'csv-parse/browser/esm';
 export const readTranslations = async ({
   translationFile,
 }: {
-  translationFile: FileSystemFile;
+  translationFile: FileSystemFileAccess;
 }): Promise<StringKeyDictionary<NoitaTranslation>> => {
   const csvText = await translationFile.read.asText();
   const translations: StringKeyDictionary<NoitaTranslation> = {};

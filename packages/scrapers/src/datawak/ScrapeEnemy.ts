@@ -1,5 +1,5 @@
 import {
-  FileSystemFolderBrowserApi,
+  FileSystemDirectoryAccess,
   StringKeyDictionary,
   NoitaEnemy,
   NoitaTranslation,
@@ -7,19 +7,19 @@ import {
 } from '@noita-explorer/model';
 
 export const scrapeEnemy = async ({
-  dataWakFolderBrowserApi,
+  dataWakDirectoryApi,
   translations,
 }: {
-  dataWakFolderBrowserApi: FileSystemFolderBrowserApi;
+  dataWakDirectoryApi: FileSystemDirectoryAccess;
   translations: StringKeyDictionary<NoitaTranslation>;
 }): Promise<NoitaEnemy[]> => {
-  const animalsFolderPath = await dataWakFolderBrowserApi.path.join(
+  const animalsDirPath = await dataWakDirectoryApi.path.join(
     noitaPaths.noitaDataWak.icons.animals,
   );
-  const animalsFolder =
-    await dataWakFolderBrowserApi.getFolder(animalsFolderPath);
+  const animalsDirectory =
+    await dataWakDirectoryApi.getDirectory(animalsDirPath);
 
-  const files = await animalsFolder.listFilesFromFolder();
+  const files = await animalsDirectory.listFilesFromDirectory();
   const noitaEnemies: NoitaEnemy[] = [];
 
   let animalList: string[] = [];

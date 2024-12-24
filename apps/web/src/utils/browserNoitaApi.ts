@@ -1,5 +1,5 @@
 import {
-  FileSystemFolderBrowserApi,
+  FileSystemDirectoryAccess,
   NoitaAPI,
   StringKeyDictionary,
 } from '@noita-explorer/model';
@@ -9,7 +9,8 @@ import {
   scrapeProgressFlags,
   scrapeSessions,
 } from '@noita-explorer/scrapers';
-import { FileSystemFolderBrowserWeb } from './FileSystemWebApi.ts';
+import { FileSystemDirectoryAccessBrowserApi } from '@noita-explorer/file-systems/browser-file-access-api';
+import { FileSystemDirectoryAccessBrowserFallback } from '@noita-explorer/file-systems/browser-fallback';
 import { useToast } from '@noita-explorer/noita-component-library';
 import { noitaDb } from './databases.ts';
 import {
@@ -17,7 +18,6 @@ import {
   directoryOpen,
   FileWithDirectoryAndFileHandle,
 } from 'browser-fs-access';
-import { FileSystemFolderBrowserFallback } from './FileSystemWebFallback.ts';
 
 export function browserNoitaApi(): NoitaAPI {
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -41,7 +41,7 @@ export function browserNoitaApi(): NoitaAPI {
         throw new Error('NollaGamesNoita folder is not set');
       }
 
-      return handle.getFolder('save00');
+      return handle.getDirectory('save00');
     }
 
     const fileAccessConfig = db.fileAccess;
@@ -55,7 +55,7 @@ export function browserNoitaApi(): NoitaAPI {
     const save00BrowserHandle =
       await nollaGamesNoitaBrowserHandle.getDirectoryHandle('save00');
 
-    return FileSystemFolderBrowserWeb(save00BrowserHandle);
+    return FileSystemDirectoryAccessBrowserApi(save00BrowserHandle);
   };
 
   return {
@@ -87,15 +87,15 @@ export function browserNoitaApi(): NoitaAPI {
       save00: {
         scrapeProgressFlags: async () => {
           const api = await getSave00FolderHandle();
-          return scrapeProgressFlags({ save00BrowserApi: api });
+          return scrapeProgressFlags({ save00DirectoryApi: api });
         },
         scrapeEnemyStatistics: async () => {
           const api = await getSave00FolderHandle();
-          return await scrapeEnemyStatistics({ save00BrowserApi: api });
+          return await scrapeEnemyStatistics({ save00DirectoryApi: api });
         },
         scrapeSessions: async () => {
           const api = await getSave00FolderHandle();
-          return await scrapeSessions({ save00BrowserApi: api });
+          return await scrapeSessions({ save00DirectoryApi: api });
         },
       },
     },
@@ -156,7 +156,7 @@ const openFolderDialogFileAccessApi = async () => {
   return dirHandle.name;
 };
 
-const fallbackFolderStorage: StringKeyDictionary<FileSystemFolderBrowserApi> =
+const fallbackFolderStorage: StringKeyDictionary<FileSystemDirectoryAccess> =
   {};
 const openFolderDialogFallback = async (id: string | undefined) => {
   const handlers = (await directoryOpen({
@@ -169,7 +169,7 @@ const openFolderDialogFallback = async (id: string | undefined) => {
     throw new Error('Invalid directory handle or no files selected.');
   }
 
-  const folder = FileSystemFolderBrowserFallback(handlers, 0);
+  const folder = FileSystemDirectoryAccessBrowserFallback(handlers, 0);
   const name = folder.getName();
 
   fallbackFolderStorage[name] = folder;

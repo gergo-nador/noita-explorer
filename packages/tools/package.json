@@ -1,27 +1,26 @@
 {
   "name": "@noita-explorer/tools",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "main": "dist/main.js",
   "module": "dist/main.js",
   "types": "dist/main.d.ts",
   "exports": {
-    "./common": {
-      "import": "./dist/common.js",
-      "types": "./dist/common/main.d.ts"
-    },
     "./lua": {
-      "import": "./dist/lua.js",
-      "types": "./dist/lua/main.d.ts"
+      "types": "./dist/lua/main.d.ts",
+      "import": "./dist/lua.es.js",
+      "require": "./dist/lua.cjs.js"
     },
     "./xml": {
-      "import": "./dist/xml.js",
-      "types": "./dist/xml/main.d.ts"
+      "types": "./dist/xml/main.d.ts",
+      "import": "./dist/xml.es.js",
+      "require": "./dist/xml.cjs.js"
     },
     ".": {
-      "import": "./dist/main.js",
-      "default": "./dist/main.js"
+      "types": "./dist/common/main.d.ts",
+      "import": "./dist/common.es.js",
+      "require": "./dist/common.cjs.js"
     }
   },
   "scripts": {
@@ -41,6 +40,7 @@
   "dependencies": {
     "@noita-explorer/model": "*",
     "events": "^3.3.0",
+    "buffer": "^6.0.3",
     "luaparse": "^0.3.1",
     "xml2js": "^0.6.2"
   }

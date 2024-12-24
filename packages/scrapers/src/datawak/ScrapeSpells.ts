@@ -1,5 +1,5 @@
 import {
-  FileSystemFolderBrowserApi,
+  FileSystemDirectoryAccess,
   NoitaConstants,
   noitaPaths,
   NoitaSpell,
@@ -7,24 +7,21 @@ import {
   SpellModifierNumberUnit,
   StringKeyDictionary,
 } from '@noita-explorer/model';
-import {
-  proxiedPropertiesOf,
-  stringHelpers,
-} from '@noita-explorer/tools/common';
+import { proxiedPropertiesOf, stringHelpers } from '@noita-explorer/tools';
 import { LuaWrapper } from '@noita-explorer/tools/lua';
 import { parseXml, XmlWrapper } from '@noita-explorer/tools/xml';
 
 export const scrapeSpells = async ({
-  dataWakFolderBrowserApi,
+  dataWakDirectoryApi,
   translations,
 }: {
-  dataWakFolderBrowserApi: FileSystemFolderBrowserApi;
+  dataWakDirectoryApi: FileSystemDirectoryAccess;
   translations: StringKeyDictionary<NoitaTranslation>;
 }) => {
-  const spellListLuaScriptPath = await dataWakFolderBrowserApi.path.join(
+  const spellListLuaScriptPath = await dataWakDirectoryApi.path.join(
     noitaPaths.noitaDataWak.luaScripts.guns,
   );
-  const spellListLuaScriptFile = await dataWakFolderBrowserApi.getFile(
+  const spellListLuaScriptFile = await dataWakDirectoryApi.getFile(
     spellListLuaScriptPath,
   );
   const text = await spellListLuaScriptFile.read.asText();
@@ -108,10 +105,8 @@ export const scrapeSpells = async ({
     const sprite: string = luaSpell
       .getRequiredField('sprite')
       .required.asString();
-    const imagePath = await dataWakFolderBrowserApi.path.join(
-      sprite.split('/'),
-    );
-    const imageFile = await dataWakFolderBrowserApi.getFile(imagePath);
+    const imagePath = await dataWakDirectoryApi.path.join(sprite.split('/'));
+    const imageFile = await dataWakDirectoryApi.getFile(imagePath);
     spell.imageBase64 = await imageFile.read.asImageBase64();
 
     // load other data
@@ -122,11 +117,7 @@ export const scrapeSpells = async ({
         for (const xmlFilePathValue of xmlFiles) {
           const xmlFilePath = xmlFilePathValue.asString();
           if (xmlFilePath !== undefined) {
-            await scrapeXmlSpellData(
-              dataWakFolderBrowserApi,
-              xmlFilePath,
-              spell,
-            );
+            await scrapeXmlSpellData(dataWakDirectoryApi, xmlFilePath, spell);
           }
         }
       }
@@ -243,18 +234,18 @@ export const scrapeSpells = async ({
 };
 
 const scrapeXmlSpellData = async (
-  dataWakFolderBrowserApi: FileSystemFolderBrowserApi,
+  dataWakDirectoryApi: FileSystemDirectoryAccess,
   xmlRelativePath: string,
   spell: NoitaSpell,
 ) => {
-  const xmlFilePath = await dataWakFolderBrowserApi.path.join(
+  const xmlFilePath = await dataWakDirectoryApi.path.join(
     xmlRelativePath.split('/'),
   );
   const xmlFileExists =
-    await dataWakFolderBrowserApi.checkRelativePathExists(xmlFilePath);
+    await dataWakDirectoryApi.checkRelativePathExists(xmlFilePath);
   if (!xmlFileExists) return spell;
 
-  const xmlFile = await dataWakFolderBrowserApi.getFile(xmlFilePath);
+  const xmlFile = await dataWakDirectoryApi.getFile(xmlFilePath);
 
   const xmlText = await xmlFile.read.asText();
   const xmlObj = await parseXml(xmlText);
@@ -266,7 +257,7 @@ const scrapeXmlSpellData = async (
     // specific for healhurt (Deadly Heal), in this xml will be the Regeneration Game effect
     const effect = hitEffect.getAttribute('value_string')?.asText();
     if (effect?.endsWith('.xml')) {
-      await scrapeXmlSpellData(dataWakFolderBrowserApi, effect, spell);
+      await scrapeXmlSpellData(dataWakDirectoryApi, effect, spell);
     }
   }
 
@@ -317,7 +308,7 @@ const scrapeXmlSpellData = async (
     });
     if (damageGameEffectEntities?.endsWith('.xml')) {
       await scrapeXmlSpellData(
-        dataWakFolderBrowserApi,
+        dataWakDirectoryApi,
         damageGameEffectEntities,
         spell,
       );

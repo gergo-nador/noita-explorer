@@ -1,9 +1,4 @@
 import { ipcMain } from 'electron';
-import {
-  checkPathExist,
-  readFileAsText,
-  writeTextFile,
-} from '../utils/file-system';
 import path from 'path';
 import { electronPaths } from '../electron-paths';
 import {
@@ -23,8 +18,9 @@ import {
   scrapeSpells,
 } from '@noita-explorer/scrapers';
 import { getConfig } from '../persistence/config-store';
-import { FileSystemFileNode } from '../file-system-api/FileSystemFileNode';
-import { FileSystemFolderBrowserNode } from '../file-system-api/FileSystemFolderBrowserNode';
+import { nodeFileSystemHelpers } from '../tools/file-system';
+import { FileSystemFileAccessNode } from '../file-system/FileSystemFileAccessNode';
+import { FileSystemDirectoryAccessNode } from '../file-system/FileSystemDirectoryAccessNode';
 
 const noitaWakDataPath = path.join(
   electronPaths.appData,
@@ -33,14 +29,14 @@ const noitaWakDataPath = path.join(
 
 export const registerNoitaDataFileHandlers = () => {
   ipcMain.handle('noita-data-file:is-ready', () => {
-    return checkPathExist(noitaWakDataPath);
+    return nodeFileSystemHelpers.checkPathExist(noitaWakDataPath);
   });
   ipcMain.handle('noita-data-file:get', async () => {
-    if (!checkPathExist(noitaWakDataPath)) {
+    if (!nodeFileSystemHelpers.checkPathExist(noitaWakDataPath)) {
       throw new Error('noita_wak_data.json does not exist');
     }
 
-    const text = await readFileAsText(noitaWakDataPath);
+    const text = await nodeFileSystemHelpers.readFileAsText(noitaWakDataPath);
     const data: NoitaWakData = JSON.parse(text);
 
     return data;
@@ -49,7 +45,7 @@ export const registerNoitaDataFileHandlers = () => {
     'noita-data-file:write',
     async (event, dataWak: NoitaWakData) => {
       const json = JSON.stringify(dataWak);
-      await writeTextFile(noitaWakDataPath, json);
+      await nodeFileSystemHelpers.writeTextFile(noitaWakDataPath, json);
     },
   );
   ipcMain.handle('noita-data-file:scrape', async () => {
@@ -59,7 +55,7 @@ export const registerNoitaDataFileHandlers = () => {
       ...noitaPaths.noitaInstallFolder.translation,
     );
 
-    const translationFile = FileSystemFileNode(commonCsvPath);
+    const translationFile = FileSystemFileAccessNode(commonCsvPath);
 
     let translations: StringKeyDictionary<NoitaTranslation>;
 
@@ -98,18 +94,17 @@ export const registerNoitaDataFileHandlers = () => {
       nollaGamesNoita,
       ...noitaPaths.noitaDataWak.folder,
     );
-    if (!checkPathExist(dataFolder)) {
+    if (!nodeFileSystemHelpers.checkPathExist(dataFolder)) {
       throw new Error('Extracted data path does not exist');
     }
 
-    const dataWakFolderBrowserApi =
-      FileSystemFolderBrowserNode(nollaGamesNoita);
+    const dataWakDirectoryApi = FileSystemDirectoryAccessNode(nollaGamesNoita);
 
     let perks: NoitaPerk[] = [];
     let perkError: unknown | undefined = undefined;
     try {
       perks = await scrapePerks({
-        dataWakFolderBrowserApi: dataWakFolderBrowserApi,
+        dataWakDirectoryApi: dataWakDirectoryApi,
         translations: translations,
       });
     } catch (e) {
@@ -120,7 +115,7 @@ export const registerNoitaDataFileHandlers = () => {
     let spellsError: unknown | undefined = undefined;
     try {
       spells = await scrapeSpells({
-        dataWakFolderBrowserApi: dataWakFolderBrowserApi,
+        dataWakDirectoryApi: dataWakDirectoryApi,
         translations: translations,
       });
     } catch (e) {
@@ -131,7 +126,7 @@ export const registerNoitaDataFileHandlers = () => {
     let enemiesError: unknown | undefined = undefined;
     try {
       enemies = await scrapeEnemy({
-        dataWakFolderBrowserApi: dataWakFolderBrowserApi,
+        dataWakDirectoryApi: dataWakDirectoryApi,
         translations: translations,
       });
     } catch (err) {

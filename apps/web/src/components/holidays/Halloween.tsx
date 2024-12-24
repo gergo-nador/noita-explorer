@@ -1,5 +1,5 @@
 import { Card, Icon } from '@noita-explorer/noita-component-library';
-import { mathHelpers } from '@noita-explorer/tools/common';
+import { mathHelpers } from '@noita-explorer/tools';
 import { useMemo } from 'react';
 
 import pumpkin_1 from '../../assets/holidays/pumpkin_01.png';

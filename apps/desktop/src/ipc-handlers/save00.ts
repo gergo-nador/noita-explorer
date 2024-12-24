@@ -7,7 +7,7 @@ import {
 import { getConfig } from '../persistence/config-store';
 import path from 'path';
 import { noitaPaths } from '@noita-explorer/model';
-import { FileSystemFolderBrowserNode } from '../file-system-api/FileSystemFolderBrowserNode';
+import { FileSystemDirectoryAccessNode } from '../file-system/FileSystemDirectoryAccessNode';
 
 export const registerSave00Handlers = () => {
   ipcMain.handle('save00:scrape-progress-flags', async () => {
@@ -20,10 +20,10 @@ export const registerSave00Handlers = () => {
       ...noitaPaths.save00.folder,
     );
 
-    const save00FolderBrowserApi = FileSystemFolderBrowserNode(save00Folder);
+    const save00DirectoryApi = FileSystemDirectoryAccessNode(save00Folder);
 
     return await scrapeProgressFlags({
-      save00BrowserApi: save00FolderBrowserApi,
+      save00DirectoryApi: save00DirectoryApi,
     });
   });
   ipcMain.handle('save00:scrape-enemy-statistics', async () => {
@@ -36,10 +36,10 @@ export const registerSave00Handlers = () => {
       ...noitaPaths.save00.folder,
     );
 
-    const save00FolderBrowserApi = FileSystemFolderBrowserNode(save00Folder);
+    const save00DirectoryApi = FileSystemDirectoryAccessNode(save00Folder);
 
     return await scrapeEnemyStatistics({
-      save00BrowserApi: save00FolderBrowserApi,
+      save00DirectoryApi: save00DirectoryApi,
     });
   });
   ipcMain.handle('save00:scrape-sessions', async () => {
@@ -52,10 +52,10 @@ export const registerSave00Handlers = () => {
       ...noitaPaths.save00.folder,
     );
 
-    const save00FolderBrowserApi = FileSystemFolderBrowserNode(save00Folder);
+    const save00DirectoryApi = FileSystemDirectoryAccessNode(save00Folder);
 
     return await scrapeSessions({
-      save00BrowserApi: save00FolderBrowserApi,
+      save00DirectoryApi: save00DirectoryApi,
     });
   });
 };

@@ -1,6 +1,6 @@
 import {
-  FileSystemFile,
-  FileSystemFolderBrowserApi,
+  FileSystemFileAccess,
+  FileSystemDirectoryAccess,
   noitaPaths,
   StringKeyDictionary,
 } from '@noita-explorer/model';
@@ -8,21 +8,21 @@ import { NoitaSession } from '@noita-explorer/model';
 import { parseXml, XmlWrapper } from '@noita-explorer/tools/xml';
 
 export const scrapeSessions = async ({
-  save00BrowserApi,
+  save00DirectoryApi,
 }: {
-  save00BrowserApi: FileSystemFolderBrowserApi;
+  save00DirectoryApi: FileSystemDirectoryAccess;
 }): Promise<NoitaSession[]> => {
-  const sessionsFolderPath = await save00BrowserApi.path.join(
+  const sessionsDirPath = await save00DirectoryApi.path.join(
     noitaPaths.save00.sessions,
   );
 
-  const sessionsFolder = await save00BrowserApi.getFolder(sessionsFolderPath);
-  const files = await sessionsFolder.listFilesFromFolder();
+  const sessionsDir = await save00DirectoryApi.getDirectory(sessionsDirPath);
+  const files = await sessionsDir.listFilesFromDirectory();
 
   const sessionGroups: StringKeyDictionary<{
     baseId: string;
-    stats: FileSystemFile | undefined;
-    kills: FileSystemFile | undefined;
+    stats: FileSystemFileAccess | undefined;
+    kills: FileSystemFileAccess | undefined;
   }> = {};
 
   files.forEach((f) => {

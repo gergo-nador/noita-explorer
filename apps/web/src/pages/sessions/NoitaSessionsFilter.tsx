@@ -6,7 +6,7 @@ import {
 import { NoitaSession } from '@noita-explorer/model';
 import { NoitaSessionFilters } from './NoitaSessions.tsx';
 import { NoitaSessionsFilterAdvanced } from './NoitaSessionsFilterAdvanced.tsx';
-import { arrayHelpers } from '@noita-explorer/tools/common';
+import { arrayHelpers } from '@noita-explorer/tools';
 import { useState } from 'react';
 
 interface NoitaSessionsFilterProps {

@@ -1,5 +1,5 @@
 import { BrowserWindow, dialog, ipcMain } from 'electron';
-import { openExplorer } from '../utils/file-system';
+import { nodeFileSystemHelpers } from '../tools/file-system';
 
 export const registerDialogHandlers = () => {
   ipcMain.handle('dialog:openDirectory', async (event, args) => {
@@ -31,7 +31,7 @@ export const registerDialogHandlers = () => {
   });
 
   ipcMain.handle('dialog:openExplorer', async (event, path: string) => {
-    openExplorer(path);
+    nodeFileSystemHelpers.openExplorer(path);
     return true;
   });
 };

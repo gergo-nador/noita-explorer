@@ -7,10 +7,11 @@ export default defineConfig({
   build: {
     lib: {
       entry: {
-        main: resolve(__dirname, 'src/main.ts'),
-        common: resolve(__dirname, 'src/common/main.ts'),
-        lua: resolve(__dirname, 'src/lua/main.ts'),
-        xml: resolve(__dirname, 'src/xml/main.ts'),
+        'browser-fallback': resolve(__dirname, 'src/browser-fallback/main.ts'),
+        'browser-file-access-api': resolve(
+          __dirname,
+          'src/browser-file-access-api/main.ts',
+        ),
       },
       formats: ['es', 'cjs'],
       fileName: (format, entryName) => `${entryName}.${format}.js`,
@@ -20,7 +21,7 @@ export default defineConfig({
         assetFileNames: 'assets/[name][extname]',
         entryFileNames: '[name].[format].js',
       },
-      external: [],
+      external: ['@noita-explorer/tools/os', 'os', 'path'],
     },
   },
 });

@@ -1,5 +1,5 @@
 import { app, ipcMain } from 'electron';
-import { Platform } from '../utils/Platform';
+import { Platform } from '../tools/platform';
 import path from 'path';
 
 export const registerNoitaDefaultPathsHandlers = () => {

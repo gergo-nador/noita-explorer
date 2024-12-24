@@ -10,11 +10,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@noita-explorer/file-systems": "*",
     "@noita-explorer/model": "*",
     "@noita-explorer/noita-component-library": "*",
     "@noita-explorer/scrapers": "*",
     "@noita-explorer/tools": "*",
-    "browser-fs-access": "^0.35.0",
     "buffer": "^6.0.3",
     "idb": "^8.0.1",
     "react": "^18.3.1",

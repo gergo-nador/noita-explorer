@@ -4,9 +4,8 @@
 
 export * from "./common/StringKeyDictionary";
 export * from "./common/StringKeyDictionaryComposite";
-export * from "./file-system/FileReadOptions";
-export * from "./file-system/FileSystemFile";
-export * from "./file-system/FileSystemFolderBrowserApi";
+export * from "./file-system/FileSystemDirectoryAccess";
+export * from "./file-system/FileSystemFileAccess";
 export * from "./noita/NoitaAPI";
 export * from "./noita/NoitaConstants";
 export * from "./noita/NoitaEnemy";

@@ -1,0 +1,10 @@
+{
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build", "generate-barrels"],
+      "outputs": ["dist/**"]
+    },
+    "generate-barrels": {}
+  },
+  "extends": ["//"]
+}

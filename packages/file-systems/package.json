@@ -1,0 +1,46 @@
+{
+  "name": "@noita-explorer/file-systems",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "main": "dist/main.js",
+  "module": "dist/main.js",
+  "types": "dist/main.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/main.d.ts",
+      "import": "./dist/main.es.js",
+      "require": "./dist/main.cjs.js"
+    },
+    "./browser-fallback": {
+      "types": "./dist/browser-fallback/main.d.ts",
+      "import": "./dist/browser-fallback.es.js",
+      "require": "./dist/browser-fallback..cjsjs"
+    },
+    "./browser-file-access-api": {
+      "types": "./dist/browser-file-access-api/main.d.ts",
+      "import": "./dist/browser-file-access-api.es.js",
+      "require": "./dist/browser-file-access-api.cjs.js"
+    }
+  },
+  "scripts": {
+    "dev": "vite build --watch",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "generate-barrels": "barrelsby --config barrels.config.json"
+  },
+  "dependencies": {
+    "@noita-explorer/model": "*",
+    "@noita-explorer/tools": "*"
+  },
+  "peerDependencies": {
+    "browser-fs-access": "^0.35.0"
+  },
+  "devDependencies": {
+    "barrelsby": "^2.8.1",
+    "browser-fs-access": "^0.35.0",
+    "typescript": "~5.6.2",
+    "vite": "^6.0.1",
+    "vite-plugin-dts": "^4.3.0"
+  }
+}

@@ -1,26 +1,26 @@
 import {
   encryptedFileKeys,
   EnemyStatistic,
-  FileSystemFolderBrowserApi,
+  FileSystemDirectoryAccess,
   noitaPaths,
   StringKeyDictionary,
 } from '@noita-explorer/model';
 
 import { parseXml, XmlWrapper } from '@noita-explorer/tools/xml';
-import { aesBuffer } from '@noita-explorer/tools/common';
+import { aesBuffer } from '@noita-explorer/tools';
 
 export const scrapeEnemyStatistics = async ({
-  save00BrowserApi,
+  save00DirectoryApi,
 }: {
-  save00BrowserApi: FileSystemFolderBrowserApi;
+  save00DirectoryApi: FileSystemDirectoryAccess;
 }) => {
-  const enemyStatsFolderPath = await save00BrowserApi.path.join(
+  const enemyStatsDirPath = await save00DirectoryApi.path.join(
     noitaPaths.save00.stats,
   );
-  const enemyStatsFolder =
-    await save00BrowserApi.getFolder(enemyStatsFolderPath);
+  const enemyStatsDirectory =
+    await save00DirectoryApi.getDirectory(enemyStatsDirPath);
 
-  const files = await enemyStatsFolder.listFilesFromFolder();
+  const files = await enemyStatsDirectory.listFilesFromDirectory();
   const animalStatisticsFiles = files
     .filter(
       (f) => f.getName().startsWith('stats_') && f.getName().endsWith('.xml'),
@@ -49,7 +49,7 @@ export const scrapeEnemyStatistics = async ({
     };
   }
 
-  const statsSalakieli = await enemyStatsFolder.getFile('_stats.salakieli');
+  const statsSalakieli = await enemyStatsDirectory.getFile('_stats.salakieli');
   const statsSalakieliBuffer = await statsSalakieli.read.asBuffer();
   const decryptedStats = await aesBuffer({
     buffer: statsSalakieliBuffer,

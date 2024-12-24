@@ -8,9 +8,9 @@
   "types": "dist/main.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/main.js",
-      "require": "./dist/main.js",
-      "default": "./dist/main.js"
+      "types": "./dist/main.d.ts",
+      "import": "./dist/main.es.js",
+      "require": "./dist/main.cjs.js"
     }
   },
   "scripts": {

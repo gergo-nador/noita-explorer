@@ -7,7 +7,7 @@ import {
 } from 'electron';
 import path from 'path';
 import started from 'electron-squirrel-startup';
-import { Platform } from './utils/Platform';
+import { Platform } from './tools/platform';
 import { registerClipboardIpcHandlers } from './ipc-handlers/clipboard';
 import { registerConfigIpcHandlers } from './ipc-handlers/config';
 import { registerNoitaDataFileHandlers } from './ipc-handlers/noita-data-file';

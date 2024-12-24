@@ -2,7 +2,7 @@
 // https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts
 import { contextBridge, ipcRenderer } from 'electron';
 import { NoitaAPI } from '@noita-explorer/model';
-import { Platform } from './utils/Platform';
+import { Platform } from './tools/platform';
 
 const noitaApi: NoitaAPI = {
   config: {

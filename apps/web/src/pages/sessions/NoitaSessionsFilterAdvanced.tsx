@@ -1,7 +1,7 @@
 import { Button, Header } from '@noita-explorer/noita-component-library';
 import { NoitaSession, StringKeyDictionary } from '@noita-explorer/model';
 import { NoitaSessionFilters } from './NoitaSessions.tsx';
-import { arrayHelpers } from '@noita-explorer/tools/common';
+import { arrayHelpers } from '@noita-explorer/tools';
 import { useMemo } from 'react';
 
 interface NoitaSessionsFilterAdvancedProps {

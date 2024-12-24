@@ -1,12 +1,12 @@
 import fs from 'fs';
 import path from 'node:path';
 import { spawn } from 'child_process';
-import { Platform } from './Platform';
-import { trim } from '@noita-explorer/tools';
+import { Platform } from './platform';
+import { stringHelpers } from '@noita-explorer/tools';
 
-export const getPathsFromFolder = (folder: string): Promise<string[]> => {
+const getPathsFromDirectory = (directoryPath: string): Promise<string[]> => {
   return new Promise((resolve, reject) => {
-    fs.readdir(folder, (err, files) => {
+    fs.readdir(directoryPath, (err, files) => {
       if (err) {
         reject(`${err.name}: ${err.message} at ${err.stack}`);
         return;
@@ -17,11 +17,11 @@ export const getPathsFromFolder = (folder: string): Promise<string[]> => {
   });
 };
 
-export const checkPathExist = (filePath: string): boolean => {
+const checkPathExist = (filePath: string): boolean => {
   return fs.existsSync(filePath);
 };
 
-export const readFileAsBuffer = (filePath: string): Promise<Buffer> => {
+const readFileAsBuffer = (filePath: string): Promise<Buffer> => {
   return new Promise((resolve, reject) => {
     fs.readFile(filePath, (err, data) => {
       if (err) {
@@ -34,14 +34,11 @@ export const readFileAsBuffer = (filePath: string): Promise<Buffer> => {
   });
 };
 
-export const readFileAsText = (filePath: string): Promise<string> => {
+const readFileAsText = (filePath: string): Promise<string> => {
   return readFileAsBuffer(filePath).then((buffer) => buffer.toString());
 };
 
-export const writeTextFile = (
-  filePath: string,
-  text: string,
-): Promise<void> => {
+const writeTextFile = (filePath: string, text: string): Promise<void> => {
   return new Promise((resolve, reject) => {
     fs.writeFile(filePath, text, (err) => {
       if (err) {
@@ -53,7 +50,7 @@ export const writeTextFile = (
   });
 };
 
-export const readImageAsBase64 = (filePath: string): Promise<string> => {
+const readImageAsBase64 = (filePath: string): Promise<string> => {
   return new Promise((resolve, reject) => {
     fs.readFile(filePath, (err, data) => {
       if (err) {
@@ -62,14 +59,17 @@ export const readImageAsBase64 = (filePath: string): Promise<string> => {
       }
 
       const parsedPath = path.parse(filePath);
-      const extension = trim({ text: parsedPath.ext, fromStart: '.' });
+      const extension = stringHelpers.trim({
+        text: parsedPath.ext,
+        fromStart: '.',
+      });
       const base64 = `data:image/${extension};base64,${data.toString('base64')}`;
       resolve(base64);
     });
   });
 };
 
-export const openExplorer = (path: string) => {
+const openExplorer = (path: string) => {
   Platform.select({
     windows: () => {
       spawn('explorer', ['/select,', path], {
@@ -90,4 +90,14 @@ export const openExplorer = (path: string) => {
       });
     },
   });
+};
+
+export const nodeFileSystemHelpers = {
+  getPathsFromDirectory: getPathsFromDirectory,
+  checkPathExist: checkPathExist,
+  readFileAsBuffer: readFileAsBuffer,
+  readFileAsText: readFileAsText,
+  writeTextFile: writeTextFile,
+  readImageAsBase64: readImageAsBase64,
+  openExplorer: openExplorer,
 };

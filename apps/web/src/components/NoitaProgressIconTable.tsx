@@ -1,5 +1,5 @@
 import React from 'react';
-import { mathHelpers } from '@noita-explorer/tools/common';
+import { mathHelpers } from '@noita-explorer/tools';
 
 interface NoitaProgressIconTableProps {
   count: number;
