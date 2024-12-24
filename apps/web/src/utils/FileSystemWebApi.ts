@@ -10,6 +10,7 @@ export const FileSystemFolderBrowserWeb = (
   directoryHandle: FileSystemDirectoryHandle,
 ): FileSystemFolderBrowserApi => {
   return {
+    getName: () => directoryHandle.name,
     path: {
       join: (args) => resolvePromise(args.join('/')),
     },

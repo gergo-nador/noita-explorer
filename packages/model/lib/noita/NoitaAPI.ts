@@ -31,6 +31,7 @@ export interface NoitaAPI {
     openFolderDialog: (args?: {
       startIn?: string;
       title?: string;
+      id?: string;
     }) => Promise<string | undefined>;
 
     openFileDialog: (args?: {

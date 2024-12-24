@@ -43,6 +43,7 @@ export const FileSystemFolderBrowserNode = (
   };
 
   return {
+    getName: () => path.parse(folderPath).name,
     path: {
       join: (args) => resolvePromise(path.join(...args)),
     },
