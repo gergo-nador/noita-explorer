@@ -1,15 +1,20 @@
 import { timeHelpers, arrayHelpers, mathHelpers } from '@noita-explorer/tools';
 import { NoitaSession } from '@noita-explorer/model';
+import { useMemo } from 'react';
 
 interface NoitaSessionsStatisticsProps {
-  sessionsGroupedByDay: NoitaSession[][];
   sessions: NoitaSession[];
 }
 
 export const NoitaSessionsStatistics = ({
   sessions,
-  sessionsGroupedByDay,
 }: NoitaSessionsStatisticsProps) => {
+  const sessionsGroupedByDay = useMemo(() => {
+    return arrayHelpers
+      .groupBy(sessions, (session) => session.startedAt.toLocaleDateString())
+      .asArray();
+  }, [sessions]);
+
   const statsMostPlayedOneDay = arrayHelpers.maxBy(
     sessionsGroupedByDay,
     (arr) => arr.length,

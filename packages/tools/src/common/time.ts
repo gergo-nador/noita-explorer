@@ -19,7 +19,7 @@ const milliSecondsToTimeString = (ms: number) => {
   }
 
   const totalDays = mathHelpers.floor(totalHours / 24);
-  return `${totalDays} days ${hours} hours`;
+  return `${totalDays} d ${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
 };
 
 const secondsToTimeString = (seconds: number) =>

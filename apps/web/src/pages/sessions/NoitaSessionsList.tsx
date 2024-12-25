@@ -1,5 +1,9 @@
 import { NoitaSession, StringKeyDictionary } from '@noita-explorer/model';
-import { dictionaryHelpers, timeHelpers } from '@noita-explorer/tools';
+import {
+  arrayHelpers,
+  dictionaryHelpers,
+  timeHelpers,
+} from '@noita-explorer/tools';
 import {
   Button,
   Card,
@@ -8,7 +12,7 @@ import {
   NoitaTooltipWrapper,
 } from '@noita-explorer/noita-component-library';
 import { Flex } from '../../components/Flex.tsx';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import dieIcon from '../../assets/icons/die2.png';
 import lifetimeIcon from '../../assets/icons/spells/lifetime.webp';
@@ -22,36 +26,65 @@ interface NoitaSessionsListProps {
 export const NoitaSessionsList = ({
   sessionsGrouped,
 }: NoitaSessionsListProps) => {
-  const items = useMemo(
-    () =>
-      dictionaryHelpers.mapDictionary(sessionsGrouped, (key, val) => ({
+  const [items, itemsCount] = useMemo(() => {
+    const items = dictionaryHelpers.mapDictionary(
+      sessionsGrouped,
+      (key, val) => ({
         key: key,
         val: val,
-      })),
-    [sessionsGrouped],
-  );
+      }),
+    );
 
-  const initialItemCount = 10;
-  const increaseItemCountBy = 10;
+    const count = arrayHelpers.sumBy(items, (item) => item.val.length);
+
+    return [items, count];
+  }, [sessionsGrouped]);
+
+  const initialItemCount = 30;
+  const increaseItemCountBy = 30;
 
   const [loadedSessionsCount, setLoadedSessionsCount] =
     useState(initialItemCount);
 
+  useEffect(() => {
+    setLoadedSessionsCount(initialItemCount);
+  }, [items]);
+
   const loadNext = () => {
     const nextLoadedSessionsCount = Math.min(
       loadedSessionsCount + increaseItemCountBy,
-      items.length,
+      itemsCount,
     );
 
     setLoadedSessionsCount(nextLoadedSessionsCount);
   };
 
   const loadedItems = useMemo(() => {
-    const end = Math.min(loadedSessionsCount, items.length);
-    return items.slice(0, end);
-  }, [loadedSessionsCount, items]);
+    const end = Math.min(loadedSessionsCount, itemsCount);
 
-  const hasMoreItems = loadedItems.length < items.length;
+    const loadedItems = [];
+    let loadedItemsCount = 0;
+
+    for (const item of items) {
+      if (loadedItemsCount + item.val.length <= end) {
+        loadedItems.push(item);
+        loadedItemsCount += item.val.length;
+        continue;
+      }
+
+      const newItemVal = item.val.slice(0, end - loadedItemsCount);
+      loadedItems.push({
+        key: item.key,
+        val: newItemVal,
+      });
+
+      break;
+    }
+
+    return loadedItems;
+  }, [loadedSessionsCount, items, itemsCount]);
+
+  const hasMoreItems = loadedSessionsCount < itemsCount;
 
   return (
     <Flex gap={20} style={{ flexDirection: 'column' }}>
@@ -114,8 +147,9 @@ export const NoitaSessionsList = ({
                   </div>
                   <div style={{ textAlign: 'right' }}>
                     <div>
-                      <span className={'text-secondary'}>Started at</span>{' '}
-                      <span>{session.startedAt.toLocaleTimeString()}</span>
+                      <span className={'text-secondary'}>
+                        {session.startedAt.toLocaleString()}
+                      </span>
                     </div>
                     <div className={'text-secondary'}>{session.buildName}</div>
                   </div>

@@ -4,7 +4,7 @@ import {
   Header,
 } from '@noita-explorer/noita-component-library';
 import { NoitaSession } from '@noita-explorer/model';
-import { NoitaSessionFilters } from './NoitaSessions.tsx';
+import { NoitaSessionFilters, NoitaSessionOrdering } from './NoitaSessions.tsx';
 import { NoitaSessionsFilterAdvanced } from './NoitaSessionsFilterAdvanced.tsx';
 import { arrayHelpers } from '@noita-explorer/tools';
 import { useState } from 'react';
@@ -13,12 +13,16 @@ interface NoitaSessionsFilterProps {
   sessions: NoitaSession[];
   filters: NoitaSessionFilters;
   setFilters: (filters: NoitaSessionFilters) => void;
+  ordering: NoitaSessionOrdering;
+  setOrdering: (orders: NoitaSessionOrdering) => void;
 }
 
 export const NoitaSessionsFilter = ({
   sessions,
   filters,
   setFilters,
+  ordering,
+  setOrdering,
 }: NoitaSessionsFilterProps) => {
   const noitaBuilds = [...new Set(sessions.map((s) => s.buildName))];
   const [showAdvancedDialog, setShowAdvancedDialog] = useState(false);
@@ -29,6 +33,33 @@ export const NoitaSessionsFilter = ({
   return (
     <div>
       <Header title={'Sort by'}>
+        <div>
+          <div style={{ display: 'flex' }}>
+            Play Time
+            <Button
+              decoration={'none'}
+              onClick={() =>
+                setOrdering({
+                  ...ordering,
+                  playTime: ordering.playTime === 'asc' ? undefined : 'asc',
+                })
+              }
+            >
+              ▲
+            </Button>
+            <Button
+              decoration={'none'}
+              onClick={() =>
+                setOrdering({
+                  ...ordering,
+                  playTime: ordering.playTime === 'desc' ? undefined : 'desc',
+                })
+              }
+            >
+              ▼
+            </Button>
+          </div>
+        </div>
         <ul>
           <li>play time</li>
           <li>played at</li>

@@ -5,7 +5,7 @@ import React, { MutableRefObject, useRef } from 'react';
 
 interface ButtonProps {
   children?: string | React.ReactNode | React.ReactNode[];
-  decoration?: 'left' | 'right' | 'both';
+  decoration?: 'left' | 'right' | 'both' | 'none';
   disabled?: boolean;
   onClick?: () => void;
   onDisabledClick?: () => void;
