@@ -7,18 +7,26 @@ interface ButtonProps {
   children?: string | React.ReactNode | React.ReactNode[];
   decoration?: 'left' | 'right' | 'both' | 'none';
   disabled?: boolean;
+  textStyle?: React.CSSProperties;
   onClick?: () => void;
   onDisabledClick?: () => void;
-  textStyle?: React.CSSProperties;
+  onBlur?: () => void;
+  onFocus?: () => void;
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
 }
 
 export const Button = ({
   children,
   onClick,
   decoration,
+  textStyle = {},
   disabled,
   onDisabledClick,
-  textStyle = {},
+  onMouseEnter,
+  onMouseLeave,
+  onBlur,
+  onFocus,
 }: ButtonProps) => {
   const iconSize = 6;
   const buttonRef = useRef<HTMLButtonElement>();
@@ -56,6 +64,10 @@ export const Button = ({
         style={{
           cursor: disabled ? 'not-allowed' : 'pointer',
         }}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
+        onFocus={onFocus}
+        onBlur={onBlur}
       >
         {leftButton && (
           <span

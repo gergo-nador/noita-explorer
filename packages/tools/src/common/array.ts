@@ -101,6 +101,10 @@ const asDict = <T>(
   return dict;
 };
 
+const unique = <T>(items: T[]) => {
+  return [...new Set(items)];
+};
+
 export const arrayHelpers = {
   groupBy: groupBy,
   maxBy: maxBy,
@@ -108,5 +112,6 @@ export const arrayHelpers = {
   sumBy: sumBy,
   avgBy: avgBy,
   asDict: asDict,
+  unique: unique,
   toggleItemInList: toggleItemInList,
 };
