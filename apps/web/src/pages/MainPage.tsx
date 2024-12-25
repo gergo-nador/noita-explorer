@@ -8,7 +8,7 @@ import { useSave00Store } from '../stores/save00.ts';
 export const MainPage = () => {
   const navigate = useNavigate();
   const { loaded: noitaDataWakLoaded } = useNoitaDataWakStore();
-  const { loaded: sessionsLoaded, reload } = useSave00Store();
+  const { loaded: sessionsLoaded } = useSave00Store();
   const toast = useToast();
 
   return (
@@ -78,9 +78,6 @@ export const MainPage = () => {
         }
       >
         Sessions
-      </Button>
-      <Button decoration={'both'} onClick={() => reload()}>
-        Reload File data
       </Button>
     </div>
   );

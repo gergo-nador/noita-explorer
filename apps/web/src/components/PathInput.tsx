@@ -13,6 +13,7 @@ interface PathInputProps {
   setPath: (path: string) => void;
   dialogTitle?: string;
   type: 'file' | 'directory';
+  fileSystemDialogId?: string;
 }
 
 export const PathInput = ({
@@ -22,6 +23,7 @@ export const PathInput = ({
   setPath,
   dialogTitle,
   type,
+  fileSystemDialogId,
 }: PathInputProps) => {
   const onPathSelect = () => {
     if (type === 'directory') {
@@ -29,6 +31,7 @@ export const PathInput = ({
         .openFolderDialog({
           startIn: path ?? startInIfPathEmpty,
           title: dialogTitle,
+          id: fileSystemDialogId,
         })
         .then((folder) => folder && setPath(folder));
     } else if (type === 'file') {

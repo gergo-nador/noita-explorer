@@ -1,16 +1,18 @@
 import {
   Header,
+  Icon,
   NoitaTooltipWrapper,
 } from '@noita-explorer/noita-component-library';
 import { PathInput } from '../../components/PathInput.tsx';
 import { useSettingsStore } from '../../stores/settings.ts';
+import { supported } from 'browser-fs-access';
 
 export const SetupWebPaths = () => {
   const { paths, set: setPaths } = useSettingsStore();
 
   return (
     <Header title={'Paths'}>
-      <div style={{ display: 'flex' }}>
+      <div>
         <NoitaTooltipWrapper content={'NollaGamesNoita folder'}>
           <PathInput
             type={'directory'}
@@ -24,8 +26,29 @@ export const SetupWebPaths = () => {
                 (state) => (state.paths = { ...paths, NollaGamesNoita: path }),
               );
             }}
+            fileSystemDialogId={'nolla_games_noita'}
           />
         </NoitaTooltipWrapper>
+
+        {!supported && (
+          <>
+            <br />
+            <br />
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              <Icon type={'warning'} size={20} />
+              <span>
+                This browser is not fully compatible with certain features of
+                this site (<i>File System API</i>). As a result, you will need
+                to manually set the paths each time you visit.
+              </span>
+            </div>
+          </>
+        )}
       </div>
     </Header>
   );

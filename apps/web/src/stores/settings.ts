@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { noitaAPI } from '../ipcHandlers';
+import { supported } from 'browser-fs-access';
 
 export interface SettingsState {
   paths: {
@@ -22,6 +23,13 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
   load: async () => {
     try {
       const state = await loadSettings(get());
+      if (!supported) {
+        state.paths = {
+          install: undefined,
+          NollaGamesNoita: undefined,
+        };
+      }
+
       return set({ ...state, loaded: true });
     } catch (err) {
       console.error('Failed to load settings: ', err);
