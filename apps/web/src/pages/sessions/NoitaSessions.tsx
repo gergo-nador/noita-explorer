@@ -20,6 +20,7 @@ export interface NoitaSessionOrdering {
   goldAll?: NoitaSessionOrderingType;
   playedAt?: NoitaSessionOrderingType;
   playTime?: NoitaSessionOrderingType;
+  enemiesKilled?: NoitaSessionOrderingType;
 }
 
 export const NoitaSessions = () => {
@@ -122,6 +123,19 @@ export const NoitaSessions = () => {
       return arrayHelpers.groupBy(
         temp,
         () => 'Gold: ' + noitaSessionOrdering.gold,
+      );
+    }
+
+    if (noitaSessionOrdering.enemiesKilled !== undefined) {
+      if (noitaSessionOrdering.enemiesKilled === 'asc') {
+        temp.sort((s1, s2) => s1.enemiesKilled - s2.enemiesKilled);
+      } else {
+        temp.sort((s1, s2) => s2.enemiesKilled - s1.enemiesKilled);
+      }
+
+      return arrayHelpers.groupBy(
+        temp,
+        () => 'Enemies killed: ' + noitaSessionOrdering.enemiesKilled,
       );
     }
 

@@ -40,7 +40,13 @@ export const NoitaSessionsFilter = ({
   return (
     <div>
       <Header title={'Sort by'}>
-        <div>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'max-content min-content min-content',
+            gap: 4,
+          }}
+        >
           <SortItem
             title={'Played at'}
             fieldGetter={() => ordering.playedAt}
@@ -74,6 +80,15 @@ export const NoitaSessionsFilter = ({
             fieldSetter={(type) =>
               setOrdering({
                 goldAll: type,
+              })
+            }
+          />
+          <SortItem
+            title={'Enemies killed'}
+            fieldGetter={() => ordering.enemiesKilled}
+            fieldSetter={(type) =>
+              setOrdering({
+                enemiesKilled: type,
               })
             }
           />
@@ -153,12 +168,10 @@ const SortItem = ({
   fieldSetter: (type: NoitaSessionOrderingType) => void;
 }) => {
   const value = fieldGetter();
-  const halfLength = title.length / 2;
-  const title1 = title.substring(0, halfLength);
-  const title2 = title.substring(halfLength, title.length);
 
   return (
-    <div style={{ display: 'flex' }}>
+    <>
+      <span>{title}</span>
       <Button
         decoration={'none'}
         onClick={() => fieldSetter('asc')}
@@ -166,7 +179,7 @@ const SortItem = ({
           color: value === 'asc' ? 'gold' : 'inherit',
         }}
       >
-        ▲ {title1}
+        ▲
       </Button>
       <Button
         decoration={'none'}
@@ -175,8 +188,8 @@ const SortItem = ({
           color: value === 'desc' ? 'gold' : 'inherit',
         }}
       >
-        {title2} ▼
+        ▼
       </Button>
-    </div>
+    </>
   );
 };

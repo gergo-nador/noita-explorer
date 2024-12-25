@@ -18,6 +18,7 @@ import dieIcon from '../../assets/icons/die2.png';
 import lifetimeIcon from '../../assets/icons/spells/lifetime.webp';
 import moneyIcon from '../../assets/icons/money.png';
 import deathIcon from '../../assets/icons/icon_danger.png';
+import enemyIcon from '../../assets/icons/enemy.png';
 
 interface NoitaSessionsListProps {
   sessionsGrouped: StringKeyDictionary<NoitaSession[]>;
@@ -143,6 +144,10 @@ export const NoitaSessionsList = ({
                           )}
                         </div>
                       )}
+                    </div>
+                    <div>
+                      <Icon type={'custom'} src={enemyIcon} size={20} />{' '}
+                      {session.enemiesKilled}
                     </div>
                   </div>
                   <div style={{ textAlign: 'right' }}>
