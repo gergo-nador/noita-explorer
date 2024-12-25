@@ -4,7 +4,11 @@ import {
   Header,
 } from '@noita-explorer/noita-component-library';
 import { NoitaSession } from '@noita-explorer/model';
-import { NoitaSessionFilters, NoitaSessionOrdering } from './NoitaSessions.tsx';
+import {
+  NoitaSessionFilters,
+  NoitaSessionOrdering,
+  NoitaSessionOrderingType,
+} from './NoitaSessions.tsx';
 import { NoitaSessionsFilterAdvanced } from './NoitaSessionsFilterAdvanced.tsx';
 import { arrayHelpers } from '@noita-explorer/tools';
 import { useState } from 'react';
@@ -34,38 +38,43 @@ export const NoitaSessionsFilter = ({
     <div>
       <Header title={'Sort by'}>
         <div>
-          <div style={{ display: 'flex' }}>
-            Play Time
-            <Button
-              decoration={'none'}
-              onClick={() =>
-                setOrdering({
-                  ...ordering,
-                  playTime: ordering.playTime === 'asc' ? undefined : 'asc',
-                })
-              }
-            >
-              ▲
-            </Button>
-            <Button
-              decoration={'none'}
-              onClick={() =>
-                setOrdering({
-                  ...ordering,
-                  playTime: ordering.playTime === 'desc' ? undefined : 'desc',
-                })
-              }
-            >
-              ▼
-            </Button>
-          </div>
+          <SortItem
+            title={'Played at'}
+            fieldGetter={() => ordering.playedAt}
+            fieldSetter={(type) =>
+              setOrdering({
+                playedAt: type,
+              })
+            }
+          />
+          <SortItem
+            title={'Play time'}
+            fieldGetter={() => ordering.playTime}
+            fieldSetter={(type) =>
+              setOrdering({
+                playTime: type,
+              })
+            }
+          />
+          <SortItem
+            title={'Gold'}
+            fieldGetter={() => ordering.gold}
+            fieldSetter={(type) =>
+              setOrdering({
+                gold: type,
+              })
+            }
+          />
+          <SortItem
+            title={'Gold all'}
+            fieldGetter={() => ordering.goldAll}
+            fieldSetter={(type) =>
+              setOrdering({
+                goldAll: type,
+              })
+            }
+          />
         </div>
-        <ul>
-          <li>play time</li>
-          <li>played at</li>
-          <li>kills</li>
-          <li>gold/gold all</li>
-        </ul>
       </Header>
       <Header title={'Filter by'}>
         <div>
@@ -126,6 +135,44 @@ export const NoitaSessionsFilter = ({
           }}
         />
       )}
+    </div>
+  );
+};
+
+const SortItem = ({
+  fieldGetter,
+  fieldSetter,
+  title,
+}: {
+  title: string;
+  fieldGetter: () => NoitaSessionOrderingType;
+  fieldSetter: (type: NoitaSessionOrderingType) => void;
+}) => {
+  const value = fieldGetter();
+  const halfLength = title.length / 2;
+  const title1 = title.substring(0, halfLength);
+  const title2 = title.substring(halfLength, title.length);
+
+  return (
+    <div style={{ display: 'flex' }}>
+      <Button
+        decoration={'none'}
+        onClick={() => fieldSetter('asc')}
+        textStyle={{
+          color: value === 'asc' ? 'gold' : 'inherit',
+        }}
+      >
+        ▲ {title1}
+      </Button>
+      <Button
+        decoration={'none'}
+        onClick={() => fieldSetter('desc')}
+        textStyle={{
+          color: value === 'desc' ? 'gold' : 'inherit',
+        }}
+      >
+        {title2} ▼
+      </Button>
     </div>
   );
 };

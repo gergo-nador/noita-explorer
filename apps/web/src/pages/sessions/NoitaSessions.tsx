@@ -14,14 +14,13 @@ export interface NoitaSessionFilters {
   killedByEntity: string[];
 }
 
-type NoitaSessionOrderingType = undefined | 'asc' | 'desc';
+export type NoitaSessionOrderingType = undefined | 'asc' | 'desc';
 export interface NoitaSessionOrdering {
+  gold?: NoitaSessionOrderingType;
+  goldAll?: NoitaSessionOrderingType;
+  playedAt?: NoitaSessionOrderingType;
   playTime?: NoitaSessionOrderingType;
 }
-
-const emptyOrdering: NoitaSessionOrdering = {
-  playTime: undefined,
-};
 
 export const NoitaSessions = () => {
   const { sessions } = useSave00Store();
@@ -33,11 +32,15 @@ export const NoitaSessions = () => {
       killedByReasons: [],
     });
   const [noitaSessionOrdering, _setNoitaSessionOrdering] =
-    useState<NoitaSessionOrdering>(emptyOrdering);
+    useState<NoitaSessionOrdering>({
+      gold: undefined,
+      goldAll: undefined,
+      playedAt: 'desc',
+      playTime: undefined,
+    });
 
   const setNoitaSessionOrdering = (val: NoitaSessionOrdering) => {
     _setNoitaSessionOrdering({
-      ...emptyOrdering,
       ...val,
     });
   };
@@ -84,9 +87,10 @@ export const NoitaSessions = () => {
     const temp = [...sessionsFiltered];
 
     if (noitaSessionOrdering.playTime !== undefined) {
-      temp.sort((s1, s2) => s1.playTime - s2.playTime);
-      if (noitaSessionOrdering.playTime === 'desc') {
-        temp.reverse();
+      if (noitaSessionOrdering.playTime === 'asc') {
+        temp.sort((s1, s2) => s1.playTime - s2.playTime);
+      } else {
+        temp.sort((s1, s2) => s2.playTime - s1.playTime);
       }
 
       return arrayHelpers.groupBy(
@@ -95,7 +99,35 @@ export const NoitaSessions = () => {
       );
     }
 
-    temp.reverse();
+    if (noitaSessionOrdering.goldAll !== undefined) {
+      if (noitaSessionOrdering.goldAll === 'asc') {
+        temp.sort((s1, s2) => s1.goldAll - s2.goldAll);
+      } else {
+        temp.sort((s1, s2) => s2.goldAll - s1.goldAll);
+      }
+
+      return arrayHelpers.groupBy(
+        temp,
+        () => 'Gold all: ' + noitaSessionOrdering.goldAll,
+      );
+    }
+
+    if (noitaSessionOrdering.gold !== undefined) {
+      if (noitaSessionOrdering.gold === 'asc') {
+        temp.sort((s1, s2) => s1.gold - s2.gold);
+      } else {
+        temp.sort((s1, s2) => s2.gold - s1.gold);
+      }
+
+      return arrayHelpers.groupBy(
+        temp,
+        () => 'Gold: ' + noitaSessionOrdering.gold,
+      );
+    }
+
+    if (noitaSessionOrdering.playedAt === 'desc') {
+      temp.reverse();
+    }
 
     return arrayHelpers.groupBy(temp, (session) =>
       session.startedAt.toLocaleDateString(),
