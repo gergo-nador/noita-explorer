@@ -34,6 +34,9 @@ export const NoitaSessionsFilter = ({
   const activeTextFilterDecoration = (isActive: boolean) =>
     isActive ? { textDecoration: 'underline', color: 'gold' } : {};
 
+  const advancedFilterCount =
+    filters.killedByEntity.length + filters.killedByReasons.length;
+
   return (
     <div>
       <Header title={'Sort by'}>
@@ -81,7 +84,8 @@ export const NoitaSessionsFilter = ({
           <Button
             onClick={() => setShowAdvancedDialog((prevState) => !prevState)}
           >
-            Advanced Filters
+            Advanced Filters{' '}
+            {advancedFilterCount > 0 ? `(${advancedFilterCount})` : ''}
           </Button>
         </div>
         <br />
