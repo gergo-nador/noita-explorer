@@ -79,6 +79,18 @@ export const MainPage = () => {
       >
         Sessions
       </Button>
+      <Button
+        decoration={'both'}
+        disabled={!sessionsLoaded}
+        onClick={() => navigate(pages.deathMap)}
+        onDisabledClick={() =>
+          toast.error(
+            'To view death map you need to set up reading from save00 folder.',
+          )
+        }
+      >
+        Death Map
+      </Button>
     </div>
   );
 };

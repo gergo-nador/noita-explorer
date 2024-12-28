@@ -1,7 +1,9 @@
 import Plot from 'react-plotly.js';
-import noitaMap from '../assets/noita-map.webp';
-import { useSave00Store } from '../stores/save00.ts';
+import noitaMap from '../../assets/noita-map.webp';
+import { useSave00Store } from '../../stores/save00.ts';
 import { StringKeyDictionary } from '@noita-explorer/model';
+import { Data, Layout } from 'plotly.js';
+import { arrayHelpers } from '@noita-explorer/tools';
 
 export const NoitaDeathMap = () => {
   const { sessions } = useSave00Store();
@@ -21,11 +23,13 @@ export const NoitaDeathMap = () => {
     )
     .filter((s) => s.deathPosX !== undefined && Math.abs(s.deathPosX) < 17800);
 
-  const uniqueProperties = Array.from(
-    new Set(sessionsFiltered.map((s) => s.killedByReason)),
+  const uniqueProperties: string[] = arrayHelpers.unique(
+    sessionsFiltered
+      .map((s) => s.killedByReason)
+      .filter((s) => s !== undefined),
   );
 
-  const generateColor = (index, total) => {
+  const generateColor = (index: number, total: number) => {
     const hue = (index / total) * 360; // Spread hues across 360 degrees
     return `hsl(${hue}, 70%, 50%)`; // HSL color (70% saturation, 50% lightness)
   };
@@ -38,49 +42,37 @@ export const NoitaDeathMap = () => {
     {} as StringKeyDictionary<string>,
   );
 
-  const traces = uniqueProperties.map((prop) => ({
-    x: sessions
-      ?.filter((s) => s.killedByReason === prop && s.deathPosX)
+  const traces: Data[] = uniqueProperties.map((prop) => ({
+    x: sessionsFiltered
+      .filter((s) => s.killedByReason === prop && s.deathPosX)
       .map((s) => s.deathPosX),
-    y: sessions
-      ?.filter((s) => s.killedByReason === prop && s.deathPosY)
+    y: sessionsFiltered
+      .filter((s) => s.killedByReason === prop && s.deathPosY)
       .map((s) => -s.deathPosY), // Inverted for your specific layout
     mode: 'markers',
     marker: { size: 10, color: colorMap[prop] },
     type: 'scatter',
     name: prop, // Legend label
   }));
+  traces.sort((t1, t2) =>
+    t1.name === undefined || t2.name === undefined
+      ? 0
+      : t1.name.localeCompare(t2.name),
+  );
 
-  const scatterData = {
-    x: sessionsFiltered.map((s) => s.deathPosX),
-    y: sessionsFiltered.map((s) => -s.deathPosY),
-    mode: 'markers',
-    marker: {
-      color: sessionsFiltered
-        .filter((s) => s.deathPosX)
-        .map((s) => colorMap[s.killedByReason!]),
-      size: 10,
-    },
-    type: 'scatter',
-  };
-
-  const plotSizeMultiplier = 2;
-
-  const layout = {
-    width: 531 * plotSizeMultiplier,
-    height: 450 * plotSizeMultiplier,
+  const layout: Partial<Layout> = {
     xaxis: {
       range: [rangeXLeft, rangeXRight],
       showgrid: false,
       zeroline: false,
       scaleanchor: 'y',
-      autorange: false,
+      autorange: true,
     },
     yaxis: {
       range: [rangeYTop, rangeYBottom],
       showgrid: false,
       zeroline: false,
-      autorange: false,
+      autorange: true,
     },
     margin: { l: 0, r: 0, t: 0, b: 0 },
     images: [
@@ -97,9 +89,30 @@ export const NoitaDeathMap = () => {
         layer: 'below',
       },
     ],
-    showlegend: true,
-    /* plot_bgcolor: 'rgba(0,0,0,0)',
-    paper_bgcolor: 'rgba(0,0,0,0)',*/
+    autosize: true,
+
+    plot_bgcolor: '#FFFFFF10',
+    paper_bgcolor: '#FFFFFF05',
+    legend: {
+      font: {
+        color: '#EEEEEE',
+      },
+    },
+
+    showlegend: false,
+    updatemenus: [
+      {
+        type: 'buttons',
+        buttons: [
+          {
+            label: 'Legend',
+            method: 'relayout',
+            args: ['showlegend', false],
+            args2: ['showlegend', true],
+          },
+        ],
+      },
+    ],
   };
 
   return (
@@ -108,7 +121,7 @@ export const NoitaDeathMap = () => {
         data={traces}
         layout={layout}
         config={{ responsive: true }}
-        style={{ padding: 0, margin: 0 }}
+        style={{ padding: 0, margin: 0, width: '100%', height: '700px' }}
       />
     </div>
   );

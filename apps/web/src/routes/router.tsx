@@ -14,7 +14,7 @@ import { NoitaProgressV2Enemies } from '../pages/progress/progressv2/NoitaProgre
 import { SetupWebPaths } from '../pages/setup/SetupWebPaths.tsx';
 import { NoitaSessions } from '../pages/sessions/NoitaSessions.tsx';
 import { EmptyPageTemplate } from '../pages/templates/EmptyPageTemplate.tsx';
-import { NoitaDeathMap } from '../pages/NoitaDeathMap.tsx';
+import { NoitaDeathMap } from '../pages/sessions/NoitaDeathMap.tsx';
 
 export const router = createBrowserRouter([
   {
@@ -83,9 +83,9 @@ export const router = createBrowserRouter([
   {
     path: 'death-map',
     element: (
-      <EmptyPageTemplate>
+      <CardPageTemplate>
         <NoitaDeathMap />
-      </EmptyPageTemplate>
+      </CardPageTemplate>
     ),
   },
 ]);
