@@ -46,6 +46,7 @@ export const SetupWebPaths = () => {
                 this site (<i>File System API</i>). As a result, you will need
                 to manually set the paths each time you visit.
               </span>
+              <Icon type={'warning'} size={20} />
             </div>
           </>
         )}
