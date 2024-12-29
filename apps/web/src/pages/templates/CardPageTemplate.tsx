@@ -1,7 +1,6 @@
-import { Button } from '@noita-explorer/noita-component-library';
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import { CardPageHeight } from '../../components/CardPageHeight.tsx';
+import { useTemplatePageLogic } from '../../hooks/useTemplatePageLogic.tsx';
 
 interface CardPageTemplateProps {
   children?: React.ReactNode | React.ReactNode[];
@@ -12,7 +11,7 @@ export const CardPageTemplate = ({
   children,
   style = {},
 }: CardPageTemplateProps) => {
-  const navigate = useNavigate();
+  const templatePageLogic = useTemplatePageLogic();
 
   return (
     <div
@@ -38,7 +37,7 @@ export const CardPageTemplate = ({
             marginTop: 10,
           }}
         >
-          <Button onClick={() => navigate('/')}>Return</Button>
+          {templatePageLogic.buttons.map((b) => b.element)}
         </div>
       </div>
     </div>

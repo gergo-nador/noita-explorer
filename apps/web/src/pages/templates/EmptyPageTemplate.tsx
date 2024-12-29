@@ -1,7 +1,6 @@
-import { Button } from '@noita-explorer/noita-component-library';
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import { constants } from '../../constants.ts';
+import { useTemplatePageLogic } from '../../hooks/useTemplatePageLogic';
 
 interface EmptyPageTemplateProps {
   children?: React.ReactNode | React.ReactNode[];
@@ -12,7 +11,7 @@ export const EmptyPageTemplate = ({
   children,
   style = {},
 }: EmptyPageTemplateProps) => {
-  const navigate = useNavigate();
+  const templatePageLogic = useTemplatePageLogic();
 
   return (
     <div
@@ -40,7 +39,7 @@ export const EmptyPageTemplate = ({
             marginTop: 10,
           }}
         >
-          <Button onClick={() => navigate('/')}>Return</Button>
+          {templatePageLogic.buttons.map((b) => b.element)}
         </div>
       </div>
     </div>

@@ -1,6 +1,7 @@
-import { Button, TabView } from '@noita-explorer/noita-component-library';
+import { TabView } from '@noita-explorer/noita-component-library';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { constants } from '../../constants.ts';
+import { useTemplatePageLogic } from '../../hooks/useTemplatePageLogic';
 
 interface TabLink {
   title: string;
@@ -12,6 +13,7 @@ interface TabPageTemplateProps {
 }
 
 export const TabPageTemplate = ({ tabs }: TabPageTemplateProps) => {
+  const templatePageLogic = useTemplatePageLogic();
   const navigate = useNavigate();
 
   return (
@@ -47,7 +49,7 @@ export const TabPageTemplate = ({ tabs }: TabPageTemplateProps) => {
             marginTop: 10,
           }}
         >
-          <Button onClick={() => navigate('/')}>Return</Button>
+          {templatePageLogic.buttons.map((b) => b.element)}
         </div>
       </div>
     </div>
