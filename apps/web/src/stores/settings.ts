@@ -9,6 +9,9 @@ export interface SettingsState {
     // master data folder for noita saves
     NollaGamesNoita: string | undefined;
   };
+  units: {
+    time: 'frames' | 'seconds';
+  };
   loaded: boolean;
   load: () => Promise<void>;
   set: (callback: (state: SettingsState) => void) => void;
@@ -19,6 +22,10 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
     install: undefined,
     NollaGamesNoita: undefined,
   },
+  units: {
+    time: 'frames',
+  },
+
   loaded: false,
   load: async () => {
     try {
@@ -51,6 +58,10 @@ async function loadSettings(state: SettingsState): Promise<SettingsState> {
     path: 'settings.paths',
     obj: state.paths,
   });
+  await loadSettingsRecursive({
+    path: 'settings.units',
+    obj: state.units,
+  });
 
   return state;
 }
@@ -81,12 +92,13 @@ async function loadSettingsRecursive({
     const result = await noitaAPI.config.get(currentPath);
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    obj[key] = result;
+    obj[key] = result ?? obj[key];
   }
 }
 
 async function saveSettings(state: SettingsState): Promise<void> {
   await saveSettingsRecursive({ path: 'settings.paths', obj: state.paths });
+  await saveSettingsRecursive({ path: 'settings.units', obj: state.units });
 }
 
 async function saveSettingsRecursive({

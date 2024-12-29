@@ -3,6 +3,7 @@ import { Icon } from '@noita-explorer/noita-component-library';
 import { NoitaSpellTypesDictionary } from '../../noita/NoitaSpellTypeDictionary.ts';
 import { BooleanIcon } from '../BooleanIcon.tsx';
 import { Flex } from '../Flex.tsx';
+import { switchStatement } from '@noita-explorer/tools';
 import React from 'react';
 
 import actionTypeIcon from '../../assets/icons/spells/icon_action_type.png';
@@ -26,6 +27,7 @@ import damageElectricityIcon from '../../assets/icons/spells/icon_damage_electri
 import damageDrillIcon from '../../assets/icons/spells/icon_damage_drill.png';
 import damageIceIcon from '../../assets/icons/spells/icon_damage_ice.png';
 import damageHolyIcon from '../../assets/icons/spells/icon_damage_holy.png';
+import { useNoitaUnits } from '../../hooks/useNoitaUnits.ts';
 
 interface TooltipRowData {
   icon?: React.ReactNode;
@@ -44,6 +46,7 @@ export const NoitaSpellTooltip = ({
   isUnknown,
 }: NoitaSpellTooltipProps) => {
   const actionType = NoitaSpellTypesDictionary[spell.type];
+  const noitaUnits = useNoitaUnits();
 
   if (isUnknown) {
     return <div>???</div>;
@@ -84,28 +87,60 @@ export const NoitaSpellTooltip = ({
     {
       icon: <Icon type={'custom'} src={lifetimeIcon} size={15} />,
       text: 'Lifetime',
-      value:
-        spell.lifetimeRandomness !== undefined && spell.lifetimeRandomness !== 0
-          ? `${(spell.lifetime ?? 0) - spell.lifetimeRandomness}-${(spell.lifetime ?? 0) + spell.lifetimeRandomness}`
-          : spell.lifetime,
+      value: (() => {
+        if (spell.lifetime === undefined) {
+          return '';
+        }
+
+        if (
+          spell.lifetimeRandomness !== undefined &&
+          spell.lifetimeRandomness !== 0
+        ) {
+          const minLifetime = spell.lifetime - spell.lifetimeRandomness;
+          const minLifetimeText = noitaUnits.framesWithoutUnit(minLifetime);
+
+          const maxLifetime = spell.lifetime + spell.lifetimeRandomness;
+          const maxLifetimeText = noitaUnits.frames(maxLifetime);
+
+          return `${minLifetimeText}-${maxLifetimeText}`;
+        }
+
+        return noitaUnits.frames(spell.lifetime);
+      })(),
+
       show: spell.lifetime !== undefined,
     },
     {
       icon: <Icon type={'custom'} src={lifetimeIcon} size={15} />,
       text: 'Lifetime Modifier',
-      value: <NumberModifierDisplay modifier={spell.lifetimeModifier} />,
+      value: (
+        <NumberModifierDisplay
+          modifier={spell.lifetimeModifier}
+          unitDisplayCallback={noitaUnits.frames}
+        />
+      ),
       show: spell.lifetimeModifier !== undefined,
     },
     {
       icon: <Icon type={'custom'} src={fireRateWaitModifierIcon} size={15} />,
       text: 'Cast Delay',
-      value: <NumberModifierDisplay modifier={spell.fireRateWaitModifier} />,
+      value: (
+        <NumberModifierDisplay
+          modifier={spell.fireRateWaitModifier}
+          unitDisplayCallback={noitaUnits.frames}
+        />
+      ),
       show: spell.fireRateWaitModifier !== undefined,
     },
     {
       icon: <Icon type={'custom'} src={reloadModifierIcon} size={15} />,
       text: 'Reload Time',
-      value: <NumberModifierDisplay modifier={spell.reloadTimeModifier} />,
+      value: (
+        <NumberModifierDisplay
+          modifier={spell.reloadTimeModifier}
+          unitDisplayCallback={noitaUnits.frames}
+        />
+      ),
       show: spell.reloadTimeModifier !== undefined,
     },
   ];
@@ -227,7 +262,12 @@ export const NoitaSpellTooltip = ({
     {
       icon: <Icon type={'custom'} src={spreadModifierIcon} size={15} />,
       text: 'Spread',
-      value: <NumberModifierDisplay modifier={spell.spreadDegreesModifier} />,
+      value: (
+        <NumberModifierDisplay
+          modifier={spell.spreadDegreesModifier}
+          unitDisplayCallback={noitaUnits.degree}
+        />
+      ),
       show: spell.spreadDegreesModifier !== undefined,
     },
   ];
@@ -321,13 +361,28 @@ export const NoitaSpellTooltip = ({
 
 const NumberModifierDisplay = ({
   modifier,
+  unitDisplayCallback,
 }: {
   modifier: SpellModifierNumberUnit | undefined;
+  unitDisplayCallback?: (value: number) => string;
 }) => {
+  if (modifier === undefined) {
+    return <div></div>;
+  }
+
+  const operator: string | undefined = switchStatement(modifier.operator).cases(
+    {
+      '*': 'x',
+      __default: modifier.operator,
+    },
+  );
+
   return (
     <div>
-      {modifier?.operator}
-      {modifier?.value}
+      {operator}
+      {unitDisplayCallback !== undefined
+        ? unitDisplayCallback(modifier.value)
+        : modifier?.value}
     </div>
   );
 };

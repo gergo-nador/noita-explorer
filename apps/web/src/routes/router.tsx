@@ -15,6 +15,7 @@ import { SetupWebPaths } from '../pages/setup/SetupWebPaths.tsx';
 import { NoitaSessions } from '../pages/sessions/NoitaSessions.tsx';
 import { EmptyPageTemplate } from '../pages/templates/EmptyPageTemplate.tsx';
 import { NoitaDeathMap } from '../pages/sessions/NoitaDeathMap.tsx';
+import { Settings } from '../pages/Settings.tsx';
 
 export const router = createBrowserRouter([
   {
@@ -85,6 +86,14 @@ export const router = createBrowserRouter([
     element: (
       <CardPageTemplate>
         <NoitaDeathMap />
+      </CardPageTemplate>
+    ),
+  },
+  {
+    path: 'settings',
+    element: (
+      <CardPageTemplate>
+        <Settings />
       </CardPageTemplate>
     ),
   },

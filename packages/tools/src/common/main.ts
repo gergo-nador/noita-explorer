@@ -9,4 +9,5 @@ export * from "./math";
 export * from "./promises";
 export * from "./proxiedPropertiesOf";
 export * from "./string";
+export * from "./switch";
 export * from "./time";

@@ -91,6 +91,9 @@ export const MainPage = () => {
       >
         Death Map
       </Button>
+      <Button decoration={'both'} onClick={() => navigate(pages.settings)}>
+        Settings
+      </Button>
     </div>
   );
 };
