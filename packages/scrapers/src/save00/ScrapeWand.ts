@@ -48,6 +48,7 @@ export const __scrapeWand = (wandXml: XmlWrapperType) => {
       gunActionConfig.getRequiredAttribute('spread_degrees').asInt() ?? 0,
 
     spells: [],
+    spellsPossibleIncorrectOrder: false,
   };
 
   const spritePath = abilityComponent
@@ -83,9 +84,24 @@ export const __scrapeWand = (wandXml: XmlWrapperType) => {
       .getRequiredAttribute('action_id')
       .asText() as string;
 
-    const inventorySlot = itemComponent
+    let inventorySlot = itemComponent
       .getRequiredAttribute('inventory_slot.x')
       .asInt() as number;
+
+    // check if the inventory slot is already taken (it can happen)
+    if (
+      wand.spells.find((s) => s.inventorySlot === inventorySlot) !== undefined
+    ) {
+      wand.spellsPossibleIncorrectOrder = true;
+
+      for (let i = 0; i < wand.deckCapacity; i++) {
+        if (wand.spells.every((s) => s.inventorySlot !== i)) {
+          // assign the first available inventory slot
+          inventorySlot = i;
+          break;
+        }
+      }
+    }
 
     const wandSpell: NoitaWandSpell = {
       spellId: spellId,

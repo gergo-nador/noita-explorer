@@ -1,6 +1,7 @@
 import { NoitaWand } from '@noita-explorer/model';
 import {
   ActiveIconWrapper,
+  Button,
   Card,
   Icon,
   InventoryIcon,
@@ -138,6 +139,7 @@ export const NoitaWandCard = ({ wand }: NoitaWandCardProps) => {
 
   return (
     <Card style={{ width: 'max-content', maxWidth: '100%' }}>
+      <Button onClick={() => console.log(wand)}>Print</Button>
       <div
         style={{
           display: 'grid',
@@ -183,6 +185,13 @@ export const NoitaWandCard = ({ wand }: NoitaWandCardProps) => {
       >
         {spellIcons}
       </Flex>
+      {wand.spellsPossibleIncorrectOrder && (
+        <div>
+          <Icon type={'warning'} size={40} />
+          <span>Spell order might be incorrect</span>
+          <Icon type={'warning'} size={40} />
+        </div>
+      )}
     </Card>
   );
 };
