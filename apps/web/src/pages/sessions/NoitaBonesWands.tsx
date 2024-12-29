@@ -5,7 +5,9 @@ import { Flex } from '../../components/Flex.tsx';
 export const NoitaBonesWands = () => {
   const { bonesWands } = useSave00Store();
 
-  console.log(bonesWands);
+  if (bonesWands === undefined) {
+    return <div>Bones not loaded</div>;
+  }
 
   return (
     <div>

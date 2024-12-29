@@ -1,12 +1,8 @@
-import backgroundRegular from '../../assets/progress-boxes/grid_box.png';
-import backgroundUnknown from '../../assets/progress-boxes/grid_box_unknown.png';
-import backgroundLayerNew from '../../assets/progress-boxes/grid_highlight_new.png';
+import backgroundRegular from '../../../assets/progress-boxes/grid_box.png';
+import backgroundUnknown from '../../../assets/progress-boxes/grid_box_unknown.png';
+import backgroundLayerNew from '../../../assets/progress-boxes/grid_highlight_new.png';
 import React from 'react';
 import css from './ProgressIcon.module.css';
-import { Card } from './Card';
-import { useBool } from '../hooks/useBool';
-import { zIndexManager } from '../zIndexManager';
-import { Tooltip } from 'react-tooltip';
 
 interface ProgressIconProps {
   type: 'regular' | 'unknown' | 'new';
@@ -100,57 +96,5 @@ export const ProgressIcon = ({
         />
       )}
     </div>
-  );
-};
-
-interface ActiveProgressIconProps {
-  id: string;
-  children: React.ReactNode;
-  tooltip: React.ReactNode;
-}
-
-export const ActiveProgressIcon = ({
-  id,
-  children,
-  tooltip,
-}: ActiveProgressIconProps) => {
-  const { state, setTrue, setFalse } = useBool();
-
-  const wrapperStyleProps = {
-    '--zIndexHover': zIndexManager.progressIconHover,
-  } as React.CSSProperties;
-
-  return (
-    <>
-      {state && (
-        <Tooltip
-          place='bottom'
-          offset={10}
-          anchorSelect={`#${id}`}
-          isOpen={true}
-          style={{
-            zIndex: zIndexManager.tooltip,
-            backgroundColor: 'transparent',
-            padding: 0,
-            maxWidth: '99%',
-          }}
-        >
-          <Card styling={{ background: '#000000FF' }}>{tooltip}</Card>
-        </Tooltip>
-      )}
-
-      <div
-        id={id}
-        onMouseEnter={() => setTrue()}
-        onMouseLeave={() => setFalse()}
-        style={{
-          aspectRatio: 1,
-        }}
-      >
-        <div className={css['active']} style={wrapperStyleProps}>
-          {children}
-        </div>
-      </div>
-    </>
   );
 };

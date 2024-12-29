@@ -1,5 +1,5 @@
 import {
-  ActiveProgressIcon,
+  ActiveIconWrapper,
   ProgressIcon,
 } from '@noita-explorer/noita-component-library';
 import { useMemo } from 'react';
@@ -48,7 +48,7 @@ export const NoitaProgressTracker = () => {
           unlocked={unlockedPerks?.length ?? 0}
         >
           {data.perks.map((perk) => (
-            <ActiveProgressIcon
+            <ActiveIconWrapper
               id={'perk-' + perk.id}
               key={'perk-' + perk.id}
               tooltip={
@@ -68,7 +68,7 @@ export const NoitaProgressTracker = () => {
                 }
                 icon={perk.imageBase64}
               />
-            </ActiveProgressIcon>
+            </ActiveIconWrapper>
           ))}
         </NoitaProgressIconTable>
         <NoitaProgressIconTable
@@ -78,7 +78,7 @@ export const NoitaProgressTracker = () => {
           unlocked={unlockedSpells?.length ?? 0}
         >
           {data.spells.map((spell) => (
-            <ActiveProgressIcon
+            <ActiveIconWrapper
               id={'spell-' + spell.id}
               key={'spell-' + spell.id}
               tooltip={
@@ -99,7 +99,7 @@ export const NoitaProgressTracker = () => {
                 icon={spell.imageBase64}
                 spellBackground={NoitaSpellTypesDictionary[spell.type].image}
               />
-            </ActiveProgressIcon>
+            </ActiveIconWrapper>
           ))}
         </NoitaProgressIconTable>
         <NoitaProgressIconTable
@@ -110,7 +110,7 @@ export const NoitaProgressTracker = () => {
         >
           {enemies &&
             enemies.map((e) => (
-              <ActiveProgressIcon
+              <ActiveIconWrapper
                 id={'enemy-' + e.enemyGroup.baseId}
                 key={'enemy-' + e.enemyGroup.baseId}
                 tooltip={
@@ -137,7 +137,7 @@ export const NoitaProgressTracker = () => {
                   }
                   icon={e.enemyGroup.imageBase64}
                 />
-              </ActiveProgressIcon>
+              </ActiveIconWrapper>
             ))}
         </NoitaProgressIconTable>
       </div>

@@ -1,5 +1,5 @@
 import { XmlWrapperType } from '@noita-explorer/tools/xml';
-import { NoitaWand } from '@noita-explorer/model';
+import { NoitaWand, NoitaWandSpell } from '@noita-explorer/model';
 
 // used privately by this package
 export const __scrapeWand = (wandXml: XmlWrapperType) => {
@@ -46,6 +46,8 @@ export const __scrapeWand = (wandXml: XmlWrapperType) => {
       gunActionConfig.getRequiredAttribute('speed_multiplier').asFloat() ?? -1,
     spreadMultiplier:
       gunActionConfig.getRequiredAttribute('spread_degrees').asInt() ?? 0,
+
+    spells: [],
   };
 
   const spritePath = abilityComponent
@@ -58,6 +60,39 @@ export const __scrapeWand = (wandXml: XmlWrapperType) => {
     const spriteFileSplit = spriteFile.split('.');
 
     wand.spriteId = spriteFileSplit[0];
+  }
+
+  const entities = wandXml.findTagArray('Entity');
+  for (const entity of entities) {
+    const entityTags = entity.getAttribute('tags')?.asText()?.split(',');
+    if (entityTags === undefined || !entityTags.includes('card_action')) {
+      continue;
+    }
+
+    const itemActionComponent = entity.findNthTag('ItemActionComponent');
+    if (itemActionComponent === undefined) {
+      continue;
+    }
+
+    const itemComponent = entity.findNthTag('ItemComponent');
+    if (itemComponent === undefined) {
+      continue;
+    }
+
+    const spellId = itemActionComponent
+      .getRequiredAttribute('action_id')
+      .asText() as string;
+
+    const inventorySlot = itemComponent
+      .getRequiredAttribute('inventory_slot.x')
+      .asInt() as number;
+
+    const wandSpell: NoitaWandSpell = {
+      spellId: spellId,
+      inventorySlot: inventorySlot,
+    };
+
+    wand.spells.push(wandSpell);
   }
 
   return wand;

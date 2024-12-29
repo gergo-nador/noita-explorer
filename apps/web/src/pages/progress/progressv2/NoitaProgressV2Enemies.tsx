@@ -1,5 +1,5 @@
 import {
-  ActiveProgressIcon,
+  ActiveIconWrapper,
   ProgressIcon,
 } from '@noita-explorer/noita-component-library';
 import { NoitaProgressIconTable } from '../../../components/NoitaProgressIconTable.tsx';
@@ -20,7 +20,7 @@ export const NoitaProgressV2Enemies = () => {
         columnCount={9}
       >
         {data.enemies.map((enemy) => (
-          <ActiveProgressIcon
+          <ActiveIconWrapper
             id={'enemy-' + enemy.id}
             key={'enemy-' + enemy.id}
             tooltip={
@@ -31,7 +31,7 @@ export const NoitaProgressV2Enemies = () => {
             }
           >
             <ProgressIcon type={'regular'} icon={enemy.imageBase64} />
-          </ActiveProgressIcon>
+          </ActiveIconWrapper>
         ))}
       </NoitaProgressIconTable>
     </div>

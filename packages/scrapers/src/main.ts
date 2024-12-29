@@ -6,7 +6,6 @@ export * from "./datawak/ScrapeEnemy";
 export * from "./datawak/ScrapePerks";
 export * from "./datawak/ScrapeSpells";
 export * from "./datawak/ScrapeWandsConfig";
-export * from "./save00/scrape-wand-test";
 export * from "./save00/ScrapeWand";
 export * from "./save00/persistent/ScrapeBonesWands";
 export * from "./save00/persistent/ScrapeProgressFlags";

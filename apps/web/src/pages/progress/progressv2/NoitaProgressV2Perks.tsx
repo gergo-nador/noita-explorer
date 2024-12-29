@@ -1,5 +1,5 @@
 import {
-  ActiveProgressIcon,
+  ActiveIconWrapper,
   ProgressIcon,
 } from '@noita-explorer/noita-component-library';
 import { NoitaProgressIconTable } from '../../../components/NoitaProgressIconTable.tsx';
@@ -20,7 +20,7 @@ export const NoitaProgressV2Perks = () => {
         columnCount={9}
       >
         {data.perks.map((perk) => (
-          <ActiveProgressIcon
+          <ActiveIconWrapper
             id={'perk-' + perk.id}
             key={'perk-' + perk.id}
             tooltip={
@@ -30,7 +30,7 @@ export const NoitaProgressV2Perks = () => {
             }
           >
             <ProgressIcon type={'regular'} icon={perk.imageBase64} />
-          </ActiveProgressIcon>
+          </ActiveIconWrapper>
         ))}
       </NoitaProgressIconTable>
     </div>

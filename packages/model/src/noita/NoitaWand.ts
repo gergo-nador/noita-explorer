@@ -1,3 +1,5 @@
+import { NoitaWandSpell } from './NoitaWandSpell.ts';
+
 export interface NoitaWand {
   name: string;
   spriteId: string;
@@ -15,4 +17,6 @@ export interface NoitaWand {
 
   spreadMultiplier: number;
   speedMultiplier: number;
+
+  spells: NoitaWandSpell[];
 }

@@ -1,5 +1,5 @@
 import {
-  ActiveProgressIcon,
+  ActiveIconWrapper,
   ProgressIcon,
 } from '@noita-explorer/noita-component-library';
 import { NoitaSpellTypesDictionary } from '../../../noita/NoitaSpellTypeDictionary.ts';
@@ -21,7 +21,7 @@ export const NoitaProgressV2Spells = () => {
         columnCount={12}
       >
         {data.spells.map((spell) => (
-          <ActiveProgressIcon
+          <ActiveIconWrapper
             id={'spell-' + spell.id}
             key={'spell-' + spell.id}
             tooltip={
@@ -35,7 +35,7 @@ export const NoitaProgressV2Spells = () => {
               icon={spell.imageBase64}
               spellBackground={NoitaSpellTypesDictionary[spell.type].image}
             />
-          </ActiveProgressIcon>
+          </ActiveIconWrapper>
         ))}
       </NoitaProgressIconTable>
     </div>

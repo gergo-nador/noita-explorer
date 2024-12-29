@@ -1,8 +1,17 @@
 import { NoitaWand } from '@noita-explorer/model';
-import { Card, Icon } from '@noita-explorer/noita-component-library';
+import {
+  ActiveIconWrapper,
+  Card,
+  Icon,
+  InventoryIcon,
+} from '@noita-explorer/noita-component-library';
 import { mathHelpers } from '@noita-explorer/tools';
 import { useNoitaUnits } from '../hooks/useNoitaUnits.ts';
 import React, { useMemo } from 'react';
+import { useNoitaDataWakStore } from '../stores/NoitaDataWak.ts';
+import { Flex } from './Flex.tsx';
+import { NoitaSpellTooltip } from './tooltips/NoitaSpellTooltip.tsx';
+import { NoitaSpellTypesDictionary } from '../noita/NoitaSpellTypeDictionary.ts';
 
 import gunShuffleIcon from '../assets/icons/icon_gun_shuffle.png';
 import fireRateWaitIcon from '../assets/icons/spells/icon_fire_rate_wait.png';
@@ -13,7 +22,6 @@ import capacityIcon from '../assets/icons/icon_gun_capacity.png';
 import manaMaxIcon from '../assets/icons/icon_mana_max.png';
 import manaChargeIcon from '../assets/icons/icon_mana_charge_speed.png';
 import actionsPerRoundIcon from '../assets/icons/icon_gun_actions_per_round.png';
-import { useNoitaDataWakStore } from '../stores/NoitaDataWak.ts';
 
 interface NoitaWandCardProps {
   wand: NoitaWand;
@@ -33,12 +41,51 @@ export const NoitaWandCard = ({ wand }: NoitaWandCardProps) => {
       (config) => config.spriteId === wand.spriteId,
     );
     if (wandConfig === undefined) {
-      console.log('Couldnt find wand config', wand.spriteId);
       return undefined;
     }
 
     return wandConfig.imageBase64;
   }, [wand, data?.wandConfigs]);
+
+  const spellIcons = useMemo(() => {
+    if (data?.spells === undefined) {
+      return undefined;
+    }
+
+    const displaySpells: React.ReactNode[] = [];
+
+    /*for(let i = 0;i<wand.deckCapacity; i++){
+      const wandSpell = wand.spells.find(s => s.inventorySlot === i);
+      if(wandSpell === undefined){
+        return <ProgressIcon type={''} icon={}
+      }
+    }*/
+
+    for (const wandSpell of wand.spells) {
+      const spell = data.spells.find((s) => s.id === wandSpell.spellId);
+      if (spell === undefined) {
+        continue;
+      }
+
+      const spellComponent = (
+        <ActiveIconWrapper
+          key={'spell-' + wandSpell.spellId + wandSpell.inventorySlot}
+          id={'spell-' + wandSpell.spellId + wandSpell.inventorySlot}
+          tooltip={<NoitaSpellTooltip spell={spell} />}
+        >
+          <InventoryIcon
+            icon={spell.imageBase64}
+            spellBackground={NoitaSpellTypesDictionary[spell.type].image}
+            size={40}
+          />
+        </ActiveIconWrapper>
+      );
+
+      displaySpells.push(spellComponent);
+    }
+
+    return displaySpells;
+  }, [wand, data?.spells]);
 
   const rows: RowData[] = [
     {
@@ -89,30 +136,59 @@ export const NoitaWandCard = ({ wand }: NoitaWandCardProps) => {
   ];
 
   return (
-    <Card>
-      <div>{wand.name}</div>
-      {wandImage && (
-        <Icon type={'custom'} src={wandImage} style={{ zoom: 3.5 }} />
-      )}
-      <table>
-        <tbody>
-          <tr>
-            <td>
-              <Icon type={'custom'} src={gunShuffleIcon} size={15} />
-            </td>
-            <td>Shuffle</td>
-            <td>{wand.shuffle ? 'Yes' : 'No'}</td>
-          </tr>
-          {rows.map((row) => (
-            <tr>
-              <td>{row.icon}</td>
-              <td>{row.text}</td>
-              <td style={{ paddingLeft: 5 }}>{row.value}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <div></div>
+    <Card style={{ width: 'max-content', maxWidth: '100%' }}>
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'max-content max-content',
+        }}
+      >
+        <div>
+          <div style={{ fontSize: 20 }}>{wand.name}</div>
+          <br />
+          <table>
+            <tbody>
+              <tr>
+                <td>
+                  <Icon type={'custom'} src={gunShuffleIcon} size={15} />
+                </td>
+                <td>Shuffle</td>
+                <td>{wand.shuffle ? 'Yes' : 'No'}</td>
+              </tr>
+              {rows.map((row) => (
+                <tr>
+                  <td>{row.icon}</td>
+                  <td>{row.text}</td>
+                  <td style={{ paddingLeft: 5 }}>{row.value}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          {wandImage && (
+            <Icon type={'custom'} src={wandImage} style={{ zoom: 5 }} />
+          )}
+        </div>
+      </div>
+
+      <br />
+      <Flex
+        style={{
+          width: 'max-content',
+          maxWidth: '100%',
+          justifyContent: 'left',
+        }}
+        gap={5}
+      >
+        {spellIcons}
+      </Flex>
     </Card>
   );
 };

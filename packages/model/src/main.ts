@@ -18,6 +18,7 @@ export * from "./noita/NoitaSpell";
 export * from "./noita/NoitaSpellType";
 export * from "./noita/NoitaWand";
 export * from "./noita/NoitaWandConfig";
+export * from "./noita/NoitaWandSpell";
 export * from "./noita/SpellModifierNumberUnit";
 export * from "./noita/scraping/EncryptedFileKeys";
 export * from "./noita/scraping/EnemyStatistics";

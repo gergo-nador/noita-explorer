@@ -1,5 +1,5 @@
 import toast from 'react-hot-toast/headless';
-import { Icon } from '../components/Icon';
+import { Icon } from '../components/icons/Icon';
 
 export const useToast = () => {
   const size = 20;
