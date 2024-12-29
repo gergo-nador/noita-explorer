@@ -9,6 +9,7 @@ export const noitaPaths = {
     },
     luaScripts: {
       guns: ['data', 'scripts', 'gun', 'gun_actions.lua'],
+      wands: ['data', 'scripts', 'gun', 'procedural', 'wands.lua'],
       perks: ['data', 'scripts', 'perks', 'perk_list.lua'],
     },
   },
@@ -21,5 +22,6 @@ export const noitaPaths = {
     stats: ['stats'],
     sessions: ['stats', 'sessions'],
     flags: ['persistent', 'flags'],
+    bones_new: ['persistent', 'bones_new'],
   },
 };

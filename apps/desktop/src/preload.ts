@@ -28,6 +28,7 @@ const noitaApi: NoitaAPI = {
       scrapeEnemyStatistics: () =>
         ipcRenderer.invoke('save00:scrape-enemy-statistics'),
       scrapeSessions: () => ipcRenderer.invoke('save00:scrape-sessions'),
+      scrapeBonesWands: () => ipcRenderer.invoke('save00:scrape-bones-wands'),
     },
   },
   dialog: {

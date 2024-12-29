@@ -1,11 +1,12 @@
 import { XmlAttributeReadOptions } from './XmlAttributeReadOptions';
 import { StringKeyDictionaryComposite } from '@noita-explorer/model';
 
-interface XmlWrapperType {
+export interface XmlWrapperType {
   _getCurrentXmlObj: () => object;
   findNthTag: (tagName: string, index?: number) => XmlWrapperType | undefined;
   findTagArray: (tagName: string) => XmlWrapperType[];
   getAttribute: (attributeName: string) => XmlAttributeReadOptions | undefined;
+  getRequiredAttribute: (attributeName: string) => XmlAttributeReadOptions;
 }
 
 export const XmlWrapper = (
@@ -23,6 +24,16 @@ export const XmlWrapper = (
     findNthTag: (tagName, index) => findNthTag(xmlObj, tagName, index),
     findTagArray: (tagName) => findTagArray(xmlObj, tagName),
     getAttribute: (attributeName) => getAttribute(xmlObj, attributeName),
+    getRequiredAttribute: (attributeName) => {
+      const attr = getAttribute(xmlObj, attributeName);
+      if (attr === undefined) {
+        throw new Error(
+          `Could not find attribute ${attributeName} in ${JSON.stringify(xmlObj)}`,
+        );
+      }
+
+      return attr;
+    },
   };
 };
 

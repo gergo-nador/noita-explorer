@@ -8,9 +8,9 @@ import {
   useToast,
 } from '@noita-explorer/noita-component-library';
 import {
-  ImportResult,
-  ImportResultPart,
-  ImportResultStatus,
+  NoitaDataWakScrapeResult,
+  NoitaDataWakScrapeResultPart,
+  NoitaDataWakScrapeResultStatus,
   NoitaWakData,
 } from '@noita-explorer/model';
 import { PageBottomComponent } from '../../components/PageBottomComponent';
@@ -23,7 +23,10 @@ import { useNoitaDataWakStore } from '../../stores/NoitaDataWak';
 
 export const SetupDesktopScraper = () => {
   const navigate = useNavigate();
-  const [importResult, setImportResult] = useState<ImportResult>();
+  const [dataWakScrapeResult, setDataWakScrapeResult] =
+    useState<NoitaDataWakScrapeResult>();
+  const [dataWakScrapeResultError, setDataWakScrapeResultError] =
+    useState<string>();
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
   const { load: loadNoitaDataWak } = useNoitaDataWakStore();
@@ -32,24 +35,29 @@ export const SetupDesktopScraper = () => {
 
   const scrape = async () => {
     setIsLoading(true);
+    setDataWakScrapeResultError(undefined);
 
-    const result = await noitaAPI.noita.dataFile.scrape();
-    console.log(result);
-    setImportResult(result);
+    try {
+      const result = await noitaAPI.noita.dataFile.scrape();
+      setDataWakScrapeResult(result);
+    } catch (e) {
+      setDataWakScrapeResultError(e + '');
+    }
 
     setIsLoading(false);
   };
 
   const save = (): Promise<NoitaWakData> => {
-    if (!importResult) {
+    if (!dataWakScrapeResult) {
       toast.error('Scraped data was not found.');
       return new Promise((_resolve, reject) => reject());
     }
 
-    const translations = importResult.translations.data ?? {};
-    const enemies = importResult.enemies.data ?? [];
-    const perks = importResult.perks.data ?? [];
-    const spells = importResult.spells.data ?? [];
+    const translations = dataWakScrapeResult.translations.data ?? {};
+    const enemies = dataWakScrapeResult.enemies.data ?? [];
+    const perks = dataWakScrapeResult.perks.data ?? [];
+    const spells = dataWakScrapeResult.spells.data ?? [];
+    const wandConfigs = dataWakScrapeResult.wandConfigs.data ?? [];
 
     const now = new Date();
 
@@ -57,10 +65,12 @@ export const SetupDesktopScraper = () => {
       scrapedAt: now.toISOString(),
       scrapedAtUnix: now.getTime(),
       version: 1,
+
       translations: translations,
       enemies: enemies,
       perks: perks,
       spells: spells,
+      wandConfigs: wandConfigs,
     };
 
     return noitaAPI.noita.dataFile.write(data).then(() => data);
@@ -82,50 +92,59 @@ export const SetupDesktopScraper = () => {
   }, []);
 
   useEffect(() => {
-    if (isLoading || !importResult) {
+    if (isLoading || !dataWakScrapeResult) {
       setIsFinishEnabled(false);
       return;
     }
 
     if (
-      importResult.perks.status !== ImportResultStatus.SUCCESS ||
-      importResult.spells.status !== ImportResultStatus.SUCCESS ||
-      importResult.enemies.status !== ImportResultStatus.SUCCESS
+      dataWakScrapeResult.perks.status !==
+        NoitaDataWakScrapeResultStatus.SUCCESS ||
+      dataWakScrapeResult.spells.status !==
+        NoitaDataWakScrapeResultStatus.SUCCESS ||
+      dataWakScrapeResult.enemies.status !==
+        NoitaDataWakScrapeResultStatus.SUCCESS
     ) {
       setIsFinishEnabled(false);
       return;
     }
 
     setIsFinishEnabled(true);
-  }, [importResult, isLoading]);
+  }, [dataWakScrapeResult, isLoading]);
 
   return (
     <div>
       <Header title={'Scraper'}>
         {isLoading && <div>Loading...</div>}
+        {dataWakScrapeResultError && (
+          <div className={'text-danger'}>{dataWakScrapeResultError}</div>
+        )}
         <br />
-        {importResult && (
+        {dataWakScrapeResult && (
           <Flex style={{ gap: '10px' }}>
-            {importResult.translations.status !==
-              ImportResultStatus.SUCCESS && (
+            {dataWakScrapeResult.translations.status !==
+              NoitaDataWakScrapeResultStatus.SUCCESS && (
               <Card>
                 <Header title={'Translation'}>
                   <div>
                     Status:
-                    <StatusText status={importResult.translations.status} />
+                    <StatusText
+                      status={dataWakScrapeResult.translations.status}
+                    />
                   </div>
-                  {!!importResult.translations.error && (
+                  {!!dataWakScrapeResult.translations.error && (
                     <div>
-                      Error: {JSON.stringify(importResult.translations.error)}
+                      Error:{' '}
+                      {JSON.stringify(dataWakScrapeResult.translations.error)}
                     </div>
                   )}
                 </Header>
               </Card>
             )}
 
-            <ImportResultDisplay
+            <NoitaDataWakScrapeResultDisplay
               title={'Perks'}
-              result={importResult.perks}
+              result={dataWakScrapeResult.perks}
               dataIconMapper={(perk) => (
                 <ProgressIcon
                   key={perk.id}
@@ -136,9 +155,9 @@ export const SetupDesktopScraper = () => {
               )}
             />
 
-            <ImportResultDisplay
+            <NoitaDataWakScrapeResultDisplay
               title={'Spells'}
-              result={importResult.spells}
+              result={dataWakScrapeResult.spells}
               dataIconMapper={(spell) => (
                 <ProgressIcon
                   key={spell.id}
@@ -149,14 +168,27 @@ export const SetupDesktopScraper = () => {
               )}
             />
 
-            <ImportResultDisplay
+            <NoitaDataWakScrapeResultDisplay
               title={'Enemies'}
-              result={importResult.enemies}
+              result={dataWakScrapeResult.enemies}
               dataIconMapper={(enemy) => (
                 <ProgressIcon
                   key={enemy.id}
                   type={'regular'}
                   icon={enemy.imageBase64}
+                  size={24}
+                />
+              )}
+            />
+
+            <NoitaDataWakScrapeResultDisplay
+              title={'Wands'}
+              result={dataWakScrapeResult.wandConfigs}
+              dataIconMapper={(wand) => (
+                <ProgressIcon
+                  key={wand.spriteId}
+                  type={'regular'}
+                  icon={wand.imageBase64}
                   size={24}
                 />
               )}
@@ -184,14 +216,14 @@ export const SetupDesktopScraper = () => {
   );
 };
 
-const StatusText = ({ status }: { status: ImportResultStatus }) => {
+const StatusText = ({ status }: { status: NoitaDataWakScrapeResultStatus }) => {
   let data: { color: string; tooltip: string | undefined };
 
-  if (status === ImportResultStatus.FAILED) {
+  if (status === NoitaDataWakScrapeResultStatus.FAILED) {
     data = { color: '#DE4646', tooltip: undefined };
-  } else if (status === ImportResultStatus.SUCCESS) {
+  } else if (status === NoitaDataWakScrapeResultStatus.SUCCESS) {
     data = { color: '#87BF1C', tooltip: undefined };
-  } else if (status === ImportResultStatus.SKIPPED) {
+  } else if (status === NoitaDataWakScrapeResultStatus.SKIPPED) {
     data = {
       color: '#F7C34F',
       tooltip: 'Skipped, as a previous task was not finished',
@@ -216,17 +248,17 @@ const StatusText = ({ status }: { status: ImportResultStatus }) => {
   );
 };
 
-interface ImportResultDisplayProps<T> {
+interface NoitaDataWakScrapeResultDisplayProps<T> {
   title: string;
-  result: ImportResultPart<T[]>;
+  result: NoitaDataWakScrapeResultPart<T[]>;
   dataIconMapper: (args: T) => React.ReactNode;
 }
 
-function ImportResultDisplay<T>({
+function NoitaDataWakScrapeResultDisplay<T>({
   title,
   result,
   dataIconMapper,
-}: ImportResultDisplayProps<T>) {
+}: NoitaDataWakScrapeResultDisplayProps<T>) {
   const { state: showAll, flip: flipShowAll } = useBool();
 
   return (

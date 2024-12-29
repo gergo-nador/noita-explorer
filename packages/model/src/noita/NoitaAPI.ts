@@ -1,9 +1,10 @@
 import { NoitaWakData } from './scraping/NoitaWakData';
-import { ImportResult } from './scraping/ImportResult.ts';
+import { NoitaDataWakScrapeResult } from './scraping/NoitaDataWakScrapeResult.ts';
 import { StringKeyDictionary } from '../common/StringKeyDictionary.ts';
 import { EnemyStatistic } from './scraping/EnemyStatistics.ts';
 import { NoitaProgressFlags } from './scraping/NoitaProgressFlags.ts';
 import { NoitaSession } from './NoitaSession.ts';
+import { NoitaWand } from './NoitaWand.ts';
 
 export interface NoitaAPI {
   config: {
@@ -15,7 +16,7 @@ export interface NoitaAPI {
       exists: () => Promise<boolean>;
       get: () => Promise<NoitaWakData>;
       write: (obj: NoitaWakData) => Promise<void>;
-      scrape: () => Promise<ImportResult>;
+      scrape: () => Promise<NoitaDataWakScrapeResult>;
     };
     defaultPaths: {
       installPathDefault: () => Promise<string | undefined>;
@@ -25,6 +26,7 @@ export interface NoitaAPI {
       scrapeEnemyStatistics: () => Promise<StringKeyDictionary<EnemyStatistic>>;
       scrapeProgressFlags: () => Promise<NoitaProgressFlags>;
       scrapeSessions: () => Promise<NoitaSession[]>;
+      scrapeBonesWands: () => Promise<NoitaWand[]>;
     };
   };
   dialog: {

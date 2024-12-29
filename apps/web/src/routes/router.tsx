@@ -16,6 +16,7 @@ import { NoitaSessions } from '../pages/sessions/NoitaSessions.tsx';
 import { EmptyPageTemplate } from '../pages/templates/EmptyPageTemplate.tsx';
 import { NoitaDeathMap } from '../pages/sessions/NoitaDeathMap.tsx';
 import { Settings } from '../pages/Settings.tsx';
+import { NoitaBonesWands } from '../pages/sessions/NoitaBonesWands.tsx';
 
 export const router = createBrowserRouter([
   {
@@ -86,6 +87,14 @@ export const router = createBrowserRouter([
     element: (
       <CardPageTemplate>
         <NoitaDeathMap />
+      </CardPageTemplate>
+    ),
+  },
+  {
+    path: 'bones-wands',
+    element: (
+      <CardPageTemplate>
+        <NoitaBonesWands />
       </CardPageTemplate>
     ),
   },

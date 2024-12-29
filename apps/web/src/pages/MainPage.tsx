@@ -8,7 +8,7 @@ import { useSave00Store } from '../stores/save00.ts';
 export const MainPage = () => {
   const navigate = useNavigate();
   const { loaded: noitaDataWakLoaded } = useNoitaDataWakStore();
-  const { loaded: sessionsLoaded } = useSave00Store();
+  const { loaded: save00Loaded } = useSave00Store();
   const toast = useToast();
 
   return (
@@ -69,7 +69,7 @@ export const MainPage = () => {
       </Button>
       <Button
         decoration={'both'}
-        disabled={!sessionsLoaded}
+        disabled={!save00Loaded}
         onClick={() => navigate(pages.sessions)}
         onDisabledClick={() =>
           toast.error(
@@ -81,7 +81,7 @@ export const MainPage = () => {
       </Button>
       <Button
         decoration={'both'}
-        disabled={!sessionsLoaded}
+        disabled={!save00Loaded}
         onClick={() => navigate(pages.deathMap)}
         onDisabledClick={() =>
           toast.error(
@@ -90,6 +90,18 @@ export const MainPage = () => {
         }
       >
         Death Map
+      </Button>
+      <Button
+        decoration={'both'}
+        disabled={!save00Loaded}
+        onClick={() => navigate(pages.bonesWands)}
+        onDisabledClick={() =>
+          toast.error(
+            'To view bones wands you need to set up reading from save00 folder.',
+          )
+        }
+      >
+        Bones Wands
       </Button>
       <Button decoration={'both'} onClick={() => navigate(pages.settings)}>
         Settings

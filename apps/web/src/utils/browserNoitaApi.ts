@@ -5,6 +5,7 @@ import {
 } from '@noita-explorer/model';
 import { promiseHelper } from '@noita-explorer/tools';
 import {
+  scrapeBonesWands,
   scrapeEnemyStatistics,
   scrapeProgressFlags,
   scrapeSessions,
@@ -96,6 +97,10 @@ export function browserNoitaApi(): NoitaAPI {
         scrapeSessions: async () => {
           const api = await getSave00FolderHandle();
           return await scrapeSessions({ save00DirectoryApi: api });
+        },
+        scrapeBonesWands: async () => {
+          const api = await getSave00FolderHandle();
+          return await scrapeBonesWands({ save00DirectoryApi: api });
         },
       },
     },

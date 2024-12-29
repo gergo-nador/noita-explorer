@@ -4,6 +4,7 @@ import { NoitaSpellTypesDictionary } from '../../noita/NoitaSpellTypeDictionary.
 import { BooleanIcon } from '../BooleanIcon.tsx';
 import { Flex } from '../Flex.tsx';
 import { switchStatement } from '@noita-explorer/tools';
+import { useNoitaUnits } from '../../hooks/useNoitaUnits.ts';
 import React from 'react';
 
 import actionTypeIcon from '../../assets/icons/spells/icon_action_type.png';
@@ -27,7 +28,6 @@ import damageElectricityIcon from '../../assets/icons/spells/icon_damage_electri
 import damageDrillIcon from '../../assets/icons/spells/icon_damage_drill.png';
 import damageIceIcon from '../../assets/icons/spells/icon_damage_ice.png';
 import damageHolyIcon from '../../assets/icons/spells/icon_damage_holy.png';
-import { useNoitaUnits } from '../../hooks/useNoitaUnits.ts';
 
 interface TooltipRowData {
   icon?: React.ReactNode;
