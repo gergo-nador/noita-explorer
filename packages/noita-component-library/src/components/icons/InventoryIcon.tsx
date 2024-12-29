@@ -2,14 +2,14 @@ import backgroundRegular from '../../../assets/inventory-boxes/full_inventory_bo
 import React from 'react';
 
 interface InventoryIconProps {
-  icon: string;
+  icon?: string;
   style?: React.CSSProperties;
   size?: number | string;
   spellBackground?: string;
 }
 
 export const InventoryIcon = ({
-  icon = '',
+  icon,
   size,
   style = {},
   spellBackground,
@@ -68,7 +68,7 @@ export const InventoryIcon = ({
       )}
 
       {/* Main image */}
-      {
+      {icon && (
         <div
           style={{
             position: 'absolute',
@@ -92,7 +92,7 @@ export const InventoryIcon = ({
             }}
           />
         </div>
-      }
+      )}
     </div>
   );
 };

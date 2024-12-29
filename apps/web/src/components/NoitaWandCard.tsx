@@ -54,16 +54,18 @@ export const NoitaWandCard = ({ wand }: NoitaWandCardProps) => {
 
     const displaySpells: React.ReactNode[] = [];
 
-    /*for(let i = 0;i<wand.deckCapacity; i++){
-      const wandSpell = wand.spells.find(s => s.inventorySlot === i);
-      if(wandSpell === undefined){
-        return <ProgressIcon type={''} icon={}
+    for (let i = 0; i < wand.deckCapacity; i++) {
+      const wandSpell = wand.spells.find((s) => s.inventorySlot === i);
+      if (wandSpell === undefined) {
+        const noSpellInventoryIcon = <InventoryIcon size={40} />;
+        displaySpells.push(noSpellInventoryIcon);
+        continue;
       }
-    }*/
 
-    for (const wandSpell of wand.spells) {
       const spell = data.spells.find((s) => s.id === wandSpell.spellId);
       if (spell === undefined) {
+        const spellNotFoundIcon = <Icon type={'error'} size={40} />;
+        displaySpells.push(spellNotFoundIcon);
         continue;
       }
 
@@ -80,7 +82,6 @@ export const NoitaWandCard = ({ wand }: NoitaWandCardProps) => {
           />
         </ActiveIconWrapper>
       );
-
       displaySpells.push(spellComponent);
     }
 
@@ -148,13 +149,6 @@ export const NoitaWandCard = ({ wand }: NoitaWandCardProps) => {
           <br />
           <table>
             <tbody>
-              <tr>
-                <td>
-                  <Icon type={'custom'} src={gunShuffleIcon} size={15} />
-                </td>
-                <td>Shuffle</td>
-                <td>{wand.shuffle ? 'Yes' : 'No'}</td>
-              </tr>
               {rows.map((row) => (
                 <tr>
                   <td>{row.icon}</td>
