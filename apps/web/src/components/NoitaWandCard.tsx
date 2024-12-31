@@ -9,7 +9,6 @@ import { mathHelpers } from '@noita-explorer/tools';
 import { useNoitaUnits } from '../hooks/useNoitaUnits.ts';
 import React, { useMemo } from 'react';
 import { useNoitaDataWakStore } from '../stores/NoitaDataWak.ts';
-import { Flex } from './Flex.tsx';
 import { NoitaSpellTooltip } from './tooltips/NoitaSpellTooltip.tsx';
 import { NoitaSpellTypesDictionary } from '../noita/NoitaSpellTypeDictionary.ts';
 
@@ -56,16 +55,18 @@ export const NoitaWandCard = ({ wand }: NoitaWandCardProps) => {
     const displaySpells: React.ReactNode[] = [];
 
     for (let i = 0; i < wand.deckCapacity; i++) {
+      const iconSize = 35;
+
       const wandSpell = wand.spells.find((s) => s.inventorySlot === i);
       if (wandSpell === undefined) {
-        const noSpellInventoryIcon = <InventoryIcon size={40} />;
+        const noSpellInventoryIcon = <InventoryIcon size={iconSize} />;
         displaySpells.push(noSpellInventoryIcon);
         continue;
       }
 
       const spell = data.spells.find((s) => s.id === wandSpell.spellId);
       if (spell === undefined) {
-        const spellNotFoundIcon = <Icon type={'error'} size={40} />;
+        const spellNotFoundIcon = <Icon type={'error'} size={iconSize} />;
         displaySpells.push(spellNotFoundIcon);
         continue;
       }
@@ -79,7 +80,7 @@ export const NoitaWandCard = ({ wand }: NoitaWandCardProps) => {
           <InventoryIcon
             icon={spell.imageBase64}
             spellBackground={NoitaSpellTypesDictionary[spell.type].image}
-            size={40}
+            size={iconSize}
           />
         </ActiveIconWrapper>
       );
@@ -144,11 +145,12 @@ export const NoitaWandCard = ({ wand }: NoitaWandCardProps) => {
   ];
 
   return (
-    <Card style={{ width: 'max-content', maxWidth: '100%' }}>
+    <Card style={{ maxWidth: '100%' }} styleContent={{ width: 'min-content' }}>
       <div
         style={{
           display: 'grid',
           gridTemplateColumns: 'max-content max-content',
+          gap: 30,
         }}
       >
         <div>
@@ -160,7 +162,7 @@ export const NoitaWandCard = ({ wand }: NoitaWandCardProps) => {
                 <tr>
                   <td>{row.icon}</td>
                   <td>{row.text}</td>
-                  <td style={{ paddingLeft: 5 }}>{row.value}</td>
+                  <td style={{ paddingLeft: 15 }}>{row.value}</td>
                 </tr>
               ))}
             </tbody>
@@ -174,27 +176,30 @@ export const NoitaWandCard = ({ wand }: NoitaWandCardProps) => {
           }}
         >
           {wandImage && (
-            <Icon type={'custom'} src={wandImage} style={{ zoom: 5 }} />
+            <Icon
+              type={'custom'}
+              src={wandImage}
+              style={{ zoom: 5, transform: 'rotate(-90deg)' }}
+            />
           )}
         </div>
       </div>
 
       <br />
-      <Flex
+      <div
         style={{
-          width: 'max-content',
-          maxWidth: '100%',
-          justifyContent: 'left',
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: 5,
         }}
-        gap={5}
       >
         {spellIcons}
-      </Flex>
+      </div>
       {wand.spellsPossibleIncorrectOrder && (
         <div>
-          <Icon type={'warning'} size={40} />
+          <Icon type={'warning'} size={30} />
           <span>Spell order might be incorrect</span>
-          <Icon type={'warning'} size={40} />
+          <Icon type={'warning'} size={30} />
         </div>
       )}
     </Card>
