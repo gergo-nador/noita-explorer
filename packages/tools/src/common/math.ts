@@ -8,12 +8,7 @@ const floor = (num: number, decimal = 0) => {
   return Math.floor((num + Number.EPSILON) * tens) / tens;
 };
 
-const randomInt = (lower: number, upper: number) => {
-  return Math.floor(Math.random() * (upper - lower) + lower);
-};
-
 export const mathHelpers = {
   round: round,
   floor: floor,
-  randomInt: randomInt,
 };

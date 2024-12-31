@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { noitaAPI } from '../ipcHandlers';
 import { supported } from 'browser-fs-access';
 
-export interface SettingsState {
+export interface Settings {
   paths: {
     // noita install folder path
     install: string | undefined;
@@ -12,58 +12,78 @@ export interface SettingsState {
   units: {
     time: 'default' | 'frames' | 'seconds';
   };
+  cursor: {
+    type: 'default' | 'noita-cursor' | 'wand';
+    noitaCursor: 'mouse_cursor_big' | 'mouse_cursor_big_system';
+    wandSpriteId: string | undefined;
+  };
+}
+
+export interface SettingsState {
+  settings: Settings;
   loaded: boolean;
   load: () => Promise<void>;
-  set: (callback: (state: SettingsState) => void) => void;
+  set: (callback: (state: Settings) => void) => void;
 }
 
 export const useSettingsStore = create<SettingsState>((set, get) => ({
-  paths: {
-    install: undefined,
-    NollaGamesNoita: undefined,
-  },
-  units: {
-    time: 'default',
+  settings: {
+    paths: {
+      install: undefined,
+      NollaGamesNoita: undefined,
+    },
+    units: {
+      time: 'default',
+    },
+    cursor: {
+      type: 'default',
+      noitaCursor: 'mouse_cursor_big',
+      wandSpriteId: undefined,
+    },
   },
 
   loaded: false,
   load: async () => {
     try {
-      const state = await loadSettings(get());
+      const state = get();
+
+      let settings = state.settings;
+      settings = await loadSettings(settings);
+      // make a deep copy to trigger updates
+      settings = JSON.parse(JSON.stringify(settings));
+
+      // reset file paths if the new file access api is not supported
       if (!supported) {
-        state.paths = {
+        settings.paths = {
           install: undefined,
           NollaGamesNoita: undefined,
         };
       }
 
-      return set({ ...state, loaded: true });
+      return set({ ...state, settings: settings, loaded: true });
     } catch (err) {
       console.error('Failed to load settings: ', err);
     }
   },
   set: (callback) => {
     const state = get();
-    callback(state);
-    set({ ...state });
+    const settings = JSON.parse(JSON.stringify(state.settings));
+    callback(settings);
+    set({ ...state, settings: settings });
 
-    saveSettings(state).catch((err) =>
+    saveSettings(settings).catch((err) =>
       console.error('Failed to save settings: ', err),
     );
   },
 }));
 
-async function loadSettings(state: SettingsState): Promise<SettingsState> {
+async function loadSettings(settings: Settings): Promise<Settings> {
   await loadSettingsRecursive({
-    path: 'settings.paths',
-    obj: state.paths,
-  });
-  await loadSettingsRecursive({
-    path: 'settings.units',
-    obj: state.units,
+    path: 'settings',
+    obj: settings,
   });
 
-  return state;
+  return settings;
 }
 
 async function loadSettingsRecursive({
@@ -96,9 +116,8 @@ async function loadSettingsRecursive({
   }
 }
 
-async function saveSettings(state: SettingsState): Promise<void> {
-  await saveSettingsRecursive({ path: 'settings.paths', obj: state.paths });
-  await saveSettingsRecursive({ path: 'settings.units', obj: state.units });
+async function saveSettings(settings: Settings): Promise<void> {
+  await saveSettingsRecursive({ path: 'settings', obj: settings });
 }
 
 async function saveSettingsRecursive({

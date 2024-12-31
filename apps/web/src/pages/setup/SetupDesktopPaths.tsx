@@ -14,7 +14,8 @@ import { PathInput } from '../../components/PathInput.tsx';
 import { Flex } from '../../components/Flex.tsx';
 
 export const SetupDesktopPaths = () => {
-  const { paths, set: setPaths } = useSettingsStore();
+  const { settings, set: setPaths } = useSettingsStore();
+  const { paths } = settings;
   const navigate = useNavigate();
   const toast = useToast();
   const [nextEnabled, setNextEnabled] = useState(false);

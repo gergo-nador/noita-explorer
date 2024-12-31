@@ -15,5 +15,8 @@ export const pages = {
   sessions: '/sessions',
   deathMap: '/death-map',
   bonesWands: '/bones-wands',
-  settings: '/settings',
+  settings: {
+    main: '/settings',
+    cursorWandPicker: '/settings/cursor-wand-picker',
+  },
 };

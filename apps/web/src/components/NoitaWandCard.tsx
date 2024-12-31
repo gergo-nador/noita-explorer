@@ -5,7 +5,7 @@ import {
   Icon,
   InventoryIcon,
 } from '@noita-explorer/noita-component-library';
-import { mathHelpers } from '@noita-explorer/tools';
+import { randomHelpers, mathHelpers } from '@noita-explorer/tools';
 import { useNoitaUnits } from '../hooks/useNoitaUnits.ts';
 import React, { useMemo } from 'react';
 import { useNoitaDataWakStore } from '../stores/NoitaDataWak.ts';
@@ -29,7 +29,7 @@ interface NoitaWandCardProps {
 export const NoitaWandCard = ({ wand }: NoitaWandCardProps) => {
   const noitaUnits = useNoitaUnits();
   const { data } = useNoitaDataWakStore();
-  const wandTooltipId = useMemo(() => mathHelpers.randomInt(0, 1000000), []);
+  const wandTooltipId = useMemo(() => randomHelpers.randomInt(0, 1000000), []);
 
   const wandImage = useMemo(() => {
     const wandConfigs = data?.wandConfigs;

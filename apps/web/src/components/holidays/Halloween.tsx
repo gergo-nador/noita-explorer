@@ -1,5 +1,5 @@
 import { Card, Icon } from '@noita-explorer/noita-component-library';
-import { mathHelpers } from '@noita-explorer/tools';
+import { randomHelpers } from '@noita-explorer/tools';
 import { useMemo } from 'react';
 
 import pumpkin_1 from '../../assets/holidays/pumpkin_01.png';
@@ -11,8 +11,7 @@ import pumpkin_5 from '../../assets/holidays/pumpkin_05.png';
 export const Halloween = () => {
   const image = useMemo(() => {
     const images = [pumpkin_1, pumpkin_2, pumpkin_3, pumpkin_4, pumpkin_5];
-    const index = mathHelpers.randomInt(0, images.length);
-    return images[index];
+    return randomHelpers.randomPick(images);
   }, []);
 
   return (

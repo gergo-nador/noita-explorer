@@ -103,7 +103,7 @@ export const MainPage = () => {
       >
         Bones Wands
       </Button>
-      <Button decoration={'both'} onClick={() => navigate(pages.settings)}>
+      <Button decoration={'both'} onClick={() => navigate(pages.settings.main)}>
         Settings
       </Button>
     </div>

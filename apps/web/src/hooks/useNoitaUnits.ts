@@ -5,7 +5,8 @@ import { NoitaConstants } from '@noita-explorer/model';
 type FrameDefaultFormats = 'frames' | 'seconds';
 
 export const useNoitaUnits = () => {
-  const { units } = useSettingsStore();
+  const { settings } = useSettingsStore();
+  const { units } = settings;
 
   const formatFrames = (
     frames: number,

@@ -8,7 +8,8 @@ import { useSettingsStore } from '../../stores/settings.ts';
 import { supported } from 'browser-fs-access';
 
 export const SetupWebPaths = () => {
-  const { paths, set: setPaths } = useSettingsStore();
+  const { settings, set: setPaths } = useSettingsStore();
+  const { paths } = settings;
 
   return (
     <Header title={'Paths'}>

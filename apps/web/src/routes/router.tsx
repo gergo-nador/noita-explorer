@@ -15,8 +15,9 @@ import { SetupWebPaths } from '../pages/setup/SetupWebPaths.tsx';
 import { NoitaSessions } from '../pages/sessions/NoitaSessions.tsx';
 import { EmptyPageTemplate } from '../pages/templates/EmptyPageTemplate.tsx';
 import { NoitaDeathMap } from '../pages/sessions/NoitaDeathMap.tsx';
-import { Settings } from '../pages/Settings.tsx';
+import { Settings } from '../pages/settings/Settings.tsx';
 import { NoitaBonesWands } from '../pages/NoitaBonesWands.tsx';
+import { SettingsCursorWandPicker } from '../pages/settings/SettingsCursorWandPicker.tsx';
 
 export const router = createBrowserRouter([
   {
@@ -103,6 +104,14 @@ export const router = createBrowserRouter([
     element: (
       <CardPageTemplate>
         <Settings />
+      </CardPageTemplate>
+    ),
+  },
+  {
+    path: 'settings/cursor-wand-picker',
+    element: (
+      <CardPageTemplate>
+        <SettingsCursorWandPicker />
       </CardPageTemplate>
     ),
   },

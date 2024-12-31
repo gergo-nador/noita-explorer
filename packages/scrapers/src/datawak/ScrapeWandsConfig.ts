@@ -43,6 +43,11 @@ export const scrapeWandConfigs = async ({
       name: name,
       imageBase64: imageBase64,
       spriteId: spriteId,
+
+      gripX: luaWandConfig.getRequiredField('grip_x').required.asNumber(),
+      gripY: luaWandConfig.getRequiredField('grip_y').required.asNumber(),
+      tipX: luaWandConfig.getRequiredField('tip_x').required.asNumber(),
+      tipY: luaWandConfig.getRequiredField('tip_y').required.asNumber(),
     };
 
     wandConfigs.push(wandConfig);

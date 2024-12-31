@@ -5,8 +5,10 @@ import React, { MutableRefObject, useRef } from 'react';
 
 interface ButtonProps {
   children?: string | React.ReactNode | React.ReactNode[];
+  className?: string;
   decoration?: 'left' | 'right' | 'both' | 'none';
   disabled?: boolean;
+  style?: React.CSSProperties;
   textStyle?: React.CSSProperties;
   onClick?: () => void;
   onDisabledClick?: () => void;
@@ -18,8 +20,10 @@ interface ButtonProps {
 
 export const Button = ({
   children,
+  className,
   onClick,
   decoration,
+  style = {},
   textStyle = {},
   disabled,
   onDisabledClick,
@@ -58,11 +62,12 @@ export const Button = ({
   return (
     <div className={css['container']}>
       <button
-        className={`${css['button-content']}`}
+        className={`${css['button-content']} ${className}`}
         onClick={buttonOnClick}
         ref={buttonRef as MutableRefObject<HTMLButtonElement>}
         style={{
           cursor: disabled ? 'not-allowed' : 'pointer',
+          ...style,
         }}
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
