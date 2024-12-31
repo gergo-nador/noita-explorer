@@ -1,7 +1,6 @@
 import { NoitaWand } from '@noita-explorer/model';
 import {
   ActiveIconWrapper,
-  Button,
   Card,
   Icon,
   InventoryIcon,
@@ -31,6 +30,7 @@ interface NoitaWandCardProps {
 export const NoitaWandCard = ({ wand }: NoitaWandCardProps) => {
   const noitaUnits = useNoitaUnits();
   const { data } = useNoitaDataWakStore();
+  const wandTooltipId = useMemo(() => mathHelpers.randomInt(0, 1000000), []);
 
   const wandImage = useMemo(() => {
     const wandConfigs = data?.wandConfigs;
@@ -72,8 +72,8 @@ export const NoitaWandCard = ({ wand }: NoitaWandCardProps) => {
 
       const spellComponent = (
         <ActiveIconWrapper
-          key={'spell-' + wandSpell.spellId + wandSpell.inventorySlot}
-          id={'spell-' + wandSpell.spellId + wandSpell.inventorySlot}
+          key={`spell-${wandSpell.spellId}-${wandSpell.inventorySlot}-${wandTooltipId}`}
+          id={`spell-${wandSpell.spellId}-${wandSpell.inventorySlot}-${wandTooltipId}`}
           tooltip={<NoitaSpellTooltip spell={spell} />}
         >
           <InventoryIcon
@@ -87,7 +87,7 @@ export const NoitaWandCard = ({ wand }: NoitaWandCardProps) => {
     }
 
     return displaySpells;
-  }, [wand, data?.spells]);
+  }, [wand, data?.spells, wandTooltipId]);
 
   const rows: RowData[] = [
     {
@@ -103,12 +103,18 @@ export const NoitaWandCard = ({ wand }: NoitaWandCardProps) => {
     {
       icon: <Icon type={'custom'} src={fireRateWaitIcon} size={15} />,
       text: 'Cast delay',
-      value: noitaUnits.frames(wand.fireRateWait),
+      value: noitaUnits.frames(
+        wand.fireRateWait,
+        noitaUnits.frameDefaultUnits.fireRateWait,
+      ),
     },
     {
       icon: <Icon type={'custom'} src={reloadIcon} size={15} />,
       text: 'Rechrg. Time',
-      value: noitaUnits.frames(wand.reloadTime),
+      value: noitaUnits.frames(
+        wand.reloadTime,
+        noitaUnits.frameDefaultUnits.reloadTime,
+      ),
     },
     {
       icon: <Icon type={'custom'} src={manaMaxIcon} size={15} />,
@@ -139,7 +145,6 @@ export const NoitaWandCard = ({ wand }: NoitaWandCardProps) => {
 
   return (
     <Card style={{ width: 'max-content', maxWidth: '100%' }}>
-      <Button onClick={() => console.log(wand)}>Print</Button>
       <div
         style={{
           display: 'grid',

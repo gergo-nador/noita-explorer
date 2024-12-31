@@ -10,7 +10,7 @@ export interface SettingsState {
     NollaGamesNoita: string | undefined;
   };
   units: {
-    time: 'frames' | 'seconds';
+    time: 'default' | 'frames' | 'seconds';
   };
   loaded: boolean;
   load: () => Promise<void>;
@@ -23,7 +23,7 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
     NollaGamesNoita: undefined,
   },
   units: {
-    time: 'frames',
+    time: 'default',
   },
 
   loaded: false,

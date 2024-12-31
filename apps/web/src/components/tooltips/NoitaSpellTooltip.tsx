@@ -97,15 +97,24 @@ export const NoitaSpellTooltip = ({
           spell.lifetimeRandomness !== 0
         ) {
           const minLifetime = spell.lifetime - spell.lifetimeRandomness;
-          const minLifetimeText = noitaUnits.framesWithoutUnit(minLifetime);
+          const minLifetimeText = noitaUnits.framesWithoutUnit(
+            minLifetime,
+            noitaUnits.frameDefaultUnits.lifetime,
+          );
 
           const maxLifetime = spell.lifetime + spell.lifetimeRandomness;
-          const maxLifetimeText = noitaUnits.frames(maxLifetime);
+          const maxLifetimeText = noitaUnits.frames(
+            maxLifetime,
+            noitaUnits.frameDefaultUnits.lifetime,
+          );
 
           return `${minLifetimeText}-${maxLifetimeText}`;
         }
 
-        return noitaUnits.frames(spell.lifetime);
+        return noitaUnits.frames(
+          spell.lifetime,
+          noitaUnits.frameDefaultUnits.lifetime,
+        );
       })(),
 
       show: spell.lifetime !== undefined,
@@ -116,7 +125,9 @@ export const NoitaSpellTooltip = ({
       value: (
         <NumberModifierDisplay
           modifier={spell.lifetimeModifier}
-          unitDisplayCallback={noitaUnits.frames}
+          unitDisplayCallback={(value) =>
+            noitaUnits.frames(value, noitaUnits.frameDefaultUnits.lifetime)
+          }
         />
       ),
       show: spell.lifetimeModifier !== undefined,
@@ -127,7 +138,9 @@ export const NoitaSpellTooltip = ({
       value: (
         <NumberModifierDisplay
           modifier={spell.fireRateWaitModifier}
-          unitDisplayCallback={noitaUnits.frames}
+          unitDisplayCallback={(value) =>
+            noitaUnits.frames(value, noitaUnits.frameDefaultUnits.fireRateWait)
+          }
         />
       ),
       show: spell.fireRateWaitModifier !== undefined,
@@ -138,7 +151,9 @@ export const NoitaSpellTooltip = ({
       value: (
         <NumberModifierDisplay
           modifier={spell.reloadTimeModifier}
-          unitDisplayCallback={noitaUnits.frames}
+          unitDisplayCallback={(value) =>
+            noitaUnits.frames(value, noitaUnits.frameDefaultUnits.reloadTime)
+          }
         />
       ),
       show: spell.reloadTimeModifier !== undefined,

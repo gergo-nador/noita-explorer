@@ -11,6 +11,15 @@ export const Settings = () => {
           <span>Time: </span>
           <Flex style={{ width: 'max-content' }} gap={10}>
             <Button
+              onClick={() => set((s) => (s.units.time = 'default'))}
+              textStyle={{
+                color: units.time === 'default' ? 'gold' : undefined,
+              }}
+            >
+              Default
+            </Button>
+            <span> / </span>
+            <Button
               onClick={() => set((s) => (s.units.time = 'frames'))}
               textStyle={{
                 color: units.time === 'frames' ? 'gold' : undefined,
