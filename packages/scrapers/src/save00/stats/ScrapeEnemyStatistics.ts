@@ -20,7 +20,7 @@ export const scrapeEnemyStatistics = async ({
   const enemyStatsDirectory =
     await save00DirectoryApi.getDirectory(enemyStatsDirPath);
 
-  const files = await enemyStatsDirectory.listFilesFromDirectory();
+  const files = await enemyStatsDirectory.listFiles();
   const animalStatisticsFiles = files
     .filter(
       (f) => f.getName().startsWith('stats_') && f.getName().endsWith('.xml'),

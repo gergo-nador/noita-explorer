@@ -10,7 +10,7 @@ export const FileSystemDirectoryAccessBrowserApi = (
     path: {
       join: (args) => promiseHelper.fromValue(args.join('/')),
     },
-    listFilesFromDirectory: async () => {
+    listFiles: async () => {
       const files: FileSystemFileHandle[] = [];
 
       if (
@@ -31,6 +31,28 @@ export const FileSystemDirectoryAccessBrowserApi = (
       }
 
       return files.map((f) => FileSystemFileAccessBrowserApi(f));
+    },
+    listDirectories: async () => {
+      const directories: FileSystemDirectoryHandle[] = [];
+
+      if (
+        !('entries' in directoryHandle) ||
+        typeof directoryHandle.entries !== 'function'
+      ) {
+        throw new Error('directoryHandler.entries is not supported');
+      }
+
+      for await (const entry of directoryHandle.entries()) {
+        const handle = entry[1] as
+          | FileSystemFileHandle
+          | FileSystemDirectoryHandle;
+
+        if (handle.kind === 'directory') {
+          directories.push(handle);
+        }
+      }
+
+      return directories.map((d) => FileSystemDirectoryAccessBrowserApi(d));
     },
     checkRelativePathExists: async (path) => {
       try {

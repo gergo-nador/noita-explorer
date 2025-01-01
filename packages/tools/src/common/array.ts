@@ -105,6 +105,18 @@ const unique = <T>(items: T[]) => {
   return [...new Set(items)];
 };
 
+const zip = <T, U>(arr1: T[], arr2: U[]) => {
+  if (arr1.length !== arr2.length) {
+    throw new Error(
+      `arr1 and arr2 length must be equal (was ${arr1.length} and ${arr2.length})`,
+    );
+  }
+
+  return arr1.map(function (e, i) {
+    return [e, arr2[i]];
+  });
+};
+
 export const arrayHelpers = {
   groupBy: groupBy,
   maxBy: maxBy,
@@ -114,4 +126,5 @@ export const arrayHelpers = {
   asDict: asDict,
   unique: unique,
   toggleItemInList: toggleItemInList,
+  zip: zip,
 };

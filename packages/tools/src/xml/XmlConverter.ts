@@ -4,10 +4,17 @@ import { StringKeyDictionaryComposite } from '@noita-explorer/model';
 export const parseXml = (
   text: string,
 ): Promise<StringKeyDictionaryComposite<string>> => {
-  return parseStringPromise(text);
+  const commentsRemoved = removeXmlComments(text);
+  return parseStringPromise(commentsRemoved);
 };
 
 export const toXml = (obj: object): string => {
   const builder = new Builder();
   return builder.buildObject(obj);
+};
+
+const removeXmlComments = (input: string): string => {
+  // Regular expression to match XML comments: <!-- anything -->
+  const xmlCommentRegex = /<!--[\s\S]*?-->/g;
+  return input.replace(xmlCommentRegex, '');
 };

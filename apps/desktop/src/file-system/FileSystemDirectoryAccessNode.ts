@@ -37,10 +37,21 @@ export const FileSystemDirectoryAccessNode = (
   const listFiles = async () => {
     const paths =
       await nodeFileSystemHelpers.getPathsFromDirectory(directoryPath);
+
     return paths
       .map((p) => getAbsolutePath(p))
       .filter((p) => fs.lstatSync(p).isFile())
       .map((f) => FileSystemFileAccessNode(f));
+  };
+
+  const listDirectories = async () => {
+    const paths =
+      await nodeFileSystemHelpers.getPathsFromDirectory(directoryPath);
+
+    return paths
+      .map((p) => getAbsolutePath(p))
+      .filter((p) => fs.lstatSync(p).isDirectory())
+      .map((d) => FileSystemDirectoryAccessNode(d));
   };
 
   return {
@@ -51,7 +62,8 @@ export const FileSystemDirectoryAccessNode = (
     checkRelativePathExists: (path) =>
       promiseHelper.fromValue(checkRelativePathExists(path)),
     getDirectory: (path) => promiseHelper.fromValue(getRelativeDirectory(path)),
-    listFilesFromDirectory: () => listFiles(),
+    listFiles: () => listFiles(),
+    listDirectories: () => listDirectories(),
     getFile: (path) =>
       promiseHelper.fromValue(FileSystemFileAccessNode(getAbsolutePath(path))),
   };

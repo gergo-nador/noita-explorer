@@ -13,7 +13,7 @@ export const scrapeProgressFlags = async ({
     noitaPaths.save00.flags,
   );
   const flagsDir = await save00DirectoryApi.getDirectory(flagsDirPath);
-  const files = await flagsDir.listFilesFromDirectory();
+  const files = await flagsDir.listFiles();
 
   const actionFlags = files
     .map((f) => f.getNameWithoutExtension())

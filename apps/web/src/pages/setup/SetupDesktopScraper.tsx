@@ -39,9 +39,11 @@ export const SetupDesktopScraper = () => {
 
     try {
       const result = await noitaAPI.noita.dataFile.scrape();
+      console.log('noita data wak scrape result', result);
       setDataWakScrapeResult(result);
     } catch (e) {
       setDataWakScrapeResultError(e + '');
+      console.log('error in scraping: ', e);
     }
 
     setIsLoading(false);

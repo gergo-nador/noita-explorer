@@ -15,7 +15,7 @@ import {
 } from '@noita-explorer/model';
 import {
   readTranslations,
-  scrapeEnemy,
+  scrapeEnemies,
   scrapePerks,
   scrapeSpells,
   scrapeWandConfigs,
@@ -134,7 +134,7 @@ export const registerNoitaDataFileHandlers = () => {
       let enemies: NoitaEnemy[] = [];
       let enemiesError: unknown | undefined = undefined;
       try {
-        enemies = await scrapeEnemy({
+        enemies = await scrapeEnemies({
           dataWakDirectoryApi: dataWakDirectoryApi,
           translations: translations,
         });

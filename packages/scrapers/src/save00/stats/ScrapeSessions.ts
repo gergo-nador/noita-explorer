@@ -17,7 +17,7 @@ export const scrapeSessions = async ({
   );
 
   const sessionsDir = await save00DirectoryApi.getDirectory(sessionsDirPath);
-  const files = await sessionsDir.listFilesFromDirectory();
+  const files = await sessionsDir.listFiles();
 
   const sessionGroups: StringKeyDictionary<{
     baseId: string;

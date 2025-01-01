@@ -5,7 +5,8 @@ export interface FileSystemDirectoryAccess {
   checkRelativePathExists: (path: string) => Promise<boolean>;
   getFile: (path: string) => Promise<FileSystemFileAccess>;
   getDirectory: (path: string) => Promise<FileSystemDirectoryAccess>;
-  listFilesFromDirectory: () => Promise<FileSystemFileAccess[]>;
+  listFiles: () => Promise<FileSystemFileAccess[]>;
+  listDirectories: () => Promise<FileSystemDirectoryAccess[]>;
 
   path: {
     join: (args: string[]) => Promise<string>;

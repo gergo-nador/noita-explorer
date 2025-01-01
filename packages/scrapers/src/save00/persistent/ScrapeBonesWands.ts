@@ -15,7 +15,7 @@ export const scrapeBonesWands = async ({
     noitaPaths.save00.bones_new,
   );
   const bonesDir = await save00DirectoryApi.getDirectory(bonesDirPath);
-  const files = await bonesDir.listFilesFromDirectory();
+  const files = await bonesDir.listFiles();
   const filteredFiles = files.filter((f) => f.getName().endsWith('.xml'));
 
   const wands: NoitaWand[] = [];

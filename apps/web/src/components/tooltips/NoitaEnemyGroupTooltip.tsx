@@ -20,10 +20,12 @@ export const NoitaEnemyGroupTooltip = ({
   if (isUnknown) {
     return <div>???</div>;
   }
+  const enemyHp = enemyGroup.enemies.find((e) => e.hp !== undefined);
 
   return (
     <div style={{ maxWidth: '400px', textAlign: 'right' }}>
       <div style={{ fontSize: 20 }}>{enemyGroup.name}</div>
+      {enemyHp !== undefined && <div>HP: {enemyHp.hp}</div>}
       {statistics &&
         enemyGroup.enemies.map((e) => (
           <div style={{ fontSize: 16 }}>

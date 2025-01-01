@@ -12,6 +12,9 @@ export const noitaPaths = {
       wands: ['data', 'scripts', 'gun', 'procedural', 'wands.lua'],
       perks: ['data', 'scripts', 'perks', 'perk_list.lua'],
     },
+    xmlData: {
+      animals: ['data', 'entities', 'animals'],
+    },
   },
   noitaInstallFolder: {
     translation: ['data', 'translations', 'common.csv'],

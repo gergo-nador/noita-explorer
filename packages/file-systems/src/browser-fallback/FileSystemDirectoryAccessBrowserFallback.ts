@@ -21,6 +21,24 @@ export const FileSystemDirectoryAccessBrowserFallback = (
     .filter((f) => f.webkitRelativePath.split('/').length === level + 2)
     .map((f) => FileSystemFileAccessBrowserFallback(f));
 
+  const directories = fallbackHandlers
+    .filter((d) => d.webkitRelativePath.split('/').length > level + 2)
+    .map((d) => {
+      return {
+        name: d.webkitRelativePath.split('/')[level + 2],
+      };
+    });
+
+  const getDirectory = async (path: string) => {
+    const result = evaluateRelativePath(path, fallbackHandlers, level + 1);
+
+    if (result && result.type === 'directory') {
+      return result.result as FileSystemDirectoryAccess;
+    }
+
+    throw new Error(`Path ${path} not found`);
+  };
+
   return {
     getName: () => directoryName,
     path: {
@@ -35,16 +53,18 @@ export const FileSystemDirectoryAccessBrowserFallback = (
 
       throw new Error(`Path ${path} not found`);
     },
-    getDirectory: async (path) => {
-      const result = evaluateRelativePath(path, fallbackHandlers, level + 1);
+    getDirectory: getDirectory,
+    listFiles: () => promiseHelper.fromValue(files),
+    listDirectories: async () => {
+      const directoryApis: FileSystemDirectoryAccess[] = [];
 
-      if (result && result.type === 'directory') {
-        return result.result as FileSystemDirectoryAccess;
+      for (const d of directories) {
+        const directoryApi = await getDirectory(d.name);
+        directoryApis.push(directoryApi);
       }
 
-      throw new Error(`Path ${path} not found`);
+      return directoryApis;
     },
-    listFilesFromDirectory: () => promiseHelper.fromValue(files),
     checkRelativePathExists: (path) =>
       promiseHelper.fromValue(
         evaluateRelativePath(path, fallbackHandlers, level + 1) !== undefined,
