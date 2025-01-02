@@ -14,6 +14,7 @@ import { NoitaProtections } from '../../../noita/NoitaProtections.ts';
 import { BooleanIcon } from '../../../components/BooleanIcon.tsx';
 import { MultiSelectionBoolean } from '../../../components/MultiSelectionBoolean.tsx';
 import { MultiSelection } from '../../../components/MultiSelection.tsx';
+import { useSave00Store } from '../../../stores/save00.ts';
 
 interface PerkFilters {
   stackable: boolean | undefined;
@@ -21,6 +22,7 @@ interface PerkFilters {
   oneOffEffect: boolean | undefined;
   removedByNullifyingAltar: boolean | undefined;
   protectionId: string | undefined;
+  unlocked: boolean | undefined;
 }
 
 export const NoitaProgressV2Perks = () => {
@@ -32,13 +34,13 @@ export const NoitaProgressV2Perks = () => {
     oneOffEffect: undefined,
     removedByNullifyingAltar: undefined,
     protectionId: undefined,
+    unlocked: undefined,
   });
+  const { unlockedPerks } = useSave00Store();
 
   if (!data) {
     return <div>Noita Data Wak is not loaded.</div>;
   }
-
-  const tableSectionDivider = <td colSpan={3} style={{ height: 20 }}></td>;
 
   const evaluateFiltersForPerk = (perk: NoitaPerk) => {
     if (filters.stackable !== undefined) {
@@ -67,6 +69,12 @@ export const NoitaProgressV2Perks = () => {
 
     if (filters.protectionId !== undefined) {
       if (!perk.gameEffects.includes(filters.protectionId)) {
+        return false;
+      }
+    }
+
+    if (filters.unlocked !== undefined && unlockedPerks !== undefined) {
+      if (!(filters.unlocked || !unlockedPerks.includes(perk.id))) {
         return false;
       }
     }
@@ -130,217 +138,234 @@ export const NoitaProgressV2Perks = () => {
       </div>
 
       <div>
+        <PerkFiltersView
+          setFilters={setFilters}
+          filters={filters}
+          showSave00RelatedFilters={unlockedPerks !== undefined}
+        />
+        <br />
         <Card style={{ maxWidth: '500px', width: '100%' }}>
           {!selectedPerk && <span>Select a perk</span>}
-          {selectedPerk && (
-            <>
-              <div>
-                <div
-                  style={{
-                    display: 'grid',
-                    gridTemplateColumns: '15% 1fr',
-                    width: '100%',
-                    gap: 5,
-                  }}
-                >
-                  <Icon
-                    type={'custom'}
-                    src={selectedPerk.imageBase64}
-                    style={{ aspectRatio: 1, width: '100%' }}
-                  />
-                  <div>
-                    <Flex
-                      style={{
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        height: '35px',
-                      }}
-                    >
-                      <span style={{ fontSize: 20 }}>{selectedPerk.name}</span>
-                    </Flex>
-                    <div>{selectedPerk.description}</div>
-                  </div>
-                </div>
-                <div style={{ marginTop: 20, width: 'max-content' }}>
-                  <NoitaTooltipWrapper content={'Protections'}>
-                    <Flex style={{ width: 'max-content' }}>
-                      {selectedPerk.gameEffects
-                        .filter((gameEffect) => gameEffect in NoitaProtections)
-                        .map((gameEffect) => (
-                          <Icon
-                            key={gameEffect}
-                            type={'custom'}
-                            src={NoitaProtections[gameEffect].image}
-                            size={40}
-                          />
-                        ))}
-                    </Flex>
-                  </NoitaTooltipWrapper>
-                </div>
-                <br />
-                <Flex>
-                  <table style={{ width: '100%' }}>
-                    <tbody>
-                      <tr>
-                        <td style={{ paddingRight: 20 }}>Stackable</td>
-                        <td style={{ textAlign: 'right' }}>
-                          <BooleanIcon value={selectedPerk.stackable} />
-                        </td>
-                      </tr>
-
-                      {selectedPerk.stackable && (
-                        <tr>
-                          <td colSpan={3}>
-                            <table style={{ width: '100%' }}>
-                              <tbody>
-                                <tr>
-                                  <td>Max</td>
-                                  <td>Is Rare</td>
-                                </tr>
-                                <tr>
-                                  <td>
-                                    {selectedPerk.stackableMaximum ?? '-'}
-                                  </td>
-                                  <td>
-                                    <BooleanIcon
-                                      value={selectedPerk.stackableIsRare}
-                                    />
-                                  </td>
-                                </tr>
-                              </tbody>
-                            </table>
-                          </td>
-                        </tr>
-                      )}
-                      <tr>{tableSectionDivider}</tr>
-                      <tr>
-                        <td>Holy Mountain</td>
-                        <td style={{ textAlign: 'right' }}>
-                          <BooleanIcon
-                            value={!selectedPerk.notInDefaultPerkPool}
-                          />
-                        </td>
-                      </tr>
-                      {!selectedPerk.notInDefaultPerkPool && (
-                        <tr>
-                          <td colSpan={3}>
-                            <table style={{ width: '100%' }}>
-                              <tbody>
-                                <tr>
-                                  <td>Pool Max</td>
-                                  <td>
-                                    Reappears
-                                    <br /> After
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <td>{selectedPerk.maxInPerkPool ?? '-'}</td>
-                                  <td>
-                                    {selectedPerk.stackableHowOftenReappears ??
-                                      '-'}
-                                  </td>
-                                </tr>
-                              </tbody>
-                            </table>
-                          </td>
-                        </tr>
-                      )}
-
-                      <tr>{tableSectionDivider}</tr>
-                      <tr>
-                        <td style={{ paddingRight: 20 }}>
-                          Will not be removed by nullifying altar
-                        </td>
-                        <td style={{ textAlign: 'right' }}>
-                          <BooleanIcon value={selectedPerk.doNotRemove} />
-                        </td>
-                      </tr>
-                      <tr>
-                        <td style={{ paddingRight: 20 }}>One-Off Effect</td>
-                        <td style={{ textAlign: 'right' }}>
-                          <BooleanIcon value={selectedPerk.oneOffEffect} />
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </Flex>
-              </div>
-            </>
-          )}
-        </Card>
-        <br />
-        <Card>
-          <Flex gap={10} style={{ maxWidth: 'max-content' }}>
-            <span>Stackable: </span>
-            <MultiSelectionBoolean
-              setValue={(value) => setFilters({ ...filters, stackable: value })}
-              currentValue={filters.stackable}
-            />
-          </Flex>
-          <Flex gap={10} style={{ maxWidth: 'max-content' }}>
-            <span>Holy Mountain: </span>
-            <MultiSelectionBoolean
-              setValue={(value) =>
-                setFilters({ ...filters, holyMountain: value })
-              }
-              currentValue={filters.holyMountain}
-            />
-          </Flex>
-          <Flex gap={10} style={{ maxWidth: 'max-content' }}>
-            <span>One-Off Effect: </span>
-            <MultiSelectionBoolean
-              setValue={(value) =>
-                setFilters({ ...filters, oneOffEffect: value })
-              }
-              currentValue={filters.oneOffEffect}
-            />
-          </Flex>
-          <Flex gap={10} style={{ maxWidth: 'max-content' }}>
-            <span>Removed by NA: </span>
-            <MultiSelectionBoolean
-              setValue={(value) =>
-                setFilters({
-                  ...filters,
-                  removedByNullifyingAltar: value,
-                })
-              }
-              currentValue={filters.removedByNullifyingAltar}
-            />
-          </Flex>
-          <Flex gap={10} style={{ maxWidth: 'max-content' }}>
-            <span>Protections:</span>
-            <MultiSelection<string | undefined>
-              options={Object.keys(NoitaProtections).map((protectionId) => ({
-                id: protectionId,
-                value: protectionId,
-                display: (
-                  <Icon
-                    type={'custom'}
-                    src={NoitaProtections[protectionId].image}
-                    size={30}
-                  />
-                ),
-                style: {
-                  opacity: 0.6,
-                },
-                selectedProperties: {
-                  opacity: 1,
-                },
-                onClick: (_, isSelected) =>
-                  isSelected &&
-                  setFilters({ ...filters, protectionId: undefined }),
-              }))}
-              setValue={(value) =>
-                setFilters({
-                  ...filters,
-                  protectionId: value,
-                })
-              }
-              currentValue={filters.protectionId}
-            />
-          </Flex>
+          {selectedPerk && <PerkOverview perk={selectedPerk} />}
         </Card>
       </div>
     </div>
+  );
+};
+
+const PerkFiltersView = ({
+  setFilters,
+  filters,
+  showSave00RelatedFilters,
+}: {
+  filters: PerkFilters;
+  setFilters: (filters: PerkFilters) => void;
+  showSave00RelatedFilters: boolean;
+}) => {
+  return (
+    <Card>
+      <Flex gap={10} style={{ maxWidth: 'max-content' }}>
+        <span>Stackable: </span>
+        <MultiSelectionBoolean
+          setValue={(value) => setFilters({ ...filters, stackable: value })}
+          currentValue={filters.stackable}
+        />
+      </Flex>
+      <Flex gap={10} style={{ maxWidth: 'max-content' }}>
+        <span>Holy Mountain: </span>
+        <MultiSelectionBoolean
+          setValue={(value) => setFilters({ ...filters, holyMountain: value })}
+          currentValue={filters.holyMountain}
+        />
+      </Flex>
+      <Flex gap={10} style={{ maxWidth: 'max-content' }}>
+        <span>One-Off Effect: </span>
+        <MultiSelectionBoolean
+          setValue={(value) => setFilters({ ...filters, oneOffEffect: value })}
+          currentValue={filters.oneOffEffect}
+        />
+      </Flex>
+      <Flex gap={10} style={{ maxWidth: 'max-content' }}>
+        <span>Removed by NA: </span>
+        <MultiSelectionBoolean
+          setValue={(value) =>
+            setFilters({
+              ...filters,
+              removedByNullifyingAltar: value,
+            })
+          }
+          currentValue={filters.removedByNullifyingAltar}
+        />
+      </Flex>
+      {showSave00RelatedFilters && (
+        <Flex gap={10} style={{ maxWidth: 'max-content' }}>
+          <span>Unlocked: </span>
+          <MultiSelectionBoolean
+            setValue={(value) =>
+              setFilters({
+                ...filters,
+                unlocked: value,
+              })
+            }
+            currentValue={filters.unlocked}
+          />
+        </Flex>
+      )}
+
+      <Flex gap={10} style={{ maxWidth: 'max-content' }}>
+        <span>Protections:</span>
+        <MultiSelection<string | undefined>
+          options={Object.keys(NoitaProtections).map((protectionId) => ({
+            id: protectionId,
+            value: protectionId,
+            display: (
+              <Icon
+                type={'custom'}
+                src={NoitaProtections[protectionId].image}
+                size={30}
+              />
+            ),
+            style: {
+              opacity: 0.6,
+            },
+            selectedProperties: {
+              opacity: 1,
+            },
+            onClick: (_, isSelected) =>
+              isSelected && setFilters({ ...filters, protectionId: undefined }),
+          }))}
+          setValue={(value) =>
+            setFilters({
+              ...filters,
+              protectionId: value,
+            })
+          }
+          currentValue={filters.protectionId}
+        />
+      </Flex>
+    </Card>
+  );
+};
+
+const PerkOverview = ({ perk }: { perk: NoitaPerk }) => {
+  const tableSectionDivider = <td colSpan={3} style={{ height: 20 }}></td>;
+
+  return (
+    <>
+      <div>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: '15% 1fr',
+            width: '100%',
+            gap: 5,
+          }}
+        >
+          <Icon
+            type={'custom'}
+            src={perk.imageBase64}
+            style={{ aspectRatio: 1, width: '100%' }}
+          />
+          <div>
+            <div style={{ fontSize: 20, marginBottom: 10 }}>{perk.name}</div>
+            <div>{perk.description}</div>
+          </div>
+        </div>
+        <div style={{ marginTop: 20, width: 'max-content' }}>
+          <NoitaTooltipWrapper content={'Protections'}>
+            <Flex style={{ width: 'max-content' }}>
+              {perk.gameEffects
+                .filter((gameEffect) => gameEffect in NoitaProtections)
+                .map((gameEffect) => (
+                  <Icon
+                    key={gameEffect}
+                    type={'custom'}
+                    src={NoitaProtections[gameEffect].image}
+                    size={40}
+                  />
+                ))}
+            </Flex>
+          </NoitaTooltipWrapper>
+        </div>
+        <br />
+        <Flex>
+          <table style={{ width: '100%' }}>
+            <tbody>
+              <tr>
+                <td style={{ paddingRight: 20 }}>Stackable</td>
+                <td style={{ textAlign: 'right' }}>
+                  <BooleanIcon value={perk.stackable} />
+                </td>
+              </tr>
+
+              {perk.stackable && (
+                <tr>
+                  <td colSpan={3}>
+                    <table style={{ width: '100%' }}>
+                      <tbody>
+                        <tr>
+                          <td>Max</td>
+                          <td>Is Rare</td>
+                        </tr>
+                        <tr>
+                          <td>{perk.stackableMaximum ?? '-'}</td>
+                          <td>
+                            <BooleanIcon value={perk.stackableIsRare} />
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </td>
+                </tr>
+              )}
+              <tr>{tableSectionDivider}</tr>
+              <tr>
+                <td>Holy Mountain</td>
+                <td style={{ textAlign: 'right' }}>
+                  <BooleanIcon value={!perk.notInDefaultPerkPool} />
+                </td>
+              </tr>
+              {!perk.notInDefaultPerkPool && (
+                <tr>
+                  <td colSpan={3}>
+                    <table style={{ width: '100%' }}>
+                      <tbody>
+                        <tr>
+                          <td>Pool Max</td>
+                          <td>
+                            Reappears
+                            <br /> After
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>{perk.maxInPerkPool ?? '-'}</td>
+                          <td>{perk.stackableHowOftenReappears ?? '-'}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </td>
+                </tr>
+              )}
+
+              <tr>{tableSectionDivider}</tr>
+              <tr>
+                <td style={{ paddingRight: 20 }}>
+                  Will not be removed by nullifying altar
+                </td>
+                <td style={{ textAlign: 'right' }}>
+                  <BooleanIcon value={perk.doNotRemove} />
+                </td>
+              </tr>
+              <tr>
+                <td style={{ paddingRight: 20 }}>One-Off Effect</td>
+                <td style={{ textAlign: 'right' }}>
+                  <BooleanIcon value={perk.oneOffEffect} />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </Flex>
+      </div>
+    </>
   );
 };
