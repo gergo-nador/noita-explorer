@@ -11,7 +11,7 @@ interface TabViewItem {
 }
 
 interface TabViewProps {
-  initialActiveTabId?: string;
+  activeTabId: string;
   tabs: TabViewItem[];
   style?: React.CSSProperties;
   styleCard?: React.CSSProperties;
@@ -21,21 +21,9 @@ export const TabView = ({
   tabs,
   style,
   styleCard,
-  initialActiveTabId,
+  activeTabId,
 }: TabViewProps) => {
-  const [currentTab, setCurrentTab] = React.useState(() => {
-    const initialActiveTabIndex = tabs.findIndex(
-      (tab) => tab.id === initialActiveTabId,
-    );
-
-    const initialTabIndex =
-      initialActiveTabIndex === -1 ? 0 : initialActiveTabIndex;
-
-    return {
-      index: initialTabIndex,
-      content: tabs.length > 0 ? tabs[initialTabIndex].content : undefined,
-    };
-  });
+  const activeTabIndex = tabs.findIndex((tab) => tab.id === activeTabId);
 
   return (
     <div style={style}>
@@ -48,8 +36,8 @@ export const TabView = ({
         }}
       >
         <div></div>
-        {tabs.map(({ title, content, onClick }, index) => {
-          const isActive = index === currentTab.index;
+        {tabs.map(({ id, title, onClick }, index) => {
+          const isActive = id === activeTabId;
           return (
             <div>
               <TabItem
@@ -61,10 +49,6 @@ export const TabView = ({
                 }}
                 isActive={isActive}
                 onClick={() => {
-                  setCurrentTab({
-                    index: index,
-                    content: content,
-                  });
                   if (typeof onClick === 'function') onClick();
                 }}
               />
@@ -80,7 +64,7 @@ export const TabView = ({
             ...styleCard,
           }}
         >
-          {currentTab.content}
+          {activeTabIndex !== -1 ? tabs[activeTabIndex].content : ''}
         </Card>
       </div>
     </div>

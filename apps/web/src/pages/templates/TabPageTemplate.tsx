@@ -2,6 +2,8 @@ import { TabView } from '@noita-explorer/noita-component-library';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { constants } from '../../constants.ts';
 import { useTemplatePageLogic } from '../../hooks/useTemplatePageLogic';
+import { useEffect, useState } from 'react';
+import { stringHelpers } from '@noita-explorer/tools';
 
 interface TabLink {
   title: string;
@@ -16,6 +18,25 @@ export const TabPageTemplate = ({ tabs }: TabPageTemplateProps) => {
   const templatePageLogic = useTemplatePageLogic();
   const navigate = useNavigate();
   const location = useLocation();
+
+  const [activeTab, setActiveTab] = useState<TabLink | undefined>(
+    tabs.length > 0 ? tabs[0] : undefined,
+  );
+
+  useEffect(() => {
+    const tab = tabs.find(
+      (t) =>
+        stringHelpers.trim({
+          text: t.href,
+          fromEnd: '/',
+        }) ===
+        stringHelpers.trim({
+          text: location.pathname,
+          fromEnd: '/',
+        }),
+    );
+    setActiveTab(tab);
+  }, [tabs, location.pathname]);
 
   return (
     <div
@@ -34,20 +55,20 @@ export const TabPageTemplate = ({ tabs }: TabPageTemplateProps) => {
           width: '90%',
         }}
       >
-        <TabView
-          styleCard={{
-            maxHeight: constants.pageHeight,
-          }}
-          tabs={tabs.map((t) => ({
-            id: t.title,
-            title: t.title,
-            content: <Outlet />,
-            onClick: () => navigate(t.href),
-          }))}
-          initialActiveTabId={
-            tabs.find((t) => t.href === location.pathname)?.title
-          }
-        />
+        {activeTab && (
+          <TabView
+            styleCard={{
+              maxHeight: constants.pageHeight,
+            }}
+            tabs={tabs.map((t) => ({
+              id: t.title,
+              title: t.title,
+              content: <Outlet />,
+              onClick: () => navigate(t.href),
+            }))}
+            activeTabId={activeTab.title}
+          />
+        )}
 
         <div
           style={{
