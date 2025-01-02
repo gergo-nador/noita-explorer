@@ -191,15 +191,12 @@ const scrapeEnemy = async (
   const genomeDataComponent = entityTag.findNthTag('GenomeDataComponent');
   if (genomeDataComponent !== undefined) {
     const genomeData: NoitaEnemyGenomeData = {
-      herdId: genomeDataComponent
-        .getRequiredAttribute('herd_id')
-        .asText() as string,
+      herdId: genomeDataComponent.getAttribute('herd_id')?.asText(),
       foodChainRank: genomeDataComponent
-        .getRequiredAttribute('food_chain_rank')
-        .asInt() as number,
+        .getAttribute('food_chain_rank')
+        ?.asInt(),
       isPredator:
-        genomeDataComponent.getRequiredAttribute('is_predator').asBoolean() ??
-        false,
+        genomeDataComponent.getAttribute('is_predator')?.asBoolean() ?? false,
     };
 
     enemy.genomeData = genomeData;

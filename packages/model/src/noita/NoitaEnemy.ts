@@ -16,7 +16,7 @@ export interface NoitaEnemyMaterialDamage {
 }
 
 export interface NoitaEnemyGenomeData {
-  herdId: string;
-  foodChainRank: number;
+  herdId?: string;
+  foodChainRank?: number;
   isPredator: boolean;
 }

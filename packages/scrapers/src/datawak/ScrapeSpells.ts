@@ -7,7 +7,11 @@ import {
   SpellModifierNumberUnit,
   StringKeyDictionary,
 } from '@noita-explorer/model';
-import { proxiedPropertiesOf, stringHelpers } from '@noita-explorer/tools';
+import {
+  mathHelpers,
+  proxiedPropertiesOf,
+  stringHelpers,
+} from '@noita-explorer/tools';
 import { LuaWrapper } from '@noita-explorer/tools/lua';
 import { parseXml, XmlWrapper } from '@noita-explorer/tools/xml';
 
@@ -146,7 +150,10 @@ export const scrapeSpells = async ({
         damage in spell &&
         spell[damage] !== undefined
       ) {
-        spell[damage] *= NoitaConstants.damageMultiplier;
+        spell[damage] = mathHelpers.round(
+          spell[damage] * NoitaConstants.damageMultiplier,
+          2,
+        );
       }
     }
 
@@ -203,12 +210,25 @@ export const scrapeSpells = async ({
           spell.recoilModifier = modifierNumberUnit;
       }
 
-      if (spell.projectileDamageModifier)
-        spell.projectileDamageModifier.value *= NoitaConstants.damageMultiplier;
-      if (spell.iceDamageModifier)
-        spell.iceDamageModifier.value *= NoitaConstants.damageMultiplier;
-      if (spell.explosionDamageModifier)
-        spell.explosionDamageModifier.value *= NoitaConstants.damageMultiplier;
+      if (spell.projectileDamageModifier) {
+        spell.projectileDamageModifier.value = mathHelpers.round(
+          spell.projectileDamageModifier.value *
+            NoitaConstants.damageMultiplier,
+          2,
+        );
+      }
+      if (spell.iceDamageModifier) {
+        spell.iceDamageModifier.value *= mathHelpers.round(
+          spell.iceDamageModifier.value * NoitaConstants.damageMultiplier,
+          2,
+        );
+      }
+      if (spell.explosionDamageModifier) {
+        spell.explosionDamageModifier.value *= mathHelpers.round(
+          spell.explosionDamageModifier.value * NoitaConstants.damageMultiplier,
+          2,
+        );
+      }
 
       const drawActionCall = action.findCallAssignment('draw_actions');
       if (drawActionCall) {

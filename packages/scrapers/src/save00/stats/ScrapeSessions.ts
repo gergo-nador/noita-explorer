@@ -3,9 +3,11 @@ import {
   FileSystemDirectoryAccess,
   noitaPaths,
   StringKeyDictionary,
+  NoitaConstants,
 } from '@noita-explorer/model';
 import { NoitaSession } from '@noita-explorer/model';
 import { parseXml, XmlWrapper } from '@noita-explorer/tools/xml';
+import { mathHelpers } from '@noita-explorer/tools';
 
 export const scrapeSessions = async ({
   save00DirectoryApi,
@@ -87,6 +89,11 @@ export const scrapeSessions = async ({
       goldInfinite:
         innerStats.getAttribute('gold_infinite')?.asBoolean() ?? false,
     };
+
+    session.damageTaken *= mathHelpers.round(
+      session.damageTaken * NoitaConstants.hpMultiplier,
+      2,
+    );
 
     const killedBy = innerStats.getAttribute('killed_by')?.asText();
     if (killedBy !== undefined) {
