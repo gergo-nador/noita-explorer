@@ -1,5 +1,5 @@
 import { TabView } from '@noita-explorer/noita-component-library';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { constants } from '../../constants.ts';
 import { useTemplatePageLogic } from '../../hooks/useTemplatePageLogic';
 
@@ -15,6 +15,7 @@ interface TabPageTemplateProps {
 export const TabPageTemplate = ({ tabs }: TabPageTemplateProps) => {
   const templatePageLogic = useTemplatePageLogic();
   const navigate = useNavigate();
+  const location = useLocation();
 
   return (
     <div
@@ -38,10 +39,14 @@ export const TabPageTemplate = ({ tabs }: TabPageTemplateProps) => {
             maxHeight: constants.pageHeight,
           }}
           tabs={tabs.map((t) => ({
+            id: t.title,
             title: t.title,
             content: <Outlet />,
             onClick: () => navigate(t.href),
           }))}
+          initialActiveTabId={
+            tabs.find((t) => t.href === location.pathname)?.title
+          }
         />
 
         <div

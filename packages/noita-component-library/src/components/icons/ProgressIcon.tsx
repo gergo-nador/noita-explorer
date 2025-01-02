@@ -31,6 +31,7 @@ export const ProgressIcon = ({
         height: typeof size === 'number' ? `${size}px` : size,
         width: typeof size === 'number' ? `${size}px` : size,
         position: 'relative',
+        aspectRatio: 1,
         ...style,
       }}
       className={css['wrapper']}

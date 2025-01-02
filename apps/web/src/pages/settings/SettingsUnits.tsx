@@ -1,6 +1,7 @@
 import { Flex } from '../../components/Flex.tsx';
-import { Button, Header } from '@noita-explorer/noita-component-library';
-import { useSettingsStore } from '../../stores/settings.ts';
+import { Header } from '@noita-explorer/noita-component-library';
+import { SettingsUnitsType, useSettingsStore } from '../../stores/settings.ts';
+import { MultiSelection } from '../../components/MultiSelection.tsx';
 
 export const SettingsUnits = () => {
   const { settings, set } = useSettingsStore();
@@ -10,34 +11,27 @@ export const SettingsUnits = () => {
     <Header title={'Units'}>
       <Flex style={{ width: 'max-content' }} gap={20}>
         <span>Time: </span>
-        <Flex style={{ width: 'max-content' }} gap={10}>
-          <Button
-            onClick={() => set((s) => (s.units.time = 'default'))}
-            textStyle={{
-              color: units.time === 'default' ? 'gold' : undefined,
-            }}
-          >
-            Default
-          </Button>
-          <span> / </span>
-          <Button
-            onClick={() => set((s) => (s.units.time = 'frames'))}
-            textStyle={{
-              color: units.time === 'frames' ? 'gold' : undefined,
-            }}
-          >
-            Frames (f)
-          </Button>
-          <span> / </span>
-          <Button
-            onClick={() => set((s) => (s.units.time = 'seconds'))}
-            textStyle={{
-              color: units.time === 'seconds' ? 'gold' : undefined,
-            }}
-          >
-            Seconds (s)
-          </Button>
-        </Flex>
+        <MultiSelection<SettingsUnitsType>
+          options={[
+            {
+              id: 'Default',
+              display: 'Default',
+              value: 'default',
+            },
+            {
+              id: 'Frames',
+              display: 'Frames',
+              value: 'frames',
+            },
+            {
+              id: 'Seconds',
+              display: 'Seconds',
+              value: 'seconds',
+            },
+          ]}
+          setValue={(value) => set((s) => (s.units.time = value))}
+          currentValue={units.time}
+        />
       </Flex>
     </Header>
   );

@@ -4,21 +4,37 @@ import { TabItem } from './TabItem';
 import { zIndexManager } from '../zIndexManager.ts';
 
 interface TabViewItem {
+  id: string;
   title: string;
   onClick?: () => void;
   content: React.ReactNode;
 }
 
 interface TabViewProps {
+  initialActiveTabId?: string;
   tabs: TabViewItem[];
   style?: React.CSSProperties;
   styleCard?: React.CSSProperties;
 }
 
-export const TabView = ({ tabs, style, styleCard }: TabViewProps) => {
-  const [currentTab, setCurrentTab] = React.useState({
-    index: 0,
-    content: tabs.length > 0 ? tabs[0].content : undefined,
+export const TabView = ({
+  tabs,
+  style,
+  styleCard,
+  initialActiveTabId,
+}: TabViewProps) => {
+  const [currentTab, setCurrentTab] = React.useState(() => {
+    const initialActiveTabIndex = tabs.findIndex(
+      (tab) => tab.id === initialActiveTabId,
+    );
+
+    const initialTabIndex =
+      initialActiveTabIndex === -1 ? 0 : initialActiveTabIndex;
+
+    return {
+      index: initialTabIndex,
+      content: tabs.length > 0 ? tabs[initialTabIndex].content : undefined,
+    };
   });
 
   return (

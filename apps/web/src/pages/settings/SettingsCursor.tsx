@@ -53,21 +53,24 @@ export const SettingsCursor = () => {
           <MultiSelection<SettingsCursorType>
             options={[
               {
-                text: 'Default',
+                id: 'Default',
+                display: 'Default',
                 value: 'default',
                 style: {
                   cursor: 'pointer',
                 },
               },
               {
-                text: 'Noita Cursor',
+                id: 'Noita Cursor',
+                display: 'Noita Cursor',
                 value: 'noita-cursor',
                 style: {
                   cursor: 'url(cursors/mouse_cursor_big.png) 20 20, pointer',
                 },
               },
               {
-                text: 'Wand',
+                id: 'Wand',
+                display: 'Wand',
                 value: 'wand',
                 style: {
                   cursor: `url("${customCursor}"), pointer`,
@@ -90,14 +93,16 @@ export const SettingsCursor = () => {
             <MultiSelection<SettingsNoitaCursorType>
               options={[
                 {
-                  text: 'Medium',
+                  id: 'medium',
+                  display: 'Medium',
                   value: 'mouse_cursor_big',
                   style: {
                     cursor: 'url(cursors/mouse_cursor_big.png) 20 20, pointer',
                   },
                 },
                 {
-                  text: ' Large',
+                  id: 'large',
+                  display: ' Large',
                   value: 'mouse_cursor_big_system',
                   style: {
                     cursor:

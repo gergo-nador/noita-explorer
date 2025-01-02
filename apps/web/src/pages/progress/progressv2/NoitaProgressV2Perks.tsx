@@ -12,16 +12,67 @@ import { NoitaPerk } from '@noita-explorer/model';
 import { Flex } from '../../../components/Flex.tsx';
 import { NoitaProtections } from '../../../noita/NoitaProtections.ts';
 import { BooleanIcon } from '../../../components/BooleanIcon.tsx';
+import { MultiSelectionBoolean } from '../../../components/MultiSelectionBoolean.tsx';
+import { MultiSelection } from '../../../components/MultiSelection.tsx';
+
+interface PerkFilters {
+  stackable: boolean | undefined;
+  holyMountain: boolean | undefined;
+  oneOffEffect: boolean | undefined;
+  removedByNullifyingAltar: boolean | undefined;
+  protectionId: string | undefined;
+}
 
 export const NoitaProgressV2Perks = () => {
   const { data } = useNoitaDataWakStore();
   const [selectedPerk, setSelectedPerk] = useState<NoitaPerk>();
+  const [filters, setFilters] = useState<PerkFilters>({
+    stackable: undefined,
+    holyMountain: undefined,
+    oneOffEffect: undefined,
+    removedByNullifyingAltar: undefined,
+    protectionId: undefined,
+  });
 
   if (!data) {
     return <div>Noita Data Wak is not loaded.</div>;
   }
 
   const tableSectionDivider = <td colSpan={3} style={{ height: 20 }}></td>;
+
+  const evaluateFiltersForPerk = (perk: NoitaPerk) => {
+    if (filters.stackable !== undefined) {
+      if (filters.stackable !== perk.stackable) {
+        return false;
+      }
+    }
+
+    if (filters.holyMountain !== undefined) {
+      if (filters.holyMountain !== !perk.notInDefaultPerkPool) {
+        return false;
+      }
+    }
+
+    if (filters.oneOffEffect !== undefined) {
+      if (filters.oneOffEffect !== perk.oneOffEffect) {
+        return false;
+      }
+    }
+
+    if (filters.removedByNullifyingAltar !== undefined) {
+      if (filters.removedByNullifyingAltar !== !perk.doNotRemove) {
+        return false;
+      }
+    }
+
+    if (filters.protectionId !== undefined) {
+      if (!perk.gameEffects.includes(filters.protectionId)) {
+        return false;
+      }
+    }
+
+    return true;
+  };
 
   return (
     <div
@@ -45,20 +96,36 @@ export const NoitaProgressV2Perks = () => {
           columnCount={9}
           iconGap={4}
         >
-          {data.perks.map((perk) => (
-            <ActiveIconWrapper
-              id={'perk-' + perk.id}
-              key={'perk-' + perk.id}
-              onClick={() => setSelectedPerk(perk)}
-              tooltip={
-                <div>
-                  <div style={{ fontSize: 20 }}>{perk.name}</div>
-                </div>
-              }
-            >
+          {data.perks.map((perk) => {
+            const filter = evaluateFiltersForPerk(perk);
+            const icon = (
               <ProgressIcon type={'regular'} icon={perk.imageBase64} />
-            </ActiveIconWrapper>
-          ))}
+            );
+
+            return (
+              <div
+                style={{
+                  opacity: filter ? 1 : 0.35,
+                }}
+              >
+                {!filter && icon}
+                {filter && (
+                  <ActiveIconWrapper
+                    id={'perk-' + perk.id}
+                    key={'perk-' + perk.id}
+                    onClick={() => setSelectedPerk(perk)}
+                    tooltip={
+                      <div>
+                        <div style={{ fontSize: 20 }}>{perk.name}</div>
+                      </div>
+                    }
+                  >
+                    {icon}
+                  </ActiveIconWrapper>
+                )}
+              </div>
+            );
+          })}
         </NoitaProgressIconTable>
       </div>
 
@@ -202,7 +269,77 @@ export const NoitaProgressV2Perks = () => {
           )}
         </Card>
         <br />
-        <Card>Hello</Card>
+        <Card>
+          <Flex gap={10} style={{ maxWidth: 'max-content' }}>
+            <span>Stackable: </span>
+            <MultiSelectionBoolean
+              setValue={(value) => setFilters({ ...filters, stackable: value })}
+              currentValue={filters.stackable}
+            />
+          </Flex>
+          <Flex gap={10} style={{ maxWidth: 'max-content' }}>
+            <span>Holy Mountain: </span>
+            <MultiSelectionBoolean
+              setValue={(value) =>
+                setFilters({ ...filters, holyMountain: value })
+              }
+              currentValue={filters.holyMountain}
+            />
+          </Flex>
+          <Flex gap={10} style={{ maxWidth: 'max-content' }}>
+            <span>One-Off Effect: </span>
+            <MultiSelectionBoolean
+              setValue={(value) =>
+                setFilters({ ...filters, oneOffEffect: value })
+              }
+              currentValue={filters.oneOffEffect}
+            />
+          </Flex>
+          <Flex gap={10} style={{ maxWidth: 'max-content' }}>
+            <span>Removed by NA: </span>
+            <MultiSelectionBoolean
+              setValue={(value) =>
+                setFilters({
+                  ...filters,
+                  removedByNullifyingAltar: value,
+                })
+              }
+              currentValue={filters.removedByNullifyingAltar}
+            />
+          </Flex>
+          <Flex gap={10} style={{ maxWidth: 'max-content' }}>
+            <span>Protections:</span>
+            <MultiSelection<string | undefined>
+              options={Object.keys(NoitaProtections).map((protectionId) => ({
+                id: protectionId,
+                value: protectionId,
+                display: (
+                  <Icon
+                    type={'custom'}
+                    src={NoitaProtections[protectionId].image}
+                    size={30}
+                  />
+                ),
+                style: {
+                  opacity: 0.6,
+                },
+                selectedProperties: {
+                  opacity: 1,
+                },
+                onClick: (_, isSelected) =>
+                  isSelected &&
+                  setFilters({ ...filters, protectionId: undefined }),
+              }))}
+              setValue={(value) =>
+                setFilters({
+                  ...filters,
+                  protectionId: value,
+                })
+              }
+              currentValue={filters.protectionId}
+            />
+          </Flex>
+        </Card>
       </div>
     </div>
   );

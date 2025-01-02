@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { noitaAPI } from '../ipcHandlers';
 import { supported } from 'browser-fs-access';
 
+export type SettingsUnitsType = 'default' | 'frames' | 'seconds';
 export type SettingsCursorType = 'default' | 'noita-cursor' | 'wand';
 export type SettingsNoitaCursorType =
   | 'mouse_cursor_big'
@@ -15,7 +16,7 @@ export interface Settings {
     NollaGamesNoita: string | undefined;
   };
   units: {
-    time: 'default' | 'frames' | 'seconds';
+    time: SettingsUnitsType;
   };
   cursor: {
     type: SettingsCursorType;
