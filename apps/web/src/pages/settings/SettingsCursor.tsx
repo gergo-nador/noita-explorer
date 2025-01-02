@@ -1,12 +1,17 @@
 import { Flex } from '../../components/Flex.tsx';
 import { Button, Header } from '@noita-explorer/noita-component-library';
-import { useSettingsStore } from '../../stores/settings.ts';
+import {
+  SettingsCursorType,
+  SettingsNoitaCursorType,
+  useSettingsStore,
+} from '../../stores/settings.ts';
 import { imageHelpers, randomHelpers } from '@noita-explorer/tools';
 import { useEffect, useState } from 'react';
 import { useNoitaDataWakStore } from '../../stores/NoitaDataWak.ts';
 import { NoitaWandConfig } from '@noita-explorer/model';
 import { useNavigate } from 'react-router-dom';
 import { pages } from '../../routes/pages.ts';
+import { MultiSelection } from '../../components/MultiSelection.tsx';
 
 export const SettingsCursor = () => {
   const { settings, set } = useSettingsStore();
@@ -44,49 +49,36 @@ export const SettingsCursor = () => {
     <Header title={'Cursor'}>
       <Flex style={{ width: 'max-content' }} gap={20}>
         <span>Type: </span>
-        <Flex style={{ width: 'max-content' }} gap={10}>
-          <Button
-            onClick={() => set((s) => (s.cursor.type = 'default'))}
-            className={'cursor-settings-button'}
-            style={{
-              cursor: 'pointer',
-            }}
-            textStyle={{
-              color: cursor.type === 'default' ? 'gold' : undefined,
-            }}
-          >
-            Default
-          </Button>
-          <span> / </span>
-          <Button
-            onClick={() => set((s) => (s.cursor.type = 'noita-cursor'))}
-            className={'cursor-settings-button'}
-            style={{
-              cursor: 'url(cursors/mouse_cursor_big.png) 20 20, pointer',
-            }}
-            textStyle={{
-              color: cursor.type === 'noita-cursor' ? 'gold' : undefined,
-            }}
-          >
-            Noita Cursor
-          </Button>
-          <span> / </span>
-          <Button
-            onClick={() => {
-              set((s) => (s.cursor.type = 'wand'));
-              setCounter(counter + 1);
-            }}
-            className={'cursor-settings-button'}
-            style={{
-              cursor: `url("${customCursor}"), pointer`,
-            }}
-            textStyle={{
-              color: cursor.type === 'wand' ? 'gold' : undefined,
-            }}
-          >
-            Wand
-          </Button>
-        </Flex>
+        <div>
+          <MultiSelection<SettingsCursorType>
+            options={[
+              {
+                text: 'Default',
+                value: 'default',
+                style: {
+                  cursor: 'pointer',
+                },
+              },
+              {
+                text: 'Noita Cursor',
+                value: 'noita-cursor',
+                style: {
+                  cursor: 'url(cursors/mouse_cursor_big.png) 20 20, pointer',
+                },
+              },
+              {
+                text: 'Wand',
+                value: 'wand',
+                style: {
+                  cursor: `url("${customCursor}"), pointer`,
+                },
+                onClick: () => setCounter(counter + 1),
+              },
+            ]}
+            setValue={(value) => set((s) => (s.cursor.type = value))}
+            currentValue={cursor.type}
+          />
+        </div>
       </Flex>
 
       {cursor.type !== 'default' && <br />}
@@ -94,44 +86,29 @@ export const SettingsCursor = () => {
       {cursor.type === 'noita-cursor' && (
         <Flex style={{ width: 'max-content' }} gap={20}>
           <span>Noita Cursor Type: </span>
-          <Flex style={{ width: 'max-content' }} gap={10}>
-            <Button
-              onClick={() =>
-                set((s) => (s.cursor.noitaCursor = 'mouse_cursor_big'))
-              }
-              className={'cursor-settings-button'}
-              style={{
-                cursor: 'url(cursors/mouse_cursor_big.png) 20 20, pointer',
-              }}
-              textStyle={{
-                color:
-                  cursor.noitaCursor === 'mouse_cursor_big'
-                    ? 'gold'
-                    : undefined,
-              }}
-            >
-              Medium
-            </Button>
-            <span> / </span>
-            <Button
-              onClick={() =>
-                set((s) => (s.cursor.noitaCursor = 'mouse_cursor_big_system'))
-              }
-              className={'cursor-settings-button'}
-              style={{
-                cursor:
-                  'url(cursors/mouse_cursor_big_system.png) 25 25, pointer',
-              }}
-              textStyle={{
-                color:
-                  cursor.noitaCursor === 'mouse_cursor_big_system'
-                    ? 'gold'
-                    : undefined,
-              }}
-            >
-              Large
-            </Button>
-          </Flex>
+          <div>
+            <MultiSelection<SettingsNoitaCursorType>
+              options={[
+                {
+                  text: 'Medium',
+                  value: 'mouse_cursor_big',
+                  style: {
+                    cursor: 'url(cursors/mouse_cursor_big.png) 20 20, pointer',
+                  },
+                },
+                {
+                  text: ' Large',
+                  value: 'mouse_cursor_big_system',
+                  style: {
+                    cursor:
+                      'url(cursors/mouse_cursor_big_system.png) 25 25, pointer',
+                  },
+                },
+              ]}
+              setValue={(value) => set((s) => (s.cursor.noitaCursor = value))}
+              currentValue={cursor.noitaCursor}
+            />
+          </div>
         </Flex>
       )}
       {cursor.type === 'wand' && (

@@ -2,6 +2,11 @@ import { create } from 'zustand';
 import { noitaAPI } from '../ipcHandlers';
 import { supported } from 'browser-fs-access';
 
+export type SettingsCursorType = 'default' | 'noita-cursor' | 'wand';
+export type SettingsNoitaCursorType =
+  | 'mouse_cursor_big'
+  | 'mouse_cursor_big_system';
+
 export interface Settings {
   paths: {
     // noita install folder path
@@ -13,8 +18,8 @@ export interface Settings {
     time: 'default' | 'frames' | 'seconds';
   };
   cursor: {
-    type: 'default' | 'noita-cursor' | 'wand';
-    noitaCursor: 'mouse_cursor_big' | 'mouse_cursor_big_system';
+    type: SettingsCursorType;
+    noitaCursor: SettingsNoitaCursorType;
     wandSpriteId: string | undefined;
   };
 }

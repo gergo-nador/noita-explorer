@@ -6,6 +6,7 @@ interface NoitaProgressIconTableProps {
   unlocked?: number;
   name: string;
   columnCount: number;
+  iconGap?: number;
   children: React.ReactNode | React.ReactNode[];
 }
 
@@ -14,6 +15,7 @@ export function NoitaProgressIconTable({
   unlocked,
   name,
   columnCount,
+  iconGap = 3,
   children,
 }: NoitaProgressIconTableProps) {
   return (
@@ -36,7 +38,7 @@ export function NoitaProgressIconTable({
           display: 'grid',
           gridTemplateColumns: `repeat(${columnCount}, 1fr)`,
           width: '100%',
-          gap: 3,
+          gap: iconGap,
         }}
       >
         {children}

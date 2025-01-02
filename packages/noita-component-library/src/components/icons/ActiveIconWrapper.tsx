@@ -9,12 +9,14 @@ interface ActiveProgressIconProps {
   id: string;
   children: React.ReactNode;
   tooltip: React.ReactNode;
+  onClick?: () => void;
 }
 
 export const ActiveIconWrapper = ({
   id,
   children,
   tooltip,
+  onClick,
 }: ActiveProgressIconProps) => {
   const { state, setTrue, setFalse } = useBool();
 
@@ -47,7 +49,9 @@ export const ActiveIconWrapper = ({
         onMouseLeave={() => setFalse()}
         style={{
           aspectRatio: 1,
+          cursor: onClick !== undefined ? 'pointer' : 'auto',
         }}
+        onClick={onClick}
       >
         <div className={css['active']} style={wrapperStyleProps}>
           {children}
