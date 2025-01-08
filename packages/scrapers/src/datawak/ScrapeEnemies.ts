@@ -2,19 +2,24 @@ import {
   FileSystemDirectoryAccess,
   StringKeyDictionary,
   NoitaEnemy,
+  NoitaEnemyVariant,
+  NoitaEnemyMaterialDamage,
   NoitaTranslation,
   noitaPaths,
   NoitaConstants,
   FileSystemFileAccess,
   NoitaEnemyGenomeData,
 } from '@noita-explorer/model';
-import { parseXml, XmlWrapper } from '@noita-explorer/tools/xml';
+import {
+  parseXml,
+  XmlWrapper,
+  XmlWrapperType,
+} from '@noita-explorer/tools/xml';
 import {
   arrayHelpers,
   mathHelpers,
   stringHelpers,
 } from '@noita-explorer/tools';
-import { NoitaEnemyMaterialDamage } from '@noita-explorer/model';
 
 export const scrapeEnemies = async ({
   dataWakDirectoryApi,
@@ -111,6 +116,9 @@ const scrapeEnemy = async (
   animalsDataDirectory: FileSystemDirectoryAccess,
   translations: StringKeyDictionary<NoitaTranslation>,
 ) => {
+  // TODO: rework this scraper so that it starts at the bottom of
+  //  the Base object and overwrites the values as it up down in the hierarchy
+
   const xmlFileName = animalId + '.xml';
 
   const file = await findFileInDirectory(xmlFileName, animalsDataDirectory);
@@ -137,7 +145,12 @@ const scrapeEnemy = async (
       fromStart: '$',
     });
 
-    entityName = translations[trimedTranslationId]?.en ?? entityName;
+    const translationIdFromAnimalId = 'animal_' + animalId;
+    if (translationIdFromAnimalId in translations) {
+      entityName = translations[translationIdFromAnimalId].en;
+    } else if (trimedTranslationId in translations) {
+      entityName = translations[trimedTranslationId].en;
+    }
   }
 
   const enemy: NoitaEnemy = {
@@ -145,47 +158,23 @@ const scrapeEnemy = async (
     imageBase64: imageBase64,
     name: entityName,
     hp: undefined,
+    maxHp: undefined,
+    knockBackResistance: undefined,
     bloodMaterial: undefined,
     materialsThatDamage: undefined,
     genomeData: undefined,
+    goldDrop: true,
+    variants: [],
   };
 
   const damageModelComponent = entityTag.findNthTag('DamageModelComponent');
   if (damageModelComponent !== undefined) {
-    const hp = damageModelComponent.getAttribute('hp')?.asFloat() ?? 0;
-    enemy.hp = mathHelpers.round(hp * NoitaConstants.hpMultiplier, 2);
-
-    const bloodMaterial = damageModelComponent
-      .getAttribute('blood_material')
-      ?.asText();
-    enemy.bloodMaterial = bloodMaterial;
-
-    const materialsThatDamage = damageModelComponent
-      .getAttribute('materials_that_damage')
-      ?.asText()
-      ?.split(',');
-    const materialsHowMuchDamage = damageModelComponent
-      .getAttribute('materials_how_much_damage')
-      ?.asText()
-      ?.split(',');
-
-    if (
-      materialsThatDamage !== undefined &&
-      materialsHowMuchDamage !== undefined &&
-      materialsThatDamage.length === materialsHowMuchDamage.length
-    ) {
-      const damages = arrayHelpers
-        .zip(materialsThatDamage, materialsHowMuchDamage)
-        .map((materialDamage) => {
-          const [materialName, damageMultiplier] = materialDamage;
-          return {
-            name: materialName,
-            multiplier: parseFloat(damageMultiplier),
-          } as NoitaEnemyMaterialDamage;
-        });
-
-      enemy.materialsThatDamage = damages;
-    }
+    const extracted = extractDamageModelInformation(damageModelComponent);
+    enemy.hp = extracted.hp;
+    enemy.maxHp = extracted.maxHp;
+    enemy.bloodMaterial = extracted.bloodMaterial;
+    enemy.materialsThatDamage = extracted.damages;
+    enemy.knockBackResistance = extracted.knockBackResistance;
   }
 
   const genomeDataComponent = entityTag.findNthTag('GenomeDataComponent');
@@ -202,7 +191,140 @@ const scrapeEnemy = async (
     enemy.genomeData = genomeData;
   }
 
+  const subDirectories = await animalsDataDirectory.listDirectories();
+  const variantFiles = await findAllFilesInDirectory(
+    xmlFileName,
+    subDirectories,
+  );
+
+  const variableStorageComponent = entityTag.findNthTag(
+    'VariableStorageComponent',
+  );
+  if (variableStorageComponent !== undefined) {
+    const tags = variableStorageComponent
+      .getAttribute('_tags')
+      ?.asText()
+      ?.split(',');
+
+    if (tags !== undefined && tags.includes('no_gold_drop')) {
+      enemy.goldDrop = false;
+    }
+  }
+
+  for (const variantFile of variantFiles) {
+    /*
+    variant file for scavenger_heal:
+
+    <Entity >
+      <Base file="data/entities/animals/scavenger_heal.xml"  include_children="1">
+        <DamageModelComponent
+          hp="0.7"
+          max_hp="0.7"
+    	  minimum_knockback_force="100000"
+         ></DamageModelComponent >
+      </Base>
+    </Entity>
+
+    might be worth implementing the Base file check and build a file tree to extract the variants more accurately
+     */
+
+    const variantFullPath = variantFile.getFullPath();
+    if (variantFullPath === file?.getFullPath()) {
+      continue;
+    }
+
+    const variantFullPathSplit =
+      await animalsDataDirectory.path.split(variantFullPath);
+
+    const variantXmlText = await variantFile.read.asText();
+    const variantXmlObj = await parseXml(variantXmlText);
+    const variantXmlWrapper = XmlWrapper(variantXmlObj);
+
+    const variantEntity = variantXmlWrapper.findNthTag('Entity');
+    if (variantEntity === undefined) {
+      continue;
+    }
+
+    const variant: NoitaEnemyVariant = {
+      // the biome is the folder right before the file name
+      biome: variantFullPathSplit[variantFullPathSplit.length - 2],
+      hp: undefined,
+      maxHp: undefined,
+      knockBackResistance: undefined,
+    };
+
+    const variantDamageModelComponent = variantEntity.findNthTag(
+      'DamageModelComponent',
+    );
+    if (variantDamageModelComponent !== undefined) {
+      const extracted = extractDamageModelInformation(
+        variantDamageModelComponent,
+      );
+      variant.hp = extracted.hp;
+      variant.maxHp = extracted.maxHp;
+      variant.knockBackResistance = extracted.knockBackResistance;
+    }
+
+    enemy.variants.push(variant);
+  }
+
   return enemy;
+};
+
+const extractDamageModelInformation = (
+  damageModelComponent: XmlWrapperType,
+) => {
+  let hp = damageModelComponent.getAttribute('hp')?.asFloat();
+  if (hp !== undefined) {
+    hp = mathHelpers.round(hp * NoitaConstants.hpMultiplier, 2);
+  }
+
+  let maxHp = damageModelComponent.getAttribute('max_hp')?.asFloat();
+  if (maxHp !== undefined) {
+    maxHp = mathHelpers.round(maxHp * NoitaConstants.hpMultiplier, 2);
+  }
+
+  const bloodMaterial = damageModelComponent
+    .getAttribute('blood_material')
+    ?.asText();
+
+  const materialsThatDamage = damageModelComponent
+    .getAttribute('materials_that_damage')
+    ?.asText()
+    ?.split(',');
+  const materialsHowMuchDamage = damageModelComponent
+    .getAttribute('materials_how_much_damage')
+    ?.asText()
+    ?.split(',');
+
+  const hasDamageMaterialsAttributes =
+    materialsThatDamage !== undefined &&
+    materialsHowMuchDamage !== undefined &&
+    materialsThatDamage.length === materialsHowMuchDamage.length;
+
+  const damages = hasDamageMaterialsAttributes
+    ? arrayHelpers
+        .zip(materialsThatDamage, materialsHowMuchDamage)
+        .map((materialDamage) => {
+          const [materialName, damageMultiplier] = materialDamage;
+          return {
+            name: materialName,
+            multiplier: parseFloat(damageMultiplier),
+          } as NoitaEnemyMaterialDamage;
+        })
+    : undefined;
+
+  const knockBackResistance = damageModelComponent
+    .getAttribute('minimum_knockback_force')
+    ?.asInt();
+
+  return {
+    hp,
+    maxHp,
+    bloodMaterial,
+    damages,
+    knockBackResistance,
+  };
 };
 
 const findFileInDirectory = async (
@@ -223,4 +345,27 @@ const findFileInDirectory = async (
   }
 
   return undefined;
+};
+
+const findAllFilesInDirectory = async (
+  fileName: string,
+  directories: FileSystemDirectoryAccess[],
+): Promise<FileSystemFileAccess[]> => {
+  const arr: FileSystemFileAccess[] = [];
+
+  let directoryQueue: FileSystemDirectoryAccess[] = [...directories];
+
+  while (directoryQueue.length > 0) {
+    const currentDir = directoryQueue.shift()!;
+    const filePathExists = await currentDir.checkRelativePathExists(fileName);
+    if (filePathExists) {
+      const file = await currentDir.getFile(fileName);
+      arr.push(file);
+    }
+
+    const subDirectories = await currentDir.listDirectories();
+    directoryQueue = [...directoryQueue, ...subDirectories];
+  }
+
+  return arr;
 };

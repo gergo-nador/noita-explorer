@@ -58,6 +58,7 @@ export const FileSystemDirectoryAccessNode = (
     getName: () => path.parse(directoryPath).name,
     path: {
       join: (args) => promiseHelper.fromValue(path.join(...args)),
+      split: (path_) => promiseHelper.fromValue(path_.split(path.sep)),
     },
     checkRelativePathExists: (path) =>
       promiseHelper.fromValue(checkRelativePathExists(path)),

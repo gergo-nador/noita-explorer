@@ -13,6 +13,7 @@ export const FileSystemFileAccessNode = (
   const parsedPath = path.parse(filePath);
 
   return {
+    getFullPath: () => filePath,
     getName: () => parsedPath.base,
     getNameWithoutExtension: () => parsedPath.name,
     read: {

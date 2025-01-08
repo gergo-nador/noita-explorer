@@ -10,5 +10,6 @@ export interface FileSystemDirectoryAccess {
 
   path: {
     join: (args: string[]) => Promise<string>;
+    split: (path: string) => Promise<string[]>;
   };
 }

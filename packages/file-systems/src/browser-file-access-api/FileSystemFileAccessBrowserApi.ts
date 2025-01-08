@@ -2,12 +2,16 @@ import { FileSystemFileAccess } from '@noita-explorer/model';
 
 export const FileSystemFileAccessBrowserApi = (
   fileHandle: FileSystemFileHandle,
+  path: string,
 ): FileSystemFileAccess => {
+  path += '/' + fileHandle.name;
+
   const readAsText = () => {
     return fileHandle.getFile().then((f) => f.text());
   };
 
   return {
+    getFullPath: () => path,
     getName: () => fileHandle.name,
     getNameWithoutExtension: () => {
       const name = fileHandle.name;

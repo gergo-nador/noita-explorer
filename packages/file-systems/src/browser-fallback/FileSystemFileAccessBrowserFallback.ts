@@ -14,6 +14,7 @@ export const FileSystemFileAccessBrowserFallback = (
   };
 
   return {
+    getFullPath: () => file.webkitRelativePath,
     getName: () => file.name,
     getNameWithoutExtension: getNameWithoutExtension,
     read: {

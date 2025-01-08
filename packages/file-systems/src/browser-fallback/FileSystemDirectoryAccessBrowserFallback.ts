@@ -43,6 +43,7 @@ export const FileSystemDirectoryAccessBrowserFallback = (
     getName: () => directoryName,
     path: {
       join: (args) => promiseHelper.fromValue(args.join('/')),
+      split: (path) => promiseHelper.fromValue(path.split('/')),
     },
     getFile: async (path) => {
       const result = evaluateRelativePath(path, fallbackHandlers, level + 1);

@@ -86,15 +86,15 @@ export const NoitaProgressV2Perks = () => {
     <div
       style={{
         display: 'grid',
-        gridTemplateColumns: '1fr 1fr',
+        gridTemplateColumns: '6fr 6fr',
         gap: 20,
-        maxWidth: '1020px', // 500px left panel + 20px gap + 500px right panel
+        maxWidth: '1220px', // 500px left panel + 20px gap + 500px right panel
         margin: 'auto',
       }}
     >
       <div
         style={{
-          maxWidth: '500px',
+          maxWidth: '700px',
           minWidth: '200px',
         }}
       >

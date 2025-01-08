@@ -1,4 +1,5 @@
 export interface FileSystemFileAccess {
+  getFullPath: () => string;
   getName: () => string;
   getNameWithoutExtension: () => string;
   read: {

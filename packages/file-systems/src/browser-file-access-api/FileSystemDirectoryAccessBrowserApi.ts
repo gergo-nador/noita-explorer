@@ -4,11 +4,16 @@ import { FileSystemFileAccessBrowserApi } from './FileSystemFileAccessBrowserApi
 
 export const FileSystemDirectoryAccessBrowserApi = (
   directoryHandle: FileSystemDirectoryHandle,
+  path?: string,
 ): FileSystemDirectoryAccess => {
+  path ??= '';
+  path += '/' + directoryHandle.name;
+
   return {
     getName: () => directoryHandle.name,
     path: {
       join: (args) => promiseHelper.fromValue(args.join('/')),
+      split: (path) => promiseHelper.fromValue(path.split('/')),
     },
     listFiles: async () => {
       const files: FileSystemFileHandle[] = [];
@@ -30,7 +35,7 @@ export const FileSystemDirectoryAccessBrowserApi = (
         }
       }
 
-      return files.map((f) => FileSystemFileAccessBrowserApi(f));
+      return files.map((f) => FileSystemFileAccessBrowserApi(f, path));
     },
     listDirectories: async () => {
       const directories: FileSystemDirectoryHandle[] = [];
@@ -52,7 +57,9 @@ export const FileSystemDirectoryAccessBrowserApi = (
         }
       }
 
-      return directories.map((d) => FileSystemDirectoryAccessBrowserApi(d));
+      return directories.map((d) =>
+        FileSystemDirectoryAccessBrowserApi(d, path),
+      );
     },
     checkRelativePathExists: async (path) => {
       try {
@@ -70,7 +77,7 @@ export const FileSystemDirectoryAccessBrowserApi = (
     },
     getFile: async (path) => {
       const fileHandle = await directoryHandle.getFileHandle(path);
-      return FileSystemFileAccessBrowserApi(fileHandle);
+      return FileSystemFileAccessBrowserApi(fileHandle, path);
     },
 
     getDirectory: async (path) => {
@@ -82,7 +89,7 @@ export const FileSystemDirectoryAccessBrowserApi = (
         });
       }
 
-      return FileSystemDirectoryAccessBrowserApi(currentHandle);
+      return FileSystemDirectoryAccessBrowserApi(currentHandle, path);
     },
   };
 };
