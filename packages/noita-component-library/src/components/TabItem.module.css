@@ -1,3 +1,5 @@
+.container{}
+
 .grid-main{
     --border-width: 8px;
     --corner-width: 4px;
@@ -12,11 +14,21 @@
     grid-template-rows: var(--border-width) auto var(--corner-width);
 }
 
-.style-hover {
+.container:hover .grid-main {
     --background-color: #00000099;
     --border-bottom-color: #00000099;
     --border-bright-color: #A59D8F;
     --border-dark-color: #A59D8F;
+}
+
+
+.container:focus .grid-main {
+    --background-color: #00000099;
+    --border-bottom-color: #00000099;
+    --border-bright-color: #A59D8F;
+    --border-dark-color: #A59D8F;
+
+    text-decoration: underline;
 }
 
 .grid-main-corner{
@@ -58,7 +70,8 @@
     text-align: center;
 }
 
-.style-active {
+/* This is to override the onfocus specificity */
+.style-active, .style-active.style-active.style-active.style-active {
     --background-color: #0E0D0CF2;
     --border-bottom-color: #18191A;
     --border-bright-color: #B49F81;

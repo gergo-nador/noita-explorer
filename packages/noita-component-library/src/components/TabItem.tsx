@@ -11,6 +11,7 @@ interface TabItemProps {
 
 export const TabItem = ({ text, style, onClick, isActive }: TabItemProps) => {
   const [isHover, setHover] = React.useState(false);
+  const [isFocus, setFocus] = React.useState(false);
 
   const innerOnClick = () => {
     if (typeof onClick !== 'function') return;
@@ -23,19 +24,24 @@ export const TabItem = ({ text, style, onClick, isActive }: TabItemProps) => {
   return (
     <div
       style={{
+        outline: 'none',
         ...style,
         zIndex: isActive
           ? zIndexManager.tabs.activeTab
-          : isHover
+          : isHover || isFocus
             ? zIndexManager.tabs.hoveredTab
             : zIndexManager.tabs.defaultTab,
       }}
+      className={css['container']}
+      tabIndex={0}
       onClick={innerOnClick}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
+      onFocus={() => setFocus(true)}
+      onBlur={() => setFocus(false)}
     >
       <div
-        className={`${css['grid-main']} ${isActive ? css['style-active'] : ''} ${!isActive && isHover ? css['style-hover'] : ''}`}
+        className={`${css['grid-main']} ${isActive ? css['style-active'] : ''}`}
         style={{
           transform: !isActive ? 'translateY(4px)' : '',
           cursor: 'pointer',
