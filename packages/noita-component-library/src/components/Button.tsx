@@ -10,7 +10,7 @@ interface ButtonProps {
   disabled?: boolean;
   style?: React.CSSProperties;
   textStyle?: React.CSSProperties;
-  onClick?: () => void;
+  onClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   onDisabledClick?: () => void;
   onBlur?: () => void;
   onFocus?: () => void;
@@ -49,7 +49,7 @@ export const Button = ({
     if (disabled) return;
 
     if (typeof onClick === 'function') {
-      onClick();
+      onClick(e);
     } else {
       console.error('button not implemented');
     }
