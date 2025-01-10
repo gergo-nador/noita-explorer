@@ -1,4 +1,5 @@
 import { FileSystemFileAccess } from '@noita-explorer/model';
+import { extractFileNameWithoutExtension } from '../common.ts';
 
 export const FileSystemFileAccessBrowserApi = (
   fileHandle: FileSystemFileHandle,
@@ -13,12 +14,8 @@ export const FileSystemFileAccessBrowserApi = (
   return {
     getFullPath: () => path,
     getName: () => fileHandle.name,
-    getNameWithoutExtension: () => {
-      const name = fileHandle.name;
-      const lastIndex = name.lastIndexOf('.');
-      if (lastIndex === -1) return name;
-      return name.substring(0, lastIndex);
-    },
+    getNameWithoutExtension: () =>
+      extractFileNameWithoutExtension(fileHandle.name),
     read: {
       asText: async () => readAsText(),
       asTextLines: async () => readAsText().then((t) => t.split('\n')),

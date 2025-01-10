@@ -3,7 +3,7 @@
  */
 
 export * from "./array";
-export * from "./crypto";
+export * from "./cryptography";
 export * from "./images";
 export * from "./map";
 export * from "./math";

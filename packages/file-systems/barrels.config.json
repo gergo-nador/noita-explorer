@@ -1,5 +1,0 @@
-{
-  "directory": ["./src/browser-fallback", "./src/browser-file-access-api"],
-  "delete": true,
-  "name": "main.ts"
-}

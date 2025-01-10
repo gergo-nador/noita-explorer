@@ -1,7 +1,7 @@
 {
   "name": "@noita-explorer/file-systems",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "main": "dist/main.js",
   "module": "dist/main.js",
@@ -21,13 +21,17 @@
       "types": "./dist/browser-file-access-api/main.d.ts",
       "import": "./dist/browser-file-access-api.es.js",
       "require": "./dist/browser-file-access-api.cjs.js"
+    },
+    "./data-wak-memory-fs": {
+      "types": "./dist/data-wak-memory-filesystem/main.d.ts",
+      "import": "./dist/data-wak-memory-filesystem.es.js",
+      "require": "./dist/data-wak-memory-filesystem.cjs.js"
     }
   },
   "scripts": {
     "dev": "vite build --watch",
     "build": "tsc && vite build",
-    "preview": "vite preview",
-    "generate-barrels": "barrelsby --config barrels.config.json"
+    "preview": "vite preview"
   },
   "dependencies": {
     "@noita-explorer/model": "*",
@@ -37,7 +41,6 @@
     "browser-fs-access": "^0.35.0"
   },
   "devDependencies": {
-    "barrelsby": "^2.8.1",
     "browser-fs-access": "^0.35.0",
     "typescript": "~5.6.2",
     "vite": "^6.0.1",

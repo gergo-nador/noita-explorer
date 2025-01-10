@@ -2,18 +2,20 @@ import { FileSystemDirectoryAccess } from '@noita-explorer/model';
 import { promiseHelper } from '@noita-explorer/tools';
 import { FileSystemFileAccessBrowserApi } from './FileSystemFileAccessBrowserApi.ts';
 
+const FILE_PATH_DIVIDER = '/';
+
 export const FileSystemDirectoryAccessBrowserApi = (
   directoryHandle: FileSystemDirectoryHandle,
   path?: string,
 ): FileSystemDirectoryAccess => {
   path ??= '';
-  path += '/' + directoryHandle.name;
+  path += FILE_PATH_DIVIDER + directoryHandle.name;
 
   return {
     getName: () => directoryHandle.name,
     path: {
-      join: (args) => promiseHelper.fromValue(args.join('/')),
-      split: (path) => promiseHelper.fromValue(path.split('/')),
+      join: (args) => promiseHelper.fromValue(args.join(FILE_PATH_DIVIDER)),
+      split: (path) => promiseHelper.fromValue(path.split(FILE_PATH_DIVIDER)),
     },
     listFiles: async () => {
       const files: FileSystemFileHandle[] = [];
@@ -63,7 +65,7 @@ export const FileSystemDirectoryAccessBrowserApi = (
     },
     checkRelativePathExists: async (path) => {
       try {
-        const parts = path.split('/');
+        const parts = path.split(FILE_PATH_DIVIDER);
         let currentHandle = directoryHandle;
         for (const part of parts) {
           currentHandle = await currentHandle.getDirectoryHandle(part, {
@@ -81,7 +83,7 @@ export const FileSystemDirectoryAccessBrowserApi = (
     },
 
     getDirectory: async (path) => {
-      const parts = path.split('/');
+      const parts = path.split(FILE_PATH_DIVIDER);
       let currentHandle = directoryHandle;
       for (const part of parts) {
         currentHandle = await currentHandle.getDirectoryHandle(part, {

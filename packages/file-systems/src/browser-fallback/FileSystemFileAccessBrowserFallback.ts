@@ -1,22 +1,14 @@
 import { FileWithDirectoryAndFileHandle } from 'browser-fs-access';
 import { FileSystemFileAccess } from '@noita-explorer/model';
+import { extractFileNameWithoutExtension } from '../common.ts';
 
 export const FileSystemFileAccessBrowserFallback = (
   file: FileWithDirectoryAndFileHandle,
 ): FileSystemFileAccess => {
-  const getNameWithoutExtension = () => {
-    const lastIndex = file.name.lastIndexOf('.');
-    if (lastIndex === -1) {
-      return file.name;
-    }
-
-    return file.name.substring(0, lastIndex);
-  };
-
   return {
     getFullPath: () => file.webkitRelativePath,
     getName: () => file.name,
-    getNameWithoutExtension: getNameWithoutExtension,
+    getNameWithoutExtension: () => extractFileNameWithoutExtension(file.name),
     read: {
       asText: () => file.text(),
       asTextLines: () => file.text().then((t) => t.split('\n')),

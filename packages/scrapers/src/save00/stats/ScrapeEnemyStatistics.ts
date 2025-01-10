@@ -7,7 +7,7 @@ import {
 } from '@noita-explorer/model';
 
 import { parseXml, XmlWrapper } from '@noita-explorer/tools/xml';
-import { aesBuffer } from '@noita-explorer/tools';
+import { cryptoSalakieli } from '../../cryptography/salakieli.ts';
 
 export const scrapeEnemyStatistics = async ({
   save00DirectoryApi,
@@ -51,7 +51,7 @@ export const scrapeEnemyStatistics = async ({
 
   const statsSalakieli = await enemyStatsDirectory.getFile('_stats.salakieli');
   const statsSalakieliBuffer = await statsSalakieli.read.asBuffer();
-  const decryptedStats = await aesBuffer({
+  const decryptedStats = await cryptoSalakieli.decrypt({
     buffer: statsSalakieliBuffer,
     key: encryptedFileKeys.stats_salakieli.key,
     iv: encryptedFileKeys.stats_salakieli.iv,

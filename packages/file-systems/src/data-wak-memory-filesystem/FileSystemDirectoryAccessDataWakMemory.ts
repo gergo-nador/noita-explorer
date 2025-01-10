@@ -1,42 +1,46 @@
 import {
-  FileSystemFileAccess,
   FileSystemDirectoryAccess,
+  FileSystemFileAccess,
 } from '@noita-explorer/model';
-import { FileWithDirectoryAndFileHandle } from 'browser-fs-access';
 import { promiseHelper } from '@noita-explorer/tools';
-import { FileSystemFileAccessBrowserFallback } from './FileSystemFileAccessBrowserFallback.ts';
+import { unWakker } from './wak/UnWakker.ts';
+import { Buffer } from 'buffer';
+import { WakMemoryFile } from './wak/WakMemoryFile.ts';
+import { FileSystemFileAccessDataWakMemory } from './FileSystemFileAccessDataWakMemory.ts';
 
 const FILE_PATH_DIVIDER = '/';
 
-export const FileSystemDirectoryAccessBrowserFallback = (
-  fallbackHandlers: FileWithDirectoryAndFileHandle[],
+export const FileSystemDirectoryAccessDataWakMemory = (
+  wakBuffer: Buffer,
+): FileSystemDirectoryAccess => {
+  const fileSystem = unWakker(wakBuffer);
+  return FileSystemDirectoryAccessDataWakMemoryInternal(fileSystem, 0);
+};
+
+const FileSystemDirectoryAccessDataWakMemoryInternal = (
+  wakMemoryFiles: WakMemoryFile[],
   level: number,
 ): FileSystemDirectoryAccess => {
-  if (fallbackHandlers.length === 0) {
-    throw new Error('No file handlers were provided');
+  if (wakMemoryFiles.length === 0) {
+    throw new Error('No files were provided');
   }
 
-  const directoryName =
-    fallbackHandlers[0].webkitRelativePath.split(FILE_PATH_DIVIDER)[level];
+  const directoryName = wakMemoryFiles[0].path.split(FILE_PATH_DIVIDER)[level];
 
-  const files = fallbackHandlers
-    .filter(
-      (f) => f.webkitRelativePath.split(FILE_PATH_DIVIDER).length === level + 2,
-    )
-    .map((f) => FileSystemFileAccessBrowserFallback(f));
+  const files = wakMemoryFiles
+    .filter((f) => f.path.split(FILE_PATH_DIVIDER).length === level + 2)
+    .map((f) => FileSystemFileAccessDataWakMemory(f));
 
-  const directories = fallbackHandlers
-    .filter(
-      (d) => d.webkitRelativePath.split(FILE_PATH_DIVIDER).length > level + 2,
-    )
+  const directories = wakMemoryFiles
+    .filter((d) => d.path.split(FILE_PATH_DIVIDER).length > level + 2)
     .map((d) => {
       return {
-        name: d.webkitRelativePath.split(FILE_PATH_DIVIDER)[level + 2],
+        name: d.path.split(FILE_PATH_DIVIDER)[level + 2],
       };
     });
 
   const getDirectory = async (path: string) => {
-    const result = evaluateRelativePath(path, fallbackHandlers, level + 1);
+    const result = evaluateRelativePath(path, wakMemoryFiles, level + 1);
 
     if (result && result.type === 'directory') {
       return result.result as FileSystemDirectoryAccess;
@@ -48,11 +52,11 @@ export const FileSystemDirectoryAccessBrowserFallback = (
   return {
     getName: () => directoryName,
     path: {
-      join: (args) => promiseHelper.fromValue(args.join(FILE_PATH_DIVIDER)),
       split: (path) => promiseHelper.fromValue(path.split(FILE_PATH_DIVIDER)),
+      join: (args) => promiseHelper.fromValue(args.join(FILE_PATH_DIVIDER)),
     },
     getFile: async (path) => {
-      const result = evaluateRelativePath(path, fallbackHandlers, level + 1);
+      const result = evaluateRelativePath(path, wakMemoryFiles, level + 1);
 
       if (result && result.type === 'file') {
         return result.result as FileSystemFileAccess;
@@ -74,14 +78,14 @@ export const FileSystemDirectoryAccessBrowserFallback = (
     },
     checkRelativePathExists: (path) =>
       promiseHelper.fromValue(
-        evaluateRelativePath(path, fallbackHandlers, level + 1) !== undefined,
+        evaluateRelativePath(path, wakMemoryFiles, level + 1) !== undefined,
       ),
   };
 };
 
 const evaluateRelativePath = (
   path: string,
-  items: FileWithDirectoryAndFileHandle[],
+  items: WakMemoryFile[],
   level: number,
 ) => {
   const pathElements = path.split(FILE_PATH_DIVIDER);
@@ -92,22 +96,20 @@ const evaluateRelativePath = (
 
     filteredItems = filteredItems.filter(
       (item) =>
-        item.webkitRelativePath.split(FILE_PATH_DIVIDER)[
-          levelAdjustedIterator
-        ] === pathElements[i],
+        item.path.split(FILE_PATH_DIVIDER)[levelAdjustedIterator] ===
+        pathElements[i],
     );
   }
 
   if (
     filteredItems.every(
       (item) =>
-        item.webkitRelativePath.split(FILE_PATH_DIVIDER).length >
-        pathElements.length + level,
+        item.path.split(FILE_PATH_DIVIDER).length > pathElements.length + level,
     )
   ) {
     return {
       type: 'directory',
-      result: FileSystemDirectoryAccessBrowserFallback(
+      result: FileSystemDirectoryAccessDataWakMemoryInternal(
         filteredItems,
         level + pathElements.length - 1,
       ),
@@ -116,7 +118,7 @@ const evaluateRelativePath = (
   if (filteredItems.length === 1) {
     return {
       type: 'file',
-      result: FileSystemFileAccessBrowserFallback(filteredItems[0]),
+      result: FileSystemFileAccessDataWakMemory(filteredItems[0]),
     };
   }
 
