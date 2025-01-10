@@ -1,15 +1,15 @@
 import {
   FileSystemDirectoryAccess,
-  StringKeyDictionary,
-  NoitaEnemy,
-  NoitaEnemyVariant,
-  NoitaEnemyMaterialDamage,
-  NoitaTranslation,
-  noitaPaths,
-  NoitaConstants,
   FileSystemFileAccess,
-  NoitaEnemyGenomeData,
+  StringKeyDictionary,
 } from '@noita-explorer/model';
+import {
+  NoitaConstants,
+  NoitaEnemy,
+  NoitaEnemyMaterialDamage,
+  NoitaEnemyVariant,
+  NoitaTranslation,
+} from '@noita-explorer/model-noita';
 import {
   parseXml,
   XmlWrapper,
@@ -20,6 +20,7 @@ import {
   mathHelpers,
   stringHelpers,
 } from '@noita-explorer/tools';
+import { noitaPaths } from '../NoitaPaths.ts';
 
 export const scrapeEnemies = async ({
   dataWakDirectoryApi,
@@ -179,16 +180,21 @@ const scrapeEnemy = async (
 
   const genomeDataComponent = entityTag.findNthTag('GenomeDataComponent');
   if (genomeDataComponent !== undefined) {
-    const genomeData: NoitaEnemyGenomeData = {
-      herdId: genomeDataComponent.getAttribute('herd_id')?.asText(),
-      foodChainRank: genomeDataComponent
-        .getAttribute('food_chain_rank')
-        ?.asInt(),
-      isPredator:
-        genomeDataComponent.getAttribute('is_predator')?.asBoolean() ?? false,
-    };
+    const herdId = genomeDataComponent.getAttribute('herd_id')?.asText();
 
-    enemy.genomeData = genomeData;
+    const foodChainRank = genomeDataComponent
+      .getAttribute('food_chain_rank')
+      ?.asInt();
+
+    const isPredator = genomeDataComponent
+      .getAttribute('is_predator')
+      ?.asBoolean();
+
+    enemy.genomeData = {
+      herdId: herdId,
+      foodChainRank: foodChainRank,
+      isPredator: isPredator ?? false,
+    };
   }
 
   const subDirectories = await animalsDataDirectory.listDirectories();

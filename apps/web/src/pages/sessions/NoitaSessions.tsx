@@ -5,7 +5,7 @@ import { CardPageHeight } from '../../components/CardPageHeight.tsx';
 import { NoitaSessionsFilter } from './NoitaSessionsFilter.tsx';
 import { NoitaSessionsList } from './NoitaSessionsList.tsx';
 import { NoitaSessionsStatistics } from './NoitaSessionsStatistics.tsx';
-import { NoitaSession } from '@noita-explorer/model';
+import { NoitaSession } from '@noita-explorer/model-noita';
 
 export interface NoitaSessionFilters {
   goldInfinite: boolean;

@@ -1,9 +1,7 @@
-import {
-  FileSystemDirectoryAccess,
-  noitaPaths,
-  NoitaWandConfig,
-} from '@noita-explorer/model';
+import { FileSystemDirectoryAccess } from '@noita-explorer/model';
+import { NoitaWandConfig } from '@noita-explorer/model-noita';
 import { LuaWrapper } from '@noita-explorer/tools/lua';
+import { noitaPaths } from '../NoitaPaths.ts';
 
 export const scrapeWandConfigs = async ({
   dataWakDirectoryApi,

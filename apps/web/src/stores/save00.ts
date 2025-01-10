@@ -1,11 +1,11 @@
 import { create } from 'zustand';
 import { noitaAPI } from '../ipcHandlers';
+import { StringKeyDictionary } from '@noita-explorer/model';
 import {
   EnemyStatistic,
   NoitaSession,
   NoitaWand,
-  StringKeyDictionary,
-} from '@noita-explorer/model';
+} from '@noita-explorer/model-noita';
 
 interface Save00StoreState {
   enemyStatistics: StringKeyDictionary<EnemyStatistic> | undefined;

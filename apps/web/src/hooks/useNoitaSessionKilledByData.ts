@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { arrayHelpers } from '@noita-explorer/tools';
-import { NoitaSession, StringKeyDictionary } from '@noita-explorer/model';
+import { StringKeyDictionary } from '@noita-explorer/model';
+import { NoitaSession } from '@noita-explorer/model-noita';
 
 export const useNoitaSessionKilledByData = (sessions: NoitaSession[]) => {
   const [killedByEntity, killedByReason] = useMemo(() => {

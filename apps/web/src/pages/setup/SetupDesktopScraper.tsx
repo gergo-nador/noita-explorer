@@ -12,7 +12,7 @@ import {
   NoitaDataWakScrapeResultPart,
   NoitaDataWakScrapeResultStatus,
   NoitaWakData,
-} from '@noita-explorer/model';
+} from '@noita-explorer/model-noita';
 import { PageBottomComponent } from '../../components/PageBottomComponent';
 import { Flex } from '../../components/Flex';
 import { noitaAPI } from '../../ipcHandlers';

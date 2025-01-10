@@ -1,4 +1,4 @@
-import { NoitaPerk } from '@noita-explorer/model';
+import { NoitaPerk } from '@noita-explorer/model-noita';
 
 interface NoitaPerkTooltipProps {
   perk: NoitaPerk;

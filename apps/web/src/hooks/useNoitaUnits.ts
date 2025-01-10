@@ -1,6 +1,6 @@
 import { useSettingsStore } from '../stores/settings.ts';
 import { mathHelpers, switchStatement } from '@noita-explorer/tools';
-import { NoitaConstants } from '@noita-explorer/model';
+import { NoitaConstants } from '@noita-explorer/model-noita';
 
 type FrameDefaultFormats = 'frames' | 'seconds';
 

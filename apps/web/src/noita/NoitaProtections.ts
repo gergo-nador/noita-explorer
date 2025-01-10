@@ -1,4 +1,5 @@
-import { StringKeyDictionary, NoitaProtection } from '@noita-explorer/model';
+import { StringKeyDictionary } from '@noita-explorer/model';
+import { NoitaProtection } from '@noita-explorer/model-noita';
 
 import iconProtectionElectricity from '../assets/icons/protection/protection_electricity.png';
 import iconProtectionExplosion from '../assets/icons/protection/protection_explosion.png';

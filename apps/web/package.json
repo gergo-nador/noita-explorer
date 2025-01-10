@@ -1,7 +1,7 @@
 {
   "name": "@noita-explorer/web",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -12,6 +12,7 @@
   "dependencies": {
     "@noita-explorer/file-systems": "*",
     "@noita-explorer/model": "*",
+    "@noita-explorer/model-noita": "*",
     "@noita-explorer/noita-component-library": "*",
     "@noita-explorer/scrapers": "*",
     "@noita-explorer/tools": "*",

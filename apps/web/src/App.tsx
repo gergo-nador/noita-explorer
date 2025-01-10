@@ -10,7 +10,7 @@ import { useEffect } from 'react';
 import { useNoitaDataWakStore } from './stores/NoitaDataWak.ts';
 import { noitaAPI } from './ipcHandlers.ts';
 import { useSave00Store } from './stores/save00.ts';
-import { NoitaWandConfig } from '@noita-explorer/model';
+import { NoitaWandConfig } from '@noita-explorer/model-noita';
 import { imageHelpers, randomHelpers } from '@noita-explorer/tools';
 
 export const App = () => {

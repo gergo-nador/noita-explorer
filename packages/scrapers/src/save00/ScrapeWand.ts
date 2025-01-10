@@ -1,5 +1,5 @@
 import { XmlWrapperType } from '@noita-explorer/tools/xml';
-import { NoitaWand, NoitaWandSpell } from '@noita-explorer/model';
+import { NoitaWand, NoitaWandSpell } from '@noita-explorer/model-noita';
 
 // used privately by this package
 export const __scrapeWand = (wandXml: XmlWrapperType) => {

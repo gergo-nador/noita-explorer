@@ -3,7 +3,7 @@ import {
   DialogCustom,
   Header,
 } from '@noita-explorer/noita-component-library';
-import { NoitaSession } from '@noita-explorer/model';
+import { NoitaSession } from '@noita-explorer/model-noita';
 import {
   NoitaSessionFilters,
   NoitaSessionOrdering,

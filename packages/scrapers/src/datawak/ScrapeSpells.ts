@@ -1,12 +1,13 @@
 import {
   FileSystemDirectoryAccess,
+  StringKeyDictionary,
+} from '@noita-explorer/model';
+import {
   NoitaConstants,
-  noitaPaths,
   NoitaSpell,
   NoitaTranslation,
   SpellModifierNumberUnit,
-  StringKeyDictionary,
-} from '@noita-explorer/model';
+} from '@noita-explorer/model-noita';
 import {
   mathHelpers,
   proxiedPropertiesOf,
@@ -14,6 +15,7 @@ import {
 } from '@noita-explorer/tools';
 import { LuaWrapper } from '@noita-explorer/tools/lua';
 import { parseXml, XmlWrapper } from '@noita-explorer/tools/xml';
+import { noitaPaths } from '../NoitaPaths.ts';
 
 export const scrapeSpells = async ({
   dataWakDirectoryApi,

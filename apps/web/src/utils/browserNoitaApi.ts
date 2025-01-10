@@ -1,8 +1,8 @@
 import {
   FileSystemDirectoryAccess,
-  NoitaAPI,
   StringKeyDictionary,
 } from '@noita-explorer/model';
+import { NoitaAPI } from '@noita-explorer/model-noita';
 import { promiseHelper } from '@noita-explorer/tools';
 import {
   scrapeBonesWands,

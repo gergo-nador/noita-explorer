@@ -1,4 +1,4 @@
-import { NoitaAPI } from '@noita-explorer/model';
+import { NoitaAPI } from '@noita-explorer/model-noita';
 import { browserNoitaApi } from './utils/browserNoitaApi.ts';
 
 export const noitaAPI: NoitaAPI =

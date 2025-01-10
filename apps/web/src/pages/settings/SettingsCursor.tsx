@@ -8,7 +8,7 @@ import {
 import { imageHelpers, randomHelpers } from '@noita-explorer/tools';
 import { useEffect, useState } from 'react';
 import { useNoitaDataWakStore } from '../../stores/NoitaDataWak.ts';
-import { NoitaWandConfig } from '@noita-explorer/model';
+import { NoitaWandConfig } from '@noita-explorer/model-noita';
 import { useNavigate } from 'react-router-dom';
 import { pages } from '../../routes/pages.ts';
 import { MultiSelection } from '../../components/MultiSelection.tsx';

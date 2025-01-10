@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { NoitaWakData } from '@noita-explorer/model';
+import { NoitaWakData } from '@noita-explorer/model-noita';
 
 interface NoitaDataWakState {
   loaded: boolean;

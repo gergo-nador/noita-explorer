@@ -1,4 +1,7 @@
-import { NoitaSpell, SpellModifierNumberUnit } from '@noita-explorer/model';
+import {
+  NoitaSpell,
+  SpellModifierNumberUnit,
+} from '@noita-explorer/model-noita';
 import { Icon } from '@noita-explorer/noita-component-library';
 import { NoitaSpellTypesDictionary } from '../../noita/NoitaSpellTypeDictionary.ts';
 import { BooleanIcon } from '../BooleanIcon.tsx';

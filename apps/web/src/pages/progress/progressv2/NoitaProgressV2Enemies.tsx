@@ -6,7 +6,7 @@ import {
 import { NoitaProgressIconTable } from '../../../components/NoitaProgressIconTable.tsx';
 import { useNoitaDataWakStore } from '../../../stores/NoitaDataWak.ts';
 import { useState } from 'react';
-import { NoitaEnemy } from '@noita-explorer/model';
+import { NoitaEnemy } from '@noita-explorer/model-noita';
 import { mathHelpers } from '@noita-explorer/tools';
 
 export const NoitaProgressV2Enemies = () => {

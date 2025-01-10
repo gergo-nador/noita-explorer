@@ -1,8 +1,8 @@
-import { NoitaWakData } from './scraping/NoitaWakData';
-import { NoitaDataWakScrapeResult } from './scraping/NoitaDataWakScrapeResult.ts';
-import { StringKeyDictionary } from '../common/StringKeyDictionary.ts';
-import { EnemyStatistic } from './scraping/EnemyStatistics.ts';
-import { NoitaProgressFlags } from './scraping/NoitaProgressFlags.ts';
+import { NoitaWakData } from '../scraping/NoitaWakData';
+import { NoitaDataWakScrapeResult } from '../scraping/NoitaDataWakScrapeResult.ts';
+import { StringKeyDictionary } from '@noita-explorer/model';
+import { EnemyStatistic } from '../scraping/EnemyStatistics.ts';
+import { NoitaProgressFlags } from '../scraping/NoitaProgressFlags.ts';
 import { NoitaSession } from './NoitaSession.ts';
 import { NoitaWand } from './NoitaWand.ts';
 

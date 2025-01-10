@@ -1,4 +1,4 @@
-import { NoitaWand } from '@noita-explorer/model';
+import { NoitaWand } from '@noita-explorer/model-noita';
 import {
   ActiveIconWrapper,
   Card,

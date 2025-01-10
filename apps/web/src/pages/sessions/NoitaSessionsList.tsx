@@ -1,4 +1,5 @@
-import { NoitaSession, StringKeyDictionary } from '@noita-explorer/model';
+import { StringKeyDictionary } from '@noita-explorer/model';
+import { NoitaSession } from '@noita-explorer/model-noita';
 import {
   arrayHelpers,
   dictionaryHelpers,

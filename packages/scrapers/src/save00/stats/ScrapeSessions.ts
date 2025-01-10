@@ -1,13 +1,12 @@
 import {
   FileSystemFileAccess,
   FileSystemDirectoryAccess,
-  noitaPaths,
   StringKeyDictionary,
-  NoitaConstants,
 } from '@noita-explorer/model';
-import { NoitaSession } from '@noita-explorer/model';
+import { NoitaConstants, NoitaSession } from '@noita-explorer/model-noita';
 import { parseXml, XmlWrapper } from '@noita-explorer/tools/xml';
 import { mathHelpers } from '@noita-explorer/tools';
+import { noitaPaths } from '../../NoitaPaths.ts';
 
 export const scrapeSessions = async ({
   save00DirectoryApi,

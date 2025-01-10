@@ -1,10 +1,10 @@
 import { useMemo } from 'react';
+import { StringKeyDictionary } from '@noita-explorer/model';
 import {
   EnemyStatistic,
   NoitaEnemy,
   NoitaEnemyGroup,
-  StringKeyDictionary,
-} from '@noita-explorer/model';
+} from '@noita-explorer/model-noita';
 
 interface useNoitaEnemyGroupsProps {
   enemies?: NoitaEnemy[];

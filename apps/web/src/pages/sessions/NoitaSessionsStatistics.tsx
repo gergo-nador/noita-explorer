@@ -1,5 +1,5 @@
 import { timeHelpers, arrayHelpers, mathHelpers } from '@noita-explorer/tools';
-import { NoitaSession } from '@noita-explorer/model';
+import { NoitaSession } from '@noita-explorer/model-noita';
 import { useMemo } from 'react';
 
 interface NoitaSessionsStatisticsProps {

@@ -1,8 +1,8 @@
 import {
   FileSystemFileAccess,
-  NoitaTranslation,
   StringKeyDictionary,
 } from '@noita-explorer/model';
+import { NoitaTranslation } from '@noita-explorer/model-noita';
 
 // as this code can be run in both the browser and in node.js, the
 // browser version needs to be imported as that can cope with both.

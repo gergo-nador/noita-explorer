@@ -1,8 +1,5 @@
-import {
-  EnemyStatistic,
-  NoitaEnemyGroup,
-  StringKeyDictionary,
-} from '@noita-explorer/model';
+import { StringKeyDictionary } from '@noita-explorer/model';
+import { EnemyStatistic, NoitaEnemyGroup } from '@noita-explorer/model-noita';
 import { BooleanIcon } from '../BooleanIcon.tsx';
 import { Flex } from '../Flex.tsx';
 

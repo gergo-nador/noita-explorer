@@ -1,10 +1,10 @@
-import { NoitaSpell } from '../NoitaSpell';
-import { NoitaPerk } from '../NoitaPerk';
-import { NoitaEnemy } from '../NoitaEnemy';
+import { NoitaSpell } from '../common/NoitaSpell.ts';
+import { NoitaPerk } from '../common/NoitaPerk.ts';
+import { NoitaEnemy } from '../common/NoitaEnemy.ts';
 import { NoitaDataWakScrapeResultPart } from './NoitaDataWakScrapeResultPart.ts';
-import { StringKeyDictionary } from '../../common/StringKeyDictionary';
-import { NoitaTranslation } from './NoitaTranslation';
-import { NoitaWandConfig } from '../NoitaWandConfig.ts';
+import { StringKeyDictionary } from '@noita-explorer/model';
+import { NoitaTranslation } from './NoitaTranslation.ts';
+import { NoitaWandConfig } from '../common/NoitaWandConfig.ts';
 
 export interface NoitaDataWakScrapeResult {
   translations: NoitaDataWakScrapeResultPart<

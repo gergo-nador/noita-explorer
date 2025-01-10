@@ -1,4 +1,5 @@
-import { StringKeyDictionary, NoitaSpellType } from '@noita-explorer/model';
+import { StringKeyDictionary } from '@noita-explorer/model';
+import { NoitaSpellType } from '@noita-explorer/model-noita';
 
 import bg_draw_many from '../assets/spell_backgrounds/item_bg_draw_many.png';
 import bg_material from '../assets/spell_backgrounds/item_bg_material.png';
