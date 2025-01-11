@@ -6,6 +6,7 @@ import { arrayHelpers, promiseHelper } from '@noita-explorer/tools';
 
 export interface DirectoryLogicForFileLists_File {
   path: string;
+  pathSplit: string[];
   getFileAccessObject: () => FileSystemFileAccess;
 }
 
@@ -30,7 +31,7 @@ export const DirectoryLogicForFileLists = ({
   if (files.length === 0) {
     throw new Error('No files were provided');
   }
-  const pathSegments = files[0].path.split(pathDivider);
+  const pathSegments = files[0].pathSplit;
 
   if (pathSegments.length <= level) {
     throw new Error(`Insufficient path segments in "${files[0].path}".`);
@@ -40,7 +41,7 @@ export const DirectoryLogicForFileLists = ({
 
   // Verify all files share the same directory name at this level
   for (const f of files) {
-    const splitF = f.path.split(pathDivider);
+    const splitF = f.pathSplit;
     if (splitF[level] !== directoryName) {
       throw new Error(
         `Inconsistent directory naming at level=${level}.` +
@@ -50,13 +51,13 @@ export const DirectoryLogicForFileLists = ({
   }
 
   const subFiles = files
-    .filter((f) => f.path.split(pathDivider).length === level + 2)
+    .filter((f) => f.pathSplit.length === level + 2)
     .map((f) => f.getFileAccessObject());
 
   const subDirectoriesFilter = files
-    .filter((d) => d.path.split(pathDivider).length > level + 2)
+    .filter((d) => d.pathSplit.length > level + 2)
     .map((d) => ({
-      name: d.path.split(pathDivider)[level + 1],
+      name: d.pathSplit[level + 1],
     }));
 
   const subDirectories = arrayHelpers.uniqueBy(
@@ -115,22 +116,31 @@ const evaluateRelativePath = (
   pathDivider: string,
 ) => {
   const pathElements = path.split(pathDivider);
-  let filteredItems = items;
+  const filteredItems: DirectoryLogicForFileLists_File[] = [];
 
-  for (let i = 0; i < pathElements.length; i++) {
-    const levelAdjustedIterator = i + level;
+  for (const item of items) {
+    let skipItem = false;
 
-    filteredItems = filteredItems.filter(
-      (item) =>
-        item.path.split(pathDivider)[levelAdjustedIterator] === pathElements[i],
-    );
+    for (let i = 0; i < pathElements.length; i++) {
+      const levelAdjustedIterator = i + level;
+
+      if (item.pathSplit[levelAdjustedIterator] !== pathElements[i]) {
+        skipItem = true;
+        break;
+      }
+    }
+
+    if (skipItem) {
+      continue;
+    }
+
+    filteredItems.push(item);
   }
 
   const isAllItemsInSubArray =
     filteredItems.length > 0 &&
     filteredItems.every(
-      (item) =>
-        item.path.split(pathDivider).length > pathElements.length + level,
+      (item) => item.pathSplit.length > pathElements.length + level,
     );
 
   if (isAllItemsInSubArray) {

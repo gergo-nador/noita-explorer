@@ -174,7 +174,7 @@ const openFolderDialogFallback = async (id: string | undefined) => {
     throw new Error('Invalid directory handle or no files selected.');
   }
 
-  const folder = FileSystemDirectoryAccessBrowserFallback(handlers, 0);
+  const folder = FileSystemDirectoryAccessBrowserFallback(handlers);
   const name = folder.getName();
 
   fallbackFolderStorage[name] = folder;

@@ -20,12 +20,12 @@ export const FileSystemFileAccessDataWakMemory = (
       asText: () => readAsText(),
       asBuffer: () => promiseHelper.fromValue(file.getFileBytes()),
       asTextLines: () => readAsText().then((t) => t.split('\n')),
-      asImageBase64: () => {
+      asImageBase64: async () => {
         const mimeType = getMimeTypeFromExtension(fileName);
+
         const base64String = file.getFileBytes().toString('base64');
-        return promiseHelper.fromValue(
-          `data:${mimeType};base64,${base64String}`,
-        );
+
+        return `data:${mimeType};base64,${base64String}`;
       },
     },
   };

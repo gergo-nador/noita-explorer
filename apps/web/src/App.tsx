@@ -152,3 +152,98 @@ const InitialLoader = () => {
 
   return <div></div>;
 };
+
+/*
+
+I'll leave this here for further performance improvement optimization
+const dataWakScrape = async () => {
+    console.log('START READING DATA WAK FILE');
+
+    const db = await noitaDb;
+    const config = db.config;
+
+    const nollaGamesNoitaFolder = await config.get(
+      'settings.paths.NollaGamesNoita',
+    );
+
+    if (nollaGamesNoitaFolder === undefined) {
+      throw new Error('NollaGamesNoita folder is not set');
+    }
+
+    const fileAccessConfig = db.fileAccess;
+    const nollaGamesNoitaBrowserHandle = await fileAccessConfig.get(
+      nollaGamesNoitaFolder,
+    );
+    if (nollaGamesNoitaBrowserHandle?.kind !== 'directory') {
+      throw new Error('NollaGamesNoita folder is not a directory');
+    }
+
+    const nollaGamesNoitaDir = FileSystemDirectoryAccessBrowserApi(
+      nollaGamesNoitaBrowserHandle,
+    );
+
+    const translationFile = await nollaGamesNoitaDir.getFile('common.csv');
+
+    const translations = await readTranslations({
+      translationFile: translationFile,
+    });
+
+    const dataWakFile = await nollaGamesNoitaDir.getFile('data.wak');
+    const dataWakBuffer = await dataWakFile.read.asBuffer();
+
+    const buff = Buffer.from(dataWakBuffer);
+    console.log(buff.length);
+
+    const dataWakParentDirectory = FileSystemDirectoryAccessDataWakMemory(buff);
+
+    let perks: NoitaPerk[] = [];
+    let perkError: unknown | undefined = undefined;
+    try {
+      perks = await scrapePerks({
+        dataWakParentDirectoryApi: dataWakParentDirectory,
+        translations: translations,
+      });
+    } catch (e) {
+      perkError = e;
+    }
+
+    let spells: NoitaSpell[] = [];
+    let spellsError: unknown | undefined = undefined;
+    try {
+      spells = await scrapeSpells({
+        dataWakParentDirectoryApi: dataWakParentDirectory,
+        translations: translations,
+      });
+    } catch (e) {
+      spellsError = e;
+    }
+
+    let enemies: NoitaEnemy[] = [];
+    let enemiesError: unknown | undefined = undefined;
+    try {
+      enemies = await scrapeEnemies({
+        dataWakParentDirectoryApi: dataWakParentDirectory,
+        translations: translations,
+      });
+    } catch (err) {
+      enemiesError = err;
+    }
+
+    let wandConfigs: NoitaWandConfig[] = [];
+    let wandConfigError: unknown | undefined = undefined;
+    try {
+      wandConfigs = await scrapeWandConfigs({
+        dataWakParentDirectoryApi: dataWakParentDirectory,
+      });
+    } catch (err) {
+      wandConfigError = err;
+    }
+
+    console.log('DATA WAK FILE READ');
+    console.log(perks, perkError);
+    console.log(spells, spellsError);
+    console.log(enemies, enemiesError);
+    console.log(wandConfigs, wandConfigError);
+  };
+
+*/

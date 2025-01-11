@@ -13,6 +13,7 @@ export const FileSystemDirectoryAccessDataWakMemory = (
   wakBuffer: Buffer,
 ): FileSystemDirectoryAccess => {
   const fileSystem = unWakker(wakBuffer);
+
   // append "data_wak_root" to each of the path so
   // that data/ folder is not the root directory but
   // a subdirectory of the root
@@ -22,6 +23,7 @@ export const FileSystemDirectoryAccessDataWakMemory = (
 
   const files: DirectoryLogicForFileLists_File[] = fileSystem.map((f) => ({
     path: f.path,
+    pathSplit: f.path.split(FILE_PATH_DIVIDER),
     getFileAccessObject: () => FileSystemFileAccessDataWakMemory(f),
   }));
 

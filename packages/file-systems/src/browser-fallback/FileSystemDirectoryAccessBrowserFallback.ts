@@ -14,6 +14,7 @@ export const FileSystemDirectoryAccessBrowserFallback = (
   const files: DirectoryLogicForFileLists_File[] = fallbackHandlers.map(
     (f) => ({
       path: f.webkitRelativePath,
+      pathSplit: f.webkitRelativePath.split(FILE_PATH_DIVIDER),
       getFileAccessObject: () => FileSystemFileAccessBrowserFallback(f),
     }),
   );

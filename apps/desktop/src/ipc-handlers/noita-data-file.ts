@@ -59,168 +59,170 @@ export const registerNoitaDataFileHandlers = () => {
   ipcMain.handle(
     'noita-data-file:scrape',
     async (): Promise<NoitaDataWakScrapeResult> => {
-      const installPath = getConfig('settings.paths.install') as string;
-      const commonCsvPath = path.join(
-        installPath,
-        ...noitaPaths.noitaInstallFolder.translation,
-      );
-
-      const translationFile = FileSystemFileAccessNode(commonCsvPath);
-
-      let translations: StringKeyDictionary<NoitaTranslation>;
-
-      try {
-        translations = await readTranslations({
-          translationFile: translationFile,
-        });
-      } catch (e) {
-        return {
-          translations: {
-            status: NoitaDataWakScrapeResultStatus.FAILED,
-            error: {
-              message: JSON.stringify(e),
-              errorData: e,
-            },
-          },
-          enemies: {
-            status: NoitaDataWakScrapeResultStatus.SKIPPED,
-          },
-          perks: {
-            status: NoitaDataWakScrapeResultStatus.SKIPPED,
-          },
-          spells: {
-            status: NoitaDataWakScrapeResultStatus.SKIPPED,
-          },
-          wandConfigs: {
-            status: NoitaDataWakScrapeResultStatus.SKIPPED,
-          },
-        };
-      }
-
-      // provide the NollaGamesNoita folder instead of the actual data folder as
-      // the code expects the directory above the extracted data wak folder
-      let dataWakParentDirectory: FileSystemDirectoryAccess = undefined;
-
-      const dataWakPath = path.join(
-        installPath,
-        ...noitaPaths.noitaInstallFolder.dataWak,
-      );
-
-      try {
-        if (nodeFileSystemHelpers.checkPathExist(dataWakPath)) {
-          let buffer =
-            await nodeFileSystemHelpers.readFileAsBuffer(dataWakPath);
-
-          buffer = Buffer.from(buffer);
-          dataWakParentDirectory =
-            FileSystemDirectoryAccessDataWakMemory(buffer);
-        }
-      } catch {
-        console.error(
-          'Could not load data.wak file into memory. Trying extracted data.wak folder for fallback.',
-        );
-      }
-
-      if (dataWakParentDirectory === undefined) {
-        const nollaGamesNoita = getConfig(
-          'settings.paths.NollaGamesNoita',
-        ) as string;
-
-        const dataFolder = path.join(
-          nollaGamesNoita,
-          ...noitaPaths.noitaDataWak.folder,
-        );
-        if (!nodeFileSystemHelpers.checkPathExist(dataFolder)) {
-          throw new Error(
-            'Could not load data.wak file and extracted data.wak folder does not exist.',
-          );
-        }
-
-        dataWakParentDirectory = FileSystemDirectoryAccessNode(nollaGamesNoita);
-      }
-
-      let perks: NoitaPerk[] = [];
-      let perkError: unknown | undefined = undefined;
-      try {
-        perks = await scrapePerks({
-          dataWakParentDirectoryApi: dataWakParentDirectory,
-          translations: translations,
-        });
-      } catch (e) {
-        perkError = e;
-      }
-
-      let spells: NoitaSpell[] = [];
-      let spellsError: unknown | undefined = undefined;
-      try {
-        spells = await scrapeSpells({
-          dataWakParentDirectoryApi: dataWakParentDirectory,
-          translations: translations,
-        });
-      } catch (e) {
-        spellsError = e;
-      }
-
-      let enemies: NoitaEnemy[] = [];
-      let enemiesError: unknown | undefined = undefined;
-      try {
-        enemies = await scrapeEnemies({
-          dataWakParentDirectoryApi: dataWakParentDirectory,
-          translations: translations,
-        });
-      } catch (err) {
-        enemiesError = err;
-      }
-
-      let wandConfigs: NoitaWandConfig[] = [];
-      let wandConfigError: unknown | undefined = undefined;
-      try {
-        wandConfigs = await scrapeWandConfigs({
-          dataWakParentDirectoryApi: dataWakParentDirectory,
-        });
-      } catch (err) {
-        wandConfigError = err;
-      }
-
-      return {
-        translations: {
-          status: NoitaDataWakScrapeResultStatus.SUCCESS,
-          data: translations,
-          error: undefined,
-        },
-        perks: {
-          status:
-            perkError === undefined
-              ? NoitaDataWakScrapeResultStatus.SUCCESS
-              : NoitaDataWakScrapeResultStatus.FAILED,
-          data: perks,
-          error: perkError,
-        },
-        spells: {
-          status:
-            spellsError === undefined
-              ? NoitaDataWakScrapeResultStatus.SUCCESS
-              : NoitaDataWakScrapeResultStatus.FAILED,
-          data: spells,
-          error: spellsError,
-        },
-        enemies: {
-          status:
-            enemiesError === undefined
-              ? NoitaDataWakScrapeResultStatus.SUCCESS
-              : NoitaDataWakScrapeResultStatus.FAILED,
-          data: enemies,
-          error: enemiesError,
-        },
-        wandConfigs: {
-          status:
-            wandConfigError === undefined
-              ? NoitaDataWakScrapeResultStatus.SUCCESS
-              : NoitaDataWakScrapeResultStatus.FAILED,
-          data: wandConfigs,
-          error: wandConfigError,
-        },
-      };
+      return await scrape();
     },
   );
+};
+
+const scrape = async (): Promise<NoitaDataWakScrapeResult> => {
+  const installPath = getConfig('settings.paths.install') as string;
+  const commonCsvPath = path.join(
+    installPath,
+    ...noitaPaths.noitaInstallFolder.translation,
+  );
+
+  const translationFile = FileSystemFileAccessNode(commonCsvPath);
+
+  let translations: StringKeyDictionary<NoitaTranslation>;
+
+  try {
+    translations = await readTranslations({
+      translationFile: translationFile,
+    });
+  } catch (e) {
+    return {
+      translations: {
+        status: NoitaDataWakScrapeResultStatus.FAILED,
+        error: {
+          message: JSON.stringify(e),
+          errorData: e,
+        },
+      },
+      enemies: {
+        status: NoitaDataWakScrapeResultStatus.SKIPPED,
+      },
+      perks: {
+        status: NoitaDataWakScrapeResultStatus.SKIPPED,
+      },
+      spells: {
+        status: NoitaDataWakScrapeResultStatus.SKIPPED,
+      },
+      wandConfigs: {
+        status: NoitaDataWakScrapeResultStatus.SKIPPED,
+      },
+    };
+  }
+
+  // provide the NollaGamesNoita folder instead of the actual data folder as
+  // the code expects the directory above the extracted data wak folder
+  let dataWakParentDirectory: FileSystemDirectoryAccess = undefined;
+
+  const dataWakPath = path.join(
+    installPath,
+    ...noitaPaths.noitaInstallFolder.dataWak,
+  );
+
+  try {
+    if (nodeFileSystemHelpers.checkPathExist(dataWakPath)) {
+      let buffer = await nodeFileSystemHelpers.readFileAsBuffer(dataWakPath);
+
+      buffer = Buffer.from(buffer);
+      dataWakParentDirectory = FileSystemDirectoryAccessDataWakMemory(buffer);
+    }
+  } catch {
+    console.error(
+      'Could not load data.wak file into memory. Trying extracted data.wak folder for fallback.',
+    );
+  }
+
+  if (dataWakParentDirectory === undefined) {
+    const nollaGamesNoita = getConfig(
+      'settings.paths.NollaGamesNoita',
+    ) as string;
+
+    const dataFolder = path.join(
+      nollaGamesNoita,
+      ...noitaPaths.noitaDataWak.folder,
+    );
+    if (!nodeFileSystemHelpers.checkPathExist(dataFolder)) {
+      throw new Error(
+        'Could not load data.wak file and extracted data.wak folder does not exist.',
+      );
+    }
+
+    dataWakParentDirectory = FileSystemDirectoryAccessNode(nollaGamesNoita);
+  }
+
+  let perks: NoitaPerk[] = [];
+  let perkError: unknown | undefined = undefined;
+  try {
+    perks = await scrapePerks({
+      dataWakParentDirectoryApi: dataWakParentDirectory,
+      translations: translations,
+    });
+  } catch (e) {
+    perkError = e;
+  }
+
+  let spells: NoitaSpell[] = [];
+  let spellsError: unknown | undefined = undefined;
+  try {
+    spells = await scrapeSpells({
+      dataWakParentDirectoryApi: dataWakParentDirectory,
+      translations: translations,
+    });
+  } catch (e) {
+    spellsError = e;
+  }
+
+  let enemies: NoitaEnemy[] = [];
+  let enemiesError: unknown | undefined = undefined;
+  try {
+    enemies = await scrapeEnemies({
+      dataWakParentDirectoryApi: dataWakParentDirectory,
+      translations: translations,
+    });
+  } catch (err) {
+    enemiesError = err;
+  }
+
+  let wandConfigs: NoitaWandConfig[] = [];
+  let wandConfigError: unknown | undefined = undefined;
+  try {
+    wandConfigs = await scrapeWandConfigs({
+      dataWakParentDirectoryApi: dataWakParentDirectory,
+    });
+  } catch (err) {
+    wandConfigError = err;
+  }
+
+  return {
+    translations: {
+      status: NoitaDataWakScrapeResultStatus.SUCCESS,
+      data: translations,
+      error: undefined,
+    },
+    perks: {
+      status:
+        perkError === undefined
+          ? NoitaDataWakScrapeResultStatus.SUCCESS
+          : NoitaDataWakScrapeResultStatus.FAILED,
+      data: perks,
+      error: perkError,
+    },
+    spells: {
+      status:
+        spellsError === undefined
+          ? NoitaDataWakScrapeResultStatus.SUCCESS
+          : NoitaDataWakScrapeResultStatus.FAILED,
+      data: spells,
+      error: spellsError,
+    },
+    enemies: {
+      status:
+        enemiesError === undefined
+          ? NoitaDataWakScrapeResultStatus.SUCCESS
+          : NoitaDataWakScrapeResultStatus.FAILED,
+      data: enemies,
+      error: enemiesError,
+    },
+    wandConfigs: {
+      status:
+        wandConfigError === undefined
+          ? NoitaDataWakScrapeResultStatus.SUCCESS
+          : NoitaDataWakScrapeResultStatus.FAILED,
+      data: wandConfigs,
+      error: wandConfigError,
+    },
+  };
 };
