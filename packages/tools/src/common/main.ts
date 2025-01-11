@@ -4,11 +4,12 @@
 
 export * from "./array";
 export * from "./cryptography";
+export * from "./file-access-utils";
 export * from "./images";
 export * from "./map";
 export * from "./math";
+export * from "./objects";
 export * from "./promises";
-export * from "./proxiedPropertiesOf";
 export * from "./random";
 export * from "./string";
 export * from "./switch";

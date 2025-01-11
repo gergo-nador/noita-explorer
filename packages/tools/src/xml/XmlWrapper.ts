@@ -5,6 +5,7 @@ export interface XmlWrapperType {
   _getCurrentXmlObj: () => object;
   findNthTag: (tagName: string, index?: number) => XmlWrapperType | undefined;
   findTagArray: (tagName: string) => XmlWrapperType[];
+  findAllTagsRecursively: (tagName: string) => XmlWrapperType[];
   getAttribute: (attributeName: string) => XmlAttributeReadOptions | undefined;
   getRequiredAttribute: (attributeName: string) => XmlAttributeReadOptions;
 }
@@ -23,6 +24,8 @@ export const XmlWrapper = (
     _getCurrentXmlObj: () => xmlObj,
     findNthTag: (tagName, index) => findNthTag(xmlObj, tagName, index),
     findTagArray: (tagName) => findTagArray(xmlObj, tagName),
+    findAllTagsRecursively: (tagName) =>
+      findAllTagsRecursively(xmlObj, tagName),
     getAttribute: (attributeName) => getAttribute(xmlObj, attributeName),
     getRequiredAttribute: (attributeName) => {
       const attr = getAttribute(xmlObj, attributeName);
@@ -51,6 +54,49 @@ const findTagArray = (
   }
 
   return tag.map((t) => XmlWrapper(t));
+};
+
+const findAllTagsRecursively = (
+  xmlObject: StringKeyDictionaryComposite<string>,
+  tagName: string,
+  tags: XmlWrapperType[] = [],
+): XmlWrapperType[] => {
+  if (Array.isArray(xmlObject)) {
+    for (const item of xmlObject) {
+      if (typeof item === 'object') {
+        findAllTagsRecursively(item, tagName, tags);
+      }
+    }
+  } else {
+    for (const key in xmlObject) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const value = xmlObject[key];
+
+      if (typeof value === 'object') {
+        findAllTagsRecursively(value, tagName, tags);
+      }
+    }
+  }
+
+  if (!(tagName in xmlObject)) {
+    return tags;
+  }
+
+  const tag = xmlObject[tagName];
+
+  if (typeof tag !== 'object') {
+    return tags;
+  }
+  if (!Array.isArray(tag)) {
+    const xmlWrapper = XmlWrapper(tag);
+    tags.push(xmlWrapper);
+    return tags;
+  }
+
+  tag.map((t) => XmlWrapper(t)).forEach((xml) => tags.push(xml));
+
+  return tags;
 };
 
 const findNthTag = (

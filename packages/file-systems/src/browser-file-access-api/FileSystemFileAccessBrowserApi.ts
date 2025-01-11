@@ -1,5 +1,8 @@
 import { FileSystemFileAccess } from '@noita-explorer/model';
-import { extractFileNameWithoutExtension } from '../common.ts';
+import {
+  extractFileNameWithoutExtension,
+  splitTextToLines,
+} from '../common.ts';
 
 export const FileSystemFileAccessBrowserApi = (
   fileHandle: FileSystemFileHandle,
@@ -18,7 +21,7 @@ export const FileSystemFileAccessBrowserApi = (
       extractFileNameWithoutExtension(fileHandle.name),
     read: {
       asText: async () => readAsText(),
-      asTextLines: async () => readAsText().then((t) => t.split('\n')),
+      asTextLines: async () => readAsText().then(splitTextToLines),
       asImageBase64: async () => {
         const blob = await fileHandle.getFile();
         return new Promise((resolve, reject) => {

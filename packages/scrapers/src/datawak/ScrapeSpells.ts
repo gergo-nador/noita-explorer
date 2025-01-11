@@ -280,7 +280,7 @@ const scrapeXmlSpellData = async (
   const xml = XmlWrapper(xmlObj);
 
   // this is in the main xml file
-  const hitEffects = xml.findTagArray('HitEffectComponent');
+  const hitEffects = xml.findAllTagsRecursively('HitEffectComponent');
   for (const hitEffect of hitEffects) {
     // specific for healhurt (Deadly Heal), in this xml will be the Regeneration Game effect
     const effect = hitEffect.getAttribute('value_string')?.asText();
@@ -290,7 +290,7 @@ const scrapeXmlSpellData = async (
   }
 
   // this could come from the HitEffectComponent
-  const gameEffects = xml.findTagArray('GameEffectComponent');
+  const gameEffects = xml.findAllTagsRecursively('GameEffectComponent');
   for (const gameEffect of gameEffects) {
     const effect = gameEffect.getAttribute('effect')?.asText();
     const frames = gameEffect.getAttribute('frames')?.asInt();

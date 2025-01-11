@@ -6,3 +6,7 @@ export const extractFileNameWithoutExtension = (fileName: string) => {
 
   return fileName.substring(0, lastIndex);
 };
+
+export const splitTextToLines = (text: string): string[] => {
+  return text.split(/\r\n|\n|\r/);
+};

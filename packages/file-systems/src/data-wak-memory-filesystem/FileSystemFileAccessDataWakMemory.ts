@@ -1,7 +1,10 @@
 import { WakMemoryFile } from './wak/WakMemoryFile.ts';
 import { FileSystemFileAccess } from '@noita-explorer/model';
 import { promiseHelper } from '@noita-explorer/tools';
-import { extractFileNameWithoutExtension } from '../common.ts';
+import {
+  extractFileNameWithoutExtension,
+  splitTextToLines,
+} from '../common.ts';
 
 export const FileSystemFileAccessDataWakMemory = (
   file: WakMemoryFile,
@@ -19,7 +22,7 @@ export const FileSystemFileAccessDataWakMemory = (
     read: {
       asText: () => readAsText(),
       asBuffer: () => promiseHelper.fromValue(file.getFileBytes()),
-      asTextLines: () => readAsText().then((t) => t.split('\n')),
+      asTextLines: () => readAsText().then(splitTextToLines),
       asImageBase64: async () => {
         const mimeType = getMimeTypeFromExtension(fileName);
 

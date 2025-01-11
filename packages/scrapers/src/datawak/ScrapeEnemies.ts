@@ -6,6 +6,7 @@ import {
 import {
   NoitaConstants,
   NoitaEnemy,
+  NoitaEnemyGameEffect,
   NoitaEnemyMaterialDamage,
   NoitaEnemyVariant,
   NoitaTranslation,
@@ -17,11 +18,18 @@ import {
 } from '@noita-explorer/tools/xml';
 import {
   arrayHelpers,
+  fileSystemAccessHelpers,
   mathHelpers,
   stringHelpers,
+  objectHelpers,
 } from '@noita-explorer/tools';
 import { noitaPaths } from '../NoitaPaths.ts';
 
+/**
+ * Scraping all the enemies/animals
+ * @param dataWakParentDirectoryApi
+ * @param translations
+ */
 export const scrapeEnemies = async ({
   dataWakParentDirectoryApi,
   translations,
@@ -29,6 +37,7 @@ export const scrapeEnemies = async ({
   dataWakParentDirectoryApi: FileSystemDirectoryAccess;
   translations: StringKeyDictionary<NoitaTranslation>;
 }): Promise<NoitaEnemy[]> => {
+  // Part 1: Getting a list of animal ids and their corresponding images
   const animalsDirPath = await dataWakParentDirectoryApi.path.join(
     noitaPaths.noitaDataWak.icons.animals,
   );
@@ -70,24 +79,44 @@ export const scrapeEnemies = async ({
 
   for (const animal of animalsProcessQueue) {
     try {
-      let enemy = await scrapeEnemy(
-        animal.animalId,
-        animal.imageBase64,
-        animalsDataDirectory,
-        translations,
-      );
+      const defaultName = translations['animal_' + animal.animalId]?.en;
+      const defaultDamageMultiplier = 1;
 
-      if (enemy === undefined) {
-        enemy = {
-          id: animal.animalId,
-          imageBase64: animal.imageBase64,
-          name:
-            translations['animal_' + animal.animalId]?.en ?? animal.animalId,
-          hp: undefined,
-          bloodMaterial: undefined,
-          materialsThatDamage: undefined,
-        } as NoitaEnemy;
-      }
+      const enemy: NoitaEnemy = {
+        id: animal.animalId,
+        imageBase64: animal.imageBase64,
+        name: defaultName ?? animal.animalId,
+        hp: undefined,
+        maxHp: undefined,
+        airNeeded: undefined,
+        bloodMaterial: undefined,
+        ragdollMaterial: undefined,
+        materialsThatDamage: undefined,
+        goldDrop: false,
+        genomeData: undefined,
+        knockBackResistance: undefined,
+        damageMultipliers: {
+          ice: defaultDamageMultiplier,
+          fire: defaultDamageMultiplier,
+          holy: defaultDamageMultiplier,
+          drill: defaultDamageMultiplier,
+          slice: defaultDamageMultiplier,
+          melee: defaultDamageMultiplier,
+          explosion: defaultDamageMultiplier,
+          projectile: defaultDamageMultiplier,
+          electricity: defaultDamageMultiplier,
+          radioactive: defaultDamageMultiplier,
+        },
+        variants: [],
+        gameEffects: [],
+      };
+
+      await scrapeEnemyMain({
+        enemy: enemy,
+        translations: translations,
+        animalsDataDirectory: animalsDataDirectory,
+        dataWakParentDirectoryApi: dataWakParentDirectoryApi,
+      });
 
       noitaEnemies.push(enemy);
     } catch (e) {
@@ -111,18 +140,24 @@ export const scrapeEnemies = async ({
   return noitaEnemies;
 };
 
-const scrapeEnemy = async (
-  animalId: string,
-  imageBase64: string,
-  animalsDataDirectory: FileSystemDirectoryAccess,
-  translations: StringKeyDictionary<NoitaTranslation>,
-) => {
-  // TODO: rework this scraper so that it starts at the bottom of
-  //  the Base object and overwrites the values as it up down in the hierarchy
+const scrapeEnemyMain = async ({
+  enemy,
+  dataWakParentDirectoryApi,
+  translations,
+  animalsDataDirectory,
+}: {
+  enemy: NoitaEnemy;
+  translations: StringKeyDictionary<NoitaTranslation>;
+  animalsDataDirectory: FileSystemDirectoryAccess;
+  dataWakParentDirectoryApi: FileSystemDirectoryAccess;
+}) => {
+  // Find, read and parse the enemy file
+  const xmlFileName = enemy.id + '.xml';
 
-  const xmlFileName = animalId + '.xml';
-
-  const file = await findFileInDirectory(xmlFileName, animalsDataDirectory);
+  const file = await fileSystemAccessHelpers.findFileInDirectory(
+    xmlFileName,
+    animalsDataDirectory,
+  );
   const xmlFileExists = file !== undefined;
   if (!xmlFileExists) {
     return undefined;
@@ -137,8 +172,9 @@ const scrapeEnemy = async (
     return undefined;
   }
 
+  // get the translation id
   const translationId = entityTag.getAttribute('name')?.asText();
-  let entityName = translationId ?? animalId;
+  let entityName = translationId ?? enemy.id;
 
   if (translationId !== undefined) {
     const trimedTranslationId = stringHelpers.trim({
@@ -146,7 +182,7 @@ const scrapeEnemy = async (
       fromStart: '$',
     });
 
-    const translationIdFromAnimalId = 'animal_' + animalId;
+    const translationIdFromAnimalId = 'animal_' + enemy.id;
     if (translationIdFromAnimalId in translations) {
       entityName = translations[translationIdFromAnimalId].en;
     } else if (trimedTranslationId in translations) {
@@ -154,28 +190,127 @@ const scrapeEnemy = async (
     }
   }
 
-  const enemy: NoitaEnemy = {
-    id: animalId,
-    imageBase64: imageBase64,
-    name: entityName,
-    hp: undefined,
-    maxHp: undefined,
-    knockBackResistance: undefined,
-    bloodMaterial: undefined,
-    materialsThatDamage: undefined,
-    genomeData: undefined,
-    goldDrop: true,
-    variants: [],
-  };
+  enemy.name = entityName;
 
+  // before starting to extract properties for enemy,
+  // traverse through the Base tag hierarchy
+  await traverseThroughBaseFiles({
+    enemy: enemy,
+    file: file,
+    dataWakParentDirectoryApi: dataWakParentDirectoryApi,
+  });
+
+  // then extract the more specific properties for the enemy
+  extractEnemyProperties({ enemy, entityTag });
+
+  // look for variants
+  const subDirectories = await animalsDataDirectory.listDirectories();
+  const variantFiles = await fileSystemAccessHelpers.findAllFilesInDirectory(
+    xmlFileName,
+    subDirectories,
+  );
+
+  for (const variantFile of variantFiles) {
+    const variantFullPath = variantFile.getFullPath();
+    if (variantFullPath === file?.getFullPath()) {
+      continue;
+    }
+
+    const variantFullPathSplit =
+      await animalsDataDirectory.path.split(variantFullPath);
+
+    const variantXmlText = await variantFile.read.asText();
+    const variantXmlObj = await parseXml(variantXmlText);
+    const variantXmlWrapper = XmlWrapper(variantXmlObj);
+
+    const variantEntityTag = variantXmlWrapper.findNthTag('Entity');
+    if (variantEntityTag === undefined) {
+      continue;
+    }
+
+    const variant: NoitaEnemyVariant = {
+      // the variant id is the folder right before the file name
+      variantId: variantFullPathSplit[variantFullPathSplit.length - 2],
+      enemy: objectHelpers.deepCopy(enemy),
+    };
+
+    extractEnemyProperties({
+      enemy: variant.enemy,
+      entityTag: variantEntityTag,
+    });
+
+    enemy.variants.push(variant);
+  }
+
+  return enemy;
+};
+
+/**
+ * Traverses through the hierarchy tree of base definitions
+ * @param enemy the enemy object to fill up
+ * @param file the current base file
+ * @param dataWakParentDirectoryApi
+ */
+const traverseThroughBaseFiles = async ({
+  enemy,
+  file,
+  dataWakParentDirectoryApi,
+}: {
+  enemy: NoitaEnemy;
+  file: FileSystemFileAccess;
+  dataWakParentDirectoryApi: FileSystemDirectoryAccess;
+}) => {
+  const xmlText = await file.read.asText().then(parseXml);
+  const xml = XmlWrapper(xmlText);
+
+  const entityTag = xml.findNthTag('Entity');
+  if (entityTag === undefined) {
+    return;
+  }
+
+  const baseTag = entityTag.findNthTag('Base');
+  const baseFilePath = baseTag?.getAttribute('file')?.asText();
+  if (baseTag !== undefined && baseFilePath !== undefined) {
+    const baseFileExists =
+      await dataWakParentDirectoryApi.checkRelativePathExists(baseFilePath);
+
+    if (baseFileExists) {
+      const baseFile = await dataWakParentDirectoryApi.getFile(baseFilePath);
+      await traverseThroughBaseFiles({
+        enemy: enemy,
+        file: baseFile,
+        dataWakParentDirectoryApi: dataWakParentDirectoryApi,
+      });
+    }
+  }
+
+  extractEnemyProperties({ enemy, entityTag });
+};
+
+/**
+ * Extracts XML information of enemies/animals, overwriting the properties
+ * in case if the data is present in the XML data
+ * @param enemy
+ * @param entityTag
+ */
+const extractEnemyProperties = ({
+  enemy,
+  entityTag,
+}: {
+  enemy: NoitaEnemy;
+  entityTag: XmlWrapperType;
+}) => {
   const damageModelComponent = entityTag.findNthTag('DamageModelComponent');
   if (damageModelComponent !== undefined) {
     const extracted = extractDamageModelInformation(damageModelComponent);
-    enemy.hp = extracted.hp;
-    enemy.maxHp = extracted.maxHp;
-    enemy.bloodMaterial = extracted.bloodMaterial;
-    enemy.materialsThatDamage = extracted.damages;
-    enemy.knockBackResistance = extracted.knockBackResistance;
+    enemy.hp = extracted.hp ?? enemy.hp;
+    enemy.maxHp = extracted.maxHp ?? enemy.maxHp;
+    enemy.bloodMaterial = extracted.bloodMaterial ?? enemy.bloodMaterial;
+    enemy.materialsThatDamage = extracted.damages ?? enemy.materialsThatDamage;
+    enemy.knockBackResistance =
+      extracted.knockBackResistance ?? enemy.knockBackResistance;
+    enemy.airNeeded = extracted.airNeeded ?? enemy.airNeeded;
+    enemy.ragdollMaterial = extracted.ragdollMaterial ?? enemy.ragdollMaterial;
   }
 
   const genomeDataComponent = entityTag.findNthTag('GenomeDataComponent');
@@ -190,18 +325,29 @@ const scrapeEnemy = async (
       .getAttribute('is_predator')
       ?.asBoolean();
 
-    enemy.genomeData = {
-      herdId: herdId,
-      foodChainRank: foodChainRank,
-      isPredator: isPredator ?? false,
-    };
+    if (enemy.genomeData === undefined) {
+      enemy.genomeData = {
+        herdId: undefined,
+        isPredator: undefined,
+        foodChainRank: undefined,
+      };
+    }
+
+    enemy.genomeData.herdId = herdId ?? enemy.genomeData.herdId;
+    enemy.genomeData.foodChainRank =
+      foodChainRank ?? enemy.genomeData.foodChainRank;
+    enemy.genomeData.isPredator = isPredator ?? enemy.genomeData.isPredator;
   }
 
-  const subDirectories = await animalsDataDirectory.listDirectories();
-  const variantFiles = await findAllFilesInDirectory(
-    xmlFileName,
-    subDirectories,
-  );
+  const luaComponents = entityTag.findAllTagsRecursively('LuaComponent');
+  for (const luaComponent of luaComponents) {
+    const goldDropScript = 'data/scripts/items/drop_money.lua';
+    const scriptDeath = luaComponent.getAttribute('script_death')?.asText();
+
+    if (scriptDeath !== undefined && scriptDeath === goldDropScript) {
+      enemy.goldDrop = true;
+    }
+  }
 
   const variableStorageComponent = entityTag.findNthTag(
     'VariableStorageComponent',
@@ -217,64 +363,56 @@ const scrapeEnemy = async (
     }
   }
 
-  for (const variantFile of variantFiles) {
-    /*
-    variant file for scavenger_heal:
+  const gameEffectComponents = entityTag.findAllTagsRecursively(
+    'GameEffectComponent',
+  );
+  for (const gameEffectComponent of gameEffectComponents) {
+    const effectId = gameEffectComponent
+      .getRequiredAttribute('effect')
+      .asText()!;
+    const frames = gameEffectComponent.getAttribute('frames')?.asInt() ?? 0;
 
-    <Entity >
-      <Base file="data/entities/animals/scavenger_heal.xml"  include_children="1">
-        <DamageModelComponent
-          hp="0.7"
-          max_hp="0.7"
-    	  minimum_knockback_force="100000"
-         ></DamageModelComponent >
-      </Base>
-    </Entity>
-
-    might be worth implementing the Base file check and build a file tree to extract the variants more accurately
-     */
-
-    const variantFullPath = variantFile.getFullPath();
-    if (variantFullPath === file?.getFullPath()) {
-      continue;
-    }
-
-    const variantFullPathSplit =
-      await animalsDataDirectory.path.split(variantFullPath);
-
-    const variantXmlText = await variantFile.read.asText();
-    const variantXmlObj = await parseXml(variantXmlText);
-    const variantXmlWrapper = XmlWrapper(variantXmlObj);
-
-    const variantEntity = variantXmlWrapper.findNthTag('Entity');
-    if (variantEntity === undefined) {
-      continue;
-    }
-
-    const variant: NoitaEnemyVariant = {
-      // the biome is the folder right before the file name
-      biome: variantFullPathSplit[variantFullPathSplit.length - 2],
-      hp: undefined,
-      maxHp: undefined,
-      knockBackResistance: undefined,
+    const gameEffect: NoitaEnemyGameEffect = {
+      id: effectId,
+      frames: frames,
     };
 
-    const variantDamageModelComponent = variantEntity.findNthTag(
-      'DamageModelComponent',
-    );
-    if (variantDamageModelComponent !== undefined) {
-      const extracted = extractDamageModelInformation(
-        variantDamageModelComponent,
-      );
-      variant.hp = extracted.hp;
-      variant.maxHp = extracted.maxHp;
-      variant.knockBackResistance = extracted.knockBackResistance;
+    if (enemy.gameEffects.some((effect) => effect.id === effectId)) {
+      continue;
     }
-
-    enemy.variants.push(variant);
+    enemy.gameEffects.push(gameEffect);
   }
 
-  return enemy;
+  const damageMultipliersTag =
+    damageModelComponent?.findNthTag('damage_multipliers');
+  const damageMultiplierProxy = objectHelpers.proxiedPropertiesOf(
+    enemy.damageMultipliers,
+  );
+  if (damageMultipliersTag !== undefined) {
+    const extractDamageMultipliers = [
+      damageMultiplierProxy.ice,
+      damageMultiplierProxy.fire,
+      damageMultiplierProxy.holy,
+      damageMultiplierProxy.drill,
+      damageMultiplierProxy.slice,
+      damageMultiplierProxy.melee,
+      damageMultiplierProxy.explosion,
+      damageMultiplierProxy.projectile,
+      damageMultiplierProxy.electricity,
+      damageMultiplierProxy.radioactive,
+    ];
+
+    for (const multiplier of extractDamageMultipliers) {
+      if (multiplier === undefined) continue;
+
+      const multiplierValue = damageMultipliersTag
+        .getAttribute(multiplier)
+        ?.asFloat();
+
+      enemy.damageMultipliers[multiplier] =
+        multiplierValue ?? enemy.damageMultipliers[multiplier];
+    }
+  }
 };
 
 const extractDamageModelInformation = (
@@ -292,6 +430,10 @@ const extractDamageModelInformation = (
 
   const bloodMaterial = damageModelComponent
     .getAttribute('blood_material')
+    ?.asText();
+
+  const ragdollMaterial = damageModelComponent
+    .getAttribute('ragdoll_material')
     ?.asText();
 
   const materialsThatDamage = damageModelComponent
@@ -324,54 +466,17 @@ const extractDamageModelInformation = (
     .getAttribute('minimum_knockback_force')
     ?.asInt();
 
+  const airNeeded = damageModelComponent
+    .getAttribute('air_needed')
+    ?.asBoolean();
+
   return {
     hp,
     maxHp,
     bloodMaterial,
     damages,
     knockBackResistance,
+    airNeeded,
+    ragdollMaterial,
   };
-};
-
-const findFileInDirectory = async (
-  fileName: string,
-  directory: FileSystemDirectoryAccess,
-): Promise<FileSystemFileAccess | undefined> => {
-  const filePathExists = await directory.checkRelativePathExists(fileName);
-  if (filePathExists) {
-    return await directory.getFile(fileName);
-  }
-
-  const directories = await directory.listDirectories();
-  for (const dir of directories) {
-    const file = await findFileInDirectory(fileName, dir);
-    if (file !== undefined) {
-      return file;
-    }
-  }
-
-  return undefined;
-};
-
-const findAllFilesInDirectory = async (
-  fileName: string,
-  directories: FileSystemDirectoryAccess[],
-): Promise<FileSystemFileAccess[]> => {
-  const arr: FileSystemFileAccess[] = [];
-
-  let directoryQueue: FileSystemDirectoryAccess[] = [...directories];
-
-  while (directoryQueue.length > 0) {
-    const currentDir = directoryQueue.shift()!;
-    const filePathExists = await currentDir.checkRelativePathExists(fileName);
-    if (filePathExists) {
-      const file = await currentDir.getFile(fileName);
-      arr.push(file);
-    }
-
-    const subDirectories = await currentDir.listDirectories();
-    directoryQueue = [...directoryQueue, ...subDirectories];
-  }
-
-  return arr;
 };

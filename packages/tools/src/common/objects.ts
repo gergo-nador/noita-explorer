@@ -1,3 +1,7 @@
+const deepCopy = <T>(obj: T): T => {
+  return JSON.parse(JSON.stringify(obj));
+};
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function proxiedPropertiesOf<TObj>(_obj?: TObj) {
   // https://stackoverflow.com/questions/33547583/safe-way-to-extract-property-names
@@ -13,3 +17,8 @@ export function proxiedPropertiesOf<TObj>(_obj?: TObj) {
     [P in keyof TObj]?: P;
   };
 }
+
+export const objectHelpers = {
+  deepCopy,
+  proxiedPropertiesOf,
+};

@@ -1,6 +1,9 @@
 import { FileWithDirectoryAndFileHandle } from 'browser-fs-access';
 import { FileSystemFileAccess } from '@noita-explorer/model';
-import { extractFileNameWithoutExtension } from '../common.ts';
+import {
+  extractFileNameWithoutExtension,
+  splitTextToLines,
+} from '../common.ts';
 
 export const FileSystemFileAccessBrowserFallback = (
   file: FileWithDirectoryAndFileHandle,
@@ -11,7 +14,7 @@ export const FileSystemFileAccessBrowserFallback = (
     getNameWithoutExtension: () => extractFileNameWithoutExtension(file.name),
     read: {
       asText: () => file.text(),
-      asTextLines: () => file.text().then((t) => t.split('\n')),
+      asTextLines: () => file.text().then(splitTextToLines),
       asImageBase64: () =>
         new Promise((resolve, reject) => {
           const reader = new FileReader();
