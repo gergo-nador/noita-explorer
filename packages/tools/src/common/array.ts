@@ -105,6 +105,21 @@ const unique = <T>(items: T[]) => {
   return [...new Set(items)];
 };
 
+const uniqueBy = <T>(items: T[], by: (t: T) => string): T[] => {
+  const dict: StringKeyDictionary<T> = {};
+
+  for (const item of items) {
+    const attribute = by(item);
+    if (attribute in dict) {
+      continue;
+    }
+
+    dict[attribute] = item;
+  }
+
+  return Object.values(dict);
+};
+
 const zip = <T, U>(arr1: T[], arr2: U[]) => {
   if (arr1.length !== arr2.length) {
     throw new Error(
@@ -125,6 +140,7 @@ export const arrayHelpers = {
   avgBy: avgBy,
   asDict: asDict,
   unique: unique,
+  uniqueBy: uniqueBy,
   toggleItemInList: toggleItemInList,
   zip: zip,
 };

@@ -63,11 +63,36 @@ const readImageAsBase64 = (filePath: string): Promise<string> => {
         text: parsedPath.ext,
         fromStart: '.',
       });
-      const base64 = `data:image/${extension};base64,${data.toString('base64')}`;
+
+      const mimeType = getMimeTypeFromExtension(extension);
+
+      const base64 = `data:${mimeType};base64,${data.toString('base64')}`;
       resolve(base64);
     });
   });
 };
+
+function getMimeTypeFromExtension(fileName: string): string {
+  const extension = fileName.split('.').pop()?.toLowerCase() ?? '';
+
+  switch (extension) {
+    case 'png':
+      return 'image/png';
+    case 'jpg':
+    case 'jpeg':
+      return 'image/jpeg';
+    case 'gif':
+      return 'image/gif';
+    case 'bmp':
+      return 'image/bmp';
+    case 'svg':
+      return 'image/svg+xml';
+    case 'webp':
+      return 'image/webp';
+    default:
+      return 'application/octet-stream';
+  }
+}
 
 const openExplorer = (path: string) => {
   Platform.select({

@@ -7,7 +7,12 @@ export default defineConfig({
   build: {
     lib: {
       entry: {
+        main: resolve(__dirname, 'src/main.ts'),
         'browser-fallback': resolve(__dirname, 'src/browser-fallback/main.ts'),
+        'data-wak-memory-filesystem': resolve(
+          __dirname,
+          'src/data-wak-memory-filesystem/main.ts',
+        ),
         'browser-file-access-api': resolve(
           __dirname,
           'src/browser-file-access-api/main.ts',
@@ -21,7 +26,6 @@ export default defineConfig({
         assetFileNames: 'assets/[name][extname]',
         entryFileNames: '[name].[format].js',
       },
-      external: ['@noita-explorer/tools/os', 'os', 'path'],
     },
   },
 });

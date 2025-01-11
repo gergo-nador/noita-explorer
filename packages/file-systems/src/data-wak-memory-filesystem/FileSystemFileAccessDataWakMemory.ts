@@ -21,8 +21,34 @@ export const FileSystemFileAccessDataWakMemory = (
       asBuffer: () => promiseHelper.fromValue(file.getFileBytes()),
       asTextLines: () => readAsText().then((t) => t.split('\n')),
       asImageBase64: () => {
-        throw new Error();
+        const mimeType = getMimeTypeFromExtension(fileName);
+        const base64String = file.getFileBytes().toString('base64');
+        return promiseHelper.fromValue(
+          `data:${mimeType};base64,${base64String}`,
+        );
       },
     },
   };
 };
+
+function getMimeTypeFromExtension(fileName: string): string {
+  const extension = fileName.split('.').pop()?.toLowerCase() ?? '';
+
+  switch (extension) {
+    case 'png':
+      return 'image/png';
+    case 'jpg':
+    case 'jpeg':
+      return 'image/jpeg';
+    case 'gif':
+      return 'image/gif';
+    case 'bmp':
+      return 'image/bmp';
+    case 'svg':
+      return 'image/svg+xml';
+    case 'webp':
+      return 'image/webp';
+    default:
+      return 'application/octet-stream';
+  }
+}

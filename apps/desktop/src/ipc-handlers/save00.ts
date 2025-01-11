@@ -4,10 +4,10 @@ import {
   scrapeEnemyStatistics,
   scrapeProgressFlags,
   scrapeSessions,
+  noitaPaths,
 } from '@noita-explorer/scrapers';
 import { getConfig } from '../persistence/config-store';
 import path from 'path';
-import { noitaPaths } from '@noita-explorer/model';
 import { FileSystemDirectoryAccessNode } from '../file-system/FileSystemDirectoryAccessNode';
 
 export const registerSave00Handlers = () => {

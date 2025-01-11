@@ -15,7 +15,7 @@
     "./browser-fallback": {
       "types": "./dist/browser-fallback/main.d.ts",
       "import": "./dist/browser-fallback.es.js",
-      "require": "./dist/browser-fallback..cjsjs"
+      "require": "./dist/browser-fallback.cjs.js"
     },
     "./browser-file-access-api": {
       "types": "./dist/browser-file-access-api/main.d.ts",

@@ -18,16 +18,16 @@ import { parseXml, XmlWrapper } from '@noita-explorer/tools/xml';
 import { noitaPaths } from '../NoitaPaths.ts';
 
 export const scrapeSpells = async ({
-  dataWakDirectoryApi,
+  dataWakParentDirectoryApi,
   translations,
 }: {
-  dataWakDirectoryApi: FileSystemDirectoryAccess;
+  dataWakParentDirectoryApi: FileSystemDirectoryAccess;
   translations: StringKeyDictionary<NoitaTranslation>;
 }) => {
-  const spellListLuaScriptPath = await dataWakDirectoryApi.path.join(
+  const spellListLuaScriptPath = await dataWakParentDirectoryApi.path.join(
     noitaPaths.noitaDataWak.luaScripts.guns,
   );
-  const spellListLuaScriptFile = await dataWakDirectoryApi.getFile(
+  const spellListLuaScriptFile = await dataWakParentDirectoryApi.getFile(
     spellListLuaScriptPath,
   );
   const text = await spellListLuaScriptFile.read.asText();
@@ -111,8 +111,10 @@ export const scrapeSpells = async ({
     const sprite: string = luaSpell
       .getRequiredField('sprite')
       .required.asString();
-    const imagePath = await dataWakDirectoryApi.path.join(sprite.split('/'));
-    const imageFile = await dataWakDirectoryApi.getFile(imagePath);
+    const imagePath = await dataWakParentDirectoryApi.path.join(
+      sprite.split('/'),
+    );
+    const imageFile = await dataWakParentDirectoryApi.getFile(imagePath);
     spell.imageBase64 = await imageFile.read.asImageBase64();
 
     // load other data
@@ -123,7 +125,11 @@ export const scrapeSpells = async ({
         for (const xmlFilePathValue of xmlFiles) {
           const xmlFilePath = xmlFilePathValue.asString();
           if (xmlFilePath !== undefined) {
-            await scrapeXmlSpellData(dataWakDirectoryApi, xmlFilePath, spell);
+            await scrapeXmlSpellData(
+              dataWakParentDirectoryApi,
+              xmlFilePath,
+              spell,
+            );
           }
         }
       }

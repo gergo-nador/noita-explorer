@@ -8,16 +8,16 @@ import { LuaWrapper } from '@noita-explorer/tools/lua';
 import { noitaPaths } from '../NoitaPaths.ts';
 
 export const scrapePerks = async ({
-  dataWakDirectoryApi,
+  dataWakParentDirectoryApi,
   translations,
 }: {
-  dataWakDirectoryApi: FileSystemDirectoryAccess;
+  dataWakParentDirectoryApi: FileSystemDirectoryAccess;
   translations: StringKeyDictionary<NoitaTranslation>;
 }): Promise<NoitaPerk[]> => {
-  const perkListLuaScriptPath = await dataWakDirectoryApi.path.join(
+  const perkListLuaScriptPath = await dataWakParentDirectoryApi.path.join(
     noitaPaths.noitaDataWak.luaScripts.perks,
   );
-  const perkListLuaScriptFile = await dataWakDirectoryApi.getFile(
+  const perkListLuaScriptFile = await dataWakParentDirectoryApi.getFile(
     perkListLuaScriptPath,
   );
 
@@ -92,8 +92,10 @@ export const scrapePerks = async ({
 
     // load the image
     const ui_icon = luaPerk.getRequiredField('perk_icon').required.asString();
-    const imagePath = await dataWakDirectoryApi.path.join(ui_icon.split('/'));
-    const imageFile = await dataWakDirectoryApi.getFile(imagePath);
+    const imagePath = await dataWakParentDirectoryApi.path.join(
+      ui_icon.split('/'),
+    );
+    const imageFile = await dataWakParentDirectoryApi.getFile(imagePath);
     perk.imageBase64 = await imageFile.read.asImageBase64();
 
     perks.push(perk);

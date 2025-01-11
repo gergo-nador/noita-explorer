@@ -23,17 +23,17 @@ import {
 import { noitaPaths } from '../NoitaPaths.ts';
 
 export const scrapeEnemies = async ({
-  dataWakDirectoryApi,
+  dataWakParentDirectoryApi,
   translations,
 }: {
-  dataWakDirectoryApi: FileSystemDirectoryAccess;
+  dataWakParentDirectoryApi: FileSystemDirectoryAccess;
   translations: StringKeyDictionary<NoitaTranslation>;
 }): Promise<NoitaEnemy[]> => {
-  const animalsDirPath = await dataWakDirectoryApi.path.join(
+  const animalsDirPath = await dataWakParentDirectoryApi.path.join(
     noitaPaths.noitaDataWak.icons.animals,
   );
   const animalsDirectory =
-    await dataWakDirectoryApi.getDirectory(animalsDirPath);
+    await dataWakParentDirectoryApi.getDirectory(animalsDirPath);
 
   const files = await animalsDirectory.listFiles();
 
@@ -60,11 +60,11 @@ export const scrapeEnemies = async ({
     });
   }
 
-  const animalsDataDirOath = await dataWakDirectoryApi.path.join(
+  const animalsDataDirOath = await dataWakParentDirectoryApi.path.join(
     noitaPaths.noitaDataWak.xmlData.animals,
   );
   const animalsDataDirectory =
-    await dataWakDirectoryApi.getDirectory(animalsDataDirOath);
+    await dataWakParentDirectoryApi.getDirectory(animalsDataDirOath);
 
   const noitaEnemies: NoitaEnemy[] = [];
 

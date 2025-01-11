@@ -4,14 +4,14 @@ import { LuaWrapper } from '@noita-explorer/tools/lua';
 import { noitaPaths } from '../NoitaPaths.ts';
 
 export const scrapeWandConfigs = async ({
-  dataWakDirectoryApi,
+  dataWakParentDirectoryApi,
 }: {
-  dataWakDirectoryApi: FileSystemDirectoryAccess;
+  dataWakParentDirectoryApi: FileSystemDirectoryAccess;
 }) => {
-  const wandListLuaScriptPath = await dataWakDirectoryApi.path.join(
+  const wandListLuaScriptPath = await dataWakParentDirectoryApi.path.join(
     noitaPaths.noitaDataWak.luaScripts.wands,
   );
-  const wandListLuaScriptFile = await dataWakDirectoryApi.getFile(
+  const wandListLuaScriptFile = await dataWakParentDirectoryApi.getFile(
     wandListLuaScriptPath,
   );
   const text = await wandListLuaScriptFile.read.asText();
@@ -30,8 +30,8 @@ export const scrapeWandConfigs = async ({
     const sprite = luaWandConfig.getRequiredField('file').required.asString();
 
     const spriteSplit = sprite.split('/');
-    const imagePath = await dataWakDirectoryApi.path.join(spriteSplit);
-    const imageFile = await dataWakDirectoryApi.getFile(imagePath);
+    const imagePath = await dataWakParentDirectoryApi.path.join(spriteSplit);
+    const imageFile = await dataWakParentDirectoryApi.getFile(imagePath);
     const imageBase64 = await imageFile.read.asImageBase64();
 
     const spriteFileName = spriteSplit[spriteSplit.length - 1];

@@ -18,7 +18,8 @@ export const noitaPaths = {
   },
   noitaInstallFolder: {
     translation: ['data', 'translations', 'common.csv'],
-    translation_dev: ['data', 'translations', 'common_dev.csv'],
+    translationDev: ['data', 'translations', 'common_dev.csv'],
+    dataWak: ['data', 'data.wak'],
   },
   save00: {
     folder: ['save00'],

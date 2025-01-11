@@ -39,6 +39,7 @@
   },
   "license": "MIT",
   "dependencies": {
+    "@noita-explorer/file-systems": "*",
     "@noita-explorer/model": "*",
     "@noita-explorer/tools": "*",
     "@noita-explorer/scrapers": "*",
