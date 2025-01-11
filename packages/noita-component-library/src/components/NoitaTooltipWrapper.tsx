@@ -47,7 +47,6 @@ export const NoitaTooltipWrapper = ({
         id={id}
         onMouseEnter={() => setMouseHovered(true)}
         onMouseLeave={() => setMouseHovered(false)}
-        style={{ display: 'contents' }}
       >
         {children}
       </div>

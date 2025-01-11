@@ -28,6 +28,9 @@ export interface NoitaAPI {
       scrapeSessions: () => Promise<NoitaSession[]>;
       scrapeBonesWands: () => Promise<NoitaWand[]>;
     };
+    launch: {
+      master: (params?: string[]) => Promise<void>;
+    };
   };
   dialog: {
     openFolderDialog: (args?: {

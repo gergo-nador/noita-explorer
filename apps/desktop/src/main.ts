@@ -14,6 +14,7 @@ import { registerNoitaDataFileHandlers } from './ipc-handlers/noita-data-file';
 import { registerNoitaDefaultPathsHandlers } from './ipc-handlers/noita-default-paths';
 import { registerDialogHandlers } from './ipc-handlers/dialog';
 import { registerSave00Handlers } from './ipc-handlers/save00';
+import { registerLaunchHandlers } from './ipc-handlers/launch';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
@@ -27,6 +28,7 @@ const ipcHandlerRegisters = [
   registerNoitaDefaultPathsHandlers,
   registerDialogHandlers,
   registerSave00Handlers,
+  registerLaunchHandlers,
 ];
 
 const template: (MenuItemConstructorOptions | MenuItem)[] = [

@@ -30,6 +30,9 @@ const noitaApi: NoitaAPI = {
       scrapeSessions: () => ipcRenderer.invoke('save00:scrape-sessions'),
       scrapeBonesWands: () => ipcRenderer.invoke('save00:scrape-bones-wands'),
     },
+    launch: {
+      master: (args) => ipcRenderer.invoke('noita:launch-master', args),
+    },
   },
   dialog: {
     openFolderDialog: (args) =>

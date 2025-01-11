@@ -103,6 +103,9 @@ export function browserNoitaApi(): NoitaAPI {
           return await scrapeBonesWands({ save00DirectoryApi: api });
         },
       },
+      launch: {
+        master: () => throwNotAllowedInThisModeError(),
+      },
     },
     dialog: {
       openFileDialog: async () => {
