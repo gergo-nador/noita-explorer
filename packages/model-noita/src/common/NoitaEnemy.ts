@@ -9,6 +9,7 @@ export interface NoitaEnemy extends NoitaProgressEntity {
   airNeeded: boolean | undefined;
   bloodMaterial: string | undefined;
   ragdollMaterial: string | undefined;
+  fireProbabilityOfIgnition: number | undefined;
   materialsThatDamage: NoitaEnemyMaterialDamage[] | undefined;
   genomeData: NoitaEnemyGenomeData | undefined;
   knockBackResistance: number | undefined;

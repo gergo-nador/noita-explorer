@@ -91,6 +91,7 @@ export const scrapeEnemies = async ({
         airNeeded: undefined,
         bloodMaterial: undefined,
         ragdollMaterial: undefined,
+        fireProbabilityOfIgnition: undefined,
         materialsThatDamage: undefined,
         goldDrop: false,
         genomeData: undefined,
@@ -311,6 +312,8 @@ const extractEnemyProperties = ({
       extracted.knockBackResistance ?? enemy.knockBackResistance;
     enemy.airNeeded = extracted.airNeeded ?? enemy.airNeeded;
     enemy.ragdollMaterial = extracted.ragdollMaterial ?? enemy.ragdollMaterial;
+    enemy.fireProbabilityOfIgnition =
+      extracted.fireProbabilityOfIgnition ?? enemy.fireProbabilityOfIgnition;
   }
 
   const genomeDataComponent = entityTag.findNthTag('GenomeDataComponent');
@@ -436,6 +439,10 @@ const extractDamageModelInformation = (
     .getAttribute('ragdoll_material')
     ?.asText();
 
+  const fireProbabilityOfIgnition = damageModelComponent
+    .getAttribute('fire_probability_of_ignition')
+    ?.asFloat();
+
   const materialsThatDamage = damageModelComponent
     .getAttribute('materials_that_damage')
     ?.asText()
@@ -478,5 +485,6 @@ const extractDamageModelInformation = (
     knockBackResistance,
     airNeeded,
     ragdollMaterial,
+    fireProbabilityOfIgnition,
   };
 };
