@@ -6,4 +6,6 @@ export const NoitaConstants = {
   damageMultiplier: 25,
   hpMultiplier: 25,
   framesPerSecond: 60,
+  hpGoldMultiplier: 10,
+  minGoldDrop: 10,
 };

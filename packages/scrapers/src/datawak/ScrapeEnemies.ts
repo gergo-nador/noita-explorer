@@ -517,13 +517,15 @@ const extractDamageModelInformation = (
 const calculateGold = (hp: number) => {
   // based on data\scripts\items\drop_money.lua
 
-  let originalHp = hp / 25;
+  let originalHp = hp / NoitaConstants.hpMultiplier;
   if (originalHp > 1) {
     originalHp = mathHelpers.floor(originalHp);
   }
 
-  const gold = originalHp * 10;
-  return Math.max(gold, 10);
+  const calculatedGold = originalHp * NoitaConstants.hpGoldMultiplier;
+  const actualGold = Math.max(calculatedGold, NoitaConstants.minGoldDrop);
+
+  return mathHelpers.round(actualGold);
 };
 
 const splitTags = (tags: string) => {
