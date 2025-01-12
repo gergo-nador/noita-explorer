@@ -93,8 +93,10 @@ export const scrapeEnemies = async ({
         ragdollMaterial: undefined,
         fireProbabilityOfIgnition: undefined,
         materialsThatDamage: undefined,
-        goldDrop: false,
+        goldDrop: undefined,
+        hasGoldDrop: false,
         genomeData: undefined,
+        physicsObjectsDamage: undefined,
         knockBackResistance: undefined,
         damageMultipliers: {
           ice: defaultDamageMultiplier,
@@ -110,6 +112,7 @@ export const scrapeEnemies = async ({
         },
         variants: [],
         gameEffects: [],
+        entityTags: [],
       };
 
       await scrapeEnemyMain({
@@ -203,6 +206,15 @@ const scrapeEnemyMain = async ({
 
   // then extract the more specific properties for the enemy
   extractEnemyProperties({ enemy, entityTag });
+
+  // dropped gold
+
+  if (enemy.hasGoldDrop) {
+    const enemyHpForGold = enemy.maxHp ?? enemy.hp;
+    if (enemyHpForGold !== undefined) {
+      enemy.goldDrop = calculateGold(enemyHpForGold);
+    }
+  }
 
   // look for variants
   const subDirectories = await animalsDataDirectory.listDirectories();
@@ -301,6 +313,12 @@ const extractEnemyProperties = ({
   enemy: NoitaEnemy;
   entityTag: XmlWrapperType;
 }) => {
+  const tags = entityTag.getAttribute('tags')?.asText();
+  if (tags !== undefined) {
+    const splitted = splitTags(tags);
+    enemy.entityTags = arrayHelpers.unique([...enemy.entityTags, ...splitted]);
+  }
+
   const damageModelComponent = entityTag.findNthTag('DamageModelComponent');
   if (damageModelComponent !== undefined) {
     const extracted = extractDamageModelInformation(damageModelComponent);
@@ -314,6 +332,8 @@ const extractEnemyProperties = ({
     enemy.ragdollMaterial = extracted.ragdollMaterial ?? enemy.ragdollMaterial;
     enemy.fireProbabilityOfIgnition =
       extracted.fireProbabilityOfIgnition ?? enemy.fireProbabilityOfIgnition;
+    enemy.physicsObjectsDamage =
+      extracted.physicsObjectsDamage ?? enemy.physicsObjectsDamage;
   }
 
   const genomeDataComponent = entityTag.findNthTag('GenomeDataComponent');
@@ -348,7 +368,7 @@ const extractEnemyProperties = ({
     const scriptDeath = luaComponent.getAttribute('script_death')?.asText();
 
     if (scriptDeath !== undefined && scriptDeath === goldDropScript) {
-      enemy.goldDrop = true;
+      enemy.hasGoldDrop = true;
     }
   }
 
@@ -362,7 +382,7 @@ const extractEnemyProperties = ({
       ?.split(',');
 
     if (tags !== undefined && tags.includes('no_gold_drop')) {
-      enemy.goldDrop = false;
+      enemy.hasGoldDrop = true;
     }
   }
 
@@ -477,6 +497,10 @@ const extractDamageModelInformation = (
     .getAttribute('air_needed')
     ?.asBoolean();
 
+  const physicsObjectsDamage = damageModelComponent
+    .getAttribute('physics_objects_damage')
+    ?.asBoolean();
+
   return {
     hp,
     maxHp,
@@ -486,5 +510,22 @@ const extractDamageModelInformation = (
     airNeeded,
     ragdollMaterial,
     fireProbabilityOfIgnition,
+    physicsObjectsDamage,
   };
+};
+
+const calculateGold = (hp: number) => {
+  // based on data\scripts\items\drop_money.lua
+
+  let originalHp = hp / 25;
+  if (originalHp > 1) {
+    originalHp = mathHelpers.floor(originalHp);
+  }
+
+  const gold = originalHp * 10;
+  return Math.max(gold, 10);
+};
+
+const splitTags = (tags: string) => {
+  return tags.split(',');
 };

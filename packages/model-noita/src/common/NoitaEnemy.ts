@@ -13,10 +13,15 @@ export interface NoitaEnemy extends NoitaProgressEntity {
   materialsThatDamage: NoitaEnemyMaterialDamage[] | undefined;
   genomeData: NoitaEnemyGenomeData | undefined;
   knockBackResistance: number | undefined;
-  goldDrop: boolean;
+  goldDrop: number | undefined;
+  hasGoldDrop: boolean;
+  physicsObjectsDamage: boolean | undefined;
+
   damageMultipliers: NoitaEnemyDamageMultipliers;
   variants: NoitaEnemyVariant[];
   gameEffects: NoitaEnemyGameEffect[];
+
+  entityTags: string[];
 }
 
 export interface NoitaEnemyMaterialDamage {

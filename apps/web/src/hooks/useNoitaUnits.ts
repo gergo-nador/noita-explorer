@@ -40,6 +40,7 @@ export const useNoitaUnits = () => {
       fireRateWait: 'seconds' as FrameDefaultFormats,
       reloadTime: 'seconds' as FrameDefaultFormats,
       lifetime: 'frames' as FrameDefaultFormats,
+      gameEffectTime: 'frames' as FrameDefaultFormats,
     },
   };
 };
