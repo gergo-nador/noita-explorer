@@ -13,6 +13,27 @@ import { Flex } from '../../../components/Flex.tsx';
 import { NoitaProtections } from '../../../noita/NoitaProtections.ts';
 import { useNoitaUnits } from '../../../hooks/useNoitaUnits.ts';
 
+import damageProjectileIcon from '../../../assets/icons/damages/icon_damage_projectile.png';
+import damageProjectileIconColor from '../../../assets/icons/damages/icon_damage_projectile_color.png';
+import damageExplosionIcon from '../../../assets/icons/damages/icon_damage_explosion.png';
+import damageExplosionIconColor from '../../../assets/icons/damages/icon_damage_explosion_color.png';
+import damageMeleeIcon from '../../../assets/icons/damages/icon_damage_melee.png';
+import damageMeleeIconColor from '../../../assets/icons/damages/icon_damage_melee_color.png';
+import damageSliceIcon from '../../../assets/icons/damages/icon_damage_slice.png';
+import damageSliceIconColor from '../../../assets/icons/damages/icon_damage_slice_color.png';
+import damageFireIcon from '../../../assets/icons/damages/icon_damage_fire.png';
+import damageFireIconColor from '../../../assets/icons/damages/icon_damage_fire_color.png';
+import damageElectricityIcon from '../../../assets/icons/damages/icon_damage_electricity.png';
+import damageElectricityIconColor from '../../../assets/icons/damages/icon_damage_electricity_color.png';
+import damageIceIcon from '../../../assets/icons/damages/icon_damage_ice.png';
+import damageIceIconColor from '../../../assets/icons/damages/icon_damage_ice_color.png';
+import damageRadioActivityIcon from '../../../assets/icons/damages/icon_damage_radioactivity.png';
+import damageRadioActivityIconColor from '../../../assets/icons/damages/icon_damage_radioactivity_color.png';
+import damageDrillIcon from '../../../assets/icons/damages/icon_damage_drill.png';
+import damageDrillIconColor from '../../../assets/icons/damages/icon_damage_drill_color.png';
+import damageHolyIcon from '../../../assets/icons/damages/icon_damage_holy.png';
+import damageHolyIconColor from '../../../assets/icons/damages/icon_damage_holy_color.png';
+
 export const NoitaProgressV2Enemies = () => {
   const { data } = useNoitaDataWakStore();
   const [selectedEnemy, setSelectedEnemy] = useState<NoitaEnemy>();
@@ -113,6 +134,13 @@ const EnemyOverview = ({ enemy }: { enemy: NoitaEnemy }) => {
       });
     }
 
+    if (enemy.entityTags.includes('touchmagic_immunity')) {
+      gameEffects.push({
+        id: 'PROTECTION_TOUCH_MAGIC',
+        frames: -1,
+      });
+    }
+
     if (enemy.physicsObjectsDamage === false) {
       gameEffects.push({
         id: 'PROTECTION_PHYSICS_IMPACT',
@@ -177,8 +205,8 @@ const EnemyOverview = ({ enemy }: { enemy: NoitaEnemy }) => {
       <div>{enemy.knockBackResistance}</div>
 
       <br />
-      <div style={{ width: 'max-content' }}>
-        <Flex style={{ width: 'max-content' }}>
+      <div>
+        <Flex style={{ flexWrap: 'wrap' }}>
           {gameEffects
             .filter((gameEffect) => gameEffect.id in NoitaProtections)
             .map((gameEffect) => (
@@ -216,44 +244,84 @@ const EnemyOverview = ({ enemy }: { enemy: NoitaEnemy }) => {
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr' }}>
         <div style={{ gridColumnStart: 1, gridColumnEnd: -1 }}>
-          <div>projectile:</div>
-          {enemy.damageMultipliers.projectile}
+          <DamageMultiplierDisplay
+            name={'projectile'}
+            icon={damageProjectileIcon}
+            iconColor={damageProjectileIconColor}
+            value={enemy.damageMultipliers.projectile}
+          />
         </div>
         <div>
-          <div>explosion:</div>
-          {enemy.damageMultipliers.explosion}
+          <DamageMultiplierDisplay
+            name={'explosion'}
+            icon={damageExplosionIcon}
+            iconColor={damageExplosionIconColor}
+            value={enemy.damageMultipliers.explosion}
+          />
         </div>
         <div>
-          <div>melee:</div>
-          {enemy.damageMultipliers.melee}
+          <DamageMultiplierDisplay
+            name={'melee'}
+            icon={damageMeleeIcon}
+            iconColor={damageMeleeIconColor}
+            value={enemy.damageMultipliers.melee}
+          />
         </div>
         <div>
-          <div>slice:</div>
-          {enemy.damageMultipliers.slice}
+          <DamageMultiplierDisplay
+            name={'slice'}
+            icon={damageSliceIcon}
+            iconColor={damageSliceIconColor}
+            value={enemy.damageMultipliers.slice}
+          />
         </div>
         <div>
-          <div>fire:</div>
-          {enemy.damageMultipliers.fire}
+          <DamageMultiplierDisplay
+            name={'fire'}
+            icon={damageFireIcon}
+            iconColor={damageFireIconColor}
+            value={enemy.damageMultipliers.fire}
+          />
         </div>
         <div>
-          <div>electric:</div>
-          {enemy.damageMultipliers.electricity}
+          <DamageMultiplierDisplay
+            name={'electric'}
+            icon={damageElectricityIcon}
+            iconColor={damageElectricityIconColor}
+            value={enemy.damageMultipliers.electricity}
+          />
         </div>
         <div>
-          <div>ice:</div>
-          {enemy.damageMultipliers.ice}
+          <DamageMultiplierDisplay
+            name={'ice'}
+            icon={damageIceIcon}
+            iconColor={damageIceIconColor}
+            value={enemy.damageMultipliers.ice}
+          />
         </div>
         <div>
-          <div>radioactive:</div>
-          {enemy.damageMultipliers.radioactive}
+          <DamageMultiplierDisplay
+            name={'toxic'}
+            icon={damageRadioActivityIcon}
+            iconColor={damageRadioActivityIconColor}
+            value={enemy.damageMultipliers.radioactive}
+          />
         </div>
         <div>
-          <div>drill:</div>
-          {enemy.damageMultipliers.drill}
+          <DamageMultiplierDisplay
+            name={'drill'}
+            icon={damageDrillIcon}
+            iconColor={damageDrillIconColor}
+            value={enemy.damageMultipliers.drill}
+          />
         </div>
         <div>
-          <div>holy:</div>
-          {enemy.damageMultipliers.holy}
+          <DamageMultiplierDisplay
+            name={'holy'}
+            icon={damageHolyIcon}
+            iconColor={damageHolyIconColor}
+            value={enemy.damageMultipliers.holy}
+          />
         </div>
       </div>
 
@@ -267,6 +335,43 @@ const EnemyOverview = ({ enemy }: { enemy: NoitaEnemy }) => {
           </div>
         ))}
       </div>
+    </div>
+  );
+};
+
+interface DamageMultiplierDisplayProps {
+  name: string;
+  icon: string;
+  iconColor: string;
+  value: number;
+}
+const DamageMultiplierDisplay = ({
+  name,
+  icon,
+  iconColor,
+  value,
+}: DamageMultiplierDisplayProps) => {
+  let color = 'inherit';
+  if (value === 0) color = '#FFAABB';
+  else if (value < 0) color = '#EE8866';
+  else if (value < 1) color = '#EEDD88';
+  else if (value > 1) color = '#44BB99';
+
+  // the icons are 7x7, 21 is divisible by 7, so the icons
+  // will look natural
+  const iconSize = 21;
+
+  return (
+    <div>
+      <NoitaTooltipWrapper content={name}>
+        <div style={{ width: 'fit-content' }}>
+          {value === 1 && <Icon type={'custom'} src={icon} size={iconSize} />}
+          {value !== 1 && (
+            <Icon type={'custom'} src={iconColor} size={iconSize} />
+          )}
+          <span style={{ color: color }}> {value}</span>
+        </div>
+      </NoitaTooltipWrapper>
     </div>
   );
 };

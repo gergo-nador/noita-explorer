@@ -20,17 +20,17 @@ import reloadModifierIcon from '../../assets/icons/spells/icon_reload_time.png';
 import speedModifierIcon from '../../assets/icons/spells/icon_speed_multiplier.png';
 import spreadModifierIcon from '../../assets/icons/spells/icon_spread_degrees.png';
 
-import damageProjectileIcon from '../../assets/icons/spells/icon_damage_projectile.png';
-import damageExplosionIcon from '../../assets/icons/spells/icon_damage_explosion.png';
+import damageProjectileIcon from '../../assets/icons/damages/icon_damage_projectile.png';
+import damageExplosionIcon from '../../assets/icons/damages/icon_damage_explosion.png';
 import explosionRadiusIcon from '../../assets/icons/spells/icon_explosion_radius.png';
-import damageHealingIcon from '../../assets/icons/spells/icon_damage_healing.png';
-import damageSliceIcon from '../../assets/icons/spells/icon_damage_slice.png';
-import damageMeleeIcon from '../../assets/icons/spells/icon_damage_melee.png';
-import damageFireIcon from '../../assets/icons/spells/icon_damage_fire.png';
-import damageElectricityIcon from '../../assets/icons/spells/icon_damage_electricity.png';
-import damageDrillIcon from '../../assets/icons/spells/icon_damage_drill.png';
-import damageIceIcon from '../../assets/icons/spells/icon_damage_ice.png';
-import damageHolyIcon from '../../assets/icons/spells/icon_damage_holy.png';
+import damageHealingIcon from '../../assets/icons/damages/icon_damage_healing.png';
+import damageSliceIcon from '../../assets/icons/damages/icon_damage_slice.png';
+import damageMeleeIcon from '../../assets/icons/damages/icon_damage_melee.png';
+import damageFireIcon from '../../assets/icons/damages/icon_damage_fire.png';
+import damageElectricityIcon from '../../assets/icons/damages/icon_damage_electricity.png';
+import damageDrillIcon from '../../assets/icons/damages/icon_damage_drill.png';
+import damageIceIcon from '../../assets/icons/damages/icon_damage_ice.png';
+import damageHolyIcon from '../../assets/icons/damages/icon_damage_holy.png';
 
 interface TooltipRowData {
   icon?: React.ReactNode;

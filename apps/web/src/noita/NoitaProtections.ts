@@ -16,6 +16,7 @@ import iconProtectionProjectile from '../assets/icons/protection/protection_proj
 import iconProtectionRadioActivity from '../assets/icons/protection/protection_radioactivity.png';
 import iconProtectionResurrection from '../assets/icons/protection/protection_resurrection.png';
 import iconProtectionSuffocate from '../assets/icons/protection/protection_suffocate.png';
+import iconProtectionTouchMagic from '../assets/icons/protection/protection_touch_of.png';
 
 export const NoitaProtections: StringKeyDictionary<NoitaProtection> = {
   PROTECTION_ALL: {
@@ -90,7 +91,12 @@ export const NoitaProtections: StringKeyDictionary<NoitaProtection> = {
   },
   PROTECTION_SUFFOCATE: {
     id: 'PROTECTION_SUFFOCATE',
-    name: 'Cannot Suffocate',
+    name: 'Suffocation Immunity',
     image: iconProtectionSuffocate,
+  },
+  PROTECTION_TOUCH_MAGIC: {
+    id: 'PROTECTION_TOUCH_MAGIC',
+    name: 'Touch Magic Immunity',
+    image: iconProtectionTouchMagic,
   },
 };
