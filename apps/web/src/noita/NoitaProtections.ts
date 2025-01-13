@@ -99,4 +99,4 @@ export const NoitaProtections: StringKeyDictionary<NoitaProtection> = {
     name: 'Touch Magic Immunity',
     image: iconProtectionTouchMagic,
   },
-};
+} as const;

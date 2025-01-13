@@ -51,4 +51,4 @@ export const NoitaSpellTypesDictionary: StringKeyDictionary<NoitaSpellType> = {
     name: 'Utility',
     image: bg_utility,
   },
-};
+} as const;

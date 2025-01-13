@@ -77,6 +77,8 @@ export const DirectoryLogicForFileLists = ({
 
   return {
     getName: () => directoryName,
+    getFullPath: () =>
+      pathSegments.filter((_, index) => index <= level).join(pathDivider),
     path: {
       split: (path) => promiseHelper.fromValue(path.split(pathDivider)),
       join: (args) => promiseHelper.fromValue(args.join(pathDivider)),

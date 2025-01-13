@@ -46,7 +46,11 @@ export const scrapeEnemies = async ({
 
   const files = await animalsDirectory.listFiles();
 
-  const animalsProcessQueue: { animalId: string; imageBase64: string }[] = [];
+  const animalsProcessQueue: {
+    animalId: string;
+    imageBase64: string;
+    imagePath: string;
+  }[] = [];
   let animalList: string[] = [];
 
   for (const file of files) {
@@ -66,6 +70,9 @@ export const scrapeEnemies = async ({
     animalsProcessQueue.push({
       animalId: animalId,
       imageBase64: imageBase64,
+      imagePath: file
+        .getFullPath()
+        .substring(dataWakParentDirectoryApi.getFullPath().length),
     });
   }
 
@@ -118,7 +125,11 @@ export const scrapeEnemies = async ({
         },
         variants: [],
         gameEffects: [],
-        entityTags: [],
+        debug: {
+          fileHierarchy: [],
+          entityTags: [],
+          imagePath: animal.imagePath,
+        },
       };
 
       await scrapeEnemyMain({
@@ -312,6 +323,11 @@ const traverseThroughBaseFiles = async ({
     return;
   }
 
+  const filePath = file
+    .getFullPath()
+    .substring(dataWakParentDirectoryApi.getFullPath().length);
+  enemy.debug.fileHierarchy.push(filePath);
+
   const baseTag = entityTag.findNthTag('Base');
   const baseFilePath = baseTag?.getAttribute('file')?.asText();
   if (baseTag !== undefined && baseFilePath !== undefined) {
@@ -347,7 +363,10 @@ const extractEnemyProperties = ({
   const tags = entityTag.getAttribute('tags')?.asText();
   if (tags !== undefined) {
     const splitted = splitTags(tags);
-    enemy.entityTags = arrayHelpers.unique([...enemy.entityTags, ...splitted]);
+    enemy.debug.entityTags = arrayHelpers.unique([
+      ...enemy.debug.entityTags,
+      ...splitted,
+    ]);
   }
 
   const damageModelComponent = entityTag.findNthTag('DamageModelComponent');
@@ -393,7 +412,7 @@ const extractEnemyProperties = ({
     enemy.genomeData.isPredator = isPredator ?? enemy.genomeData.isPredator;
   }
 
-  const luaComponents = entityTag.findAllTagsRecursively('LuaComponent');
+  const luaComponents = entityTag.findAllTags('LuaComponent');
   for (const luaComponent of luaComponents) {
     const goldDropScript = 'data/scripts/items/drop_money.lua';
     const scriptDeath = luaComponent.getAttribute('script_death')?.asText();
@@ -417,9 +436,7 @@ const extractEnemyProperties = ({
     }
   }
 
-  const gameEffectComponents = entityTag.findAllTagsRecursively(
-    'GameEffectComponent',
-  );
+  const gameEffectComponents = entityTag.findAllTags('GameEffectComponent');
   for (const gameEffectComponent of gameEffectComponents) {
     const effectId = gameEffectComponent
       .getRequiredAttribute('effect')

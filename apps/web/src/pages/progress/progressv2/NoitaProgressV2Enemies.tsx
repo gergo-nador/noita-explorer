@@ -1,6 +1,7 @@
 import {
   ActiveIconWrapper,
   Card,
+  Header,
   Icon,
   NoitaTooltipWrapper,
   ProgressIcon,
@@ -12,6 +13,7 @@ import { NoitaEnemy } from '@noita-explorer/model-noita';
 import { Flex } from '../../../components/Flex.tsx';
 import { NoitaProtections } from '../../../noita/NoitaProtections.ts';
 import { useNoitaUnits } from '../../../hooks/useNoitaUnits.ts';
+import { useSettingsStore } from '../../../stores/settings.ts';
 
 import damageProjectileIcon from '../../../assets/icons/damages/icon_damage_projectile.png';
 import damageProjectileIconColor from '../../../assets/icons/damages/icon_damage_projectile_color.png';
@@ -33,6 +35,8 @@ import damageDrillIcon from '../../../assets/icons/damages/icon_damage_drill.png
 import damageDrillIconColor from '../../../assets/icons/damages/icon_damage_drill_color.png';
 import damageHolyIcon from '../../../assets/icons/damages/icon_damage_holy.png';
 import damageHolyIconColor from '../../../assets/icons/damages/icon_damage_holy_color.png';
+import goldNuggetIcon from '../../../assets/goldnugget_icon.png';
+import heartIcon from '../../../assets/heart.png';
 
 export const NoitaProgressV2Enemies = () => {
   const { data } = useNoitaDataWakStore();
@@ -92,6 +96,8 @@ export const NoitaProgressV2Enemies = () => {
 
 const EnemyOverview = ({ enemy }: { enemy: NoitaEnemy }) => {
   const noitaUnits = useNoitaUnits();
+  const { settings } = useSettingsStore();
+  const { progressDisplayDebugData } = settings;
 
   const gameEffects = useMemo(() => {
     const gameEffects = [...enemy.gameEffects];
@@ -113,28 +119,28 @@ const EnemyOverview = ({ enemy }: { enemy: NoitaEnemy }) => {
       });
     }
 
-    if (enemy.entityTags.includes('polymorphable_NOT')) {
+    if (enemy.debug.entityTags.includes('polymorphable_NOT')) {
       gameEffects.push({
         id: 'PROTECTION_POLYMORPH',
         frames: -1,
       });
     }
 
-    if (enemy.entityTags.includes('necrobot_NOT')) {
+    if (enemy.debug.entityTags.includes('necrobot_NOT')) {
       gameEffects.push({
         id: 'PROTECTION_RESURRECTION',
         frames: -1,
       });
     }
 
-    if (enemy.entityTags.includes('glue_NOT')) {
+    if (enemy.debug.entityTags.includes('glue_NOT')) {
       gameEffects.push({
         id: 'PROTECTION_GLUE',
         frames: -1,
       });
     }
 
-    if (enemy.entityTags.includes('touchmagic_immunity')) {
+    if (enemy.debug.entityTags.includes('touchmagic_immunity')) {
       gameEffects.push({
         id: 'PROTECTION_TOUCH_MAGIC',
         frames: -1,
@@ -185,19 +191,59 @@ const EnemyOverview = ({ enemy }: { enemy: NoitaEnemy }) => {
             paddingLeft: 10,
           }}
         >
-          <div style={{ fontSize: 30, marginBottom: 5 }}>{enemy.name}</div>
-          <div>{enemy.id}</div>
+          <div style={{ fontSize: 30 }}>{enemy.name}</div>
+          {progressDisplayDebugData && (
+            <div style={{ marginTop: 5 }}>{enemy.id}</div>
+          )}
         </div>
       </div>
 
       <br />
-      <div>{enemy.entityTags.join(', ')}</div>
-      <br />
-      <div>Hp: {enemy.hp}</div>
-      <div>Max Hp: {enemy.maxHp}</div>
-      {enemy.hp !== undefined && (
-        <div>Gold: {enemy.goldDrop ? enemy.goldDrop : '-'}</div>
+      {progressDisplayDebugData && (
+        <div>
+          <Header title={'Debug'}>
+            <div style={{ fontSize: 18 }}>Tags:</div>
+            <div>{enemy.debug.entityTags.join(', ')}</div>
+            <br />
+            <div style={{ fontSize: 18 }}>Scraped Files:</div>
+            <div>
+              {enemy.debug.fileHierarchy.map((f) => (
+                <div style={{ wordWrap: 'break-word', maxWidth: '100%' }}>
+                  {f}
+                </div>
+              ))}
+            </div>
+            <br />
+            <div style={{ fontSize: 18 }}>Additional Files:</div>
+            <div>
+              <div style={{ wordWrap: 'break-word', maxWidth: '100%' }}>
+                {enemy.debug.imagePath}
+              </div>
+            </div>
+            <br />
+          </Header>
+        </div>
       )}
+
+      <div>
+        Hp:<span style={{ color: '#f14343' }}> {enemy.hp} </span>
+        <Icon type={'custom'} src={heartIcon} size={16} />
+      </div>
+      {enemy.maxHp !== undefined && (
+        <div>
+          Max Hp:<span style={{ color: '#f14343' }}> {enemy.maxHp} </span>
+          <Icon type={'custom'} src={heartIcon} size={16} />
+        </div>
+      )}
+
+      {enemy.hasGoldDrop && (
+        <div>
+          Gold:<span style={{ color: '#fae27e' }}> {enemy.goldDrop} </span>
+          <Icon type={'custom'} src={goldNuggetIcon} size={16} />
+        </div>
+      )}
+      {!enemy.hasGoldDrop && <div>Gold: -</div>}
+
       <br />
       <div>Bleeds: {enemy.bloodMaterial}</div>
       <div>Corpse: {enemy.ragdollMaterial}</div>
@@ -345,6 +391,7 @@ interface DamageMultiplierDisplayProps {
   iconColor: string;
   value: number;
 }
+
 const DamageMultiplierDisplay = ({
   name,
   icon,

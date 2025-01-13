@@ -5,11 +5,16 @@ export interface XmlWrapperType {
   _getCurrentXmlObj: () => object;
   findNthTag: (tagName: string, index?: number) => XmlWrapperType | undefined;
   findTagArray: (tagName: string) => XmlWrapperType[];
-  findAllTagsRecursively: (tagName: string) => XmlWrapperType[];
+  findAllTags: (tagName: string) => XmlWrapperType[];
   getAttribute: (attributeName: string) => XmlAttributeReadOptions | undefined;
   getRequiredAttribute: (attributeName: string) => XmlAttributeReadOptions;
 }
 
+/**
+ * Wrapper object providing many utility methods
+ * @param xmlObj
+ * @constructor
+ */
 export const XmlWrapper = (
   xmlObj: StringKeyDictionaryComposite<string>,
 ): XmlWrapperType => {
@@ -24,8 +29,7 @@ export const XmlWrapper = (
     _getCurrentXmlObj: () => xmlObj,
     findNthTag: (tagName, index) => findNthTag(xmlObj, tagName, index),
     findTagArray: (tagName) => findTagArray(xmlObj, tagName),
-    findAllTagsRecursively: (tagName) =>
-      findAllTagsRecursively(xmlObj, tagName),
+    findAllTags: (tagName) => findAllTagsRecursively(xmlObj, tagName),
     getAttribute: (attributeName) => getAttribute(xmlObj, attributeName),
     getRequiredAttribute: (attributeName) => {
       const attr = getAttribute(xmlObj, attributeName);
@@ -40,6 +44,12 @@ export const XmlWrapper = (
   };
 };
 
+/**
+ * Finds the first XML tag declaration with the specified name.
+ * Returns the array of tags found at the path of the found XML tag.
+ * @param xmlObject
+ * @param name
+ */
 const findTagArray = (
   xmlObject: StringKeyDictionaryComposite<string>,
   name: string,
@@ -56,6 +66,13 @@ const findTagArray = (
   return tag.map((t) => XmlWrapper(t));
 };
 
+/**
+ * Traverses through the entire XML structure and returns all the
+ * tags with the given name.
+ * @param xmlObject
+ * @param tagName
+ * @param tags
+ */
 const findAllTagsRecursively = (
   xmlObject: StringKeyDictionaryComposite<string>,
   tagName: string,
@@ -99,6 +116,13 @@ const findAllTagsRecursively = (
   return tags;
 };
 
+/**
+ * Finds the first XML tag with the specified name. If the declaration is an array of tags,
+ * it returns the nth tag from the array.
+ * @param xmlObject
+ * @param name
+ * @param index
+ */
 const findNthTag = (
   xmlObject: StringKeyDictionaryComposite<string>,
   name: string,
@@ -122,6 +146,11 @@ const findNthTag = (
   return XmlWrapper(nthTag);
 };
 
+/**
+ * Gets an attribute from a XML tag.
+ * @param xmlObject
+ * @param name
+ */
 const getAttribute = (
   xmlObject: StringKeyDictionaryComposite<string>,
   name: string,
@@ -159,6 +188,11 @@ const getAttribute = (
   };
 };
 
+/**
+ * Finds the first XML tag with the specified tag name
+ * @param xmlObject the xml object to traverse through
+ * @param tagName the tag name to find
+ */
 const findXmlTag = (
   xmlObject: StringKeyDictionaryComposite<string>,
   tagName: string,
@@ -180,8 +214,6 @@ const findXmlTag = (
     }
   } else {
     for (const key in xmlObject) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
       const value = xmlObject[key];
 
       if (typeof value === 'object') {

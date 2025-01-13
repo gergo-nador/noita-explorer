@@ -1,6 +1,11 @@
 import { AssignmentStatement, Chunk, parse } from 'luaparse';
 import { LuaAssignmentStatementWrapper } from './LuaAssignmentStatementWrapper';
 
+/**
+ * The main entry point for the Lua tools. It parses the text and returns a wrapper object around it.
+ * @param text
+ * @constructor
+ */
 export const LuaWrapper = (text: string) => {
   const parsed = parse(text);
   return {

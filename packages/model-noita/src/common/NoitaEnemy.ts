@@ -21,7 +21,7 @@ export interface NoitaEnemy extends NoitaProgressEntity {
   variants: NoitaEnemyVariant[];
   gameEffects: NoitaEnemyGameEffect[];
 
-  entityTags: string[];
+  debug: NoitaEnemyDebugObject;
 }
 
 export interface NoitaEnemyMaterialDamage {
@@ -56,4 +56,10 @@ export interface NoitaEnemyDamageMultipliers {
   radioactive: number;
   drill: number;
   holy: number;
+}
+
+export interface NoitaEnemyDebugObject {
+  fileHierarchy: string[];
+  entityTags: string[];
+  imagePath: string;
 }

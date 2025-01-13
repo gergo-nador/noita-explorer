@@ -8,11 +8,15 @@ export const FileSystemDirectoryAccessBrowserApi = (
   directoryHandle: FileSystemDirectoryHandle,
   path?: string,
 ): FileSystemDirectoryAccess => {
-  path ??= '';
-  path += FILE_PATH_DIVIDER + directoryHandle.name;
+  if (path === undefined) {
+    path = directoryHandle.name;
+  } else {
+    path += FILE_PATH_DIVIDER + directoryHandle.name;
+  }
 
   return {
     getName: () => directoryHandle.name,
+    getFullPath: () => path,
     path: {
       join: (args) => promiseHelper.fromValue(args.join(FILE_PATH_DIVIDER)),
       split: (path) => promiseHelper.fromValue(path.split(FILE_PATH_DIVIDER)),

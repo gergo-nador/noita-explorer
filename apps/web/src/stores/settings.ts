@@ -23,6 +23,7 @@ export interface Settings {
     noitaCursor: SettingsNoitaCursorType;
     wandSpriteId: string | undefined;
   };
+  progressDisplayDebugData: boolean;
 }
 
 export interface SettingsState {
@@ -46,6 +47,7 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
       noitaCursor: 'mouse_cursor_big',
       wandSpriteId: undefined,
     },
+    progressDisplayDebugData: false,
   },
 
   loaded: false,

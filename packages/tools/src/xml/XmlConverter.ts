@@ -1,6 +1,10 @@
 import { Builder, parseStringPromise } from 'xml2js';
 import { StringKeyDictionaryComposite } from '@noita-explorer/model';
 
+/**
+ * Parses a text to an XML object
+ * @param text
+ */
 export const parseXml = (
   text: string,
 ): Promise<StringKeyDictionaryComposite<string>> => {
