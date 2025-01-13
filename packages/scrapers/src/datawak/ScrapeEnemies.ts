@@ -413,7 +413,7 @@ const extractEnemyProperties = ({
       ?.split(',');
 
     if (tags !== undefined && tags.includes('no_gold_drop')) {
-      enemy.hasGoldDrop = true;
+      enemy.hasGoldDrop = false;
     }
   }
 
