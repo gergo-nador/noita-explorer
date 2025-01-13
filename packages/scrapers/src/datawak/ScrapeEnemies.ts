@@ -69,17 +69,17 @@ export const scrapeEnemies = async ({
     });
   }
 
-  const entitiesDataDirOath = await dataWakParentDirectoryApi.path.join(
+  const entitiesDataDirPath = await dataWakParentDirectoryApi.path.join(
     noitaPaths.noitaDataWak.xmlData.entities,
   );
   const entitiesDataDirectory =
-    await dataWakParentDirectoryApi.getDirectory(entitiesDataDirOath);
+    await dataWakParentDirectoryApi.getDirectory(entitiesDataDirPath);
 
-  const animalsDataDirOath = await dataWakParentDirectoryApi.path.join(
+  const animalsDataDirPath = await dataWakParentDirectoryApi.path.join(
     noitaPaths.noitaDataWak.xmlData.animals,
   );
   const animalsDataDirectory =
-    await dataWakParentDirectoryApi.getDirectory(animalsDataDirOath);
+    await dataWakParentDirectoryApi.getDirectory(animalsDataDirPath);
 
   const noitaEnemies: NoitaEnemy[] = [];
 
