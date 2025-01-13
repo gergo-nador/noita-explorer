@@ -69,6 +69,12 @@ export const scrapeEnemies = async ({
     });
   }
 
+  const entitiesDataDirOath = await dataWakParentDirectoryApi.path.join(
+    noitaPaths.noitaDataWak.xmlData.entities,
+  );
+  const entitiesDataDirectory =
+    await dataWakParentDirectoryApi.getDirectory(entitiesDataDirOath);
+
   const animalsDataDirOath = await dataWakParentDirectoryApi.path.join(
     noitaPaths.noitaDataWak.xmlData.animals,
   );
@@ -119,6 +125,7 @@ export const scrapeEnemies = async ({
         enemy: enemy,
         translations: translations,
         animalsDataDirectory: animalsDataDirectory,
+        entitiesDataDirectory: entitiesDataDirectory,
         dataWakParentDirectoryApi: dataWakParentDirectoryApi,
       });
 
@@ -146,24 +153,36 @@ export const scrapeEnemies = async ({
 
 const scrapeEnemyMain = async ({
   enemy,
-  dataWakParentDirectoryApi,
   translations,
+  dataWakParentDirectoryApi,
   animalsDataDirectory,
+  entitiesDataDirectory,
 }: {
   enemy: NoitaEnemy;
   translations: StringKeyDictionary<NoitaTranslation>;
-  animalsDataDirectory: FileSystemDirectoryAccess;
   dataWakParentDirectoryApi: FileSystemDirectoryAccess;
+  animalsDataDirectory: FileSystemDirectoryAccess;
+  entitiesDataDirectory: FileSystemDirectoryAccess;
 }) => {
   // Find, read and parse the enemy file
   const xmlFileName = enemy.id + '.xml';
 
-  const file = await fileSystemAccessHelpers.findFileInDirectory(
+  // first look for the xml file in the animals directory
+  // (the animals folder should have priority over the others)
+  let file = await fileSystemAccessHelpers.findFileInDirectory(
     xmlFileName,
     animalsDataDirectory,
   );
-  const xmlFileExists = file !== undefined;
-  if (!xmlFileExists) {
+
+  // then if it was not found, look for it in the entire entities folder
+  if (file === undefined) {
+    file = await fileSystemAccessHelpers.findFileInDirectory(
+      xmlFileName,
+      entitiesDataDirectory,
+    );
+  }
+
+  if (file === undefined) {
     return undefined;
   }
 
@@ -217,7 +236,7 @@ const scrapeEnemyMain = async ({
   }
 
   // look for variants
-  const subDirectories = await animalsDataDirectory.listDirectories();
+  const subDirectories = await entitiesDataDirectory.listDirectories();
   const variantFiles = await fileSystemAccessHelpers.findAllFilesInDirectory(
     xmlFileName,
     subDirectories,
@@ -230,7 +249,7 @@ const scrapeEnemyMain = async ({
     }
 
     const variantFullPathSplit =
-      await animalsDataDirectory.path.split(variantFullPath);
+      await entitiesDataDirectory.path.split(variantFullPath);
 
     const variantXmlText = await variantFile.read.asText();
     const variantXmlObj = await parseXml(variantXmlText);
@@ -238,6 +257,18 @@ const scrapeEnemyMain = async ({
 
     const variantEntityTag = variantXmlWrapper.findNthTag('Entity');
     if (variantEntityTag === undefined) {
+      continue;
+    }
+
+    // ensure the base tag points to the main entity xml file
+    const variantBaseTag = variantEntityTag.findNthTag('Base');
+    const baseFilePath = variantBaseTag?.getAttribute('file')?.asText();
+    if (baseFilePath === undefined) {
+      continue;
+    }
+
+    const baseFile = await dataWakParentDirectoryApi.getFile(baseFilePath);
+    if (baseFile.getFullPath() !== file.getFullPath()) {
       continue;
     }
 
