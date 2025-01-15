@@ -21,6 +21,7 @@ import capacityIcon from '../assets/icons/icon_gun_capacity.png';
 import manaMaxIcon from '../assets/icons/icon_mana_max.png';
 import manaChargeIcon from '../assets/icons/icon_mana_charge_speed.png';
 import actionsPerRoundIcon from '../assets/icons/icon_gun_actions_per_round.png';
+import gunPermanentActionIcon from '../assets/icons/icon_gun_permanent_actions.png';
 
 interface NoitaWandCardProps {
   wand: NoitaWand;
@@ -230,9 +231,14 @@ export const NoitaWandCard = ({ wand }: NoitaWandCardProps) => {
             style={{
               display: 'flex',
               flexWrap: 'wrap',
-              gap: 5,
+              alignItems: 'center',
+              gap: 10,
+
+              paddingLeft: 2,
             }}
           >
+            <Icon type={'custom'} src={gunPermanentActionIcon} size={15} />
+            <div style={{ paddingRight: 10 }}>Always casts</div>
             {spellIconsAlwaysCast}
           </div>
         </>
