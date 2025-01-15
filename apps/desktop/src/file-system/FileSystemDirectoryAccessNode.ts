@@ -56,6 +56,7 @@ export const FileSystemDirectoryAccessNode = (
 
   return {
     getName: () => path.parse(directoryPath).name,
+    getFullPath: () => directoryPath,
     path: {
       join: (args) => promiseHelper.fromValue(path.join(...args)),
       split: (path_) => promiseHelper.fromValue(path_.split(path.sep)),
