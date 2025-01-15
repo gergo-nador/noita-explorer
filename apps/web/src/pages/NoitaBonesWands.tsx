@@ -1,9 +1,39 @@
 import { useSave00Store } from '../stores/save00.ts';
 import { NoitaWandCard } from '../components/NoitaWandCard.tsx';
 import { Flex } from '../components/Flex.tsx';
+import { useMemo } from 'react';
 
 export const NoitaBonesWands = () => {
   const { bonesWands } = useSave00Store();
+
+  const bonesWandsSorted = useMemo(() => {
+    if (bonesWands === undefined) {
+      return [];
+    }
+
+    const arr = [...bonesWands];
+
+    // sort by wand card height. not 100% punctual but good enough
+    arr.sort((w1, w2) => {
+      const deckCapacity = w1.deckCapacity - w2.deckCapacity;
+
+      if (w1.alwaysCastSpells.length > 0 && w2.alwaysCastSpells.length > 0) {
+        return deckCapacity;
+      }
+
+      if (w1.alwaysCastSpells.length > 0) {
+        return deckCapacity + 9;
+      }
+
+      if (w2.alwaysCastSpells.length > 0) {
+        return deckCapacity - 9;
+      }
+
+      return deckCapacity;
+    });
+
+    return arr;
+  }, [bonesWands]);
 
   if (bonesWands === undefined) {
     return <div>Bones not loaded</div>;
@@ -19,7 +49,9 @@ export const NoitaBonesWands = () => {
           alignItems: 'flex-start',
         }}
       >
-        {bonesWands?.map((wand) => <NoitaWandCard wand={wand} />)}
+        {bonesWandsSorted.map((wand) => (
+          <NoitaWandCard wand={wand} />
+        ))}
       </Flex>
     </div>
   );

@@ -47,6 +47,7 @@ export const __scrapeWand = (wandXml: XmlWrapperType) => {
     spreadMultiplier:
       gunActionConfig.getRequiredAttribute('spread_degrees').asInt() ?? 0,
 
+    alwaysCastSpells: [],
     spells: [],
     spellsPossibleIncorrectOrder: false,
   };
@@ -87,6 +88,19 @@ export const __scrapeWand = (wandXml: XmlWrapperType) => {
     let inventorySlot = itemComponent
       .getRequiredAttribute('inventory_slot.x')
       .asInt() as number;
+
+    const isAlwaysCastSpell =
+      itemComponent.getAttribute('permanently_attached')?.asBoolean() ?? false;
+
+    if (isAlwaysCastSpell) {
+      const wandSpellAlwaysCast: NoitaWandSpell = {
+        spellId: spellId,
+        inventorySlot: wand.alwaysCastSpells.length,
+      };
+
+      wand.alwaysCastSpells.push(wandSpellAlwaysCast);
+      continue;
+    }
 
     // check if the inventory slot is already taken (it can happen)
     if (

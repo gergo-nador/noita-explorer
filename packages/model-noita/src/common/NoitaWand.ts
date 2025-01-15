@@ -18,6 +18,7 @@ export interface NoitaWand {
   spreadMultiplier: number;
   speedMultiplier: number;
 
+  alwaysCastSpells: NoitaWandSpell[];
   spells: NoitaWandSpell[];
   spellsPossibleIncorrectOrder: boolean;
 }

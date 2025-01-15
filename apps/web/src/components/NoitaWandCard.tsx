@@ -90,6 +90,44 @@ export const NoitaWandCard = ({ wand }: NoitaWandCardProps) => {
     return displaySpells;
   }, [wand, data?.spells, wandTooltipId]);
 
+  const spellIconsAlwaysCast = useMemo(() => {
+    if (data?.spells === undefined) {
+      return undefined;
+    }
+
+    const iconSize = 35;
+    const displaySpells: React.ReactNode[] = [];
+
+    for (let i = 0; i < wand.alwaysCastSpells.length; i++) {
+      const wandSpell = wand.alwaysCastSpells[i];
+
+      const spell = data.spells.find((s) => s.id === wandSpell.spellId);
+      if (spell === undefined) {
+        const spellNotFoundIcon = <Icon type={'error'} size={iconSize} />;
+        displaySpells.push(spellNotFoundIcon);
+        continue;
+      }
+
+      const spellComponent = (
+        <ActiveIconWrapper
+          key={`spell-${wandSpell.spellId}-${i}-${wandTooltipId}`}
+          id={`spell-${wandSpell.spellId}-${i}-${wandTooltipId}`}
+          tooltip={<NoitaSpellTooltip spell={spell} />}
+        >
+          <InventoryIcon
+            icon={spell.imageBase64}
+            spellBackground={NoitaSpellTypesDictionary[spell.type].image}
+            size={iconSize}
+          />
+        </ActiveIconWrapper>
+      );
+
+      displaySpells.push(spellComponent);
+    }
+
+    return displaySpells;
+  }, [wand, data?.spells, wandTooltipId]);
+
   const rows: RowData[] = [
     {
       icon: <Icon type={'custom'} src={gunShuffleIcon} size={15} />,
@@ -184,6 +222,21 @@ export const NoitaWandCard = ({ wand }: NoitaWandCardProps) => {
           )}
         </div>
       </div>
+
+      {wand.alwaysCastSpells.length > 0 && (
+        <>
+          <br />
+          <div
+            style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: 5,
+            }}
+          >
+            {spellIconsAlwaysCast}
+          </div>
+        </>
+      )}
 
       <br />
       <div
