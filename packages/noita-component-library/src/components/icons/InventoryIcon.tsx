@@ -1,5 +1,6 @@
 import backgroundRegular from '../../../assets/inventory-boxes/full_inventory_box.png';
 import React from 'react';
+import { Icon } from './Icon';
 
 interface InventoryIconProps {
   icon?: string;
@@ -7,6 +8,7 @@ interface InventoryIconProps {
   size?: number | string;
   spellBackground?: string;
   usesRemaining?: number;
+  showWarning?: boolean;
 }
 
 export const InventoryIcon = ({
@@ -15,6 +17,7 @@ export const InventoryIcon = ({
   style = {},
   spellBackground,
   usesRemaining,
+  showWarning,
 }: InventoryIconProps) => {
   const backgroundImage = backgroundRegular;
 
@@ -103,10 +106,33 @@ export const InventoryIcon = ({
             top: 0,
             left: 0,
             fontSize: 14,
+            paddingLeft: 2,
           }}
           className={'font-noita-small-numbers'}
         >
           {usesRemaining}
+        </div>
+      )}
+
+      {showWarning && (
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+
+            display: 'flex',
+            justifyContent: 'center',
+          }}
+        >
+          <Icon
+            type={'warning'}
+            style={{
+              width: '60%',
+              transform: 'translateY(-80%)',
+            }}
+          />
         </div>
       )}
     </div>

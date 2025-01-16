@@ -1,4 +1,4 @@
-import { NoitaWand } from '@noita-explorer/model-noita';
+import { NoitaConstants, NoitaWand } from '@noita-explorer/model-noita';
 import {
   ActiveIconWrapper,
   Card,
@@ -72,17 +72,29 @@ export const NoitaWandCard = ({ wand }: NoitaWandCardProps) => {
         continue;
       }
 
+      const largerManaDrainThanWandMaxMana =
+        (spell.manaDrain ?? 0) > wand.manaMax;
+
       const spellComponent = (
         <ActiveIconWrapper
           key={`spell-${wandSpell.spellId}-${wandSpell.inventorySlot}-${wandTooltipId}`}
           id={`spell-${wandSpell.spellId}-${wandSpell.inventorySlot}-${wandTooltipId}`}
-          tooltip={<NoitaSpellTooltip spell={spell} />}
+          tooltip={
+            <NoitaSpellTooltip
+              spell={spell}
+              wandSpell={wandSpell}
+              warnings={{
+                manaTooMuch: largerManaDrainThanWandMaxMana,
+              }}
+            />
+          }
         >
           <InventoryIcon
             icon={spell.imageBase64}
             spellBackground={NoitaSpellTypesDictionary[spell.type].image}
             size={iconSize}
             usesRemaining={wandSpell.usesRemaining}
+            showWarning={largerManaDrainThanWandMaxMana}
           />
         </ActiveIconWrapper>
       );
@@ -165,7 +177,15 @@ export const NoitaWandCard = ({ wand }: NoitaWandCardProps) => {
     {
       icon: <Icon type={'custom'} src={manaChargeIcon} size={15} />,
       text: 'Mana chg. Spd',
-      value: wand.manaChargeSpeed,
+      value: (() => {
+        const timeUntilFullCharge = wand.manaMax / wand.manaChargeSpeed;
+        const displayTime = noitaUnits.frames(
+          timeUntilFullCharge * NoitaConstants.framesPerSecond,
+          noitaUnits.frameDefaultUnits.wandRechargeTime,
+        );
+
+        return `${wand.manaChargeSpeed} (${displayTime})`;
+      })(),
     },
     {
       icon: <Icon type={'custom'} src={capacityIcon} size={15} />,

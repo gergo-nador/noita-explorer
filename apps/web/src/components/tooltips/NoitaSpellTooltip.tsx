@@ -1,5 +1,6 @@
 import {
   NoitaSpell,
+  NoitaWandSpell,
   SpellModifierNumberUnit,
 } from '@noita-explorer/model-noita';
 import { Icon } from '@noita-explorer/noita-component-library';
@@ -41,12 +42,18 @@ interface TooltipRowData {
 
 interface NoitaSpellTooltipProps {
   spell: NoitaSpell;
+  wandSpell?: NoitaWandSpell;
   isUnknown?: boolean;
+  warnings?: {
+    manaTooMuch: boolean;
+  };
 }
 
 export const NoitaSpellTooltip = ({
   spell,
+  wandSpell,
   isUnknown,
+  warnings,
 }: NoitaSpellTooltipProps) => {
   const actionType = NoitaSpellTypesDictionary[spell.type];
   const noitaUnits = useNoitaUnits();
@@ -65,14 +72,28 @@ export const NoitaSpellTooltip = ({
     {
       icon: <Icon type={'custom'} src={manaDrainIcon} size={15} />,
       text: 'Mana Drain',
-      value: spell.manaDrain,
+      value: (
+        <span style={{ color: warnings?.manaTooMuch ? '#e35d5d' : 'inherit' }}>
+          {spell.manaDrain}
+          {warnings?.manaTooMuch && (
+            <Icon type={'warning'} size={20} style={{ marginLeft: 5 }} />
+          )}
+        </span>
+      ),
       show: true,
     },
     {
       icon: <Icon type={'custom'} src={maxUsesIcon} size={15} />,
       text: 'Uses',
       value: spell.maxUses,
-      show: spell.maxUses !== undefined,
+      show:
+        spell.maxUses !== undefined && wandSpell?.usesRemaining === undefined,
+    },
+    {
+      icon: <Icon type={'custom'} src={maxUsesIcon} size={15} />,
+      text: 'Uses remaining',
+      value: wandSpell?.usesRemaining,
+      show: wandSpell?.usesRemaining !== undefined,
     },
     {
       text: 'Flag Required',
@@ -293,7 +314,13 @@ export const NoitaSpellTooltip = ({
   return (
     <div style={{ minWidth: '350px', maxWidth: '450px', lineHeight: '16px' }}>
       <div>
-        <div style={{ fontSize: 20, marginBottom: 10 }}>{spell.name}</div>
+        <div style={{ fontSize: 20, marginBottom: 10 }}>
+          {spell.name}
+          {wandSpell?.usesRemaining !== undefined &&
+            wandSpell.usesRemaining !== -1 && (
+              <span> ( {wandSpell.usesRemaining} )</span>
+            )}
+        </div>
         <div>{spell.description}</div>
         <br />
 

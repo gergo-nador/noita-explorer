@@ -41,6 +41,7 @@ export const useNoitaUnits = () => {
       reloadTime: 'seconds' as FrameDefaultFormats,
       lifetime: 'frames' as FrameDefaultFormats,
       gameEffectTime: 'frames' as FrameDefaultFormats,
+      wandRechargeTime: 'seconds' as FrameDefaultFormats,
     },
   };
 };
