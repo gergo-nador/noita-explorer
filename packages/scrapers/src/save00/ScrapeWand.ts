@@ -96,6 +96,7 @@ export const __scrapeWand = (wandXml: XmlWrapperType) => {
       const wandSpellAlwaysCast: NoitaWandSpell = {
         spellId: spellId,
         inventorySlot: wand.alwaysCastSpells.length,
+        usesRemaining: undefined,
       };
 
       wand.alwaysCastSpells.push(wandSpellAlwaysCast);
@@ -117,9 +118,12 @@ export const __scrapeWand = (wandXml: XmlWrapperType) => {
       }
     }
 
+    const usesRemaining = itemComponent.getAttribute('uses_remaining')?.asInt();
+
     const wandSpell: NoitaWandSpell = {
       spellId: spellId,
       inventorySlot: inventorySlot,
+      usesRemaining: usesRemaining,
     };
 
     wand.spells.push(wandSpell);

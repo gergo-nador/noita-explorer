@@ -8,6 +8,11 @@
   src: url("../public/NoitaGlyphScaled.ttf");
 }
 
+@font-face {
+  font-family: 'NoitaSmallNumbers';
+  src: url("../public/Font Small Numbers.ttf");
+}
+
 :root {
   font-family: "NoitaPixel", sans-serif !important;
 }
@@ -42,4 +47,8 @@ body {
 
 .ts-particles-wrapper{
   height: 100%;
+}
+
+.font-noita-small-numbers {
+  font-family: 'NoitaSmallNumbers', sans-serif !important;
 }

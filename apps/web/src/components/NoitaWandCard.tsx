@@ -82,6 +82,7 @@ export const NoitaWandCard = ({ wand }: NoitaWandCardProps) => {
             icon={spell.imageBase64}
             spellBackground={NoitaSpellTypesDictionary[spell.type].image}
             size={iconSize}
+            usesRemaining={wandSpell.usesRemaining}
           />
         </ActiveIconWrapper>
       );

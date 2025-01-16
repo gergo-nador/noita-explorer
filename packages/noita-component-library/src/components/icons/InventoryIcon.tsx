@@ -6,6 +6,7 @@ interface InventoryIconProps {
   style?: React.CSSProperties;
   size?: number | string;
   spellBackground?: string;
+  usesRemaining?: number;
 }
 
 export const InventoryIcon = ({
@@ -13,6 +14,7 @@ export const InventoryIcon = ({
   size,
   style = {},
   spellBackground,
+  usesRemaining,
 }: InventoryIconProps) => {
   const backgroundImage = backgroundRegular;
 
@@ -91,6 +93,20 @@ export const InventoryIcon = ({
               width: '84%', // the main image in the inventory is slightly smaller than the spell background
             }}
           />
+        </div>
+      )}
+
+      {usesRemaining !== undefined && usesRemaining >= 0 && (
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            fontSize: 14,
+          }}
+          className={'font-noita-small-numbers'}
+        >
+          {usesRemaining}
         </div>
       )}
     </div>
