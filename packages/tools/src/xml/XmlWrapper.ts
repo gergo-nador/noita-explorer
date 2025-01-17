@@ -8,6 +8,7 @@ export interface XmlWrapperType {
   findAllTags: (tagName: string) => XmlWrapperType[];
   getAttribute: (attributeName: string) => XmlAttributeReadOptions | undefined;
   getRequiredAttribute: (attributeName: string) => XmlAttributeReadOptions;
+  getTextContent: () => string | undefined;
 }
 
 /**
@@ -16,10 +17,18 @@ export interface XmlWrapperType {
  * @constructor
  */
 export const XmlWrapper = (
-  xmlObj: StringKeyDictionaryComposite<string>,
+  xmlObj: StringKeyDictionaryComposite<string> | string,
 ): XmlWrapperType => {
   if (xmlObj === undefined) {
     throw new Error('xmlObj is undefined');
+  }
+
+  // if a tag only contains a string value without any properties
+  // or other children, the value will be a single string.
+  if (typeof xmlObj === 'string') {
+    xmlObj = {
+      _: xmlObj,
+    };
   }
   if (typeof xmlObj !== 'object') {
     throw new Error('xmlObj is not an object, but a ' + typeof xmlObj);
@@ -41,7 +50,26 @@ export const XmlWrapper = (
 
       return attr;
     },
+    getTextContent: () => getTextContent(xmlObj),
   };
+};
+
+const getTextContent = (
+  xmlObject: StringKeyDictionaryComposite<string>,
+): string | undefined => {
+  if ('_' in xmlObject) {
+    const content = xmlObject['_'];
+    if (typeof content === 'string') {
+      return content.trim();
+    }
+  }
+
+  if (Array.isArray(xmlObject)) {
+    const text = xmlObject.find((inner) => typeof inner === 'string');
+    return text?.trim();
+  }
+
+  return undefined;
 };
 
 /**

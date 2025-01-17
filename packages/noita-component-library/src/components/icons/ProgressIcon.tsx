@@ -4,9 +4,11 @@ import backgroundLayerNew from '../../../assets/progress-boxes/grid_highlight_ne
 import React from 'react';
 import css from './ProgressIcon.module.css';
 
+export type ProgressIconType = 'regular' | 'unknown' | 'new';
+
 interface ProgressIconProps {
-  type: 'regular' | 'unknown' | 'new';
   icon: string;
+  type?: ProgressIconType;
   style?: React.CSSProperties;
   size?: number | string;
   spellBackground?: string;

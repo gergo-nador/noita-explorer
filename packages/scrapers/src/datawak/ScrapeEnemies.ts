@@ -24,6 +24,7 @@ import {
   objectHelpers,
 } from '@noita-explorer/tools';
 import { noitaPaths } from '../NoitaPaths.ts';
+import { splitNoitaEntityTags } from '../common/tags.ts';
 
 /**
  * Scraping all the enemies/animals
@@ -362,7 +363,7 @@ const extractEnemyProperties = ({
 }) => {
   const tags = entityTag.getAttribute('tags')?.asText();
   if (tags !== undefined) {
-    const splitted = splitTags(tags);
+    const splitted = splitNoitaEntityTags(tags);
     enemy.debug.entityTags = arrayHelpers.unique([
       ...enemy.debug.entityTags,
       ...splitted,
@@ -574,8 +575,4 @@ const calculateGold = (hp: number) => {
   const actualGold = Math.max(calculatedGold, NoitaConstants.minGoldDrop);
 
   return mathHelpers.round(actualGold);
-};
-
-const splitTags = (tags: string) => {
-  return tags.split(',');
 };

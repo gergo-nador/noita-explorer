@@ -37,7 +37,9 @@ export const CardPageTemplate = ({
             marginTop: 10,
           }}
         >
-          {templatePageLogic.buttons.map((b) => b.element)}
+          {templatePageLogic.buttons.map((b, i) => (
+            <div key={i}>{b.element}</div>
+          ))}
         </div>
       </div>
     </div>

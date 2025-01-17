@@ -5,6 +5,7 @@ import { EnemyStatistic } from '../scraping/EnemyStatistics.ts';
 import { NoitaProgressFlags } from '../scraping/NoitaProgressFlags.ts';
 import { NoitaSession } from './NoitaSession.ts';
 import { NoitaWand } from './NoitaWand.ts';
+import { NoitaWorldState } from './NoitaWorldState.ts';
 
 export interface NoitaAPI {
   config: {
@@ -27,6 +28,7 @@ export interface NoitaAPI {
       scrapeProgressFlags: () => Promise<NoitaProgressFlags>;
       scrapeSessions: () => Promise<NoitaSession[]>;
       scrapeBonesWands: () => Promise<NoitaWand[]>;
+      scrapeWorldState: () => Promise<NoitaWorldState | undefined>;
     };
     launch: {
       master: (params?: string[]) => Promise<void>;

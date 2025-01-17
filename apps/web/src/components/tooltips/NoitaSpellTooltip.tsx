@@ -335,7 +335,7 @@ export const NoitaSpellTooltip = ({
               {rowsGeneral
                 .filter((r) => r.show)
                 .map((r) => (
-                  <tr>
+                  <tr key={r.text + r.value}>
                     <td>{r.icon}</td>
                     <td>{r.text}</td>
                     <td>{r.value}</td>
@@ -351,7 +351,7 @@ export const NoitaSpellTooltip = ({
               {rowsTime
                 .filter((r) => r.show)
                 .map((r) => (
-                  <tr>
+                  <tr key={r.text + r.value}>
                     <td>{r.icon}</td>
                     <td>{r.text}</td>
                     <td>{r.value}</td>
@@ -367,7 +367,7 @@ export const NoitaSpellTooltip = ({
               {rowsDamages
                 .filter((r) => r.show)
                 .map((r) => (
-                  <tr>
+                  <tr key={r.text + r.value}>
                     <td>{r.icon}</td>
                     <td>{r.text}</td>
                     <td>{r.value}</td>
@@ -383,7 +383,7 @@ export const NoitaSpellTooltip = ({
               {rowsOther
                 .filter((r) => r.show)
                 .map((r) => (
-                  <tr>
+                  <tr key={r.text + r.value}>
                     <td>{r.icon}</td>
                     <td>{r.text}</td>
                     <td>{r.value}</td>

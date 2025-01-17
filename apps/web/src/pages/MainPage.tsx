@@ -4,12 +4,31 @@ import { pages } from '../routes/pages';
 import { useNoitaDataWakStore } from '../stores/NoitaDataWak';
 import { noitaAPI } from '../ipcHandlers.ts';
 import { useSave00Store } from '../stores/save00.ts';
+import { useMemo } from 'react';
 
 export const MainPage = () => {
   const navigate = useNavigate();
-  const { loaded: noitaDataWakLoaded } = useNoitaDataWakStore();
-  const { loaded: save00Loaded } = useSave00Store();
+  const { loaded: noitaDataWakLoaded, data } = useNoitaDataWakStore();
+  const { loaded: save00Loaded, currentRun } = useSave00Store();
   const toast = useToast();
+
+  const newProgress = useMemo(() => {
+    if (!currentRun) {
+      return 0;
+    }
+
+    let count = 0;
+    count += currentRun.worldState.flags.newActionIds.length;
+    count += currentRun.worldState.flags.newPerkIds.length;
+
+    if (data) {
+      const enemyIds = data.enemies.map((e) => e.id);
+      count += currentRun?.worldState.flags.newEnemyIds.filter((e) =>
+        enemyIds.includes(e),
+      ).length;
+    }
+    return count;
+  }, [currentRun, data]);
 
   return (
     <div
@@ -55,7 +74,7 @@ export const MainPage = () => {
           )
         }
       >
-        Progress Tracker
+        Progress {newProgress > 0 && <span>( {newProgress} )</span>}
       </Button>
       <Button
         decoration={'both'}
@@ -67,7 +86,23 @@ export const MainPage = () => {
           )
         }
       >
-        Progress Tracker V2
+        Progress V2
+      </Button>
+      <Button
+        decoration={'both'}
+        disabled={!noitaDataWakLoaded || !currentRun}
+        onClick={() => navigate(pages.currentRun)}
+        onDisabledClick={() => {
+          if (!noitaDataWakLoaded) {
+            toast.error(
+              'Noita Data is not set up. Please click on the Setup menu.',
+            );
+          } else if (!currentRun) {
+            toast.error('No ongoing run detected.');
+          }
+        }}
+      >
+        Current Run
       </Button>
       <Button decoration={'both'} onClick={() => navigate(pages.holidays)}>
         Holidays

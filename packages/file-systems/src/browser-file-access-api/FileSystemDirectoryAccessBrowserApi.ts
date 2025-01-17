@@ -69,13 +69,9 @@ export const FileSystemDirectoryAccessBrowserApi = (
     },
     checkRelativePathExists: async (path) => {
       try {
-        const parts = path.split(FILE_PATH_DIVIDER);
-        let currentHandle = directoryHandle;
-        for (const part of parts) {
-          currentHandle = await currentHandle.getDirectoryHandle(part, {
-            create: false,
-          });
-        }
+        await directoryHandle.getDirectoryHandle(path, {
+          create: false,
+        });
         return true;
       } catch {
         return false;

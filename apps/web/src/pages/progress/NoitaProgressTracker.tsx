@@ -1,6 +1,7 @@
 import {
   ActiveIconWrapper,
   ProgressIcon,
+  ProgressIconType,
 } from '@noita-explorer/noita-component-library';
 import { useMemo } from 'react';
 import { useNoitaDataWakStore } from '../../stores/NoitaDataWak.ts';
@@ -11,10 +12,12 @@ import { useSave00Store } from '../../stores/save00.ts';
 import { NoitaSpellTypesDictionary } from '../../noita/NoitaSpellTypeDictionary.ts';
 import { NoitaEnemyGroupTooltip } from '../../components/tooltips/NoitaEnemyGroupTooltip.tsx';
 import { useNoitaEnemyGroups } from '../../hooks/useNoitaEnemyGroups.ts';
+import { arrayHelpers } from '@noita-explorer/tools';
 
 export const NoitaProgressTracker = () => {
   const { data } = useNoitaDataWakStore();
-  const { enemyStatistics, unlockedPerks, unlockedSpells } = useSave00Store();
+  const { enemyStatistics, unlockedPerks, unlockedSpells, currentRun } =
+    useSave00Store();
 
   const enemies = useNoitaEnemyGroups({
     enemies: data?.enemies,
@@ -25,7 +28,9 @@ export const NoitaProgressTracker = () => {
     if (data?.enemies === undefined) return 0;
     if (enemyStatistics === undefined) return 0;
 
-    return data.enemies.filter((e) => e.id in enemyStatistics).length;
+    return data.enemies
+      .filter((e) => e.id in enemyStatistics)
+      .filter((e) => enemyStatistics[e.id].enemyDeathByPlayer > 0).length;
   }, [data, enemyStatistics]);
 
   if (!data) {
@@ -47,29 +52,34 @@ export const NoitaProgressTracker = () => {
           columnCount={9}
           unlocked={unlockedPerks?.length ?? 0}
         >
-          {data.perks.map((perk) => (
-            <ActiveIconWrapper
-              id={'perk-' + perk.id}
-              key={'perk-' + perk.id}
-              tooltip={
-                <NoitaPerkTooltip
-                  perk={perk}
-                  isUnknown={
-                    !(!unlockedPerks || unlockedPerks.includes(perk.id))
-                  }
-                />
-              }
-            >
-              <ProgressIcon
-                type={
-                  !unlockedPerks || unlockedPerks.includes(perk.id)
-                    ? 'regular'
-                    : 'unknown'
+          {data.perks.map((perk) => {
+            let iconType: ProgressIconType = 'regular';
+
+            if (unlockedPerks && !unlockedPerks.includes(perk.id)) {
+              iconType = 'unknown';
+            } else if (
+              currentRun?.worldState?.flags?.newPerkIds?.includes(perk.id)
+            ) {
+              iconType = 'new';
+            }
+
+            return (
+              <ActiveIconWrapper
+                id={'perk-' + perk.id}
+                key={'perk-' + perk.id}
+                tooltip={
+                  <NoitaPerkTooltip
+                    perk={perk}
+                    isUnknown={
+                      !(!unlockedPerks || unlockedPerks.includes(perk.id))
+                    }
+                  />
                 }
-                icon={perk.imageBase64}
-              />
-            </ActiveIconWrapper>
-          ))}
+              >
+                <ProgressIcon type={iconType} icon={perk.imageBase64} />
+              </ActiveIconWrapper>
+            );
+          })}
         </NoitaProgressIconTable>
         <NoitaProgressIconTable
           count={data.spells.length}
@@ -77,30 +87,38 @@ export const NoitaProgressTracker = () => {
           columnCount={12}
           unlocked={unlockedSpells?.length ?? 0}
         >
-          {data.spells.map((spell) => (
-            <ActiveIconWrapper
-              id={'spell-' + spell.id}
-              key={'spell-' + spell.id}
-              tooltip={
-                <NoitaSpellTooltip
-                  spell={spell}
-                  isUnknown={
-                    !(!unlockedSpells || unlockedSpells.includes(spell.id))
-                  }
-                />
-              }
-            >
-              <ProgressIcon
-                type={
-                  !unlockedSpells || unlockedSpells.includes(spell.id)
-                    ? 'regular'
-                    : 'unknown'
+          {data.spells.map((spell) => {
+            let iconType: ProgressIconType = 'regular';
+
+            if (unlockedSpells && !unlockedSpells.includes(spell.id)) {
+              iconType = 'unknown';
+            } else if (
+              currentRun?.worldState?.flags?.newActionIds?.includes(spell.id)
+            ) {
+              iconType = 'new';
+            }
+
+            return (
+              <ActiveIconWrapper
+                id={'spell-' + spell.id}
+                key={'spell-' + spell.id}
+                tooltip={
+                  <NoitaSpellTooltip
+                    spell={spell}
+                    isUnknown={
+                      !(!unlockedSpells || unlockedSpells.includes(spell.id))
+                    }
+                  />
                 }
-                icon={spell.imageBase64}
-                spellBackground={NoitaSpellTypesDictionary[spell.type].image}
-              />
-            </ActiveIconWrapper>
-          ))}
+              >
+                <ProgressIcon
+                  type={iconType}
+                  icon={spell.imageBase64}
+                  spellBackground={NoitaSpellTypesDictionary[spell.type].image}
+                />
+              </ActiveIconWrapper>
+            );
+          })}
         </NoitaProgressIconTable>
         <NoitaProgressIconTable
           count={enemies?.length ?? 0}
@@ -109,36 +127,59 @@ export const NoitaProgressTracker = () => {
           unlocked={unlockedEnemycount}
         >
           {enemies &&
-            enemies.map((e) => (
-              <ActiveIconWrapper
-                id={'enemy-' + e.enemyGroup.baseId}
-                key={'enemy-' + e.enemyGroup.baseId}
-                tooltip={
-                  <NoitaEnemyGroupTooltip
-                    enemyGroup={e.enemyGroup}
-                    statistics={e.statistics}
-                    isUnknown={
-                      !(
-                        !enemyStatistics ||
-                        e.enemyGroup.enemies.some(
-                          (e) => e.id in enemyStatistics,
+            enemies.map((e) => {
+              let iconType: ProgressIconType = 'regular';
+
+              const isEnemyInStatistics =
+                enemyStatistics &&
+                e.enemyGroup.enemies.some((e) => e.id in enemyStatistics);
+
+              const enemyKilledZeroTimes =
+                arrayHelpers.sumBy(
+                  Object.values(e.statistics),
+                  (stats) => stats.enemyDeathByPlayer,
+                ) === 0;
+
+              if (
+                !enemyStatistics ||
+                !isEnemyInStatistics ||
+                enemyKilledZeroTimes
+              ) {
+                iconType = 'unknown';
+              } else if (
+                e.enemyGroup.enemies.some((e) =>
+                  currentRun?.worldState?.flags?.newEnemyIds?.includes(e.id),
+                )
+              ) {
+                iconType = 'new';
+              }
+
+              return (
+                <ActiveIconWrapper
+                  id={'enemy-' + e.enemyGroup.baseId}
+                  key={'enemy-' + e.enemyGroup.baseId}
+                  tooltip={
+                    <NoitaEnemyGroupTooltip
+                      enemyGroup={e.enemyGroup}
+                      statistics={e.statistics}
+                      isUnknown={
+                        !(
+                          !enemyStatistics ||
+                          e.enemyGroup.enemies.some(
+                            (e) => e.id in enemyStatistics,
+                          )
                         )
-                      )
-                    }
-                  />
-                }
-              >
-                <ProgressIcon
-                  type={
-                    !enemyStatistics ||
-                    e.enemyGroup.enemies.some((e) => e.id in enemyStatistics)
-                      ? 'regular'
-                      : 'unknown'
+                      }
+                    />
                   }
-                  icon={e.enemyGroup.imageBase64}
-                />
-              </ActiveIconWrapper>
-            ))}
+                >
+                  <ProgressIcon
+                    type={iconType}
+                    icon={e.enemyGroup.imageBase64}
+                  />
+                </ActiveIconWrapper>
+              );
+            })}
         </NoitaProgressIconTable>
       </div>
     </>

@@ -19,4 +19,5 @@ export const pages = {
     main: '/settings',
     cursorWandPicker: '/settings/cursor-wand-picker',
   },
+  currentRun: '/current-run',
 };

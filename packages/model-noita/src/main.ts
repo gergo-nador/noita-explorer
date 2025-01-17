@@ -15,6 +15,7 @@ export * from "./common/NoitaSpellType";
 export * from "./common/NoitaWand";
 export * from "./common/NoitaWandConfig";
 export * from "./common/NoitaWandSpell";
+export * from "./common/NoitaWorldState";
 export * from "./common/SpellModifierNumberUnit";
 export * from "./scraping/EnemyStatistics";
 export * from "./scraping/NoitaDataWakScrapeResult";

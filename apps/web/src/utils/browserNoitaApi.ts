@@ -9,6 +9,7 @@ import {
   scrapeEnemyStatistics,
   scrapeProgressFlags,
   scrapeSessions,
+  scrapeWorldState,
 } from '@noita-explorer/scrapers';
 import { FileSystemDirectoryAccessBrowserApi } from '@noita-explorer/file-systems/browser-file-access-api';
 import { FileSystemDirectoryAccessBrowserFallback } from '@noita-explorer/file-systems/browser-fallback';
@@ -101,6 +102,10 @@ export function browserNoitaApi(): NoitaAPI {
         scrapeBonesWands: async () => {
           const api = await getSave00FolderHandle();
           return await scrapeBonesWands({ save00DirectoryApi: api });
+        },
+        scrapeWorldState: async () => {
+          const api = await getSave00FolderHandle();
+          return await scrapeWorldState({ save00DirectoryApi: api });
         },
       },
       launch: {

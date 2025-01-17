@@ -23,7 +23,7 @@ export const NoitaEnemyGroupTooltip = ({
       <div style={{ fontSize: 20 }}>{enemyGroup.name}</div>
       {statistics &&
         enemyGroup.enemies.map((e) => (
-          <div style={{ fontSize: 16 }}>
+          <div style={{ fontSize: 16 }} key={e.id}>
             {enemyGroup.enemies.length > 1 && (
               <div style={{ marginTop: 10 }}>
                 <Flex gap={5}>
@@ -32,6 +32,7 @@ export const NoitaEnemyGroupTooltip = ({
                 </Flex>
               </div>
             )}
+
             {statistics && e.id in statistics && (
               <div
                 style={{
