@@ -8,6 +8,7 @@ export * from "./common/tags";
 export * from "./cryptography/EncryptedFileKeys";
 export * from "./cryptography/salakieli";
 export * from "./datawak/ScrapeEnemies";
+export * from "./datawak/ScrapeMaterials";
 export * from "./datawak/ScrapePerks";
 export * from "./datawak/ScrapeSpells";
 export * from "./datawak/ScrapeWandsConfig";

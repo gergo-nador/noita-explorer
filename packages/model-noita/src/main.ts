@@ -6,6 +6,8 @@ export * from "./common/NoitaAPI";
 export * from "./common/NoitaConstants";
 export * from "./common/NoitaEnemy";
 export * from "./common/NoitaEnemyGroup";
+export * from "./common/NoitaMaterial";
+export * from "./common/NoitaMaterialReaction";
 export * from "./common/NoitaPerk";
 export * from "./common/NoitaProgressEntity";
 export * from "./common/NoitaProtection";
