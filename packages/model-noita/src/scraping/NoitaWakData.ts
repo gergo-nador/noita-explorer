@@ -4,6 +4,8 @@ import { NoitaSpell } from '../common/NoitaSpell.ts';
 import { NoitaTranslation } from './NoitaTranslation.ts';
 import { StringKeyDictionary } from '@noita-explorer/model';
 import { NoitaWandConfig } from '../common/NoitaWandConfig.ts';
+import { NoitaMaterial } from '../common/NoitaMaterial.ts';
+import { NoitaMaterialReaction } from '../common/NoitaMaterialReaction.ts';
 
 export interface NoitaWakData {
   scrapedAt: string;
@@ -15,4 +17,6 @@ export interface NoitaWakData {
   spells: NoitaSpell[];
   wandConfigs: NoitaWandConfig[];
   translations: StringKeyDictionary<NoitaTranslation>;
+  materials: NoitaMaterial[];
+  materialReactions: NoitaMaterialReaction[];
 }

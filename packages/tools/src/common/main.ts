@@ -3,6 +3,7 @@
  */
 
 export * from "./array";
+export * from "./color";
 export * from "./conditions";
 export * from "./cryptography";
 export * from "./file-access-utils";

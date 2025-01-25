@@ -7,6 +7,8 @@ import {
   NoitaMaterialReaction,
   NoitaMaterialReactionComponent,
   NoitaTranslation,
+  NoitaMaterialCellType,
+  NoitaMaterialCellTypeValidValues,
 } from '@noita-explorer/model-noita';
 import { noitaPaths } from '../NoitaPaths.ts';
 import {
@@ -14,7 +16,7 @@ import {
   XmlWrapper,
   XmlWrapperType,
 } from '@noita-explorer/tools/xml';
-import { stringHelpers } from '@noita-explorer/tools';
+import { colorHelpers, stringHelpers } from '@noita-explorer/tools';
 
 export const scrapeMaterials = async ({
   dataWakParentDirectoryApi,
@@ -44,14 +46,18 @@ export const scrapeMaterials = async ({
   const cellDataChildTags = materialsTag.findTagArray('CellDataChild');
   const reactionTags = materialsTag.findTagArray('Reaction');
 
-  const materials = [
-    ...cellDataTags.map((c) =>
-      extractCellData({ xml: c, translations: translations }),
-    ),
-    ...cellDataChildTags.map((c) =>
-      extractCellData({ xml: c, translations: translations }),
-    ),
-  ];
+  const materials: NoitaMaterial[] = [];
+
+  const materialTags = [...cellDataTags, ...cellDataChildTags];
+  for (const c of materialTags) {
+    const material = await extractCellData({
+      xml: c,
+      translations: translations,
+      dataWakParentDirectoryApi: dataWakParentDirectoryApi,
+    });
+
+    materials.push(material);
+  }
 
   const reactions = reactionTags.map((r) =>
     extractReaction({ reactionXml: r }),
@@ -60,23 +66,41 @@ export const scrapeMaterials = async ({
   return { materials, reactions };
 };
 
-const extractCellData = ({
+const extractCellData = async ({
   xml,
   translations,
+  dataWakParentDirectoryApi,
 }: {
   xml: XmlWrapperType;
   translations: StringKeyDictionary<NoitaTranslation>;
-}): NoitaMaterial => {
+  dataWakParentDirectoryApi: FileSystemDirectoryAccess;
+}): Promise<NoitaMaterial> => {
   const id = xml.getRequiredAttribute('name').asText()!;
   const tags = xml.getAttribute('tags')?.asText();
 
   const material: NoitaMaterial = {
     id: id,
     name: id,
+    cellType: 'liquid',
+    tags: tags !== undefined ? tags.split(',') : [],
+
     burnable: xml.getAttribute('burnable')?.asBoolean() ?? false,
     density: xml.getAttribute('density')?.asInt(),
-    tags: tags !== undefined ? tags.split(',') : [],
-    cellType: xml.getAttribute('cell_type')?.asText(),
+    durability: xml.getAttribute('durability')?.asInt(),
+    electricalConductivity: false,
+    hardness: xml.getAttribute('hp')?.asInt(),
+    liquidSand: xml.getAttribute('liquid_sand')?.asBoolean() ?? false,
+    stickiness: xml.getAttribute('stickiness')?.asFloat(),
+    wangColor: xml.getAttribute('wang_color')?.asText() ?? '_NO_WANG_COLOR_',
+
+    gfxGlow: xml.getAttribute('gfx_glow')?.asInt(),
+    gfxGlowColor: xml.getAttribute('gfx_glow_color')?.asText(),
+    graphicsColor: undefined,
+    graphicsImageBase64: undefined,
+
+    parent: undefined,
+    stainEffects: [],
+    ingestionEffects: [],
   };
 
   const nameTranslation = xml.getAttribute('ui_name')?.asText();
@@ -85,7 +109,88 @@ const extractCellData = ({
       text: nameTranslation,
       fromStart: '$',
     });
-    material.name = translations[nameTranslationId].en ?? nameTranslationId;
+    material.name = translations[nameTranslationId]?.en ?? nameTranslationId;
+  }
+
+  // cell type
+  const cellType = xml
+    .getAttribute('cell_type')
+    ?.asText() as NoitaMaterialCellType;
+  if (cellType && NoitaMaterialCellTypeValidValues.has(cellType)) {
+    material.cellType = cellType;
+  }
+
+  // electrical conductivity
+  const electricalConductivity = xml
+    .getAttribute('electrical_conductivity')
+    ?.asBoolean();
+  if (electricalConductivity !== undefined) {
+    material.electricalConductivity = electricalConductivity;
+  } else if (material.cellType === 'liquid' && !material.liquidSand) {
+    material.electricalConductivity = true;
+  }
+
+  // extra tags: [any_liquid] - Refers to any material with cell_type="liquid" and liquid_sand="0"
+  if (material.cellType === 'liquid' && !material.liquidSand) {
+    material.tags.push('[any_liquid]');
+  }
+  // extra tags: [any_powder] - Refers to any material with cell_type="liquid" and liquid_sand="1"
+  else if (material.cellType === 'liquid' && material.liquidSand) {
+    material.tags.push('[any_powder]');
+  }
+  // extra tags: [*]
+  material.tags.push('[*]');
+
+  // graphics
+  const graphics = xml.findNthTag('Graphics');
+  if (graphics) {
+    const color = graphics.getAttribute('color')?.asText();
+    if (color) {
+      material.graphicsColor = '#' + colorHelpers.conversion.argbToRgba(color);
+    }
+
+    const textureFilePath = graphics.getAttribute('texture_file')?.asText();
+    if (textureFilePath) {
+      const pathExists =
+        await dataWakParentDirectoryApi.checkRelativePathExists(
+          textureFilePath,
+        );
+
+      if (pathExists) {
+        const textureFile =
+          await dataWakParentDirectoryApi.getFile(textureFilePath);
+
+        const image = await textureFile.read.asImageBase64();
+        material.graphicsImageBase64 = image;
+      }
+    }
+
+    // TODO: Edge files
+  }
+
+  // effects: stains
+  const stains = xml.findNthTag('Stains');
+  if (stains) {
+    const effects = stains.findTagArray('StatusEffect');
+
+    for (const effect of effects) {
+      material.stainEffects.push({
+        effectType: effect.getRequiredAttribute('type').asText()!,
+      });
+    }
+  }
+
+  // effects: ingestion
+  const ingestion = xml.findNthTag('Ingestion');
+  if (ingestion) {
+    const effects = ingestion.findTagArray('StatusEffect');
+
+    for (const effect of effects) {
+      material.ingestionEffects.push({
+        effectType: effect.getRequiredAttribute('type').asText()!,
+        effectAmount: effect.getAttribute('amount')?.asFloat(),
+      });
+    }
   }
 
   return material;
@@ -126,14 +231,39 @@ const extractReaction = ({
     }
   }
 
-  return {
+  const reaction: NoitaMaterialReaction = {
     probability: probability,
     inputComponents: inputComponents,
     outputComponents: outputComponents,
+    fastReaction:
+      reactionXml.getAttribute('fast_reaction')?.asBoolean() ?? false,
+    convertAll: reactionXml.getAttribute('convert_all')?.asBoolean() ?? false,
+    direction: reactionXml.getAttribute('direction')?.asText(),
+    explosion: undefined,
   };
+
+  const explosionTag = reactionXml.findNthTag('Explosion');
+  if (explosionTag) {
+    reaction.explosion = {
+      explosionPower:
+        explosionTag.getAttribute('cell_explosion_power')?.asInt() ?? 0,
+    };
+  }
+
+  return reaction;
 };
 
 /*
+https://noita.wiki.gg/wiki/Modding:_Making_a_custom_material#List_of_all_known_material_properties
+https://noita.wiki.gg/wiki/Documentation:_Reaction
+
+input/output cells can be:
+- tags: [meltable_metal], [regenerative]
+- tags + state: [meltable_metal]_molten, [rust_oxide]_oxide
+- exact: diamond, void_liquid, oil
+
+
+
 Example Reactions
     <Reaction probability="30"
     	input_cell1="[fire_strong]" 		input_cell2="[meltable_metal]"

@@ -60,6 +60,8 @@ export const SetupDesktopScraper = () => {
     const perks = dataWakScrapeResult.perks.data ?? [];
     const spells = dataWakScrapeResult.spells.data ?? [];
     const wandConfigs = dataWakScrapeResult.wandConfigs.data ?? [];
+    const materials = dataWakScrapeResult.materials.data ?? [];
+    const materialReactions = dataWakScrapeResult.materialReactions.data ?? [];
 
     const now = new Date();
 
@@ -73,6 +75,8 @@ export const SetupDesktopScraper = () => {
       perks: perks,
       spells: spells,
       wandConfigs: wandConfigs,
+      materials: materials,
+      materialReactions: materialReactions,
     };
 
     return noitaAPI.noita.dataFile.write(data).then(() => data);
@@ -194,6 +198,36 @@ export const SetupDesktopScraper = () => {
                   size={24}
                 />
               )}
+            />
+
+            <NoitaDataWakScrapeResultDisplay
+              title={'Materials'}
+              result={dataWakScrapeResult.materials}
+              dataIconMapper={(material) => {
+                if (material.graphicsImageBase64) {
+                  return (
+                    <ProgressIcon
+                      key={material.id}
+                      type={'regular'}
+                      icon={material.graphicsImageBase64}
+                      size={24}
+                    />
+                  );
+                }
+                if (material.graphicsColor) {
+                  return (
+                    <div
+                      style={{
+                        width: '24px',
+                        height: '24px',
+                        background: material.graphicsColor,
+                      }}
+                    ></div>
+                  );
+                }
+
+                return <div></div>;
+              }}
             />
           </Flex>
         )}

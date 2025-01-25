@@ -9,6 +9,8 @@ import {
   NoitaDataWakScrapeResult,
   NoitaDataWakScrapeResultStatus,
   NoitaEnemy,
+  NoitaMaterial,
+  NoitaMaterialReaction,
   NoitaPerk,
   NoitaSpell,
   NoitaTranslation,
@@ -19,6 +21,7 @@ import {
   noitaPaths,
   readTranslations,
   scrapeEnemies,
+  scrapeMaterials,
   scrapePerks,
   scrapeSpells,
   scrapeWandConfigs,
@@ -98,6 +101,12 @@ const scrape = async (): Promise<NoitaDataWakScrapeResult> => {
         status: NoitaDataWakScrapeResultStatus.SKIPPED,
       },
       wandConfigs: {
+        status: NoitaDataWakScrapeResultStatus.SKIPPED,
+      },
+      materials: {
+        status: NoitaDataWakScrapeResultStatus.SKIPPED,
+      },
+      materialReactions: {
         status: NoitaDataWakScrapeResultStatus.SKIPPED,
       },
     };
@@ -186,6 +195,20 @@ const scrape = async (): Promise<NoitaDataWakScrapeResult> => {
     wandConfigError = err;
   }
 
+  let materials: NoitaMaterial[] = [];
+  let materialReactions: NoitaMaterialReaction[] = [];
+  let materialError: unknown | undefined = undefined;
+  try {
+    const scrapedMaterials = await scrapeMaterials({
+      translations: translations,
+      dataWakParentDirectoryApi: dataWakParentDirectory,
+    });
+    materials = scrapedMaterials.materials;
+    materialReactions = scrapedMaterials.reactions;
+  } catch (err) {
+    materialError = err;
+  }
+
   return {
     translations: {
       status: NoitaDataWakScrapeResultStatus.SUCCESS,
@@ -223,6 +246,22 @@ const scrape = async (): Promise<NoitaDataWakScrapeResult> => {
           : NoitaDataWakScrapeResultStatus.FAILED,
       data: wandConfigs,
       error: wandConfigError,
+    },
+    materials: {
+      status:
+        materialError === undefined
+          ? NoitaDataWakScrapeResultStatus.SUCCESS
+          : NoitaDataWakScrapeResultStatus.FAILED,
+      data: materials,
+      error: materialError,
+    },
+    materialReactions: {
+      status:
+        materialError === undefined
+          ? NoitaDataWakScrapeResultStatus.SUCCESS
+          : NoitaDataWakScrapeResultStatus.FAILED,
+      data: materialReactions,
+      error: materialError,
     },
   };
 };
