@@ -25,8 +25,48 @@ function convertARGBToRGBA(argb: string): string | null {
   return rgba;
 }
 
+function getContrastColor(color: string): 'white' | 'black' {
+  let r: number, g: number, b: number;
+
+  // If color is in HEX format, convert it to RGB
+  if (color.startsWith('#')) {
+    const hex = color.replace('#', '');
+
+    if (hex.length === 3) {
+      // Convert shorthand hex (e.g., #FFF) to full hex (e.g., #FFFFFF)
+      r = parseInt(hex[0] + hex[0], 16);
+      g = parseInt(hex[1] + hex[1], 16);
+      b = parseInt(hex[2] + hex[2], 16);
+    } else if (hex.length === 6 || hex.length === 8) {
+      r = parseInt(hex.substring(0, 2), 16);
+      g = parseInt(hex.substring(2, 4), 16);
+      b = parseInt(hex.substring(4, 6), 16);
+    } else {
+      throw new Error('Invalid HEX color.');
+    }
+  }
+  // If color is in RGB format
+  else if (color.startsWith('rgb')) {
+    const match = color.match(/\d+/g);
+    if (!match || match.length < 3) throw new Error('Invalid RGB color.');
+    r = parseInt(match[0]);
+    g = parseInt(match[1]);
+    b = parseInt(match[2]);
+  } else {
+    throw new Error(
+      'Unsupported color format. Use HEX (#RRGGBB) or RGB (rgb(R, G, B)).',
+    );
+  }
+
+  // Calculate luminance using the standard formula
+  const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+
+  return luminance > 0.5 ? 'black' : 'white';
+}
+
 export const colorHelpers = {
   conversion: {
     argbToRgba: convertARGBToRGBA,
   },
+  getRgbaContractsColor: getContrastColor,
 };

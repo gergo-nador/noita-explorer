@@ -170,8 +170,57 @@ function trimWhitespaceBase64(base64: string): Promise<string> {
   });
 }
 
+function getAverageColorBase64(base64: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.crossOrigin = 'Anonymous'; // To avoid CORS issues
+    img.src = base64;
+
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+
+      if (!ctx) {
+        reject('Canvas rendering context not supported');
+        return;
+      }
+
+      canvas.width = img.width;
+      canvas.height = img.height;
+      ctx.drawImage(img, 0, 0, img.width, img.height);
+
+      const imageData = ctx.getImageData(0, 0, img.width, img.height).data;
+      let r = 0;
+      let g = 0;
+      let b = 0;
+      let a = 0;
+      let count = 0;
+
+      for (let i = 0; i < imageData.length; i += 4) {
+        r += imageData[i]; // Red
+        g += imageData[i + 1]; // Green
+        b += imageData[i + 2]; // Blue
+        a += imageData[i + 3];
+        count++;
+      }
+
+      r = Math.floor(r / count);
+      g = Math.floor(g / count);
+      b = Math.floor(b / count);
+      a = Math.floor(a / count);
+
+      resolve(
+        `#${r.toString(16)}${g.toString(16)}${b.toString(16)}${a.toString(16)}`,
+      );
+    };
+
+    img.onerror = () => reject('Failed to load image');
+  });
+}
+
 export const imageHelpers = {
   trimWhitespaceBase64,
   scaleImageBase64,
   rotateImageBase64,
+  getAverageColorBase64,
 };

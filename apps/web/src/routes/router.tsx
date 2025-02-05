@@ -19,6 +19,7 @@ import { Settings } from '../pages/settings/Settings.tsx';
 import { NoitaBonesWands } from '../pages/NoitaBonesWands.tsx';
 import { SettingsCursorWandPicker } from '../pages/settings/SettingsCursorWandPicker.tsx';
 import { CurrentRunPage } from '../pages/world/CurrentRunPage.tsx';
+import { NoitaProgressV2Materials } from '../pages/progress/progressv2/NoitaProgressV2Materials.tsx';
 
 export const router = createBrowserRouter([
   {
@@ -41,6 +42,7 @@ export const router = createBrowserRouter([
           { title: 'Perks', href: pages.progressTrackerV2.perks },
           { title: 'Spells', href: pages.progressTrackerV2.spells },
           { title: 'Enemies', href: pages.progressTrackerV2.enemies },
+          { title: 'Materials', href: pages.progressTrackerV2.materials },
         ]}
       />
     ),
@@ -56,6 +58,10 @@ export const router = createBrowserRouter([
       {
         path: 'enemies',
         element: <NoitaProgressV2Enemies />,
+      },
+      {
+        path: 'materials',
+        element: <NoitaProgressV2Materials />,
       },
     ],
   },

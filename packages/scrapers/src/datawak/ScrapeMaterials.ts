@@ -77,6 +77,7 @@ const extractCellData = async ({
 }): Promise<NoitaMaterial> => {
   const id = xml.getRequiredAttribute('name').asText()!;
   const tags = xml.getAttribute('tags')?.asText();
+  const wangColor = xml.getRequiredAttribute('wang_color').asText()!;
 
   const material: NoitaMaterial = {
     id: id,
@@ -91,7 +92,8 @@ const extractCellData = async ({
     hardness: xml.getAttribute('hp')?.asInt(),
     liquidSand: xml.getAttribute('liquid_sand')?.asBoolean() ?? false,
     stickiness: xml.getAttribute('stickiness')?.asFloat(),
-    wangColor: xml.getAttribute('wang_color')?.asText() ?? '_NO_WANG_COLOR_',
+    wangColor: wangColor,
+    wangColorHtml: '#' + colorHelpers.conversion.argbToRgba(wangColor),
 
     gfxGlow: xml.getAttribute('gfx_glow')?.asInt(),
     gfxGlowColor: xml.getAttribute('gfx_glow_color')?.asText(),
@@ -110,6 +112,19 @@ const extractCellData = async ({
       fromStart: '$',
     });
     material.name = translations[nameTranslationId]?.en ?? nameTranslationId;
+  }
+
+  // parent material
+  const parent = xml.getAttribute('_parent')?.asText();
+  const parentInheritReactions = xml
+    .getAttribute('_inherit_reactions')
+    ?.asBoolean();
+
+  if (parent !== undefined) {
+    material.parent = {
+      id: parent,
+      inherit_reactions: parentInheritReactions ?? false,
+    };
   }
 
   // cell type

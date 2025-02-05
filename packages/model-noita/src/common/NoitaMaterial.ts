@@ -13,6 +13,7 @@ export interface NoitaMaterial {
   // [solid, liquid, fire, gas], default: liquid
   cellType: NoitaMaterialCellType;
   wangColor: string;
+  wangColorHtml: string;
   gfxGlow: number | undefined;
   gfxGlowColor: string | undefined;
   graphicsColor: string | undefined;
