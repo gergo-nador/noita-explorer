@@ -24,6 +24,7 @@ export interface Settings {
     wandSpriteId: string | undefined;
   };
   progressDisplayDebugData: boolean;
+  spoilerWarningAccepted: boolean;
 }
 
 export interface SettingsState {
@@ -48,6 +49,7 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
       wandSpriteId: undefined,
     },
     progressDisplayDebugData: false,
+    spoilerWarningAccepted: false,
   },
 
   loaded: false,
