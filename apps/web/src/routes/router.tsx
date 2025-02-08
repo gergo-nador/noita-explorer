@@ -19,6 +19,7 @@ import { Settings } from '../pages/settings/Settings.tsx';
 import { NoitaBonesWands } from '../pages/NoitaBonesWands.tsx';
 import { SettingsCursorWandPicker } from '../pages/settings/SettingsCursorWandPicker.tsx';
 import { CurrentRunPage } from '../pages/world/CurrentRunPage.tsx';
+import { NoitaProgressV2MaterialsTree } from '../pages/progress/progressv2/NoitaProgressV2MaterialsTree.tsx';
 import { NoitaProgressV2Materials } from '../pages/progress/progressv2/NoitaProgressV2Materials.tsx';
 
 export const router = createBrowserRouter([
@@ -43,6 +44,10 @@ export const router = createBrowserRouter([
           { title: 'Spells', href: pages.progressTrackerV2.spells },
           { title: 'Enemies', href: pages.progressTrackerV2.enemies },
           { title: 'Materials', href: pages.progressTrackerV2.materials },
+          {
+            title: 'Materials Tree',
+            href: pages.progressTrackerV2.materialsTree,
+          },
         ]}
       />
     ),
@@ -62,6 +67,10 @@ export const router = createBrowserRouter([
       {
         path: 'materials',
         element: <NoitaProgressV2Materials />,
+      },
+      {
+        path: 'materials-tree',
+        element: <NoitaProgressV2MaterialsTree />,
       },
     ],
   },

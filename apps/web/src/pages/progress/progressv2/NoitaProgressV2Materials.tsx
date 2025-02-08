@@ -1,172 +1,82 @@
 import { useNoitaDataWakStore } from '../../../stores/NoitaDataWak.ts';
-import { useEffect, useMemo, useState } from 'react';
-import {
-  arrayHelpers,
-  colorHelpers,
-  imageHelpers,
-} from '@noita-explorer/tools';
-import { NoitaMaterial } from '@noita-explorer/model-noita';
-import { StringKeyDictionary } from '@noita-explorer/model';
-
-interface MaterialTreeNode extends NoitaMaterial {
-  children: MaterialTreeNode[];
-}
+import { useEffect, useState } from 'react';
+import potionPng from '../../../assets/potion.png';
 
 export const NoitaProgressV2Materials = () => {
   const { data } = useNoitaDataWakStore();
+  const [img, setImg] = useState<string>();
 
-  const materialsUnique = useMemo(() => {
-    if (!data?.materials) {
-      return [];
-    }
-
-    return arrayHelpers.uniqueBy(data.materials, (m) => m.id);
-  }, [data?.materials]);
-
-  const materialHierarchy = useMemo(() => {
-    const materialMap: StringKeyDictionary<MaterialTreeNode> = {};
-
-    materialsUnique.forEach((material) => {
-      materialMap[material.id] = { ...material, children: [] };
-    });
-
-    const rootNodes: MaterialTreeNode[] = [];
-
-    materialsUnique.forEach((material) => {
-      const materialNode = materialMap[material.id];
-
-      if (material.parent === undefined) {
-        rootNodes.push(materialNode);
-      } else {
-        const parent = materialMap[material.parent.id];
-        parent.children.push(materialNode);
-      }
-    });
-
-    return rootNodes;
-  }, [materialsUnique]);
+  useEffect(() => {
+    colorNoitaPotion().then(setImg);
+  }, []);
 
   if (!data?.materials) {
     return <div>Noita Data Wak is not loaded.</div>;
   }
 
   return (
-    <div
-      style={{
-        display: 'grid',
-        gridTemplateColumns: '6fr 6fr',
-        gap: 20,
-        maxWidth: '1220px', // 500px left panel + 20px gap + 500px right panel
-        margin: 'auto',
-      }}
-    >
-      <div
-        style={{
-          maxWidth: '700px',
-          minWidth: '200px',
-          position: 'relative',
-        }}
-      >
-        <MaterialTreeView data={materialHierarchy} />
+    <div>
+      <div>potion:</div>
+      <div>
+        <img src={potionPng} style={{ zoom: 4, imageRendering: 'pixelated' }} />
+        <img src={img} style={{ zoom: 4, imageRendering: 'pixelated' }} />
       </div>
-      {/*<div>
-        <Card style={{ position: 'sticky', top: 0 }}>
-          {!selectedEnemy && <span>Select an enemy</span>}
-          {selectedEnemy && <EnemyOverview enemy={selectedEnemy} />}
-        </Card>
-      </div>*/}
     </div>
   );
 };
 
-interface MaterialTreeNodeComponentProps {
-  node: MaterialTreeNode;
-}
-const MaterialTreeNodeComponent = ({
-  node,
-}: MaterialTreeNodeComponentProps) => {
-  const [collapsed, setCollapsed] = useState(false);
-  const [textColor, setTextColor] = useState<'black' | 'white'>();
-  const [textBackgroundColor, setTextBackgroundColor] = useState<string>();
+function colorNoitaPotion() {
+  // parameters:
+  const wangColor = {
+    r: 47 / 255,
+    g: 85 / 255,
+    b: 76 / 255,
+    a: 1,
+  };
+  const mouthColor = {
+    r: 0.85,
+    g: 0.85,
+    b: 0.85,
+    a: 1,
+  };
 
-  useEffect(() => {
-    if (node.graphicsImageBase64) {
-      imageHelpers
-        .getAverageColorBase64(node.graphicsImageBase64)
-        .then((color) => {
-          setTextBackgroundColor(color);
-          const contrast = colorHelpers.getRgbaContractsColor(color);
-          setTextColor(contrast);
-        });
-    } else {
-      const color = node.graphicsColor ?? node.wangColorHtml;
-      const contrast = colorHelpers.getRgbaContractsColor(color);
-      setTextColor(contrast);
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+
+  const tex = new Image();
+  tex.src = potionPng; // Replace with actual texture path
+
+  function applyColorFilter(imageData: ImageData, color) {
+    const data = imageData.data;
+
+    for (let i = 0; i < data.length; i += 4) {
+      const isFirstRow = i / 4 <= canvas.width;
+      const rowColor = isFirstRow ? mouthColor : color;
+
+      data[i] *= rowColor.r;
+      data[i + 1] *= rowColor.g;
+      data[i + 2] *= rowColor.b;
+      data[i + 3] *= rowColor.a;
     }
-  }, [node]);
+    return imageData;
+  }
 
-  return (
-    <div style={{ marginLeft: '16px' }}>
-      <div
-        onClick={() => setCollapsed(!collapsed)}
-        style={{
-          cursor: 'pointer',
-          display: 'flex',
-          alignItems: 'center',
-          padding: '4px',
-          borderRadius: '4px',
-          marginBottom: '2px',
-          maxWidth: 'fit-content',
-        }}
-      >
-        {node.children.length > 0 && (
-          <span style={{ fontWeight: 'bold', marginRight: '6px' }}>
-            {collapsed ? '▶' : '▼'}
-          </span>
-        )}
+  function renderPotion(color) {
+    ctx.drawImage(tex, 0, 0);
+    let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
 
-        <div
-          style={{
-            padding: 10,
-            backgroundImage: `url(${node.graphicsImageBase64})`,
-            backgroundColor: node.graphicsColor ?? node.wangColorHtml,
-          }}
-        >
-          <div
-            style={{ backgroundColor: textBackgroundColor, color: textColor }}
-          >
-            <span style={{ fontSize: 18 }}>{node.name}</span>
-            <br />
-            <i>{node.id}</i>
-          </div>
-        </div>
-      </div>
-      {!collapsed && (
-        <div
-          style={{
-            marginLeft: '16px',
-            paddingLeft: '8px',
-            borderLeft: '2px solid #ddd',
-          }}
-        >
-          {node.children.map((child) => (
-            <MaterialTreeNodeComponent key={child.id} node={child} />
-          ))}
-        </div>
-      )}
-    </div>
-  );
-};
+    imageData = applyColorFilter(imageData, color);
 
-interface MaterialTreeViewProps {
-  data: MaterialTreeNode[];
+    ctx.putImageData(imageData, 0, 0);
+    return canvas.toDataURL('image/png');
+  }
+
+  return new Promise((resolve, reject) => {
+    tex.onload = () => {
+      canvas.width = tex.width;
+      canvas.height = tex.height;
+      const base64 = renderPotion(wangColor);
+      resolve(base64);
+    };
+  });
 }
-const MaterialTreeView = ({ data }: MaterialTreeViewProps) => {
-  return (
-    <div style={{ padding: '16px', fontFamily: 'Arial, sans-serif' }}>
-      {data.map((node) => (
-        <MaterialTreeNodeComponent key={node.id} node={node} />
-      ))}
-    </div>
-  );
-};

@@ -11,6 +11,7 @@ export const pages = {
     spells: '/progress-tracker-v2/spells',
     enemies: '/progress-tracker-v2/enemies',
     materials: '/progress-tracker-v2/materials',
+    materialsTree: '/progress-tracker-v2/materials-tree',
   },
   holidays: '/holidays',
   sessions: '/sessions',
