@@ -27,18 +27,27 @@ export const NoitaProgressV2Materials = () => {
 
 function colorNoitaPotion() {
   // parameters:
-  const wangColor = {
+  const waterWangColor = {
     r: 47 / 255,
     g: 85 / 255,
     b: 76 / 255,
     a: 1,
   };
+  const polyWangColor = {
+    // 80f18beb
+    r: 241 / 255,
+    g: 139 / 255,
+    b: 235 / 255,
+    a: 1,
+  };
+
   const mouthColor = {
     r: 0.85,
     g: 0.85,
     b: 0.85,
     a: 1,
   };
+  const wangColor = polyWangColor;
 
   const canvas = document.createElement('canvas');
   const ctx = canvas.getContext('2d');

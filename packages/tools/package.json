@@ -30,6 +30,7 @@
     "generate-barrels": "barrelsby --config barrels.config.json"
   },
   "devDependencies": {
+    "@types/color": "^4.2.0",
     "@types/luaparse": "^0.2.12",
     "@types/xml2js": "^0.4.14",
     "barrelsby": "^2.8.1",
@@ -39,8 +40,9 @@
   },
   "dependencies": {
     "@noita-explorer/model": "*",
-    "events": "^3.3.0",
     "buffer": "^6.0.3",
+    "color": "^4.2.3",
+    "events": "^3.3.0",
     "luaparse": "^0.3.1",
     "xml2js": "^0.6.2"
   }
