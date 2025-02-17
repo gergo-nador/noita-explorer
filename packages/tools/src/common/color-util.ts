@@ -27,8 +27,8 @@ function convertARGBToRGBA(argb: string): string | null {
   return rgba;
 }
 
-function getContrastColor(base_color: string): 'white' | 'black' {
-  const [r, g, b] = color(base_color).rgb().array();
+function getContrastColor(baseColor: string): 'white' | 'black' {
+  const [r, g, b] = color(baseColor).rgb().array();
 
   // https://stackoverflow.com/questions/596216/formula-to-determine-perceived-brightness-of-rgb-color
   const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
