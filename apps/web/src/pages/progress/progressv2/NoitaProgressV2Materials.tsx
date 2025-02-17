@@ -2,9 +2,19 @@ import { useNoitaDataWakStore } from '../../../stores/NoitaDataWak.ts';
 import { NoitaMaterialIcon } from '../../../components/NoitaMaterialIcon.tsx';
 import { NoitaProgressIconTable } from '../../../components/NoitaProgressIconTable.tsx';
 import { ActiveIconWrapper } from '@noita-explorer/noita-component-library';
+import { useMemo } from 'react';
+import { arrayHelpers } from '@noita-explorer/tools';
 
 export const NoitaProgressV2Materials = () => {
   const { data } = useNoitaDataWakStore();
+
+  const materialsUnique = useMemo(() => {
+    if (!data?.materials) {
+      return [];
+    }
+
+    return arrayHelpers.uniqueBy(data.materials, (m) => m.id);
+  }, [data?.materials]);
 
   if (!data?.materials) {
     return <div>Noita Data Wak is not loaded.</div>;
@@ -15,11 +25,11 @@ export const NoitaProgressV2Materials = () => {
       <div>potion:</div>
       <div>
         <NoitaProgressIconTable
-          count={data.materials.length}
+          count={materialsUnique.length}
           name={'Materials'}
           columnCount={9}
         >
-          {data.materials.map((material) => (
+          {materialsUnique.map((material) => (
             <ActiveIconWrapper
               id={'enemy-' + material.id}
               key={'enemy-' + material.id}
@@ -34,9 +44,6 @@ export const NoitaProgressV2Materials = () => {
             </ActiveIconWrapper>
           ))}
         </NoitaProgressIconTable>
-
-        {/*<img src={potionPng} style={{ zoom: 4, imageRendering: 'pixelated' }} />
-        <img src={img} style={{ zoom: 4, imageRendering: 'pixelated' }} />*/}
       </div>
     </div>
   );

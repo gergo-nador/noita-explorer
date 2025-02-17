@@ -19,7 +19,7 @@ interface TabViewProps {
 
 export const TabView = ({
   tabs,
-  style,
+  style = {},
   styleCard,
   activeTabId,
 }: TabViewProps) => {
@@ -39,7 +39,7 @@ export const TabView = ({
         {tabs.map(({ id, title, onClick }, index) => {
           const isActive = id === activeTabId;
           return (
-            <div>
+            <div style={{ display: 'grid', alignItems: 'stretch' }}>
               <TabItem
                 key={title}
                 text={title}

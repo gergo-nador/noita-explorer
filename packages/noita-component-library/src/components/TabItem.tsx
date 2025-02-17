@@ -45,6 +45,7 @@ export const TabItem = ({ text, style, onClick, isActive }: TabItemProps) => {
         style={{
           transform: !isActive ? 'translateY(4px)' : '',
           cursor: 'pointer',
+          height: '100%',
         }}
       >
         <div className={css['grid-main-corner']}>

@@ -1,5 +1,6 @@
 import color from 'color';
 import potionPng from '../assets/potion.png';
+import pouchPng from '../assets/material_pouch.png';
 import { NoitaMaterial } from '@noita-explorer/model-noita';
 import { InventoryIcon } from '@noita-explorer/noita-component-library';
 import { useEffect, useState } from 'react';
@@ -14,8 +15,17 @@ export const NoitaMaterialIcon = ({ material }: NoitaMaterialIconProps) => {
   useEffect(() => {
     if (material.cellType === 'liquid' && !material.liquidSand) {
       colorNoitaPotion({
+        potionBaseImage: potionPng,
         potionColor: material.graphicsColor ?? material.wangColorHtml,
-        potionMouthRow: 2,
+        potionMouthRowStart: 2,
+        potionMouthRowEnd: 2,
+      }).then((icon) => setMaterialIcon(icon));
+    } else if (material.cellType === 'liquid' && material.liquidSand) {
+      colorNoitaPotion({
+        potionBaseImage: pouchPng,
+        potionColor: material.graphicsColor ?? material.wangColorHtml,
+        potionMouthRowStart: 1,
+        potionMouthRowEnd: 2,
       }).then((icon) => setMaterialIcon(icon));
     }
   }, [
@@ -25,15 +35,44 @@ export const NoitaMaterialIcon = ({ material }: NoitaMaterialIconProps) => {
     material.wangColorHtml,
   ]);
 
-  return <InventoryIcon icon={materialIcon} />;
+  if (materialIcon) {
+    return <InventoryIcon icon={materialIcon} />;
+  }
+
+  if (material.graphicsImageBase64) {
+    return (
+      <div
+        style={{
+          width: '100%',
+          height: '100%',
+          backgroundImage: `url(${material.graphicsImageBase64})`,
+          backgroundRepeat: 'repeat',
+        }}
+      ></div>
+    );
+  }
+
+  return (
+    <div
+      style={{
+        width: '100%',
+        height: '100%',
+        backgroundColor: material.graphicsColor ?? material.wangColorHtml,
+      }}
+    ></div>
+  );
 };
 
 function colorNoitaPotion({
+  potionBaseImage,
   potionColor,
-  potionMouthRow,
+  potionMouthRowStart,
+  potionMouthRowEnd,
 }: {
+  potionBaseImage: string;
   potionColor: string;
-  potionMouthRow: number;
+  potionMouthRowStart: number;
+  potionMouthRowEnd: number;
 }): Promise<string> {
   const [r, g, b] = color(potionColor).rgb().array();
 
@@ -59,14 +98,15 @@ function colorNoitaPotion({
   }
 
   const tex = new Image();
-  tex.src = potionPng; // Replace with actual texture path
+  tex.src = potionBaseImage;
 
   function applyColorFilter(imageData: ImageData) {
     const data = imageData.data;
 
     for (let i = 0; i < data.length; i += 4) {
       const rowIndex = Math.floor(i / (canvas.width * 4));
-      const isPotionMouthRow = rowIndex === potionMouthRow;
+      const isPotionMouthRow =
+        rowIndex >= potionMouthRowStart && rowIndex <= potionMouthRowEnd;
 
       data[i] *= potionFilter.r;
       data[i + 1] *= potionFilter.g;
