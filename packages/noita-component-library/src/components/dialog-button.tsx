@@ -1,7 +1,7 @@
-import { ShowButtonDialogProps } from '../ui-models/ShowDialogButtonProps.ts';
-import { ShowCustomDialogProps } from '../ui-models/ShowDialogCustomProps.ts';
-import { Button } from './Button';
-import { DialogCustom } from './DialogCustom';
+import { ShowButtonDialogProps } from '../ui-models/show-dialog-button-props.ts';
+import { ShowCustomDialogProps } from '../ui-models/show-dialog-custom-props.ts';
+import { Button } from './button';
+import { DialogCustom } from './dialog-custom';
 
 interface DialogButtonProps {
   isOpen: boolean;

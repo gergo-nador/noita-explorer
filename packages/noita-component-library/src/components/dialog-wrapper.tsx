@@ -1,6 +1,6 @@
-import { DialogButton } from './DialogButton';
+import { DialogButton } from './dialog-button';
 import { useDialogStore } from '../ui-stores/dialog-store';
-import { DialogCustom } from './DialogCustom';
+import { DialogCustom } from './dialog-custom';
 
 export const DialogWrapper = () => {
   const { isOpen, type, props, close } = useDialogStore();

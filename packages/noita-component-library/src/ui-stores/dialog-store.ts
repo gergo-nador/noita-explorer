@@ -1,6 +1,6 @@
 import { create } from 'zustand';
-import { ShowButtonDialogProps } from '../ui-models/ShowDialogButtonProps.ts';
-import { ShowCustomDialogProps } from '../ui-models/ShowDialogCustomProps.ts';
+import { ShowButtonDialogProps } from '../ui-models/show-dialog-button-props.ts';
+import { ShowCustomDialogProps } from '../ui-models/show-dialog-custom-props.ts';
 
 interface DialogState {
   isOpen: boolean;

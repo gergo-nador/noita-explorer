@@ -1,6 +1,6 @@
 import backgroundRegular from '../../../assets/inventory-boxes/full_inventory_box.png';
 import React from 'react';
-import { Icon } from './Icon';
+import { Icon } from './icon';
 
 interface InventoryIconProps {
   icon?: string;

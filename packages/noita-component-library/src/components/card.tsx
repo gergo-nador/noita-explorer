@@ -1,4 +1,4 @@
-import css from './Card.module.css';
+import css from './card.module.css';
 import React from 'react';
 
 interface CardProps {

@@ -60,14 +60,19 @@ export const TabPageTemplate = ({ tabs }: TabPageTemplateProps) => {
             styleCard={{
               maxHeight: constants.pageHeight,
             }}
-            tabs={tabs.map((t) => ({
-              id: t.title,
-              title: t.title,
-              content: <Outlet />,
-              onClick: () => navigate(t.href),
-            }))}
             activeTabId={activeTab.title}
-          />
+          >
+            {tabs.map((t, index) => (
+              <TabView.Item
+                id={t.title}
+                text={t.title}
+                index={index}
+                onClick={() => navigate(t.href)}
+              >
+                <Outlet />
+              </TabView.Item>
+            ))}
+          </TabView>
         )}
 
         <div

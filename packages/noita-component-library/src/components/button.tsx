@@ -1,4 +1,4 @@
-import css from './Button.module.css';
+import css from './button.module.css';
 import arrowLeft from '../../assets/button/keyboard_cursor_left_active.png';
 import arrowRight from '../../assets/button/keyboard_cursor_right_active.png';
 import React, { MutableRefObject, useRef } from 'react';

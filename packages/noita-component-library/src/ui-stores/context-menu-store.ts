@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { MouseEvent } from 'react';
-import { ContextMenuItemSeparator } from '../ui-models/ContextMenuItemSeparator.ts';
-import { ContextMenuItemSimple } from '../ui-models/ContextMenuItemSimple.ts';
+import { ContextMenuItemSeparator } from '../ui-models/context-menu-item-separator.ts';
+import { ContextMenuItemSimple } from '../ui-models/context-menu-item-simple.ts';
 
 interface ContextMenuState {
   menuItems: ContextMenuItem[];

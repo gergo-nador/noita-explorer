@@ -1,9 +1,9 @@
-import { useBool } from '../../hooks/useBool';
+import { useBool } from '../../hooks/use-bool';
 import { zIndexManager } from '../../zIndexManager';
 import React from 'react';
 import { Tooltip } from 'react-tooltip';
-import { Card } from '../Card';
-import css from './ActiveIconWrapper.module.css';
+import { Card } from '../card';
+import css from './active-icon-wrapper.module.css';
 
 interface ActiveProgressIconProps {
   id: string;

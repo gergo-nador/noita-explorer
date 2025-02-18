@@ -1,5 +1,5 @@
 import { useToaster } from 'react-hot-toast/headless';
-import { Card } from './Card';
+import { Card } from './card';
 import React, { LegacyRef } from 'react';
 
 export const NoitaToaster = () => {

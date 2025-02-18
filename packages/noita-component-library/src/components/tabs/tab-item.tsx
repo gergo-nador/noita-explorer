@@ -1,23 +1,46 @@
-import css from './TabItem.module.css';
-import React from 'react';
-import { zIndexManager } from '../zIndexManager';
+import css from './tab-item.module.css';
+import React, { useContext, useEffect } from 'react';
+import { zIndexManager } from '../../zIndexManager';
+import { TabViewContext } from './tab-view-context';
 
-interface TabItemProps {
+export interface TabItemProps {
+  id: string;
   text: string;
+  index: number;
   style?: React.CSSProperties;
   onClick?: () => void;
-  isActive?: boolean;
+  children: React.ReactNode | React.ReactNode[];
 }
 
-export const TabItem = ({ text, style, onClick, isActive }: TabItemProps) => {
+export const TabItem = ({
+  id,
+  text,
+  index,
+  style,
+  onClick,
+  children,
+}: TabItemProps) => {
   const [isHover, setHover] = React.useState(false);
   const [isFocus, setFocus] = React.useState(false);
+  const tabContext = useContext(TabViewContext);
+  const isActive = tabContext.activeTabId === id;
 
   const innerOnClick = () => {
-    if (typeof onClick !== 'function') return;
+    if (!tabContext.activeTabId) {
+      tabContext.setActiveTab(children);
+    }
 
+    if (typeof onClick !== 'function') {
+      return;
+    }
     onClick();
   };
+
+  useEffect(() => {
+    if (tabContext.activeTabId === id) {
+      tabContext.setActiveTab(children);
+    }
+  }, [id, children, tabContext.activeTabId]);
 
   style ??= {};
 
@@ -26,6 +49,8 @@ export const TabItem = ({ text, style, onClick, isActive }: TabItemProps) => {
       style={{
         outline: 'none',
         ...style,
+        transform: `translateX(-${index * 4}px) translateY(4px)`, // 4px is the width in the css
+        position: 'relative',
         zIndex: isActive
           ? zIndexManager.tabs.activeTab
           : isHover || isFocus

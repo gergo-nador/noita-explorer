@@ -2,7 +2,7 @@ import backgroundRegular from '../../../assets/progress-boxes/grid_box.png';
 import backgroundUnknown from '../../../assets/progress-boxes/grid_box_unknown.png';
 import backgroundLayerNew from '../../../assets/progress-boxes/grid_highlight_new.png';
 import React from 'react';
-import css from './ProgressIcon.module.css';
+import css from './progress-icon.module.css';
 
 export type ProgressIconType = 'regular' | 'unknown' | 'new';
 
