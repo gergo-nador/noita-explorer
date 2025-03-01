@@ -1,4 +1,4 @@
-import { Card } from '../card';
+import { Card } from '../card/card';
 import React, { useCallback, useState } from 'react';
 import { TabItem } from './tab-item';
 import { zIndexManager } from '../../zIndexManager.ts';

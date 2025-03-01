@@ -2,7 +2,7 @@ import { useBool } from '../../hooks/use-bool';
 import { zIndexManager } from '../../zIndexManager';
 import React from 'react';
 import { Tooltip } from 'react-tooltip';
-import { Card } from '../card';
+import { Card } from '../card/card';
 import css from './active-icon-wrapper.module.css';
 
 interface ActiveProgressIconProps {

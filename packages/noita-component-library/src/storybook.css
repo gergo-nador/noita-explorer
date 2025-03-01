@@ -1,0 +1,10 @@
+body{
+    background: black;
+    color: white;
+    font-family: NoitaPixel, sans-serif;
+}
+
+@font-face {
+    font-family: 'NoitaPixel'; /*a name to be used later*/
+    src: url("../assets/NoitaPixel.ttf"); /*URL to font*/
+}

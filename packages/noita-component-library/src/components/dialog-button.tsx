@@ -1,6 +1,6 @@
 import { ShowButtonDialogProps } from '../ui-models/show-dialog-button-props.ts';
 import { ShowCustomDialogProps } from '../ui-models/show-dialog-custom-props.ts';
-import { Button } from './button';
+import { Button } from './button/button';
 import { DialogCustom } from './dialog-custom';
 
 interface DialogButtonProps {

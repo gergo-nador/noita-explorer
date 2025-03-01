@@ -1,7 +1,7 @@
 import { ShowCustomDialogProps } from '../ui-models/show-dialog-custom-props.ts';
 import React, { useRef } from 'react';
 import css from './dialog.module.css';
-import { Card } from './card';
+import { Card } from './card/card';
 
 interface DialogCustomProps {
   isOpen: boolean;

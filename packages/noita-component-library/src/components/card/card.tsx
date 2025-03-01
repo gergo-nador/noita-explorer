@@ -1,18 +1,63 @@
 import css from './card.module.css';
 import React from 'react';
 
-interface CardProps {
+/**
+ * Props for the Card component, allowing customization of appearance and content.
+ */
+export interface CardProps {
+  /**
+   * The content inside the card.
+   * It can be a string, a single React element, or an array of React elements.
+   */
   children?: React.ReactNode | React.ReactNode[] | string;
+
+  /**
+   * Predefined color options for the card.
+   * - `'gray'` - A neutral gray background.
+   * - `'gold'` - A golden-colored background.
+   */
   color?: 'gray' | 'gold';
 
+  /**
+   * Custom styling options for the card's visual properties.
+   */
   styling?: {
+    /**
+     * The color of the bright border.
+     */
     borderBright?: string;
+
+    /**
+     * The color of the dark border.
+     */
     borderDark?: string;
+
+    /**
+     * Background color of the card.
+     */
     background?: string;
+
+    /**
+     * Background image URL.
+     */
     backgroundImage?: string;
+
+    /**
+     * Additional content styling (e.g., text color, font).
+     */
     content?: string;
   };
+
+  /**
+   * Custom inline styles for the card container.
+   * Accepts a standard React CSS properties object.
+   */
   style?: React.CSSProperties;
+
+  /**
+   * Custom inline styles for the card content.
+   * Useful for adjusting text color, font size, and layout inside the card.
+   */
   styleContent?: React.CSSProperties;
 }
 

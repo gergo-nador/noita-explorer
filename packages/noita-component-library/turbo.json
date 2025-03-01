@@ -6,6 +6,9 @@
     },
     "dev": {
       "dependsOn": ["^build"]
+    },
+    "storybook": {
+
     }
   },
   "extends": ["//"]
