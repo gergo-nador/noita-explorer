@@ -3,7 +3,7 @@ import {
   ProgressIcon,
   ProgressIconType,
 } from '@noita-explorer/noita-component-library';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useNoitaDataWakStore } from '../../stores/NoitaDataWak.ts';
 import { NoitaProgressIconTable } from '../../components/NoitaProgressIconTable.tsx';
 import { NoitaSpellTooltip } from '../../components/tooltips/NoitaSpellTooltip.tsx';
@@ -13,11 +13,14 @@ import { NoitaSpellTypesDictionary } from '../../noita/NoitaSpellTypeDictionary.
 import { NoitaEnemyGroupTooltip } from '../../components/tooltips/NoitaEnemyGroupTooltip.tsx';
 import { useNoitaEnemyGroups } from '../../hooks/useNoitaEnemyGroups.ts';
 import { arrayHelpers } from '@noita-explorer/tools';
+import { MultiSelectionBoolean } from '../../components/multi-selection/MultiSelectionBoolean.tsx';
 
 export const NoitaProgressTracker = () => {
   const { data } = useNoitaDataWakStore();
   const { enemyStatistics, unlockedPerks, unlockedSpells, currentRun } =
     useSave00Store();
+
+  const [showOnlyUnlocked, setShowOnlyUnlocked] = useState(true);
 
   const enemies = useNoitaEnemyGroups({
     enemies: data?.enemies,
@@ -41,6 +44,20 @@ export const NoitaProgressTracker = () => {
     <>
       <div
         style={{
+          display: 'flex',
+          gap: 10,
+          marginBottom: 20,
+          color: '#ffffffaa',
+        }}
+      >
+        Show only unlocked:
+        <MultiSelectionBoolean
+          setValue={setShowOnlyUnlocked}
+          currentValue={showOnlyUnlocked}
+        />
+      </div>
+      <div
+        style={{
           display: 'grid',
           gridTemplateColumns: '9fr 12fr 9fr',
           gap: 10,
@@ -50,12 +67,18 @@ export const NoitaProgressTracker = () => {
           count={data.perks.length}
           name={'Perks'}
           columnCount={9}
-          unlocked={unlockedPerks?.length ?? 0}
+          unlocked={
+            (showOnlyUnlocked ? unlockedPerks?.length : data.perks.length) ?? 0
+          }
         >
           {data.perks.map((perk) => {
             let iconType: ProgressIconType = 'regular';
 
-            if (unlockedPerks && !unlockedPerks.includes(perk.id)) {
+            if (
+              unlockedPerks &&
+              !unlockedPerks.includes(perk.id) &&
+              showOnlyUnlocked
+            ) {
               iconType = 'unknown';
             } else if (
               currentRun?.worldState?.flags?.newPerkIds?.includes(perk.id)
@@ -71,6 +94,7 @@ export const NoitaProgressTracker = () => {
                   <NoitaPerkTooltip
                     perk={perk}
                     isUnknown={
+                      showOnlyUnlocked &&
                       !(!unlockedPerks || unlockedPerks.includes(perk.id))
                     }
                   />
@@ -85,12 +109,19 @@ export const NoitaProgressTracker = () => {
           count={data.spells.length}
           name={'Spells'}
           columnCount={12}
-          unlocked={unlockedSpells?.length ?? 0}
+          unlocked={
+            (showOnlyUnlocked ? unlockedSpells?.length : data.spells.length) ??
+            0
+          }
         >
           {data.spells.map((spell) => {
             let iconType: ProgressIconType = 'regular';
 
-            if (unlockedSpells && !unlockedSpells.includes(spell.id)) {
+            if (
+              unlockedSpells &&
+              !unlockedSpells.includes(spell.id) &&
+              showOnlyUnlocked
+            ) {
               iconType = 'unknown';
             } else if (
               currentRun?.worldState?.flags?.newActionIds?.includes(spell.id)
@@ -106,6 +137,7 @@ export const NoitaProgressTracker = () => {
                   <NoitaSpellTooltip
                     spell={spell}
                     isUnknown={
+                      showOnlyUnlocked &&
                       !(!unlockedSpells || unlockedSpells.includes(spell.id))
                     }
                   />
@@ -124,7 +156,7 @@ export const NoitaProgressTracker = () => {
           count={enemies?.length ?? 0}
           name={'Enemies'}
           columnCount={9}
-          unlocked={unlockedEnemycount}
+          unlocked={showOnlyUnlocked ? unlockedEnemycount : enemies?.length}
         >
           {enemies &&
             enemies.map((e) => {
@@ -141,9 +173,10 @@ export const NoitaProgressTracker = () => {
                 ) === 0;
 
               if (
-                !enemyStatistics ||
-                !isEnemyInStatistics ||
-                enemyKilledZeroTimes
+                showOnlyUnlocked &&
+                (!enemyStatistics ||
+                  !isEnemyInStatistics ||
+                  enemyKilledZeroTimes)
               ) {
                 iconType = 'unknown';
               } else if (
@@ -163,6 +196,7 @@ export const NoitaProgressTracker = () => {
                       enemyGroup={e.enemyGroup}
                       statistics={e.statistics}
                       isUnknown={
+                        showOnlyUnlocked &&
                         !(
                           !enemyStatistics ||
                           e.enemyGroup.enemies.some(

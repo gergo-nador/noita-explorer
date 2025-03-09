@@ -12,8 +12,8 @@ import { NoitaPerk } from '@noita-explorer/model-noita';
 import { Flex } from '../../../components/Flex.tsx';
 import { NoitaProtections } from '../../../noita/NoitaProtections.ts';
 import { BooleanIcon } from '../../../components/BooleanIcon.tsx';
-import { MultiSelectionBoolean } from '../../../components/MultiSelectionBoolean.tsx';
-import { MultiSelection } from '../../../components/MultiSelection.tsx';
+import { MultiSelectionBooleanNullable } from '../../../components/multi-selection/MultiSelectionBooleanNullable.tsx';
+import { MultiSelection } from '../../../components/multi-selection/MultiSelection.tsx';
 import { useSave00Store } from '../../../stores/save00.ts';
 import { arrayHelpers } from '@noita-explorer/tools';
 
@@ -179,28 +179,28 @@ const PerkFiltersView = ({
     <Card>
       <Flex gap={10} style={{ maxWidth: 'max-content', marginBottom: 10 }}>
         <span>Stackable: </span>
-        <MultiSelectionBoolean
+        <MultiSelectionBooleanNullable
           setValue={(value) => setFilters({ ...filters, stackable: value })}
           currentValue={filters.stackable}
         />
       </Flex>
       <Flex gap={10} style={{ maxWidth: 'max-content', marginBottom: 10 }}>
         <span>Holy Mountain: </span>
-        <MultiSelectionBoolean
+        <MultiSelectionBooleanNullable
           setValue={(value) => setFilters({ ...filters, holyMountain: value })}
           currentValue={filters.holyMountain}
         />
       </Flex>
       <Flex gap={10} style={{ maxWidth: 'max-content', marginBottom: 10 }}>
         <span>One-Off Effect: </span>
-        <MultiSelectionBoolean
+        <MultiSelectionBooleanNullable
           setValue={(value) => setFilters({ ...filters, oneOffEffect: value })}
           currentValue={filters.oneOffEffect}
         />
       </Flex>
       <Flex gap={10} style={{ maxWidth: 'max-content', marginBottom: 10 }}>
         <span>Removed by NA: </span>
-        <MultiSelectionBoolean
+        <MultiSelectionBooleanNullable
           setValue={(value) =>
             setFilters({
               ...filters,
@@ -213,7 +213,7 @@ const PerkFiltersView = ({
       {showSave00RelatedFilters && (
         <Flex gap={10} style={{ maxWidth: 'max-content', marginBottom: 10 }}>
           <span>Unlocked: </span>
-          <MultiSelectionBoolean
+          <MultiSelectionBooleanNullable
             setValue={(value) =>
               setFilters({
                 ...filters,

@@ -11,7 +11,7 @@ import { useNoitaDataWakStore } from '../../stores/NoitaDataWak.ts';
 import { NoitaWandConfig } from '@noita-explorer/model-noita';
 import { useNavigate } from 'react-router-dom';
 import { pages } from '../../routes/pages.ts';
-import { MultiSelection } from '../../components/MultiSelection.tsx';
+import { MultiSelection } from '../../components/multi-selection/MultiSelection.tsx';
 
 export const SettingsCursor = () => {
   const { settings, set } = useSettingsStore();
