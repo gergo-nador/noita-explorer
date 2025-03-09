@@ -1,4 +1,5 @@
 import { NoitaPerk } from '@noita-explorer/model-noita';
+import { NoitaUnknownTooltip } from './NoitaUnknownTooltip.tsx';
 
 interface NoitaPerkTooltipProps {
   perk: NoitaPerk;
@@ -10,7 +11,7 @@ export const NoitaPerkTooltip = ({
   isUnknown,
 }: NoitaPerkTooltipProps) => {
   if (isUnknown) {
-    return <div>???</div>;
+    return <NoitaUnknownTooltip />;
   }
 
   return (

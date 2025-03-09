@@ -32,6 +32,7 @@ import damageElectricityIcon from '../../assets/icons/damages/icon_damage_electr
 import damageDrillIcon from '../../assets/icons/damages/icon_damage_drill.png';
 import damageIceIcon from '../../assets/icons/damages/icon_damage_ice.png';
 import damageHolyIcon from '../../assets/icons/damages/icon_damage_holy.png';
+import { NoitaUnknownTooltip } from './NoitaUnknownTooltip.tsx';
 
 interface TooltipRowData {
   icon?: React.ReactNode;
@@ -59,7 +60,7 @@ export const NoitaSpellTooltip = ({
   const noitaUnits = useNoitaUnits();
 
   if (isUnknown) {
-    return <div>???</div>;
+    return <NoitaUnknownTooltip />;
   }
 
   const rowsGeneral: TooltipRowData[] = [

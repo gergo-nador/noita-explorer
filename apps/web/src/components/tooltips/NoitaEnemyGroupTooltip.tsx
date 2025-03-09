@@ -2,6 +2,7 @@ import { StringKeyDictionary } from '@noita-explorer/model';
 import { EnemyStatistic, NoitaEnemyGroup } from '@noita-explorer/model-noita';
 import { BooleanIcon } from '../BooleanIcon.tsx';
 import { Flex } from '../Flex.tsx';
+import { NoitaUnknownTooltip } from './NoitaUnknownTooltip.tsx';
 
 interface NoitaEnemyTooltipProps {
   enemyGroup: NoitaEnemyGroup;
@@ -15,7 +16,7 @@ export const NoitaEnemyGroupTooltip = ({
   statistics,
 }: NoitaEnemyTooltipProps) => {
   if (isUnknown) {
-    return <div>???</div>;
+    return <NoitaUnknownTooltip />;
   }
 
   return (
