@@ -41,7 +41,11 @@ export const EmptyPageTemplate = ({
             marginTop: 10,
           }}
         >
-          {templatePageLogic.buttons.map((b) => b.element)}
+          {templatePageLogic.buttons.map((b) => (
+            <div key={b.id} style={{ display: 'contents' }}>
+              {b.element}
+            </div>
+          ))}
         </div>
       </div>
     </div>

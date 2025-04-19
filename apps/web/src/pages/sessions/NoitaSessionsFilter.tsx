@@ -117,7 +117,7 @@ export const NoitaSessionsFilter = ({
         <br />
         <div>
           {noitaBuilds.map((b) => (
-            <div>
+            <div key={b}>
               <Button
                 onClick={() =>
                   setFilters({

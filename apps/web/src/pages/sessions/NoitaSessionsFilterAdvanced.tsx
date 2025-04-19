@@ -48,7 +48,7 @@ export const NoitaSessionsFilterAdvanced = ({
       <Header title={'Build'}>
         <div>
           {noitaBuilds.map((b) => (
-            <div>
+            <div key={b}>
               <Button
                 onClick={() =>
                   setFilters({
@@ -77,6 +77,7 @@ export const NoitaSessionsFilterAdvanced = ({
             <div style={{ position: 'sticky', top: 0 }}>
               {killedByEntity.map((entity) => (
                 <Button
+                  key={entity}
                   onClick={() =>
                     setFilters({
                       ...filters,
@@ -114,6 +115,7 @@ export const NoitaSessionsFilterAdvanced = ({
             <div style={{ position: 'sticky', top: 0 }}>
               {killedByReason.map((reason) => (
                 <Button
+                  key={reason}
                   onClick={() =>
                     setFilters({
                       ...filters,
