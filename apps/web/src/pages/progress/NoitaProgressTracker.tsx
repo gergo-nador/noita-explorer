@@ -17,10 +17,15 @@ import { MultiSelectionBoolean } from '../../components/multi-selection/MultiSel
 
 export const NoitaProgressTracker = () => {
   const { data } = useNoitaDataWakStore();
-  const { enemyStatistics, unlockedPerks, unlockedSpells, currentRun } =
-    useSave00Store();
+  const {
+    enemyStatistics,
+    unlockedPerks,
+    unlockedSpells,
+    currentRun,
+    loaded: save00Loaded,
+  } = useSave00Store();
 
-  const [showOnlyUnlocked, setShowOnlyUnlocked] = useState(true);
+  const [showAll, setShowAll] = useState(false);
 
   const enemies = useNoitaEnemyGroups({
     enemies: data?.enemies,
@@ -50,11 +55,13 @@ export const NoitaProgressTracker = () => {
           color: '#ffffffaa',
         }}
       >
-        Show only unlocked:
-        <MultiSelectionBoolean
-          setValue={setShowOnlyUnlocked}
-          currentValue={showOnlyUnlocked}
-        />
+        Show all:
+        <MultiSelectionBoolean setValue={setShowAll} currentValue={showAll} />
+        {!showAll && !save00Loaded && (
+          <div style={{ color: 'yellow', marginLeft: 30 }}>
+            Save00 folder not loaded!
+          </div>
+        )}
       </div>
       <div
         style={{
@@ -67,23 +74,17 @@ export const NoitaProgressTracker = () => {
           count={data.perks.length}
           name={'Perks'}
           columnCount={9}
-          unlocked={
-            (showOnlyUnlocked ? unlockedPerks?.length : data.perks.length) ?? 0
-          }
+          unlocked={(showAll ? data.perks.length : unlockedPerks?.length) ?? 0}
         >
           {data.perks.map((perk) => {
-            let iconType: ProgressIconType = 'regular';
+            let iconType: ProgressIconType = 'unknown';
 
-            if (
-              unlockedPerks &&
-              !unlockedPerks.includes(perk.id) &&
-              showOnlyUnlocked
-            ) {
-              iconType = 'unknown';
-            } else if (
-              currentRun?.worldState?.flags?.newPerkIds?.includes(perk.id)
-            ) {
+            if (currentRun?.worldState?.flags?.newPerkIds?.includes(perk.id)) {
               iconType = 'new';
+            } else if (unlockedPerks && unlockedPerks.includes(perk.id)) {
+              iconType = 'regular';
+            } else if (showAll) {
+              iconType = 'regular';
             }
 
             return (
@@ -94,7 +95,7 @@ export const NoitaProgressTracker = () => {
                   <NoitaPerkTooltip
                     perk={perk}
                     isUnknown={
-                      showOnlyUnlocked &&
+                      !showAll &&
                       !(!unlockedPerks || unlockedPerks.includes(perk.id))
                     }
                   />
@@ -110,23 +111,20 @@ export const NoitaProgressTracker = () => {
           name={'Spells'}
           columnCount={12}
           unlocked={
-            (showOnlyUnlocked ? unlockedSpells?.length : data.spells.length) ??
-            0
+            (showAll ? data.spells.length : unlockedSpells?.length) ?? 0
           }
         >
           {data.spells.map((spell) => {
-            let iconType: ProgressIconType = 'regular';
+            let iconType: ProgressIconType = 'unknown';
 
             if (
-              unlockedSpells &&
-              !unlockedSpells.includes(spell.id) &&
-              showOnlyUnlocked
-            ) {
-              iconType = 'unknown';
-            } else if (
               currentRun?.worldState?.flags?.newActionIds?.includes(spell.id)
             ) {
               iconType = 'new';
+            } else if (unlockedSpells && unlockedSpells.includes(spell.id)) {
+              iconType = 'regular';
+            } else if (showAll) {
+              iconType = 'regular';
             }
 
             return (
@@ -137,7 +135,7 @@ export const NoitaProgressTracker = () => {
                   <NoitaSpellTooltip
                     spell={spell}
                     isUnknown={
-                      showOnlyUnlocked &&
+                      !showAll &&
                       !(!unlockedSpells || unlockedSpells.includes(spell.id))
                     }
                   />
@@ -156,11 +154,11 @@ export const NoitaProgressTracker = () => {
           count={enemies?.length ?? 0}
           name={'Enemies'}
           columnCount={9}
-          unlocked={showOnlyUnlocked ? unlockedEnemycount : enemies?.length}
+          unlocked={!showAll ? unlockedEnemycount : enemies?.length}
         >
           {enemies &&
             enemies.map((e) => {
-              let iconType: ProgressIconType = 'regular';
+              let iconType: ProgressIconType = 'unknown';
 
               const isEnemyInStatistics =
                 enemyStatistics &&
@@ -172,22 +170,22 @@ export const NoitaProgressTracker = () => {
                   (stats) => stats.enemyDeathByPlayer,
                 ) === 0;
 
-              const showEnemy =
-                showOnlyUnlocked &&
-                !(
-                  !enemyStatistics ||
-                  !isEnemyInStatistics ||
-                  enemyKilledZeroTimes
-                );
+              const showEnemy = !(
+                !enemyStatistics ||
+                !isEnemyInStatistics ||
+                enemyKilledZeroTimes
+              );
 
-              if (showEnemy) {
-                iconType = 'unknown';
-              } else if (
+              if (
                 e.enemyGroup.enemies.some((e) =>
                   currentRun?.worldState?.flags?.newEnemyIds?.includes(e.id),
                 )
               ) {
                 iconType = 'new';
+              } else if (showEnemy) {
+                iconType = 'regular';
+              } else if (showAll) {
+                iconType = 'regular';
               }
 
               return (
@@ -198,7 +196,7 @@ export const NoitaProgressTracker = () => {
                     <NoitaEnemyGroupTooltip
                       enemyGroup={e.enemyGroup}
                       statistics={e.statistics}
-                      isUnknown={showEnemy}
+                      isUnknown={iconType === 'unknown'}
                     />
                   }
                 >
