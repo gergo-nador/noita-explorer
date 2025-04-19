@@ -6,30 +6,44 @@ import {
 import { PathInput } from '../../components/PathInput.tsx';
 import { useSettingsStore } from '../../stores/settings.ts';
 import { supported } from 'browser-fs-access';
+import { useSave00Store } from '../../stores/save00.ts';
 
 export const SetupWebPaths = () => {
   const { settings, set: setPaths } = useSettingsStore();
+  const { status: save00Status } = useSave00Store();
   const { paths } = settings;
 
   return (
     <Header title={'Paths'}>
       <div>
-        <NoitaTooltipWrapper content={'NollaGamesNoita folder'}>
-          <PathInput
-            type={'directory'}
-            displayPath={
-              paths.NollaGamesNoita ?? 'Select the NollaGamesNoita folder'
-            }
-            dialogTitle={'Select the NollaGamesNoita folder'}
-            path={paths.NollaGamesNoita}
-            setPath={(path) => {
-              setPaths(
-                (state) => (state.paths = { ...paths, NollaGamesNoita: path }),
-              );
-            }}
-            fileSystemDialogId={'nolla_games_noita'}
-          />
-        </NoitaTooltipWrapper>
+        <div style={{ display: 'flex', gap: 20 }}>
+          <NoitaTooltipWrapper content={'NollaGamesNoita folder'}>
+            <PathInput
+              type={'directory'}
+              displayPath={
+                paths.NollaGamesNoita ?? 'Select the NollaGamesNoita folder'
+              }
+              dialogTitle={'Select the NollaGamesNoita folder'}
+              path={paths.NollaGamesNoita}
+              setPath={(path) => {
+                setPaths(
+                  (state) =>
+                    (state.paths = { ...paths, NollaGamesNoita: path }),
+                );
+              }}
+              fileSystemDialogId={'nolla_games_noita'}
+            />
+          </NoitaTooltipWrapper>
+
+          <div> - </div>
+          {save00Status === 'failed' && (
+            <div className={'text-danger'}>Failed to load</div>
+          )}
+          {save00Status === 'loading' && <div>Loading...</div>}
+          {save00Status === 'loaded' && (
+            <div className={'text-success'}>Loaded</div>
+          )}
+        </div>
 
         {!supported && (
           <>

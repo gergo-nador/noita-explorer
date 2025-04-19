@@ -29,6 +29,10 @@
   color: #d55456;
 }
 
+.text-success {
+  color: #88bc1c;
+}
+
 .text-xl {
   font-size: 20px;
 }

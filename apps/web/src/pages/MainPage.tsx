@@ -9,7 +9,7 @@ import { useMemo } from 'react';
 export const MainPage = () => {
   const navigate = useNavigate();
   const { loaded: noitaDataWakLoaded, data } = useNoitaDataWakStore();
-  const { loaded: save00Loaded, currentRun } = useSave00Store();
+  const { status: save00Status, currentRun } = useSave00Store();
   const toast = useToast();
 
   const newProgress = useMemo(() => {
@@ -109,7 +109,7 @@ export const MainPage = () => {
       </Button>
       <Button
         decoration={'both'}
-        disabled={!save00Loaded}
+        disabled={save00Status !== 'loaded'}
         onClick={() => navigate(pages.sessions)}
         onDisabledClick={() =>
           toast.error(
@@ -121,7 +121,7 @@ export const MainPage = () => {
       </Button>
       <Button
         decoration={'both'}
-        disabled={!save00Loaded}
+        disabled={save00Status !== 'loaded'}
         onClick={() => navigate(pages.deathMap)}
         onDisabledClick={() =>
           toast.error(
@@ -133,7 +133,7 @@ export const MainPage = () => {
       </Button>
       <Button
         decoration={'both'}
-        disabled={!save00Loaded}
+        disabled={save00Status !== 'loaded'}
         onClick={() => navigate(pages.bonesWands)}
         onDisabledClick={() =>
           toast.error(

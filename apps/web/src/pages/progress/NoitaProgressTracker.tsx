@@ -22,7 +22,7 @@ export const NoitaProgressTracker = () => {
     unlockedPerks,
     unlockedSpells,
     currentRun,
-    loaded: save00Loaded,
+    status: save00Status,
   } = useSave00Store();
 
   const [showAll, setShowAll] = useState(false);
@@ -57,7 +57,7 @@ export const NoitaProgressTracker = () => {
       >
         Show all:
         <MultiSelectionBoolean setValue={setShowAll} currentValue={showAll} />
-        {!showAll && !save00Loaded && (
+        {!showAll && save00Status !== 'loaded' && (
           <div style={{ color: 'yellow', marginLeft: 30 }}>
             Save00 folder not loaded!
           </div>
@@ -94,10 +94,7 @@ export const NoitaProgressTracker = () => {
                 tooltip={
                   <NoitaPerkTooltip
                     perk={perk}
-                    isUnknown={
-                      !showAll &&
-                      !(!unlockedPerks || unlockedPerks.includes(perk.id))
-                    }
+                    isUnknown={iconType === 'unknown'}
                   />
                 }
               >
@@ -134,10 +131,7 @@ export const NoitaProgressTracker = () => {
                 tooltip={
                   <NoitaSpellTooltip
                     spell={spell}
-                    isUnknown={
-                      !showAll &&
-                      !(!unlockedSpells || unlockedSpells.includes(spell.id))
-                    }
+                    isUnknown={iconType === 'unknown'}
                   />
                 }
               >

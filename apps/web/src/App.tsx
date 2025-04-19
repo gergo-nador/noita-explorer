@@ -81,6 +81,10 @@ const InitialLoader = () => {
   const { reload } = useSave00Store();
 
   useEffect(() => {
+    if (!settings.paths.NollaGamesNoita) {
+      return;
+    }
+
     reload()
       .then(() => console.log('save00 loaded'))
       .catch((err) => console.error(err));
