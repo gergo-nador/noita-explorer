@@ -5,8 +5,8 @@ import { NoitaDataWakScrapeResultPart } from './NoitaDataWakScrapeResultPart.ts'
 import { StringKeyDictionary } from '@noita-explorer/model';
 import { NoitaTranslation } from './NoitaTranslation.ts';
 import { NoitaWandConfig } from '../common/NoitaWandConfig.ts';
-import { NoitaMaterial } from '../../dist/common/NoitaMaterial';
-import { NoitaMaterialReaction } from '../../dist/common/NoitaMaterialReaction';
+import { NoitaMaterial } from '../common/NoitaMaterial';
+import { NoitaMaterialReaction } from '../common/NoitaMaterialReaction';
 
 export interface NoitaDataWakScrapeResult {
   translations: NoitaDataWakScrapeResultPart<
