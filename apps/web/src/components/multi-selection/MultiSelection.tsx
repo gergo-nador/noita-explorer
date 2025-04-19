@@ -42,6 +42,7 @@ export const MultiSelection = <T,>({
         return (
           <>
             <Button
+              key={option.id}
               onClick={() => {
                 setValue(option.value);
                 if (option.onClick !== undefined) {
