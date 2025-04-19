@@ -31,7 +31,7 @@
     "eslint-plugin-import": "^2.31.0",
     "ts-node": "^10.9.2",
     "typescript": "~4.5.4",
-    "vite": "^5.4.11"
+    "vite": "^6.3.2"
   },
   "keywords": [],
   "author": {
@@ -42,8 +42,8 @@
   "dependencies": {
     "@noita-explorer/file-systems": "*",
     "@noita-explorer/model": "*",
-    "@noita-explorer/tools": "*",
     "@noita-explorer/scrapers": "*",
+    "@noita-explorer/tools": "*",
     "copy-paste": "^1.5.3",
     "electron-squirrel-startup": "^1.0.1",
     "electron-store": "^10.0.0"
