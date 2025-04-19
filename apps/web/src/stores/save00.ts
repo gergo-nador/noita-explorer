@@ -4,7 +4,7 @@ import { StringKeyDictionary } from '@noita-explorer/model';
 import {
   EnemyStatistic,
   NoitaSession,
-  NoitaWand,
+  NoitaWandBonesFile,
   NoitaWorldState,
 } from '@noita-explorer/model-noita';
 import { noiToast } from '@noita-explorer/noita-component-library';
@@ -20,7 +20,7 @@ interface Save00StoreState {
   unlockedSpells: string[] | undefined;
   unlockedPerks: string[] | undefined;
   sessions: NoitaSession[] | undefined;
-  bonesWands: NoitaWand[] | undefined;
+  bonesWands: NoitaWandBonesFile[] | undefined;
   currentRun: Save00CurrentRun | undefined;
 
   status: Save00Status;

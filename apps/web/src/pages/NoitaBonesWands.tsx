@@ -14,7 +14,10 @@ export const NoitaBonesWands = () => {
     const arr = [...bonesWands];
 
     // sort by wand card height. not 100% punctual but good enough
-    arr.sort((w1, w2) => {
+    arr.sort((wandBonesFile1, wandBonesFile2) => {
+      const w1 = wandBonesFile1.wand;
+      const w2 = wandBonesFile2.wand;
+
       const deckCapacity = w1.deckCapacity - w2.deckCapacity;
 
       if (w1.alwaysCastSpells.length > 0 && w2.alwaysCastSpells.length > 0) {
@@ -49,8 +52,12 @@ export const NoitaBonesWands = () => {
           alignItems: 'flex-start',
         }}
       >
-        {bonesWandsSorted.map((wand) => (
-          <NoitaWandCard wand={wand} />
+        {bonesWandsSorted.map((wandFile) => (
+          <NoitaWandCard
+            key={wandFile.fileName}
+            wand={wandFile.wand}
+            bonesFileName={wandFile.fileName}
+          />
         ))}
       </Flex>
     </div>

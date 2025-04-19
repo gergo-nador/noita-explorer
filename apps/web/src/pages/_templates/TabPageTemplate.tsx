@@ -65,6 +65,7 @@ export const TabPageTemplate = ({ tabs, returnPath }: TabPageTemplateProps) => {
           >
             {tabs.map((t, index) => (
               <TabView.Item
+                key={t.title}
                 id={t.title}
                 text={t.title}
                 index={index}
@@ -81,7 +82,11 @@ export const TabPageTemplate = ({ tabs, returnPath }: TabPageTemplateProps) => {
             marginTop: 10,
           }}
         >
-          {templatePageLogic.buttons.map((b) => b.element)}
+          {templatePageLogic.buttons.map((b) => (
+            <div key={b.id} style={{ display: 'contents' }}>
+              {b.element}
+            </div>
+          ))}
         </div>
       </div>
     </div>

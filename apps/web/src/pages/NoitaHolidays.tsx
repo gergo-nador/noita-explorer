@@ -71,7 +71,10 @@ export const NoitaHolidays = () => {
         }}
       >
         {holidays.map((holiday) => (
-          <div style={{ width: '600px', maxWidth: '80%', marginBottom: 30 }}>
+          <div
+            key={holiday.id}
+            style={{ width: '600px', maxWidth: '80%', marginBottom: 30 }}
+          >
             {holiday.reactComponent ?? (
               <Card color={'gold'}>
                 <div style={{ marginBottom: 15 }}>

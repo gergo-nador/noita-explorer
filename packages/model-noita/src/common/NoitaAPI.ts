@@ -4,8 +4,8 @@ import { StringKeyDictionary } from '@noita-explorer/model';
 import { EnemyStatistic } from '../scraping/EnemyStatistics.ts';
 import { NoitaProgressFlags } from '../scraping/NoitaProgressFlags.ts';
 import { NoitaSession } from './NoitaSession.ts';
-import { NoitaWand } from './NoitaWand.ts';
 import { NoitaWorldState } from './NoitaWorldState.ts';
+import { NoitaWandBonesFile } from './NoitaWandBonesFile.ts';
 
 export interface NoitaAPI {
   config: {
@@ -27,7 +27,7 @@ export interface NoitaAPI {
       scrapeEnemyStatistics: () => Promise<StringKeyDictionary<EnemyStatistic>>;
       scrapeProgressFlags: () => Promise<NoitaProgressFlags>;
       scrapeSessions: () => Promise<NoitaSession[]>;
-      scrapeBonesWands: () => Promise<NoitaWand[]>;
+      scrapeBonesWands: () => Promise<NoitaWandBonesFile[]>;
       scrapeWorldState: () => Promise<NoitaWorldState | undefined>;
     };
     launch: {

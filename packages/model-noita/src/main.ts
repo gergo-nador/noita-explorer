@@ -15,6 +15,7 @@ export * from "./common/NoitaSession";
 export * from "./common/NoitaSpell";
 export * from "./common/NoitaSpellType";
 export * from "./common/NoitaWand";
+export * from "./common/NoitaWandBonesFile";
 export * from "./common/NoitaWandConfig";
 export * from "./common/NoitaWandSpell";
 export * from "./common/NoitaWorldState";

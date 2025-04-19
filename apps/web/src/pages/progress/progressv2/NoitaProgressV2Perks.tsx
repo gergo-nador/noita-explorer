@@ -122,6 +122,7 @@ export const NoitaProgressV2Perks = () => {
 
             return (
               <div
+                key={perk.id}
                 style={{
                   opacity: filter ? 1 : 0.35,
                 }}

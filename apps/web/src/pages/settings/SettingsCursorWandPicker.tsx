@@ -47,6 +47,7 @@ export const SettingsCursorWandPicker = () => {
 
           return (
             <Card
+              key={wandConfig.spriteId}
               color={isSelected ? 'gold' : 'gray'}
               style={{
                 position: isSelected ? 'sticky' : 'initial',

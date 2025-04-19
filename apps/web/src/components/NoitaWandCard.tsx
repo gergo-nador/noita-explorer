@@ -25,9 +25,10 @@ import gunPermanentActionIcon from '../assets/icons/icon_gun_permanent_actions.p
 
 interface NoitaWandCardProps {
   wand: NoitaWand;
+  bonesFileName?: string;
 }
 
-export const NoitaWandCard = ({ wand }: NoitaWandCardProps) => {
+export const NoitaWandCard = ({ wand, bonesFileName }: NoitaWandCardProps) => {
   const noitaUnits = useNoitaUnits();
   const { data } = useNoitaDataWakStore();
   const wandTooltipId = useMemo(() => randomHelpers.randomInt(0, 1000000), []);
@@ -53,7 +54,8 @@ export const NoitaWandCard = ({ wand }: NoitaWandCardProps) => {
       return undefined;
     }
 
-    const displaySpells: React.ReactNode[] = [];
+    const displaySpells: { key: string; spellComponent: React.ReactNode }[] =
+      [];
 
     for (let i = 0; i < wand.deckCapacity; i++) {
       const iconSize = 35;
@@ -61,14 +63,18 @@ export const NoitaWandCard = ({ wand }: NoitaWandCardProps) => {
       const wandSpell = wand.spells.find((s) => s.inventorySlot === i);
       if (wandSpell === undefined) {
         const noSpellInventoryIcon = <InventoryIcon size={iconSize} />;
-        displaySpells.push(noSpellInventoryIcon);
+        displaySpells.push({
+          key: 'none-' + i,
+          spellComponent: noSpellInventoryIcon,
+        });
         continue;
       }
 
+      const key = `spell-${wandSpell.spellId}-${wandSpell.inventorySlot}-${wandTooltipId}`;
       const spell = data.spells.find((s) => s.id === wandSpell.spellId);
       if (spell === undefined) {
         const spellNotFoundIcon = <Icon type={'error'} size={iconSize} />;
-        displaySpells.push(spellNotFoundIcon);
+        displaySpells.push({ key, spellComponent: spellNotFoundIcon });
         continue;
       }
 
@@ -77,8 +83,7 @@ export const NoitaWandCard = ({ wand }: NoitaWandCardProps) => {
 
       const spellComponent = (
         <ActiveIconWrapper
-          key={`spell-${wandSpell.spellId}-${wandSpell.inventorySlot}-${wandTooltipId}`}
-          id={`spell-${wandSpell.spellId}-${wandSpell.inventorySlot}-${wandTooltipId}`}
+          id={key}
           tooltip={
             <NoitaSpellTooltip
               spell={spell}
@@ -98,7 +103,7 @@ export const NoitaWandCard = ({ wand }: NoitaWandCardProps) => {
           />
         </ActiveIconWrapper>
       );
-      displaySpells.push(spellComponent);
+      displaySpells.push({ key, spellComponent });
     }
 
     return displaySpells;
@@ -215,11 +220,15 @@ export const NoitaWandCard = ({ wand }: NoitaWandCardProps) => {
       >
         <div>
           <div style={{ fontSize: 20 }}>{wand.name}</div>
+          {bonesFileName && (
+            <div style={{ opacity: 0.6, marginTop: 5 }}>{bonesFileName}</div>
+          )}
+
           <br />
           <table>
             <tbody>
               {rows.map((row) => (
-                <tr>
+                <tr key={row.text}>
                   <td>{row.icon}</td>
                   <td>{row.text}</td>
                   <td style={{ paddingLeft: 15 }}>{row.value}</td>
@@ -273,7 +282,11 @@ export const NoitaWandCard = ({ wand }: NoitaWandCardProps) => {
           gap: 5,
         }}
       >
-        {spellIcons}
+        {spellIcons?.map((icon) => (
+          <div key={icon.key} style={{ display: 'contents' }}>
+            {icon.spellComponent}
+          </div>
+        ))}
       </div>
       {wand.spellsPossibleIncorrectOrder && (
         <div>

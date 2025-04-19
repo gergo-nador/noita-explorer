@@ -40,9 +40,8 @@ export const MultiSelection = <T,>({
         }
 
         return (
-          <>
+          <div key={option.id} style={{ display: 'contents' }}>
             <Button
-              key={option.id}
               onClick={() => {
                 setValue(option.value);
                 if (option.onClick !== undefined) {
@@ -55,7 +54,7 @@ export const MultiSelection = <T,>({
               {option.display}
             </Button>
             {index !== options.length - 1 && <span> / </span>}
-          </>
+          </div>
         );
       })}
     </Flex>

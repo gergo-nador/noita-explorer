@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import { Button } from '@noita-explorer/noita-component-library';
 
 interface Button {
+  id: string;
   element: React.ReactElement;
 }
 
@@ -22,6 +23,7 @@ export const useTemplatePageLogic = (returnPath?: string) => {
 
   const buttons: Button[] = [
     {
+      id: 'return',
       element: (
         <Button
           onClick={(e) => {

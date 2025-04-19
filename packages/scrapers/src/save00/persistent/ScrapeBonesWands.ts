@@ -1,5 +1,5 @@
 import { FileSystemDirectoryAccess } from '@noita-explorer/model';
-import { NoitaWand } from '@noita-explorer/model-noita';
+import { NoitaWandBonesFile } from '@noita-explorer/model-noita';
 import { parseXml, XmlWrapper } from '@noita-explorer/tools/xml';
 import { __scrapeWand } from '../../common/ScrapeWand.ts';
 import { noitaPaths } from '../../NoitaPaths.ts';
@@ -16,7 +16,7 @@ export const scrapeBonesWands = async ({
   const files = await bonesDir.listFiles();
   const filteredFiles = files.filter((f) => f.getName().endsWith('.xml'));
 
-  const wands: NoitaWand[] = [];
+  const wands: NoitaWandBonesFile[] = [];
 
   for (const file of filteredFiles) {
     const text = await file.read.asText();
@@ -33,7 +33,12 @@ export const scrapeBonesWands = async ({
       continue;
     }
 
-    wands.push(wand);
+    const bonesFile: NoitaWandBonesFile = {
+      fileName: file.getName(),
+      wand: wand,
+    };
+
+    wands.push(bonesFile);
   }
 
   return wands;
