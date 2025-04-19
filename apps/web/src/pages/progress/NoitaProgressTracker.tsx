@@ -172,12 +172,15 @@ export const NoitaProgressTracker = () => {
                   (stats) => stats.enemyDeathByPlayer,
                 ) === 0;
 
-              if (
+              const showEnemy =
                 showOnlyUnlocked &&
-                (!enemyStatistics ||
+                !(
+                  !enemyStatistics ||
                   !isEnemyInStatistics ||
-                  enemyKilledZeroTimes)
-              ) {
+                  enemyKilledZeroTimes
+                );
+
+              if (showEnemy) {
                 iconType = 'unknown';
               } else if (
                 e.enemyGroup.enemies.some((e) =>
@@ -195,15 +198,7 @@ export const NoitaProgressTracker = () => {
                     <NoitaEnemyGroupTooltip
                       enemyGroup={e.enemyGroup}
                       statistics={e.statistics}
-                      isUnknown={
-                        showOnlyUnlocked &&
-                        !(
-                          !enemyStatistics ||
-                          e.enemyGroup.enemies.some(
-                            (e) => e.id in enemyStatistics,
-                          )
-                        )
-                      }
+                      isUnknown={showEnemy}
                     />
                   }
                 >
