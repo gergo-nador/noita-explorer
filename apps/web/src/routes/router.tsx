@@ -30,7 +30,7 @@ export const router = createBrowserRouter([
   {
     path: 'progress-tracker',
     element: (
-      <CardPageTemplate>
+      <CardPageTemplate returnPath={'/'}>
         <NoitaProgressTracker />
       </CardPageTemplate>
     ),
@@ -39,6 +39,7 @@ export const router = createBrowserRouter([
     path: 'progress-tracker-v2',
     element: (
       <TabPageTemplate
+        returnPath={'/'}
         tabs={[
           { title: 'Perks', href: pages.progressTrackerV2.perks },
           { title: 'Spells', href: pages.progressTrackerV2.spells },
@@ -77,7 +78,7 @@ export const router = createBrowserRouter([
   {
     path: 'setup',
     element: (
-      <CardPageTemplate>
+      <CardPageTemplate returnPath={'/'}>
         <Outlet />
       </CardPageTemplate>
     ),
@@ -90,7 +91,7 @@ export const router = createBrowserRouter([
   {
     path: 'holidays',
     element: (
-      <CardPageTemplate>
+      <CardPageTemplate returnPath={'/'}>
         <NoitaHolidays />
       </CardPageTemplate>
     ),
@@ -98,7 +99,7 @@ export const router = createBrowserRouter([
   {
     path: 'current-run',
     element: (
-      <CardPageTemplate>
+      <CardPageTemplate returnPath={'/'}>
         <CurrentRunPage />
       </CardPageTemplate>
     ),
@@ -106,7 +107,7 @@ export const router = createBrowserRouter([
   {
     path: 'sessions',
     element: (
-      <EmptyPageTemplate>
+      <EmptyPageTemplate returnPath={'/'}>
         <NoitaSessions />
       </EmptyPageTemplate>
     ),
@@ -114,7 +115,7 @@ export const router = createBrowserRouter([
   {
     path: 'death-map',
     element: (
-      <CardPageTemplate>
+      <CardPageTemplate returnPath={'/'}>
         <NoitaDeathMap />
       </CardPageTemplate>
     ),
@@ -122,7 +123,7 @@ export const router = createBrowserRouter([
   {
     path: 'bones-wands',
     element: (
-      <CardPageTemplate>
+      <CardPageTemplate returnPath={'/'}>
         <NoitaBonesWands />
       </CardPageTemplate>
     ),
@@ -130,7 +131,7 @@ export const router = createBrowserRouter([
   {
     path: 'settings',
     element: (
-      <CardPageTemplate>
+      <CardPageTemplate returnPath={'/'}>
         <Settings />
       </CardPageTemplate>
     ),
@@ -138,7 +139,7 @@ export const router = createBrowserRouter([
   {
     path: 'settings/cursor-wand-picker',
     element: (
-      <CardPageTemplate>
+      <CardPageTemplate returnPath={'/settings'}>
         <SettingsCursorWandPicker />
       </CardPageTemplate>
     ),

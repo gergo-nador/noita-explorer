@@ -5,13 +5,15 @@ import { useTemplatePageLogic } from '../../hooks/useTemplatePageLogic';
 interface EmptyPageTemplateProps {
   children?: React.ReactNode | React.ReactNode[];
   style?: React.CSSProperties;
+  returnPath?: string;
 }
 
 export const EmptyPageTemplate = ({
   children,
   style = {},
+  returnPath,
 }: EmptyPageTemplateProps) => {
-  const templatePageLogic = useTemplatePageLogic();
+  const templatePageLogic = useTemplatePageLogic(returnPath);
 
   return (
     <div

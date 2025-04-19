@@ -3,7 +3,7 @@ import {
   ProgressIcon,
   ProgressIconType,
 } from '@noita-explorer/noita-component-library';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { useNoitaDataWakStore } from '../../stores/NoitaDataWak.ts';
 import { NoitaProgressIconTable } from '../../components/NoitaProgressIconTable.tsx';
 import { NoitaSpellTooltip } from '../../components/tooltips/NoitaSpellTooltip.tsx';
@@ -14,6 +14,7 @@ import { NoitaEnemyGroupTooltip } from '../../components/tooltips/NoitaEnemyGrou
 import { useNoitaEnemyGroups } from '../../hooks/useNoitaEnemyGroups.ts';
 import { arrayHelpers } from '@noita-explorer/tools';
 import { MultiSelectionBoolean } from '../../components/multi-selection/MultiSelectionBoolean.tsx';
+import { useQueryParamsBoolean } from '../../hooks/use-query-params-boolean.ts';
 
 export const NoitaProgressTracker = () => {
   const { data } = useNoitaDataWakStore();
@@ -25,7 +26,7 @@ export const NoitaProgressTracker = () => {
     status: save00Status,
   } = useSave00Store();
 
-  const [showAll, setShowAll] = useState(false);
+  const [showAll, setShowAll] = useQueryParamsBoolean('showAll');
 
   const enemies = useNoitaEnemyGroups({
     enemies: data?.enemies,

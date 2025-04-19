@@ -1,25 +1,24 @@
 import { useLocation, useNavigate } from 'react-router-dom';
-import React, { useCallback, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Button } from '@noita-explorer/noita-component-library';
 
 interface Button {
   element: React.ReactElement;
 }
 
-export const useTemplatePageLogic = () => {
+export const useTemplatePageLogic = (returnPath?: string) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const goBackOrHome = useCallback(
-    (forceGoBackToRoot: boolean) => {
-      if (location.key && !forceGoBackToRoot) {
-        navigate(-1);
-      } else {
-        navigate('/');
-      }
-    },
-    [navigate, location],
-  );
+  const goBackOrHome = (forceGoBackToRoot: boolean) => {
+    if (!(location.key && !forceGoBackToRoot)) {
+      navigate('/');
+      return;
+    }
+    if (returnPath) {
+      navigate(returnPath);
+    } else navigate(-1);
+  };
 
   const buttons: Button[] = [
     {

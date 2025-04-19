@@ -12,10 +12,11 @@ interface TabLink {
 
 interface TabPageTemplateProps {
   tabs: TabLink[];
+  returnPath?: string;
 }
 
-export const TabPageTemplate = ({ tabs }: TabPageTemplateProps) => {
-  const templatePageLogic = useTemplatePageLogic();
+export const TabPageTemplate = ({ tabs, returnPath }: TabPageTemplateProps) => {
+  const templatePageLogic = useTemplatePageLogic(returnPath);
   const navigate = useNavigate();
   const location = useLocation();
 

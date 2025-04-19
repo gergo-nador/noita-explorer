@@ -5,13 +5,15 @@ import { useTemplatePageLogic } from '../../hooks/useTemplatePageLogic.tsx';
 interface CardPageTemplateProps {
   children?: React.ReactNode | React.ReactNode[];
   style?: React.CSSProperties;
+  returnPath?: string;
 }
 
 export const CardPageTemplate = ({
   children,
   style = {},
+  returnPath,
 }: CardPageTemplateProps) => {
-  const templatePageLogic = useTemplatePageLogic();
+  const templatePageLogic = useTemplatePageLogic(returnPath);
 
   return (
     <div
