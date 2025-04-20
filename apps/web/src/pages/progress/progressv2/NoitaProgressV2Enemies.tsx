@@ -8,12 +8,13 @@ import {
 } from '@noita-explorer/noita-component-library';
 import { NoitaProgressIconTable } from '../../../components/NoitaProgressIconTable.tsx';
 import { useNoitaDataWakStore } from '../../../stores/NoitaDataWak.ts';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { NoitaEnemy } from '@noita-explorer/model-noita';
 import { Flex } from '../../../components/Flex.tsx';
 import { NoitaProtections } from '../../../noita/NoitaProtections.ts';
 import { useNoitaUnits } from '../../../hooks/useNoitaUnits.ts';
 import { useSettingsStore } from '../../../stores/settings.ts';
+import { useStateWithQueryParamsString } from '../../../hooks/use-state-with-query-params-string.ts';
 
 import damageProjectileIcon from '../../../assets/icons/damages/icon_damage_projectile.png';
 import damageProjectileIconColor from '../../../assets/icons/damages/icon_damage_projectile_color.png';
@@ -40,7 +41,13 @@ import heartIcon from '../../../assets/heart.png';
 
 export const NoitaProgressV2Enemies = () => {
   const { data } = useNoitaDataWakStore();
-  const [selectedEnemy, setSelectedEnemy] = useState<NoitaEnemy>();
+  const [selectedEnemy, setSelectedEnemy] =
+    useStateWithQueryParamsString<NoitaEnemy>({
+      key: 'enemy',
+      queryParamValueSelector: (enemy) => enemy.id,
+      findValueBasedOnQueryParam: (enemyId) =>
+        data?.enemies?.find((enemy) => enemy.id === enemyId),
+    });
 
   if (!data) {
     return <div>Noita Data Wak is not loaded.</div>;
