@@ -16,6 +16,7 @@ import { MultiSelectionBooleanNullable } from '../../../components/multi-selecti
 import { MultiSelection } from '../../../components/multi-selection/MultiSelection.tsx';
 import { useSave00Store } from '../../../stores/save00.ts';
 import { arrayHelpers } from '@noita-explorer/tools';
+import { useStateWithQueryParamsString } from '../../../hooks/use-state-with-query-params-string.ts';
 
 interface PerkFilters {
   stackable: boolean | undefined;
@@ -28,7 +29,15 @@ interface PerkFilters {
 
 export const NoitaProgressV2Perks = () => {
   const { data } = useNoitaDataWakStore();
-  const [selectedPerk, setSelectedPerk] = useState<NoitaPerk>();
+
+  const [selectedPerk, setSelectedPerk] =
+    useStateWithQueryParamsString<NoitaPerk>({
+      key: 'perk',
+      queryParamValueSelector: (perk) => perk.id,
+      findValueBasedOnQueryParam: (perkId) =>
+        data?.perks?.find((perk) => perk.id === perkId),
+    });
+
   const [filters, setFilters] = useState<PerkFilters>({
     stackable: undefined,
     holyMountain: undefined,

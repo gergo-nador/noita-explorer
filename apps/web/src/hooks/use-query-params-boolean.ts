@@ -7,6 +7,7 @@ export const useQueryParamsBoolean = (
   const [searchParams, setSearchParams] = useSearchParams();
 
   const queryParamValue = searchParams.get(key) === '1';
+
   const setQueryParamValue = (value: boolean) =>
     setSearchParams((state) => {
       state.set(key, value ? '1' : '0');
