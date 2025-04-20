@@ -11,6 +11,7 @@ import React, { useMemo } from 'react';
 import { useNoitaDataWakStore } from '../stores/NoitaDataWak.ts';
 import { NoitaSpellTooltip } from './tooltips/NoitaSpellTooltip.tsx';
 import { NoitaSpellTypesDictionary } from '../noita/NoitaSpellTypeDictionary.ts';
+import css from './NoitaWandCard.module.css';
 
 import gunShuffleIcon from '../assets/icons/icon_gun_shuffle.png';
 import fireRateWaitIcon from '../assets/icons/spells/icon_fire_rate_wait.png';
@@ -210,18 +211,35 @@ export const NoitaWandCard = ({ wand, bonesFileName }: NoitaWandCardProps) => {
   ];
 
   return (
-    <Card style={{ maxWidth: '100%' }} styleContent={{ width: 'min-content' }}>
+    <Card
+      className={css['container']}
+      style={{ maxWidth: '100%' }}
+      styleContent={{ width: 'min-content' }}
+    >
       <div
         style={{
           display: 'grid',
           gridTemplateColumns: 'max-content max-content',
           gap: 30,
+          position: 'relative',
         }}
       >
         <div>
           <div style={{ fontSize: 20 }}>{wand.name}</div>
           {bonesFileName && (
-            <div style={{ opacity: 0.6, marginTop: 5 }}>{bonesFileName}</div>
+            <>
+              <div style={{ opacity: 0.6, marginTop: 5 }}>{bonesFileName}</div>
+              <div
+                className={css['visible-on-hover']}
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  right: 0,
+                }}
+              >
+                <Icon size={20} type={'cross'} />
+              </div>
+            </>
           )}
 
           <br />

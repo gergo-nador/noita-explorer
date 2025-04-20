@@ -1,0 +1,11 @@
+.container {
+
+}
+
+.visible-on-hover{
+    visibility: hidden;
+}
+
+.container:hover .visible-on-hover {
+    visibility: visible;
+}

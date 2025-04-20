@@ -59,6 +59,8 @@ export interface CardProps {
    * Useful for adjusting text color, font size, and layout inside the card.
    */
   styleContent?: React.CSSProperties;
+
+  className?: string;
 }
 
 export const Card = ({
@@ -67,6 +69,7 @@ export const Card = ({
   styling,
   style = {},
   styleContent = {},
+  className,
 }: CardProps) => {
   // based on data/ui_gfx/decorations/9piece0.png
 
@@ -92,7 +95,10 @@ export const Card = ({
 
   return (
     <div
-      className={`${css['grid-main']} ${css[color === 'gray' ? 'style-gray' : 'style-gold']}`}
+      className={
+        `${css['grid-main']} ${css[color === 'gray' ? 'style-gray' : 'style-gold']} ` +
+        className
+      }
       style={{
         ...(customStyles as React.CSSProperties),
         ...style,
