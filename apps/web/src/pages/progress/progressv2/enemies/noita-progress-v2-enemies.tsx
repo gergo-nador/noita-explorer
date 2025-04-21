@@ -8,6 +8,10 @@ import { useNoitaDataWakStore } from '../../../../stores/NoitaDataWak.ts';
 import { NoitaEnemy } from '@noita-explorer/model-noita';
 import { useStateWithQueryParamsString } from '../../../../hooks/use-state-with-query-params-string.ts';
 import { EnemyOverview } from './enemy-overview.tsx';
+import { useMemo, useState } from 'react';
+import { EnemyFilters } from './enemy-filters.ts';
+import { EnemyFiltersView } from './enemy-filters-view.tsx';
+import { arrayHelpers } from '@noita-explorer/tools';
 
 export const NoitaProgressV2Enemies = () => {
   const { data } = useNoitaDataWakStore();
@@ -18,6 +22,23 @@ export const NoitaProgressV2Enemies = () => {
       findValueBasedOnQueryParam: (enemyId) =>
         data?.enemies?.find((enemy) => enemy.id === enemyId),
     });
+
+  const [filters, setFilters] = useState<EnemyFilters>({
+    protectionId: undefined,
+  });
+
+  const usedProtectionIds = useMemo(() => {
+    if (data?.enemies === undefined) {
+      return [];
+    }
+
+    const gameEffects = data.enemies
+      .map((e) => e.gameEffects)
+      .flat()
+      .map((effect) => effect.id);
+
+    return arrayHelpers.unique(gameEffects);
+  }, [data?.enemies]);
 
   if (!data) {
     return <div>Noita Data Wak is not loaded.</div>;
@@ -43,25 +64,48 @@ export const NoitaProgressV2Enemies = () => {
           position: 'relative',
         }}
       >
+        <EnemyFiltersView
+          filters={filters}
+          setFilters={setFilters}
+          usedProtectionIds={usedProtectionIds}
+        />
+        <br />
         <NoitaProgressIconTable
           count={data.spells.length}
           name={'Spells'}
           columnCount={9}
         >
-          {data.enemies.map((enemy) => (
-            <ActiveIconWrapper
-              id={'enemy-' + enemy.id}
-              key={'enemy-' + enemy.id}
-              tooltip={
-                <div>
-                  <div style={{ fontSize: 20 }}>{enemy.name}</div>
-                </div>
-              }
-              onClick={() => setSelectedEnemy(enemy)}
-            >
+          {data.enemies.map((enemy) => {
+            const filter = evaluateFiltersForEnemy({ enemy, filters });
+            const icon = (
               <ProgressIcon type={'regular'} icon={enemy.imageBase64} />
-            </ActiveIconWrapper>
-          ))}
+            );
+
+            return (
+              <div
+                key={enemy.id}
+                style={{
+                  opacity: filter ? 1 : 0.35,
+                }}
+              >
+                {!filter && icon}
+                {filter && (
+                  <ActiveIconWrapper
+                    id={'enemy-' + enemy.id}
+                    key={'enemy-' + enemy.id}
+                    tooltip={
+                      <div>
+                        <div style={{ fontSize: 20 }}>{enemy.name}</div>
+                      </div>
+                    }
+                    onClick={() => setSelectedEnemy(enemy)}
+                  >
+                    <ProgressIcon type={'regular'} icon={enemy.imageBase64} />
+                  </ActiveIconWrapper>
+                )}
+              </div>
+            );
+          })}
         </NoitaProgressIconTable>
       </div>
 
@@ -79,4 +123,20 @@ export const NoitaProgressV2Enemies = () => {
       </Card>
     </div>
   );
+};
+
+const evaluateFiltersForEnemy = ({
+  enemy,
+  filters,
+}: {
+  enemy: NoitaEnemy;
+  filters: EnemyFilters;
+}) => {
+  if (filters.protectionId) {
+    if (!enemy.gameEffects.find((e) => e.id === filters.protectionId)) {
+      return false;
+    }
+  }
+
+  return true;
 };
