@@ -1,43 +1,86 @@
 import {
   ActiveIconWrapper,
+  Card,
   ProgressIcon,
 } from '@noita-explorer/noita-component-library';
 import { NoitaSpellTypesDictionary } from '../../../../noita/NoitaSpellTypeDictionary.ts';
 import { NoitaProgressIconTable } from '../../../../components/NoitaProgressIconTable.tsx';
 import { useNoitaDataWakStore } from '../../../../stores/NoitaDataWak.ts';
+import { useStateWithQueryParamsString } from '../../../../hooks/use-state-with-query-params-string.ts';
+import { NoitaSpell } from '@noita-explorer/model-noita';
+import { SpellOverview } from './spell-overview.tsx';
 
 export const NoitaProgressV2Spells = () => {
   const { data } = useNoitaDataWakStore();
+
+  const [selectedSpell, setSelectedSpell] =
+    useStateWithQueryParamsString<NoitaSpell>({
+      key: 'spell',
+      queryParamValueSelector: (spell) => spell.id,
+      findValueBasedOnQueryParam: (spellId) =>
+        data?.spells?.find((spell) => spell.id === spellId),
+    });
 
   if (!data) {
     return <div>Noita Data Wak is not loaded.</div>;
   }
 
   return (
-    <div>
-      <NoitaProgressIconTable
-        count={data.spells.length}
-        name={'Spells'}
-        columnCount={12}
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        gap: 20,
+        margin: 'auto',
+        maxHeight: '100%',
+        overflowY: 'auto',
+        padding: 15,
+        boxSizing: 'border-box',
+      }}
+    >
+      <div
+        style={{
+          maxWidth: '700px',
+          width: '55%',
+        }}
       >
-        {data.spells.map((spell) => (
-          <ActiveIconWrapper
-            id={'spell-' + spell.id}
-            key={'spell-' + spell.id}
-            tooltip={
-              <div>
-                <div style={{ fontSize: 20 }}>{spell.name}</div>
-              </div>
-            }
-          >
-            <ProgressIcon
-              type={'regular'}
-              icon={spell.imageBase64}
-              spellBackground={NoitaSpellTypesDictionary[spell.type].image}
-            />
-          </ActiveIconWrapper>
-        ))}
-      </NoitaProgressIconTable>
+        <NoitaProgressIconTable
+          count={data.spells.length}
+          name={'Spells'}
+          columnCount={12}
+        >
+          {data.spells.map((spell) => (
+            <ActiveIconWrapper
+              id={'spell-' + spell.id}
+              key={'spell-' + spell.id}
+              onClick={() => setSelectedSpell(spell)}
+              tooltip={
+                <div>
+                  <div style={{ fontSize: 20 }}>{spell.name}</div>
+                </div>
+              }
+            >
+              <ProgressIcon
+                type={'regular'}
+                icon={spell.imageBase64}
+                spellBackground={NoitaSpellTypesDictionary[spell.type].image}
+              />
+            </ActiveIconWrapper>
+          ))}
+        </NoitaProgressIconTable>
+      </div>
+      <Card
+        style={{
+          width: '45%',
+          maxWidth: '500px',
+          maxHeight: '100%',
+          position: 'sticky',
+          top: 0,
+        }}
+      >
+        {!selectedSpell && <span>Select a spell</span>}
+        {selectedSpell && <SpellOverview spell={selectedSpell} />}
+      </Card>
     </div>
   );
 };

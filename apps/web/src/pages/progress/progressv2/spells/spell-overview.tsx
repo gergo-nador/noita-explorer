@@ -1,63 +1,35 @@
-import { NoitaSpell, NoitaWandSpell } from '@noita-explorer/model-noita';
+import { NoitaSpell } from '@noita-explorer/model-noita';
 import { Icon } from '@noita-explorer/noita-component-library';
-import { NoitaSpellTypesDictionary } from '../../noita/NoitaSpellTypeDictionary.ts';
-import { BooleanIcon } from '../BooleanIcon.tsx';
-import { Flex } from '../Flex.tsx';
-import { useNoitaUnits } from '../../hooks/useNoitaUnits.ts';
-import React from 'react';
-import { NoitaUnknownTooltip } from './NoitaUnknownTooltip.tsx';
-import { NoitaNumberModifier } from './noita-number-modifier.tsx';
+import { NoitaSpellTypesDictionary } from '../../../../noita/NoitaSpellTypeDictionary.ts';
+import { useNoitaUnits } from '../../../../hooks/useNoitaUnits.ts';
+import { BooleanIcon } from '../../../../components/BooleanIcon.tsx';
+import { TooltipRowData } from '../../../../components/tooltips/NoitaSpellTooltip.tsx';
 
-import actionTypeIcon from '../../assets/icons/spells/icon_action_type.png';
-import maxUsesIcon from '../../assets/icons/spells/icon_action_max_uses.png';
-import manaDrainIcon from '../../assets/icons/spells/icon_mana_drain.png';
-import lifetimeIcon from '../../assets/icons/spells/lifetime.webp';
-import recoilModifierIcon from '../../assets/icons/spells/icon_recoil.png';
-import fireRateWaitModifierIcon from '../../assets/icons/spells/icon_fire_rate_wait.png';
-import reloadModifierIcon from '../../assets/icons/spells/icon_reload_time.png';
-import speedModifierIcon from '../../assets/icons/spells/icon_speed_multiplier.png';
-import spreadModifierIcon from '../../assets/icons/spells/icon_spread_degrees.png';
+import actionTypeIcon from '../../../../assets/icons/spells/icon_action_type.png';
+import manaDrainIcon from '../../../../assets/icons/spells/icon_mana_drain.png';
+import maxUsesIcon from '../../../../assets/icons/spells/icon_action_max_uses.png';
+import lifetimeIcon from '../../../../assets/icons/spells/lifetime.webp';
+import fireRateWaitModifierIcon from '../../../../assets/icons/spells/icon_fire_rate_wait.png';
+import reloadModifierIcon from '../../../../assets/icons/spells/icon_reload_time.png';
+import damageProjectileIcon from '../../../../assets/icons/damages/icon_damage_projectile.png';
+import damageExplosionIcon from '../../../../assets/icons/damages/icon_damage_explosion.png';
+import explosionRadiusIcon from '../../../../assets/icons/spells/icon_explosion_radius.png';
+import damageSliceIcon from '../../../../assets/icons/damages/icon_damage_slice.png';
+import damageMeleeIcon from '../../../../assets/icons/damages/icon_damage_melee.png';
+import damageFireIcon from '../../../../assets/icons/damages/icon_damage_fire.png';
+import damageHealingIcon from '../../../../assets/icons/damages/icon_damage_healing.png';
+import damageElectricityIcon from '../../../../assets/icons/damages/icon_damage_electricity.png';
+import damageDrillIcon from '../../../../assets/icons/damages/icon_damage_drill.png';
+import damageIceIcon from '../../../../assets/icons/damages/icon_damage_ice.png';
+import damageHolyIcon from '../../../../assets/icons/damages/icon_damage_holy.png';
+import speedModifierIcon from '../../../../assets/icons/spells/icon_speed_multiplier.png';
+import recoilModifierIcon from '../../../../assets/icons/spells/icon_recoil.png';
+import spreadModifierIcon from '../../../../assets/icons/spells/icon_spread_degrees.png';
+import { NoitaNumberModifier } from '../../../../components/tooltips/noita-number-modifier.tsx';
 
-import damageProjectileIcon from '../../assets/icons/damages/icon_damage_projectile.png';
-import damageExplosionIcon from '../../assets/icons/damages/icon_damage_explosion.png';
-import explosionRadiusIcon from '../../assets/icons/spells/icon_explosion_radius.png';
-import damageHealingIcon from '../../assets/icons/damages/icon_damage_healing.png';
-import damageSliceIcon from '../../assets/icons/damages/icon_damage_slice.png';
-import damageMeleeIcon from '../../assets/icons/damages/icon_damage_melee.png';
-import damageFireIcon from '../../assets/icons/damages/icon_damage_fire.png';
-import damageElectricityIcon from '../../assets/icons/damages/icon_damage_electricity.png';
-import damageDrillIcon from '../../assets/icons/damages/icon_damage_drill.png';
-import damageIceIcon from '../../assets/icons/damages/icon_damage_ice.png';
-import damageHolyIcon from '../../assets/icons/damages/icon_damage_holy.png';
-
-export interface TooltipRowData {
-  icon?: React.ReactNode;
-  text: string;
-  value: string | React.ReactNode;
-  show?: boolean;
-}
-
-interface NoitaSpellTooltipProps {
-  spell: NoitaSpell;
-  wandSpell?: NoitaWandSpell;
-  isUnknown?: boolean;
-  warnings?: {
-    manaTooMuch: boolean;
-  };
-}
-
-export const NoitaSpellTooltip = ({
-  spell,
-  wandSpell,
-  isUnknown,
-  warnings,
-}: NoitaSpellTooltipProps) => {
+export const SpellOverview = ({ spell }: { spell: NoitaSpell }) => {
   const actionType = NoitaSpellTypesDictionary[spell.type];
   const noitaUnits = useNoitaUnits();
-
-  if (isUnknown) {
-    return <NoitaUnknownTooltip />;
-  }
 
   const rowsGeneral: TooltipRowData[] = [
     {
@@ -69,28 +41,14 @@ export const NoitaSpellTooltip = ({
     {
       icon: <Icon type={'custom'} src={manaDrainIcon} size={15} />,
       text: 'Mana Drain',
-      value: (
-        <span style={{ color: warnings?.manaTooMuch ? '#e35d5d' : 'inherit' }}>
-          {spell.manaDrain}
-          {warnings?.manaTooMuch && (
-            <Icon type={'warning'} size={20} style={{ marginLeft: 5 }} />
-          )}
-        </span>
-      ),
+      value: <span>{spell.manaDrain}</span>,
       show: true,
     },
     {
       icon: <Icon type={'custom'} src={maxUsesIcon} size={15} />,
       text: 'Uses',
       value: spell.maxUses,
-      show:
-        spell.maxUses !== undefined && wandSpell?.usesRemaining === undefined,
-    },
-    {
-      icon: <Icon type={'custom'} src={maxUsesIcon} size={15} />,
-      text: 'Uses remaining',
-      value: wandSpell?.usesRemaining,
-      show: wandSpell?.usesRemaining !== undefined,
+      show: spell.maxUses !== undefined,
     },
     {
       text: 'Flag Required',
@@ -308,92 +266,87 @@ export const NoitaSpellTooltip = ({
 
   return (
     <div style={{ minWidth: '350px', maxWidth: '450px', lineHeight: '16px' }}>
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: '15% 1fr',
+          width: '100%',
+          gap: 5,
+        }}
+      >
+        <Icon
+          type={'custom'}
+          src={spell.imageBase64}
+          style={{ aspectRatio: 1, width: '100%' }}
+        />
+        <div>
+          <div style={{ fontSize: 20, marginBottom: 10 }}>{spell.name}</div>
+          <div>{spell.description}</div>
+        </div>
+      </div>
+      <br />
       <div>
-        <div style={{ fontSize: 20, marginBottom: 10 }}>
-          {spell.name}
-          {wandSpell?.usesRemaining !== undefined &&
-            wandSpell.usesRemaining !== -1 && (
-              <span> ( {wandSpell.usesRemaining} )</span>
+        <table style={{ width: '100%' }}>
+          <tbody>
+            {rowsGeneral
+              .filter((r) => r.show)
+              .map((r) => (
+                <tr key={r.text + r.value}>
+                  <td>{r.icon}</td>
+                  <td>{r.text}</td>
+                  <td>{r.value}</td>
+                </tr>
+              ))}
+
+            {rowsTime.some((r) => r.show) && (
+              <tr>
+                <td colSpan={3} style={{ height: 10 }}></td>
+              </tr>
             )}
-        </div>
-        <div>{spell.description}</div>
-        <br />
 
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr auto',
-          }}
-        >
-          <table style={{ width: '100%' }}>
-            <tbody>
-              {rowsGeneral
-                .filter((r) => r.show)
-                .map((r) => (
-                  <tr key={r.text + r.value}>
-                    <td>{r.icon}</td>
-                    <td>{r.text}</td>
-                    <td>{r.value}</td>
-                  </tr>
-                ))}
-
-              {rowsTime.some((r) => r.show) && (
-                <tr>
-                  <td colSpan={3} style={{ height: 10 }}></td>
+            {rowsTime
+              .filter((r) => r.show)
+              .map((r) => (
+                <tr key={r.text + r.value}>
+                  <td>{r.icon}</td>
+                  <td>{r.text}</td>
+                  <td>{r.value}</td>
                 </tr>
-              )}
+              ))}
 
-              {rowsTime
-                .filter((r) => r.show)
-                .map((r) => (
-                  <tr key={r.text + r.value}>
-                    <td>{r.icon}</td>
-                    <td>{r.text}</td>
-                    <td>{r.value}</td>
-                  </tr>
-                ))}
+            {rowsDamages.some((r) => r.show) && (
+              <tr>
+                <td colSpan={3} style={{ height: 10 }}></td>
+              </tr>
+            )}
 
-              {rowsDamages.some((r) => r.show) && (
-                <tr>
-                  <td colSpan={3} style={{ height: 10 }}></td>
+            {rowsDamages
+              .filter((r) => r.show)
+              .map((r) => (
+                <tr key={r.text + r.value}>
+                  <td>{r.icon}</td>
+                  <td>{r.text}</td>
+                  <td>{r.value}</td>
                 </tr>
-              )}
+              ))}
 
-              {rowsDamages
-                .filter((r) => r.show)
-                .map((r) => (
-                  <tr key={r.text + r.value}>
-                    <td>{r.icon}</td>
-                    <td>{r.text}</td>
-                    <td>{r.value}</td>
-                  </tr>
-                ))}
+            {rowsOther.some((r) => r.show) && (
+              <tr>
+                <td colSpan={3} style={{ height: 10 }}></td>
+              </tr>
+            )}
 
-              {rowsOther.some((r) => r.show) && (
-                <tr>
-                  <td colSpan={3} style={{ height: 10 }}></td>
+            {rowsOther
+              .filter((r) => r.show)
+              .map((r) => (
+                <tr key={r.text + r.value}>
+                  <td>{r.icon}</td>
+                  <td>{r.text}</td>
+                  <td>{r.value}</td>
                 </tr>
-              )}
-
-              {rowsOther
-                .filter((r) => r.show)
-                .map((r) => (
-                  <tr key={r.text + r.value}>
-                    <td>{r.icon}</td>
-                    <td>{r.text}</td>
-                    <td>{r.value}</td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
-          <Flex
-            style={{
-              alignItems: 'center',
-            }}
-          >
-            <Icon type={'custom'} src={spell.imageBase64} size={74} />
-          </Flex>
-        </div>
+              ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );
