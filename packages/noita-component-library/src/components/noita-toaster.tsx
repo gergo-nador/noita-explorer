@@ -1,6 +1,7 @@
 import { useToaster } from 'react-hot-toast/headless';
 import { Card } from './card/card';
 import React, { LegacyRef } from 'react';
+import { zIndexManager } from '../zIndexManager';
 
 export const NoitaToaster = () => {
   const { toasts, handlers } = useToaster();
@@ -19,6 +20,7 @@ export const NoitaToaster = () => {
         position: 'fixed',
         bottom: 8,
         right: 8,
+        zIndex: zIndexManager.toast,
       }}
       onMouseEnter={startPause}
       onMouseLeave={endPause}

@@ -2,6 +2,7 @@
 export const zIndexManager = {
   progressIconHover: 1,
   tooltip: 999,
+  toast: 999,
   tabs: {
     activeTab: 3,
     card: 2,
