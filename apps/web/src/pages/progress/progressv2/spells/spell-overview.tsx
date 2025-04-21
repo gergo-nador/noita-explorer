@@ -265,7 +265,7 @@ export const SpellOverview = ({ spell }: { spell: NoitaSpell }) => {
   ];
 
   return (
-    <div style={{ minWidth: '350px', maxWidth: '450px', lineHeight: '16px' }}>
+    <div>
       <div
         style={{
           display: 'grid',
@@ -274,12 +274,21 @@ export const SpellOverview = ({ spell }: { spell: NoitaSpell }) => {
           gap: 5,
         }}
       >
-        <Icon
-          type={'custom'}
-          src={spell.imageBase64}
-          style={{ aspectRatio: 1, width: '100%' }}
-        />
-        <div>
+        <div style={{ height: '100%', display: 'flex', alignItems: 'center' }}>
+          <Icon
+            type={'custom'}
+            src={spell.imageBase64}
+            style={{ aspectRatio: 1, width: '100%' }}
+          />
+        </div>
+
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+          }}
+        >
           <div style={{ fontSize: 20, marginBottom: 10 }}>{spell.name}</div>
           <div>{spell.description}</div>
         </div>
