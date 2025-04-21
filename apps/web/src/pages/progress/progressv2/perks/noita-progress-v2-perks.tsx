@@ -48,46 +48,6 @@ export const NoitaProgressV2Perks = () => {
     return <div>Noita Data Wak is not loaded.</div>;
   }
 
-  const evaluateFiltersForPerk = (perk: NoitaPerk) => {
-    if (filters.stackable !== undefined) {
-      if (filters.stackable !== perk.stackable) {
-        return false;
-      }
-    }
-
-    if (filters.holyMountain !== undefined) {
-      if (filters.holyMountain !== !perk.notInDefaultPerkPool) {
-        return false;
-      }
-    }
-
-    if (filters.oneOffEffect !== undefined) {
-      if (filters.oneOffEffect !== perk.oneOffEffect) {
-        return false;
-      }
-    }
-
-    if (filters.removedByNullifyingAltar !== undefined) {
-      if (filters.removedByNullifyingAltar !== !perk.doNotRemove) {
-        return false;
-      }
-    }
-
-    if (filters.protectionId !== undefined) {
-      if (!perk.gameEffects.includes(filters.protectionId)) {
-        return false;
-      }
-    }
-
-    if (filters.unlocked !== undefined && unlockedPerks !== undefined) {
-      if (!(filters.unlocked || !unlockedPerks.includes(perk.id))) {
-        return false;
-      }
-    }
-
-    return true;
-  };
-
   return (
     <div
       style={{
@@ -121,7 +81,11 @@ export const NoitaProgressV2Perks = () => {
           iconGap={4}
         >
           {data.perks.map((perk) => {
-            const filter = evaluateFiltersForPerk(perk);
+            const filter = evaluateFiltersForPerk({
+              perk,
+              filters,
+              unlockedPerks,
+            });
             const icon = (
               <ProgressIcon type={'regular'} icon={perk.imageBase64} />
             );
@@ -168,4 +132,52 @@ export const NoitaProgressV2Perks = () => {
       </Card>
     </div>
   );
+};
+
+const evaluateFiltersForPerk = ({
+  perk,
+  filters,
+  unlockedPerks,
+}: {
+  perk: NoitaPerk;
+  filters: PerkFilters;
+  unlockedPerks: string[] | undefined;
+}) => {
+  if (filters.stackable !== undefined) {
+    if (filters.stackable !== perk.stackable) {
+      return false;
+    }
+  }
+
+  if (filters.holyMountain !== undefined) {
+    if (filters.holyMountain !== !perk.notInDefaultPerkPool) {
+      return false;
+    }
+  }
+
+  if (filters.oneOffEffect !== undefined) {
+    if (filters.oneOffEffect !== perk.oneOffEffect) {
+      return false;
+    }
+  }
+
+  if (filters.removedByNullifyingAltar !== undefined) {
+    if (filters.removedByNullifyingAltar !== !perk.doNotRemove) {
+      return false;
+    }
+  }
+
+  if (filters.protectionId !== undefined) {
+    if (!perk.gameEffects.includes(filters.protectionId)) {
+      return false;
+    }
+  }
+
+  if (filters.unlocked !== undefined && unlockedPerks !== undefined) {
+    if (!(filters.unlocked || !unlockedPerks.includes(perk.id))) {
+      return false;
+    }
+  }
+
+  return true;
 };

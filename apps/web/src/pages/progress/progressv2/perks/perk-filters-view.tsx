@@ -4,6 +4,7 @@ import { MultiSelectionBooleanNullable } from '../../../../components/multi-sele
 import { MultiSelection } from '../../../../components/multi-selection/MultiSelection.tsx';
 import { NoitaProtections } from '../../../../noita/NoitaProtections.ts';
 import { PerkFilters } from './perk-filters.ts';
+import { Dispatch } from 'react';
 
 export const PerkFiltersView = ({
   setFilters,
@@ -12,7 +13,7 @@ export const PerkFiltersView = ({
   usedProtectionIds,
 }: {
   filters: PerkFilters;
-  setFilters: (filters: PerkFilters) => void;
+  setFilters: Dispatch<PerkFilters>;
   showSave00RelatedFilters: boolean;
   usedProtectionIds: string[];
 }) => {
