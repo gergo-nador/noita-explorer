@@ -59,6 +59,7 @@ export const TabView = ({
               zIndex: zIndexManager.tabs.card,
               ...styleCard,
             }}
+            styleContent={{ padding: 0 }}
           >
             {activeTab.tabChildren}
           </Card>

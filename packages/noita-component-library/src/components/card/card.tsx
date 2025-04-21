@@ -73,6 +73,7 @@ export const Card = ({
 }: CardProps) => {
   // based on data/ui_gfx/decorations/9piece0.png
 
+  className ??= '';
   const customStyles: { [key: string]: string } = {};
 
   if (styling?.borderDark !== undefined) {

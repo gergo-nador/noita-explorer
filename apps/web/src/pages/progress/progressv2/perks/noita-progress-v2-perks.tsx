@@ -91,19 +91,29 @@ export const NoitaProgressV2Perks = () => {
   return (
     <div
       style={{
-        display: 'grid',
-        gridTemplateColumns: '6fr 6fr',
+        display: 'flex',
+        justifyContent: 'center',
         gap: 20,
-        maxWidth: '1220px', // 500px left panel + 20px gap + 500px right panel
         margin: 'auto',
+        maxHeight: '100%',
+        overflowY: 'auto',
+        padding: 15,
+        boxSizing: 'border-box',
       }}
     >
       <div
         style={{
-          maxWidth: '700px',
-          minWidth: '200px',
+          maxWidth: '500px',
+          width: '50%',
         }}
       >
+        <PerkFiltersView
+          setFilters={setFilters}
+          filters={filters}
+          showSave00RelatedFilters={unlockedPerks !== undefined}
+          usedProtectionIds={usedProtectionIds}
+        />
+        <br />
         <NoitaProgressIconTable
           count={data.spells.length}
           name={'Spells'}
@@ -144,19 +154,18 @@ export const NoitaProgressV2Perks = () => {
         </NoitaProgressIconTable>
       </div>
 
-      <div>
-        <PerkFiltersView
-          setFilters={setFilters}
-          filters={filters}
-          showSave00RelatedFilters={unlockedPerks !== undefined}
-          usedProtectionIds={usedProtectionIds}
-        />
-        <br />
-        <Card style={{ width: '100%' }}>
-          {!selectedPerk && <span>Select a perk</span>}
-          {selectedPerk && <PerkOverview perk={selectedPerk} />}
-        </Card>
-      </div>
+      <Card
+        style={{
+          width: '50%',
+          maxWidth: '500px',
+          maxHeight: '100%',
+          position: 'sticky',
+          top: 0,
+        }}
+      >
+        {!selectedPerk && <span>Select a perk</span>}
+        {selectedPerk && <PerkOverview perk={selectedPerk} />}
+      </Card>
     </div>
   );
 };
