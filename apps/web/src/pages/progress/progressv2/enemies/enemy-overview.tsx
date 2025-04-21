@@ -1,7 +1,6 @@
 import { NoitaEnemy } from '@noita-explorer/model-noita';
 import { useNoitaUnits } from '../../../../hooks/useNoitaUnits.ts';
 import { useSettingsStore } from '../../../../stores/settings.ts';
-import { useMemo } from 'react';
 import {
   Header,
   Icon,
@@ -38,75 +37,6 @@ export const EnemyOverview = ({ enemy }: { enemy: NoitaEnemy }) => {
   const noitaUnits = useNoitaUnits();
   const { settings } = useSettingsStore();
   const { progressDisplayDebugData } = settings;
-
-  const gameEffects = useMemo(() => {
-    const gameEffects = [...enemy.gameEffects];
-
-    if (
-      enemy.fireProbabilityOfIgnition === 0 &&
-      gameEffects.every((e) => e.id !== 'PROTECTION_FIRE')
-    ) {
-      gameEffects.push({
-        id: 'PROTECTION_FIRE',
-        frames: -1,
-      });
-    }
-
-    if (enemy.airNeeded === false) {
-      gameEffects.push({
-        id: 'PROTECTION_SUFFOCATE',
-        frames: -1,
-      });
-    }
-
-    if (enemy.debug.entityTags.includes('polymorphable_NOT')) {
-      gameEffects.push({
-        id: 'PROTECTION_POLYMORPH',
-        frames: -1,
-      });
-    }
-
-    if (enemy.debug.entityTags.includes('necrobot_NOT')) {
-      gameEffects.push({
-        id: 'PROTECTION_RESURRECTION',
-        frames: -1,
-      });
-    }
-
-    if (enemy.debug.entityTags.includes('glue_NOT')) {
-      gameEffects.push({
-        id: 'PROTECTION_GLUE',
-        frames: -1,
-      });
-    }
-
-    if (enemy.debug.entityTags.includes('touchmagic_immunity')) {
-      gameEffects.push({
-        id: 'PROTECTION_TOUCH_MAGIC',
-        frames: -1,
-      });
-    }
-
-    if (enemy.physicsObjectsDamage === false) {
-      gameEffects.push({
-        id: 'PROTECTION_PHYSICS_IMPACT',
-        frames: -1,
-      });
-    }
-
-    // make the protection all be the first in the list
-    gameEffects.sort((e1, e2) => {
-      if (e1.id === 'PROTECTION_ALL') {
-        return -1;
-      }
-      if (e2.id === 'PROTECTION_ALL') {
-        return 1;
-      }
-      return 0;
-    });
-
-    return gameEffects;
-  }, [enemy]);
 
   return (
     <div>
@@ -193,7 +123,7 @@ export const EnemyOverview = ({ enemy }: { enemy: NoitaEnemy }) => {
       <br />
       <div>
         <Flex style={{ flexWrap: 'wrap' }}>
-          {gameEffects
+          {enemy.gameEffects
             .filter((gameEffect) => gameEffect.id in NoitaProtections)
             .map((gameEffect) => (
               <NoitaTooltipWrapper

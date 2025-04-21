@@ -15,9 +15,7 @@ export const EnemyFiltersView = ({
 }) => {
   return (
     <Card>
-      <div
-        style={{ maxWidth: 'max-content', gap: 10, justifyContent: 'center' }}
-      >
+      <div style={{ gap: 10, justifyContent: 'center' }}>
         <span>Protections:</span>
         <MultiSelection<string | undefined>
           options={Object.keys(NoitaProtections)

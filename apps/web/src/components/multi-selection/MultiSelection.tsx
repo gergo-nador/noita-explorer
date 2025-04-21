@@ -23,7 +23,7 @@ export const MultiSelection = <T,>({
   currentValue,
 }: MultiSelectionProps<T>) => {
   return (
-    <Flex style={{ width: 'max-content' }} gap={10}>
+    <Flex style={{ flexWrap: 'wrap' }} gap={10}>
       {options.map((option, index) => {
         let style = {
           ...option.style,
