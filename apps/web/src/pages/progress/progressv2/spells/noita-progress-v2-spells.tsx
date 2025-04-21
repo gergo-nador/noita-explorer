@@ -2,9 +2,9 @@ import {
   ActiveIconWrapper,
   ProgressIcon,
 } from '@noita-explorer/noita-component-library';
-import { NoitaSpellTypesDictionary } from '../../../noita/NoitaSpellTypeDictionary.ts';
-import { NoitaProgressIconTable } from '../../../components/NoitaProgressIconTable.tsx';
-import { useNoitaDataWakStore } from '../../../stores/NoitaDataWak.ts';
+import { NoitaSpellTypesDictionary } from '../../../../noita/NoitaSpellTypeDictionary.ts';
+import { NoitaProgressIconTable } from '../../../../components/NoitaProgressIconTable.tsx';
+import { useNoitaDataWakStore } from '../../../../stores/NoitaDataWak.ts';
 
 export const NoitaProgressV2Spells = () => {
   const { data } = useNoitaDataWakStore();

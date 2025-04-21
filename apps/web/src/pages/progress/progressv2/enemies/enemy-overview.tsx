@@ -1,107 +1,40 @@
+import { NoitaEnemy } from '@noita-explorer/model-noita';
+import { useNoitaUnits } from '../../../../hooks/useNoitaUnits.ts';
+import { useSettingsStore } from '../../../../stores/settings.ts';
+import { useMemo } from 'react';
 import {
-  ActiveIconWrapper,
-  Card,
   Header,
   Icon,
   NoitaTooltipWrapper,
-  ProgressIcon,
 } from '@noita-explorer/noita-component-library';
-import { NoitaProgressIconTable } from '../../../components/NoitaProgressIconTable.tsx';
-import { useNoitaDataWakStore } from '../../../stores/NoitaDataWak.ts';
-import { useMemo } from 'react';
-import { NoitaEnemy } from '@noita-explorer/model-noita';
-import { Flex } from '../../../components/Flex.tsx';
-import { NoitaProtections } from '../../../noita/NoitaProtections.ts';
-import { useNoitaUnits } from '../../../hooks/useNoitaUnits.ts';
-import { useSettingsStore } from '../../../stores/settings.ts';
-import { useStateWithQueryParamsString } from '../../../hooks/use-state-with-query-params-string.ts';
+import heartIcon from '../../../../assets/heart.png';
+import goldNuggetIcon from '../../../../assets/goldnugget_icon.png';
+import { Flex } from '../../../../components/Flex.tsx';
+import { NoitaProtections } from '../../../../noita/NoitaProtections.ts';
+import { DamageMultiplierDisplay } from './damage-multiplier-display.tsx';
 
-import damageProjectileIcon from '../../../assets/icons/damages/icon_damage_projectile.png';
-import damageProjectileIconColor from '../../../assets/icons/damages/icon_damage_projectile_color.png';
-import damageExplosionIcon from '../../../assets/icons/damages/icon_damage_explosion.png';
-import damageExplosionIconColor from '../../../assets/icons/damages/icon_damage_explosion_color.png';
-import damageMeleeIcon from '../../../assets/icons/damages/icon_damage_melee.png';
-import damageMeleeIconColor from '../../../assets/icons/damages/icon_damage_melee_color.png';
-import damageSliceIcon from '../../../assets/icons/damages/icon_damage_slice.png';
-import damageSliceIconColor from '../../../assets/icons/damages/icon_damage_slice_color.png';
-import damageFireIcon from '../../../assets/icons/damages/icon_damage_fire.png';
-import damageFireIconColor from '../../../assets/icons/damages/icon_damage_fire_color.png';
-import damageElectricityIcon from '../../../assets/icons/damages/icon_damage_electricity.png';
-import damageElectricityIconColor from '../../../assets/icons/damages/icon_damage_electricity_color.png';
-import damageIceIcon from '../../../assets/icons/damages/icon_damage_ice.png';
-import damageIceIconColor from '../../../assets/icons/damages/icon_damage_ice_color.png';
-import damageRadioActivityIcon from '../../../assets/icons/damages/icon_damage_radioactivity.png';
-import damageRadioActivityIconColor from '../../../assets/icons/damages/icon_damage_radioactivity_color.png';
-import damageDrillIcon from '../../../assets/icons/damages/icon_damage_drill.png';
-import damageDrillIconColor from '../../../assets/icons/damages/icon_damage_drill_color.png';
-import damageHolyIcon from '../../../assets/icons/damages/icon_damage_holy.png';
-import damageHolyIconColor from '../../../assets/icons/damages/icon_damage_holy_color.png';
-import goldNuggetIcon from '../../../assets/goldnugget_icon.png';
-import heartIcon from '../../../assets/heart.png';
+import damageProjectileIcon from '../../../../assets/icons/damages/icon_damage_projectile.png';
+import damageProjectileIconColor from '../../../../assets/icons/damages/icon_damage_projectile_color.png';
+import damageExplosionIcon from '../../../../assets/icons/damages/icon_damage_explosion.png';
+import damageExplosionIconColor from '../../../../assets/icons/damages/icon_damage_explosion_color.png';
+import damageMeleeIcon from '../../../../assets/icons/damages/icon_damage_melee.png';
+import damageMeleeIconColor from '../../../../assets/icons/damages/icon_damage_melee_color.png';
+import damageSliceIcon from '../../../../assets/icons/damages/icon_damage_slice.png';
+import damageSliceIconColor from '../../../../assets/icons/damages/icon_damage_slice_color.png';
+import damageFireIcon from '../../../../assets/icons/damages/icon_damage_fire.png';
+import damageFireIconColor from '../../../../assets/icons/damages/icon_damage_fire_color.png';
+import damageElectricityIcon from '../../../../assets/icons/damages/icon_damage_electricity.png';
+import damageElectricityIconColor from '../../../../assets/icons/damages/icon_damage_electricity_color.png';
+import damageIceIcon from '../../../../assets/icons/damages/icon_damage_ice.png';
+import damageIceIconColor from '../../../../assets/icons/damages/icon_damage_ice_color.png';
+import damageRadioActivityIcon from '../../../../assets/icons/damages/icon_damage_radioactivity.png';
+import damageRadioActivityIconColor from '../../../../assets/icons/damages/icon_damage_radioactivity_color.png';
+import damageDrillIcon from '../../../../assets/icons/damages/icon_damage_drill.png';
+import damageDrillIconColor from '../../../../assets/icons/damages/icon_damage_drill_color.png';
+import damageHolyIcon from '../../../../assets/icons/damages/icon_damage_holy.png';
+import damageHolyIconColor from '../../../../assets/icons/damages/icon_damage_holy_color.png';
 
-export const NoitaProgressV2Enemies = () => {
-  const { data } = useNoitaDataWakStore();
-  const [selectedEnemy, setSelectedEnemy] =
-    useStateWithQueryParamsString<NoitaEnemy>({
-      key: 'enemy',
-      queryParamValueSelector: (enemy) => enemy.id,
-      findValueBasedOnQueryParam: (enemyId) =>
-        data?.enemies?.find((enemy) => enemy.id === enemyId),
-    });
-
-  if (!data) {
-    return <div>Noita Data Wak is not loaded.</div>;
-  }
-
-  return (
-    <div
-      style={{
-        display: 'grid',
-        gridTemplateColumns: '6fr 6fr',
-        gap: 20,
-        maxWidth: '1220px', // 500px left panel + 20px gap + 500px right panel
-        margin: 'auto',
-      }}
-    >
-      <div
-        style={{
-          maxWidth: '700px',
-          minWidth: '200px',
-          position: 'relative',
-        }}
-      >
-        <NoitaProgressIconTable
-          count={data.spells.length}
-          name={'Spells'}
-          columnCount={9}
-        >
-          {data.enemies.map((enemy) => (
-            <ActiveIconWrapper
-              id={'enemy-' + enemy.id}
-              key={'enemy-' + enemy.id}
-              tooltip={
-                <div>
-                  <div style={{ fontSize: 20 }}>{enemy.name}</div>
-                </div>
-              }
-              onClick={() => setSelectedEnemy(enemy)}
-            >
-              <ProgressIcon type={'regular'} icon={enemy.imageBase64} />
-            </ActiveIconWrapper>
-          ))}
-        </NoitaProgressIconTable>
-      </div>
-      <div>
-        <Card style={{ position: 'sticky', top: 0 }}>
-          {!selectedEnemy && <span>Select an enemy</span>}
-          {selectedEnemy && <EnemyOverview enemy={selectedEnemy} />}
-        </Card>
-      </div>
-    </div>
-  );
-};
-
-const EnemyOverview = ({ enemy }: { enemy: NoitaEnemy }) => {
+export const EnemyOverview = ({ enemy }: { enemy: NoitaEnemy }) => {
   const noitaUnits = useNoitaUnits();
   const { settings } = useSettingsStore();
   const { progressDisplayDebugData } = settings;
@@ -388,44 +321,6 @@ const EnemyOverview = ({ enemy }: { enemy: NoitaEnemy }) => {
           </div>
         ))}
       </div>
-    </div>
-  );
-};
-
-interface DamageMultiplierDisplayProps {
-  name: string;
-  icon: string;
-  iconColor: string;
-  value: number;
-}
-
-const DamageMultiplierDisplay = ({
-  name,
-  icon,
-  iconColor,
-  value,
-}: DamageMultiplierDisplayProps) => {
-  let color = 'inherit';
-  if (value === 0) color = '#FFAABB';
-  else if (value < 0) color = '#EE8866';
-  else if (value < 1) color = '#EEDD88';
-  else if (value > 1) color = '#44BB99';
-
-  // the icons are 7x7, 21 is divisible by 7, so the icons
-  // will look natural
-  const iconSize = 21;
-
-  return (
-    <div>
-      <NoitaTooltipWrapper content={name}>
-        <div style={{ width: 'fit-content' }}>
-          {value === 1 && <Icon type={'custom'} src={icon} size={iconSize} />}
-          {value !== 1 && (
-            <Icon type={'custom'} src={iconColor} size={iconSize} />
-          )}
-          <span style={{ color: color }}> {value}</span>
-        </div>
-      </NoitaTooltipWrapper>
     </div>
   );
 };
