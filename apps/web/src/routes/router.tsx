@@ -8,7 +8,7 @@ import { SetupDesktopScraper } from '../pages/setup/SetupDesktopScraper.tsx';
 import { NoitaProgressTracker } from '../pages/progress/NoitaProgressTracker.tsx';
 import { TabPageTemplate } from '../pages/_templates/TabPageTemplate.tsx';
 import { pages } from './pages.ts';
-import { NoitaProgressV2Perks } from '../pages/progress/progressv2/NoitaProgressV2Perks.tsx';
+import { NoitaProgressV2Perks } from '../pages/progress/progressv2/perks/noita-progress-v2-perks.tsx';
 import { NoitaProgressV2Spells } from '../pages/progress/progressv2/NoitaProgressV2Spells.tsx';
 import { NoitaProgressV2Enemies } from '../pages/progress/progressv2/NoitaProgressV2Enemies.tsx';
 import { SetupWebPaths } from '../pages/setup/SetupWebPaths.tsx';
