@@ -6,6 +6,7 @@ export * from "./array";
 export * from "./color-util";
 export * from "./conditions";
 export * from "./cryptography";
+export * from "./date";
 export * from "./file-access-utils";
 export * from "./images";
 export * from "./map";

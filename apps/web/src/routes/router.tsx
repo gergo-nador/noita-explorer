@@ -1,7 +1,7 @@
 import { createBrowserRouter, Outlet } from 'react-router-dom';
 import { MainPage } from '../pages/MainPage';
 
-import { NoitaHolidays } from '../pages/NoitaHolidays';
+import { NoitaHolidays } from '../pages/holidays/noita-holidays.tsx';
 import { CardPageTemplate } from '../pages/_templates/CardPageTemplate.tsx';
 import { SetupDesktopPaths } from '../pages/setup/SetupDesktopPaths.tsx';
 import { SetupDesktopScraper } from '../pages/setup/SetupDesktopScraper.tsx';
