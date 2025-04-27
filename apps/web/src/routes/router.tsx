@@ -20,7 +20,7 @@ import { NoitaBonesWands } from '../pages/NoitaBonesWands.tsx';
 import { SettingsCursorWandPicker } from '../pages/settings/SettingsCursorWandPicker.tsx';
 import { CurrentRunPage } from '../pages/world/CurrentRunPage.tsx';
 import { NoitaProgressV2MaterialsTree } from '../pages/progress/progressv2/NoitaProgressV2MaterialsTree.tsx';
-import { NoitaProgressV2Materials } from '../pages/progress/progressv2/NoitaProgressV2Materials.tsx';
+import { NoitaProgressV2Materials } from '../pages/progress/progressv2/materials/noita-progress-v2-materials.tsx';
 
 export const router = createBrowserRouter([
   {

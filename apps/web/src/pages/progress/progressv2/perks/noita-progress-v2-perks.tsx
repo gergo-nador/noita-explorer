@@ -75,8 +75,8 @@ export const NoitaProgressV2Perks = () => {
         />
         <br />
         <NoitaProgressIconTable
-          count={data.spells.length}
-          name={'Spells'}
+          count={data.perks.length}
+          name={'Perks'}
           columnCount={9}
           iconGap={4}
         >

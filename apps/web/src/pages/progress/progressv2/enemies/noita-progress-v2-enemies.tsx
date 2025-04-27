@@ -82,8 +82,8 @@ export const NoitaProgressV2Enemies = () => {
         />
         <br />
         <NoitaProgressIconTable
-          count={data.spells.length}
-          name={'Spells'}
+          count={data.enemies.length}
+          name={'Enemies'}
           columnCount={9}
         >
           {enemies?.map((enemy) => (

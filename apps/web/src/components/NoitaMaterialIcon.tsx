@@ -10,30 +10,57 @@ interface NoitaMaterialIconProps {
 }
 
 export const NoitaMaterialIcon = ({ material }: NoitaMaterialIconProps) => {
-  const [materialIcon, setMaterialIcon] = useState<string>();
+  const [materialIcon, setMaterialIcon] = useState<string | undefined>(() => {
+    const iconType = getMaterialIconType(material);
+
+    if (!iconType) {
+      return;
+    }
+
+    const iconCacheKey = getMaterialIconCacheKey(iconType, material.id);
+    const materialCache = getMaterialIconFromCache(iconCacheKey);
+    if (materialCache) {
+      return materialCache;
+    }
+  });
 
   useEffect(() => {
-    if (material.cellType === 'liquid' && !material.liquidSand) {
-      colorNoitaPotion({
+    const iconType = getMaterialIconType(material);
+
+    if (!iconType) {
+      return;
+    }
+
+    const iconCacheKey = getMaterialIconCacheKey(iconType, material.id);
+    const materialCache = getMaterialIconFromCache(iconCacheKey);
+    if (materialCache) {
+      setMaterialIcon(materialCache);
+      return;
+    }
+
+    let iconPromise: Promise<string>;
+
+    if (iconType === 'potion') {
+      iconPromise = colorNoitaPotion({
         potionBaseImage: potionPng,
         potionColor: material.graphicsColor ?? material.wangColorHtml,
         potionMouthRowStart: 2,
         potionMouthRowEnd: 2,
-      }).then((icon) => setMaterialIcon(icon));
-    } else if (material.cellType === 'liquid' && material.liquidSand) {
-      colorNoitaPotion({
+      });
+    } else {
+      iconPromise = colorNoitaPotion({
         potionBaseImage: pouchPng,
         potionColor: material.graphicsColor ?? material.wangColorHtml,
         potionMouthRowStart: 1,
         potionMouthRowEnd: 2,
-      }).then((icon) => setMaterialIcon(icon));
+      });
     }
-  }, [
-    material.cellType,
-    material.liquidSand,
-    material.graphicsColor,
-    material.wangColorHtml,
-  ]);
+
+    iconPromise.then((icon) => {
+      setMaterialIcon(icon);
+      sessionStorage[iconCacheKey] = icon;
+    });
+  }, [material]);
 
   if (materialIcon) {
     return <InventoryIcon icon={materialIcon} />;
@@ -61,6 +88,28 @@ export const NoitaMaterialIcon = ({ material }: NoitaMaterialIconProps) => {
       }}
     ></div>
   );
+};
+
+const getMaterialIconType = (
+  material: NoitaMaterial,
+): 'pouch' | 'potion' | undefined => {
+  if (material.cellType === 'liquid' && !material.liquidSand) {
+    return 'potion';
+  } else if (material.cellType === 'liquid' && material.liquidSand) {
+    return 'pouch';
+  } else return;
+};
+
+const getMaterialIconCacheKey = (iconType: string, materialId: string) =>
+  `${iconType}-${materialId}`;
+
+const getMaterialIconFromCache = (cacheId: string): string | undefined => {
+  const cache = sessionStorage;
+
+  if (cacheId in cache) {
+    const icon = cache[cacheId];
+    return icon;
+  }
 };
 
 function colorNoitaPotion({
