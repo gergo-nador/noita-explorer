@@ -5,14 +5,20 @@ import {
   ActiveIconWrapper,
   Card,
 } from '@noita-explorer/noita-component-library';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { arrayHelpers } from '@noita-explorer/tools';
 import { useStateWithQueryParamsString } from '../../../hooks/use-state-with-query-params-string.ts';
 import { NoitaMaterial } from '@noita-explorer/model-noita';
 import { MaterialOverview } from './material-overview.tsx';
+import { MaterialFilters } from './material-filters.ts';
+import { MaterialFiltersView } from './material-filters-view.tsx';
 
 export const WikiMaterials = () => {
   const { data } = useNoitaDataWakStore();
+
+  const [filters, setFilters] = useState<MaterialFilters>({
+    tag: undefined,
+  });
 
   const materialsUnique = useMemo(() => {
     if (!data?.materials) {
@@ -31,6 +37,13 @@ export const WikiMaterials = () => {
       findValueBasedOnQueryParam: (materialId) =>
         materialsUnique.find((material) => material.id === materialId),
     });
+
+  const allAvailableTags = useMemo(() => {
+    const allTags = materialsUnique.map((m) => m.tags).flat();
+    const allUniqueTags = arrayHelpers.unique(allTags);
+    allUniqueTags.sort((t1, t2) => t1.localeCompare(t2));
+    return allUniqueTags;
+  }, [materialsUnique]);
 
   if (!data?.materials) {
     return <div>Noita Data Wak is not loaded.</div>;
@@ -55,12 +68,11 @@ export const WikiMaterials = () => {
           width: '50%',
         }}
       >
-        {/*<PerkFiltersView
+        <MaterialFiltersView
           setFilters={setFilters}
           filters={filters}
-          showSave00RelatedFilters={unlockedPerks !== undefined}
-          usedProtectionIds={usedProtectionIds}
-        />*/}
+          allAvailableTags={allAvailableTags}
+        />
         <br />
         <NoitaProgressIconTable
           count={materialsUnique.length}
@@ -68,20 +80,36 @@ export const WikiMaterials = () => {
           columnCount={9}
           iconGap={4}
         >
-          {materialsUnique.map((material) => (
-            <ActiveIconWrapper
-              id={'material-' + material.id}
-              key={'material-' + material.id}
-              tooltip={
-                <div>
-                  <div style={{ fontSize: 20 }}>{material.name}</div>
-                </div>
-              }
-              onClick={() => setSelectedMaterial(material)}
-            >
-              <NoitaMaterialIcon material={material} />
-            </ActiveIconWrapper>
-          ))}
+          {materialsUnique.map((material) => {
+            const filter = evaluateFiltersOnMaterials({ material, filters });
+
+            const icon = <NoitaMaterialIcon material={material} />;
+
+            return (
+              <div
+                key={material.id}
+                style={{
+                  opacity: filter ? 1 : 0.35,
+                }}
+              >
+                {!filter && icon}
+                {filter && (
+                  <ActiveIconWrapper
+                    id={'material-' + material.id}
+                    key={'material-' + material.id}
+                    onClick={() => setSelectedMaterial(material)}
+                    tooltip={
+                      <div>
+                        <div style={{ fontSize: 20 }}>{material.name}</div>
+                      </div>
+                    }
+                  >
+                    {icon}
+                  </ActiveIconWrapper>
+                )}
+              </div>
+            );
+          })}
         </NoitaProgressIconTable>
       </div>
 
@@ -104,4 +132,20 @@ export const WikiMaterials = () => {
       </Card>
     </div>
   );
+};
+
+const evaluateFiltersOnMaterials = ({
+  material,
+  filters,
+}: {
+  material: NoitaMaterial;
+  filters: MaterialFilters;
+}) => {
+  if (filters.tag) {
+    if (!material.tags.some((t) => t === filters.tag)) {
+      return false;
+    }
+  }
+
+  return true;
 };

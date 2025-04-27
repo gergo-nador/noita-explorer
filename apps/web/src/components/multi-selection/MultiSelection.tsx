@@ -14,7 +14,7 @@ interface MultiSelectionOption<T> {
 export interface MultiSelectionProps<T> {
   options: MultiSelectionOption<T>[];
   setValue: (value: T) => void;
-  currentValue: T;
+  currentValue: T | undefined;
 }
 
 export const MultiSelection = <T,>({
