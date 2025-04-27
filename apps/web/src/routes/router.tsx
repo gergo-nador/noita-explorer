@@ -5,7 +5,7 @@ import { NoitaHolidays } from '../pages/NoitaHolidays';
 import { CardPageTemplate } from '../pages/_templates/CardPageTemplate.tsx';
 import { SetupDesktopPaths } from '../pages/setup/SetupDesktopPaths.tsx';
 import { SetupDesktopScraper } from '../pages/setup/SetupDesktopScraper.tsx';
-import { NoitaProgressTracker } from '../pages/progress/NoitaProgressTracker.tsx';
+import { NoitaProgressTracker } from '../pages/progress/noita-progress-tracker.tsx';
 import { TabPageTemplate } from '../pages/_templates/TabPageTemplate.tsx';
 import { pages } from './pages.ts';
 import { NoitaProgressV2Perks } from '../pages/progress/progressv2/perks/noita-progress-v2-perks.tsx';
@@ -19,7 +19,7 @@ import { Settings } from '../pages/settings/Settings.tsx';
 import { NoitaBonesWands } from '../pages/NoitaBonesWands.tsx';
 import { SettingsCursorWandPicker } from '../pages/settings/SettingsCursorWandPicker.tsx';
 import { CurrentRunPage } from '../pages/world/CurrentRunPage.tsx';
-import { NoitaProgressV2MaterialsTree } from '../pages/progress/progressv2/NoitaProgressV2MaterialsTree.tsx';
+import { NoitaProgressV2MaterialsTree } from '../pages/progress/progressv2/noita-progress-v2-materials-tree.tsx';
 import { NoitaProgressV2Materials } from '../pages/progress/progressv2/materials/noita-progress-v2-materials.tsx';
 
 export const router = createBrowserRouter([

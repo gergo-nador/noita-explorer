@@ -107,7 +107,9 @@ export const NoitaProgressV2Enemies = () => {
         }}
       >
         {!selectedEnemy && <span>Select an enemy</span>}
-        {selectedEnemy && <EnemyOverview enemy={selectedEnemy} />}
+        {selectedEnemy && (
+          <EnemyOverview key={selectedEnemy.id} enemy={selectedEnemy} />
+        )}
       </Card>
     </div>
   );

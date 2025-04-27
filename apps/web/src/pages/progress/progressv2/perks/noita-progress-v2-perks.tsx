@@ -128,7 +128,9 @@ export const NoitaProgressV2Perks = () => {
         }}
       >
         {!selectedPerk && <span>Select a perk</span>}
-        {selectedPerk && <PerkOverview perk={selectedPerk} />}
+        {selectedPerk && (
+          <PerkOverview key={selectedPerk.id} perk={selectedPerk} />
+        )}
       </Card>
     </div>
   );

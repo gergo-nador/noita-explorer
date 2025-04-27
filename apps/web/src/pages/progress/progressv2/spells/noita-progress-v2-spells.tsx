@@ -101,7 +101,9 @@ export const NoitaProgressV2Spells = () => {
         }}
       >
         {!selectedSpell && <span>Select a spell</span>}
-        {selectedSpell && <SpellOverview spell={selectedSpell} />}
+        {selectedSpell && (
+          <SpellOverview key={selectedSpell.id} spell={selectedSpell} />
+        )}
       </Card>
     </div>
   );

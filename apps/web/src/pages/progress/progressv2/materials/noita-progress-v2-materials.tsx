@@ -9,6 +9,7 @@ import { useMemo } from 'react';
 import { arrayHelpers } from '@noita-explorer/tools';
 import { useStateWithQueryParamsString } from '../../../../hooks/use-state-with-query-params-string.ts';
 import { NoitaMaterial } from '@noita-explorer/model-noita';
+import { MaterialOverview } from './material-overview.tsx';
 
 export const NoitaProgressV2Materials = () => {
   const { data } = useNoitaDataWakStore();
@@ -18,7 +19,9 @@ export const NoitaProgressV2Materials = () => {
       return [];
     }
 
-    return arrayHelpers.uniqueBy(data.materials, (m) => m.id);
+    const uniqueMaterials = arrayHelpers.uniqueBy(data.materials, (m) => m.id);
+    uniqueMaterials.sort((a, b) => a.name.localeCompare(b.name));
+    return uniqueMaterials;
   }, [data?.materials]);
 
   const [selectedMaterial, setSelectedMaterial] =
@@ -92,7 +95,12 @@ export const NoitaProgressV2Materials = () => {
         }}
       >
         {!selectedMaterial && <span>Select a material</span>}
-        {selectedMaterial && <div />}
+        {selectedMaterial && (
+          <MaterialOverview
+            key={selectedMaterial.id}
+            material={selectedMaterial}
+          />
+        )}
       </Card>
     </div>
   );
