@@ -88,6 +88,7 @@ export const NoitaProgressV2Enemies = () => {
         >
           {enemies?.map((enemy) => (
             <EnemyProgressIcon
+              key={enemy.id}
               enemy={enemy}
               filters={filters}
               setSelectedEnemy={setSelectedEnemy}

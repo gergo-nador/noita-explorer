@@ -246,7 +246,7 @@ export const EnemyOverview = ({ enemy }: { enemy: NoitaEnemy }) => {
       <div>
         Variants:
         {enemy.variants.map((v) => (
-          <div>
+          <div key={v.variantId}>
             {v.variantId}: {v.enemy.hp}
           </div>
         ))}
