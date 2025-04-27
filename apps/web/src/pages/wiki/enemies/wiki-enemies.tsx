@@ -3,17 +3,17 @@ import {
   Card,
   ProgressIcon,
 } from '@noita-explorer/noita-component-library';
-import { NoitaProgressIconTable } from '../../../../components/NoitaProgressIconTable.tsx';
-import { useNoitaDataWakStore } from '../../../../stores/NoitaDataWak.ts';
+import { NoitaProgressIconTable } from '../../../components/NoitaProgressIconTable.tsx';
+import { useNoitaDataWakStore } from '../../../stores/NoitaDataWak.ts';
 import { NoitaEnemy } from '@noita-explorer/model-noita';
-import { useStateWithQueryParamsString } from '../../../../hooks/use-state-with-query-params-string.ts';
+import { useStateWithQueryParamsString } from '../../../hooks/use-state-with-query-params-string.ts';
 import { EnemyOverview } from './enemy-overview.tsx';
 import { Dispatch, useMemo, useState } from 'react';
 import { EnemyFilters } from './enemy-filters.ts';
 import { EnemyFiltersView } from './enemy-filters-view.tsx';
 import { arrayHelpers } from '@noita-explorer/tools';
 
-export const NoitaProgressV2Enemies = () => {
+export const WikiEnemies = () => {
   const { data } = useNoitaDataWakStore();
   const [selectedEnemy, setSelectedEnemy] =
     useStateWithQueryParamsString<NoitaEnemy>({

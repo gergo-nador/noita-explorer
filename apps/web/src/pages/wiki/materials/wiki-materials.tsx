@@ -1,17 +1,17 @@
-import { useNoitaDataWakStore } from '../../../../stores/NoitaDataWak.ts';
-import { NoitaMaterialIcon } from '../../../../components/NoitaMaterialIcon.tsx';
-import { NoitaProgressIconTable } from '../../../../components/NoitaProgressIconTable.tsx';
+import { useNoitaDataWakStore } from '../../../stores/NoitaDataWak.ts';
+import { NoitaMaterialIcon } from '../../../components/NoitaMaterialIcon.tsx';
+import { NoitaProgressIconTable } from '../../../components/NoitaProgressIconTable.tsx';
 import {
   ActiveIconWrapper,
   Card,
 } from '@noita-explorer/noita-component-library';
 import { useMemo } from 'react';
 import { arrayHelpers } from '@noita-explorer/tools';
-import { useStateWithQueryParamsString } from '../../../../hooks/use-state-with-query-params-string.ts';
+import { useStateWithQueryParamsString } from '../../../hooks/use-state-with-query-params-string.ts';
 import { NoitaMaterial } from '@noita-explorer/model-noita';
 import { MaterialOverview } from './material-overview.tsx';
 
-export const NoitaProgressV2Materials = () => {
+export const WikiMaterials = () => {
   const { data } = useNoitaDataWakStore();
 
   const materialsUnique = useMemo(() => {

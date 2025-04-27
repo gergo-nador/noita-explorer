@@ -8,9 +8,9 @@ import { SetupDesktopScraper } from '../pages/setup/SetupDesktopScraper.tsx';
 import { NoitaProgressTracker } from '../pages/progress/noita-progress-tracker.tsx';
 import { TabPageTemplate } from '../pages/_templates/TabPageTemplate.tsx';
 import { pages } from './pages.ts';
-import { NoitaProgressV2Perks } from '../pages/progress/progressv2/perks/noita-progress-v2-perks.tsx';
-import { NoitaProgressV2Spells } from '../pages/progress/progressv2/spells/noita-progress-v2-spells.tsx';
-import { NoitaProgressV2Enemies } from '../pages/progress/progressv2/enemies/noita-progress-v2-enemies.tsx';
+import { WikiPerks } from '../pages/wiki/perks/wiki-perks.tsx';
+import { WikiSpells } from '../pages/wiki/spells/wiki-spells.tsx';
+import { WikiEnemies } from '../pages/wiki/enemies/wiki-enemies.tsx';
 import { SetupWebPaths } from '../pages/setup/SetupWebPaths.tsx';
 import { NoitaSessions } from '../pages/sessions/NoitaSessions.tsx';
 import { EmptyPageTemplate } from '../pages/_templates/EmptyPageTemplate.tsx';
@@ -19,8 +19,8 @@ import { Settings } from '../pages/settings/Settings.tsx';
 import { NoitaBonesWands } from '../pages/NoitaBonesWands.tsx';
 import { SettingsCursorWandPicker } from '../pages/settings/SettingsCursorWandPicker.tsx';
 import { CurrentRunPage } from '../pages/world/CurrentRunPage.tsx';
-import { NoitaProgressV2MaterialsTree } from '../pages/progress/progressv2/noita-progress-v2-materials-tree.tsx';
-import { NoitaProgressV2Materials } from '../pages/progress/progressv2/materials/noita-progress-v2-materials.tsx';
+import { WikiMaterialsTree } from '../pages/wiki/wiki-materials-tree.tsx';
+import { WikiMaterials } from '../pages/wiki/materials/wiki-materials.tsx';
 
 export const router = createBrowserRouter([
   {
@@ -36,18 +36,18 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: 'progress-tracker-v2',
+    path: 'wiki',
     element: (
       <TabPageTemplate
         returnPath={'/'}
         tabs={[
-          { title: 'Perks', href: pages.progressTrackerV2.perks },
-          { title: 'Spells', href: pages.progressTrackerV2.spells },
-          { title: 'Enemies', href: pages.progressTrackerV2.enemies },
-          { title: 'Materials', href: pages.progressTrackerV2.materials },
+          { title: 'Perks', href: pages.wiki.perks },
+          { title: 'Spells', href: pages.wiki.spells },
+          { title: 'Enemies', href: pages.wiki.enemies },
+          { title: 'Materials', href: pages.wiki.materials },
           {
             title: 'Materials Tree',
-            href: pages.progressTrackerV2.materialsTree,
+            href: pages.wiki.materialsTree,
           },
         ]}
       />
@@ -55,23 +55,23 @@ export const router = createBrowserRouter([
     children: [
       {
         path: 'perks',
-        element: <NoitaProgressV2Perks />,
+        element: <WikiPerks />,
       },
       {
         path: 'spells',
-        element: <NoitaProgressV2Spells />,
+        element: <WikiSpells />,
       },
       {
         path: 'enemies',
-        element: <NoitaProgressV2Enemies />,
+        element: <WikiEnemies />,
       },
       {
         path: 'materials',
-        element: <NoitaProgressV2Materials />,
+        element: <WikiMaterials />,
       },
       {
         path: 'materials-tree',
-        element: <NoitaProgressV2MaterialsTree />,
+        element: <WikiMaterialsTree />,
       },
     ],
   },

@@ -3,17 +3,17 @@ import {
   Card,
   ProgressIcon,
 } from '@noita-explorer/noita-component-library';
-import { NoitaSpellTypesDictionary } from '../../../../noita/NoitaSpellTypeDictionary.ts';
-import { NoitaProgressIconTable } from '../../../../components/NoitaProgressIconTable.tsx';
-import { useNoitaDataWakStore } from '../../../../stores/NoitaDataWak.ts';
-import { useStateWithQueryParamsString } from '../../../../hooks/use-state-with-query-params-string.ts';
+import { NoitaSpellTypesDictionary } from '../../../noita/NoitaSpellTypeDictionary.ts';
+import { NoitaProgressIconTable } from '../../../components/NoitaProgressIconTable.tsx';
+import { useNoitaDataWakStore } from '../../../stores/NoitaDataWak.ts';
+import { useStateWithQueryParamsString } from '../../../hooks/use-state-with-query-params-string.ts';
 import { NoitaSpell } from '@noita-explorer/model-noita';
 import { SpellOverview } from './spell-overview.tsx';
 import { SpellFiltersView } from './spell-filters-view.tsx';
 import { useState } from 'react';
 import { SpellFilters } from './spell-filters.ts';
 
-export const NoitaProgressV2Spells = () => {
+export const WikiSpells = () => {
   const { data } = useNoitaDataWakStore();
 
   const [selectedSpell, setSelectedSpell] =

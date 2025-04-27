@@ -1,6 +1,6 @@
 import { NoitaMaterial } from '@noita-explorer/model-noita';
-import { NoitaMaterialIcon } from '../../../../components/NoitaMaterialIcon.tsx';
-import { useNoitaDataWakStore } from '../../../../stores/NoitaDataWak.ts';
+import { NoitaMaterialIcon } from '../../../components/NoitaMaterialIcon.tsx';
+import { useNoitaDataWakStore } from '../../../stores/NoitaDataWak.ts';
 import { useMemo } from 'react';
 
 interface Props {

@@ -1,8 +1,8 @@
 import { Card, Icon } from '@noita-explorer/noita-component-library';
 import { EnemyFilters } from './enemy-filters.ts';
 import { Dispatch } from 'react';
-import { MultiSelection } from '../../../../components/multi-selection/MultiSelection.tsx';
-import { NoitaProtections } from '../../../../noita/NoitaProtections.ts';
+import { MultiSelection } from '../../../components/multi-selection/MultiSelection.tsx';
+import { NoitaProtections } from '../../../noita/NoitaProtections.ts';
 
 export const EnemyFiltersView = ({
   filters,

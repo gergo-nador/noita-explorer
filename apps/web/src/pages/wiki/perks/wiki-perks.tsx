@@ -3,18 +3,18 @@ import {
   Card,
   ProgressIcon,
 } from '@noita-explorer/noita-component-library';
-import { NoitaProgressIconTable } from '../../../../components/NoitaProgressIconTable.tsx';
-import { useNoitaDataWakStore } from '../../../../stores/NoitaDataWak.ts';
+import { NoitaProgressIconTable } from '../../../components/NoitaProgressIconTable.tsx';
+import { useNoitaDataWakStore } from '../../../stores/NoitaDataWak.ts';
 import { useMemo, useState } from 'react';
 import { NoitaPerk } from '@noita-explorer/model-noita';
-import { useSave00Store } from '../../../../stores/save00.ts';
+import { useSave00Store } from '../../../stores/save00.ts';
 import { arrayHelpers } from '@noita-explorer/tools';
-import { useStateWithQueryParamsString } from '../../../../hooks/use-state-with-query-params-string.ts';
+import { useStateWithQueryParamsString } from '../../../hooks/use-state-with-query-params-string.ts';
 import { PerkFilters } from './perk-filters.ts';
 import { PerkFiltersView } from './perk-filters-view.tsx';
 import { PerkOverview } from './perk-overview.tsx';
 
-export const NoitaProgressV2Perks = () => {
+export const WikiPerks = () => {
   const { data } = useNoitaDataWakStore();
 
   const [selectedPerk, setSelectedPerk] =

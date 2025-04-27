@@ -1,4 +1,4 @@
-import { useNoitaDataWakStore } from '../../../stores/NoitaDataWak.ts';
+import { useNoitaDataWakStore } from '../../stores/NoitaDataWak.ts';
 import { useEffect, useMemo, useState } from 'react';
 import {
   arrayHelpers,
@@ -12,7 +12,7 @@ interface MaterialTreeNode extends NoitaMaterial {
   children: MaterialTreeNode[];
 }
 
-export const NoitaProgressV2MaterialsTree = () => {
+export const WikiMaterialsTree = () => {
   const { data } = useNoitaDataWakStore();
 
   const materialsUnique = useMemo(() => {

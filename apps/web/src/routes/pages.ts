@@ -6,12 +6,12 @@ export const pages = {
     webPaths: '/setup/web-paths',
   },
   progressTracker: '/progress-tracker',
-  progressTrackerV2: {
-    perks: '/progress-tracker-v2/perks',
-    spells: '/progress-tracker-v2/spells',
-    enemies: '/progress-tracker-v2/enemies',
-    materials: '/progress-tracker-v2/materials',
-    materialsTree: '/progress-tracker-v2/materials-tree',
+  wiki: {
+    perks: '/wiki/perks',
+    spells: '/wiki/spells',
+    enemies: '/wiki/enemies',
+    materials: '/wiki/materials',
+    materialsTree: '/wiki/materials-tree',
   },
   holidays: '/holidays',
   sessions: '/sessions',

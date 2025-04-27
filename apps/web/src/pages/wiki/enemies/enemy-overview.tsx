@@ -1,37 +1,37 @@
 import { NoitaEnemy } from '@noita-explorer/model-noita';
-import { useNoitaUnits } from '../../../../hooks/useNoitaUnits.ts';
-import { useSettingsStore } from '../../../../stores/settings.ts';
+import { useNoitaUnits } from '../../../hooks/useNoitaUnits.ts';
+import { useSettingsStore } from '../../../stores/settings.ts';
 import {
   Header,
   Icon,
   NoitaTooltipWrapper,
 } from '@noita-explorer/noita-component-library';
-import heartIcon from '../../../../assets/heart.png';
-import goldNuggetIcon from '../../../../assets/goldnugget_icon.png';
-import { Flex } from '../../../../components/Flex.tsx';
-import { NoitaProtections } from '../../../../noita/NoitaProtections.ts';
+import heartIcon from '../../../assets/heart.png';
+import goldNuggetIcon from '../../../assets/goldnugget_icon.png';
+import { Flex } from '../../../components/Flex.tsx';
+import { NoitaProtections } from '../../../noita/NoitaProtections.ts';
 import { DamageMultiplierDisplay } from './damage-multiplier-display.tsx';
 
-import damageProjectileIcon from '../../../../assets/icons/damages/icon_damage_projectile.png';
-import damageProjectileIconColor from '../../../../assets/icons/damages/icon_damage_projectile_color.png';
-import damageExplosionIcon from '../../../../assets/icons/damages/icon_damage_explosion.png';
-import damageExplosionIconColor from '../../../../assets/icons/damages/icon_damage_explosion_color.png';
-import damageMeleeIcon from '../../../../assets/icons/damages/icon_damage_melee.png';
-import damageMeleeIconColor from '../../../../assets/icons/damages/icon_damage_melee_color.png';
-import damageSliceIcon from '../../../../assets/icons/damages/icon_damage_slice.png';
-import damageSliceIconColor from '../../../../assets/icons/damages/icon_damage_slice_color.png';
-import damageFireIcon from '../../../../assets/icons/damages/icon_damage_fire.png';
-import damageFireIconColor from '../../../../assets/icons/damages/icon_damage_fire_color.png';
-import damageElectricityIcon from '../../../../assets/icons/damages/icon_damage_electricity.png';
-import damageElectricityIconColor from '../../../../assets/icons/damages/icon_damage_electricity_color.png';
-import damageIceIcon from '../../../../assets/icons/damages/icon_damage_ice.png';
-import damageIceIconColor from '../../../../assets/icons/damages/icon_damage_ice_color.png';
-import damageRadioActivityIcon from '../../../../assets/icons/damages/icon_damage_radioactivity.png';
-import damageRadioActivityIconColor from '../../../../assets/icons/damages/icon_damage_radioactivity_color.png';
-import damageDrillIcon from '../../../../assets/icons/damages/icon_damage_drill.png';
-import damageDrillIconColor from '../../../../assets/icons/damages/icon_damage_drill_color.png';
-import damageHolyIcon from '../../../../assets/icons/damages/icon_damage_holy.png';
-import damageHolyIconColor from '../../../../assets/icons/damages/icon_damage_holy_color.png';
+import damageProjectileIcon from '../../../assets/icons/damages/icon_damage_projectile.png';
+import damageProjectileIconColor from '../../../assets/icons/damages/icon_damage_projectile_color.png';
+import damageExplosionIcon from '../../../assets/icons/damages/icon_damage_explosion.png';
+import damageExplosionIconColor from '../../../assets/icons/damages/icon_damage_explosion_color.png';
+import damageMeleeIcon from '../../../assets/icons/damages/icon_damage_melee.png';
+import damageMeleeIconColor from '../../../assets/icons/damages/icon_damage_melee_color.png';
+import damageSliceIcon from '../../../assets/icons/damages/icon_damage_slice.png';
+import damageSliceIconColor from '../../../assets/icons/damages/icon_damage_slice_color.png';
+import damageFireIcon from '../../../assets/icons/damages/icon_damage_fire.png';
+import damageFireIconColor from '../../../assets/icons/damages/icon_damage_fire_color.png';
+import damageElectricityIcon from '../../../assets/icons/damages/icon_damage_electricity.png';
+import damageElectricityIconColor from '../../../assets/icons/damages/icon_damage_electricity_color.png';
+import damageIceIcon from '../../../assets/icons/damages/icon_damage_ice.png';
+import damageIceIconColor from '../../../assets/icons/damages/icon_damage_ice_color.png';
+import damageRadioActivityIcon from '../../../assets/icons/damages/icon_damage_radioactivity.png';
+import damageRadioActivityIconColor from '../../../assets/icons/damages/icon_damage_radioactivity_color.png';
+import damageDrillIcon from '../../../assets/icons/damages/icon_damage_drill.png';
+import damageDrillIconColor from '../../../assets/icons/damages/icon_damage_drill_color.png';
+import damageHolyIcon from '../../../assets/icons/damages/icon_damage_holy.png';
+import damageHolyIconColor from '../../../assets/icons/damages/icon_damage_holy_color.png';
 
 export const EnemyOverview = ({ enemy }: { enemy: NoitaEnemy }) => {
   const noitaUnits = useNoitaUnits();

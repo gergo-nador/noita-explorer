@@ -79,14 +79,14 @@ export const MainPage = () => {
       <Button
         decoration={'both'}
         disabled={!noitaDataWakLoaded}
-        onClick={() => navigate(pages.progressTrackerV2.perks)}
+        onClick={() => navigate(pages.wiki.perks)}
         onDisabledClick={() =>
           toast.error(
             'Noita Data is not set up. Please click on the Setup menu.',
           )
         }
       >
-        Progress V2
+        Wiki
       </Button>
       <Button
         decoration={'both'}
