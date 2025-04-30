@@ -16,7 +16,7 @@ import { FileSystemDirectoryAccessBrowserFallback } from '@noita-explorer/file-s
 import { useToast } from '@noita-explorer/noita-component-library';
 import { noitaDb } from './databases.ts';
 import {
-  supported,
+  supported as hasFileSystemApi,
   directoryOpen,
   FileWithDirectoryAndFileHandle,
 } from 'browser-fs-access';
@@ -37,7 +37,7 @@ export function browserNoitaApi(): NoitaAPI {
       throw new Error('NollaGamesNoita folder is not set');
     }
 
-    if (!supported) {
+    if (!hasFileSystemApi) {
       const handle = fallbackFolderStorage[nollaGamesNoitaFolder];
       if (handle === undefined) {
         throw new Error('NollaGamesNoita folder is not set');
@@ -130,7 +130,7 @@ export function browserNoitaApi(): NoitaAPI {
         return fileHandle.name;
       },
       openFolderDialog: async (props) => {
-        if (!supported) {
+        if (!hasFileSystemApi) {
           return await openFolderDialogFallback(props?.id);
         }
 
@@ -139,8 +139,14 @@ export function browserNoitaApi(): NoitaAPI {
       openExplorer: throwNotAllowedInThisModeError,
     },
     environment: {
-      web: true,
+      web: {
+        isFileSystemApiSupported: hasFileSystemApi,
+        isFileSystemApiUnSupported: !hasFileSystemApi,
+      },
       desktop: undefined,
+      features: {
+        bonesWandDelete: hasFileSystemApi,
+      },
     },
     clipboard: {
       get: () => navigator.clipboard.readText(),

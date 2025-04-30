@@ -23,6 +23,7 @@ import manaMaxIcon from '../assets/icons/icon_mana_max.png';
 import manaChargeIcon from '../assets/icons/icon_mana_charge_speed.png';
 import actionsPerRoundIcon from '../assets/icons/icon_gun_actions_per_round.png';
 import gunPermanentActionIcon from '../assets/icons/icon_gun_permanent_actions.png';
+import { noitaAPI } from '../ipcHandlers.ts';
 
 interface NoitaWandCardProps {
   wand: NoitaWand;
@@ -226,7 +227,7 @@ export const NoitaWandCard = ({ wand, bonesFileName }: NoitaWandCardProps) => {
       >
         <div>
           <div style={{ fontSize: 20 }}>{wand.name}</div>
-          {bonesFileName && (
+          {noitaAPI.environment.features.bonesWandDelete && bonesFileName && (
             <>
               <div style={{ opacity: 0.6, marginTop: 5 }}>{bonesFileName}</div>
               <div

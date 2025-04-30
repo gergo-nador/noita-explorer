@@ -57,7 +57,12 @@ export interface NoitaAPI {
     set: (text: string) => Promise<void>;
   };
   environment: {
-    web: boolean;
+    web:
+      | {
+          isFileSystemApiSupported: boolean;
+          isFileSystemApiUnSupported: boolean;
+        }
+      | undefined;
     desktop:
       | {
           isMacOs: boolean;
@@ -65,5 +70,9 @@ export interface NoitaAPI {
           isWindows: boolean;
         }
       | undefined;
+
+    features: {
+      bonesWandDelete: boolean;
+    };
   };
 }

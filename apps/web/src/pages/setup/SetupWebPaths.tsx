@@ -5,8 +5,8 @@ import {
 } from '@noita-explorer/noita-component-library';
 import { PathInput } from '../../components/PathInput.tsx';
 import { useSettingsStore } from '../../stores/settings.ts';
-import { supported } from 'browser-fs-access';
 import { useSave00Store } from '../../stores/save00.ts';
+import { noitaAPI } from '../../ipcHandlers.ts';
 
 export const SetupWebPaths = () => {
   const { settings, set: setPaths } = useSettingsStore();
@@ -45,7 +45,7 @@ export const SetupWebPaths = () => {
           )}
         </div>
 
-        {!supported && (
+        {noitaAPI.environment.web?.isFileSystemApiUnSupported && (
           <>
             <br />
             <br />

@@ -1,6 +1,5 @@
 import { create } from 'zustand';
 import { noitaAPI } from '../ipcHandlers';
-import { supported } from 'browser-fs-access';
 
 export type SettingsUnitsType = 'default' | 'frames' | 'seconds';
 export type SettingsCursorType = 'default' | 'noita-cursor' | 'wand';
@@ -63,7 +62,7 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
       settings = JSON.parse(JSON.stringify(settings));
 
       // reset file paths if the new file access api is not supported
-      if (!supported) {
+      if (noitaAPI.environment.web?.isFileSystemApiUnSupported) {
         settings.paths = {
           install: undefined,
           NollaGamesNoita: undefined,
