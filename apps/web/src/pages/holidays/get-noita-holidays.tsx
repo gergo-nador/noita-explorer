@@ -48,8 +48,7 @@ export const getNoitaHolidays = () => {
     {
       id: 'vappu',
       title: 'Vappu / Walpurgis Night',
-      description:
-        'Sima Potion Sima and Beer Potion Beer will replace 20% of potions.',
+      description: 'Sima and Beer will replace 20% of potions.',
       datesText: '30 April – 1 May',
       nextStartDate: dateHelpers.getNextUpcomingDate(
         (year) => new Date(year, 3, 30),
