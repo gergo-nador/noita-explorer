@@ -9,4 +9,5 @@ export const zIndexManager = {
     hoveredTab: 1,
     defaultTab: 0,
   },
+  actionsBar: 10,
 };

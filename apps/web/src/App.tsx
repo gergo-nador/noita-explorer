@@ -13,6 +13,7 @@ import { useSave00Store } from './stores/save00.ts';
 import { NoitaWandConfig } from '@noita-explorer/model-noita';
 import { imageHelpers, randomHelpers } from '@noita-explorer/tools';
 import { SpoilerWarningPage } from './pages/SpoilerWarningPage.tsx';
+import { ActionsPanel } from './components/actions/actions-panel.tsx';
 
 export const App = () => {
   const { loaded: settingsLoaded, settings } = useSettingsStore();
@@ -30,6 +31,7 @@ export const App = () => {
       <ContextMenuWrapper />
       <NoitaToaster />
       <InitialLoader />
+      <ActionsPanel />
     </>
   );
 };

@@ -24,6 +24,7 @@ import manaChargeIcon from '../assets/icons/icon_mana_charge_speed.png';
 import actionsPerRoundIcon from '../assets/icons/icon_gun_actions_per_round.png';
 import gunPermanentActionIcon from '../assets/icons/icon_gun_permanent_actions.png';
 import { noitaAPI } from '../ipcHandlers.ts';
+import { useNoitaActionsStore } from '../stores/actions.ts';
 
 interface NoitaWandCardProps {
   wand: NoitaWand;
@@ -33,6 +34,8 @@ interface NoitaWandCardProps {
 export const NoitaWandCard = ({ wand, bonesFileName }: NoitaWandCardProps) => {
   const noitaUnits = useNoitaUnits();
   const { data } = useNoitaDataWakStore();
+  const { actionUtils } = useNoitaActionsStore();
+
   const wandTooltipId = useMemo(() => randomHelpers.randomInt(0, 1000000), []);
 
   const wandImage = useMemo(() => {
@@ -237,8 +240,22 @@ export const NoitaWandCard = ({ wand, bonesFileName }: NoitaWandCardProps) => {
                   top: 0,
                   right: 0,
                 }}
+                onClick={() =>
+                  actionUtils.deleteBonesWand.create(bonesFileName).addToList()
+                }
               >
-                <Icon size={20} type={'cross'} />
+                <Icon
+                  size={20}
+                  type={'cross'}
+                  style={
+                    actionUtils.deleteBonesWand.isOnList(bonesFileName)
+                      ? {
+                          cursor: 'not-allowed',
+                          filter: 'grayscale()',
+                        }
+                      : { cursor: 'pointer' }
+                  }
+                />
               </div>
             </>
           )}
