@@ -2,11 +2,11 @@ import { Card, Icon } from '@noita-explorer/noita-component-library';
 import { randomHelpers } from '@noita-explorer/tools';
 import { useMemo } from 'react';
 
-import pumpkin_1 from '../../assets/holidays/pumpkin_01.png';
-import pumpkin_2 from '../../assets/holidays/pumpkin_02.png';
-import pumpkin_3 from '../../assets/holidays/pumpkin_03.png';
-import pumpkin_4 from '../../assets/holidays/pumpkin_04.png';
-import pumpkin_5 from '../../assets/holidays/pumpkin_05.png';
+import pumpkin_1 from '../../../assets/holidays/pumpkin_01.png';
+import pumpkin_2 from '../../../assets/holidays/pumpkin_02.png';
+import pumpkin_3 from '../../../assets/holidays/pumpkin_03.png';
+import pumpkin_4 from '../../../assets/holidays/pumpkin_04.png';
+import pumpkin_5 from '../../../assets/holidays/pumpkin_05.png';
 
 export const Halloween = () => {
   const image = useMemo(() => {

@@ -1,6 +1,6 @@
 import { Card } from '@noita-explorer/noita-component-library';
 
-import teamFortressGunner from '../../assets/holidays/team-fortress-2.webp';
+import teamFortressGunner from '../../../assets/holidays/team-fortress-2.webp';
 
 export const TeamFortress2 = () => {
   return (

@@ -1,7 +1,7 @@
 import { Card, Icon } from '@noita-explorer/noita-component-library';
 
-import egg1 from '../../assets/holidays/egg.png';
-import egg2 from '../../assets/holidays/hollow_egg.png';
+import egg1 from '../../../assets/holidays/egg.png';
+import egg2 from '../../../assets/holidays/hollow_egg.png';
 
 export const Easter = () => {
   // https://www.irt.org/articles/js052/index.htm

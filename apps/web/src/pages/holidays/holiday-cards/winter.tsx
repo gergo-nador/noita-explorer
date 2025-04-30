@@ -4,7 +4,7 @@ import type { Engine, ISourceOptions } from 'tsparticles-engine';
 import { loadSlim } from 'tsparticles-slim';
 import Particles from 'react-particles';
 
-import snow from '../../assets/holidays/snowrock.png';
+import snow from '../../../assets/holidays/snowrock.png';
 
 export const Winter = () => {
   const particlesInit = useCallback(async (engine: Engine) => {

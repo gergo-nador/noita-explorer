@@ -4,8 +4,8 @@ import type { Engine, ISourceOptions } from 'tsparticles-engine';
 import Particles from 'react-particles';
 import { loadSlim } from 'tsparticles-slim';
 
-import charm from '../../assets/status-indicators/charm-high-res.png';
-import heart from '../../assets/holidays/Heart_extrahp_default.gif';
+import charm from '../../../assets/status-indicators/charm-high-res.png';
+import heart from '../../../assets/holidays/Heart_extrahp_default.gif';
 
 export const Valentines = () => {
   const particlesInit = useCallback(async (engine: Engine) => {

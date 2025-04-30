@@ -35,7 +35,7 @@ export const SetupWebPaths = () => {
             />
           </NoitaTooltipWrapper>
 
-          <div> - </div>
+          {save00Status !== 'unset' && <div> - </div>}
           {save00Status === 'failed' && (
             <div className={'text-danger'}>Failed to load</div>
           )}
