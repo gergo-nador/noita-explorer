@@ -8,7 +8,7 @@ import {
 import { randomHelpers, mathHelpers } from '@noita-explorer/tools';
 import { useNoitaUnits } from '../hooks/useNoitaUnits.ts';
 import React, { useMemo } from 'react';
-import { useNoitaDataWakStore } from '../stores/NoitaDataWak.ts';
+import { useNoitaDataWakStore } from '../stores/noita-data-wak.ts';
 import { NoitaSpellTooltip } from './tooltips/NoitaSpellTooltip.tsx';
 import { NoitaSpellTypesDictionary } from '../noita/NoitaSpellTypeDictionary.ts';
 import css from './NoitaWandCard.module.css';

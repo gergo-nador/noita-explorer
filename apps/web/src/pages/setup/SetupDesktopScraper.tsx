@@ -19,7 +19,7 @@ import { noitaAPI } from '../../ipcHandlers';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { pages } from '../../routes/pages';
-import { useNoitaDataWakStore } from '../../stores/NoitaDataWak';
+import { useNoitaDataWakStore } from '../../stores/noita-data-wak.ts';
 
 export const SetupDesktopScraper = () => {
   const navigate = useNavigate();

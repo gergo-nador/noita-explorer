@@ -1,4 +1,4 @@
-import { useNoitaDataWakStore } from '../../stores/NoitaDataWak.ts';
+import { useNoitaDataWakStore } from '../../stores/noita-data-wak.ts';
 import { useEffect, useMemo, useState } from 'react';
 import {
   arrayHelpers,

@@ -4,7 +4,7 @@ import {
   ProgressIconType,
 } from '@noita-explorer/noita-component-library';
 import { useMemo } from 'react';
-import { useNoitaDataWakStore } from '../../stores/NoitaDataWak.ts';
+import { useNoitaDataWakStore } from '../../stores/noita-data-wak.ts';
 import { NoitaProgressIconTable } from '../../components/NoitaProgressIconTable.tsx';
 import { NoitaSpellTooltip } from '../../components/tooltips/NoitaSpellTooltip.tsx';
 import { NoitaPerkTooltip } from '../../components/tooltips/NoitaPerkTooltip.tsx';

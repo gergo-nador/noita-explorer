@@ -7,7 +7,7 @@ import { RouterProvider } from 'react-router-dom';
 import { router } from './routes/router';
 import { useSettingsStore } from './stores/settings';
 import { useEffect } from 'react';
-import { useNoitaDataWakStore } from './stores/NoitaDataWak.ts';
+import { useNoitaDataWakStore } from './stores/noita-data-wak.ts';
 import { noitaAPI } from './ipcHandlers.ts';
 import { useSave00Store } from './stores/save00.ts';
 import { NoitaWandConfig } from '@noita-explorer/model-noita';

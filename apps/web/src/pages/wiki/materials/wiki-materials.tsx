@@ -1,4 +1,4 @@
-import { useNoitaDataWakStore } from '../../../stores/NoitaDataWak.ts';
+import { useNoitaDataWakStore } from '../../../stores/noita-data-wak.ts';
 import { NoitaMaterialIcon } from '../../../components/NoitaMaterialIcon.tsx';
 import { NoitaProgressIconTable } from '../../../components/NoitaProgressIconTable.tsx';
 import {

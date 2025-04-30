@@ -7,7 +7,7 @@ import {
 } from '../../stores/settings.ts';
 import { imageHelpers, randomHelpers } from '@noita-explorer/tools';
 import { useEffect, useState } from 'react';
-import { useNoitaDataWakStore } from '../../stores/NoitaDataWak.ts';
+import { useNoitaDataWakStore } from '../../stores/noita-data-wak.ts';
 import { NoitaWandConfig } from '@noita-explorer/model-noita';
 import { useNavigate } from 'react-router-dom';
 import { pages } from '../../routes/pages.ts';

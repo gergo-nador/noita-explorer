@@ -1,7 +1,7 @@
 import { Button, useToast } from '@noita-explorer/noita-component-library';
 import { useNavigate } from 'react-router-dom';
 import { pages } from '../routes/pages';
-import { useNoitaDataWakStore } from '../stores/NoitaDataWak';
+import { useNoitaDataWakStore } from '../stores/noita-data-wak.ts';
 import { noitaAPI } from '../ipcHandlers.ts';
 import { useSave00Store } from '../stores/save00.ts';
 import { useMemo } from 'react';
