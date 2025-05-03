@@ -90,7 +90,11 @@ const InitialLoader = () => {
     reload()
       .then(() => console.log('save00 loaded'))
       .catch((err) => console.error(err));
-  }, [reload, settings.paths.NollaGamesNoita]);
+  }, [
+    reload,
+    settings.paths.NollaGamesNoita,
+    settings.paths.forceReloadNollaGamesNoitaCounter,
+  ]);
 
   const { cursor } = settings;
   const { data } = useNoitaDataWakStore();

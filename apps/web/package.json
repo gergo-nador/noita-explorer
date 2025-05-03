@@ -24,6 +24,7 @@
     "react-particles": "^2.12.2",
     "react-plotly.js": "^2.6.0",
     "react-router-dom": "^7.0.2",
+    "react-use": "^17.6.0",
     "tsparticles": "^3.7.1",
     "tsparticles-slim": "^2.12.0"
   },

@@ -28,7 +28,12 @@ export const SetupWebPaths = () => {
               setPath={(path) => {
                 setPaths(
                   (state) =>
-                    (state.paths = { ...paths, NollaGamesNoita: path }),
+                    (state.paths = {
+                      ...paths,
+                      NollaGamesNoita: path,
+                      forceReloadNollaGamesNoitaCounter:
+                        state.paths.forceReloadNollaGamesNoitaCounter + 1,
+                    }),
                 );
               }}
               fileSystemDialogId={'nolla_games_noita'}
