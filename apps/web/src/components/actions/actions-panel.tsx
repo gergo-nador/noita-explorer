@@ -28,6 +28,7 @@ export const ActionsPanel = () => {
           height: '100vh',
           width: '100vw',
           backdropFilter: 'blur(7px)',
+          backgroundColor: '#00000066',
           opacity: isOpen ? '1' : '0',
           pointerEvents: isOpen ? 'initial' : 'none',
           transition: 'opacity 200ms',
