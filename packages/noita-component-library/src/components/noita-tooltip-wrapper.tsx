@@ -1,16 +1,18 @@
-import { Tooltip } from 'react-tooltip';
+import { PlacesType, Tooltip } from 'react-tooltip';
 import React, { useMemo, useState } from 'react';
 import { Card } from './card/card';
 import { zIndexManager } from '../zIndexManager';
 
 interface NoitaTooltipProps {
   content: string | React.ReactNode | React.ReactNode[] | undefined;
+  placement?: PlacesType;
   children?: React.ReactNode | string | React.ReactNode[];
 }
 
 export const NoitaTooltipWrapper = ({
   content,
   children,
+  placement,
 }: NoitaTooltipProps) => {
   const [isMouseHovered, setMouseHovered] = useState(false);
 
@@ -32,6 +34,7 @@ export const NoitaTooltipWrapper = ({
           anchorSelect={`#${id}`}
           opacity={1}
           isOpen={true}
+          place={placement}
         >
           <Card
             styling={{

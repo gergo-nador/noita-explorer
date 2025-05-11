@@ -18,7 +18,7 @@ import { NoitaDeathMap } from '../pages/sessions/NoitaDeathMap.tsx';
 import { Settings } from '../pages/settings/Settings.tsx';
 import { NoitaBonesWands } from '../pages/NoitaBonesWands.tsx';
 import { SettingsCursorWandPicker } from '../pages/settings/SettingsCursorWandPicker.tsx';
-import { CurrentRunPage } from '../pages/world/CurrentRunPage.tsx';
+import { CurrentRun } from '../pages/world/current-run.tsx';
 import { WikiMaterialsTree } from '../pages/wiki/wiki-materials-tree.tsx';
 import { WikiMaterials } from '../pages/wiki/materials/wiki-materials.tsx';
 
@@ -100,7 +100,7 @@ export const router = createBrowserRouter([
     path: 'current-run',
     element: (
       <CardPageTemplate returnPath={'/'}>
-        <CurrentRunPage />
+        <CurrentRun />
       </CardPageTemplate>
     ),
   },
