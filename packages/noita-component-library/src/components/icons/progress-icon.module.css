@@ -5,3 +5,16 @@
     image-rendering: -moz-crisp-edges;
     image-rendering: crisp-edges;
 }
+
+.progress-icon-new-animation{
+    animation: light-up ease-in-out 1.5s infinite;
+}
+
+@keyframes light-up {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.4;
+    }
+}

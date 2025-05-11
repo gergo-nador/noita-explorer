@@ -88,6 +88,7 @@ export const ProgressIcon = ({
         <img
           src={backgroundLayerNew}
           alt={'background image'}
+          className={css['progress-icon-new-animation']}
           style={{
             imageRendering: 'pixelated',
             height: '100%',
