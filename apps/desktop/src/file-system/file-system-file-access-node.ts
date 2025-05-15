@@ -25,5 +25,8 @@ export const FileSystemFileAccessNode = (
         return text.split(EOL);
       },
     },
+    delete: async () => {
+      await nodeFileSystemHelpers.deleteFile(filePath);
+    },
   };
 };

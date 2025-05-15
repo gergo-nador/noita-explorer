@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'node:path';
 import { spawn } from 'child_process';
 import { Platform } from './platform';
-import { stringHelpers } from '@noita-explorer/tools';
+import { promiseHelper, stringHelpers } from '@noita-explorer/tools';
 
 const getPathsFromDirectory = (directoryPath: string): Promise<string[]> => {
   return new Promise((resolve, reject) => {
@@ -117,6 +117,10 @@ const openExplorer = (path: string) => {
   });
 };
 
+const deleteFile = (path: string) => {
+  return new Promise((res) => fs.rm(path, res));
+};
+
 export const nodeFileSystemHelpers = {
   getPathsFromDirectory: getPathsFromDirectory,
   checkPathExist: checkPathExist,
@@ -125,4 +129,5 @@ export const nodeFileSystemHelpers = {
   writeTextFile: writeTextFile,
   readImageAsBase64: readImageAsBase64,
   openExplorer: openExplorer,
+  deleteFile: deleteFile,
 };
