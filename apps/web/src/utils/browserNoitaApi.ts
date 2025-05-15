@@ -212,6 +212,11 @@ const runActions = async (
           save00DirectoryApi: save00FolderHandle,
           perkId: action.payload.perkId,
         });
+      } else if (action.type === 'unlock-spell') {
+        await actions.unlockSpell({
+          save00DirectoryApi: save00FolderHandle,
+          spellId: action.payload.spellId,
+        });
       } else {
         console.error(
           action,

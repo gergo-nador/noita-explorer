@@ -18,6 +18,10 @@ export const ActionsRunAllButton = ({ onClick }: { onClick: () => void }) => {
           prev.unlockedPerks !== undefined
             ? [...prev.unlockedPerks]
             : undefined;
+        const unlockedSpells =
+          prev.unlockedSpells !== undefined
+            ? [...prev.unlockedSpells]
+            : undefined;
 
         for (const result of results) {
           if (result.type !== 'success') {
@@ -40,6 +44,14 @@ export const ActionsRunAllButton = ({ onClick }: { onClick: () => void }) => {
             if (!isPerkAlreadyUnlocked) {
               unlockedPerks?.push(action.payload.perkId);
             }
+          } else if (action.type === 'unlock-spell') {
+            const isSpellAlreadyUnlocked = unlockedSpells?.includes(
+              action.payload.spellId,
+            );
+
+            if (!isSpellAlreadyUnlocked) {
+              unlockedSpells?.push(action.payload.spellId);
+            }
           }
         }
 
@@ -47,6 +59,7 @@ export const ActionsRunAllButton = ({ onClick }: { onClick: () => void }) => {
           ...prev,
           bonesWands: bonesWands,
           unlockedPerks: unlockedPerks,
+          unlockedSpells: unlockedSpells,
         };
       });
 

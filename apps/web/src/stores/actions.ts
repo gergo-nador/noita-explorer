@@ -3,7 +3,9 @@ import {
   BonesDeleteFileAction,
   NoitaAction,
   NoitaPerk,
+  NoitaSpell,
   UnlockPerkAction,
+  UnlockSpellAction,
 } from '@noita-explorer/model-noita';
 
 interface ActionsState {
@@ -18,6 +20,11 @@ interface ActionsState {
       get: (perkId: string) => UnlockPerkAction | undefined;
       create: (perk: NoitaPerk) => UnlockPerkAction;
     };
+    spellUnlock: {
+      isOnList: (spellId: string) => boolean;
+      get: (spellId: string) => UnlockSpellAction | undefined;
+      create: (spell: NoitaSpell) => UnlockSpellAction;
+    };
     removeAction: (action: NoitaAction) => void;
   };
 
@@ -30,6 +37,7 @@ export const useNoitaActionsStore = create<ActionsState>((set, get) => {
   const idFactory = {
     deleteBonesWand: (fileName: string) => 'bones-' + fileName,
     perksUnlock: (perkId: string) => 'perk-unlock-' + perkId,
+    spellUnlock: (spellId: string) => 'action-' + spellId,
   };
 
   const addAction = (action: NoitaAction) => {
@@ -102,6 +110,34 @@ export const useNoitaActionsStore = create<ActionsState>((set, get) => {
             id: idFactory.perksUnlock(perk.id),
             name: 'Unlock perk ' + perk.name,
             payload: { perkId: perk.id },
+          };
+
+          addAction(newAction);
+
+          return newAction;
+        },
+      },
+      spellUnlock: {
+        isOnList: (spellId) => {
+          const id = idFactory.spellUnlock(spellId);
+          return isOnList(id);
+        },
+        get: (spellId) => {
+          const id = idFactory.spellUnlock(spellId);
+          const action = getAction(id);
+
+          if (action?.type !== 'unlock-spell') {
+            return;
+          }
+
+          return action;
+        },
+        create: (spell) => {
+          const newAction: UnlockSpellAction = {
+            type: 'unlock-spell',
+            id: idFactory.spellUnlock(spell.id),
+            name: 'Unlock spell ' + spell.name,
+            payload: { spellId: spell.id },
           };
 
           addAction(newAction);

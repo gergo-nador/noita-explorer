@@ -75,7 +75,8 @@ export const NoitaProgressTracker = () => {
         {unlockMode && (
           <>
             <HorizontalDivider />
-            <div style={{ display: 'flex' }}>
+            <span>Unlock all:</span>
+            <div style={{ display: 'flex', gap: 8, marginLeft: 8 }}>
               <Button
                 decoration={'both'}
                 onClick={() => {
@@ -91,7 +92,25 @@ export const NoitaProgressTracker = () => {
                   }
                 }}
               >
-                Unlock all Perks
+                Perks
+              </Button>
+              /
+              <Button
+                decoration={'both'}
+                onClick={() => {
+                  if (unlockedSpells === undefined || !data) {
+                    return;
+                  }
+
+                  for (const spell of data.spells) {
+                    const isLocked = !unlockedSpells.includes(spell.id);
+                    if (isLocked) {
+                      actionUtils.spellUnlock.create(spell);
+                    }
+                  }
+                }}
+              >
+                Spells
               </Button>
             </div>
           </>
@@ -153,7 +172,11 @@ export const NoitaProgressTracker = () => {
                   )
                 }
                 onClick={() => {
-                  if (unlockMode && iconType === 'unknown') {
+                  if (!unlockMode) {
+                    return;
+                  }
+
+                  if (iconType === 'unknown') {
                     actionUtils.perksUnlock.create(perk);
                     return;
                   }
@@ -190,6 +213,18 @@ export const NoitaProgressTracker = () => {
               iconType = 'regular';
             }
 
+            const isUnlockActionPresent = actionUtils.spellUnlock.isOnList(
+              spell.id,
+            );
+
+            if (unlockMode) {
+              if (iconType === 'new') {
+                iconType = 'regular';
+              } else if (isUnlockActionPresent) {
+                iconType = 'new';
+              }
+            }
+
             return (
               <ActiveIconWrapper
                 id={'spell-' + spell.id}
@@ -202,6 +237,23 @@ export const NoitaProgressTracker = () => {
                     />
                   )
                 }
+                onClick={() => {
+                  if (!unlockMode) {
+                    return;
+                  }
+
+                  if (iconType === 'unknown') {
+                    actionUtils.spellUnlock.create(spell);
+                    return;
+                  }
+
+                  const unlockSpellAction = actionUtils.spellUnlock.get(
+                    spell.id,
+                  );
+                  if (unlockSpellAction) {
+                    actionUtils.removeAction(unlockSpellAction);
+                  }
+                }}
               >
                 <ProgressIcon
                   type={iconType}
