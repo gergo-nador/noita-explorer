@@ -13,7 +13,7 @@ export const pages = {
     materials: '/wiki/materials',
     materialsTree: '/wiki/materials-tree',
   },
-  holidays: '/holiday-cards',
+  holidays: '/holidays',
   sessions: '/sessions',
   deathMap: '/death-map',
   bonesWands: '/bones-wands',

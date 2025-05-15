@@ -87,12 +87,23 @@ const HolidayCard = ({
             <span>
               {isHappeningNow
                 ? 'Now'
-                : holiday.nextStartDate?.toLocaleDateString()}
+                : holiday.nextStartDate?.toLocaleDateString()}{' '}
+              (
+              {holiday.nextEndDate?.toLocaleDateString(undefined, {
+                weekday: 'long',
+              })}
+              )
             </span>
             <span> - </span>
           </>
         )}
-        <span>{holiday.nextEndDate?.toLocaleDateString()}</span>
+        <span>
+          {holiday.nextEndDate?.toLocaleDateString()} (
+          {holiday.nextEndDate?.toLocaleDateString(undefined, {
+            weekday: 'long',
+          })}
+          )
+        </span>
       </div>
       {holiday.reactComponent ?? (
         <Card color={'gold'}>
