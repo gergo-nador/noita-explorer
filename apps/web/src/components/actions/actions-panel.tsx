@@ -1,4 +1,4 @@
-import { Card, Icon } from '@noita-explorer/noita-component-library';
+import { Card } from '@noita-explorer/noita-component-library';
 import { useState } from 'react';
 import { useNoitaActionsStore } from '../../stores/actions.ts';
 import { ActionsRunAllButton } from './actions-run-all-button.tsx';
@@ -10,18 +10,22 @@ export const ActionsPanel = () => {
 
   return (
     <>
-      <div
-        style={{
-          position: 'absolute',
-          top: 0,
-          right: 0,
-          paddingTop: 10,
-          paddingRight: 10,
-        }}
-        onClick={() => setIsOpen(true)}
-      >
-        <Icon type={'info'} size={20} />
-      </div>
+      {numberOfActions > 0 && (
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            right: 0,
+            paddingTop: 10,
+            paddingRight: 10,
+            cursor: 'pointer',
+          }}
+          onClick={() => setIsOpen(true)}
+        >
+          <Card styleContent={{ padding: 5 }}>{numberOfActions}</Card>
+        </div>
+      )}
+
       <div
         style={{
           position: 'absolute',
