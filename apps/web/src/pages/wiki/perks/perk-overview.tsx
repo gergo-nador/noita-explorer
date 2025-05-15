@@ -31,20 +31,20 @@ export const PerkOverview = ({ perk }: { perk: NoitaPerk }) => {
         </div>
       </div>
       <div style={{ marginTop: 20, width: 'max-content' }}>
-        <NoitaTooltipWrapper content={'Protections'}>
-          <Flex style={{ width: 'max-content' }}>
-            {perk.gameEffects
-              .filter((gameEffect) => gameEffect in NoitaProtections)
-              .map((gameEffect) => (
+        <Flex style={{ width: 'max-content' }}>
+          {perk.gameEffects
+            .filter((gameEffect) => gameEffect in NoitaProtections)
+            .map((gameEffect) => (
+              <NoitaTooltipWrapper content={NoitaProtections[gameEffect].name}>
                 <Icon
                   key={gameEffect}
                   type={'custom'}
                   src={NoitaProtections[gameEffect].image}
                   size={40}
                 />
-              ))}
-          </Flex>
-        </NoitaTooltipWrapper>
+              </NoitaTooltipWrapper>
+            ))}
+        </Flex>
       </div>
       <br />
       <Flex>
