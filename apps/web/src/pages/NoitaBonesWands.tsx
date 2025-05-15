@@ -2,9 +2,12 @@ import { useSave00Store } from '../stores/save00.ts';
 import { NoitaWandCard } from '../components/NoitaWandCard.tsx';
 import { Flex } from '../components/Flex.tsx';
 import { useMemo } from 'react';
+import { Button } from '@noita-explorer/noita-component-library';
+import { useNoitaActionsStore } from '../stores/actions.ts';
 
 export const NoitaBonesWands = () => {
   const { bonesWands } = useSave00Store();
+  const { actionUtils } = useNoitaActionsStore();
 
   const bonesWandsSorted = useMemo(() => {
     if (bonesWands === undefined) {
@@ -44,6 +47,18 @@ export const NoitaBonesWands = () => {
 
   return (
     <div>
+      <div>
+        <Button
+          decoration={'both'}
+          onClick={() => {
+            bonesWands?.forEach((wand) =>
+              actionUtils.deleteBonesWand.create(wand.fileName),
+            );
+          }}
+        >
+          Delete all
+        </Button>
+      </div>
       <Flex
         gap={20}
         style={{

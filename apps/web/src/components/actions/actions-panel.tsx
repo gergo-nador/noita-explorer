@@ -6,6 +6,7 @@ import { ActionsRunAllButton } from './actions-run-all-button.tsx';
 export const ActionsPanel = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { actions } = useNoitaActionsStore();
+  const numberOfActions = Object.keys(actions).length;
 
   return (
     <>
@@ -81,6 +82,7 @@ export const ActionsPanel = () => {
               }}
             >
               Actions
+              {numberOfActions > 0 && <span> ({numberOfActions})</span>}
             </span>
           </div>
           <div style={{ minHeight: 'calc(100% - 100px)' }}>

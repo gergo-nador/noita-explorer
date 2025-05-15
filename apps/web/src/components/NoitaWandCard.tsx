@@ -223,7 +223,10 @@ export const NoitaWandCard = ({ wand, bonesFileName }: NoitaWandCardProps) => {
       className={css['container']}
       style={{
         maxWidth: '100%',
-        filter: isOnDeleteList ? 'brightness(0.7)' : '',
+      }}
+      styling={{
+        borderBright: isOnDeleteList ? '#d55456' : undefined,
+        borderDark: isOnDeleteList ? '#d55456' : undefined,
       }}
       styleContent={{ width: 'min-content' }}
     >
