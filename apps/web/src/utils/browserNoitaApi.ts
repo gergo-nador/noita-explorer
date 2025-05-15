@@ -207,6 +207,16 @@ const runActions = async (
           save00DirectoryApi: save00FolderHandle,
           bonesWandFileName: action.payload.bonesFileName,
         });
+      } else if (action.type === 'unlock-perk') {
+        await actions.unlockPerk({
+          save00DirectoryApi: save00FolderHandle,
+          perkId: action.payload.perkId,
+        });
+      } else {
+        console.error(
+          action,
+          'not implemented in "actions-run-all-button.tsx"',
+        );
       }
 
       results.push({ type: 'success', action: action });

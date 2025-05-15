@@ -9,4 +9,7 @@ export interface FileSystemFileAccess {
     asBuffer: () => Promise<Buffer>;
   };
   delete: () => Promise<void>;
+  modify: {
+    asText: (text: string) => Promise<void>;
+  };
 }

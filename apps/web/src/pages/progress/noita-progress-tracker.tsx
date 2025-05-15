@@ -1,5 +1,6 @@
 import {
   ActiveIconWrapper,
+  Button,
   ProgressIcon,
   ProgressIconType,
 } from '@noita-explorer/noita-component-library';
@@ -15,6 +16,7 @@ import { useNoitaEnemyGroups } from '../../hooks/useNoitaEnemyGroups.ts';
 import { arrayHelpers } from '@noita-explorer/tools';
 import { MultiSelectionBoolean } from '../../components/multi-selection/MultiSelectionBoolean.tsx';
 import { useQueryParamsBoolean } from '../../hooks/use-query-params-boolean.ts';
+import { useNoitaActionsStore } from '../../stores/actions.ts';
 
 export const NoitaProgressTracker = () => {
   const { data } = useNoitaDataWakStore();
@@ -25,8 +27,10 @@ export const NoitaProgressTracker = () => {
     currentRun,
     status: save00Status,
   } = useSave00Store();
+  const { actionUtils } = useNoitaActionsStore();
 
   const [showAll, setShowAll] = useQueryParamsBoolean('showAll');
+  const [unlockMode, setUnlockMode] = useQueryParamsBoolean('unlockMode');
 
   const enemies = useNoitaEnemyGroups({
     enemies: data?.enemies,
@@ -51,17 +55,53 @@ export const NoitaProgressTracker = () => {
       <div
         style={{
           display: 'flex',
-          gap: 10,
           marginBottom: 20,
           color: '#ffffffaa',
         }}
       >
-        Show all:
-        <MultiSelectionBoolean setValue={setShowAll} currentValue={showAll} />
+        <div style={{ display: 'flex', gap: 10 }}>
+          Show all:
+          <MultiSelectionBoolean setValue={setShowAll} currentValue={showAll} />
+        </div>
+        <HorizontalDivider />
+        <div>
+          <Button
+            decoration={'both'}
+            onClick={() => setUnlockMode(!unlockMode)}
+          >
+            Unlock mode: {unlockMode ? 'on' : 'off'}
+          </Button>
+        </div>
+        {unlockMode && (
+          <>
+            <HorizontalDivider />
+            <div style={{ display: 'flex' }}>
+              <Button
+                decoration={'both'}
+                onClick={() => {
+                  if (unlockedPerks === undefined || !data) {
+                    return;
+                  }
+
+                  for (const perk of data.perks) {
+                    const isLocked = !unlockedPerks.includes(perk.id);
+                    if (isLocked) {
+                      actionUtils.perksUnlock.create(perk);
+                    }
+                  }
+                }}
+              >
+                Unlock all Perks
+              </Button>
+            </div>
+          </>
+        )}
+
         {!showAll && save00Status !== 'loaded' && (
-          <div style={{ color: 'yellow', marginLeft: 30 }}>
-            Save00 folder not loaded!
-          </div>
+          <>
+            <HorizontalDivider />
+            <div style={{ color: 'yellow' }}>Save00 folder not loaded!</div>
+          </>
         )}
       </div>
       <div
@@ -88,16 +128,41 @@ export const NoitaProgressTracker = () => {
               iconType = 'regular';
             }
 
+            const isUnlockActionPresent = actionUtils.perksUnlock.isOnList(
+              perk.id,
+            );
+
+            if (unlockMode) {
+              if (iconType === 'new') {
+                iconType = 'regular';
+              } else if (isUnlockActionPresent) {
+                iconType = 'new';
+              }
+            }
+
             return (
               <ActiveIconWrapper
                 id={'perk-' + perk.id}
                 key={'perk-' + perk.id}
                 tooltip={
-                  <NoitaPerkTooltip
-                    perk={perk}
-                    isUnknown={iconType === 'unknown'}
-                  />
+                  unlockMode ? undefined : (
+                    <NoitaPerkTooltip
+                      perk={perk}
+                      isUnknown={iconType === 'unknown'}
+                    />
+                  )
                 }
+                onClick={() => {
+                  if (unlockMode && iconType === 'unknown') {
+                    actionUtils.perksUnlock.create(perk);
+                    return;
+                  }
+
+                  const unlockPerkAction = actionUtils.perksUnlock.get(perk.id);
+                  if (unlockPerkAction) {
+                    actionUtils.removeAction(unlockPerkAction);
+                  }
+                }}
               >
                 <ProgressIcon type={iconType} icon={perk.imageBase64} />
               </ActiveIconWrapper>
@@ -130,10 +195,12 @@ export const NoitaProgressTracker = () => {
                 id={'spell-' + spell.id}
                 key={'spell-' + spell.id}
                 tooltip={
-                  <NoitaSpellTooltip
-                    spell={spell}
-                    isUnknown={iconType === 'unknown'}
-                  />
+                  unlockMode ? undefined : (
+                    <NoitaSpellTooltip
+                      spell={spell}
+                      isUnknown={iconType === 'unknown'}
+                    />
+                  )
                 }
               >
                 <ProgressIcon
@@ -188,11 +255,13 @@ export const NoitaProgressTracker = () => {
                   id={'enemy-' + e.enemyGroup.baseId}
                   key={'enemy-' + e.enemyGroup.baseId}
                   tooltip={
-                    <NoitaEnemyGroupTooltip
-                      enemyGroup={e.enemyGroup}
-                      statistics={e.statistics}
-                      isUnknown={iconType === 'unknown'}
-                    />
+                    unlockMode ? undefined : (
+                      <NoitaEnemyGroupTooltip
+                        enemyGroup={e.enemyGroup}
+                        statistics={e.statistics}
+                        isUnknown={iconType === 'unknown'}
+                      />
+                    )
                   }
                 >
                   <ProgressIcon
@@ -207,3 +276,16 @@ export const NoitaProgressTracker = () => {
     </>
   );
 };
+
+const HorizontalDivider = () => (
+  <div
+    style={{
+      height: '1rem',
+      width: 2,
+      color: 'inherit',
+      background: 'currentcolor',
+      marginLeft: 30,
+      marginRight: 30,
+    }}
+  />
+);

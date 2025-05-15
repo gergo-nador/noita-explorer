@@ -13,7 +13,13 @@ const fromCallback = <T>(callback: () => T): Promise<T> => {
   });
 };
 
+const reject = <T>(error: string): Promise<T> =>
+  new Promise((_resolve, reject) => {
+    reject(error);
+  });
+
 export const promiseHelper = {
   fromValue: fromValue,
   fromCallback: fromCallback,
+  reject,
 };

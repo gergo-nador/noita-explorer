@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { NoitaWakData } from '@noita-explorer/model-noita';
+import { Dispatch, SetStateAction } from 'react';
 
 interface NoitaDataWakState {
   loaded: boolean;
@@ -8,6 +9,7 @@ interface NoitaDataWakState {
 
   setExists: (exists: boolean) => void;
   load: (args: NoitaWakData) => void;
+  modify: Dispatch<SetStateAction<NoitaDataWakState>>;
 }
 
 export const useNoitaDataWakStore = create<NoitaDataWakState>((set) => ({
@@ -28,4 +30,5 @@ export const useNoitaDataWakStore = create<NoitaDataWakState>((set) => ({
       data: args,
     });
   },
+  modify: (args) => set(args),
 }));

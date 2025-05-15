@@ -1,4 +1,4 @@
-export type NoitaAction = BonesDeleteFileAction;
+export type NoitaAction = BonesDeleteFileAction | UnlockPerkAction;
 
 export interface NoitaActionResult {
   type: 'success' | 'error';
@@ -15,5 +15,12 @@ export interface BonesDeleteFileAction extends NoitaActionBase {
   type: 'bones-wand-delete';
   payload: {
     bonesFileName: string;
+  };
+}
+
+export interface UnlockPerkAction extends NoitaActionBase {
+  type: 'unlock-perk';
+  payload: {
+    perkId: string;
   };
 }

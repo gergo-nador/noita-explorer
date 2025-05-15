@@ -93,5 +93,12 @@ export const FileSystemDirectoryAccessBrowserApi = (
 
       return FileSystemDirectoryAccessBrowserApi(currentHandle, path);
     },
+    createFile: async (fileName) => {
+      const fileHandle = await directoryHandle.getFileHandle(fileName, {
+        create: true,
+      });
+
+      return FileSystemFileAccessBrowserApi(fileHandle, path);
+    },
   };
 };

@@ -5,37 +5,57 @@ import { useSave00Store } from '../../stores/save00.ts';
 
 export const ActionsRunAllButton = ({ onClick }: { onClick: () => void }) => {
   const { actions, actionUtils } = useNoitaActionsStore();
-  const { modify } = useSave00Store();
+  const { modify: modifySave00 } = useSave00Store();
   const toast = useToast();
 
   const runActions = async () => {
     const array = Object.values(actions);
     noitaAPI.noita.actions.runActions(array).then((results) => {
-      modify((prev) => {
-        const bonesWands = prev.bonesWands;
+      // make modifications to the save00 stores from the successful actions
+      modifySave00((prev) => {
+        const bonesWands = prev.bonesWands ? [...prev.bonesWands] : undefined;
+        const unlockedPerks =
+          prev.unlockedPerks !== undefined
+            ? [...prev.unlockedPerks]
+            : undefined;
 
         for (const result of results) {
           if (result.type !== 'success') {
             continue;
           }
 
-          actionUtils.removeAction(result.action);
-
-          if (result.action.type === 'bones-wand-delete') {
+          const action = result.action;
+          if (action.type === 'bones-wand-delete') {
             const index = bonesWands?.findIndex(
-              (bones) => bones.fileName === result.action.payload.bonesFileName,
+              (bones) => bones.fileName === action.payload.bonesFileName,
             );
             if (index !== undefined && index > -1) {
               bonesWands?.splice(index, 1);
+            }
+          } else if (action.type === 'unlock-perk') {
+            const isPerkAlreadyUnlocked = unlockedPerks?.includes(
+              action.payload.perkId,
+            );
+
+            if (!isPerkAlreadyUnlocked) {
+              unlockedPerks?.push(action.payload.perkId);
             }
           }
         }
 
         return {
           ...prev,
-          bonesWands: bonesWands !== undefined ? [...bonesWands] : undefined,
+          bonesWands: bonesWands,
+          unlockedPerks: unlockedPerks,
         };
       });
+
+      // remove all succeeded actions from tracking
+      for (const result of results) {
+        if (result.type === 'success') {
+          actionUtils.removeAction(result.action);
+        }
+      }
 
       const numberOfSuccess = results.reduce(
         (success, current) => success + (current.type === 'success' ? 1 : 0),

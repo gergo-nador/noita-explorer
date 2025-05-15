@@ -26,7 +26,7 @@ export const ActiveIconWrapper = ({
 
   return (
     <>
-      {state && (
+      {state && tooltip && (
         <Tooltip
           place='bottom'
           offset={10}

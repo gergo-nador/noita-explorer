@@ -32,5 +32,12 @@ export const FileSystemFileAccessBrowserFallback = (
         'Delete operation not supported for FileSystemFileAccessBrowserFallback',
       );
     },
+    modify: {
+      asText: () => {
+        throw new Error(
+          'Modify operation not supported for FileSystemFileAccessBrowserFallback',
+        );
+      },
+    },
   };
 };

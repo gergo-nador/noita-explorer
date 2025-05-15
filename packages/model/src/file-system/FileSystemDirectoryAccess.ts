@@ -8,6 +8,7 @@ export interface FileSystemDirectoryAccess {
   getDirectory: (path: string) => Promise<FileSystemDirectoryAccess>;
   listFiles: () => Promise<FileSystemFileAccess[]>;
   listDirectories: () => Promise<FileSystemDirectoryAccess[]>;
+  createFile: (fileName: string) => Promise<FileSystemFileAccess>;
 
   path: {
     join: (args: string[]) => Promise<string>;

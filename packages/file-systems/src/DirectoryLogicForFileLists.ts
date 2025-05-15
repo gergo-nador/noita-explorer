@@ -108,6 +108,11 @@ export const DirectoryLogicForFileLists = ({
       promiseHelper.fromValue(
         evaluateRelativePath(path, files, level + 1, pathDivider) !== undefined,
       ),
+    createFile: () => {
+      throw new Error(
+        'Creating file is not allowed for DirectoryLogicForFileLists',
+      );
+    },
   };
 };
 

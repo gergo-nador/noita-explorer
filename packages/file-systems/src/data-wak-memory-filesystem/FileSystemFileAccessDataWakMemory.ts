@@ -36,6 +36,13 @@ export const FileSystemFileAccessDataWakMemory = (
         'Delete operation not supported for FileSystemFileAccessDataWakMemory',
       );
     },
+    modify: {
+      asText: () => {
+        throw new Error(
+          'Modify operation not supported for FileSystemFileAccessDataWakMemory',
+        );
+      },
+    },
   };
 };
 

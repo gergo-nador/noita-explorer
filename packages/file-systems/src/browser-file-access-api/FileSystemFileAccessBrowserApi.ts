@@ -38,5 +38,12 @@ export const FileSystemFileAccessBrowserApi = (
       // @ts-expect-error .remove() function exists, the IDE doesn't know about it
       await fileHandle.remove();
     },
+    modify: {
+      asText: async (text) => {
+        const writable = await fileHandle.createWritable();
+        await writable.write(text);
+        await writable.close();
+      },
+    },
   };
 };
