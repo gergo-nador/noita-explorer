@@ -3,6 +3,7 @@
  */
 
 export * from "./common/NoitaAPI";
+export * from "./common/NoitaAction";
 export * from "./common/NoitaConstants";
 export * from "./common/NoitaEnemy";
 export * from "./common/NoitaEnemyGroup";

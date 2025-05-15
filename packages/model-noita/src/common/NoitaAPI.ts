@@ -33,6 +33,9 @@ export interface NoitaAPI {
     launch: {
       master: (params?: string[]) => Promise<void>;
     };
+    actions: {
+      deleteBonesWandFile: (fileName: string) => Promise<void>;
+    };
   };
   dialog: {
     openFolderDialog: (args?: {

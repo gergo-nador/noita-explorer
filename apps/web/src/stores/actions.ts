@@ -1,25 +1,19 @@
 import { create } from 'zustand';
-import { noiToast } from '@noita-explorer/noita-component-library';
-
-export type NoitaActionType = 'bones-wand-delete';
-type NoitaActionStatus = 'created' | 'on-list';
-
-interface NoitaAction {
-  type: NoitaActionType;
-  id: string;
-  name: string;
-  status: NoitaActionStatus;
-
-  addToList: () => void;
-}
+import {
+  BonesDeleteFileAction,
+  NoitaAction,
+} from '@noita-explorer/model-noita';
 
 interface ActionsState {
   actionUtils: {
     deleteBonesWand: {
       isOnList: (fileName: string) => boolean;
-      create: (fileName: string) => NoitaAction;
+      create: (fileName: string) => BonesDeleteFileAction;
+      get: (fileName: string) => BonesDeleteFileAction | undefined;
     };
+    removeAction: (action: NoitaAction) => void;
   };
+
   actions: Record<string, NoitaAction>;
 }
 
@@ -31,34 +25,47 @@ export const useNoitaActionsStore = create<ActionsState>((set, get) => ({
         const id = 'bones-' + fileName;
         return id in get().actions;
       },
+      get: (fileName) => {
+        const id = 'bones-' + fileName;
+        const action = get().actions[id];
+
+        if (action.type !== 'bones-wand-delete') {
+          return;
+        }
+
+        return action;
+      },
       create: (fileName) => {
-        const newAction: NoitaAction = {
+        const newAction: BonesDeleteFileAction = {
           type: 'bones-wand-delete',
           id: 'bones-' + fileName,
           name: 'Delete Bones file: ' + fileName,
-          status: 'created',
-
-          addToList: () => {
-            set((prev) => {
-              if (newAction.id in prev.actions) {
-                noiToast.warning(
-                  `The deletion of the bones file "${fileName}" is already on the list.`,
-                );
-                return prev;
-              }
-
-              newAction.status = 'on-list';
-              noiToast.info(`File deletion "${fileName}" added to the list`);
-              const actions = { ...prev.actions };
-              actions[newAction.id] = newAction;
-
-              return { ...prev, actions };
-            });
+          payload: {
+            bonesFileName: fileName,
           },
         };
 
+        set((prev) => {
+          if (newAction.id in prev.actions) {
+            return prev;
+          }
+
+          const actions = { ...prev.actions };
+          actions[newAction.id] = newAction;
+
+          return { ...prev, actions };
+        });
+
         return newAction;
       },
+    },
+    removeAction: (action) => {
+      set((prev) => {
+        const newActions = { ...prev.actions };
+        delete newActions[action.id];
+
+        return { ...prev, actions: newActions };
+      });
     },
   },
 }));

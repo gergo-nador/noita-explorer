@@ -214,10 +214,17 @@ export const NoitaWandCard = ({ wand, bonesFileName }: NoitaWandCardProps) => {
     },
   ];
 
+  const isOnDeleteList = actionUtils.deleteBonesWand.isOnList(
+    bonesFileName ?? '',
+  );
+
   return (
     <Card
       className={css['container']}
-      style={{ maxWidth: '100%' }}
+      style={{
+        maxWidth: '100%',
+        filter: isOnDeleteList ? 'brightness(0.7)' : '',
+      }}
       styleContent={{ width: 'min-content' }}
     >
       <div
@@ -240,17 +247,28 @@ export const NoitaWandCard = ({ wand, bonesFileName }: NoitaWandCardProps) => {
                   top: 0,
                   right: 0,
                 }}
-                onClick={() =>
-                  actionUtils.deleteBonesWand.create(bonesFileName).addToList()
-                }
+                onClick={() => {
+                  if (!isOnDeleteList) {
+                    actionUtils.deleteBonesWand
+                      .create(bonesFileName)
+                      .addToList();
+
+                    return;
+                  }
+
+                  const action = actionUtils.deleteBonesWand.get(bonesFileName);
+                  if (action) {
+                    actionUtils.removeAction(action);
+                  }
+                }}
               >
                 <Icon
                   size={20}
                   type={'cross'}
                   style={
-                    actionUtils.deleteBonesWand.isOnList(bonesFileName)
+                    isOnDeleteList
                       ? {
-                          cursor: 'not-allowed',
+                          cursor: 'pointer',
                           filter: 'grayscale()',
                         }
                       : { cursor: 'pointer' }

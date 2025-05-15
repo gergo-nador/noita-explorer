@@ -1,4 +1,4 @@
-import { Card, Icon } from '@noita-explorer/noita-component-library';
+import { Button, Card, Icon } from '@noita-explorer/noita-component-library';
 import { useState } from 'react';
 import { useNoitaActionsStore } from '../../stores/actions.ts';
 
@@ -54,15 +54,51 @@ export const ActionsPanel = () => {
             minWidth: '40vw',
             marginTop: '5vh',
           }}
-          styleContent={{ maxHeight: '100%', overflowY: 'auto' }}
+          styleContent={{
+            maxHeight: '100%',
+            overflowY: 'auto',
+            paddingTop: '0',
+            paddingBottom: '0',
+          }}
         >
-          <div style={{ display: 'flex', justifyContent: 'center' }}>
-            <span style={{ fontSize: 23 }}>Actions</span>
+          <div
+            style={{
+              position: 'sticky',
+              top: 0,
+              display: 'flex',
+              justifyContent: 'center',
+              background: 'inherit',
+            }}
+          >
+            <span
+              style={{
+                fontSize: 23,
+                marginTop: 20,
+                marginBottom: 10,
+                width: '100%',
+                background: 'inherit',
+              }}
+            >
+              Actions
+            </span>
           </div>
-          <div>
+          <div style={{ minHeight: 'calc(100% - 100px)' }}>
             {Object.values(actions).map((action) => (
               <div>{action.name}</div>
             ))}
+          </div>
+          <div
+            style={{
+              position: 'sticky',
+              bottom: 0,
+              paddingTop: 10,
+              paddingBottom: 20,
+              background: 'inherit',
+              display: 'flex',
+              justifyContent: 'right',
+            }}
+          >
+            <Button decoration={'both'}>Run Actions</Button>
           </div>
         </Card>
       </div>
