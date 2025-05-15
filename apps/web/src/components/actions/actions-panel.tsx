@@ -101,7 +101,11 @@ export const ActionsPanel = () => {
               justifyContent: 'right',
             }}
           >
-            <ActionsRunAllButton />
+            <ActionsRunAllButton
+              onClick={() => {
+                setIsOpen(false);
+              }}
+            />
           </div>
         </Card>
       </div>

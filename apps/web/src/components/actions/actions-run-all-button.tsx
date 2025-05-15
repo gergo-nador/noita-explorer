@@ -1,11 +1,12 @@
 import { noitaAPI } from '../../ipcHandlers.ts';
-import { Button } from '@noita-explorer/noita-component-library';
+import { Button, useToast } from '@noita-explorer/noita-component-library';
 import { useNoitaActionsStore } from '../../stores/actions.ts';
 import { useSave00Store } from '../../stores/save00.ts';
 
-export const ActionsRunAllButton = () => {
+export const ActionsRunAllButton = ({ onClick }: { onClick: () => void }) => {
   const { actions, actionUtils } = useNoitaActionsStore();
   const { modify } = useSave00Store();
+  const toast = useToast();
 
   const runActions = async () => {
     const array = Object.values(actions);
@@ -35,6 +36,36 @@ export const ActionsRunAllButton = () => {
           bonesWands: bonesWands !== undefined ? [...bonesWands] : undefined,
         };
       });
+
+      const numberOfSuccess = results.reduce(
+        (success, current) => success + (current.type === 'success' ? 1 : 0),
+        0,
+      );
+
+      if (numberOfSuccess > 0) {
+        const message =
+          numberOfSuccess === 1
+            ? '1 action has been completed!'
+            : `${numberOfSuccess} actions have been completed!`;
+
+        toast.success(message);
+      }
+
+      const numberOfErrors = results.reduce(
+        (errors, current) => errors + (current.type === 'error' ? 1 : 0),
+        0,
+      );
+
+      if (numberOfErrors > 0) {
+        const message =
+          numberOfErrors === 1
+            ? '1 action has failed :('
+            : `${numberOfErrors} actions have failed :(`;
+
+        toast.error(message);
+      }
+
+      onClick();
     });
   };
 
