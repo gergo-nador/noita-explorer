@@ -249,10 +249,7 @@ export const NoitaWandCard = ({ wand, bonesFileName }: NoitaWandCardProps) => {
                 }}
                 onClick={() => {
                   if (!isOnDeleteList) {
-                    actionUtils.deleteBonesWand
-                      .create(bonesFileName)
-                      .addToList();
-
+                    actionUtils.deleteBonesWand.create(bonesFileName);
                     return;
                   }
 

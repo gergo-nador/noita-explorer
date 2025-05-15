@@ -15,7 +15,7 @@ import {
 } from '@noita-explorer/tools';
 import { LuaWrapper } from '@noita-explorer/tools/lua';
 import { parseXml, XmlWrapper } from '@noita-explorer/tools/xml';
-import { noitaPaths } from '../NoitaPaths.ts';
+import { noitaPaths } from '../../noita-paths.ts';
 
 export const scrapeSpells = async ({
   dataWakParentDirectoryApi,

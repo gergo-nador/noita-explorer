@@ -1,6 +1,6 @@
 import { FileSystemDirectoryAccess } from '@noita-explorer/model';
 import { NoitaProgressFlags } from '@noita-explorer/model-noita';
-import { noitaPaths } from '../../NoitaPaths.ts';
+import { noitaPaths } from '../../../noita-paths.ts';
 
 export const scrapeProgressFlags = async ({
   save00DirectoryApi,

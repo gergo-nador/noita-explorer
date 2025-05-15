@@ -29,9 +29,15 @@ const noitaApi: NoitaAPI = {
         ipcRenderer.invoke('save00:scrape-enemy-statistics'),
       scrapeSessions: () => ipcRenderer.invoke('save00:scrape-sessions'),
       scrapeBonesWands: () => ipcRenderer.invoke('save00:scrape-bones-wands'),
+      scrapeWorldState: () => ipcRenderer.invoke('save00:scrape-world-state'),
     },
     launch: {
       master: (args) => ipcRenderer.invoke('noita:launch-master', args),
+    },
+    actions: {
+      runActions: (actions) => {
+        throw new Error('not implemented');
+      },
     },
   },
   dialog: {
@@ -46,11 +52,14 @@ const noitaApi: NoitaAPI = {
     set: (text) => ipcRenderer.invoke('clipboard:set', text),
   },
   environment: {
-    web: false,
+    web: undefined,
     desktop: {
       isMacOs: Platform.isMacOs,
       isLinux: Platform.isLinux,
       isWindows: Platform.isWindows,
+    },
+    features: {
+      bonesWandDelete: true,
     },
   },
 };

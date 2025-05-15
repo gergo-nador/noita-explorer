@@ -3,7 +3,7 @@ import path from 'path';
 import { FileSystemDirectoryAccess } from '@noita-explorer/model';
 import { nodeFileSystemHelpers } from '../tools/file-system';
 import { promiseHelper } from '@noita-explorer/tools';
-import { FileSystemFileAccessNode } from './FileSystemFileAccessNode';
+import { FileSystemFileAccessNode } from './file-system-file-access-node';
 
 export const FileSystemDirectoryAccessNode = (
   directoryPath: string,

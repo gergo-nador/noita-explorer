@@ -10,7 +10,7 @@ import {
   NoitaMaterialCellType,
   NoitaMaterialCellTypeValidValues,
 } from '@noita-explorer/model-noita';
-import { noitaPaths } from '../NoitaPaths.ts';
+import { noitaPaths } from '../../noita-paths.ts';
 import {
   parseXml,
   XmlWrapper,

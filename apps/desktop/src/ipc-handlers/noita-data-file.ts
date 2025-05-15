@@ -17,19 +17,11 @@ import {
   NoitaWakData,
   NoitaWandConfig,
 } from '@noita-explorer/model-noita';
-import {
-  noitaPaths,
-  readTranslations,
-  scrapeEnemies,
-  scrapeMaterials,
-  scrapePerks,
-  scrapeSpells,
-  scrapeWandConfigs,
-} from '@noita-explorer/scrapers';
+import { noitaPaths, scrape } from '@noita-explorer/scrapers';
 import { getConfig } from '../persistence/config-store';
 import { nodeFileSystemHelpers } from '../tools/file-system';
-import { FileSystemFileAccessNode } from '../file-system/FileSystemFileAccessNode';
-import { FileSystemDirectoryAccessNode } from '../file-system/FileSystemDirectoryAccessNode';
+import { FileSystemFileAccessNode } from '../file-system/file-system-file-access-node';
+import { FileSystemDirectoryAccessNode } from '../file-system/file-system-directory-access-node';
 import { FileSystemDirectoryAccessDataWakMemory } from '@noita-explorer/file-systems';
 import { Buffer } from 'buffer';
 
@@ -62,12 +54,12 @@ export const registerNoitaDataFileHandlers = () => {
   ipcMain.handle(
     'noita-data-file:scrape',
     async (): Promise<NoitaDataWakScrapeResult> => {
-      return await scrape();
+      return await scrapeDataWak();
     },
   );
 };
 
-const scrape = async (): Promise<NoitaDataWakScrapeResult> => {
+const scrapeDataWak = async (): Promise<NoitaDataWakScrapeResult> => {
   const installPath = getConfig('settings.paths.install') as string;
   const commonCsvPath = path.join(
     installPath,
@@ -79,7 +71,7 @@ const scrape = async (): Promise<NoitaDataWakScrapeResult> => {
   let translations: StringKeyDictionary<NoitaTranslation>;
 
   try {
-    translations = await readTranslations({
+    translations = await scrape.translations({
       translationFile: translationFile,
     });
   } catch (e) {
@@ -155,7 +147,7 @@ const scrape = async (): Promise<NoitaDataWakScrapeResult> => {
   let perks: NoitaPerk[] = [];
   let perkError: unknown | undefined = undefined;
   try {
-    perks = await scrapePerks({
+    perks = await scrape.perks({
       dataWakParentDirectoryApi: dataWakParentDirectory,
       translations: translations,
     });
@@ -166,7 +158,7 @@ const scrape = async (): Promise<NoitaDataWakScrapeResult> => {
   let spells: NoitaSpell[] = [];
   let spellsError: unknown | undefined = undefined;
   try {
-    spells = await scrapeSpells({
+    spells = await scrape.spells({
       dataWakParentDirectoryApi: dataWakParentDirectory,
       translations: translations,
     });
@@ -177,7 +169,7 @@ const scrape = async (): Promise<NoitaDataWakScrapeResult> => {
   let enemies: NoitaEnemy[] = [];
   let enemiesError: unknown | undefined = undefined;
   try {
-    enemies = await scrapeEnemies({
+    enemies = await scrape.enemies({
       dataWakParentDirectoryApi: dataWakParentDirectory,
       translations: translations,
     });
@@ -188,7 +180,7 @@ const scrape = async (): Promise<NoitaDataWakScrapeResult> => {
   let wandConfigs: NoitaWandConfig[] = [];
   let wandConfigError: unknown | undefined = undefined;
   try {
-    wandConfigs = await scrapeWandConfigs({
+    wandConfigs = await scrape.wandConfigs({
       dataWakParentDirectoryApi: dataWakParentDirectory,
     });
   } catch (err) {
@@ -199,7 +191,7 @@ const scrape = async (): Promise<NoitaDataWakScrapeResult> => {
   let materialReactions: NoitaMaterialReaction[] = [];
   let materialError: unknown | undefined = undefined;
   try {
-    const scrapedMaterials = await scrapeMaterials({
+    const scrapedMaterials = await scrape.materials({
       translations: translations,
       dataWakParentDirectoryApi: dataWakParentDirectory,
     });

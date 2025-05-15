@@ -3,7 +3,7 @@ import {
   FileSystemDirectoryAccess,
   FileSystemFileAccess,
 } from '@noita-explorer/model';
-import { noitaPaths } from '../NoitaPaths.ts';
+import { noitaPaths } from '../../noita-paths.ts';
 import { parseXml, XmlWrapper } from '@noita-explorer/tools/xml';
 import { stringHelpers } from '@noita-explorer/tools';
 

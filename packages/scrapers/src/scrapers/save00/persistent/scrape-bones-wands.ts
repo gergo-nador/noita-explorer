@@ -1,8 +1,8 @@
 import { FileSystemDirectoryAccess } from '@noita-explorer/model';
 import { NoitaWandBonesFile } from '@noita-explorer/model-noita';
 import { parseXml, XmlWrapper } from '@noita-explorer/tools/xml';
-import { __scrapeWand } from '../../common/ScrapeWand.ts';
-import { noitaPaths } from '../../NoitaPaths.ts';
+import { scrapeWand } from '../../common/scrape-wand.ts';
+import { noitaPaths } from '../../../noita-paths.ts';
 
 export const scrapeBonesWands = async ({
   save00DirectoryApi,
@@ -28,7 +28,7 @@ export const scrapeBonesWands = async ({
       continue;
     }
 
-    const wand = __scrapeWand(entityTag);
+    const wand = scrapeWand(entityTag);
     if (wand === undefined) {
       continue;
     }

@@ -2,7 +2,7 @@ import { XmlWrapperType } from '@noita-explorer/tools/xml';
 import { NoitaWand, NoitaWandSpell } from '@noita-explorer/model-noita';
 
 // used privately by this package
-export const __scrapeWand = (wandXml: XmlWrapperType) => {
+export const scrapeWand = (wandXml: XmlWrapperType) => {
   const tags = wandXml.getAttribute('tags')?.asText();
   if (tags === undefined || !tags.split(',').includes('wand')) {
     return undefined;

@@ -6,7 +6,7 @@ import {
 import { NoitaConstants, NoitaSession } from '@noita-explorer/model-noita';
 import { parseXml, XmlWrapper } from '@noita-explorer/tools/xml';
 import { mathHelpers } from '@noita-explorer/tools';
-import { noitaPaths } from '../../NoitaPaths.ts';
+import { noitaPaths } from '../../../noita-paths.ts';
 
 export const scrapeSessions = async ({
   save00DirectoryApi,

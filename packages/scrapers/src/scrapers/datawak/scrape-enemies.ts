@@ -23,7 +23,7 @@ import {
   stringHelpers,
   objectHelpers,
 } from '@noita-explorer/tools';
-import { noitaPaths } from '../NoitaPaths.ts';
+import { noitaPaths } from '../../noita-paths.ts';
 import { splitNoitaEntityTags } from '../common/tags.ts';
 
 /**

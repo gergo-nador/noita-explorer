@@ -1,14 +1,8 @@
 import { ipcMain } from 'electron';
-import {
-  scrapeBonesWands,
-  scrapeEnemyStatistics,
-  scrapeProgressFlags,
-  scrapeSessions,
-  noitaPaths,
-} from '@noita-explorer/scrapers';
+import { scrape, noitaPaths } from '@noita-explorer/scrapers';
 import { getConfig } from '../persistence/config-store';
 import path from 'path';
-import { FileSystemDirectoryAccessNode } from '../file-system/FileSystemDirectoryAccessNode';
+import { FileSystemDirectoryAccessNode } from '../file-system/file-system-directory-access-node';
 
 export const registerSave00Handlers = () => {
   const getSave00DirectoryApi = () => {
@@ -27,28 +21,35 @@ export const registerSave00Handlers = () => {
   ipcMain.handle('save00:scrape-progress-flags', async () => {
     const save00DirectoryApi = getSave00DirectoryApi();
 
-    return await scrapeProgressFlags({
+    return await scrape.progressFlags({
       save00DirectoryApi: save00DirectoryApi,
     });
   });
   ipcMain.handle('save00:scrape-enemy-statistics', async () => {
     const save00DirectoryApi = getSave00DirectoryApi();
 
-    return await scrapeEnemyStatistics({
+    return await scrape.enemyStatistics({
       save00DirectoryApi: save00DirectoryApi,
     });
   });
   ipcMain.handle('save00:scrape-sessions', async () => {
     const save00DirectoryApi = getSave00DirectoryApi();
 
-    return await scrapeSessions({
+    return await scrape.sessions({
       save00DirectoryApi: save00DirectoryApi,
     });
   });
   ipcMain.handle('save00:scrape-bones-wands', async () => {
     const save00DirectoryApi = getSave00DirectoryApi();
 
-    return await scrapeBonesWands({
+    return await scrape.bonesWands({
+      save00DirectoryApi: save00DirectoryApi,
+    });
+  });
+  ipcMain.handle('save00:scrape-world-state', async () => {
+    const save00DirectoryApi = getSave00DirectoryApi();
+
+    return await scrape.worldState({
       save00DirectoryApi: save00DirectoryApi,
     });
   });

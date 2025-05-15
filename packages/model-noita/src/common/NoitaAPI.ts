@@ -6,6 +6,7 @@ import { NoitaProgressFlags } from '../scraping/NoitaProgressFlags.ts';
 import { NoitaSession } from './NoitaSession.ts';
 import { NoitaWorldState } from './NoitaWorldState.ts';
 import { NoitaWandBonesFile } from './NoitaWandBonesFile.ts';
+import { NoitaAction } from './NoitaAction.ts';
 
 export interface NoitaAPI {
   config: {
@@ -34,7 +35,7 @@ export interface NoitaAPI {
       master: (params?: string[]) => Promise<void>;
     };
     actions: {
-      deleteBonesWandFile: (fileName: string) => Promise<void>;
+      runActions: (actions: NoitaAction[]) => Promise<void>;
     };
   };
   dialog: {

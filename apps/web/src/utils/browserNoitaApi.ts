@@ -2,64 +2,20 @@ import {
   FileSystemDirectoryAccess,
   StringKeyDictionary,
 } from '@noita-explorer/model';
-import { NoitaAPI } from '@noita-explorer/model-noita';
+import { NoitaAction, NoitaAPI } from '@noita-explorer/model-noita';
 import { promiseHelper } from '@noita-explorer/tools';
-import {
-  scrapeBonesWands,
-  scrapeEnemyStatistics,
-  scrapeProgressFlags,
-  scrapeSessions,
-  scrapeWorldState,
-} from '@noita-explorer/scrapers';
+import { scrape } from '@noita-explorer/scrapers';
 import { FileSystemDirectoryAccessBrowserApi } from '@noita-explorer/file-systems/browser-file-access-api';
 import { FileSystemDirectoryAccessBrowserFallback } from '@noita-explorer/file-systems/browser-fallback';
-import { useToast } from '@noita-explorer/noita-component-library';
 import { noitaDb } from './databases.ts';
 import {
   supported as hasFileSystemApi,
   directoryOpen,
   FileWithDirectoryAndFileHandle,
 } from 'browser-fs-access';
+import { noiToast } from '@noita-explorer/noita-component-library';
 
 export function browserNoitaApi(): NoitaAPI {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const toast = useToast();
-
-  const getSave00FolderHandle = async () => {
-    const db = await noitaDb;
-    const config = db.config;
-
-    const nollaGamesNoitaFolder = await config.get(
-      'settings.paths.NollaGamesNoita',
-    );
-
-    if (nollaGamesNoitaFolder === undefined) {
-      throw new Error('NollaGamesNoita folder is not set');
-    }
-
-    if (!hasFileSystemApi) {
-      const handle = fallbackFolderStorage[nollaGamesNoitaFolder];
-      if (handle === undefined) {
-        throw new Error('NollaGamesNoita folder is not set');
-      }
-
-      return handle.getDirectory('save00');
-    }
-
-    const fileAccessConfig = db.fileAccess;
-    const nollaGamesNoitaBrowserHandle = await fileAccessConfig.get(
-      nollaGamesNoitaFolder,
-    );
-    if (nollaGamesNoitaBrowserHandle?.kind !== 'directory') {
-      throw new Error('NollaGamesNoita folder is not a directory');
-    }
-
-    const save00BrowserHandle =
-      await nollaGamesNoitaBrowserHandle.getDirectoryHandle('save00');
-
-    return FileSystemDirectoryAccessBrowserApi(save00BrowserHandle);
-  };
-
   return {
     config: {
       get: async (key) => {
@@ -89,27 +45,30 @@ export function browserNoitaApi(): NoitaAPI {
       save00: {
         scrapeProgressFlags: async () => {
           const api = await getSave00FolderHandle();
-          return scrapeProgressFlags({ save00DirectoryApi: api });
+          return scrape.progressFlags({ save00DirectoryApi: api });
         },
         scrapeEnemyStatistics: async () => {
           const api = await getSave00FolderHandle();
-          return await scrapeEnemyStatistics({ save00DirectoryApi: api });
+          return await scrape.enemyStatistics({ save00DirectoryApi: api });
         },
         scrapeSessions: async () => {
           const api = await getSave00FolderHandle();
-          return await scrapeSessions({ save00DirectoryApi: api });
+          return await scrape.sessions({ save00DirectoryApi: api });
         },
         scrapeBonesWands: async () => {
           const api = await getSave00FolderHandle();
-          return await scrapeBonesWands({ save00DirectoryApi: api });
+          return await scrape.bonesWands({ save00DirectoryApi: api });
         },
         scrapeWorldState: async () => {
           const api = await getSave00FolderHandle();
-          return await scrapeWorldState({ save00DirectoryApi: api });
+          return await scrape.worldState({ save00DirectoryApi: api });
         },
       },
       launch: {
         master: () => throwNotAllowedInThisModeError(),
+      },
+      actions: {
+        runActions: runActions,
       },
     },
     dialog: {
@@ -118,7 +77,7 @@ export function browserNoitaApi(): NoitaAPI {
           !('showOpenFilePicker' in window) ||
           typeof window.showOpenFilePicker !== 'function'
         ) {
-          toast.error('This browser does not support file access.');
+          noiToast.error('This browser does not support file access.');
           return;
         }
 
@@ -194,4 +153,46 @@ const openFolderDialogFallback = async (id: string | undefined) => {
   fallbackFolderStorage[name] = folder;
 
   return name;
+};
+
+const getSave00FolderHandle = async () => {
+  const db = await noitaDb;
+  const config = db.config;
+
+  const nollaGamesNoitaFolder = await config.get(
+    'settings.paths.NollaGamesNoita',
+  );
+
+  if (nollaGamesNoitaFolder === undefined) {
+    throw new Error('NollaGamesNoita folder is not set');
+  }
+
+  if (!hasFileSystemApi) {
+    const handle = fallbackFolderStorage[nollaGamesNoitaFolder];
+    if (handle === undefined) {
+      throw new Error('NollaGamesNoita folder is not set');
+    }
+
+    return handle.getDirectory('save00');
+  }
+
+  const fileAccessConfig = db.fileAccess;
+  const nollaGamesNoitaBrowserHandle = await fileAccessConfig.get(
+    nollaGamesNoitaFolder,
+  );
+  if (nollaGamesNoitaBrowserHandle?.kind !== 'directory') {
+    throw new Error('NollaGamesNoita folder is not a directory');
+  }
+
+  const save00BrowserHandle =
+    await nollaGamesNoitaBrowserHandle.getDirectoryHandle('save00');
+
+  return FileSystemDirectoryAccessBrowserApi(save00BrowserHandle);
+};
+
+const runActions = async (actions: NoitaAction[]) => {
+  for (const action of actions) {
+    if (action.type === 'bones-wand-delete') {
+    }
+  }
 };
