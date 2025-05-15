@@ -31,6 +31,11 @@ export const FileSystemFileAccessDataWakMemory = (
         return `data:${mimeType};base64,${base64String}`;
       },
     },
+    delete: () => {
+      throw new Error(
+        'Delete operation not supported for FileSystemFileAccessDataWakMemory',
+      );
+    },
   };
 };
 

@@ -2,9 +2,13 @@ import {
   FileSystemDirectoryAccess,
   StringKeyDictionary,
 } from '@noita-explorer/model';
-import { NoitaAction, NoitaAPI } from '@noita-explorer/model-noita';
+import {
+  NoitaAction,
+  NoitaActionResult,
+  NoitaAPI,
+} from '@noita-explorer/model-noita';
 import { promiseHelper } from '@noita-explorer/tools';
-import { scrape } from '@noita-explorer/scrapers';
+import { scrape, actions } from '@noita-explorer/scrapers';
 import { FileSystemDirectoryAccessBrowserApi } from '@noita-explorer/file-systems/browser-file-access-api';
 import { FileSystemDirectoryAccessBrowserFallback } from '@noita-explorer/file-systems/browser-fallback';
 import { noitaDb } from './databases.ts';
@@ -190,9 +194,26 @@ const getSave00FolderHandle = async () => {
   return FileSystemDirectoryAccessBrowserApi(save00BrowserHandle);
 };
 
-const runActions = async (actions: NoitaAction[]) => {
-  for (const action of actions) {
-    if (action.type === 'bones-wand-delete') {
+const runActions = async (
+  noitaActions: NoitaAction[],
+): Promise<NoitaActionResult[]> => {
+  const save00FolderHandle = await getSave00FolderHandle();
+  const results: NoitaActionResult[] = [];
+
+  for (const action of noitaActions) {
+    try {
+      if (action.type === 'bones-wand-delete') {
+        await actions.deleteBonesWands({
+          save00DirectoryApi: save00FolderHandle,
+          bonesWandFileName: action.payload.bonesFileName,
+        });
+      }
+
+      results.push({ type: 'success', action: action });
+    } catch (e) {
+      results.push({ type: 'error', action: action, error: e as Error });
     }
   }
+
+  return results;
 };

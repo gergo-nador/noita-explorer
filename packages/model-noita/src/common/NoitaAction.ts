@@ -1,5 +1,11 @@
 export type NoitaAction = BonesDeleteFileAction;
 
+export interface NoitaActionResult {
+  type: 'success' | 'error';
+  action: NoitaAction;
+  error?: Error;
+}
+
 interface NoitaActionBase {
   id: string;
   name: string;

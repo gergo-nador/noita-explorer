@@ -27,5 +27,10 @@ export const FileSystemFileAccessBrowserFallback = (
         return buffer as Buffer;
       },
     },
+    delete: () => {
+      throw new Error(
+        'Delete operation not supported for FileSystemFileAccessBrowserFallback',
+      );
+    },
   };
 };

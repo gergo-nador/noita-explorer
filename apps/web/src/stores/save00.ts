@@ -8,6 +8,7 @@ import {
   NoitaWorldState,
 } from '@noita-explorer/model-noita';
 import { noiToast } from '@noita-explorer/noita-component-library';
+import { Dispatch, SetStateAction } from 'react';
 
 interface Save00CurrentRun {
   worldState: NoitaWorldState;
@@ -25,6 +26,7 @@ interface Save00StoreState {
 
   status: Save00Status;
   reload: () => Promise<void>;
+  modify: Dispatch<SetStateAction<Save00StoreState>>;
 }
 
 export const useSave00Store = create<Save00StoreState>((set, get) => ({
@@ -74,4 +76,5 @@ export const useSave00Store = create<Save00StoreState>((set, get) => ({
       noiToast.error('Failed to load game data from save00 folder: ' + message);
     }
   },
+  modify: (action) => set(action),
 }));

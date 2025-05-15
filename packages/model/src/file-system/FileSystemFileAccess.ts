@@ -8,4 +8,5 @@ export interface FileSystemFileAccess {
     asImageBase64: () => Promise<string>;
     asBuffer: () => Promise<Buffer>;
   };
+  delete: () => Promise<void>;
 }

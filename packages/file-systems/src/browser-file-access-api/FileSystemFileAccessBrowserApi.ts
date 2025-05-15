@@ -34,5 +34,9 @@ export const FileSystemFileAccessBrowserApi = (
       asBuffer: async () =>
         fileHandle.getFile().then((f) => f.arrayBuffer()) as Promise<Buffer>,
     },
+    delete: async () => {
+      // @ts-expect-error .remove() function exists, the IDE doesn't know about it
+      await fileHandle.remove();
+    },
   };
 };

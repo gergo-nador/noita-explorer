@@ -1,6 +1,7 @@
-import { Button, Card, Icon } from '@noita-explorer/noita-component-library';
+import { Card, Icon } from '@noita-explorer/noita-component-library';
 import { useState } from 'react';
 import { useNoitaActionsStore } from '../../stores/actions.ts';
+import { ActionsRunAllButton } from './actions-run-all-button.tsx';
 
 export const ActionsPanel = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -98,7 +99,7 @@ export const ActionsPanel = () => {
               justifyContent: 'right',
             }}
           >
-            <Button decoration={'both'}>Run Actions</Button>
+            <ActionsRunAllButton />
           </div>
         </Card>
       </div>
