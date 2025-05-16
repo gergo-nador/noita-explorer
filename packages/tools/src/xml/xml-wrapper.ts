@@ -1,4 +1,4 @@
-import { XmlAttributeReadOptions } from './XmlAttributeReadOptions';
+import { XmlAttributeReadOptions } from './xml-attribute-read-options.ts';
 import { StringKeyDictionaryComposite } from '@noita-explorer/model';
 
 export interface XmlWrapperType {
