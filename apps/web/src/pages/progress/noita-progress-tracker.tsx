@@ -147,11 +147,11 @@ export const NoitaProgressTracker = () => {
               iconType = 'regular';
             }
 
-            const isUnlockActionPresent = actionUtils.perksUnlock.isOnList(
-              perk.id,
-            );
-
             if (unlockMode) {
+              const isUnlockActionPresent = actionUtils.perksUnlock.isOnList(
+                perk.id,
+              );
+
               if (iconType === 'new') {
                 iconType = 'regular';
               } else if (isUnlockActionPresent) {
@@ -213,11 +213,11 @@ export const NoitaProgressTracker = () => {
               iconType = 'regular';
             }
 
-            const isUnlockActionPresent = actionUtils.spellUnlock.isOnList(
-              spell.id,
-            );
-
             if (unlockMode) {
+              const isUnlockActionPresent = actionUtils.spellUnlock.isOnList(
+                spell.id,
+              );
+
               if (iconType === 'new') {
                 iconType = 'regular';
               } else if (isUnlockActionPresent) {
@@ -302,6 +302,18 @@ export const NoitaProgressTracker = () => {
                 iconType = 'regular';
               }
 
+              if (unlockMode) {
+                const isUnlockActionPresent = e.enemyGroup.enemies.some(
+                  (enemy) => actionUtils.enemyUnlock.isOnList(enemy.id),
+                );
+
+                if (iconType === 'new') {
+                  iconType = 'regular';
+                } else if (isUnlockActionPresent) {
+                  iconType = 'new';
+                }
+              }
+
               return (
                 <ActiveIconWrapper
                   id={'enemy-' + e.enemyGroup.baseId}
@@ -315,6 +327,29 @@ export const NoitaProgressTracker = () => {
                       />
                     )
                   }
+                  onClick={() => {
+                    if (!unlockMode) {
+                      return;
+                    }
+
+                    if (iconType === 'unknown') {
+                      e.enemyGroup.enemies.forEach((enemy) =>
+                        actionUtils.enemyUnlock.create(enemy),
+                      );
+
+                      return;
+                    }
+
+                    e.enemyGroup.enemies.forEach((enemy) => {
+                      const unlockEnemyAction = actionUtils.enemyUnlock.get(
+                        enemy.id,
+                      );
+
+                      if (unlockEnemyAction) {
+                        actionUtils.removeAction(unlockEnemyAction);
+                      }
+                    });
+                  }}
                 >
                   <ProgressIcon
                     type={iconType}

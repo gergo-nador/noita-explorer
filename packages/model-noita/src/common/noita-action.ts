@@ -1,7 +1,8 @@
 export type NoitaAction =
   | BonesDeleteFileAction
   | UnlockPerkAction
-  | UnlockSpellAction;
+  | UnlockSpellAction
+  | UnlockEnemyAction;
 
 export interface NoitaActionResult {
   type: 'success' | 'error';
@@ -33,4 +34,9 @@ export interface UnlockSpellAction extends NoitaActionBase {
   payload: {
     spellId: string;
   };
+}
+
+export interface UnlockEnemyAction extends NoitaActionBase {
+  type: 'unlock-enemy';
+  payload: { enemyId: string; numberOfTimesEnemyKilled: number };
 }

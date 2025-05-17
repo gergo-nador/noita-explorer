@@ -2,22 +2,19 @@ import {
   FileSystemDirectoryAccess,
   StringKeyDictionary,
 } from '@noita-explorer/model';
-import {
-  NoitaAction,
-  NoitaActionResult,
-  NoitaAPI,
-} from '@noita-explorer/model-noita';
+import { NoitaAPI } from '@noita-explorer/model-noita';
 import { promiseHelper } from '@noita-explorer/tools';
-import { scrape, actions } from '@noita-explorer/scrapers';
+import { scrape } from '@noita-explorer/scrapers';
 import { FileSystemDirectoryAccessBrowserApi } from '@noita-explorer/file-systems/browser-file-access-api';
 import { FileSystemDirectoryAccessBrowserFallback } from '@noita-explorer/file-systems/browser-fallback';
-import { noitaDb } from './databases.ts';
+import { noitaDb } from '../databases.ts';
 import {
   supported as hasFileSystemApi,
   directoryOpen,
   FileWithDirectoryAndFileHandle,
 } from 'browser-fs-access';
 import { noiToast } from '@noita-explorer/noita-component-library';
+import { runActions } from './run-actions.ts';
 
 export function browserNoitaApi(): NoitaAPI {
   return {
@@ -72,7 +69,11 @@ export function browserNoitaApi(): NoitaAPI {
         master: () => throwNotAllowedInThisModeError(),
       },
       actions: {
-        runActions: runActions,
+        runActions: async (actions) =>
+          runActions({
+            noitaActions: actions,
+            save00FolderHandle: await getSave00FolderHandle(),
+          }),
       },
     },
     dialog: {
@@ -192,43 +193,4 @@ const getSave00FolderHandle = async () => {
     await nollaGamesNoitaBrowserHandle.getDirectoryHandle('save00');
 
   return FileSystemDirectoryAccessBrowserApi(save00BrowserHandle);
-};
-
-const runActions = async (
-  noitaActions: NoitaAction[],
-): Promise<NoitaActionResult[]> => {
-  const save00FolderHandle = await getSave00FolderHandle();
-  const results: NoitaActionResult[] = [];
-
-  for (const action of noitaActions) {
-    try {
-      if (action.type === 'bones-wand-delete') {
-        await actions.deleteBonesWands({
-          save00DirectoryApi: save00FolderHandle,
-          bonesWandFileName: action.payload.bonesFileName,
-        });
-      } else if (action.type === 'unlock-perk') {
-        await actions.unlockPerk({
-          save00DirectoryApi: save00FolderHandle,
-          perkId: action.payload.perkId,
-        });
-      } else if (action.type === 'unlock-spell') {
-        await actions.unlockSpell({
-          save00DirectoryApi: save00FolderHandle,
-          spellId: action.payload.spellId,
-        });
-      } else {
-        console.error(
-          action,
-          'not implemented in "actions-run-all-button.tsx"',
-        );
-      }
-
-      results.push({ type: 'success', action: action });
-    } catch (e) {
-      results.push({ type: 'error', action: action, error: e as Error });
-    }
-  }
-
-  return results;
 };

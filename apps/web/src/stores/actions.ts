@@ -2,8 +2,10 @@ import { create } from 'zustand';
 import {
   BonesDeleteFileAction,
   NoitaAction,
+  NoitaEnemy,
   NoitaPerk,
   NoitaSpell,
+  UnlockEnemyAction,
   UnlockPerkAction,
   UnlockSpellAction,
 } from '@noita-explorer/model-noita';
@@ -25,6 +27,11 @@ interface ActionsState {
       get: (spellId: string) => UnlockSpellAction | undefined;
       create: (spell: NoitaSpell) => UnlockSpellAction;
     };
+    enemyUnlock: {
+      isOnList: (enemyId: string) => boolean;
+      get: (enemyId: string) => UnlockEnemyAction | undefined;
+      create: (enemy: NoitaEnemy) => UnlockEnemyAction;
+    };
     removeAction: (action: NoitaAction) => void;
   };
 
@@ -37,7 +44,8 @@ export const useNoitaActionsStore = create<ActionsState>((set, get) => {
   const idFactory = {
     deleteBonesWand: (fileName: string) => 'bones-' + fileName,
     perksUnlock: (perkId: string) => 'perk-unlock-' + perkId,
-    spellUnlock: (spellId: string) => 'action-' + spellId,
+    spellUnlock: (spellId: string) => 'action-unlock-' + spellId,
+    enemyUnlock: (enemyId: string) => 'enemy-unlock-' + enemyId,
   };
 
   const addAction = (action: NoitaAction) => {
@@ -138,6 +146,37 @@ export const useNoitaActionsStore = create<ActionsState>((set, get) => {
             id: idFactory.spellUnlock(spell.id),
             name: 'Unlock spell ' + spell.name,
             payload: { spellId: spell.id },
+          };
+
+          addAction(newAction);
+
+          return newAction;
+        },
+      },
+      enemyUnlock: {
+        isOnList: (enemyId) => {
+          const id = idFactory.enemyUnlock(enemyId);
+          return isOnList(id);
+        },
+        get: (enemyId) => {
+          const id = idFactory.enemyUnlock(enemyId);
+          const action = getAction(id);
+
+          if (action?.type !== 'unlock-enemy') {
+            return;
+          }
+
+          return action;
+        },
+        create: (enemy) => {
+          const newAction: UnlockEnemyAction = {
+            type: 'unlock-enemy',
+            id: idFactory.enemyUnlock(enemy.id),
+            name: `Unlock enemy ${enemy.name} (${enemy.id})`,
+            payload: {
+              enemyId: enemy.id,
+              numberOfTimesEnemyKilled: 1,
+            },
           };
 
           addAction(newAction);
