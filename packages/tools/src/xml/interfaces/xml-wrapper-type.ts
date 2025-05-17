@@ -20,11 +20,18 @@ export interface XmlWrapperType {
    * @param tagName
    */
   findAllTags: (tagName: string) => XmlWrapperType[];
+  /**
+   * Gets the specified attribute if exists, otherwise returns undefined
+   * @param attributeName
+   */
   getAttribute: (attributeName: string) => XmlAttributeReadOptions | undefined;
   /**
-   * Throws error if the attribute cannot be found
+   * Gets the specified attribute, throws error if the attribute cannot be found
    * @param attributeName
    */
   getRequiredAttribute: (attributeName: string) => XmlAttributeReadOptions;
+  /**
+   * Gets the text content of a tag
+   */
   getTextContent: () => string | undefined;
 }
