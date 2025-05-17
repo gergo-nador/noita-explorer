@@ -8,7 +8,7 @@ import { NoitaWorldState } from './noita-world-state.ts';
 import { NoitaWandBonesFile } from './noita-wand-bones-file.ts';
 import { NoitaAction, NoitaActionResult } from './noita-action.ts';
 
-export interface NoitaApi {
+export interface NoitaAPI {
   config: {
     get: (key: string) => Promise<string | undefined>;
     set: ({ key, value }: { key: string; value: string }) => Promise<void>;
