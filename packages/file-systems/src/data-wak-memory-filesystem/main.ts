@@ -1,1 +1,1 @@
-export { FileSystemDirectoryAccessDataWakMemory } from './FileSystemDirectoryAccessDataWakMemory';
+export { FileSystemDirectoryAccessDataWakMemory } from './file-system-directory-access-data-wak-memory.ts';

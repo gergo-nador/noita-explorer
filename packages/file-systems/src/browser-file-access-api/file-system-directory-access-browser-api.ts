@@ -1,6 +1,6 @@
 import { FileSystemDirectoryAccess } from '@noita-explorer/model';
 import { promiseHelper } from '@noita-explorer/tools';
-import { FileSystemFileAccessBrowserApi } from './FileSystemFileAccessBrowserApi.ts';
+import { FileSystemFileAccessBrowserApi } from './file-system-file-access-browser-api.ts';
 
 const FILE_PATH_DIVIDER = '/';
 

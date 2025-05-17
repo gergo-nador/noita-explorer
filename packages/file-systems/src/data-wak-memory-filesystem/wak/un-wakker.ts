@@ -1,5 +1,5 @@
 import { Buffer } from 'buffer';
-import { WakMemoryFile } from './WakMemoryFile.ts';
+import { WakMemoryFile } from './wak-memory-file.ts';
 
 /**
  * Little-endian 32-bit read from buffer.

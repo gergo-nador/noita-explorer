@@ -1,1 +1,1 @@
-export * from './FileSystemDirectoryAccessBrowserFallback';
+export * from './file-system-directory-access-browser-fallback.ts';

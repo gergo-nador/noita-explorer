@@ -1,4 +1,4 @@
-import { WakMemoryFile } from './wak/WakMemoryFile.ts';
+import { WakMemoryFile } from './wak/wak-memory-file.ts';
 import { FileSystemFileAccess } from '@noita-explorer/model';
 import { promiseHelper } from '@noita-explorer/tools';
 import {

@@ -3,8 +3,8 @@ import { FileWithDirectoryAndFileHandle } from 'browser-fs-access';
 import {
   DirectoryLogicForFileLists,
   DirectoryLogicForFileLists_File,
-} from '../DirectoryLogicForFileLists.ts';
-import { FileSystemFileAccessBrowserFallback } from './FileSystemFileAccessBrowserFallback.ts';
+} from '../directory-logic-for-file-lists.ts';
+import { FileSystemFileAccessBrowserFallback } from './file-system-file-access-browser-fallback.ts';
 
 const FILE_PATH_DIVIDER = '/';
 

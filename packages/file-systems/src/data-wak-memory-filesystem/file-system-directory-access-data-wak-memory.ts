@@ -1,11 +1,11 @@
 import { FileSystemDirectoryAccess } from '@noita-explorer/model';
-import { unWakker } from './wak/UnWakker.ts';
+import { unWakker } from './wak/un-wakker.ts';
 import { Buffer } from 'buffer';
 import {
   DirectoryLogicForFileLists,
   DirectoryLogicForFileLists_File,
-} from '../DirectoryLogicForFileLists.ts';
-import { FileSystemFileAccessDataWakMemory } from './FileSystemFileAccessDataWakMemory.ts';
+} from '../directory-logic-for-file-lists.ts';
+import { FileSystemFileAccessDataWakMemory } from './file-system-file-access-data-wak-memory.ts';
 
 const FILE_PATH_DIVIDER = '/';
 
