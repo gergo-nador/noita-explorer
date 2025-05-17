@@ -4,9 +4,9 @@ import {
   IndexExpression,
   MemberExpression,
 } from 'luaparse';
-import { LuaObjectDeclarationWrapperType } from './LuaObjectDeclarationWrapper';
-import { LuaValueWrapper } from './LuaValueWrapper';
-import { LuaExpressionPart } from './LuaExpressionPart';
+import { LuaObjectDeclarationWrapperType } from './lua-object-declaration-wrapper.ts';
+import { LuaValuWrapper } from './lua-valu-wrapper.ts';
+import { LuaExpressionPart } from './lua-expression-part.ts';
 
 export interface LuaAssignmentWrapperType {
   getName: () => string;
@@ -20,7 +20,7 @@ export const LuaAssignmentWrapper = (
 ): LuaAssignmentWrapperType => {
   return {
     getName: () => {
-      const name = LuaValueWrapper(variable).asIdentifier();
+      const name = LuaValuWrapper(variable).asIdentifier();
       if (name === undefined) {
         throw new Error('identifier name is undefined.');
       }
@@ -48,7 +48,7 @@ const getExpressionValue = (
     return arr;
   }
 
-  const value = LuaValueWrapper(expression);
+  const value = LuaValuWrapper(expression);
 
   const part: LuaExpressionPart = {
     value:
@@ -65,7 +65,7 @@ const getExpressionValue = (
 function processArrayObjectDeclaration(
   expression: Expression,
 ): LuaObjectDeclarationWrapperType[] {
-  const array = LuaValueWrapper(expression).asArray();
+  const array = LuaValuWrapper(expression).asArray();
   if (array === undefined) {
     throw new Error('array is undefined');
   }

@@ -1,7 +1,7 @@
 import { PlacesType, Tooltip } from 'react-tooltip';
 import React, { useMemo, useState } from 'react';
 import { Card } from './card/card';
-import { zIndexManager } from '../zIndexManager';
+import { ZIndexManager } from '../z-index-manager';
 
 interface NoitaTooltipProps {
   content: string | React.ReactNode | React.ReactNode[] | undefined;
@@ -26,7 +26,7 @@ export const NoitaTooltipWrapper = ({
         <Tooltip
           id={id}
           style={{
-            zIndex: zIndexManager.tooltip,
+            zIndex: ZIndexManager.tooltip,
             backgroundColor: 'transparent',
             padding: 0,
             maxWidth: '99%',

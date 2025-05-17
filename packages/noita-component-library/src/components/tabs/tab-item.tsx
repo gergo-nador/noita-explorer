@@ -1,6 +1,6 @@
 import css from './tab-item.module.css';
 import React, { useContext, useEffect } from 'react';
-import { zIndexManager } from '../../zIndexManager';
+import { ZIndexManager } from '../../z-index-manager';
 import { TabViewContext } from './tab-view-context';
 
 export interface TabItemProps {
@@ -52,10 +52,10 @@ export const TabItem = ({
         transform: `translateX(-${index * 4}px) translateY(4px)`, // 4px is the width in the css
         position: 'relative',
         zIndex: isActive
-          ? zIndexManager.tabs.activeTab
+          ? ZIndexManager.tabs.activeTab
           : isHover || isFocus
-            ? zIndexManager.tabs.hoveredTab
-            : zIndexManager.tabs.defaultTab,
+            ? ZIndexManager.tabs.hoveredTab
+            : ZIndexManager.tabs.defaultTab,
       }}
       className={css['container']}
       tabIndex={0}

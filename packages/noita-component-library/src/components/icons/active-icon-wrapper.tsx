@@ -1,5 +1,5 @@
 import { useBool } from '../../hooks/use-bool';
-import { zIndexManager } from '../../zIndexManager';
+import { ZIndexManager } from '../../z-index-manager';
 import React from 'react';
 import { Tooltip } from 'react-tooltip';
 import { Card } from '../card/card';
@@ -21,7 +21,7 @@ export const ActiveIconWrapper = ({
   const { state, setTrue, setFalse } = useBool();
 
   const wrapperStyleProps = {
-    '--zIndexHover': zIndexManager.progressIconHover,
+    '--zIndexHover': ZIndexManager.progressIconHover,
   } as React.CSSProperties;
 
   return (
@@ -33,7 +33,7 @@ export const ActiveIconWrapper = ({
           anchorSelect={`#${id}`}
           isOpen={true}
           style={{
-            zIndex: zIndexManager.tooltip,
+            zIndex: ZIndexManager.tooltip,
             backgroundColor: 'transparent',
             padding: 0,
             maxWidth: '99%',

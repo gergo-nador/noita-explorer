@@ -1,7 +1,7 @@
 import { Card } from '../card/card';
 import React, { useCallback, useState } from 'react';
 import { TabItem } from './tab-item';
-import { zIndexManager } from '../../zIndexManager.ts';
+import { ZIndexManager } from '../../z-index-manager.ts';
 import { TabViewContext } from './tab-view-context';
 
 interface TabViewProps {
@@ -56,7 +56,7 @@ export const TabView = ({
             style={{
               gridColumn: '1/-1',
               position: 'relative',
-              zIndex: zIndexManager.tabs.card,
+              zIndex: ZIndexManager.tabs.card,
               ...styleCard,
             }}
             styleContent={{ padding: 0 }}

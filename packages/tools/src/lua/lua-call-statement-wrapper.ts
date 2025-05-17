@@ -1,5 +1,5 @@
 import { CallStatement } from 'luaparse';
-import { LuaValueWrapper, LuaValueWrapperType } from './LuaValueWrapper';
+import { LuaValuWrapper, LuaValueWrapperType } from './lua-valu-wrapper.ts';
 
 export interface LuaCallStatementWrapperType {
   identifier: string;
@@ -10,13 +10,13 @@ export const LuaCallStatementWrapper = (
   callStatement: CallStatement,
 ): LuaCallStatementWrapperType => {
   const expression = callStatement.expression;
-  const identifier = LuaValueWrapper(expression.base).required.asIdentifier();
+  const identifier = LuaValuWrapper(expression.base).required.asIdentifier();
 
   return {
     identifier: identifier,
     arguments: () => {
       if (expression.type !== 'CallExpression') return undefined;
-      return expression.arguments.map((a) => LuaValueWrapper(a));
+      return expression.arguments.map((a) => LuaValuWrapper(a));
     },
   };
 };

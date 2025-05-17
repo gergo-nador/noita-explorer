@@ -1,5 +1,5 @@
 import { AssignmentStatement, Chunk, parse } from 'luaparse';
-import { LuaAssignmentStatementWrapper } from './LuaAssignmentStatementWrapper';
+import { LuaAssignmentStatementWrapper } from './lua-assignment-statement-wrapper.ts';
 
 /**
  * The main entry point for the Lua tools. It parses the text and returns a wrapper object around it.

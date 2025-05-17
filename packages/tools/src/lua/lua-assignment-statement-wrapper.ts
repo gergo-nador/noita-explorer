@@ -2,7 +2,7 @@ import { AssignmentStatement } from 'luaparse';
 import {
   LuaAssignmentWrapper,
   LuaAssignmentWrapperType,
-} from './LuaAssignmentWrapper';
+} from './lua-assignment-wrapper.ts';
 
 export interface LuaAssignmentStatementWrapperType {
   first: () => LuaAssignmentWrapperType;

@@ -1,4 +1,4 @@
-import { FileSystemFileAccess } from './FileSystemFileAccess.ts';
+import { FileSystemFileAccess } from './file-system-file-access.ts';
 
 export interface FileSystemDirectoryAccess {
   getName: () => string;

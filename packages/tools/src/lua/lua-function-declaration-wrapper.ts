@@ -2,12 +2,12 @@ import { CallStatement, FunctionDeclaration } from 'luaparse';
 import {
   LuaAssignmentStatementWrapper,
   LuaAssignmentStatementWrapperType,
-} from './LuaAssignmentStatementWrapper';
+} from './lua-assignment-statement-wrapper.ts';
 import {
   LuaCallStatementWrapper,
   LuaCallStatementWrapperType,
-} from './LuaCallStatementWrapper';
-import { LuaValueWrapper } from './LuaValueWrapper';
+} from './lua-call-statement-wrapper.ts';
+import { LuaValuWrapper } from './lua-valu-wrapper.ts';
 import { StringKeyDictionary } from '@noita-explorer/model';
 
 export interface LuaFunctionDeclarationWrapperType {
@@ -31,7 +31,7 @@ export const LuaFunctionDeclarationWrapper = (
         .filter((c) => c.expression.type === 'CallExpression')
         .filter(
           (c) =>
-            LuaValueWrapper(c.expression.base).asIdentifier() === identifier,
+            LuaValuWrapper(c.expression.base).asIdentifier() === identifier,
         );
 
       if (results.length === 0) return undefined;

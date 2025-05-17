@@ -1,6 +1,6 @@
 import { TableConstructorExpression } from 'luaparse';
 import { StringKeyDictionary } from '@noita-explorer/model';
-import { LuaValueWrapperType, LuaValueWrapper } from './LuaValueWrapper';
+import { LuaValueWrapperType, LuaValuWrapper } from './lua-valu-wrapper.ts';
 
 export interface LuaObjectDeclarationWrapperType {
   keys: string[];
@@ -20,7 +20,7 @@ export const LuaObjectDeclarationWrapper = (
     if (key['type'] !== 'Identifier') continue;
 
     const propertyName: string = key['name'];
-    const propertyValue = LuaValueWrapper(field.value);
+    const propertyValue = LuaValuWrapper(field.value);
 
     if (propertyValue === undefined) {
       continue;
