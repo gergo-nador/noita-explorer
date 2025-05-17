@@ -1,15 +1,6 @@
-import { XmlAttributeReadOptions } from './xml-attribute-read-options.ts';
+import { XmlAttributeReadOptions } from './interfaces/xml-attribute-read-options.ts';
 import { StringKeyDictionaryComposite } from '@noita-explorer/model';
-
-export interface XmlWrapperType {
-  _getCurrentXmlObj: () => object;
-  findNthTag: (tagName: string, index?: number) => XmlWrapperType | undefined;
-  findTagArray: (tagName: string) => XmlWrapperType[];
-  findAllTags: (tagName: string) => XmlWrapperType[];
-  getAttribute: (attributeName: string) => XmlAttributeReadOptions | undefined;
-  getRequiredAttribute: (attributeName: string) => XmlAttributeReadOptions;
-  getTextContent: () => string | undefined;
-}
+import { XmlWrapperType } from './interfaces/xml-wrapper-type.ts';
 
 /**
  * Wrapper object providing many utility methods

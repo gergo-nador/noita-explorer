@@ -1,0 +1,30 @@
+import { XmlAttributeReadOptions } from './xml-attribute-read-options.ts';
+
+export interface XmlWrapperType {
+  _getCurrentXmlObj: () => object;
+  /**
+   * Finds the first tag whose child matches the `tagName`, and gets the
+   * nth child (zero indexed) of the type `tagName`
+   * @param tagName tag name to look for
+   * @param index
+   */
+  findNthTag: (tagName: string, index?: number) => XmlWrapperType | undefined;
+  /**
+   * Finds the first tag whose child matches the `tagName`, and get all
+   * the children which matches the `tagName`
+   * @param tagName
+   */
+  findTagArray: (tagName: string) => XmlWrapperType[];
+  /**
+   * Recursively finds all occurrence of a tag that matches the `tagName`
+   * @param tagName
+   */
+  findAllTags: (tagName: string) => XmlWrapperType[];
+  getAttribute: (attributeName: string) => XmlAttributeReadOptions | undefined;
+  /**
+   * Throws error if the attribute cannot be found
+   * @param attributeName
+   */
+  getRequiredAttribute: (attributeName: string) => XmlAttributeReadOptions;
+  getTextContent: () => string | undefined;
+}
