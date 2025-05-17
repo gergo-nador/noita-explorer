@@ -1,4 +1,4 @@
-import { NoitaWand } from './NoitaWand.ts';
+import { NoitaWand } from './noita-wand.ts';
 
 export interface NoitaWandBonesFile {
   wand: NoitaWand;

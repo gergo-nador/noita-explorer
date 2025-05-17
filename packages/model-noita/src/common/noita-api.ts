@@ -1,14 +1,14 @@
-import { NoitaWakData } from '../scraping/NoitaWakData';
-import { NoitaDataWakScrapeResult } from '../scraping/NoitaDataWakScrapeResult.ts';
+import { NoitaWakData } from '../scraping/noita-wak-data.ts';
+import { NoitaDataWakScrapeResult } from '../scraping/noita-data-wak-scrape-result.ts';
 import { StringKeyDictionary } from '@noita-explorer/model';
-import { EnemyStatistic } from '../scraping/EnemyStatistics.ts';
-import { NoitaProgressFlags } from '../scraping/NoitaProgressFlags.ts';
-import { NoitaSession } from './NoitaSession.ts';
-import { NoitaWorldState } from './NoitaWorldState.ts';
-import { NoitaWandBonesFile } from './NoitaWandBonesFile.ts';
-import { NoitaAction, NoitaActionResult } from './NoitaAction.ts';
+import { EnemyStatistic } from '../scraping/enemy-statistics.ts';
+import { NoitaProgressFlags } from '../scraping/noita-progress-flags.ts';
+import { NoitaSession } from './noita-session.ts';
+import { NoitaWorldState } from './noita-world-state.ts';
+import { NoitaWandBonesFile } from './noita-wand-bones-file.ts';
+import { NoitaAction, NoitaActionResult } from './noita-action.ts';
 
-export interface NoitaAPI {
+export interface NoitaApi {
   config: {
     get: (key: string) => Promise<string | undefined>;
     set: ({ key, value }: { key: string; value: string }) => Promise<void>;

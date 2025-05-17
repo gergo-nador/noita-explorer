@@ -1,4 +1,4 @@
-import { NoitaProgressEntity } from './NoitaProgressEntity';
+import { NoitaProgressEntity } from './noita-progress-entity.ts';
 
 export interface NoitaPerk extends NoitaProgressEntity {
   description: string;

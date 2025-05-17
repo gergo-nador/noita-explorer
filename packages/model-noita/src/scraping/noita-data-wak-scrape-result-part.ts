@@ -1,4 +1,4 @@
-import { NoitaDataWakScrapeResultStatus } from './NoitaDataWakScrapeResultStatus.ts';
+import { NoitaDataWakScrapeResultStatus } from './noita-data-wak-scrape-result-status.ts';
 
 export interface NoitaDataWakScrapeResultPart<T> {
   status: NoitaDataWakScrapeResultStatus;

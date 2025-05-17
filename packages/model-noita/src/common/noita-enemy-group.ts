@@ -1,4 +1,4 @@
-import { NoitaEnemy } from './NoitaEnemy';
+import { NoitaEnemy } from './noita-enemy.ts';
 
 export interface NoitaEnemyGroup {
   baseId: string;

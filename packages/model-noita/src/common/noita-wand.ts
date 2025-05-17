@@ -1,4 +1,4 @@
-import { NoitaWandSpell } from './NoitaWandSpell.ts';
+import { NoitaWandSpell } from './noita-wand-spell.ts';
 
 export interface NoitaWand {
   name: string;
