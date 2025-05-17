@@ -1,13 +1,11 @@
 import { Builder, parseStringPromise, RenderOptions } from 'xml2js';
-import { StringKeyDictionaryComposite } from '@noita-explorer/model';
+import { XmlRootWrapper } from './interfaces/xml-inner-types.ts';
 
 /**
  * Parses a text to an XML object
  * @param text
  */
-export const parseXml = (
-  text: string,
-): Promise<StringKeyDictionaryComposite<string>> => {
+export const parseXml = (text: string): Promise<XmlRootWrapper> => {
   const commentsRemoved = removeXmlComments(text);
   return parseStringPromise(commentsRemoved);
 };

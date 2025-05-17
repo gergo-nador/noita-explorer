@@ -40,7 +40,13 @@ describe('XmlWrapper', () => {
               <float_11d1 value="11.1" />
               <float_22d234234 value="22.234234" />
             </float>
+            <empty hello="2"></empty>
+            <modify attr_to_modify="unmodified"></modify>
           </attributes>
+          <text>
+            <text_simple>Test text</text_simple>
+            <text_advanced><node1></node1>Test text<node2></node2></text_advanced>
+          </text>
         </root>
       `;
 
@@ -169,15 +175,50 @@ describe('XmlWrapper', () => {
   });
 
   it('should get text content of a node', () => {
-    const secondNodes = xmlWrapper.findAllTags('second');
+    const textSimple = xmlWrapper.findNthTag('text_simple');
+    expect(textSimple.getTextContent()).toBe('Test text');
 
-    const second1 = secondNodes[0];
-    expect(second1.getTextContent()).toBe('1');
+    const textAdvanced = xmlWrapper.findNthTag('text_advanced');
+    expect(textAdvanced.getTextContent()).toBe('Test text');
+  });
 
-    const second2 = secondNodes[1];
-    expect(second2.getTextContent()).toBe('Text');
+  it('should add a new attribute', () => {
+    const empty = xmlWrapper.findNthTag('empty');
+    empty.addOrModifyAttribute('added', 'hello');
 
-    const second3 = secondNodes[2];
-    expect(second3.getTextContent()).toBe('Phone');
+    expect(empty.getAttribute('added')?.asText()).toBe('hello');
+  });
+
+  it('should modify an existing attribute', () => {
+    const empty = xmlWrapper.findNthTag('modify');
+    empty.addOrModifyAttribute('attr_to_modify', 'done');
+
+    expect(empty.getAttribute('attr_to_modify')?.asText()).toBe('done');
+  });
+
+  it('should add a new tag with existing siblings with same tag', () => {
+    const third = xmlWrapper.findNthTag('third');
+    const newChild = third.addChild('second');
+    expect(third.findTagArray('second')).toHaveLength(2);
+
+    newChild.addOrModifyAttribute('id', 'second-4');
+
+    const findNewChild = xmlWrapper
+      .findAllTags('second')
+      .find((tag) => tag.getAttribute('id')?.asText() === 'second-4');
+
+    expect(findNewChild).toBeTruthy();
+  });
+
+  it('should add a new tag without any existing siblings with same tag', () => {
+    const third = xmlWrapper.findNthTag('third');
+    const newChild = third.addChild('newtag');
+    expect(third.findTagArray('newtag')).toHaveLength(1);
+
+    newChild.addOrModifyAttribute('hello', 'test');
+
+    const findNewChild = xmlWrapper.findNthTag('newtag');
+    expect(findNewChild).toBeTruthy();
+    expect(findNewChild.getAttribute('hello')?.asText()).toBe('test');
   });
 });

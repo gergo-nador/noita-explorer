@@ -90,11 +90,30 @@ describe('XmlConverter', () => {
     });
   });
 
+  it('should ignore second root', async () => {
+    const xml = `
+      <root>
+        <hello attr1="1">Whatsup<childless/></hello>
+      </root>
+      <root2>
+        <other>ohh</other>
+      </root2>
+    `;
+
+    const parsed = await parseXml(xml);
+
+    expect(parsed).toBeTruthy();
+    expect(parsed).toStrictEqual({
+      root: { hello: [{ _: 'Whatsup', $: { attr1: '1' }, childless: [''] }] },
+    });
+  });
+
   it('should parse an xml after removing the comments', async () => {
     const xml = `
       <root id="123" name="rootNode">
         <!-- hello -->
         <single>Single item</single>
+        <single1><childless/></single1>
         <child id="1">Child 1</child>
         <child id="2">Child 2</child>
         <item type="A">Item A</item>
@@ -111,6 +130,11 @@ describe('XmlConverter', () => {
       root: {
         $: { id: '123', name: 'rootNode' },
         single: ['Single item'],
+        single1: [
+          {
+            childless: [''],
+          },
+        ],
         child: [
           {
             _: 'Child 1',

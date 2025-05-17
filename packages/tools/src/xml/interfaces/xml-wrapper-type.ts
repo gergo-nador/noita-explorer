@@ -34,4 +34,15 @@ export interface XmlWrapperType {
    * Gets the text content of a tag
    */
   getTextContent: () => string | undefined;
+  /**
+   * Adds a new tag as a child to the current tag
+   * @param tagName
+   */
+  addChild: (tagName: string) => XmlWrapperType;
+  /**
+   * Adds or modifies an attribute to the specified content
+   * @param attributeName
+   * @param content
+   */
+  addOrModifyAttribute: (attributeName: string, content: string) => void;
 }
