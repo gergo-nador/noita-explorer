@@ -3,19 +3,24 @@ import { Button, useToast } from '@noita-explorer/noita-component-library';
 import { useNoitaActionsStore } from '../../stores/actions.ts';
 import { useSave00Store } from '../../stores/save00.ts';
 import { useState } from 'react';
+import { NoitaActionProgress } from '@noita-explorer/model-noita';
 
 export const ActionsRunAllButton = ({ onClick }: { onClick: () => void }) => {
   const { actions, actionUtils } = useNoitaActionsStore();
   const { modify: modifySave00 } = useSave00Store();
   const toast = useToast();
   const [isRunning, setIsRunning] = useState(false);
+  const [progress, setProgress] = useState<NoitaActionProgress>();
 
   const runActions = async () => {
     setIsRunning(true);
 
+    const updateCallback = (progress: NoitaActionProgress) =>
+      setProgress(progress);
+
     const array = Object.values(actions);
     noitaAPI.noita.actions
-      .runActions(array)
+      .runActions(array, updateCallback)
       .then((results) => {
         // make modifications to the save00 stores from the successful actions
         modifySave00((prev) => {
@@ -115,16 +120,29 @@ export const ActionsRunAllButton = ({ onClick }: { onClick: () => void }) => {
 
         onClick();
       })
-      .then(() => setIsRunning(false))
-      .catch((err) => {
-        console.error(err);
+      .then(() => {
         setIsRunning(false);
+        setProgress(undefined);
+      })
+      .catch((err) => {
+        console.error(
+          'error while executing the actions (actions-run-all-button.tsx)',
+          err,
+        );
+        setIsRunning(false);
+        setProgress(undefined);
       });
   };
 
+  const progressNumber = (progress?.success ?? 0) + (progress?.failed ?? 0);
+
   return (
     <Button disabled={isRunning} decoration={'both'} onClick={runActions}>
-      {isRunning && <span>Running...</span>}
+      {isRunning && (
+        <span>
+          Running... ({progressNumber} / {progress?.all})
+        </span>
+      )}
       {!isRunning && <span>Run Actions</span>}
     </Button>
   );

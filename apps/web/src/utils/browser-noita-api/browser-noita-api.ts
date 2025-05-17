@@ -69,10 +69,11 @@ export function browserNoitaApi(): NoitaAPI {
         master: () => throwNotAllowedInThisModeError(),
       },
       actions: {
-        runActions: async (actions) =>
+        runActions: async (actions, callback) =>
           runActions({
             noitaActions: actions,
             save00FolderHandle: await getSave00FolderHandle(),
+            callback,
           }),
       },
     },

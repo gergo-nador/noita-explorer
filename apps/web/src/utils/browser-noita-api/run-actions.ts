@@ -1,15 +1,23 @@
-import { NoitaAction, NoitaActionResult } from '@noita-explorer/model-noita';
+import {
+  NoitaAction,
+  NoitaActionProgress,
+  NoitaActionResult,
+} from '@noita-explorer/model-noita';
 import { actions } from '@noita-explorer/scrapers';
 import { FileSystemDirectoryAccess } from '@noita-explorer/model';
+import { Dispatch } from 'react';
 
 export const runActions = async ({
   noitaActions,
   save00FolderHandle,
+  callback,
 }: {
   noitaActions: NoitaAction[];
   save00FolderHandle: FileSystemDirectoryAccess;
+  callback: Dispatch<NoitaActionProgress>;
 }): Promise<NoitaActionResult[]> => {
-  const results: NoitaActionResult[] = [];
+  const success: NoitaActionResult[] = [];
+  const error: NoitaActionResult[] = [];
 
   for (const action of noitaActions) {
     try {
@@ -37,11 +45,21 @@ export const runActions = async ({
         );
       }
 
-      results.push({ type: 'success', action: action });
+      success.push({ type: 'success', action: action });
     } catch (e) {
-      results.push({ type: 'error', action: action, error: e as Error });
+      error.push({ type: 'error', action: action, error: e as Error });
+    }
+
+    try {
+      callback({
+        all: noitaActions.length,
+        success: success.length,
+        failed: error.length,
+      });
+    } catch (err) {
+      console.error('Error in callback for running actions: ', err);
     }
   }
 
-  return results;
+  return [...success, ...error];
 };

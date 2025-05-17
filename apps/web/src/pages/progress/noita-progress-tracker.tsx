@@ -80,12 +80,15 @@ export const NoitaProgressTracker = () => {
               <Button
                 decoration={'both'}
                 onClick={() => {
-                  if (unlockedPerks === undefined || !data) {
+                  if (save00Status !== 'loaded' || !data) {
                     return;
                   }
 
                   for (const perk of data.perks) {
-                    const isLocked = !unlockedPerks.includes(perk.id);
+                    const isLocked = unlockedPerks
+                      ? !unlockedPerks.includes(perk.id)
+                      : true;
+
                     if (isLocked) {
                       actionUtils.perksUnlock.create(perk);
                     }
@@ -98,12 +101,15 @@ export const NoitaProgressTracker = () => {
               <Button
                 decoration={'both'}
                 onClick={() => {
-                  if (unlockedSpells === undefined || !data) {
+                  if (save00Status !== 'loaded' || !data) {
                     return;
                   }
 
                   for (const spell of data.spells) {
-                    const isLocked = !unlockedSpells.includes(spell.id);
+                    const isLocked = unlockedSpells
+                      ? !unlockedSpells.includes(spell.id)
+                      : true;
+
                     if (isLocked) {
                       actionUtils.spellUnlock.create(spell);
                     }
@@ -116,12 +122,13 @@ export const NoitaProgressTracker = () => {
               <Button
                 decoration={'both'}
                 onClick={() => {
-                  if (enemyStatistics === undefined || !data) {
+                  if (save00Status !== 'loaded' || !data) {
                     return;
                   }
 
                   for (const enemy of data.enemies) {
-                    const kills = enemyStatistics[enemy.id]?.enemyDeathByPlayer;
+                    const kills =
+                      enemyStatistics?.[enemy.id]?.enemyDeathByPlayer;
                     const isLocked = kills === undefined || kills === 0;
                     if (isLocked) {
                       actionUtils.enemyUnlock.create(enemy);
@@ -191,7 +198,7 @@ export const NoitaProgressTracker = () => {
                   )
                 }
                 onClick={() => {
-                  if (!unlockMode) {
+                  if (!unlockMode || save00Status !== 'loaded') {
                     return;
                   }
 
@@ -257,7 +264,7 @@ export const NoitaProgressTracker = () => {
                   )
                 }
                 onClick={() => {
-                  if (!unlockMode) {
+                  if (!unlockMode || save00Status !== 'loaded') {
                     return;
                   }
 
@@ -347,7 +354,7 @@ export const NoitaProgressTracker = () => {
                     )
                   }
                   onClick={() => {
-                    if (!unlockMode) {
+                    if (!unlockMode || save00Status !== 'loaded') {
                       return;
                     }
 

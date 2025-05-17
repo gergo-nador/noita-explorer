@@ -6,7 +6,11 @@ import { NoitaProgressFlags } from '../scraping/noita-progress-flags.ts';
 import { NoitaSession } from './noita-session.ts';
 import { NoitaWorldState } from './noita-world-state.ts';
 import { NoitaWandBonesFile } from './noita-wand-bones-file.ts';
-import { NoitaAction, NoitaActionResult } from './noita-action.ts';
+import {
+  NoitaAction,
+  NoitaActionProgress,
+  NoitaActionResult,
+} from './noita-action.ts';
 
 export interface NoitaAPI {
   config: {
@@ -35,7 +39,10 @@ export interface NoitaAPI {
       master: (params?: string[]) => Promise<void>;
     };
     actions: {
-      runActions: (actions: NoitaAction[]) => Promise<NoitaActionResult[]>;
+      runActions: (
+        actions: NoitaAction[],
+        callback: (progress: NoitaActionProgress) => void,
+      ) => Promise<NoitaActionResult[]>;
     };
   };
   dialog: {

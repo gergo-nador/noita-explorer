@@ -10,6 +10,12 @@ export interface NoitaActionResult {
   error?: Error;
 }
 
+export interface NoitaActionProgress {
+  all: number;
+  failed: number;
+  success: number;
+}
+
 interface NoitaActionBase {
   id: string;
   name: string;
