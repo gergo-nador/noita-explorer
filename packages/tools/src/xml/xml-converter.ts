@@ -13,13 +13,15 @@ export const parseXml = (text: string): Promise<XmlRootWrapper> => {
 export const toXml = (obj: object): string => {
   const renderOpts: RenderOptions = {
     pretty: true,
-    // in noita files there are no self-closing XML tags
+    // there shouldn't be any self-closing xml tags in noita xml files
     // @ts-expect-error allowsEmpty is a valid argument here, the IDE just doesn't recognize it
     allowEmpty: true,
   };
 
   const builder = new Builder({
     renderOpts: renderOpts,
+    // no xml declaration in noita xml files
+    headless: true,
   });
   return builder.buildObject(obj);
 };
