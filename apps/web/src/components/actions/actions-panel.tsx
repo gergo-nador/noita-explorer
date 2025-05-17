@@ -33,7 +33,7 @@ export const ActionsPanel = () => {
           left: 0,
           height: '100vh',
           width: '100vw',
-          backdropFilter: 'blur(7px)',
+          backdropFilter: 'blur(10px)',
           backgroundColor: '#00000066',
           opacity: isOpen ? '1' : '0',
           pointerEvents: isOpen ? 'initial' : 'none',
