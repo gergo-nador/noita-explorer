@@ -27,7 +27,7 @@ export const ActionsRunAllButton = ({ onClick }: { onClick: () => void }) => {
           const bonesWands = shallowCopyArray(prev.bonesWands);
           const unlockedPerks = shallowCopyArray(prev.unlockedPerks);
           const unlockedSpells = shallowCopyArray(prev.unlockedSpells);
-          const enemyStatistics = shallowCopyObject(prev.enemyStatistics);
+          const enemyStatistics = shallowCopyObject(prev.enemyStatistics, {});
 
           for (const result of results) {
             if (result.type !== 'success') {
@@ -80,6 +80,7 @@ export const ActionsRunAllButton = ({ onClick }: { onClick: () => void }) => {
             bonesWands: bonesWands,
             unlockedPerks: unlockedPerks,
             unlockedSpells: unlockedSpells,
+            enemyStatistics: enemyStatistics,
           };
         });
 
@@ -150,15 +151,18 @@ export const ActionsRunAllButton = ({ onClick }: { onClick: () => void }) => {
 
 const shallowCopyArray = <T,>(arr: T[] | undefined) => {
   if (!arr) {
-    return undefined;
+    return [];
   }
 
   return [...arr];
 };
 
-const shallowCopyObject = <T extends object>(obj: T | undefined) => {
+const shallowCopyObject = <T extends object>(
+  obj: T | undefined,
+  defaultValue: T,
+): T => {
   if (!obj) {
-    return undefined;
+    return defaultValue;
   }
 
   return { ...obj };
