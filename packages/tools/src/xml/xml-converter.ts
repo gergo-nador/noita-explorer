@@ -1,4 +1,4 @@
-import { Builder, parseStringPromise } from 'xml2js';
+import { Builder, parseStringPromise, RenderOptions } from 'xml2js';
 import { StringKeyDictionaryComposite } from '@noita-explorer/model';
 
 /**
@@ -13,7 +13,16 @@ export const parseXml = (
 };
 
 export const toXml = (obj: object): string => {
-  const builder = new Builder();
+  const renderOpts: RenderOptions = {
+    pretty: true,
+    // in noita files there are no self-closing XML tags
+    // @ts-expect-error allowsEmpty is a valid argument here, the IDE just doesn't recognize it
+    allowEmpty: true,
+  };
+
+  const builder = new Builder({
+    renderOpts: renderOpts,
+  });
   return builder.buildObject(obj);
 };
 

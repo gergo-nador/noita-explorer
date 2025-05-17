@@ -16,6 +16,9 @@ describe('XmlConverter', () => {
         <item type="B">Item B</item>
         <note lang="en">Note in English</note>
         <note lang="fr">Note en Français</note>
+        <childless />
+        <childless_attr attr1="1" />
+        <childless_extended attr1="1"></childless_extended>
       </root>
     `;
 
@@ -37,6 +40,21 @@ describe('XmlConverter', () => {
             _: 'Child 2',
             $: {
               id: '2',
+            },
+          },
+        ],
+        childless: [''],
+        childless_attr: [
+          {
+            $: {
+              attr1: '1',
+            },
+          },
+        ],
+        childless_extended: [
+          {
+            $: {
+              attr1: '1',
             },
           },
         ],
@@ -158,6 +176,21 @@ describe('XmlConverter', () => {
             },
           },
         ],
+        childless: [''],
+        childless_attr: [
+          {
+            $: {
+              attr1: '1',
+            },
+          },
+        ],
+        childless_extended: [
+          {
+            $: {
+              attr1: '1',
+            },
+          },
+        ],
         item: [
           {
             _: 'Item A',
@@ -197,6 +230,9 @@ describe('XmlConverter', () => {
   <single>Single item</single>
   <child id="1">Child 1</child>
   <child id="2">Child 2</child>
+  <childless></childless>
+  <childless_attr attr1="1"></childless_attr>
+  <childless_extended attr1="1"></childless_extended>
   <item type="A">Item A</item>
   <item type="B">Item B</item>
   <note lang="en">Note in English</note>
