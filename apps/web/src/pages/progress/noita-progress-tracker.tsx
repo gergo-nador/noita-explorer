@@ -112,6 +112,25 @@ export const NoitaProgressTracker = () => {
               >
                 Spells
               </Button>
+              /
+              <Button
+                decoration={'both'}
+                onClick={() => {
+                  if (enemyStatistics === undefined || !data) {
+                    return;
+                  }
+
+                  for (const enemy of data.enemies) {
+                    const kills = enemyStatistics[enemy.id]?.enemyDeathByPlayer;
+                    const isLocked = kills === undefined || kills === 0;
+                    if (isLocked) {
+                      actionUtils.enemyUnlock.create(enemy);
+                    }
+                  }
+                }}
+              >
+                Enemies
+              </Button>
             </div>
           </>
         )}
