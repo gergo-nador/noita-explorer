@@ -140,7 +140,7 @@ export const ActionsRunAllButton = ({ onClick }: { onClick: () => void }) => {
     <Button disabled={isRunning} decoration={'both'} onClick={runActions}>
       {isRunning && (
         <span>
-          Running... ({progressNumber} / {progress?.all})
+          Running... ({progressNumber} / {Object.keys(actions).length})
         </span>
       )}
       {!isRunning && <span>Run Actions</span>}

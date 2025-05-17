@@ -17,5 +17,5 @@ export const unlockSpell = async ({
   const spellProgressFlagFileName = 'action_' + spellId.toLowerCase();
 
   const file = await flagsDir.createFile(spellProgressFlagFileName);
-  await file.modify.asText(constants.whyAreYouLookingHere);
+  await file.modify.fromText(constants.whyAreYouLookingHere);
 };

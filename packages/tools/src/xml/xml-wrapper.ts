@@ -102,6 +102,19 @@ const XmlWrapperInternal = ({
     return XmlWrapperInternal({ xmlObj: child, isRoot: false });
   };
 
+  const sortChildrenArrayInternal = (
+    tagName: string,
+    by: (a: XmlWrapperType, b: XmlWrapperType) => number,
+  ) => {
+    const items = findTagArray(xmlObj, tagName);
+    items.sort((a, b) => {
+      const wrapperA = XmlWrapperInternal({ xmlObj: a, isRoot: false });
+      const wrapperB = XmlWrapperInternal({ xmlObj: b, isRoot: false });
+
+      return by(wrapperA, wrapperB);
+    });
+  };
+
   return {
     _getCurrentXmlObj: () => xmlObj,
     findNthTag: findNthTagInternal,
@@ -110,7 +123,8 @@ const XmlWrapperInternal = ({
     getAttribute: getAttributeInternal,
     getRequiredAttribute: getRequiredAttributeInternal,
     getTextContent: getTextContentInternal,
-    addOrModifyAttribute: addOrModifyAttributeInternal,
+    setAttribute: addOrModifyAttributeInternal,
     addChild: addChildInternal,
+    sortChildrenArray: sortChildrenArrayInternal,
   };
 };

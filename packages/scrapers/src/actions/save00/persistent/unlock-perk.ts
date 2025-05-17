@@ -17,5 +17,5 @@ export const unlockPerk = async ({
   const perkProgressFlagFileName = 'perk_picked_' + perkId.toLowerCase();
 
   const file = await flagsDir.createFile(perkProgressFlagFileName);
-  await file.modify.asText(constants.whyAreYouLookingHere);
+  await file.modify.fromText(constants.whyAreYouLookingHere);
 };

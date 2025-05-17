@@ -47,6 +47,14 @@ describe('XmlWrapper', () => {
             <text_simple>Test text</text_simple>
             <text_advanced><node1></node1>Test text<node2></node2></text_advanced>
           </text>
+          <sorting>
+            <sort_item value="4"></sort_item>
+            <sort_item value="3"></sort_item>
+            <sort_item value="1"></sort_item>
+            <sort_item value="6"></sort_item>
+            <sort_item value="2"></sort_item>
+            <sort_item value="5"></sort_item>
+          </sorting>
         </root>
       `;
 
@@ -184,14 +192,14 @@ describe('XmlWrapper', () => {
 
   it('should add a new attribute', () => {
     const empty = xmlWrapper.findNthTag('empty');
-    empty.addOrModifyAttribute('added', 'hello');
+    empty.setAttribute('added', 'hello');
 
     expect(empty.getAttribute('added')?.asText()).toBe('hello');
   });
 
   it('should modify an existing attribute', () => {
     const empty = xmlWrapper.findNthTag('modify');
-    empty.addOrModifyAttribute('attr_to_modify', 'done');
+    empty.setAttribute('attr_to_modify', 'done');
 
     expect(empty.getAttribute('attr_to_modify')?.asText()).toBe('done');
   });
@@ -201,7 +209,7 @@ describe('XmlWrapper', () => {
     const newChild = third.addChild('second');
     expect(third.findTagArray('second')).toHaveLength(2);
 
-    newChild.addOrModifyAttribute('id', 'second-4');
+    newChild.setAttribute('id', 'second-4');
 
     const findNewChild = xmlWrapper
       .findAllTags('second')
@@ -215,10 +223,31 @@ describe('XmlWrapper', () => {
     const newChild = third.addChild('newtag');
     expect(third.findTagArray('newtag')).toHaveLength(1);
 
-    newChild.addOrModifyAttribute('hello', 'test');
+    newChild.setAttribute('hello', 'test');
 
     const findNewChild = xmlWrapper.findNthTag('newtag');
     expect(findNewChild).toBeTruthy();
     expect(findNewChild.getAttribute('hello')?.asText()).toBe('test');
+  });
+
+  it('should sort items', () => {
+    const sort = xmlWrapper.findNthTag('sorting');
+    sort.sortChildrenArray('sort_item', (xml1, xml2) => {
+      const val1 = xml1.getAttribute('value').asInt();
+      const val2 = xml2.getAttribute('value').asInt();
+
+      return val1 - val2;
+    });
+
+    const sortedItems = xmlWrapper.findTagArray('sort_item');
+
+    expect(sortedItems).toHaveLength(6);
+
+    expect(sortedItems[0].getAttribute('value').asInt()).toBe(1);
+    expect(sortedItems[1].getAttribute('value').asInt()).toBe(2);
+    expect(sortedItems[2].getAttribute('value').asInt()).toBe(3);
+    expect(sortedItems[3].getAttribute('value').asInt()).toBe(4);
+    expect(sortedItems[4].getAttribute('value').asInt()).toBe(5);
+    expect(sortedItems[5].getAttribute('value').asInt()).toBe(6);
   });
 });

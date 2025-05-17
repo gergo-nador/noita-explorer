@@ -37,7 +37,12 @@ export const FileSystemFileAccessDataWakMemory = (
       );
     },
     modify: {
-      asText: () => {
+      fromText: () => {
+        throw new Error(
+          'Modify operation not supported for FileSystemFileAccessDataWakMemory',
+        );
+      },
+      fromBuffer: () => {
         throw new Error(
           'Modify operation not supported for FileSystemFileAccessDataWakMemory',
         );

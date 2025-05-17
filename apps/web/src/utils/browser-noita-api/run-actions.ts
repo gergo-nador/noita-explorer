@@ -37,7 +37,11 @@ export const runActions = async ({
           spellId: action.payload.spellId,
         });
       } else if (action.type === 'unlock-enemy') {
-        throw new Error('not implemented in run-actions.ts');
+        await actions.unlockEnemy({
+          save00DirectoryApi: save00FolderHandle,
+          enemyId: action.payload.enemyId,
+          killCount: action.payload.numberOfTimesEnemyKilled,
+        });
       } else {
         console.error(
           action,
@@ -48,6 +52,7 @@ export const runActions = async ({
       success.push({ type: 'success', action: action });
     } catch (e) {
       error.push({ type: 'error', action: action, error: e as Error });
+      console.error(e);
     }
 
     try {

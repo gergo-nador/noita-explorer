@@ -39,9 +39,14 @@ export const FileSystemFileAccessBrowserApi = (
       await fileHandle.remove();
     },
     modify: {
-      asText: async (text) => {
+      fromText: async (text) => {
         const writable = await fileHandle.createWritable();
         await writable.write(text);
+        await writable.close();
+      },
+      fromBuffer: async (buffer) => {
+        const writable = await fileHandle.createWritable();
+        await writable.write(buffer);
         await writable.close();
       },
     },

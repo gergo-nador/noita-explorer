@@ -33,7 +33,12 @@ export const FileSystemFileAccessBrowserFallback = (
       );
     },
     modify: {
-      asText: () => {
+      fromText: () => {
+        throw new Error(
+          'Modify operation not supported for FileSystemFileAccessBrowserFallback',
+        );
+      },
+      fromBuffer: () => {
         throw new Error(
           'Modify operation not supported for FileSystemFileAccessBrowserFallback',
         );

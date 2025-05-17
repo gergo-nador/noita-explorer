@@ -44,5 +44,14 @@ export interface XmlWrapperType {
    * @param attributeName
    * @param content
    */
-  addOrModifyAttribute: (attributeName: string, content: string) => void;
+  setAttribute: (attributeName: string, content: string) => void;
+  /**
+   * Sorts children of the specified tag.
+   * @param tagName
+   * @param by
+   */
+  sortChildrenArray: (
+    tagName: string,
+    by: (a: XmlWrapperType, b: XmlWrapperType) => number,
+  ) => void;
 }
