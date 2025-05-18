@@ -64,7 +64,8 @@ export const SetupWebPaths = () => {
               <span>
                 This browser is not fully compatible with certain features of
                 this site (<i>File System API</i>). As a result, you will need
-                to manually set the paths each time you visit.
+                to manually set the paths each time you visit. Additionally, you
+                will not be able to modify any of your progress.
               </span>
               <Icon type={'warning'} size={20} />
             </div>
