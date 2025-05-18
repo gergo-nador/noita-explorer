@@ -30,7 +30,7 @@ export const MainPage = () => {
     return count;
   }, [currentRun, data]);
 
-  console.log(import.meta.env.VITE_ENV);
+  console.log('env:', import.meta.env.VITE_ENV);
 
   return (
     <div
