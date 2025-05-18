@@ -1,81 +1,130 @@
-# Turborepo starter
+# Noita Explorer
 
-This is an official starter Turborepo.
+Welcome to **Noita Explorer**!
 
-## Using this example
+Have you lost your unlocked perks, spells or enemies progress recently? 
+Or would you like to just check what you haven't unlocked yet? Are you
+interested in a map visualizing your death locations? Or to check statistics of
+your previous sessions? 
 
-Run the following command:
+You are at the perfect place!
 
-```sh
-npx create-turbo@latest
+## Disclaimer
+
+Noita Explorer is a free, ad-free, open-source and fully client side tool to unlock perk, 
+spell and enemy progress.
+It achieves it without mods, by directly modifying your save files. 
+While I've tested the features that modifies files as thoroughly as I could, it is software after all, 
+and anything that can go wrong will go wrong one day. 
+Therefore, it is YOUR responsibility (and highly advised) to create a backup of your game
+files before using this tool. 
+I do not take any responsibility if this tool breaks your save files and the previous 
+version cannot be restored!
+
+### Features - Browser version
+
+- Progress: View your in-game progress of the unlocked items
+- [*] Progress: Unlock any perk, spell or enemy, without mods (achievements still work)!
+- [WIP] Wiki: An auto generated wiki from the data.wak file.
+- [WIP] Current run: View details of your current run.
+- Holidays: View the upcoming holidays, sorted by the event's date
+- Sessions: View all your sessions and statistics about it. Filter by what killed you :D
+- Death map: An interactive death map, using plotly.js
+- Bones wands: Inspect the wands stored in the bones wands files. 
+- [*] Bones wands: Delete any or all bones files from your disk.
+- Settings: 
+  - Units / Time: The default option chooses the time unit that fits the context the best. Though you can force the time unit to be either frames or seconds throughout the app.
+  - Cursor / Type: A bit buggy, but you can customize your cursor to be more Noita like! I'll plan to investigate the rendering issue with the custom cursor
+  - Extras / Display debug info: Reveals the collected debug information during the scraping of the data.wak, such as tags for enemies, scraped files. Currently only a limited amount of debug information is collected.
+
+Features marked with a [*] star are only available in browser that support the [File System API](https://caniuse.com/native-filesystem-api).
+At the moment writing this README, only these browser do maintain a support:
+- Chrome: 105 - current
+- Edge: 105 - current
+- Opera: 91 - current
+
+### Features - Desktop version
+
+The desktop app is a work in progress, but eventually it is planned to be released.
+
+- Everything from web, plus:
+- Launch the Noita game
+- Launch the Noita game with differents sets of arguments
+- Scrape data.wak file
+- Open folders and files in the client's operating system's file explorer
+
+
+### Feature request / Bug report
+
+Do you have an idea that you would like to see in Noita Explorer? Or have you encountered
+a bug? Feel free to open an issue for it!
+
+
+## Running the project locally
+
+### Setup
+
+1. Clone the repository
+
+```shell
+git clone https://github.com/gergo-nador/noita-explorer.git
 ```
 
-## What's inside?
+2. Install dependencies
 
-This Turborepo includes the following packages/apps:
-
-### Apps and Packages
-
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
-
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
-
-```
-cd my-turborepo
-pnpm build
+```shell
+npm install
 ```
 
-### Develop
+### Running the Website development server
 
-To develop all apps and packages, run the following command:
+1. Run development server
 
-```
-cd my-turborepo
-pnpm dev
-```
-
-### Remote Caching
-
-Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup), then enter the following commands:
-
-```
-cd my-turborepo
-npx turbo login
+```shell
+npm run dev:web
 ```
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
+2. Visit https://localhost:4000 in your preferred browser
 
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
+### Running the Electron app
 
+1. Run electron startup script
+```shell
+npm run dev:desktop
 ```
-npx turbo link
-```
 
-## Useful Links
+Note: only tested this on Windows
 
-Learn more about the power of Turborepo:
+## Project structure
 
-- [Tasks](https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks)
-- [Caching](https://turbo.build/repo/docs/core-concepts/caching)
-- [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching)
-- [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
-- [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
-- [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)
+As you may have noticed, this repository consists of two applications,
+an Electron desktop app, and a browser based app. While the electron 
+runs the browser app internally, they still need different logic, especially
+in the file handling. Therefore it was decided to separate them into projects.
+
+After a lot of research the choice was made to use [Turborepo](https://turborepo.com/)
+as a build system.
+
+The project is structured in the following way:
+
+- Apps
+  - `apps/desktop`: Electron app
+  - `apps/web`: Browser app
+
+- Packages
+  - `packages/model`: Base helper interfaces, not related to Noita
+  - `packages/model-noita`: Types for Noita
+  - `packages/tools`: General tools and utility functions
+    - `src/common`: General utility functions
+    - `src/lua`: Wrapper around `luaparse` package
+    - `src/xml`: Wrapper around `xml2js` parsed object structure
+    - `tests/xml`: Unit tests for the xml 
+  - `packages/file-systems`: File system access is abstracted in this project for flexibility (interfaces in `packages/model/src/file-system`)
+    - `src/browser-fallback`: Fallback file using `browser-fs-access` for cases when the File System API is not available
+    - `src/browser-file-access-api`: File system used when File System API is available
+    - `src/data-wak-memory-filesystem`: Read files directly from the data.wak compressed file without unpacking it
+    - `/apps/desktop/src/file-system`: Node implementation of the file system access interfaces
+  - `packages/scrapers`: All functions related to scraping and modifying Noita files 
+    - `src/actions`: Actions that modify the save files.
+    - `src/scrapers`: Functions to scrape data from data.wak or save00 folder. These functions don't modify any files on the disk
+  - `noita-component-library`: Reusable Noita components without Noita logic
