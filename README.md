@@ -55,7 +55,7 @@ The desktop app is a work in progress, but eventually it is planned to be releas
 
 - Everything from web, plus:
 - Launch the Noita game
-- Launch the Noita game with differents sets of arguments
+- Launch the Noita game with different sets of arguments
 - Scrape data.wak file
 - Open folders and files in the client's operating system's file explorer
 
@@ -82,6 +82,14 @@ git clone https://github.com/gergo-nador/noita-explorer.git
 npm install
 ```
 
+3. Create an environment file in the path `apps/web/.env` with the following content:
+
+```dotenv
+VITE_ENV=development
+```
+
+(`VITE_ENV` will resolve to `preview` in the development deployment, and `production` in production deployment)
+
 ### Running the Website development server
 
 1. Run development server
@@ -100,6 +108,26 @@ npm run dev:desktop
 ```
 
 Note: only tested this on Windows
+
+
+## Branches and Environments
+
+Since I'm the only one developing this project, and I don't expect any contributors
+in the near future, I've come up with this simple structure:
+
+### Environments (`import.meta.env.VITE_ENV`)
+
+- on local machine: `development`
+- on preview deployment from `dev` branch: `preview`
+- on production deployment from `main` branch: `production`
+
+### Branches
+
+- `dev`: active development branch. Mainly a beta testing branch. New features can be broken.
+  - deployed: https://dev.noita-explorer.pages.dev/
+- `main`: main production branch. If a feature is well tested in the `dev` branch, it will be merged into this one.
+  - deployed: https://noita-explorer.pages.dev/
+
 
 ## Project structure
 
