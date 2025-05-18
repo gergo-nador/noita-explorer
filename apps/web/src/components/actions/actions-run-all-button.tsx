@@ -1,4 +1,4 @@
-import { noitaAPI } from '../../ipcHandlers.ts';
+import { noitaAPI } from '../../noita-api.ts';
 import { Button, useToast } from '@noita-explorer/noita-component-library';
 import { useNoitaActionsStore } from '../../stores/actions.ts';
 import { useSave00Store } from '../../stores/save00.ts';

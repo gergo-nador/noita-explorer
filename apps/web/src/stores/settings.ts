@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { noitaAPI } from '../ipcHandlers';
+import { noitaAPI } from '../noita-api.ts';
 
 export type SettingsUnitsType = 'default' | 'frames' | 'seconds';
 export type SettingsCursorType = 'default' | 'noita-cursor' | 'wand';

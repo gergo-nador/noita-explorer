@@ -6,7 +6,7 @@ import {
 import { PathInput } from '../../components/PathInput.tsx';
 import { useSettingsStore } from '../../stores/settings.ts';
 import { useSave00Store } from '../../stores/save00.ts';
-import { noitaAPI } from '../../ipcHandlers.ts';
+import { noitaAPI } from '../../noita-api.ts';
 
 export const SetupWebPaths = () => {
   const { settings, set: setPaths } = useSettingsStore();

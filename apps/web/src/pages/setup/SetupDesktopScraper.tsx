@@ -15,7 +15,7 @@ import {
 } from '@noita-explorer/model-noita';
 import { PageBottomComponent } from '../../components/PageBottomComponent';
 import { Flex } from '../../components/Flex';
-import { noitaAPI } from '../../ipcHandlers';
+import { noitaAPI } from '../../noita-api.ts';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { pages } from '../../routes/pages';

@@ -17,7 +17,7 @@ import { arrayHelpers } from '@noita-explorer/tools';
 import { MultiSelectionBoolean } from '../../components/multi-selection/MultiSelectionBoolean.tsx';
 import { useQueryParamsBoolean } from '../../hooks/use-query-params-boolean.ts';
 import { useNoitaActionsStore } from '../../stores/actions.ts';
-import { noitaAPI } from '../../ipcHandlers.ts';
+import { noitaAPI } from '../../noita-api.ts';
 
 export const NoitaProgressTracker = () => {
   const { data } = useNoitaDataWakStore();

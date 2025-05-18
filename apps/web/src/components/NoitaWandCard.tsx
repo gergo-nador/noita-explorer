@@ -23,7 +23,7 @@ import manaMaxIcon from '../assets/icons/icon_mana_max.png';
 import manaChargeIcon from '../assets/icons/icon_mana_charge_speed.png';
 import actionsPerRoundIcon from '../assets/icons/icon_gun_actions_per_round.png';
 import gunPermanentActionIcon from '../assets/icons/icon_gun_permanent_actions.png';
-import { noitaAPI } from '../ipcHandlers.ts';
+import { noitaAPI } from '../noita-api.ts';
 import { useNoitaActionsStore } from '../stores/actions.ts';
 
 interface NoitaWandCardProps {

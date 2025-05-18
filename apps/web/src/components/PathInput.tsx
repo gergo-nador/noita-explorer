@@ -4,7 +4,7 @@ import {
   ContextMenuItem,
   useContextMenuStore,
 } from '@noita-explorer/noita-component-library';
-import { noitaAPI } from '../ipcHandlers.ts';
+import { noitaAPI } from '../noita-api.ts';
 
 interface PathInputProps {
   path: string | undefined;
