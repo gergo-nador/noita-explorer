@@ -9,6 +9,8 @@ your previous sessions?
 
 You are at the perfect place!
 
+Website: https://noita-explorer.pages.dev/
+
 ## Disclaimer
 
 Noita Explorer is a free, ad-free, open-source and fully client side tool to unlock perk, 
@@ -20,6 +22,9 @@ Therefore, it is YOUR responsibility (and highly advised) to create a backup of 
 files before using this tool. 
 I do not take any responsibility if this tool breaks your save files and the previous 
 version cannot be restored!
+
+
+## Features
 
 ### Features - Browser version
 
@@ -128,3 +133,4 @@ The project is structured in the following way:
     - `src/actions`: Actions that modify the save files.
     - `src/scrapers`: Functions to scrape data from data.wak or save00 folder. These functions don't modify any files on the disk
   - `noita-component-library`: Reusable Noita components without Noita logic
+    - run `npm run dev:storybook` to view the components (not finished)
