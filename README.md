@@ -10,6 +10,7 @@ your previous sessions?
 You are at the perfect place!
 
 Website: https://noita-explorer.pages.dev/
+Dev website: https://dev.noita-explorer.pages.dev/
 
 ## Disclaimer
 
