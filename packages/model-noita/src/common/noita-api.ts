@@ -84,6 +84,8 @@ export interface NoitaAPI {
 
     features: {
       bonesWandDelete: boolean;
+      launchGame: boolean;
+      progressUnlockMode: boolean;
     };
   };
 }

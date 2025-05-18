@@ -17,6 +17,7 @@ import { arrayHelpers } from '@noita-explorer/tools';
 import { MultiSelectionBoolean } from '../../components/multi-selection/MultiSelectionBoolean.tsx';
 import { useQueryParamsBoolean } from '../../hooks/use-query-params-boolean.ts';
 import { useNoitaActionsStore } from '../../stores/actions.ts';
+import { noitaAPI } from '../../ipcHandlers.ts';
 
 export const NoitaProgressTracker = () => {
   const { data } = useNoitaDataWakStore();
@@ -30,7 +31,10 @@ export const NoitaProgressTracker = () => {
   const { actionUtils } = useNoitaActionsStore();
 
   const [showAll, setShowAll] = useQueryParamsBoolean('showAll');
-  const [unlockMode, setUnlockMode] = useQueryParamsBoolean('unlockMode');
+  const [__unlockMode, setUnlockMode] = useQueryParamsBoolean('unlockMode');
+  const unlockMode = noitaAPI.environment.features.progressUnlockMode
+    ? __unlockMode
+    : false;
 
   const enemies = useNoitaEnemyGroups({
     enemies: data?.enemies,
@@ -63,15 +67,19 @@ export const NoitaProgressTracker = () => {
           Show all:
           <MultiSelectionBoolean setValue={setShowAll} currentValue={showAll} />
         </div>
-        <HorizontalDivider />
-        <div>
-          <Button
-            decoration={'both'}
-            onClick={() => setUnlockMode(!unlockMode)}
-          >
-            Unlock mode: {unlockMode ? 'on' : 'off'}
-          </Button>
-        </div>
+        {noitaAPI.environment.features.progressUnlockMode && (
+          <>
+            <HorizontalDivider />
+            <div>
+              <Button
+                decoration={'both'}
+                onClick={() => setUnlockMode(!unlockMode)}
+              >
+                Unlock mode: {unlockMode ? 'on' : 'off'}
+              </Button>
+            </div>
+          </>
+        )}
         {unlockMode && (
           <>
             <HorizontalDivider />

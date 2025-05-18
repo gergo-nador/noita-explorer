@@ -111,6 +111,8 @@ export function browserNoitaApi(): NoitaAPI {
       desktop: undefined,
       features: {
         bonesWandDelete: hasFileSystemApi,
+        launchGame: false,
+        progressUnlockMode: hasFileSystemApi,
       },
     },
     clipboard: {

@@ -42,7 +42,7 @@ export const MainPage = () => {
         gap: 5,
       }}
     >
-      {!!noitaAPI.environment.desktop && (
+      {noitaAPI.environment.features.launchGame && (
         <Button onClick={() => noitaAPI.noita.launch.master()}>
           Launch Game
         </Button>
