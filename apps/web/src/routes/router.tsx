@@ -1,5 +1,5 @@
 import { createBrowserRouter, Outlet } from 'react-router-dom';
-import { MainPage } from '../pages/MainPage';
+import { MainPage } from '../pages/main-page.tsx';
 
 import { NoitaHolidays } from '../pages/holidays/noita-holidays.tsx';
 import { CardPageTemplate } from '../pages/_templates/CardPageTemplate.tsx';
@@ -16,7 +16,7 @@ import { NoitaSessions } from '../pages/sessions/NoitaSessions.tsx';
 import { EmptyPageTemplate } from '../pages/_templates/EmptyPageTemplate.tsx';
 import { NoitaDeathMap } from '../pages/sessions/NoitaDeathMap.tsx';
 import { Settings } from '../pages/settings/Settings.tsx';
-import { NoitaBonesWands } from '../pages/NoitaBonesWands.tsx';
+import { NoitaBonesWands } from '../pages/noita-bones-wands.tsx';
 import { SettingsCursorWandPicker } from '../pages/settings/SettingsCursorWandPicker.tsx';
 import { CurrentRun } from '../pages/world/current-run.tsx';
 import { WikiMaterialsTree } from '../pages/wiki/wiki-materials-tree.tsx';
