@@ -2,7 +2,8 @@
   "name": "noita-explorer",
   "private": true,
   "scripts": {
-    "build": "turbo build",
+    "build": "VITE_ENV=production turbo build",
+    "build-preview": "VITE_ENV=preview turbo build",
     "dev": "turbo dev",
     "dev:web": "turbo dev --filter=@noita-explorer/web",
     "dev:desktop": "turbo dev --filter=@noita-explorer/desktop",
