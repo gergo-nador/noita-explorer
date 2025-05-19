@@ -9,17 +9,26 @@ interface NoitaExplorerDBSchema extends DBSchema {
     key: string;
     value: string;
   };
+  'app-config': {
+    key: string;
+    value: string | number;
+  };
 }
 
 // https://www.npmjs.com/package/idb
 const setupNoitaExplorerDb = async () => {
   const dbName = 'noita-explorer-db';
-  const version = 1;
+  const version = 2;
 
   const db = await openDB<NoitaExplorerDBSchema>(dbName, version, {
     upgrade(db, oldVersion, newVersion) {
-      db.createObjectStore('config');
-      db.createObjectStore('file-access');
+      if (oldVersion < 1) {
+        db.createObjectStore('config');
+        db.createObjectStore('file-access');
+      }
+      if (oldVersion < 2) {
+        db.createObjectStore('app-config');
+      }
 
       console.info(`DB Version upgraded from ${oldVersion} to ${newVersion}`);
     },
@@ -53,6 +62,12 @@ const setupNoitaExplorerDb = async () => {
         key: string,
         value: FileSystemFileHandle | FileSystemDirectoryHandle,
       ) => db.put('file-access', value, key),
+    },
+    appData: {
+      get: (key: string) => db.get('app-config', key),
+      set: (key: string, value: string | number) =>
+        db.put('app-config', value, key),
+      keys: { numberOfActionsRan: 'number-of-actions-ran' },
     },
   };
 };

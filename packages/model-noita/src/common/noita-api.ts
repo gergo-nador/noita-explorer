@@ -43,6 +43,7 @@ export interface NoitaAPI {
         actions: NoitaAction[],
         callback: (progress: NoitaActionProgress) => void,
       ) => Promise<NoitaActionResult[]>;
+      getNumberOfActionsRan: () => Promise<number>;
     };
   };
   dialog: {

@@ -1,26 +1,49 @@
-import { noitaAPI } from '../../noita-api.ts';
-import { Button, useToast } from '@noita-explorer/noita-component-library';
-import { useNoitaActionsStore } from '../../stores/actions.ts';
-import { useSave00Store } from '../../stores/save00.ts';
-import { useState } from 'react';
+import { noitaAPI } from '../noita-api.ts';
+import { Dispatch, useState } from 'react';
+import { useToast } from '@noita-explorer/noita-component-library';
+import { useNoitaActionsStore } from '../stores/actions.ts';
+import { useSave00Store } from '../stores/save00.ts';
 import { NoitaActionProgress } from '@noita-explorer/model-noita';
 
-export const ActionsRunAllButton = ({ onClick }: { onClick: () => void }) => {
+export const useRunActions = ({
+  successCallback,
+}: {
+  successCallback: Dispatch<void>;
+}) => {
   const { actions, actionUtils } = useNoitaActionsStore();
   const { modify: modifySave00 } = useSave00Store();
-  const toast = useToast();
-  const [isRunning, setIsRunning] = useState(false);
   const [progress, setProgress] = useState<NoitaActionProgress>();
+  const [runActionWarning, setRunActionWarning] = useState({
+    accepted: false,
+    display: false,
+  });
+  const [isRunning, setIsRunning] = useState(false);
+  const toast = useToast();
 
   const runActions = async () => {
+    if (isRunning) {
+      return;
+    }
+
+    // first check if the warning should be displayed to the users
+    const numberOfRuns = await noitaAPI.noita.actions.getNumberOfActionsRan();
+    const runActionsWarningNeeded = numberOfRuns === 0;
+
+    if (runActionsWarningNeeded && !runActionWarning.accepted) {
+      setRunActionWarning({
+        ...runActionWarning,
+        display: true,
+      });
+
+      return;
+    }
+
+    // if no warning, run the actions
     setIsRunning(true);
 
-    const updateCallback = (progress: NoitaActionProgress) =>
-      setProgress(progress);
-
     const array = Object.values(actions);
-    noitaAPI.noita.actions
-      .runActions(array, updateCallback)
+    return noitaAPI.noita.actions
+      .runActions(array, setProgress)
       .then((results) => {
         // make modifications to the save00 stores from the successful actions
         modifySave00((prev) => {
@@ -118,12 +141,11 @@ export const ActionsRunAllButton = ({ onClick }: { onClick: () => void }) => {
 
           toast.error(message);
         }
-
-        onClick();
       })
       .then(() => {
         setIsRunning(false);
         setProgress(undefined);
+        successCallback();
       })
       .catch((err) => {
         console.error(
@@ -135,21 +157,21 @@ export const ActionsRunAllButton = ({ onClick }: { onClick: () => void }) => {
       });
   };
 
-  const progressNumber = (progress?.success ?? 0) + (progress?.failed ?? 0);
-
-  return (
-    <Button disabled={isRunning} decoration={'both'} onClick={runActions}>
-      {isRunning && (
-        <span>
-          Running... ({progressNumber} / {Object.keys(actions).length})
-        </span>
-      )}
-      {!isRunning && <span>Run Actions</span>}
-    </Button>
-  );
+  return {
+    runActions,
+    progress,
+    isRunning,
+    runActionWarning,
+    acceptWarning: () =>
+      setRunActionWarning({
+        ...runActionWarning,
+        accepted: true,
+        display: false,
+      }),
+  };
 };
 
-const shallowCopyArray = <T,>(arr: T[] | undefined) => {
+const shallowCopyArray = <T>(arr: T[] | undefined) => {
   if (!arr) {
     return [];
   }

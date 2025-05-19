@@ -1,12 +1,18 @@
-import { Card } from '@noita-explorer/noita-component-library';
+import { Button, Card, Icon } from '@noita-explorer/noita-component-library';
 import { useState } from 'react';
 import { useNoitaActionsStore } from '../../stores/actions.ts';
-import { ActionsRunAllButton } from './actions-run-all-button.tsx';
+import { useRunActions } from '../../hooks/use-run-actions.ts';
 
 export const ActionsPanel = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { actions } = useNoitaActionsStore();
   const numberOfActions = Object.keys(actions).length;
+  const { isRunning, progress, runActions, runActionWarning, acceptWarning } =
+    useRunActions({
+      successCallback: () => setIsOpen(false),
+    });
+
+  const progressNumber = (progress?.success ?? 0) + (progress?.failed ?? 0);
 
   return (
     <>
@@ -67,50 +73,97 @@ export const ActionsPanel = () => {
             paddingBottom: '0',
           }}
         >
-          <div
-            style={{
-              position: 'sticky',
-              top: 0,
-              display: 'flex',
-              justifyContent: 'center',
-              background: 'inherit',
-            }}
-          >
-            <span
-              style={{
-                fontSize: 23,
-                marginTop: 20,
-                marginBottom: 10,
-                width: '100%',
-                background: 'inherit',
-              }}
-            >
-              Actions
-              {numberOfActions > 0 && <span> ({numberOfActions})</span>}
-            </span>
-          </div>
-          <div style={{ minHeight: 'calc(100% - 100px)' }}>
-            {Object.values(actions).map((action) => (
-              <div>{action.name}</div>
-            ))}
-          </div>
-          <div
-            style={{
-              position: 'sticky',
-              bottom: 0,
-              paddingTop: 10,
-              paddingBottom: 20,
-              background: 'inherit',
-              display: 'flex',
-              justifyContent: 'right',
-            }}
-          >
-            <ActionsRunAllButton
-              onClick={() => {
-                setIsOpen(false);
-              }}
-            />
-          </div>
+          {runActionWarning.display && (
+            <div style={{ padding: 10, paddingTop: 20, maxWidth: '40vw' }}>
+              <div
+                style={{ display: 'flex', justifyContent: 'center', gap: 10 }}
+              >
+                <Icon type={'warning'} size={20} />
+                <span style={{ fontSize: 20 }}>Warning</span>
+                <Icon type={'warning'} size={20} />
+              </div>
+              <br />
+              <div>
+                Actions modify your save files. In some cases it can corrupt
+                your save files, and there is no way to restore them without a
+                backup.
+              </div>
+              <br />
+              <div>
+                Before running your first action, please make a backup of your
+                save00 folder.
+              </div>
+              <br />
+              <div>
+                Noita Explorer and its developers are not responsible in any way
+                for your save files.
+              </div>
+              <br />
+              <div>So please make a backup of your save files!</div>
+              <br />
+              <br />
+              <Button onClick={() => acceptWarning()}>
+                Click here to accept the risk of running actions, and that you
+                confirm you have made a backup of your save files.
+              </Button>
+            </div>
+          )}
+          {!runActionWarning.display && (
+            <>
+              <div
+                style={{
+                  position: 'sticky',
+                  top: 0,
+                  display: 'flex',
+                  justifyContent: 'center',
+                  background: 'inherit',
+                }}
+              >
+                <span
+                  style={{
+                    fontSize: 23,
+                    marginTop: 20,
+                    marginBottom: 10,
+                    width: '100%',
+                    background: 'inherit',
+                  }}
+                >
+                  Actions
+                  {numberOfActions > 0 && <span> ({numberOfActions})</span>}
+                </span>
+              </div>
+              <div style={{ minHeight: 'calc(100% - 100px)' }}>
+                {Object.values(actions).map((action) => (
+                  <div>{action.name}</div>
+                ))}
+              </div>
+              <div
+                style={{
+                  position: 'sticky',
+                  bottom: 0,
+                  paddingTop: 10,
+                  paddingBottom: 20,
+                  background: 'inherit',
+                  display: 'flex',
+                  justifyContent: 'right',
+                }}
+              >
+                <Button
+                  disabled={isRunning}
+                  decoration={'both'}
+                  onClick={runActions}
+                >
+                  {isRunning && (
+                    <span>
+                      Running... ({progressNumber} /{' '}
+                      {Object.keys(actions).length})
+                    </span>
+                  )}
+                  {!isRunning && <span>Run Actions</span>}
+                </Button>
+              </div>
+            </>
+          )}
         </Card>
       </div>
     </>

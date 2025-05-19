@@ -69,12 +69,38 @@ export function browserNoitaApi(): NoitaAPI {
         master: () => throwNotAllowedInThisModeError(),
       },
       actions: {
-        runActions: async (actions, callback) =>
-          runActions({
+        runActions: async (actions, callback) => {
+          // update number of ran actions
+          await noitaDb.then(async (db) => {
+            const dbValue = await noitaDb.then((db) =>
+              db.appData.get(db.appData.keys.numberOfActionsRan),
+            );
+
+            const value = typeof dbValue !== 'number' ? 0 : dbValue;
+            await db.appData.set(
+              db.appData.keys.numberOfActionsRan,
+              value + actions.length,
+            );
+          });
+
+          // run actions
+          return runActions({
             noitaActions: actions,
             save00FolderHandle: await getSave00FolderHandle(),
             callback,
-          }),
+          });
+        },
+        getNumberOfActionsRan: async () => {
+          const value = await noitaDb.then((db) =>
+            db.appData.get(db.appData.keys.numberOfActionsRan),
+          );
+
+          if (typeof value !== 'number') {
+            return 0;
+          }
+
+          return value as number;
+        },
       },
     },
     dialog: {
