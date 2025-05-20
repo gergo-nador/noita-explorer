@@ -1,4 +1,5 @@
 import github from '../assets/external/github.png';
+import { Icon } from '@noita-explorer/noita-component-library';
 
 export const Credits = () => {
   return (
@@ -10,11 +11,7 @@ export const Credits = () => {
         mods, by directly modifying your save files.
       </p>
 
-      <ul>
-        <li>
-          <img src={github} />
-        </li>
-      </ul>
+      <Icon type='custom' src={github} alt='github' size={40} />
     </div>
   );
 };
