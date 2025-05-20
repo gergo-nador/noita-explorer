@@ -77,6 +77,78 @@ export const Credits = () => {
           </ul>
         </div>
       )}
+      <br />
+      <h2>Thank you</h2>
+      <p>
+        Thank you for the inspiration and the knowledge I gathered from your
+        projects:
+      </p>
+      <ul>
+        <li>
+          <CreditsLink link='https://github.com/TwoAbove/noita-tools'>
+            [Github] TwoAbove / noita-tools
+          </CreditsLink>
+        </li>
+        <li>
+          <CreditsLink link='https://github.com/ipeterov/noita-progress'>
+            [Github] ipeterov / noita-progress
+          </CreditsLink>
+        </li>
+        <li>
+          <CreditsLink link='https://github.com/Takiro/noita-savegame-editor'>
+            [Github] Takiro / noita-savegame-editor
+          </CreditsLink>
+        </li>
+        <li>
+          <CreditsLink link='https://github.com/acidflow-noita/noitamap'>
+            [Github] acidflow-noita / noitamap
+          </CreditsLink>
+        </li>
+        <li>
+          <CreditsLink link='https://github.com/kamiheku/noited'>
+            [Github] kamiheku / noited
+          </CreditsLink>
+        </li>
+        <li>
+          <CreditsLink link='https://github.com/isJuhn/UnWak'>
+            [Github] isJuhn / UnWak
+          </CreditsLink>
+        </li>
+        <li>
+          <CreditsLink link='https://www.lightbourn.net/games/Noita/editor.html'>
+            Noita .salakieli Editor
+          </CreditsLink>
+        </li>
+        <li>
+          <CreditsLink link='https://noita.wiki.gg/wiki/Noita_Wiki'>
+            Noita Wiki
+          </CreditsLink>
+        </li>
+        <li>
+          <CreditsLink link='https://www.reddit.com/r/noita/comments/yzajqv/i_made_a_simplified_map_while_still_keeping_all/'>
+            [Reddit] Noita map for the Death map borrowed from here
+          </CreditsLink>
+        </li>
+        <li>
+          <CreditsLink link='https://www.reddit.com/r/noita/comments/jp56ub/a_while_ago_i_made_noita_blackletter_this_is_now/'>
+            [Reddit] Noita Font Glyphs from here
+          </CreditsLink>
+        </li>
+      </ul>
     </div>
+  );
+};
+
+const CreditsLink = ({
+  children,
+  link,
+}: {
+  children: string;
+  link: string;
+}) => {
+  return (
+    <a href={link} style={{ color: 'white' }}>
+      <Button decoration='right'>{children}</Button>
+    </a>
   );
 };
