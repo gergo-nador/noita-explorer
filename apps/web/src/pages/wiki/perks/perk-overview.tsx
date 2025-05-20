@@ -4,7 +4,7 @@ import {
   NoitaTooltipWrapper,
 } from '@noita-explorer/noita-component-library';
 import { Flex } from '../../../components/Flex.tsx';
-import { NoitaProtections } from '../../../noita/NoitaProtections.ts';
+import { NoitaProtections } from '../../../noita/noita-protections.ts';
 import { BooleanIcon } from '../../../components/BooleanIcon.tsx';
 
 export const PerkOverview = ({ perk }: { perk: NoitaPerk }) => {

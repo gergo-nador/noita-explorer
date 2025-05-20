@@ -3,7 +3,7 @@ import {
   Card,
   ProgressIcon,
 } from '@noita-explorer/noita-component-library';
-import { NoitaSpellTypesDictionary } from '../../../noita/NoitaSpellTypeDictionary.ts';
+import { NoitaSpellTypesDictionary } from '../../../noita/noita-spell-type-dictionary.ts';
 import { NoitaProgressIconTable } from '../../../components/NoitaProgressIconTable.tsx';
 import { useNoitaDataWakStore } from '../../../stores/noita-data-wak.ts';
 import { useStateWithQueryParamsString } from '../../../hooks/use-state-with-query-params-string.ts';

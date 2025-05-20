@@ -1,6 +1,6 @@
 import Plot from 'react-plotly.js';
-import noitaMap from '../../assets/noita-map.webp';
-import { useSave00Store } from '../../stores/save00.ts';
+import noitaMap from '../assets/noita-map.webp';
+import { useSave00Store } from '../stores/save00.ts';
 import { StringKeyDictionary } from '@noita-explorer/model';
 import { Data, Layout } from 'plotly.js';
 import { arrayHelpers } from '@noita-explorer/tools';

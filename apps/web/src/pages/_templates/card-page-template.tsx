@@ -1,18 +1,18 @@
 import React from 'react';
-import { constants } from '../../constants.ts';
-import { useTemplatePageLogic } from '../../hooks/useTemplatePageLogic';
+import { CardPageHeight } from '../../components/CardPageHeight.tsx';
+import { useTemplatePageLogic } from '../../hooks/use-template-page-logic.tsx';
 
-interface EmptyPageTemplateProps {
+interface CardPageTemplateProps {
   children?: React.ReactNode | React.ReactNode[];
   style?: React.CSSProperties;
   returnPath?: string;
 }
 
-export const EmptyPageTemplate = ({
+export const CardPageTemplate = ({
   children,
   style = {},
   returnPath,
-}: EmptyPageTemplateProps) => {
+}: CardPageTemplateProps) => {
   const templatePageLogic = useTemplatePageLogic(returnPath);
 
   return (
@@ -32,9 +32,7 @@ export const EmptyPageTemplate = ({
           width: '90%',
         }}
       >
-        <div style={{ maxHeight: constants.pageHeight, ...style }}>
-          {children}
-        </div>
+        <CardPageHeight style={style}>{children}</CardPageHeight>
 
         <div
           style={{

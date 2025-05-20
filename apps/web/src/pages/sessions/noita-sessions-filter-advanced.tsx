@@ -1,8 +1,8 @@
 import { Button, Header } from '@noita-explorer/noita-component-library';
 import { NoitaSession } from '@noita-explorer/model-noita';
-import { NoitaSessionFilters } from './NoitaSessions.tsx';
+import { NoitaSessionFilters } from './noita-sessions.tsx';
 import { arrayHelpers } from '@noita-explorer/tools';
-import { useNoitaSessionKilledByData } from '../../hooks/useNoitaSessionKilledByData.ts';
+import { useNoitaSessionKilledByData } from '../../hooks/use-noita-session-killed-by-data.ts';
 import { useState } from 'react';
 
 interface NoitaSessionsFilterAdvancedProps {

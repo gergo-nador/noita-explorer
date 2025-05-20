@@ -1,7 +1,7 @@
 import { TabView } from '@noita-explorer/noita-component-library';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { constants } from '../../constants.ts';
-import { useTemplatePageLogic } from '../../hooks/useTemplatePageLogic';
+import { useTemplatePageLogic } from '../../hooks/use-template-page-logic.tsx';
 import { useEffect, useState } from 'react';
 import { stringHelpers } from '@noita-explorer/tools';
 

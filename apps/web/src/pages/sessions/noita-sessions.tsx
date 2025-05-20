@@ -2,9 +2,9 @@ import { useSave00Store } from '../../stores/save00.ts';
 import { useMemo, useState } from 'react';
 import { arrayHelpers } from '@noita-explorer/tools';
 import { CardPageHeight } from '../../components/CardPageHeight.tsx';
-import { NoitaSessionsFilter } from './NoitaSessionsFilter.tsx';
-import { NoitaSessionsList } from './NoitaSessionsList.tsx';
-import { NoitaSessionsStatistics } from './NoitaSessionsStatistics.tsx';
+import { NoitaSessionsFilter } from './noita-sessions-filter.tsx';
+import { NoitaSessionsList } from './noita-sessions-list.tsx';
+import { NoitaSessionsStatistics } from './noita-sessions-statistics.tsx';
 import { NoitaSession } from '@noita-explorer/model-noita';
 
 export interface NoitaSessionFilters {

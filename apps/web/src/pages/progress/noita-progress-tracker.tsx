@@ -10,9 +10,9 @@ import { NoitaProgressIconTable } from '../../components/NoitaProgressIconTable.
 import { NoitaSpellTooltip } from '../../components/tooltips/NoitaSpellTooltip.tsx';
 import { NoitaPerkTooltip } from '../../components/tooltips/NoitaPerkTooltip.tsx';
 import { useSave00Store } from '../../stores/save00.ts';
-import { NoitaSpellTypesDictionary } from '../../noita/NoitaSpellTypeDictionary.ts';
+import { NoitaSpellTypesDictionary } from '../../noita/noita-spell-type-dictionary.ts';
 import { NoitaEnemyGroupTooltip } from '../../components/tooltips/NoitaEnemyGroupTooltip.tsx';
-import { useNoitaEnemyGroups } from '../../hooks/useNoitaEnemyGroups.ts';
+import { useNoitaEnemyGroups } from '../../hooks/use-noita-enemy-groups.ts';
 import { arrayHelpers } from '@noita-explorer/tools';
 import { MultiSelectionBoolean } from '../../components/multi-selection/MultiSelectionBoolean.tsx';
 import { useQueryParamsBoolean } from '../../hooks/use-query-params-boolean.ts';

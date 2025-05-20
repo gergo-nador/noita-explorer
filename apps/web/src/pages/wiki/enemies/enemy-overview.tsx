@@ -1,5 +1,5 @@
 import { NoitaEnemy } from '@noita-explorer/model-noita';
-import { useNoitaUnits } from '../../../hooks/useNoitaUnits.ts';
+import { useNoitaUnits } from '../../../hooks/use-noita-units.ts';
 import { useSettingsStore } from '../../../stores/settings.ts';
 import {
   Header,
@@ -9,7 +9,7 @@ import {
 import heartIcon from '../../../assets/heart.png';
 import goldNuggetIcon from '../../../assets/goldnugget_icon.png';
 import { Flex } from '../../../components/Flex.tsx';
-import { NoitaProtections } from '../../../noita/NoitaProtections.ts';
+import { NoitaProtections } from '../../../noita/noita-protections.ts';
 import { DamageMultiplierDisplay } from './damage-multiplier-display.tsx';
 
 import damageProjectileIcon from '../../../assets/icons/damages/icon_damage_projectile.png';

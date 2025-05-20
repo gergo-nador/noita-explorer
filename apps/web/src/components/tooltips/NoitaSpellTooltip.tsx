@@ -1,9 +1,9 @@
 import { NoitaSpell, NoitaWandSpell } from '@noita-explorer/model-noita';
 import { Icon } from '@noita-explorer/noita-component-library';
-import { NoitaSpellTypesDictionary } from '../../noita/NoitaSpellTypeDictionary.ts';
+import { NoitaSpellTypesDictionary } from '../../noita/noita-spell-type-dictionary.ts';
 import { BooleanIcon } from '../BooleanIcon.tsx';
 import { Flex } from '../Flex.tsx';
-import { useNoitaUnits } from '../../hooks/useNoitaUnits.ts';
+import { useNoitaUnits } from '../../hooks/use-noita-units.ts';
 import React from 'react';
 import { NoitaUnknownTooltip } from './NoitaUnknownTooltip.tsx';
 import { NoitaNumberModifier } from './noita-number-modifier.tsx';

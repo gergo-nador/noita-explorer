@@ -8,8 +8,8 @@ import {
   NoitaSessionFilters,
   NoitaSessionOrdering,
   NoitaSessionOrderingType,
-} from './NoitaSessions.tsx';
-import { NoitaSessionsFilterAdvanced } from './NoitaSessionsFilterAdvanced.tsx';
+} from './noita-sessions.tsx';
+import { NoitaSessionsFilterAdvanced } from './noita-sessions-filter-advanced.tsx';
 import { arrayHelpers } from '@noita-explorer/tools';
 import { useState } from 'react';
 

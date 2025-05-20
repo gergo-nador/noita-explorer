@@ -6,11 +6,11 @@ import {
   InventoryIcon,
 } from '@noita-explorer/noita-component-library';
 import { randomHelpers, mathHelpers } from '@noita-explorer/tools';
-import { useNoitaUnits } from '../hooks/useNoitaUnits.ts';
+import { useNoitaUnits } from '../hooks/use-noita-units.ts';
 import React, { useMemo } from 'react';
 import { useNoitaDataWakStore } from '../stores/noita-data-wak.ts';
 import { NoitaSpellTooltip } from './tooltips/NoitaSpellTooltip.tsx';
-import { NoitaSpellTypesDictionary } from '../noita/NoitaSpellTypeDictionary.ts';
+import { NoitaSpellTypesDictionary } from '../noita/noita-spell-type-dictionary.ts';
 import css from './NoitaWandCard.module.css';
 
 import gunShuffleIcon from '../assets/icons/icon_gun_shuffle.png';
