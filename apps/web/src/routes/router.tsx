@@ -21,6 +21,7 @@ import { SettingsCursorWandPicker } from '../pages/settings/settings-cursor-wand
 import { CurrentRun } from '../pages/world/current-run.tsx';
 import { WikiMaterialsTree } from '../pages/wiki/wiki-materials-tree.tsx';
 import { WikiMaterials } from '../pages/wiki/materials/wiki-materials.tsx';
+import { Credits } from '../pages/credits.tsx';
 
 export const router = createBrowserRouter([
   {
@@ -141,6 +142,14 @@ export const router = createBrowserRouter([
     element: (
       <CardPageTemplate returnPath={'/settings'}>
         <SettingsCursorWandPicker />
+      </CardPageTemplate>
+    ),
+  },
+  {
+    path: 'credits',
+    element: (
+      <CardPageTemplate>
+        <Credits />
       </CardPageTemplate>
     ),
   },

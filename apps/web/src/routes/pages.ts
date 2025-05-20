@@ -22,4 +22,5 @@ export const pages = {
     cursorWandPicker: '/settings/cursor-wand-picker',
   },
   currentRun: '/current-run',
+  credits: '/credits',
 };

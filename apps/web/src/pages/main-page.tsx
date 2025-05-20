@@ -137,6 +137,9 @@ export const MainPage = () => {
       <Button decoration={'both'} onClick={() => navigate(pages.settings.main)}>
         Settings
       </Button>
+      <Button decoration={'both'} onClick={() => navigate(pages.credits)}>
+        Credits
+      </Button>
     </Flex>
   );
 };
