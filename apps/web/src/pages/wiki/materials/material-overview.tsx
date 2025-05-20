@@ -1,5 +1,5 @@
 import { NoitaMaterial } from '@noita-explorer/model-noita';
-import { NoitaMaterialIcon } from '../../../components/NoitaMaterialIcon.tsx';
+import { NoitaMaterialIcon } from '../../../components/noita-material-icon.tsx';
 import { useNoitaDataWakStore } from '../../../stores/noita-data-wak.ts';
 import { useMemo } from 'react';
 

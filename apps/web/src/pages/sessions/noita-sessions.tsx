@@ -1,7 +1,7 @@
 import { useSave00Store } from '../../stores/save00.ts';
 import { useMemo, useState } from 'react';
 import { arrayHelpers } from '@noita-explorer/tools';
-import { CardPageHeight } from '../../components/CardPageHeight.tsx';
+import { CardPageHeight } from '../../components/card-page-height.tsx';
 import { NoitaSessionsFilter } from './noita-sessions-filter.tsx';
 import { NoitaSessionsList } from './noita-sessions-list.tsx';
 import { NoitaSessionsStatistics } from './noita-sessions-statistics.tsx';

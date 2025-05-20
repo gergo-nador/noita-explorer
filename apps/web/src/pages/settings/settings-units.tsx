@@ -1,7 +1,7 @@
-import { Flex } from '../../components/Flex.tsx';
+import { Flex } from '../../components/flex.tsx';
 import { Header } from '@noita-explorer/noita-component-library';
 import { SettingsUnitsType, useSettingsStore } from '../../stores/settings.ts';
-import { MultiSelection } from '../../components/multi-selection/MultiSelection.tsx';
+import { MultiSelection } from '../../components/multi-selection/multi-selection.tsx';
 
 export const SettingsUnits = () => {
   const { settings, set } = useSettingsStore();

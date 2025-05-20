@@ -1,6 +1,6 @@
 import { useNoitaDataWakStore } from '../../../stores/noita-data-wak.ts';
-import { NoitaMaterialIcon } from '../../../components/NoitaMaterialIcon.tsx';
-import { NoitaProgressIconTable } from '../../../components/NoitaProgressIconTable.tsx';
+import { NoitaMaterialIcon } from '../../../components/noita-material-icon.tsx';
+import { NoitaProgressIconTable } from '../../../components/noita-progress-icon-table.tsx';
 import {
   ActiveIconWrapper,
   Card,

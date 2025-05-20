@@ -3,7 +3,7 @@ import {
   Icon,
   NoitaTooltipWrapper,
 } from '@noita-explorer/noita-component-library';
-import { PathInput } from '../../components/PathInput.tsx';
+import { PathInput } from '../../components/path-input.tsx';
 import { useSettingsStore } from '../../stores/settings.ts';
 import { useSave00Store } from '../../stores/save00.ts';
 import { noitaAPI } from '../../noita-api.ts';

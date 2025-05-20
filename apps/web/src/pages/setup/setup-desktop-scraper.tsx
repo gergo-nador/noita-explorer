@@ -13,8 +13,8 @@ import {
   NoitaDataWakScrapeResultStatus,
   NoitaWakData,
 } from '@noita-explorer/model-noita';
-import { PageBottomComponent } from '../../components/PageBottomComponent';
-import { Flex } from '../../components/Flex';
+import { PageBottomComponent } from '../../components/page-bottom-component.tsx';
+import { Flex } from '../../components/flex.tsx';
 import { noitaAPI } from '../../noita-api.ts';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';

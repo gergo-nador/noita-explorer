@@ -9,9 +9,9 @@ import { noitaAPI } from '../../noita-api.ts';
 import { useNavigate } from 'react-router-dom';
 import { pages } from '../../routes/pages';
 import { useEffect, useState } from 'react';
-import { PageBottomComponent } from '../../components/PageBottomComponent';
-import { PathInput } from '../../components/PathInput.tsx';
-import { Flex } from '../../components/Flex.tsx';
+import { PageBottomComponent } from '../../components/page-bottom-component.tsx';
+import { PathInput } from '../../components/path-input.tsx';
+import { Flex } from '../../components/flex.tsx';
 
 export const SetupDesktopPaths = () => {
   const { settings, set: setPaths } = useSettingsStore();

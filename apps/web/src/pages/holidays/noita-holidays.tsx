@@ -1,5 +1,5 @@
 import { Card } from '@noita-explorer/noita-component-library';
-import { Separator } from '../../components/Separator.tsx';
+import { Separator } from '../../components/separator.tsx';
 import { getNoitaHolidays, NoitaHoliday } from './get-noita-holidays.tsx';
 
 export const NoitaHolidays = () => {

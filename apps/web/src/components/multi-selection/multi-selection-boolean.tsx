@@ -1,16 +1,13 @@
-import { MultiSelection } from './MultiSelection.tsx';
+import { MultiSelection } from './multi-selection.tsx';
 
 interface Props {
-  setValue: (value: boolean | undefined) => void;
-  currentValue: boolean | undefined;
+  setValue: (value: boolean) => void;
+  currentValue: boolean;
 }
 
-export const MultiSelectionBooleanNullable = ({
-  setValue,
-  currentValue,
-}: Props) => {
+export const MultiSelectionBoolean = ({ setValue, currentValue }: Props) => {
   return (
-    <MultiSelection<boolean | undefined>
+    <MultiSelection<boolean>
       options={[
         {
           id: 'no',
@@ -19,12 +16,6 @@ export const MultiSelectionBooleanNullable = ({
           selectedProperties: {
             color: '#de4646',
           },
-        },
-        {
-          id: 'undefined',
-          display: '-',
-          value: undefined,
-          style: { fontSize: 20 },
         },
         {
           id: 'yes',

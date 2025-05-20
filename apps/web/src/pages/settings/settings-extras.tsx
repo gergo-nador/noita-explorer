@@ -1,5 +1,5 @@
-import { Flex } from '../../components/Flex.tsx';
-import { MultiSelection } from '../../components/multi-selection/MultiSelection.tsx';
+import { Flex } from '../../components/flex.tsx';
+import { MultiSelection } from '../../components/multi-selection/multi-selection.tsx';
 import { useSettingsStore } from '../../stores/settings.ts';
 import { Header } from '@noita-explorer/noita-component-library';
 

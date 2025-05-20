@@ -1,5 +1,5 @@
 import { Button, Card, Icon } from '@noita-explorer/noita-component-library';
-import { PageBottomComponent } from '../components/PageBottomComponent.tsx';
+import { PageBottomComponent } from '../components/page-bottom-component.tsx';
 import { useSettingsStore } from '../stores/settings.ts';
 
 export const SpoilerWarningPage = () => {

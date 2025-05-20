@@ -1,6 +1,6 @@
 import { useSave00Store } from '../stores/save00.ts';
-import { NoitaWandCard } from '../components/NoitaWandCard.tsx';
-import { Flex } from '../components/Flex.tsx';
+import { NoitaWandCard } from '../components/noita-wand-card.tsx';
+import { Flex } from '../components/flex.tsx';
 import { useMemo } from 'react';
 import { Button } from '@noita-explorer/noita-component-library';
 import { useNoitaActionsStore } from '../stores/actions.ts';

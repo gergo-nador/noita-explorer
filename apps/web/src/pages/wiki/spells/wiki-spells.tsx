@@ -4,7 +4,7 @@ import {
   ProgressIcon,
 } from '@noita-explorer/noita-component-library';
 import { NoitaSpellTypesDictionary } from '../../../noita/noita-spell-type-dictionary.ts';
-import { NoitaProgressIconTable } from '../../../components/NoitaProgressIconTable.tsx';
+import { NoitaProgressIconTable } from '../../../components/noita-progress-icon-table.tsx';
 import { useNoitaDataWakStore } from '../../../stores/noita-data-wak.ts';
 import { useStateWithQueryParamsString } from '../../../hooks/use-state-with-query-params-string.ts';
 import { NoitaSpell } from '@noita-explorer/model-noita';

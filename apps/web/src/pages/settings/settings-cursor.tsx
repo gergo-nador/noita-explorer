@@ -1,4 +1,4 @@
-import { Flex } from '../../components/Flex.tsx';
+import { Flex } from '../../components/flex.tsx';
 import { Button, Header } from '@noita-explorer/noita-component-library';
 import {
   SettingsCursorType,
@@ -11,7 +11,7 @@ import { useNoitaDataWakStore } from '../../stores/noita-data-wak.ts';
 import { NoitaWandConfig } from '@noita-explorer/model-noita';
 import { useNavigate } from 'react-router-dom';
 import { pages } from '../../routes/pages.ts';
-import { MultiSelection } from '../../components/multi-selection/MultiSelection.tsx';
+import { MultiSelection } from '../../components/multi-selection/multi-selection.tsx';
 
 export const SettingsCursor = () => {
   const { settings, set } = useSettingsStore();

@@ -1,11 +1,11 @@
 import { NoitaSpell, NoitaWandSpell } from '@noita-explorer/model-noita';
 import { Icon } from '@noita-explorer/noita-component-library';
 import { NoitaSpellTypesDictionary } from '../../noita/noita-spell-type-dictionary.ts';
-import { BooleanIcon } from '../BooleanIcon.tsx';
-import { Flex } from '../Flex.tsx';
+import { BooleanIcon } from '../boolean-icon.tsx';
+import { Flex } from '../flex.tsx';
 import { useNoitaUnits } from '../../hooks/use-noita-units.ts';
 import React from 'react';
-import { NoitaUnknownTooltip } from './NoitaUnknownTooltip.tsx';
+import { NoitaUnknownTooltip } from './noita-unknown-tooltip.tsx';
 import { NoitaNumberModifier } from './noita-number-modifier.tsx';
 
 import actionTypeIcon from '../../assets/icons/spells/icon_action_type.png';

@@ -1,7 +1,7 @@
 import { Card, Icon } from '@noita-explorer/noita-component-library';
-import { Flex } from '../../../components/Flex.tsx';
-import { MultiSelectionBooleanNullable } from '../../../components/multi-selection/MultiSelectionBooleanNullable.tsx';
-import { MultiSelection } from '../../../components/multi-selection/MultiSelection.tsx';
+import { Flex } from '../../../components/flex.tsx';
+import { MultiSelectionBooleanNullable } from '../../../components/multi-selection/multi-selection-boolean-nullable.tsx';
+import { MultiSelection } from '../../../components/multi-selection/multi-selection.tsx';
 import { NoitaProtections } from '../../../noita/noita-protections.ts';
 import { PerkFilters } from './perk-filters.ts';
 import { Dispatch } from 'react';

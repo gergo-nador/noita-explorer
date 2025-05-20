@@ -1,5 +1,5 @@
 import { NoitaPerk } from '@noita-explorer/model-noita';
-import { NoitaUnknownTooltip } from './NoitaUnknownTooltip.tsx';
+import { NoitaUnknownTooltip } from './noita-unknown-tooltip.tsx';
 
 interface NoitaPerkTooltipProps {
   perk: NoitaPerk;

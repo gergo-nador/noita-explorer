@@ -3,7 +3,7 @@ import {
   Card,
   ProgressIcon,
 } from '@noita-explorer/noita-component-library';
-import { NoitaProgressIconTable } from '../../../components/NoitaProgressIconTable.tsx';
+import { NoitaProgressIconTable } from '../../../components/noita-progress-icon-table.tsx';
 import { useNoitaDataWakStore } from '../../../stores/noita-data-wak.ts';
 import { useMemo, useState } from 'react';
 import { NoitaPerk } from '@noita-explorer/model-noita';

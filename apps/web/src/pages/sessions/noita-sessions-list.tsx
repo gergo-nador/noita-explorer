@@ -12,7 +12,7 @@ import {
   Icon,
   NoitaTooltipWrapper,
 } from '@noita-explorer/noita-component-library';
-import { Flex } from '../../components/Flex.tsx';
+import { Flex } from '../../components/flex.tsx';
 import { useEffect, useMemo, useState } from 'react';
 
 import dieIcon from '../../assets/icons/die2.png';

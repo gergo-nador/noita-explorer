@@ -1,5 +1,5 @@
 import React from 'react';
-import { CardPageHeight } from '../../components/CardPageHeight.tsx';
+import { CardPageHeight } from '../../components/card-page-height.tsx';
 import { useTemplatePageLogic } from '../../hooks/use-template-page-logic.tsx';
 
 interface CardPageTemplateProps {
