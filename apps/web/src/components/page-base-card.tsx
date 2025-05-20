@@ -1,6 +1,7 @@
 import { Card } from '@noita-explorer/noita-component-library';
 
 import React from 'react';
+import { Flex } from './flex.tsx';
 
 interface PageBaseCardProps {
   children?: React.ReactNode | React.ReactNode[];
@@ -11,13 +12,11 @@ export const PageBaseCard = ({ children, style }: PageBaseCardProps) => {
   style ??= {};
 
   return (
-    <div
+    <Flex
+      center
       style={{
         minWidth: '100%',
         minHeight: '100%',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
       }}
     >
       <Card
@@ -28,6 +27,6 @@ export const PageBaseCard = ({ children, style }: PageBaseCardProps) => {
       >
         {children}
       </Card>
-    </div>
+    </Flex>
   );
 };

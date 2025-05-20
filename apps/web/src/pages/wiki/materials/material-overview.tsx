@@ -2,6 +2,7 @@ import { NoitaMaterial } from '@noita-explorer/model-noita';
 import { NoitaMaterialIcon } from '../../../components/noita-material-icon.tsx';
 import { useNoitaDataWakStore } from '../../../stores/noita-data-wak.ts';
 import { useMemo } from 'react';
+import { Flex } from '../../../components/flex.tsx';
 
 interface Props {
   material: NoitaMaterial;
@@ -50,16 +51,15 @@ export const MaterialOverview = ({ material }: Props) => {
         >
           <NoitaMaterialIcon key={material.id} material={material} />
         </div>
-        <div
+        <Flex
+          align='center'
           style={{
             fontSize: 20,
             marginBottom: 10,
-            display: 'flex',
-            alignItems: 'center',
           }}
         >
           {material.name}
-        </div>
+        </Flex>
       </div>
       Tags
       <div>{material.tags.join(', ')}</div>

@@ -12,6 +12,7 @@ import { NoitaMaterial } from '@noita-explorer/model-noita';
 import { MaterialOverview } from './material-overview.tsx';
 import { MaterialFilters } from './material-filters.ts';
 import { MaterialFiltersView } from './material-filters-view.tsx';
+import { Flex } from '../../../components/flex.tsx';
 
 export const WikiMaterials = () => {
   const { data } = useNoitaDataWakStore();
@@ -50,11 +51,10 @@ export const WikiMaterials = () => {
   }
 
   return (
-    <div
+    <Flex
+      justify='center'
+      gap={20}
       style={{
-        display: 'flex',
-        justifyContent: 'center',
-        gap: 20,
         margin: 'auto',
         maxHeight: '100%',
         overflowY: 'auto',
@@ -130,7 +130,7 @@ export const WikiMaterials = () => {
           />
         )}
       </Card>
-    </div>
+    </Flex>
   );
 };
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import { constants } from '../../constants.ts';
 import { useTemplatePageLogic } from '../../hooks/use-template-page-logic.tsx';
+import { Flex } from '../../components/flex.tsx';
 
 interface EmptyPageTemplateProps {
   children?: React.ReactNode | React.ReactNode[];
@@ -16,16 +17,7 @@ export const EmptyPageTemplate = ({
   const templatePageLogic = useTemplatePageLogic(returnPath);
 
   return (
-    <div
-      style={{
-        width: '100%',
-        height: '100%',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'column',
-      }}
-    >
+    <Flex width='100%' height='100%' center column>
       <div
         style={{
           maxHeight: '100%',
@@ -48,6 +40,6 @@ export const EmptyPageTemplate = ({
           ))}
         </div>
       </div>
-    </div>
+    </Flex>
   );
 };

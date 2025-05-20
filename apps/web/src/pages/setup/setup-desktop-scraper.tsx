@@ -307,10 +307,9 @@ function NoitaDataWakScrapeResultDisplay<T>({
         {result.data && (
           <>
             <div>Count: {result.data.length}</div>
-            <div
+            <Flex
+              wrap='wrap'
               style={{
-                display: 'flex',
-                flexWrap: 'wrap',
                 cursor: 'pointer',
               }}
               title={showAll ? 'Shrink' : 'Expand'}
@@ -322,7 +321,7 @@ function NoitaDataWakScrapeResultDisplay<T>({
                 </>
               )}
               {showAll && result.data.map(dataIconMapper)}
-            </div>
+            </Flex>
           </>
         )}
       </Header>

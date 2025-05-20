@@ -1,6 +1,7 @@
 import { Card } from '@noita-explorer/noita-component-library';
 import { Separator } from '../../components/separator.tsx';
 import { getNoitaHolidays, NoitaHoliday } from './get-noita-holidays.tsx';
+import { Flex } from '../../components/flex.tsx';
 
 export const NoitaHolidays = () => {
   const holidays = getNoitaHolidays();
@@ -14,14 +15,7 @@ export const NoitaHolidays = () => {
     <>
       <br />
 
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          flexDirection: 'column',
-        }}
-      >
+      <Flex justify='center' align='center' direction='column'>
         {holidaysNow.length > 0 && (
           <>
             <Separator>Now</Separator>
@@ -63,7 +57,7 @@ export const NoitaHolidays = () => {
             ))}
           </>
         )}
-      </div>
+      </Flex>
     </>
   );
 };

@@ -7,6 +7,7 @@ import {
 } from '@noita-explorer/tools';
 import { NoitaMaterial } from '@noita-explorer/model-noita';
 import { StringKeyDictionary } from '@noita-explorer/model';
+import { Flex } from '../../components/flex.tsx';
 
 interface MaterialTreeNode extends NoitaMaterial {
   children: MaterialTreeNode[];
@@ -107,12 +108,11 @@ const MaterialTreeNodeComponent = ({
 
   return (
     <div style={{ marginLeft: '16px' }}>
-      <div
+      <Flex
+        align='center'
         onClick={() => setCollapsed(!collapsed)}
         style={{
           cursor: 'pointer',
-          display: 'flex',
-          alignItems: 'center',
           padding: '4px',
           borderRadius: '4px',
           marginBottom: '2px',
@@ -144,7 +144,7 @@ const MaterialTreeNodeComponent = ({
             <i>{node.wangColorHtml}</i>
           </div>
         </div>
-      </div>
+      </Flex>
       {!collapsed && (
         <div
           style={{

@@ -1,6 +1,7 @@
 import { useNoitaDataWakStore } from '../../stores/noita-data-wak.ts';
 import { Icon } from '@noita-explorer/noita-component-library';
 import { CurrentRunPerksView } from './current-run-perks-view.tsx';
+import { Flex } from '../../components/flex.tsx';
 
 export const CurrentRun = () => {
   const { data } = useNoitaDataWakStore();
@@ -71,12 +72,12 @@ const ProgressBar = ({
       <div style={{ background: brown }}></div>
       <div style={{ background: lightBrown }}></div>
       <div style={{ background: brown }}></div>
-      <div style={{ display: 'flex' }}>
+      <Flex>
         <div style={{ background: barColor, width: progress + '%' }}></div>
         <div
           style={{ background: darkBrown, width: progressBgWidth + '%' }}
         ></div>
-      </div>
+      </Flex>
       <div style={{ background: brown }}></div>
       <div style={{ background: lightBrown }}></div>
       <div style={{ background: brown }}></div>

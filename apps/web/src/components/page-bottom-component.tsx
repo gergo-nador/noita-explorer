@@ -1,4 +1,5 @@
 import React from 'react';
+import { Flex } from './flex.tsx';
 
 interface FlexBoxProps {
   style?: React.CSSProperties;
@@ -6,20 +7,14 @@ interface FlexBoxProps {
 }
 
 export const PageBottomComponent = ({ style = {}, children }: FlexBoxProps) => {
+  const styleInternal: React.CSSProperties = {
+    ...style,
+    marginTop: 30,
+  };
+
   return (
-    <div
-      style={{
-        ...{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          gap: 30,
-          marginTop: 30,
-        },
-        ...style,
-      }}
-    >
+    <Flex justify='space-between' align='center' gap={30} style={styleInternal}>
       {children}
-    </div>
+    </Flex>
   );
 };

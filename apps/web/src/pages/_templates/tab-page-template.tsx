@@ -4,6 +4,7 @@ import { constants } from '../../constants.ts';
 import { useTemplatePageLogic } from '../../hooks/use-template-page-logic.tsx';
 import { useEffect, useState } from 'react';
 import { stringHelpers } from '@noita-explorer/tools';
+import { Flex } from '../../components/flex.tsx';
 
 interface TabLink {
   title: string;
@@ -40,16 +41,7 @@ export const TabPageTemplate = ({ tabs, returnPath }: TabPageTemplateProps) => {
   }, [tabs, location.pathname]);
 
   return (
-    <div
-      style={{
-        width: '100%',
-        height: '100%',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'column',
-      }}
-    >
+    <Flex width='100%' height='100%' center column>
       <div
         style={{
           maxHeight: '100%',
@@ -89,6 +81,6 @@ export const TabPageTemplate = ({ tabs, returnPath }: TabPageTemplateProps) => {
           ))}
         </div>
       </div>
-    </div>
+    </Flex>
   );
 };

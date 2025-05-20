@@ -2,6 +2,7 @@ import { Button, Card, Icon } from '@noita-explorer/noita-component-library';
 import { useState } from 'react';
 import { useNoitaActionsStore } from '../../stores/actions.ts';
 import { useRunActions } from '../../hooks/use-run-actions.ts';
+import { Flex } from '../flex.tsx';
 
 export const ActionsPanel = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -75,13 +76,11 @@ export const ActionsPanel = () => {
         >
           {runActionWarning.display && (
             <div style={{ padding: 10, paddingTop: 20, maxWidth: '40vw' }}>
-              <div
-                style={{ display: 'flex', justifyContent: 'center', gap: 10 }}
-              >
+              <Flex justify='center' gap={10}>
                 <Icon type={'warning'} size={20} />
                 <span style={{ fontSize: 20 }}>Warning</span>
                 <Icon type={'warning'} size={20} />
-              </div>
+              </Flex>
               <br />
               <div>
                 Actions modify your save files. In some cases it can corrupt
@@ -110,12 +109,11 @@ export const ActionsPanel = () => {
           )}
           {!runActionWarning.display && (
             <>
-              <div
+              <Flex
+                justify={'center'}
                 style={{
                   position: 'sticky',
                   top: 0,
-                  display: 'flex',
-                  justifyContent: 'center',
                   background: 'inherit',
                 }}
               >
@@ -131,21 +129,20 @@ export const ActionsPanel = () => {
                   Actions
                   {numberOfActions > 0 && <span> ({numberOfActions})</span>}
                 </span>
-              </div>
+              </Flex>
               <div style={{ minHeight: 'calc(100% - 100px)' }}>
                 {Object.values(actions).map((action) => (
                   <div>{action.name}</div>
                 ))}
               </div>
-              <div
+              <Flex
+                justify='right'
                 style={{
                   position: 'sticky',
                   bottom: 0,
                   paddingTop: 10,
                   paddingBottom: 20,
                   background: 'inherit',
-                  display: 'flex',
-                  justifyContent: 'right',
                 }}
               >
                 <Button
@@ -161,7 +158,7 @@ export const ActionsPanel = () => {
                   )}
                   {!isRunning && <span>Run Actions</span>}
                 </Button>
-              </div>
+              </Flex>
             </>
           )}
         </Card>

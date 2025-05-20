@@ -12,6 +12,7 @@ import { Dispatch, useMemo, useState } from 'react';
 import { EnemyFilters } from './enemy-filters.ts';
 import { EnemyFiltersView } from './enemy-filters-view.tsx';
 import { arrayHelpers } from '@noita-explorer/tools';
+import { Flex } from '../../../components/flex.tsx';
 
 export const WikiEnemies = () => {
   const { data } = useNoitaDataWakStore();
@@ -56,11 +57,10 @@ export const WikiEnemies = () => {
   }
 
   return (
-    <div
+    <Flex
+      justify='center'
+      gap={20}
       style={{
-        display: 'flex',
-        justifyContent: 'center',
-        gap: 20,
         margin: 'auto',
         maxHeight: '100%',
         overflowY: 'auto',
@@ -111,7 +111,7 @@ export const WikiEnemies = () => {
           <EnemyOverview key={selectedEnemy.id} enemy={selectedEnemy} />
         )}
       </Card>
-    </div>
+    </Flex>
   );
 };
 

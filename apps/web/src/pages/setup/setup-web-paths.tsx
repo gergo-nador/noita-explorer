@@ -7,6 +7,7 @@ import { PathInput } from '../../components/path-input.tsx';
 import { useSettingsStore } from '../../stores/settings.ts';
 import { useSave00Store } from '../../stores/save00.ts';
 import { noitaAPI } from '../../noita-api.ts';
+import { Flex } from '../../components/flex.tsx';
 
 export const SetupWebPaths = () => {
   const { settings, set: setPaths } = useSettingsStore();
@@ -16,7 +17,7 @@ export const SetupWebPaths = () => {
   return (
     <Header title={'Paths'}>
       <div>
-        <div style={{ display: 'flex', gap: 20 }}>
+        <Flex gap={20}>
           <NoitaTooltipWrapper content={'NollaGamesNoita folder'}>
             <PathInput
               type={'directory'}
@@ -48,18 +49,13 @@ export const SetupWebPaths = () => {
           {save00Status === 'loaded' && (
             <div className={'text-success'}>Loaded</div>
           )}
-        </div>
+        </Flex>
 
         {noitaAPI.environment.web?.isFileSystemApiUnSupported && (
           <>
             <br />
             <br />
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-              }}
-            >
+            <Flex align='center'>
               <Icon type={'warning'} size={20} />
               <span>
                 This browser is not fully compatible with certain features of
@@ -68,7 +64,7 @@ export const SetupWebPaths = () => {
                 will not be able to modify any of your progress.
               </span>
               <Icon type={'warning'} size={20} />
-            </div>
+            </Flex>
           </>
         )}
       </div>

@@ -18,6 +18,7 @@ import { MultiSelectionBoolean } from '../../components/multi-selection/multi-se
 import { useQueryParamsBoolean } from '../../hooks/use-query-params-boolean.ts';
 import { useNoitaActionsStore } from '../../stores/actions.ts';
 import { noitaAPI } from '../../noita-api.ts';
+import { Flex } from '../../components/flex.tsx';
 
 export const NoitaProgressTracker = () => {
   const { data } = useNoitaDataWakStore();
@@ -56,17 +57,16 @@ export const NoitaProgressTracker = () => {
 
   return (
     <>
-      <div
+      <Flex
         style={{
-          display: 'flex',
           marginBottom: 20,
           color: '#ffffffaa',
         }}
       >
-        <div style={{ display: 'flex', gap: 10 }}>
+        <Flex gap={10}>
           Show all:
           <MultiSelectionBoolean setValue={setShowAll} currentValue={showAll} />
-        </div>
+        </Flex>
         {noitaAPI.environment.features.progressUnlockMode && (
           <>
             <HorizontalDivider />
@@ -84,7 +84,7 @@ export const NoitaProgressTracker = () => {
           <>
             <HorizontalDivider />
             <span>Unlock all:</span>
-            <div style={{ display: 'flex', gap: 8, marginLeft: 8 }}>
+            <Flex gap={8} style={{ marginLeft: 8 }}>
               <Button
                 decoration={'both'}
                 onClick={() => {
@@ -146,7 +146,7 @@ export const NoitaProgressTracker = () => {
               >
                 Enemies
               </Button>
-            </div>
+            </Flex>
           </>
         )}
 
@@ -156,7 +156,7 @@ export const NoitaProgressTracker = () => {
             <div style={{ color: 'yellow' }}>Save00 folder not loaded!</div>
           </>
         )}
-      </div>
+      </Flex>
       <div
         style={{
           display: 'grid',

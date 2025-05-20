@@ -59,14 +59,7 @@ export const NoitaBonesWands = () => {
           Delete all
         </Button>
       </div>
-      <Flex
-        gap={20}
-        style={{
-          flexDirection: 'row',
-          flexWrap: 'wrap',
-          alignItems: 'flex-start',
-        }}
-      >
+      <Flex gap={20} align='flex-start' justify='center' wrap='wrap'>
         {bonesWandsSorted.map((wandFile) => (
           <NoitaWandCard
             key={wandFile.fileName}

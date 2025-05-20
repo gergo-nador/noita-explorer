@@ -5,6 +5,7 @@ import { useNoitaDataWakStore } from '../stores/noita-data-wak.ts';
 import { noitaAPI } from '../noita-api.ts';
 import { useSave00Store } from '../stores/save00.ts';
 import { useMemo } from 'react';
+import { Flex } from '../components/flex.tsx';
 
 export const MainPage = () => {
   const navigate = useNavigate();
@@ -31,17 +32,7 @@ export const MainPage = () => {
   }, [currentRun, data]);
 
   return (
-    <div
-      style={{
-        width: '100%',
-        height: '100%',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'column',
-        gap: 5,
-      }}
-    >
+    <Flex width='100%' height='100%' center direction='column' gap={5}>
       {noitaAPI.environment.features.launchGame && (
         <Button onClick={() => noitaAPI.noita.launch.master()}>
           Launch Game
@@ -146,6 +137,6 @@ export const MainPage = () => {
       <Button decoration={'both'} onClick={() => navigate(pages.settings.main)}>
         Settings
       </Button>
-    </div>
+    </Flex>
   );
 };

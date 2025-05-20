@@ -26,6 +26,7 @@ import speedModifierIcon from '../../../assets/icons/spells/icon_speed_multiplie
 import recoilModifierIcon from '../../../assets/icons/spells/icon_recoil.png';
 import spreadModifierIcon from '../../../assets/icons/spells/icon_spread_degrees.png';
 import { NoitaNumberModifier } from '../../../components/tooltips/noita-number-modifier.tsx';
+import { Flex } from '../../../components/flex.tsx';
 
 export const SpellOverview = ({ spell }: { spell: NoitaSpell }) => {
   const actionType = NoitaSpellTypesDictionary[spell.type];
@@ -274,24 +275,18 @@ export const SpellOverview = ({ spell }: { spell: NoitaSpell }) => {
           gap: 5,
         }}
       >
-        <div style={{ height: '100%', display: 'flex', alignItems: 'center' }}>
+        <Flex height='100%' align='center'>
           <Icon
             type={'custom'}
             src={spell.imageBase64}
             style={{ aspectRatio: 1, width: '100%' }}
           />
-        </div>
+        </Flex>
 
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-          }}
-        >
+        <Flex justify='center' column>
           <div style={{ fontSize: 20, marginBottom: 10 }}>{spell.name}</div>
           <div>{spell.description}</div>
-        </div>
+        </Flex>
       </div>
       <br />
       <div>

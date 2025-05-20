@@ -53,10 +53,9 @@ export const EnemyOverview = ({ enemy }: { enemy: NoitaEnemy }) => {
           src={enemy.imageBase64}
           style={{ aspectRatio: 1, width: '100%' }}
         />
-        <div
+        <Flex
+          justify='center'
           style={{
-            display: 'flex',
-            justifyContent: 'center',
             flexDirection: 'column',
             paddingLeft: 10,
           }}
@@ -65,7 +64,7 @@ export const EnemyOverview = ({ enemy }: { enemy: NoitaEnemy }) => {
           {progressDisplayDebugData && (
             <div style={{ marginTop: 5 }}>{enemy.id}</div>
           )}
-        </div>
+        </Flex>
       </div>
 
       <br />

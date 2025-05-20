@@ -25,6 +25,7 @@ import actionsPerRoundIcon from '../assets/icons/icon_gun_actions_per_round.png'
 import gunPermanentActionIcon from '../assets/icons/icon_gun_permanent_actions.png';
 import { noitaAPI } from '../noita-api.ts';
 import { useNoitaActionsStore } from '../stores/actions.ts';
+import { Flex } from './flex.tsx';
 
 interface NoitaWandCardProps {
   wand: NoitaWand;
@@ -291,13 +292,7 @@ export const NoitaWandCard = ({ wand, bonesFileName }: NoitaWandCardProps) => {
             </tbody>
           </table>
         </div>
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
+        <Flex center>
           {wandImage && (
             <Icon
               type={'custom'}
@@ -305,43 +300,35 @@ export const NoitaWandCard = ({ wand, bonesFileName }: NoitaWandCardProps) => {
               style={{ zoom: 5, transform: 'rotate(-90deg)' }}
             />
           )}
-        </div>
+        </Flex>
       </div>
 
       {wand.alwaysCastSpells.length > 0 && (
         <>
           <br />
-          <div
+          <Flex
+            wrap='wrap'
+            gap={10}
+            align='center'
             style={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              alignItems: 'center',
-              gap: 10,
-
               paddingLeft: 2,
             }}
           >
             <Icon type={'custom'} src={gunPermanentActionIcon} size={15} />
             <div style={{ paddingRight: 10 }}>Always casts</div>
             {spellIconsAlwaysCast}
-          </div>
+          </Flex>
         </>
       )}
 
       <br />
-      <div
-        style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          gap: 5,
-        }}
-      >
+      <Flex wrap='wrap' gap={5}>
         {spellIcons?.map((icon) => (
           <div key={icon.key} style={{ display: 'contents' }}>
             {icon.spellComponent}
           </div>
         ))}
-      </div>
+      </Flex>
       {wand.spellsPossibleIncorrectOrder && (
         <div>
           <Icon type={'warning'} size={30} />

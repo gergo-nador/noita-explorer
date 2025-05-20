@@ -1,6 +1,7 @@
 import { Button, Card, Icon } from '@noita-explorer/noita-component-library';
 import { PageBottomComponent } from '../components/page-bottom-component.tsx';
 import { useSettingsStore } from '../stores/settings.ts';
+import { Flex } from '../components/flex.tsx';
 
 export const SpoilerWarningPage = () => {
   const { set } = useSettingsStore();
@@ -10,15 +11,7 @@ export const SpoilerWarningPage = () => {
   };
 
   return (
-    <div
-      style={{
-        width: '100%',
-        height: '100%',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}
-    >
+    <Flex width='100%' height='100%' justify='center' align='center'>
       <Card style={{ maxWidth: '500px' }}>
         <h2>
           <Icon type={'warning'} size={25} />
@@ -42,6 +35,6 @@ export const SpoilerWarningPage = () => {
           </Button>
         </PageBottomComponent>
       </Card>
-    </div>
+    </Flex>
   );
 };

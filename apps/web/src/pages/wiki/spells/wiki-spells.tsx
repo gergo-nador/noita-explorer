@@ -12,6 +12,7 @@ import { SpellOverview } from './spell-overview.tsx';
 import { SpellFiltersView } from './spell-filters-view.tsx';
 import { useState } from 'react';
 import { SpellFilters } from './spell-filters.ts';
+import { Flex } from '../../../components/flex.tsx';
 
 export const WikiSpells = () => {
   const { data } = useNoitaDataWakStore();
@@ -33,11 +34,10 @@ export const WikiSpells = () => {
   }
 
   return (
-    <div
+    <Flex
+      justify='center'
+      gap={20}
       style={{
-        display: 'flex',
-        justifyContent: 'center',
-        gap: 20,
         margin: 'auto',
         maxHeight: '100%',
         overflowY: 'auto',
@@ -105,7 +105,7 @@ export const WikiSpells = () => {
           <SpellOverview key={selectedSpell.id} spell={selectedSpell} />
         )}
       </Card>
-    </div>
+    </Flex>
   );
 };
 

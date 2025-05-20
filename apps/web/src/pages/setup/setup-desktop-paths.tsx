@@ -66,7 +66,7 @@ export const SetupDesktopPaths = () => {
   return (
     <>
       <Header title={'Step 1: Paths'}>
-        <div style={{ display: 'flex' }}>
+        <Flex>
           <NoitaTooltipWrapper content={'Noita Install Folder'}>
             <PathInput
               type={'directory'}
@@ -81,8 +81,8 @@ export const SetupDesktopPaths = () => {
               }}
             />
           </NoitaTooltipWrapper>
-        </div>
-        <div style={{ display: 'flex' }}>
+        </Flex>
+        <Flex>
           <NoitaTooltipWrapper content={'NollaGamesNoita folder'}>
             <PathInput
               type={'directory'}
@@ -100,7 +100,7 @@ export const SetupDesktopPaths = () => {
               }}
             />
           </NoitaTooltipWrapper>
-        </div>
+        </Flex>
       </Header>
 
       <PageBottomComponent>

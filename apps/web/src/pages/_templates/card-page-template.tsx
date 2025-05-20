@@ -1,6 +1,7 @@
 import React from 'react';
 import { CardPageHeight } from '../../components/card-page-height.tsx';
 import { useTemplatePageLogic } from '../../hooks/use-template-page-logic.tsx';
+import { Flex } from '../../components/flex.tsx';
 
 interface CardPageTemplateProps {
   children?: React.ReactNode | React.ReactNode[];
@@ -16,16 +17,7 @@ export const CardPageTemplate = ({
   const templatePageLogic = useTemplatePageLogic(returnPath);
 
   return (
-    <div
-      style={{
-        width: '100%',
-        height: '100%',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'column',
-      }}
-    >
+    <Flex width='100%' height='100%' center column>
       <div
         style={{
           maxHeight: '100%',
@@ -46,6 +38,6 @@ export const CardPageTemplate = ({
           ))}
         </div>
       </div>
-    </div>
+    </Flex>
   );
 };

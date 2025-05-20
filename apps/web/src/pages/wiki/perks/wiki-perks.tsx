@@ -13,6 +13,7 @@ import { useStateWithQueryParamsString } from '../../../hooks/use-state-with-que
 import { PerkFilters } from './perk-filters.ts';
 import { PerkFiltersView } from './perk-filters-view.tsx';
 import { PerkOverview } from './perk-overview.tsx';
+import { Flex } from '../../../components/flex.tsx';
 
 export const WikiPerks = () => {
   const { data } = useNoitaDataWakStore();
@@ -49,11 +50,10 @@ export const WikiPerks = () => {
   }
 
   return (
-    <div
+    <Flex
+      justify='center'
+      gap={20}
       style={{
-        display: 'flex',
-        justifyContent: 'center',
-        gap: 20,
         margin: 'auto',
         maxHeight: '100%',
         overflowY: 'auto',
@@ -132,7 +132,7 @@ export const WikiPerks = () => {
           <PerkOverview key={selectedPerk.id} perk={selectedPerk} />
         )}
       </Card>
-    </div>
+    </Flex>
   );
 };
 

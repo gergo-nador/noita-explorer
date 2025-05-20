@@ -4,6 +4,7 @@ import {
   Icon,
   NoitaTooltipWrapper,
 } from '@noita-explorer/noita-component-library';
+import { Flex } from '../../components/flex.tsx';
 
 export const CurrentRunPerksView = () => {
   const { data } = useNoitaDataWakStore();
@@ -18,7 +19,7 @@ export const CurrentRunPerksView = () => {
   return (
     <div>
       <div>Perks picked: </div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '4' }}>
+      <Flex gap={4} column>
         {previewPerks.map((pickedPerk) => {
           const perk = data.perks.find((p) => p.id === pickedPerk.perkId);
 
@@ -48,7 +49,7 @@ export const CurrentRunPerksView = () => {
             </div>
           );
         })}
-      </div>
+      </Flex>
     </div>
   );
 };
