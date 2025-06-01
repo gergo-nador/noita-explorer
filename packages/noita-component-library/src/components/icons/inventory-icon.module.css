@@ -1,0 +1,5 @@
+.container {}
+
+.container:hover .icon {
+    zoom: 1.1;
+}

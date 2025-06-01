@@ -30,9 +30,14 @@ import { Flex } from './flex.tsx';
 interface NoitaWandCardProps {
   wand: NoitaWand;
   bonesFileName?: string;
+  withoutCardBorder?: boolean;
 }
 
-export const NoitaWandCard = ({ wand, bonesFileName }: NoitaWandCardProps) => {
+export const NoitaWandCard = ({
+  wand,
+  bonesFileName,
+  withoutCardBorder,
+}: NoitaWandCardProps) => {
   const noitaUnits = useNoitaUnits();
   const { data } = useNoitaDataWakStore();
   const { actionUtils } = useNoitaActionsStore();
@@ -219,18 +224,8 @@ export const NoitaWandCard = ({ wand, bonesFileName }: NoitaWandCardProps) => {
     bonesFileName ?? '',
   );
 
-  return (
-    <Card
-      className={css['container']}
-      style={{
-        maxWidth: '100%',
-      }}
-      styling={{
-        borderBright: isOnDeleteList ? '#d55456' : undefined,
-        borderDark: isOnDeleteList ? '#d55456' : undefined,
-      }}
-      styleContent={{ width: 'min-content' }}
-    >
+  const card = (
+    <div style={{ width: 'min-content' }}>
       <div
         style={{
           display: 'grid',
@@ -336,6 +331,25 @@ export const NoitaWandCard = ({ wand, bonesFileName }: NoitaWandCardProps) => {
           <Icon type={'warning'} size={30} />
         </div>
       )}
+    </div>
+  );
+
+  if (withoutCardBorder) {
+    return card;
+  }
+
+  return (
+    <Card
+      className={css['container']}
+      style={{
+        maxWidth: '100%',
+      }}
+      styling={{
+        borderBright: isOnDeleteList ? '#d55456' : undefined,
+        borderDark: isOnDeleteList ? '#d55456' : undefined,
+      }}
+    >
+      {card}
     </Card>
   );
 };

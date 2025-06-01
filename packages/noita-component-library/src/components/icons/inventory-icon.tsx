@@ -2,6 +2,7 @@ import backgroundRegular from '../../../assets/inventory-boxes/full_inventory_bo
 import React, { LegacyRef, useEffect, useRef, useState } from 'react';
 import { Icon } from './icon';
 import { imageHelpers } from '@noita-explorer/tools';
+import css from './inventory-icon.module.css';
 
 interface InventoryIconProps {
   icon?: string;
@@ -60,6 +61,7 @@ export const InventoryIcon = ({
         aspectRatio: 1,
         ...style,
       }}
+      className={css['container']}
       ref={ref as unknown as LegacyRef<HTMLDivElement>}
     >
       {/* The main background image for every Progress Icon*/}
@@ -71,6 +73,7 @@ export const InventoryIcon = ({
           height: '100%',
           width: '100%',
         }}
+        className={css['hide-on-hover']}
       />
 
       {/* Specific background for the different types of spells on top
@@ -91,7 +94,7 @@ export const InventoryIcon = ({
         >
           <img
             src={spellBackground}
-            alt={'bg image'}
+            alt={'spell image'}
             style={{
               height: '88.88888%', // images are 16x16, background is 18x18 -> 16/18 = 88.8888 %
               width: '88.88888%',
@@ -119,6 +122,7 @@ export const InventoryIcon = ({
           <img
             src={icon}
             alt={'main image'}
+            className={css['icon']}
             style={{
               imageRendering: 'pixelated',
               height: useOriginalIconSize ? imgSize.height : '84%', // images are 16x16, background is 18x18 -> 16/18 = 88.8888 %
