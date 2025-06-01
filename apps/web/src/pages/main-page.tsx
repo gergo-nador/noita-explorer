@@ -58,7 +58,7 @@ export const MainPage = () => {
       <Button
         disabled={!noitaDataWakLoaded}
         decoration={'both'}
-        onClick={() => navigate(pages.progressTracker)}
+        onClick={() => navigate(pages.progressTracker.index)}
         onDisabledClick={() =>
           toast.error(
             'Noita Data is not set up. Please click on the Setup menu.',
@@ -134,7 +134,10 @@ export const MainPage = () => {
       >
         Bones Wands
       </Button>
-      <Button decoration={'both'} onClick={() => navigate(pages.settings.main)}>
+      <Button
+        decoration={'both'}
+        onClick={() => navigate(pages.settings.index)}
+      >
         Settings
       </Button>
       <Button decoration={'both'} onClick={() => navigate(pages.credits)}>

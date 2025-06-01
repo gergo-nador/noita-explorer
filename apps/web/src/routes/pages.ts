@@ -5,7 +5,10 @@ export const pages = {
     desktopScrape: '/setup/desktop-scrape',
     webPaths: '/setup/web-paths',
   },
-  progressTracker: '/progress-tracker',
+  progressTracker: {
+    index: '/progress-tracker',
+    secrets: '/progress-tracker/secrets',
+  },
   wiki: {
     perks: '/wiki/perks',
     spells: '/wiki/spells',
@@ -18,7 +21,7 @@ export const pages = {
   deathMap: '/death-map',
   bonesWands: '/bones-wands',
   settings: {
-    main: '/settings',
+    index: '/settings',
     cursorWandPicker: '/settings/cursor-wand-picker',
   },
   currentRun: '/current-run',

@@ -25,6 +25,7 @@ interface Save00StoreState {
   sessions: NoitaSession[] | undefined;
   bonesWands: NoitaWandBonesFile[] | undefined;
   currentRun: Save00CurrentRun | undefined;
+  unlockedOrbs: string[] | undefined;
 
   status: Save00Status;
   reload: () => Promise<void>;
@@ -38,6 +39,7 @@ export const useSave00Store = create<Save00StoreState>((set, get) => ({
   sessions: undefined,
   bonesWands: undefined,
   currentRun: undefined,
+  unlockedOrbs: undefined,
 
   status: 'unset',
   reload: async () => {
@@ -55,6 +57,7 @@ export const useSave00Store = create<Save00StoreState>((set, get) => ({
 
       const worldState = await noitaAPI.noita.save00.scrapeWorldState();
       const playerState = await noitaAPI.noita.save00.scrapePlayerState();
+      const orbsUnlocked = await noitaAPI.noita.save00.scrapeOrbsUnlocked();
 
       set({
         enemyStatistics: enemyStatistics,
@@ -62,6 +65,7 @@ export const useSave00Store = create<Save00StoreState>((set, get) => ({
         unlockedSpells: flags.spells.length > 0 ? flags.spells : undefined,
         sessions: sessions,
         bonesWands: bonesWands,
+        unlockedOrbs: orbsUnlocked,
 
         currentRun:
           worldState !== undefined && playerState !== undefined

@@ -36,6 +36,7 @@ export interface NoitaAPI {
       scrapeBonesWands: () => Promise<NoitaWandBonesFile[]>;
       scrapeWorldState: () => Promise<NoitaWorldState | undefined>;
       scrapePlayerState: () => Promise<NoitaPlayerState | undefined>;
+      scrapeOrbsUnlocked: () => Promise<string[]>;
     };
     launch: {
       master: (params?: string[]) => Promise<void>;

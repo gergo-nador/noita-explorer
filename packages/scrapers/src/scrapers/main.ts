@@ -10,12 +10,14 @@ import { scrapeSpells } from './datawak/scrape-spells.ts';
 import { scrapeMaterials } from './datawak/scrape-materials.ts';
 import { scrapeWandConfigs } from './datawak/scrape-wand-configs.ts';
 import { scrapePlayerState } from './save00/scrape-player-state.ts';
+import { scrapeUnlockedOrbs } from './save00/scrape-orbs.ts';
 
 export const scrape = {
   bonesWands: scrapeBonesWands,
   enemies: scrapeEnemies,
   enemyStatistics: scrapeEnemyStatistics,
   materials: scrapeMaterials,
+  orbsUnlocked: scrapeUnlockedOrbs,
   perks: scrapePerks,
   playerState: scrapePlayerState,
   progressFlags: scrapeProgressFlags,

@@ -22,6 +22,7 @@ import { CurrentRun } from '../pages/world/current-run.tsx';
 import { WikiMaterialsTree } from '../pages/wiki/wiki-materials-tree.tsx';
 import { WikiMaterials } from '../pages/wiki/materials/wiki-materials.tsx';
 import { Credits } from '../pages/credits.tsx';
+import { NoitaProgressTrackerSecrets } from '../pages/progress/noita-progress-tracker-secrets.tsx';
 
 export const router = createBrowserRouter([
   {
@@ -30,11 +31,25 @@ export const router = createBrowserRouter([
   },
   {
     path: 'progress-tracker',
-    element: (
-      <CardPageTemplate returnPath={'/'}>
-        <NoitaProgressTracker />
-      </CardPageTemplate>
-    ),
+    element: <Outlet />,
+    children: [
+      {
+        path: '',
+        element: (
+          <CardPageTemplate returnPath={'/'}>
+            <NoitaProgressTracker />
+          </CardPageTemplate>
+        ),
+      },
+      {
+        path: 'secrets',
+        element: (
+          <CardPageTemplate returnPath={'/progress-tracker'}>
+            <NoitaProgressTrackerSecrets />
+          </CardPageTemplate>
+        ),
+      },
+    ],
   },
   {
     path: 'wiki',
