@@ -9,9 +9,12 @@ import {
   NoitaEntityTransform,
   NoitaDamageModel,
   getDefaultNoitaDamageMultipliers,
+  NoitaInventoryWand,
 } from '@noita-explorer/model-noita';
 import { extractDamageMultipliers } from '../datawak/scrape-enemies/extract-damage-multipliers.ts';
 import { extractGenomeData } from '../datawak/scrape-enemies/extract-genome-data.ts';
+import { splitNoitaEntityTags } from '../common/tags.ts';
+import { scrapeWand } from '../common/scrape-wand.ts';
 
 export const scrapePlayerState = async ({
   save00DirectoryApi,
@@ -100,10 +103,35 @@ export const scrapePlayerState = async ({
       })
     : undefined;
 
+  const inventoryWands: NoitaInventoryWand[] = [];
+  const playerEntities = playerStateEntity.findTagArray('Entity');
+
+  const quickInventoryComponent = playerEntities.find(
+    (e) => e.getAttribute('name')?.asText() === 'inventory_quick',
+  );
+  if (quickInventoryComponent) {
+    const inventoryEntities = quickInventoryComponent.findTagArray('Entity');
+    const wandEntities = inventoryEntities.filter((e) => {
+      const tagString = e.getAttribute('tags')?.asText() ?? '';
+      const tags = splitNoitaEntityTags(tagString);
+      return tags.includes('wand');
+    });
+
+    wandEntities.forEach((wandEntity) => {
+      const wand = scrapeWand({ wandXml: wandEntity });
+      if (wand) {
+        inventoryWands.push({ wand: wand });
+      }
+    });
+  }
+
   const playerState: NoitaPlayerState = {
     transform: transform,
     damageModel: damageModel,
     genomeData: genomeData,
+    inventory: {
+      wands: inventoryWands,
+    },
   };
 
   return playerState;

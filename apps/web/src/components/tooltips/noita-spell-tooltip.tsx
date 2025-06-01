@@ -90,7 +90,8 @@ export const NoitaSpellTooltip = ({
       icon: <Icon type={'custom'} src={maxUsesIcon} size={15} />,
       text: 'Uses remaining',
       value: wandSpell?.usesRemaining,
-      show: wandSpell?.usesRemaining !== undefined,
+      show:
+        wandSpell?.usesRemaining !== undefined && wandSpell.usesRemaining >= 0,
     },
     {
       text: 'Flag Required',

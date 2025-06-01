@@ -11,7 +11,7 @@ import {
   NoitaActionProgress,
   NoitaActionResult,
 } from './noita-action.ts';
-import { NoitaPlayerState } from './entity/noita-player-state.ts';
+import { NoitaPlayerState } from './entity/player/noita-player-state.ts';
 
 export interface NoitaAPI {
   config: {

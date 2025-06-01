@@ -28,7 +28,7 @@ export const scrapeBonesWands = async ({
       continue;
     }
 
-    const wand = scrapeWand(entityTag);
+    const wand = scrapeWand({ wandXml: entityTag });
     if (wand === undefined) {
       continue;
     }

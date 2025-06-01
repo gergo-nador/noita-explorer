@@ -6,6 +6,7 @@ import {
 import { CurrentRunPerksView } from './current-run-perks-view.tsx';
 import { Flex } from '../../components/flex.tsx';
 import { useSave00Store } from '../../stores/save00.ts';
+import { NoitaWandCard } from '../../components/noita-wand-card.tsx';
 
 export const CurrentRun = () => {
   const { data } = useNoitaDataWakStore();
@@ -19,9 +20,16 @@ export const CurrentRun = () => {
     return <div>No current run detected.</div>;
   }
 
+  console.log(currentRun.playerState.inventory.wands);
+
   return (
     <div>
       <div>
+        <div>
+          {currentRun.playerState.inventory.wands.map((wand) => (
+            <NoitaWandCard wand={wand.wand} />
+          ))}
+        </div>
         <div
           style={{ display: 'grid', gridTemplateColumns: '300px 20px 50px' }}
         >
