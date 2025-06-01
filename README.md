@@ -163,3 +163,8 @@ The project is structured in the following way:
     - `src/scrapers`: Functions to scrape data from data.wak or save00 folder. These functions don't modify any files on the disk
   - `noita-component-library`: Reusable Noita components without Noita logic
     - run `npm run dev:storybook` to view the components (not finished)
+
+Dependency Graph:
+<img src="turbo-graph.png">
+(generated with `turbo run build --graph --dry | dot -Tpng -oturbo-graph.png`)
+(`dot` is from `brew install graphviz`)
