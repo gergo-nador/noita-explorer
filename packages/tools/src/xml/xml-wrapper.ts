@@ -1,5 +1,9 @@
 import { XmlWrapperType } from './interfaces/xml-wrapper-type.ts';
-import { addOrModifyAttribute, getAttribute } from './utils/xml-attribute.ts';
+import {
+  addOrModifyAttribute,
+  getAttribute,
+  getRequiredAttribute,
+} from './utils/xml-attribute.ts';
 import {
   findAllTagsRecursively,
   findNthTag,
@@ -69,14 +73,7 @@ const XmlWrapperInternal = ({
       );
     }
 
-    const attr = getAttribute(xmlObj as XmlTagDeclaration, attributeName);
-    if (attr === undefined) {
-      throw new Error(
-        `Could not find attribute ${attributeName} in ${JSON.stringify(xmlObj)}`,
-      );
-    }
-
-    return attr;
+    return getRequiredAttribute(xmlObj as XmlTagDeclaration, attributeName);
   };
 
   const addOrModifyAttributeInternal = (

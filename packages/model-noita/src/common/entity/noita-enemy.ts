@@ -1,4 +1,6 @@
-import { NoitaProgressEntity } from './noita-progress-entity.ts';
+import { NoitaProgressEntity } from '../noita-progress-entity.ts';
+import { NoitaDamageMultipliers } from './noita-damage-multiplier.ts';
+import { NoitaGenomeData } from './noita-genome-data.ts';
 
 export interface NoitaEnemy extends NoitaProgressEntity {
   id: string;
@@ -11,13 +13,13 @@ export interface NoitaEnemy extends NoitaProgressEntity {
   ragdollMaterial: string | undefined;
   fireProbabilityOfIgnition: number | undefined;
   materialsThatDamage: NoitaEnemyMaterialDamage[] | undefined;
-  genomeData: NoitaEnemyGenomeData | undefined;
+  genomeData: NoitaGenomeData | undefined;
   knockBackResistance: number | undefined;
   goldDrop: number | undefined;
   hasGoldDrop: boolean;
   physicsObjectsDamage: boolean | undefined;
 
-  damageMultipliers: NoitaEnemyDamageMultipliers;
+  damageMultipliers: NoitaDamageMultipliers;
   variants: NoitaEnemyVariant[];
   gameEffects: NoitaEnemyGameEffect[];
 
@@ -29,12 +31,6 @@ export interface NoitaEnemyMaterialDamage {
   multiplier: number;
 }
 
-export interface NoitaEnemyGenomeData {
-  herdId?: string;
-  foodChainRank?: number;
-  isPredator?: boolean;
-}
-
 export interface NoitaEnemyVariant {
   variantId: string;
   enemy: NoitaEnemy;
@@ -43,19 +39,6 @@ export interface NoitaEnemyVariant {
 export interface NoitaEnemyGameEffect {
   id: string;
   frames: number;
-}
-
-export interface NoitaEnemyDamageMultipliers {
-  projectile: number;
-  explosion: number;
-  melee: number;
-  slice: number;
-  fire: number;
-  electricity: number;
-  ice: number;
-  radioactive: number;
-  drill: number;
-  holy: number;
 }
 
 export interface NoitaEnemyDebugObject {

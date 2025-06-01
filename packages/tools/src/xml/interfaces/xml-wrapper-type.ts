@@ -1,4 +1,7 @@
-import { XmlAttributeReadOptions } from './xml-attribute-read-options.ts';
+import {
+  XmlAttributeReadOptions,
+  XmlRequiredAttributeReadOptions,
+} from './xml-attribute-read-options.ts';
 
 export interface XmlWrapperType {
   _getCurrentXmlObj: () => object;
@@ -29,7 +32,9 @@ export interface XmlWrapperType {
    * Gets the specified attribute, throws error if the attribute cannot be found
    * @param attributeName
    */
-  getRequiredAttribute: (attributeName: string) => XmlAttributeReadOptions;
+  getRequiredAttribute: (
+    attributeName: string,
+  ) => XmlRequiredAttributeReadOptions;
   /**
    * Gets the text content of a tag
    */

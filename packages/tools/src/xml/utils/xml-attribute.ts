@@ -1,4 +1,7 @@
-import { XmlAttributeReadOptions } from '../interfaces/xml-attribute-read-options.ts';
+import {
+  XmlAttributeReadOptions,
+  XmlRequiredAttributeReadOptions,
+} from '../interfaces/xml-attribute-read-options.ts';
 import { XmlTagDeclaration } from '../interfaces/xml-inner-types.ts';
 
 /**
@@ -40,6 +43,52 @@ export const getAttribute = (
       return value === 'true' || value === '1';
     },
     asText: () => value,
+  };
+};
+
+export const getRequiredAttribute = (
+  xmlObject: XmlTagDeclaration,
+  name: string,
+): XmlRequiredAttributeReadOptions => {
+  if (!xmlObject.$) {
+    throw new Error(
+      `Could not find attribute ${name} in ${JSON.stringify(xmlObject)}`,
+    );
+  }
+
+  const attr = getAttribute(xmlObject as XmlTagDeclaration, name);
+  if (attr === undefined) {
+    throw new Error(
+      `Could not find attribute ${name} in ${JSON.stringify(xmlObject)}`,
+    );
+  }
+
+  return {
+    asInt: () => {
+      const result = attr.asInt();
+      if (result === undefined) {
+        throw new Error('Could not parse int attribute ' + name);
+      }
+      return result;
+    },
+    asFloat: () => {
+      const result = attr.asFloat();
+      if (result === undefined) {
+        throw new Error('Could not parse float attribute ' + name);
+      }
+      return result;
+    },
+    asBoolean: () => {
+      const result = attr.asBoolean();
+      return result ?? false;
+    },
+    asText: () => {
+      const result = attr.asText();
+      if (result === undefined) {
+        throw new Error('Could not bool text attribute ' + name);
+      }
+      return result;
+    },
   };
 };
 

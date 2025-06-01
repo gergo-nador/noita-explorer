@@ -182,6 +182,38 @@ describe('XmlWrapper', () => {
     expect(call).toThrow();
   });
 
+  it('should throw when getRequiredAttribute.asFloat is not a float', () => {
+    const float11d1 = xmlWrapper.findNthTag('float_11d1');
+    expect(float11d1.getRequiredAttribute('value').asFloat()).toBe(11.1);
+
+    const call = () => float11d1.getRequiredAttribute('text_hello').asFloat();
+    expect(call).toThrow();
+  });
+
+  it('should throw when getRequiredAttribute.asFloat is not a float', () => {
+    const float11d1 = xmlWrapper.findNthTag('float_11d1');
+    expect(float11d1.getRequiredAttribute('value').asFloat()).toBe(11.1);
+
+    const textHello = xmlWrapper.findNthTag('text_hello');
+    const textAttribute = textHello.getRequiredAttribute('value');
+    expect(textAttribute).toBeTruthy();
+
+    const call = () => textAttribute.asFloat();
+    expect(call).toThrow();
+  });
+
+  it('should throw when getRequiredAttribute.asInt is not a int', () => {
+    const int111 = xmlWrapper.findNthTag('int_111');
+    expect(int111.getRequiredAttribute('value').asInt()).toBe(111);
+
+    const textHello = xmlWrapper.findNthTag('text_hello');
+    const textAttribute = textHello.getRequiredAttribute('value');
+    expect(textAttribute).toBeTruthy();
+
+    const call = () => textAttribute.asInt();
+    expect(call).toThrow();
+  });
+
   it('should get text content of a node', () => {
     const textSimple = xmlWrapper.findNthTag('text_simple');
     expect(textSimple.getTextContent()).toBe('Test text');

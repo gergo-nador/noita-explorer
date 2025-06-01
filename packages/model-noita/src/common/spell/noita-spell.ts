@@ -1,5 +1,5 @@
 import { SpellModifierNumberUnit } from './spell-modifier-number-unit.ts';
-import { NoitaProgressEntity } from './noita-progress-entity.ts';
+import { NoitaProgressEntity } from '../noita-progress-entity.ts';
 
 export interface NoitaSpell extends NoitaProgressEntity {
   description: string;

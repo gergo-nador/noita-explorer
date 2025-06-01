@@ -1,0 +1,283 @@
+import {
+  FileSystemDirectoryAccess,
+  StringKeyDictionary,
+} from '@noita-explorer/model';
+import {
+  NoitaEnemy,
+  NoitaEnemyVariant,
+  NoitaTranslation,
+  getDefaultNoitaDamageMultipliers,
+} from '@noita-explorer/model-noita';
+import { parseXml, XmlWrapper } from '@noita-explorer/tools/xml';
+import {
+  fileSystemAccessHelpers,
+  stringHelpers,
+  objectHelpers,
+} from '@noita-explorer/tools';
+import { noitaPaths } from '../../../noita-paths.ts';
+import { extractEnemyProperties } from './extract-enemy-properties.ts';
+import { traverseThroughBaseFiles } from './traverse-through-base-files.ts';
+import { calculateEnemyGold } from './calculate-enemy-gold.ts';
+
+/**
+ * Scraping all the enemies/animals
+ * @param dataWakParentDirectoryApi
+ * @param translations
+ */
+export const scrapeEnemies = async ({
+  dataWakParentDirectoryApi,
+  translations,
+}: {
+  dataWakParentDirectoryApi: FileSystemDirectoryAccess;
+  translations: StringKeyDictionary<NoitaTranslation>;
+}): Promise<NoitaEnemy[]> => {
+  // Part 1: Getting a list of animal ids and their corresponding images
+  const animalsDirPath = await dataWakParentDirectoryApi.path.join(
+    noitaPaths.noitaDataWak.icons.animals,
+  );
+  const animalsDirectory =
+    await dataWakParentDirectoryApi.getDirectory(animalsDirPath);
+
+  const files = await animalsDirectory.listFiles();
+
+  const animalsProcessQueue: {
+    animalId: string;
+    imageBase64: string;
+    imagePath: string;
+  }[] = [];
+  let animalList: string[] = [];
+
+  for (const file of files) {
+    const filename = file.getName();
+    const nameWithoutExtension = file.getNameWithoutExtension();
+
+    if (filename === '_list.txt') {
+      animalList = await file.read.asTextLines();
+
+      continue;
+    }
+
+    const animalId = nameWithoutExtension;
+
+    const imageBase64 = await file.read.asImageBase64();
+
+    animalsProcessQueue.push({
+      animalId: animalId,
+      imageBase64: imageBase64,
+      imagePath: file
+        .getFullPath()
+        .substring(dataWakParentDirectoryApi.getFullPath().length),
+    });
+  }
+
+  const entitiesDataDirPath = await dataWakParentDirectoryApi.path.join(
+    noitaPaths.noitaDataWak.xmlData.entities,
+  );
+  const entitiesDataDirectory =
+    await dataWakParentDirectoryApi.getDirectory(entitiesDataDirPath);
+
+  const animalsDataDirPath = await dataWakParentDirectoryApi.path.join(
+    noitaPaths.noitaDataWak.xmlData.animals,
+  );
+  const animalsDataDirectory =
+    await dataWakParentDirectoryApi.getDirectory(animalsDataDirPath);
+
+  const noitaEnemies: NoitaEnemy[] = [];
+
+  for (const animal of animalsProcessQueue) {
+    try {
+      const defaultName = translations['animal_' + animal.animalId]?.en;
+
+      const enemy: NoitaEnemy = {
+        id: animal.animalId,
+        imageBase64: animal.imageBase64,
+        name: defaultName ?? animal.animalId,
+        hp: undefined,
+        maxHp: undefined,
+        airNeeded: undefined,
+        bloodMaterial: undefined,
+        ragdollMaterial: undefined,
+        fireProbabilityOfIgnition: undefined,
+        materialsThatDamage: undefined,
+        goldDrop: undefined,
+        hasGoldDrop: false,
+        genomeData: undefined,
+        physicsObjectsDamage: undefined,
+        knockBackResistance: undefined,
+        damageMultipliers: getDefaultNoitaDamageMultipliers(),
+        variants: [],
+        gameEffects: [],
+        debug: {
+          fileHierarchy: [],
+          entityTags: [],
+          imagePath: animal.imagePath,
+        },
+      };
+
+      await scrapeEnemyMain({
+        enemy: enemy,
+        translations: translations,
+        animalsDataDirectory: animalsDataDirectory,
+        entitiesDataDirectory: entitiesDataDirectory,
+        dataWakParentDirectoryApi: dataWakParentDirectoryApi,
+      });
+
+      noitaEnemies.push(enemy);
+    } catch (e) {
+      throw new Error(
+        'Error occured while scraping ' + animal.animalId + ' ' + e,
+      );
+    }
+  }
+
+  // sort by the animal list
+  noitaEnemies.sort((a, b) => {
+    let index1 = animalList.indexOf(a.id);
+    let index2 = animalList.indexOf(b.id);
+
+    if (index1 === -1) index1 = animalList.length;
+    if (index2 === -1) index2 = animalList.length;
+
+    return index1 - index2;
+  });
+
+  return noitaEnemies;
+};
+
+const scrapeEnemyMain = async ({
+  enemy,
+  translations,
+  dataWakParentDirectoryApi,
+  animalsDataDirectory,
+  entitiesDataDirectory,
+}: {
+  enemy: NoitaEnemy;
+  translations: StringKeyDictionary<NoitaTranslation>;
+  dataWakParentDirectoryApi: FileSystemDirectoryAccess;
+  animalsDataDirectory: FileSystemDirectoryAccess;
+  entitiesDataDirectory: FileSystemDirectoryAccess;
+}) => {
+  // Find, read and parse the enemy file
+  const xmlFileName = enemy.id + '.xml';
+
+  // first look for the xml file in the animals directory
+  // (the animals folder should have priority over the others)
+  let file = await fileSystemAccessHelpers.findFileInDirectory(
+    xmlFileName,
+    animalsDataDirectory,
+  );
+
+  // then if it was not found, look for it in the entire entities folder
+  if (file === undefined) {
+    file = await fileSystemAccessHelpers.findFileInDirectory(
+      xmlFileName,
+      entitiesDataDirectory,
+    );
+  }
+
+  if (file === undefined) {
+    return undefined;
+  }
+
+  const xmlText = await file.read.asText();
+  const xmlObj = await parseXml(xmlText);
+  const xml = XmlWrapper(xmlObj);
+
+  const entityTag = xml.findNthTag('Entity');
+  if (entityTag === undefined) {
+    return undefined;
+  }
+
+  // get the translation id
+  const translationId = entityTag.getAttribute('name')?.asText();
+  let entityName = translationId ?? enemy.id;
+
+  if (translationId !== undefined) {
+    const trimedTranslationId = stringHelpers.trim({
+      text: translationId,
+      fromStart: '$',
+    });
+
+    const translationIdFromAnimalId = 'animal_' + enemy.id;
+    if (translationIdFromAnimalId in translations) {
+      entityName = translations[translationIdFromAnimalId].en;
+    } else if (trimedTranslationId in translations) {
+      entityName = translations[trimedTranslationId].en;
+    }
+  }
+
+  enemy.name = entityName;
+
+  // before starting to extract properties for enemy,
+  // traverse through the Base tag hierarchy
+  await traverseThroughBaseFiles({
+    enemy: enemy,
+    file: file,
+    dataWakParentDirectoryApi: dataWakParentDirectoryApi,
+  });
+
+  // then extract the more specific properties for the enemy
+  extractEnemyProperties({ enemy, entityTag });
+
+  // dropped gold
+
+  if (enemy.hasGoldDrop) {
+    const enemyHpForGold = enemy.maxHp ?? enemy.hp;
+    if (enemyHpForGold !== undefined) {
+      enemy.goldDrop = calculateEnemyGold(enemyHpForGold);
+    }
+  }
+
+  // look for variants
+  const subDirectories = await entitiesDataDirectory.listDirectories();
+  const variantFiles = await fileSystemAccessHelpers.findAllFilesInDirectory(
+    xmlFileName,
+    subDirectories,
+  );
+
+  for (const variantFile of variantFiles) {
+    const variantFullPath = variantFile.getFullPath();
+    if (variantFullPath === file?.getFullPath()) {
+      continue;
+    }
+
+    const variantFullPathSplit =
+      await entitiesDataDirectory.path.split(variantFullPath);
+
+    const variantXmlText = await variantFile.read.asText();
+    const variantXmlObj = await parseXml(variantXmlText);
+    const variantXmlWrapper = XmlWrapper(variantXmlObj);
+
+    const variantEntityTag = variantXmlWrapper.findNthTag('Entity');
+    if (variantEntityTag === undefined) {
+      continue;
+    }
+
+    // ensure the base tag points to the main entity xml file
+    const variantBaseTag = variantEntityTag.findNthTag('Base');
+    const baseFilePath = variantBaseTag?.getAttribute('file')?.asText();
+    if (baseFilePath === undefined) {
+      continue;
+    }
+
+    const baseFile = await dataWakParentDirectoryApi.getFile(baseFilePath);
+    if (baseFile.getFullPath() !== file.getFullPath()) {
+      continue;
+    }
+
+    const variant: NoitaEnemyVariant = {
+      // the variant id is the folder right before the file name
+      variantId: variantFullPathSplit[variantFullPathSplit.length - 2],
+      enemy: objectHelpers.deepCopy(enemy),
+    };
+
+    extractEnemyProperties({
+      enemy: variant.enemy,
+      entityTag: variantEntityTag,
+    });
+
+    enemy.variants.push(variant);
+  }
+
+  return enemy;
+};

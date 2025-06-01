@@ -30,5 +30,6 @@ export const noitaPaths = {
     flags: ['persistent', 'flags'],
     bones_new: ['persistent', 'bones_new'],
     worldState: ['world_state.xml'],
+    player: ['player.xml'],
   },
 };

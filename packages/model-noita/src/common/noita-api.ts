@@ -5,7 +5,7 @@ import { EnemyStatistic } from '../scraping/enemy-statistics.ts';
 import { NoitaProgressFlags } from '../scraping/noita-progress-flags.ts';
 import { NoitaSession } from './noita-session.ts';
 import { NoitaWorldState } from './noita-world-state.ts';
-import { NoitaWandBonesFile } from './noita-wand-bones-file.ts';
+import { NoitaWandBonesFile } from './wand/noita-wand-bones-file.ts';
 import {
   NoitaAction,
   NoitaActionProgress,

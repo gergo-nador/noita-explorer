@@ -5,7 +5,7 @@ import { scrapeEnemyStatistics } from './save00/stats/scrape-enemy-statistics.ts
 import { scrapeSessions } from './save00/stats/scrape-sessions.ts';
 import { scrapeBonesWands } from './save00/persistent/scrape-bones-wands.ts';
 import { scrapePerks } from './datawak/scrape-perks.ts';
-import { scrapeEnemies } from './datawak/scrape-enemies.ts';
+import { scrapeEnemies } from './datawak/scrape-enemies/scrape-enemies.ts';
 import { scrapeSpells } from './datawak/scrape-spells.ts';
 import { scrapeMaterials } from './datawak/scrape-materials.ts';
 import { scrapeWandConfigs } from './datawak/scrape-wand-configs.ts';

@@ -1,0 +1,110 @@
+import {
+  FileSystemDirectoryAccess,
+  FileSystemFileAccess,
+} from '@noita-explorer/model';
+import { noitaPaths } from '../../noita-paths.ts';
+import { parseXml, XmlWrapper } from '@noita-explorer/tools/xml';
+import {
+  NoitaPlayerState,
+  NoitaEntityTransform,
+  NoitaDamageModel,
+  getDefaultNoitaDamageMultipliers,
+} from '@noita-explorer/model-noita';
+import { extractDamageMultipliers } from '../datawak/scrape-enemies/extract-damage-multipliers.ts';
+import { extractGenomeData } from '../datawak/scrape-enemies/extract-genome-data.ts';
+
+export const scrapePlayerState = async ({
+  save00DirectoryApi,
+}: {
+  save00DirectoryApi: FileSystemDirectoryAccess;
+}): Promise<NoitaPlayerState | undefined> => {
+  const playerStateFilePath = await save00DirectoryApi.path.join(
+    noitaPaths.save00.player,
+  );
+
+  let playerStateFile: FileSystemFileAccess;
+  try {
+    playerStateFile = await save00DirectoryApi.getFile(playerStateFilePath);
+  } catch {
+    return undefined;
+  }
+
+  const playerStateText = await playerStateFile.read.asText();
+  const playerStateXml = await parseXml(playerStateText);
+  const xmlWrapper = XmlWrapper(playerStateXml);
+
+  const playerStateEntity = xmlWrapper.findNthTag('Entity');
+  if (playerStateEntity === undefined) {
+    throw new Error('Could not find root Entity tag');
+  }
+
+  const transformComponent = playerStateEntity.findNthTag('_Transform');
+  if (transformComponent === undefined) {
+    throw new Error('Could not find _Transform tag');
+  }
+
+  const transform: NoitaEntityTransform = {
+    position: {
+      x: transformComponent.getRequiredAttribute('position.x').asFloat(),
+      y: transformComponent.getRequiredAttribute('position.y').asFloat(),
+    },
+    rotation: transformComponent.getRequiredAttribute('rotation').asInt(),
+    scale: {
+      x: transformComponent.getRequiredAttribute('scale.x').asFloat(),
+      y: transformComponent.getRequiredAttribute('scale.y').asFloat(),
+    },
+  };
+
+  const damageModelComponent = playerStateEntity.findNthTag(
+    'DamageModelComponent',
+  );
+  if (damageModelComponent === undefined) {
+    throw new Error('Could not find DamageModelComponent tag');
+  }
+
+  const damageModel: NoitaDamageModel = {
+    airInLungs: damageModelComponent.getAttribute('air_in_lungs')?.asFloat(),
+    airInLungsMax: damageModelComponent
+      .getAttribute('air_in_lungs_max')
+      ?.asFloat(),
+    airLackOfDamage: damageModelComponent
+      .getAttribute('air_lack_of_damage')
+      ?.asFloat(),
+
+    bloodMaterial:
+      damageModelComponent.getRequiredAttribute('blood_material').asText() ??
+      'no_material',
+
+    hp: damageModelComponent.getRequiredAttribute('hp').asFloat(),
+    maxHp: damageModelComponent.getRequiredAttribute('max_hp').asFloat(),
+    damageMultipliers: getDefaultNoitaDamageMultipliers(),
+  };
+
+  const damageMultipliersComponent =
+    damageModelComponent.findNthTag('damage_multipliers');
+
+  if (damageMultipliersComponent) {
+    extractDamageMultipliers({
+      damageMultipliers: damageModel.damageMultipliers,
+      damageMultipliersTag: damageMultipliersComponent,
+    });
+  }
+
+  const genomeDataComponent = playerStateEntity.findNthTag(
+    'GenomeDataComponent',
+  );
+  const genomeData = genomeDataComponent
+    ? extractGenomeData({
+        genomeData: undefined,
+        genomeDataComponent: genomeDataComponent,
+      })
+    : undefined;
+
+  const playerState: NoitaPlayerState = {
+    transform: transform,
+    damageModel: damageModel,
+    genomeData: genomeData,
+  };
+
+  return playerState;
+};
