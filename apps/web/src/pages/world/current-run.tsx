@@ -1,5 +1,8 @@
 import { useNoitaDataWakStore } from '../../stores/noita-data-wak.ts';
-import { Icon } from '@noita-explorer/noita-component-library';
+import {
+  Icon,
+  NoitaTooltipWrapper,
+} from '@noita-explorer/noita-component-library';
 import { CurrentRunPerksView } from './current-run-perks-view.tsx';
 import { Flex } from '../../components/flex.tsx';
 import { useSave00Store } from '../../stores/save00.ts';
@@ -23,8 +26,19 @@ export const CurrentRun = () => {
           style={{ display: 'grid', gridTemplateColumns: '300px 20px 50px' }}
         >
           <div>
-            <ProgressBar progress={60} barColor={progressBarColors.healthBar} />
-            <ProgressBar progress={60} barColor={progressBarColors.healthBar} />
+            <NoitaTooltipWrapper
+              content={`${currentRun.playerState.damageModel.hp}/${currentRun.playerState.damageModel.maxHp}`}
+              placement='left'
+            >
+              <ProgressBar
+                progress={
+                  (100 * currentRun.playerState.damageModel.hp) /
+                  currentRun.playerState.damageModel.maxHp
+                }
+                barColor={progressBarColors.healthBar}
+                width='300px'
+              />
+            </NoitaTooltipWrapper>
           </div>
           <div>
             <Icon type={'custom'} alt={'Health'} />

@@ -64,6 +64,10 @@ export function browserNoitaApi(): NoitaAPI {
           const api = await getSave00FolderHandle();
           return await scrape.worldState({ save00DirectoryApi: api });
         },
+        scrapePlayerState: async () => {
+          const api = await getSave00FolderHandle();
+          return await scrape.playerState({ save00DirectoryApi: api });
+        },
       },
       launch: {
         master: () => throwNotAllowedInThisModeError(),

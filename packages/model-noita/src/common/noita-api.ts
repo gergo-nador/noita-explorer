@@ -11,6 +11,7 @@ import {
   NoitaActionProgress,
   NoitaActionResult,
 } from './noita-action.ts';
+import { NoitaPlayerState } from './entity/noita-player-state.ts';
 
 export interface NoitaAPI {
   config: {
@@ -34,6 +35,7 @@ export interface NoitaAPI {
       scrapeSessions: () => Promise<NoitaSession[]>;
       scrapeBonesWands: () => Promise<NoitaWandBonesFile[]>;
       scrapeWorldState: () => Promise<NoitaWorldState | undefined>;
+      scrapePlayerState: () => Promise<NoitaPlayerState | undefined>;
     };
     launch: {
       master: (params?: string[]) => Promise<void>;

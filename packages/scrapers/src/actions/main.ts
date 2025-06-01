@@ -5,7 +5,7 @@ import { unlockEnemy } from './save00/stats/unlock-enemy.ts';
 
 export const actions = {
   deleteBonesWands: deleteBonesWands,
+  unlockEnemy: unlockEnemy,
   unlockPerk: unlockPerk,
   unlockSpell: unlockSpell,
-  unlockEnemy: unlockEnemy,
 };

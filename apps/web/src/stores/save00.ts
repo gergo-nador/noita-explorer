@@ -3,6 +3,7 @@ import { noitaAPI } from '../noita-api.ts';
 import { StringKeyDictionary } from '@noita-explorer/model';
 import {
   EnemyStatistic,
+  NoitaPlayerState,
   NoitaSession,
   NoitaWandBonesFile,
   NoitaWorldState,
@@ -12,6 +13,7 @@ import { Dispatch, SetStateAction } from 'react';
 
 interface Save00CurrentRun {
   worldState: NoitaWorldState;
+  playerState: NoitaPlayerState;
 }
 
 type Save00Status = 'unset' | 'loading' | 'loaded' | 'failed';
@@ -52,6 +54,7 @@ export const useSave00Store = create<Save00StoreState>((set, get) => ({
       const bonesWands = await noitaAPI.noita.save00.scrapeBonesWands();
 
       const worldState = await noitaAPI.noita.save00.scrapeWorldState();
+      const playerState = await noitaAPI.noita.save00.scrapePlayerState();
 
       set({
         enemyStatistics: enemyStatistics,
@@ -61,7 +64,9 @@ export const useSave00Store = create<Save00StoreState>((set, get) => ({
         bonesWands: bonesWands,
 
         currentRun:
-          worldState !== undefined ? { worldState: worldState } : undefined,
+          worldState !== undefined && playerState !== undefined
+            ? { worldState, playerState }
+            : undefined,
 
         status: 'loaded',
       });

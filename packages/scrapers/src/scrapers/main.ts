@@ -9,17 +9,19 @@ import { scrapeEnemies } from './datawak/scrape-enemies/scrape-enemies.ts';
 import { scrapeSpells } from './datawak/scrape-spells.ts';
 import { scrapeMaterials } from './datawak/scrape-materials.ts';
 import { scrapeWandConfigs } from './datawak/scrape-wand-configs.ts';
+import { scrapePlayerState } from './save00/scrape-player-state.ts';
 
 export const scrape = {
-  translations: readTranslations,
-  worldState: scrapeWorldState,
-  progressFlags: scrapeProgressFlags,
-  enemyStatistics: scrapeEnemyStatistics,
-  sessions: scrapeSessions,
   bonesWands: scrapeBonesWands,
-  perks: scrapePerks,
   enemies: scrapeEnemies,
-  spells: scrapeSpells,
+  enemyStatistics: scrapeEnemyStatistics,
   materials: scrapeMaterials,
+  perks: scrapePerks,
+  playerState: scrapePlayerState,
+  progressFlags: scrapeProgressFlags,
+  sessions: scrapeSessions,
+  spells: scrapeSpells,
+  translations: readTranslations,
   wandConfigs: scrapeWandConfigs,
+  worldState: scrapeWorldState,
 };
