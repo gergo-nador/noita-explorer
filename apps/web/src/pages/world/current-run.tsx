@@ -2,12 +2,18 @@ import { useNoitaDataWakStore } from '../../stores/noita-data-wak.ts';
 import { Icon } from '@noita-explorer/noita-component-library';
 import { CurrentRunPerksView } from './current-run-perks-view.tsx';
 import { Flex } from '../../components/flex.tsx';
+import { useSave00Store } from '../../stores/save00.ts';
 
 export const CurrentRun = () => {
   const { data } = useNoitaDataWakStore();
+  const { currentRun } = useSave00Store();
 
   if (!data) {
     return <div>Data wak is still loading...</div>;
+  }
+
+  if (!currentRun) {
+    return <div>No current run detected.</div>;
   }
 
   return (
