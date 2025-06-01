@@ -26,6 +26,7 @@ interface Save00StoreState {
   bonesWands: NoitaWandBonesFile[] | undefined;
   currentRun: Save00CurrentRun | undefined;
   unlockedOrbs: string[] | undefined;
+  flags: Set<string> | undefined;
 
   status: Save00Status;
   reload: () => Promise<void>;
@@ -40,6 +41,7 @@ export const useSave00Store = create<Save00StoreState>((set, get) => ({
   bonesWands: undefined,
   currentRun: undefined,
   unlockedOrbs: undefined,
+  flags: undefined,
 
   status: 'unset',
   reload: async () => {
@@ -66,6 +68,7 @@ export const useSave00Store = create<Save00StoreState>((set, get) => ({
         sessions: sessions,
         bonesWands: bonesWands,
         unlockedOrbs: orbsUnlocked,
+        flags: new Set(flags.all),
 
         currentRun:
           worldState !== undefined && playerState !== undefined

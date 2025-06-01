@@ -13,14 +13,16 @@ export const scrapeProgressFlags = async ({
   const flagsDir = await save00DirectoryApi.getDirectory(flagsDirPath);
   const files = await flagsDir.listFiles();
 
-  const actionFlags = files
-    .map((f) => f.getNameWithoutExtension())
+  const fileNamesWithoutExtension = files.map((f) =>
+    f.getNameWithoutExtension(),
+  );
+
+  const actionFlags = fileNamesWithoutExtension
     .filter((f) => f.startsWith('action_'))
     .map((f) => f.substring('action_'.length))
     .map((s) => s.toUpperCase());
 
-  const perkFlags = files
-    .map((f) => f.getNameWithoutExtension())
+  const perkFlags = fileNamesWithoutExtension
     .filter((f) => f.startsWith('perk_picked_'))
     .map((f) => f.substring('perk_picked_'.length))
     .map((s) => s.toUpperCase());
@@ -28,5 +30,6 @@ export const scrapeProgressFlags = async ({
   return {
     spells: actionFlags,
     perks: perkFlags,
+    all: fileNamesWithoutExtension,
   };
 };
