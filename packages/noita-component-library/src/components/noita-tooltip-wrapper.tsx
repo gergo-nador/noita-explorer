@@ -7,12 +7,14 @@ interface NoitaTooltipProps {
   content: string | React.ReactNode | React.ReactNode[] | undefined;
   placement?: PlacesType;
   children?: React.ReactNode | string | React.ReactNode[];
+  isDisabled?: boolean;
 }
 
 export const NoitaTooltipWrapper = ({
   content,
   children,
   placement,
+  isDisabled,
 }: NoitaTooltipProps) => {
   const [isMouseHovered, setMouseHovered] = useState(false);
 
@@ -33,7 +35,7 @@ export const NoitaTooltipWrapper = ({
           }}
           anchorSelect={`#${id}`}
           opacity={1}
-          isOpen={true}
+          isOpen={!isDisabled}
           place={placement}
         >
           <Card

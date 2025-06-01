@@ -1,7 +1,7 @@
-import { Card } from '@noita-explorer/noita-component-library';
 import { Separator } from '../../components/separator.tsx';
-import { getNoitaHolidays, NoitaHoliday } from './get-noita-holidays.tsx';
+import { getNoitaHolidays } from './get-noita-holidays.tsx';
 import { Flex } from '../../components/flex.tsx';
+import { HolidayCard } from './holiday-card.tsx';
 
 export const NoitaHolidays = () => {
   const holidays = getNoitaHolidays();
@@ -59,54 +59,5 @@ export const NoitaHolidays = () => {
         )}
       </Flex>
     </>
-  );
-};
-
-const HolidayCard = ({
-  holiday,
-  isHappeningNow,
-}: {
-  holiday: NoitaHoliday;
-  isHappeningNow: boolean;
-}) => {
-  const isOneDayEvent =
-    holiday.nextStartDate.getMonth() === holiday.nextEndDate.getMonth() &&
-    holiday.nextStartDate.getDate() === holiday.nextEndDate.getDate();
-
-  return (
-    <div style={{ width: '600px', maxWidth: '80%', marginBottom: 30 }}>
-      <div style={{ textAlign: 'center' }}>
-        {(!isOneDayEvent || isHappeningNow) && (
-          <>
-            <span>
-              {isHappeningNow
-                ? 'Now'
-                : holiday.nextStartDate?.toLocaleDateString()}{' '}
-              (
-              {holiday.nextEndDate?.toLocaleDateString(undefined, {
-                weekday: 'long',
-              })}
-              )
-            </span>
-            <span> - </span>
-          </>
-        )}
-        <span>
-          {holiday.nextEndDate?.toLocaleDateString()} (
-          {holiday.nextEndDate?.toLocaleDateString(undefined, {
-            weekday: 'long',
-          })}
-          )
-        </span>
-      </div>
-      {holiday.reactComponent ?? (
-        <Card color={'gold'}>
-          <div style={{ marginBottom: 15 }}>
-            {holiday.title} - {holiday.datesText}
-          </div>
-          <div>{holiday.description}</div>
-        </Card>
-      )}
-    </div>
   );
 };

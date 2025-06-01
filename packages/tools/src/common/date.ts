@@ -56,8 +56,19 @@ const getFirstDayOfWeek = (dayOfWeek: number) => {
   };
 };
 
+const convertFunction = (milliSeconds: number) => {
+  return {
+    toDays: () => milliSeconds / (1000 * 60 * 60 * 24),
+  };
+};
+
+const convert = {
+  milliSeconds: (ms: number) => convertFunction(ms),
+};
+
 export const dateHelpers = {
   calculateEaster,
   getFirstDayOfWeek,
   getNextUpcomingDate,
+  convert,
 };
