@@ -6,6 +6,7 @@ import { noitaAPI } from '../noita-api.ts';
 import { useSave00Store } from '../stores/save00.ts';
 import { useMemo } from 'react';
 import { Flex } from '../components/flex.tsx';
+import { environment } from '../environment.ts';
 
 export const MainPage = () => {
   const navigate = useNavigate();
@@ -84,7 +85,11 @@ export const MainPage = () => {
         disabled={!noitaDataWakLoaded || !currentRun}
         onClick={() => navigate(pages.currentRun)}
         onDisabledClick={() => {
-          if (!noitaDataWakLoaded) {
+          if (environment === 'production') {
+            toast.info(
+              "This page is still in development. If you want to view it's current state, check out the dev page",
+            );
+          } else if (!noitaDataWakLoaded) {
             toast.error(
               'Noita Data is not set up. Please click on the Setup menu.',
             );
