@@ -1,6 +1,7 @@
 import backgroundRegular from '../../../assets/inventory-boxes/full_inventory_box.png';
-import React from 'react';
+import React, { LegacyRef, useEffect, useRef, useState } from 'react';
 import { Icon } from './icon';
+import { imageHelpers } from '@noita-explorer/tools';
 
 interface InventoryIconProps {
   icon?: string;
@@ -9,6 +10,7 @@ interface InventoryIconProps {
   spellBackground?: string;
   usesRemaining?: number;
   showWarning?: boolean;
+  useOriginalIconSize?: boolean;
 }
 
 export const InventoryIcon = ({
@@ -18,10 +20,36 @@ export const InventoryIcon = ({
   spellBackground,
   usesRemaining,
   showWarning,
+  useOriginalIconSize,
 }: InventoryIconProps) => {
+  const ref = useRef<HTMLDivElement>();
+  const [imgSize, setImageSize] = useState({ width: 0, height: 0 });
   const backgroundImage = backgroundRegular;
 
   size ??= '100%';
+
+  useEffect(() => {
+    if (!useOriginalIconSize || !icon) {
+      return;
+    }
+
+    // the inventory icon is 18x18 pixel (not scaled)
+    const inventoryIconHeight = ref.current?.clientHeight;
+    if (inventoryIconHeight === undefined) {
+      return;
+    }
+
+    const scale = inventoryIconHeight / 18;
+
+    imageHelpers
+      .getImageSizeBase64(icon)
+      .then((size: { width: number; height: number }) => {
+        setImageSize({
+          width: size.width * scale,
+          height: size.height * scale,
+        });
+      });
+  }, [icon, size, useOriginalIconSize]);
 
   return (
     <div
@@ -32,6 +60,7 @@ export const InventoryIcon = ({
         aspectRatio: 1,
         ...style,
       }}
+      ref={ref as unknown as LegacyRef<HTMLDivElement>}
     >
       {/* The main background image for every Progress Icon*/}
       <img
@@ -92,8 +121,8 @@ export const InventoryIcon = ({
             alt={'main image'}
             style={{
               imageRendering: 'pixelated',
-              height: '84%', // images are 16x16, background is 18x18 -> 16/18 = 88.8888 %
-              width: '84%', // the main image in the inventory is slightly smaller than the spell background
+              height: useOriginalIconSize ? imgSize.height : '84%', // images are 16x16, background is 18x18 -> 16/18 = 88.8888 %
+              width: useOriginalIconSize ? imgSize.width : '84%', // the main image in the inventory is slightly smaller than the spell background
             }}
           />
         </div>

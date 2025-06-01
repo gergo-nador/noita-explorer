@@ -218,9 +218,33 @@ function getAverageColorBase64(base64: string): Promise<string> {
   });
 }
 
+function getImageSizeBase64(
+  base64: string,
+): Promise<{ width: number; height: number }> {
+  return new Promise((resolve, reject) => {
+    // Create an Image element
+    const img = new Image();
+    img.onload = () => {
+      // Create an off-screen canvas
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      if (!ctx) {
+        reject(new Error('Failed to get 2D context'));
+        return;
+      }
+
+      resolve({ width: img.width, height: img.height });
+    };
+
+    img.onerror = () => reject('Failed to load image');
+    img.src = base64;
+  });
+}
+
 export const imageHelpers = {
   trimWhitespaceBase64,
   scaleImageBase64,
   rotateImageBase64,
   getAverageColorBase64,
+  getImageSizeBase64,
 };

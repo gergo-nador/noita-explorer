@@ -25,7 +25,8 @@
     }
   },
   "dependencies": {
-    "@noita-explorer/model": "*"
+    "@noita-explorer/model": "*",
+    "@noita-explorer/tools": "*"
   },
   "peerDependencies": {
     "react": "^18.3.1",
