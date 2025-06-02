@@ -24,11 +24,16 @@ import { WikiMaterials } from '../pages/wiki/materials/wiki-materials.tsx';
 import { Credits } from '../pages/credits.tsx';
 import { NoitaProgressTrackerSecrets } from '../pages/progress/noita-progress-tracker-secrets.tsx';
 import { NoitaProgressTrackerPillar } from '../pages/progress/noita-progress-tracker-pillar.tsx';
+import { DocumentTitle } from '../components/document-title/document-title.tsx';
 
 export const router = createBrowserRouter([
   {
     path: '/',
-    element: <MainPage />,
+    element: (
+      <DocumentTitle title='Noita Explorer'>
+        <MainPage />
+      </DocumentTitle>
+    ),
   },
   {
     path: 'progress-tracker',
@@ -37,9 +42,11 @@ export const router = createBrowserRouter([
       {
         path: '',
         element: (
-          <CardPageTemplate returnPath={'/'}>
-            <NoitaProgressTracker />
-          </CardPageTemplate>
+          <DocumentTitle title='Progress Tracker'>
+            <CardPageTemplate returnPath={'/'}>
+              <NoitaProgressTracker />
+            </CardPageTemplate>
+          </DocumentTitle>
         ),
       },
       {
@@ -57,8 +64,22 @@ export const router = createBrowserRouter([
           />
         ),
         children: [
-          { path: '', element: <NoitaProgressTrackerSecrets /> },
-          { path: 'pillar', element: <NoitaProgressTrackerPillar /> },
+          {
+            path: '',
+            element: (
+              <DocumentTitle title='Secrets - Progress Tracker'>
+                <NoitaProgressTrackerSecrets />
+              </DocumentTitle>
+            ),
+          },
+          {
+            path: 'pillar',
+            element: (
+              <DocumentTitle title='Achievement Pillar - Progress Tracker'>
+                <NoitaProgressTrackerPillar />
+              </DocumentTitle>
+            ),
+          },
         ],
       },
     ],
@@ -83,32 +104,54 @@ export const router = createBrowserRouter([
     children: [
       {
         path: 'perks',
-        element: <WikiPerks />,
+        element: (
+          <DocumentTitle title='Perks - Wiki'>
+            <WikiPerks />
+          </DocumentTitle>
+        ),
       },
       {
         path: 'spells',
-        element: <WikiSpells />,
+        element: (
+          <DocumentTitle title='Spells - Wiki'>
+            <WikiSpells />
+          </DocumentTitle>
+        ),
       },
       {
         path: 'enemies',
-        element: <WikiEnemies />,
+        element: (
+          <DocumentTitle title='Enemies - Wiki'>
+            <WikiEnemies />
+          </DocumentTitle>
+        ),
       },
       {
         path: 'materials',
-        element: <WikiMaterials />,
+        element: (
+          <DocumentTitle title='Materials - Wiki'>
+            <WikiMaterials />
+          </DocumentTitle>
+        ),
       },
       {
         path: 'materials-tree',
-        element: <WikiMaterialsTree />,
+        element: (
+          <DocumentTitle title='Material Tree - Wiki'>
+            <WikiMaterialsTree />
+          </DocumentTitle>
+        ),
       },
     ],
   },
   {
     path: 'setup',
     element: (
-      <CardPageTemplate returnPath={'/'}>
-        <Outlet />
-      </CardPageTemplate>
+      <DocumentTitle title='Setup - Noita Explorer'>
+        <CardPageTemplate returnPath={'/'}>
+          <Outlet />
+        </CardPageTemplate>
+      </DocumentTitle>
     ),
     children: [
       { path: 'desktop-paths', element: <SetupDesktopPaths /> },
@@ -119,65 +162,87 @@ export const router = createBrowserRouter([
   {
     path: 'holidays',
     element: (
-      <CardPageTemplate returnPath={'/'}>
-        <NoitaHolidays />
-      </CardPageTemplate>
+      <DocumentTitle title='Holidays - Noita Explorer'>
+        <CardPageTemplate returnPath={'/'}>
+          <NoitaHolidays />
+        </CardPageTemplate>
+      </DocumentTitle>
     ),
   },
   {
     path: 'current-run',
     element: (
-      <CardPageTemplate returnPath={'/'}>
-        <CurrentRun />
-      </CardPageTemplate>
+      <DocumentTitle title='Current Run - Noita Explorer'>
+        <CardPageTemplate returnPath={'/'}>
+          <CurrentRun />
+        </CardPageTemplate>
+      </DocumentTitle>
     ),
   },
   {
     path: 'sessions',
     element: (
-      <EmptyPageTemplate returnPath={'/'}>
-        <NoitaSessions />
-      </EmptyPageTemplate>
+      <DocumentTitle title='Sessions - Noita Explorer'>
+        <EmptyPageTemplate returnPath={'/'}>
+          <NoitaSessions />
+        </EmptyPageTemplate>
+      </DocumentTitle>
     ),
   },
   {
     path: 'death-map',
     element: (
-      <CardPageTemplate returnPath={'/'}>
-        <NoitaDeathMap />
-      </CardPageTemplate>
+      <DocumentTitle title='Death Map - Noita Explorer'>
+        <CardPageTemplate returnPath={'/'}>
+          <NoitaDeathMap />
+        </CardPageTemplate>
+      </DocumentTitle>
     ),
   },
   {
     path: 'bones-wands',
     element: (
-      <CardPageTemplate returnPath={'/'}>
-        <NoitaBonesWands />
-      </CardPageTemplate>
+      <DocumentTitle title='Bones Wands - Noita Explorer'>
+        <CardPageTemplate returnPath={'/'}>
+          <NoitaBonesWands />
+        </CardPageTemplate>
+      </DocumentTitle>
     ),
   },
   {
     path: 'settings',
     element: (
-      <CardPageTemplate returnPath={'/'}>
-        <Settings />
-      </CardPageTemplate>
+      <DocumentTitle title='Settings - Noita Explorer'>
+        <Outlet />
+      </DocumentTitle>
     ),
-  },
-  {
-    path: 'settings/cursor-wand-picker',
-    element: (
-      <CardPageTemplate returnPath={'/settings'}>
-        <SettingsCursorWandPicker />
-      </CardPageTemplate>
-    ),
+    children: [
+      {
+        path: '',
+        element: (
+          <CardPageTemplate returnPath={'/'}>
+            <Settings />
+          </CardPageTemplate>
+        ),
+      },
+      {
+        path: 'cursor-wand-picker',
+        element: (
+          <CardPageTemplate returnPath={'/settings'}>
+            <SettingsCursorWandPicker />
+          </CardPageTemplate>
+        ),
+      },
+    ],
   },
   {
     path: 'credits',
     element: (
-      <CardPageTemplate>
-        <Credits />
-      </CardPageTemplate>
+      <DocumentTitle title='Credits - Noita Explorer'>
+        <CardPageTemplate>
+          <Credits />
+        </CardPageTemplate>
+      </DocumentTitle>
     ),
   },
 ]);
