@@ -102,6 +102,8 @@ interface NoitaPillar {
 }
 
 export const noitaProgressTrackerPillarDefinitions = (): NoitaPillar[][] => {
+  // lua script: data/scripts/biomes/mountain_tree.lua
+
   const pillar1: NoitaPillar[] = [
     { img: pillarEnd1 },
 
@@ -136,7 +138,11 @@ export const noitaProgressTrackerPillarDefinitions = (): NoitaPillar[][] => {
     { img: pillarTower, title: 'Tower', flag: 'secret_tower' },
 
     // Sacrifice
-    { img: pillarDarkSunRock, title: 'Sacrifice Dark Sun Rock' },
+    {
+      img: pillarDarkSunRock,
+      title: 'Sacrifice Dark Sun Rock',
+      flag: 'misc_darksun_effect',
+    },
     {
       img: pillarSunRock,
       title: 'Sacrifice Sun Rock',
@@ -182,17 +188,25 @@ export const noitaProgressTrackerPillarDefinitions = (): NoitaPillar[][] => {
     { img: pillarEnd2 },
 
     // As Above, So Below
-    { img: pillarAASBD, title: 'As Above, So Below (Dark)' },
-    { img: pillarAASB, title: 'As Above, So Below' },
+    {
+      img: pillarAASBD,
+      title: 'As Above, So Below (Dark)',
+      flag: 'secret_darksun_collision',
+    },
+    {
+      img: pillarAASB,
+      title: 'As Above, So Below',
+      flag: 'secret_sun_collision',
+    },
 
     // Dark Moon
-    { img: pillarDarkGourdMoon, title: 'Dark Gourd Moon' },
-    { img: pillarDarkMoon, title: 'Blood Moon' },
+    { img: pillarDarkGourdMoon, title: 'Dark Gourd Moon', flag: 'dead_mood' },
+    { img: pillarDarkMoon, title: 'Blood Moon', flag: 'secret_dmoon' },
 
     // Moon
-    { img: pillarGourdMoon, title: 'Gourd Moon' },
-    { img: pillarDrunkMoon, title: 'Drunk Moon' },
-    { img: pillarMoon, title: 'Moon' },
+    { img: pillarGourdMoon, title: 'Gourd Moon', flag: 'special_mood' },
+    { img: pillarDrunkMoon, title: 'Drunk Moon', flag: 'secret_moon2' },
+    { img: pillarMoon, title: 'Moon', flag: 'secret_moon' },
 
     // Essences
     {
@@ -220,13 +234,17 @@ export const noitaProgressTrackerPillarDefinitions = (): NoitaPillar[][] => {
   const pillar3: NoitaPillar[] = [
     { img: pillarEnd3 },
 
-    { img: pillarNightmare, title: 'Nightmare' },
+    { img: pillarNightmare, title: 'Nightmare', flag: 'progress_nightmare' },
     {
       img: pillarEndingNGPPP,
       title: 'New Game+++',
       flag: 'progress_newgameplusplus3',
     },
-    { img: pillarEndingPeaceful, title: 'Peaceful Ending' },
+    {
+      img: pillarEndingPeaceful,
+      title: 'Peaceful Ending',
+      flag: 'progress_ending2',
+    },
     {
       img: pillarEndingPure,
       title: 'Mountain Ending (Pure)',
@@ -252,7 +270,7 @@ export const noitaProgressTrackerPillarDefinitions = (): NoitaPillar[][] => {
 
     { img: pillarKolmi, title: 'Kolmisilmä', flag: 'boss_centipede' },
     { img: pillarKivi, title: 'Kivi', flag: 'miniboss_sky' },
-    { img: pillarToveri, title: 'Toveri' },
+    { img: pillarToveri, title: 'Toveri', flag: 'final_secret_orb3' },
     { img: pillarGate, title: 'Gate Guardian', flag: 'miniboss_gate_monsters' },
     { img: pillarTapios, title: "Tapio's Wrath", flag: 'miniboss_threelk' },
     {
@@ -305,15 +323,23 @@ export const noitaProgressTrackerPillarDefinitions = (): NoitaPillar[][] => {
       title: 'Benign Sunshine!',
       flag: 'progress_sunkill',
     },
-    { img: pillarPimeaAurinko, title: 'Pimeä Aurinko' },
-    { img: pillarUusiAurinko, title: 'Uusi Aurinko' },
+    {
+      img: pillarPimeaAurinko,
+      title: 'Pimeä Aurinko',
+      flag: 'progress_darksun',
+    },
+    { img: pillarUusiAurinko, title: 'Uusi Aurinko', flag: 'progress_sun' },
 
     // High Effort Challanges
-    { img: pillarUndamaged, title: 'Undamaged' },
-    { img: pillar1Minute, title: '1 Minute?!' },
-    { img: pillar5Minute, title: 'Dedicated to 5 Minutes' },
-    { img: pillarNoGold, title: 'No Gold' },
-    { img: pillarPacifist, title: 'Pacifist' },
+    { img: pillarUndamaged, title: 'Undamaged', flag: 'progress_nohit' },
+    { img: pillar1Minute, title: '1 Minute?!', flag: 'progress_minit' },
+    {
+      img: pillar5Minute,
+      title: 'Dedicated to 5 Minutes',
+      flag: 'progress_clock',
+    },
+    { img: pillarNoGold, title: 'No Gold', flag: 'progress_nogold' },
+    { img: pillarPacifist, title: 'Pacifist', flag: 'progress_pacifist' },
 
     // Orbs
     { img: pillarAllOrbs, title: 'All Orbs', flag: 'progress_orb_all' },
@@ -351,7 +377,7 @@ export const noitaProgressTrackerPillarDefinitions = (): NoitaPillar[][] => {
       title: 'Hourglass Chamber',
       flag: 'secret_hourglass',
     },
-    { img: pillarBuriedEye, title: 'Buried Eye' },
+    { img: pillarBuriedEye, title: 'Buried Eye', flag: 'secret_buried_eye' },
     {
       img: pillarMeditationCube,
       title: 'Meditation Cube',
@@ -363,12 +389,16 @@ export const noitaProgressTrackerPillarDefinitions = (): NoitaPillar[][] => {
       flag: 'secret_allessences',
     },
     { img: pillarSecretFruit, title: 'Secret Fruit', flag: 'secret_fruit' },
-    { img: pillarAvarice, title: 'Avarice' },
-    { img: pillarEoE, title: 'The End of Everything' },
+    { img: pillarAvarice, title: 'Avarice', flag: 'card_unlocked_divide' },
+    {
+      img: pillarEoE,
+      title: 'The End of Everything',
+      flag: 'card_unlocked_everything',
+    },
     { img: pillarCoralChest, title: 'Coral Chest', flag: 'secret_chest_light' },
     { img: pillarDarkChest, title: 'Dark Chest', flag: 'secret_chest_dark' },
-    { img: pillarFRIENDSHIP, title: 'FRIENDSHIP' },
-    { img: pillarFriendship, title: 'Friendship' },
+    { img: pillarFRIENDSHIP, title: 'FRIENDSHIP', flag: 'final_secret_orb2' },
+    { img: pillarFriendship, title: 'Friendship', flag: 'final_secret_orb' },
     { img: pillarEternalWealth, title: 'Eternal Wealth', flag: 'secret_greed' },
 
     { img: pillarPart },
