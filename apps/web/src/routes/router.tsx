@@ -23,6 +23,7 @@ import { WikiMaterialsTree } from '../pages/wiki/wiki-materials-tree.tsx';
 import { WikiMaterials } from '../pages/wiki/materials/wiki-materials.tsx';
 import { Credits } from '../pages/credits.tsx';
 import { NoitaProgressTrackerSecrets } from '../pages/progress/noita-progress-tracker-secrets.tsx';
+import { NoitaProgressTrackerPillar } from '../pages/progress/noita-progress-tracker-pillar.tsx';
 
 export const router = createBrowserRouter([
   {
@@ -44,10 +45,21 @@ export const router = createBrowserRouter([
       {
         path: 'secrets',
         element: (
-          <CardPageTemplate returnPath={'/progress-tracker'}>
-            <NoitaProgressTrackerSecrets />
-          </CardPageTemplate>
+          <TabPageTemplate
+            returnPath={'/progress-tracker'}
+            tabs={[
+              { title: 'General', href: pages.progressTracker.secrets },
+              {
+                title: 'Achievement Pillar',
+                href: pages.progressTracker.achievementPillar,
+              },
+            ]}
+          />
         ),
+        children: [
+          { path: '', element: <NoitaProgressTrackerSecrets /> },
+          { path: 'pillar', element: <NoitaProgressTrackerPillar /> },
+        ],
       },
     ],
   },

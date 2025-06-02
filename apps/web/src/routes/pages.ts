@@ -8,6 +8,7 @@ export const pages = {
   progressTracker: {
     index: '/progress-tracker',
     secrets: '/progress-tracker/secrets',
+    achievementPillar: '/progress-tracker/secrets/pillar',
   },
   wiki: {
     perks: '/wiki/perks',

@@ -5,7 +5,7 @@ export const NoitaProgressTrackerSecrets = () => {
   const { unlockedOrbs, flags } = useSave00Store();
 
   return (
-    <div>
+    <div style={{ padding: 10 }}>
       <h1>Secrets</h1>
       <h2>Unlocked Orbs</h2>
       <div>
