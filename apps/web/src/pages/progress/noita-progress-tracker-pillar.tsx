@@ -28,12 +28,12 @@ export const NoitaProgressTrackerPillar = () => {
                 }
 
                 return (
-                  <div style={{ height: 120 }}>
+                  <div style={{ height: 140 }}>
                     <img
                       src={pillar.img}
                       alt={pillar.title}
                       title={pillar.title}
-                      height={120}
+                      height={140}
                       style={{
                         imageRendering: 'pixelated',
                       }}

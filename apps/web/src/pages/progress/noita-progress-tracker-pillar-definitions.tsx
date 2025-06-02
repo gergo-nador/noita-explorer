@@ -62,6 +62,39 @@ import pillarKolmiSydan from '../../assets/pillars/pillar_part_meat.png';
 import pillarKolmiKoipi from '../../assets/pillars/pillar_part_minil.png';
 import pillarSuomuhauki from '../../assets/pillars/pillar_part_minid.png';
 
+// 5. pillar
+import pillarEnd5 from '../../assets/pillars/pillar_end_05.png';
+import pillarSupernova from '../../assets/pillars/pillar_part_col.png';
+import pillarBenignSunshine from '../../assets/pillars/pillar_part_sunkill.png';
+import pillarPimeaAurinko from '../../assets/pillars/pillar_part_dsun.png';
+import pillarUusiAurinko from '../../assets/pillars/pillar_part_sun.png';
+import pillarUndamaged from '../../assets/pillars/pillar_part_nohit.png';
+import pillar1Minute from '../../assets/pillars/pillar_part_minit.png';
+import pillar5Minute from '../../assets/pillars/pillar_part_clock.png';
+import pillarNoGold from '../../assets/pillars/pillar_part_nogold.png';
+import pillarPacifist from '../../assets/pillars/pillar_part_pacifist.png';
+import pillarAllOrbs from '../../assets/pillars/pillar_part_orba.png';
+import pillarCorruptedOrb from '../../assets/pillars/pillar_part_orbe.png';
+import pillarOrb from '../../assets/pillars/pillar_part_orbf.png';
+
+// 6. pillar
+import pillarEnd6 from '../../assets/pillars/pillar_end_04.png';
+import pillarNullifyingAltar from '../../assets/pillars/pillar_part_null.png';
+import pillarExperMath from '../../assets/pillars/pillar_part_hutb.png';
+import pillarExperPaint from '../../assets/pillars/pillar_part_huta.png';
+import pillarHourglass from '../../assets/pillars/pillar_part_secrethg.png';
+import pillarBuriedEye from '../../assets/pillars/pillar_part_secretbe.png';
+import pillarMeditationCube from '../../assets/pillars/pillar_part_secretme.png';
+import pillarAllEssenceWin from '../../assets/pillars/pillar_part_secretae.png';
+import pillarSecretFruit from '../../assets/pillars/pillar_part_secretf.png';
+import pillarAvarice from '../../assets/pillars/pillar_part_secretten.png';
+import pillarEoE from '../../assets/pillars/pillar_part_secretall.png';
+import pillarCoralChest from '../../assets/pillars/pillar_part_secretcl.png';
+import pillarDarkChest from '../../assets/pillars/pillar_part_secretcd.png';
+import pillarFRIENDSHIP from '../../assets/pillars/pillar_part_yeah2.png';
+import pillarFriendship from '../../assets/pillars/pillar_part_yeah.png';
+import pillarEternalWealth from '../../assets/pillars/pillar_part_secretg.png';
+
 interface NoitaPillar {
   img: string;
   title?: string;
@@ -162,7 +195,55 @@ export const noitaProgressTrackerPillarDefinitions = (): NoitaPillar[][] => {
     { img: pillarPartFade },
   ];
 
-  const pillars = [pillar1, pillar2, pillar3, pillar4];
+  const pillar5: NoitaPillar[] = [
+    { img: pillarEnd5 },
+
+    // Sun
+    { img: pillarSupernova, title: 'Supernova' },
+    { img: pillarBenignSunshine, title: 'Benign Sunshine!' },
+    { img: pillarPimeaAurinko, title: 'Pimeä Aurinko' },
+    { img: pillarUusiAurinko, title: 'Uusi Aurinko' },
+
+    // High Effort Challanges
+    { img: pillarUndamaged, title: 'Undamaged' },
+    { img: pillar1Minute, title: '1 Minute?!' },
+    { img: pillar5Minute, title: 'Dedicated to 5 Minutes' },
+    { img: pillarNoGold, title: 'No Gold' },
+    { img: pillarPacifist, title: 'Pacifist' },
+
+    // Orbs
+    { img: pillarAllOrbs, title: 'All Orbs' },
+    { img: pillarCorruptedOrb, title: 'Corrupted Orb' },
+    { img: pillarOrb, title: 'Orb' },
+
+    { img: pillarPart },
+    { img: pillarPartFade },
+  ];
+
+  const pillar6: NoitaPillar[] = [
+    { img: pillarEnd6 },
+
+    { img: pillarNullifyingAltar, title: 'Nullifying Altar' },
+    { img: pillarExperMath, title: 'Experimental Wand (Math)' },
+    { img: pillarExperPaint, title: 'Experimental Wand (Paint)' },
+    { img: pillarHourglass, title: 'Hourglass Chamber' },
+    { img: pillarBuriedEye, title: 'Buried Eye' },
+    { img: pillarMeditationCube, title: 'Meditation Cube' },
+    { img: pillarAllEssenceWin, title: 'All Essence Win' },
+    { img: pillarSecretFruit, title: 'Secret Fruit' },
+    { img: pillarAvarice, title: 'Avarice' },
+    { img: pillarEoE, title: 'The End of Everything' },
+    { img: pillarCoralChest, title: 'Coral Chest' },
+    { img: pillarDarkChest, title: 'Dark Chest' },
+    { img: pillarFRIENDSHIP, title: 'FRIENDSHIP' },
+    { img: pillarFriendship, title: 'Friendship' },
+    { img: pillarEternalWealth, title: 'Eternal Wealth' },
+
+    { img: pillarPart },
+    { img: pillarPartFade },
+  ];
+
+  const pillars = [pillar1, pillar2, pillar3, pillar4, pillar5, pillar6];
   pillars.forEach((p) => p.reverse());
   return pillars;
 };
