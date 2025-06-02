@@ -156,7 +156,7 @@ export const noitaProgressTrackerPillarDefinitions = (): NoitaPillar[][] => {
     {
       img: pillarPotions,
       title: 'Sacrifice Henkevä potu',
-      flag: 'mimic_potion_rain',
+      flag: 'misc_mimic_potion_rain',
     },
     {
       img: pillarTablets,
