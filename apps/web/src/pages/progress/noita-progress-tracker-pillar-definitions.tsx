@@ -137,7 +137,11 @@ export const noitaProgressTrackerPillarDefinitions = (): NoitaPillar[][] => {
 
     // Sacrifice
     { img: pillarDarkSunRock, title: 'Sacrifice Dark Sun Rock' },
-    { img: pillarSunRock, title: 'Sacrifice Sun Rock' },
+    {
+      img: pillarSunRock,
+      title: 'Sacrifice Sun Rock',
+      flag: 'misc_sun_effect',
+    },
     {
       img: pillarMockStatue,
       title: 'Sacrifice Monk Statue',
