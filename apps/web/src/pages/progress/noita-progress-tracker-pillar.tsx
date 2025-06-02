@@ -36,6 +36,7 @@ export const NoitaProgressTrackerPillar = () => {
                       height={140}
                       style={{
                         imageRendering: 'pixelated',
+                        filter: pillar.flag ? '' : 'grayscale()',
                       }}
                     />
                   </div>

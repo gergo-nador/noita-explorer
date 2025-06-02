@@ -98,7 +98,7 @@ import pillarEternalWealth from '../../assets/pillars/pillar_part_secretg.png';
 interface NoitaPillar {
   img: string;
   title?: string;
-  unlocked?: boolean;
+  flag?: string;
 }
 
 export const noitaProgressTrackerPillarDefinitions = (): NoitaPillar[][] => {
@@ -106,25 +106,69 @@ export const noitaProgressTrackerPillarDefinitions = (): NoitaPillar[][] => {
     { img: pillarEnd1 },
 
     // Transformations
-    { img: pillarHalo, title: 'Halo Transformation' },
-    { img: pillarLukki, title: 'Lukki Transformation' },
-    { img: pillarFungi, title: 'Funky Transformation' },
-    { img: pillarRatty, title: 'Ratty Transformation' },
-    { img: pillarGhostly, title: 'Ghostly Transformation' },
+    {
+      img: pillarHalo,
+      title: 'Halo Transformation',
+      flag: 'player_status_halo',
+    },
+    {
+      img: pillarLukki,
+      title: 'Lukki Transformation',
+      flag: 'player_status_lukky',
+    },
+    {
+      img: pillarFungi,
+      title: 'Funky Transformation',
+      flag: 'player_status_funky',
+    },
+    {
+      img: pillarRatty,
+      title: 'Ratty Transformation',
+      flag: 'player_status_ratty',
+    },
+    {
+      img: pillarGhostly,
+      title: 'Ghostly Transformation',
+      flag: 'player_status_ghostly',
+    },
 
     // Tower
-    { img: pillarTower, title: 'Tower' },
+    { img: pillarTower, title: 'Tower', flag: 'secret_tower' },
 
     // Sacrifice
     { img: pillarDarkSunRock, title: 'Sacrifice Dark Sun Rock' },
     { img: pillarSunRock, title: 'Sacrifice Sun Rock' },
-    { img: pillarMockStatue, title: 'Sacrifice Monk Statue' },
-    { img: pillarPotions, title: 'Sacrifice Henkevä potu' },
-    { img: pillarTablets, title: 'Sacrifice Tablets' },
-    { img: pillarGreedCurse, title: 'Sacrifice Greed Curse' },
-    { img: pillarWormCrystal, title: 'Sacrifice Worm Crystal' },
-    { img: pillarUtilityBox, title: 'Sacrifice Utility Box' },
-    { img: pillarChest, title: 'Sacrifice Chest' },
+    {
+      img: pillarMockStatue,
+      title: 'Sacrifice Monk Statue',
+      flag: 'misc_monk_bots',
+    },
+    {
+      img: pillarPotions,
+      title: 'Sacrifice Henkevä potu',
+      flag: 'mimic_potion_rain',
+    },
+    {
+      img: pillarTablets,
+      title: 'Sacrifice Tablets',
+      flag: 'misc_altar_tablet',
+    },
+    {
+      img: pillarGreedCurse,
+      title: 'Sacrifice Greed Curse',
+      flag: 'misc_greed_rain',
+    },
+    {
+      img: pillarWormCrystal,
+      title: 'Sacrifice Worm Crystal',
+      flag: 'misc_worm_rain',
+    },
+    {
+      img: pillarUtilityBox,
+      title: 'Sacrifice Utility Box',
+      flag: 'misc_util_rain',
+    },
+    { img: pillarChest, title: 'Sacrifice Chest', flag: 'misc_chest_rain' },
 
     { img: pillarPart },
     { img: pillarPartFade },
@@ -147,11 +191,23 @@ export const noitaProgressTrackerPillarDefinitions = (): NoitaPillar[][] => {
     { img: pillarMoon, title: 'Moon' },
 
     // Essences
-    { img: pillarEssenceSpirits, title: 'Essence of Spirits' },
-    { img: pillarEssenceAir, title: 'Essence of Air' },
-    { img: pillarEssenceEarth, title: 'Essence of Earth' },
-    { img: pillarEssenceWater, title: 'Essence of Water' },
-    { img: pillarEssenceFire, title: 'Essence of Fire' },
+    {
+      img: pillarEssenceSpirits,
+      title: 'Essence of Spirits',
+      flag: 'essence_alcohol',
+    },
+    { img: pillarEssenceAir, title: 'Essence of Air', flag: 'essence_air' },
+    {
+      img: pillarEssenceEarth,
+      title: 'Essence of Earth',
+      flag: 'essence_laser',
+    },
+    {
+      img: pillarEssenceWater,
+      title: 'Essence of Water',
+      flag: 'essence_water',
+    },
+    { img: pillarEssenceFire, title: 'Essence of Fire', flag: 'essence_fire' },
 
     { img: pillarPart },
     { img: pillarPartFade },
@@ -161,11 +217,27 @@ export const noitaProgressTrackerPillarDefinitions = (): NoitaPillar[][] => {
     { img: pillarEnd3 },
 
     { img: pillarNightmare, title: 'Nightmare' },
-    { img: pillarEndingNGPPP, title: 'New Game+++' },
+    {
+      img: pillarEndingNGPPP,
+      title: 'New Game+++',
+      flag: 'progress_newgameplusplus3',
+    },
     { img: pillarEndingPeaceful, title: 'Peaceful Ending' },
-    { img: pillarEndingPure, title: 'Mountain Ending (Pure)' },
-    { img: pillarEndingToxic, title: 'Mountain Ending (Toxic)' },
-    { img: pillarEndingNormal, title: 'Normal Ending' },
+    {
+      img: pillarEndingPure,
+      title: 'Mountain Ending (Pure)',
+      flag: 'progress_ending1_gold',
+    },
+    {
+      img: pillarEndingToxic,
+      title: 'Mountain Ending (Toxic)',
+      flag: 'progress_ending1_toxic',
+    },
+    {
+      img: pillarEndingNormal,
+      title: 'Normal Ending',
+      flag: 'progress_ending0',
+    },
 
     { img: pillarPart },
     { img: pillarPartFade },
@@ -174,22 +246,46 @@ export const noitaProgressTrackerPillarDefinitions = (): NoitaPillar[][] => {
   const pillar4: NoitaPillar[] = [
     { img: pillarEnd4 },
 
-    { img: pillarKolmi, title: 'Kolmisilmä' },
-    { img: pillarKivi, title: 'Kivi' },
+    { img: pillarKolmi, title: 'Kolmisilmä', flag: 'boss_centipede' },
+    { img: pillarKivi, title: 'Kivi', flag: 'miniboss_sky' },
     { img: pillarToveri, title: 'Toveri' },
-    { img: pillarGate, title: 'Gate Guardian' },
-    { img: pillarTapios, title: "Tapio's Wrath" },
-    { img: pillarTapion, title: 'Tapion Vasalli' },
-    { img: pillarSyvaolento, title: 'Syväolento' },
-    { img: pillarLimatoukka, title: 'Limatoukka' },
-    { img: pillarMestarien, title: 'Mestarien mestari' },
-    { img: pillarKolmiSilma, title: 'Kolmisilmän silmä' },
-    { img: pillarYlialkemisti, title: 'Ylialkemisti' },
-    { img: pillarSauvojen, title: 'Sauvojen tuntija' },
-    { img: pillarUnohdettu, title: 'Unohdettu' },
-    { img: pillarKolmiSydan, title: 'Kolmisilmän sydän' },
-    { img: pillarKolmiKoipi, title: 'Kolmisilmän koipi' },
-    { img: pillarSuomuhauki, title: 'Suomuhauki' },
+    { img: pillarGate, title: 'Gate Guardian', flag: 'miniboss_gate_monsters' },
+    { img: pillarTapios, title: "Tapio's Wrath", flag: 'miniboss_threelk' },
+    {
+      img: pillarTapion,
+      title: 'Tapion Vasalli',
+      flag: 'miniboss_islandspirit',
+    },
+    { img: pillarSyvaolento, title: 'Syväolento', flag: 'miniboss_fish' },
+    { img: pillarLimatoukka, title: 'Limatoukka', flag: 'miniboss_maggot' },
+    {
+      img: pillarMestarien,
+      title: 'Mestarien mestari',
+      flag: 'miniboss_wizard',
+    },
+    {
+      img: pillarKolmiSilma,
+      title: 'Kolmisilmän silmä',
+      flag: 'miniboss_robot',
+    },
+    {
+      img: pillarYlialkemisti,
+      title: 'Ylialkemisti',
+      flag: 'miniboss_alchemist',
+    },
+    { img: pillarSauvojen, title: 'Sauvojen tuntija', flag: 'miniboss_pit' },
+    { img: pillarUnohdettu, title: 'Unohdettu', flag: 'miniboss_ghost' },
+    {
+      img: pillarKolmiSydan,
+      title: 'Kolmisilmän sydän',
+      flag: 'miniboss_meat',
+    },
+    {
+      img: pillarKolmiKoipi,
+      title: 'Kolmisilmän koipi',
+      flag: 'miniboss_limbs',
+    },
+    { img: pillarSuomuhauki, title: 'Suomuhauki', flag: 'miniboss_dragon' },
 
     { img: pillarPart },
     { img: pillarPartFade },
@@ -199,8 +295,12 @@ export const noitaProgressTrackerPillarDefinitions = (): NoitaPillar[][] => {
     { img: pillarEnd5 },
 
     // Sun
-    { img: pillarSupernova, title: 'Supernova' },
-    { img: pillarBenignSunshine, title: 'Benign Sunshine!' },
+    { img: pillarSupernova, title: 'Supernova', flag: 'secret_supernova' },
+    {
+      img: pillarBenignSunshine,
+      title: 'Benign Sunshine!',
+      flag: 'progress_sunkill',
+    },
     { img: pillarPimeaAurinko, title: 'Pimeä Aurinko' },
     { img: pillarUusiAurinko, title: 'Uusi Aurinko' },
 
@@ -212,9 +312,13 @@ export const noitaProgressTrackerPillarDefinitions = (): NoitaPillar[][] => {
     { img: pillarPacifist, title: 'Pacifist' },
 
     // Orbs
-    { img: pillarAllOrbs, title: 'All Orbs' },
-    { img: pillarCorruptedOrb, title: 'Corrupted Orb' },
-    { img: pillarOrb, title: 'Orb' },
+    { img: pillarAllOrbs, title: 'All Orbs', flag: 'progress_orb_all' },
+    {
+      img: pillarCorruptedOrb,
+      title: 'Corrupted Orb',
+      flag: 'progress_orb_evil',
+    },
+    { img: pillarOrb, title: 'Orb', flag: 'progress_orb_1' },
 
     { img: pillarPart },
     { img: pillarPartFade },
@@ -223,21 +327,45 @@ export const noitaProgressTrackerPillarDefinitions = (): NoitaPillar[][] => {
   const pillar6: NoitaPillar[] = [
     { img: pillarEnd6 },
 
-    { img: pillarNullifyingAltar, title: 'Nullifying Altar' },
-    { img: pillarExperMath, title: 'Experimental Wand (Math)' },
-    { img: pillarExperPaint, title: 'Experimental Wand (Paint)' },
-    { img: pillarHourglass, title: 'Hourglass Chamber' },
+    {
+      img: pillarNullifyingAltar,
+      title: 'Nullifying Altar',
+      flag: 'secret_null',
+    },
+    {
+      img: pillarExperMath,
+      title: 'Experimental Wand (Math)',
+      flag: 'progress_hut_b',
+    },
+    {
+      img: pillarExperPaint,
+      title: 'Experimental Wand (Paint)',
+      flag: 'progress_hut_a',
+    },
+    {
+      img: pillarHourglass,
+      title: 'Hourglass Chamber',
+      flag: 'secret_hourglass',
+    },
     { img: pillarBuriedEye, title: 'Buried Eye' },
-    { img: pillarMeditationCube, title: 'Meditation Cube' },
-    { img: pillarAllEssenceWin, title: 'All Essence Win' },
-    { img: pillarSecretFruit, title: 'Secret Fruit' },
+    {
+      img: pillarMeditationCube,
+      title: 'Meditation Cube',
+      flag: 'secret_meditation',
+    },
+    {
+      img: pillarAllEssenceWin,
+      title: 'All Essence Win',
+      flag: 'secret_allessences',
+    },
+    { img: pillarSecretFruit, title: 'Secret Fruit', flag: 'secret_fruit' },
     { img: pillarAvarice, title: 'Avarice' },
     { img: pillarEoE, title: 'The End of Everything' },
-    { img: pillarCoralChest, title: 'Coral Chest' },
-    { img: pillarDarkChest, title: 'Dark Chest' },
+    { img: pillarCoralChest, title: 'Coral Chest', flag: 'secret_chest_light' },
+    { img: pillarDarkChest, title: 'Dark Chest', flag: 'secret_chest_dark' },
     { img: pillarFRIENDSHIP, title: 'FRIENDSHIP' },
     { img: pillarFriendship, title: 'Friendship' },
-    { img: pillarEternalWealth, title: 'Eternal Wealth' },
+    { img: pillarEternalWealth, title: 'Eternal Wealth', flag: 'secret_greed' },
 
     { img: pillarPart },
     { img: pillarPartFade },
