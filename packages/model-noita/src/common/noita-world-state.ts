@@ -16,6 +16,7 @@ export interface NoitaWorldState {
     newPerkIds: string[];
     newEnemyIds: string[];
   };
+  helplessKills: number | undefined;
   fungalShifts: NoitaRunFungalShift[];
 }
 

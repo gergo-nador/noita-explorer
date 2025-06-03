@@ -350,7 +350,19 @@ export const useNoitaProgressTrackerPillarDefinitions = (): NoitaPillar[][] => {
     { img: pillarKivi, title: 'Kivi', flag: 'miniboss_sky' },
     { img: pillarToveri, title: 'Toveri', flag: 'final_secret_orb3' },
     { img: pillarGate, title: 'Gate Guardian', flag: 'miniboss_gate_monsters' },
-    { img: pillarTapios, title: "Tapio's Wrath", flag: 'miniboss_threelk' },
+    {
+      img: pillarTapios,
+      title: "Tapio's Wrath",
+      flag: 'miniboss_threelk',
+      info: (
+        <div>
+          <div>Tapio's Wrath</div>
+          <div>
+            Helpless Kills: {currentRun?.worldState.helplessKills ?? 0} / 300
+          </div>
+        </div>
+      ),
+    },
     {
       img: pillarTapion,
       title: 'Tapion Vasalli',

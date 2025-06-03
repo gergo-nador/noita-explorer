@@ -63,6 +63,7 @@ export const scrapeWorldState = async ({
       newPerkIds: [],
       newEnemyIds: [],
     },
+    helplessKills: undefined,
     runType: 'normal',
     fungalShifts: [],
   };
@@ -87,6 +88,9 @@ export const scrapeWorldState = async ({
           perkId: perkId,
           count: pickupCount,
         });
+      } else if (key === 'HELPLESS_KILLS') {
+        const value = valueAttr?.asInt();
+        worldState.helplessKills = value;
       }
     }
   }
