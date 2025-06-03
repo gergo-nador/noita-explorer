@@ -36,9 +36,17 @@ function getContrastColor(baseColor: string): 'white' | 'black' {
   return luminance > 0.5 ? 'black' : 'white';
 }
 
+function lightenColor(baseColor: string, ratio: number): string {
+  const c = color(baseColor);
+  return c.lighten(ratio).hex().toString();
+}
+
 export const colorHelpers = {
   conversion: {
     argbToRgba: convertARGBToRGBA,
   },
   getRgbaContractsColor: getContrastColor,
+  manipulation: {
+    lighten: lightenColor,
+  },
 };

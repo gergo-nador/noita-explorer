@@ -23,7 +23,7 @@ import { WikiMaterialsTree } from '../pages/wiki/wiki-materials-tree.tsx';
 import { WikiMaterials } from '../pages/wiki/materials/wiki-materials.tsx';
 import { Credits } from '../pages/credits.tsx';
 import { NoitaProgressTrackerSecrets } from '../pages/progress/noita-progress-tracker-secrets.tsx';
-import { NoitaProgressTrackerPillar } from '../pages/progress/noita-progress-tracker-pillar.tsx';
+import { NoitaProgressTrackerPillar } from '../pages/progress/noita-progress-tracker-pillar/noita-progress-tracker-pillar.tsx';
 import { DocumentTitle } from '../components/document-title/document-title.tsx';
 
 export const router = createBrowserRouter([
