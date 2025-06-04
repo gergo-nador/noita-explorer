@@ -106,7 +106,7 @@ const PlayerDecorations = () => {
               </span>
               <BooleanIcon value={hasFlag} />
 
-              {!hasFlag && (
+              {flags && !hasFlag && (
                 <Flex gap={10} style={{ paddingLeft: 20 }}>
                   <span>Unlock: </span>
                   <Button
