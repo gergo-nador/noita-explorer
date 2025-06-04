@@ -6,7 +6,7 @@ import { Flex } from '../flex.tsx';
 
 export const ActionsPanel = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { actions } = useNoitaActionsStore();
+  const { actions, actionUtils } = useNoitaActionsStore();
   const numberOfActions = Object.keys(actions).length;
   const { isRunning, progress, runActions, runActionWarning, acceptWarning } =
     useRunActions({
@@ -14,6 +14,11 @@ export const ActionsPanel = () => {
     });
 
   const progressNumber = (progress?.success ?? 0) + (progress?.failed ?? 0);
+
+  const removeAllActions = () => {
+    Object.values(actions).map((action) => actionUtils.removeAction(action));
+    setIsOpen(false);
+  };
 
   return (
     <>
@@ -132,11 +137,19 @@ export const ActionsPanel = () => {
               </Flex>
               <div style={{ minHeight: 'calc(100% - 100px)' }}>
                 {Object.values(actions).map((action) => (
-                  <div>{action.name}</div>
+                  <Flex gap={10} align='center' className='hover-container'>
+                    {action.name}{' '}
+                    <span
+                      className='hover-display'
+                      onClick={() => actionUtils.removeAction(action)}
+                    >
+                      <Icon size={15} type='cross' />
+                    </span>
+                  </Flex>
                 ))}
               </div>
               <Flex
-                justify='right'
+                justify='space-between'
                 style={{
                   position: 'sticky',
                   bottom: 0,
@@ -145,6 +158,12 @@ export const ActionsPanel = () => {
                   background: 'inherit',
                 }}
               >
+                <Button
+                  onClick={removeAllActions}
+                  textStyle={{ color: '#d55456' }}
+                >
+                  Remove all
+                </Button>
                 <Button disabled={isRunning} onClick={runActions}>
                   {isRunning && (
                     <span>

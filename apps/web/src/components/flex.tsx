@@ -14,6 +14,7 @@ interface FlexProps {
   column?: boolean;
   title?: string;
   onClick?: MouseEventHandler<HTMLDivElement>;
+  className?: string;
 }
 
 export const Flex = ({
@@ -30,6 +31,7 @@ export const Flex = ({
   column,
   title,
   onClick,
+  className,
 }: FlexProps) => {
   const baseStyle: React.CSSProperties = {
     display: 'flex',
@@ -43,7 +45,12 @@ export const Flex = ({
   };
 
   return (
-    <div style={{ ...baseStyle, ...style }} title={title} onClick={onClick}>
+    <div
+      style={{ ...baseStyle, ...style }}
+      className={className}
+      title={title}
+      onClick={onClick}
+    >
       {children}
     </div>
   );

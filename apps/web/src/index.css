@@ -64,3 +64,8 @@ body {
 .font-noita-small-numbers {
   font-family: 'NoitaSmallNumbers', sans-serif !important;
 }
+
+.hover-container{}
+
+.hover-container:hover .hover-display, .hover-hide { display: initial }
+.hover-display, .hover-container:hover .hover-hide { display: none }
