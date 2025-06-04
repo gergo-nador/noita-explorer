@@ -51,7 +51,7 @@ export const TabPageTemplate = ({ tabs, returnPath }: TabPageTemplateProps) => {
         {activeTab && (
           <TabView
             styleCard={{
-              maxHeight: constants.pageHeight,
+              maxHeight: '85vh',
             }}
             activeTabId={activeTab.title}
           >
