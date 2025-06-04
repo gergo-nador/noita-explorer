@@ -1,7 +1,7 @@
 import { Icon } from '@noita-explorer/noita-component-library';
 
 interface BooleanIconProps {
-  value: boolean;
+  value: boolean | undefined;
 }
 
 export const BooleanIcon = ({ value }: BooleanIconProps) => {
