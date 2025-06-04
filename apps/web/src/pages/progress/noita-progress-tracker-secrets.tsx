@@ -82,9 +82,18 @@ const PlayerDecorations = () => {
       <div style={{ padding: '0 20px' }}>
         <PlayerImage
           size={100}
-          amulet={flags?.has('secret_amulet')}
-          amuletGem={flags?.has('secret_amulet_gem')}
-          crown={flags?.has('secret_hat')}
+          amulet={
+            flags?.has('secret_amulet') ||
+            actionUtils.playerDecoration.isOnList('amulet')
+          }
+          amuletGem={
+            flags?.has('secret_amulet_gem') ||
+            actionUtils.playerDecoration.isOnList('amulet_gem')
+          }
+          crown={
+            flags?.has('secret_hat') ||
+            actionUtils.playerDecoration.isOnList('crown')
+          }
         />
       </div>
       <Flex direction='column' gap={10}>
