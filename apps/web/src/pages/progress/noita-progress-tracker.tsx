@@ -78,10 +78,7 @@ export const NoitaProgressTracker = () => {
           <>
             <HorizontalDivider />
             <div>
-              <Button
-                decoration={'both'}
-                onClick={() => setUnlockMode(!unlockMode)}
-              >
+              <Button onClick={() => setUnlockMode(!unlockMode)}>
                 Unlock mode: {unlockMode ? 'on' : 'off'}
               </Button>
             </div>
@@ -93,7 +90,6 @@ export const NoitaProgressTracker = () => {
             <span>Unlock all:</span>
             <Flex gap={8} style={{ marginLeft: 8 }}>
               <Button
-                decoration={'both'}
                 onClick={() => {
                   if (save00Status !== 'loaded' || !data) {
                     return;
@@ -114,7 +110,6 @@ export const NoitaProgressTracker = () => {
               </Button>
               /
               <Button
-                decoration={'both'}
                 onClick={() => {
                   if (save00Status !== 'loaded' || !data) {
                     return;
@@ -135,7 +130,6 @@ export const NoitaProgressTracker = () => {
               </Button>
               /
               <Button
-                decoration={'both'}
                 onClick={() => {
                   if (save00Status !== 'loaded' || !data) {
                     return;

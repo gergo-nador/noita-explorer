@@ -5,7 +5,10 @@ import playerCrown from '../../assets/player/player_crown.png';
 
 import { useSave00Store } from '../../stores/save00.ts';
 import { Flex } from '../../components/flex.tsx';
-import { PixelatedImage } from '@noita-explorer/noita-component-library';
+import {
+  Button,
+  PixelatedImage,
+} from '@noita-explorer/noita-component-library';
 import { CSSProperties } from 'react';
 import { BooleanIcon } from '../../components/boolean-icon.tsx';
 
@@ -25,13 +28,22 @@ export const NoitaProgressTrackerSecrets = () => {
       <Flex>
         <div>
           <div>
-            Golden necklace: <BooleanIcon value={flags?.has('secret_amulet')} />
+            <span>Golden necklace: </span>
+            <BooleanIcon value={flags?.has('secret_amulet')} />
           </div>
           <div>
-            Amulet: <BooleanIcon value={flags?.has('secret_amulet_gem')} />
+            <span>Amulet: </span>
+            <BooleanIcon value={flags?.has('secret_amulet_gem')} />
+            {!flags?.has('secret_amulet_gem') && (
+              <>
+                <Button>Unlock permanently</Button>
+                <Button>Unlock only for this run</Button>
+              </>
+            )}
           </div>
           <div>
-            Crown: <BooleanIcon value={flags?.has('secret_hat')} />
+            <span>Crown: </span>
+            <BooleanIcon value={flags?.has('secret_hat')} />
           </div>
         </div>
         <div style={{ paddingLeft: 100 }}>

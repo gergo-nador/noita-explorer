@@ -49,7 +49,6 @@ export const NoitaBonesWands = () => {
     <div>
       <div>
         <Button
-          decoration={'both'}
           onClick={() => {
             bonesWands?.forEach((wand) =>
               actionUtils.deleteBonesWand.create(wand.fileName),

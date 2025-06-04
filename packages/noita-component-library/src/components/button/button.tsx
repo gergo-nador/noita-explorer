@@ -57,7 +57,8 @@ export const Button = ({
 
   const leftButton =
     decoration === 'left' || decoration === 'both' || decoration === undefined;
-  const rightButton = decoration === 'right' || decoration === 'both';
+  const rightButton =
+    decoration === 'right' || decoration === 'both' || decoration === undefined;
 
   return (
     <div className={css['container']}>

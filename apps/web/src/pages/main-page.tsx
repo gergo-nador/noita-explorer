@@ -40,25 +40,16 @@ export const MainPage = () => {
         </Button>
       )}
       {!!noitaAPI.environment.desktop && (
-        <Button
-          decoration={'both'}
-          onClick={() => navigate(pages.setup.desktopPaths)}
-        >
+        <Button onClick={() => navigate(pages.setup.desktopPaths)}>
           Setup
         </Button>
       )}
       {noitaAPI.environment.web && (
-        <Button
-          decoration={'both'}
-          onClick={() => navigate(pages.setup.webPaths)}
-        >
-          Setup
-        </Button>
+        <Button onClick={() => navigate(pages.setup.webPaths)}>Setup</Button>
       )}
 
       <Button
         disabled={!noitaDataWakLoaded}
-        decoration={'both'}
         onClick={() => navigate(pages.progressTracker.index)}
         onDisabledClick={() =>
           toast.error(
@@ -69,7 +60,6 @@ export const MainPage = () => {
         Progress {newProgress > 0 && <span>( {newProgress} )</span>}
       </Button>
       <Button
-        decoration={'both'}
         disabled={!noitaDataWakLoaded}
         onClick={() => navigate(pages.wiki.perks)}
         onDisabledClick={() =>
@@ -81,7 +71,6 @@ export const MainPage = () => {
         Wiki
       </Button>
       <Button
-        decoration={'both'}
         disabled={!noitaDataWakLoaded || !currentRun}
         onClick={() => navigate(pages.currentRun)}
         onDisabledClick={() => {
@@ -100,11 +89,8 @@ export const MainPage = () => {
       >
         Current Run
       </Button>
-      <Button decoration={'both'} onClick={() => navigate(pages.holidays)}>
-        Holidays
-      </Button>
+      <Button onClick={() => navigate(pages.holidays)}>Holidays</Button>
       <Button
-        decoration={'both'}
         disabled={save00Status !== 'loaded'}
         onClick={() => navigate(pages.sessions)}
         onDisabledClick={() =>
@@ -116,7 +102,6 @@ export const MainPage = () => {
         Sessions
       </Button>
       <Button
-        decoration={'both'}
         disabled={save00Status !== 'loaded'}
         onClick={() => navigate(pages.deathMap)}
         onDisabledClick={() =>
@@ -128,7 +113,6 @@ export const MainPage = () => {
         Death Map
       </Button>
       <Button
-        decoration={'both'}
         disabled={save00Status !== 'loaded'}
         onClick={() => navigate(pages.bonesWands)}
         onDisabledClick={() =>
@@ -139,15 +123,8 @@ export const MainPage = () => {
       >
         Bones Wands
       </Button>
-      <Button
-        decoration={'both'}
-        onClick={() => navigate(pages.settings.index)}
-      >
-        Settings
-      </Button>
-      <Button decoration={'both'} onClick={() => navigate(pages.credits)}>
-        Credits
-      </Button>
+      <Button onClick={() => navigate(pages.settings.index)}>Settings</Button>
+      <Button onClick={() => navigate(pages.credits)}>Credits</Button>
     </Flex>
   );
 };

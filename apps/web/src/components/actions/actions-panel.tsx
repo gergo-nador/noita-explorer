@@ -145,11 +145,7 @@ export const ActionsPanel = () => {
                   background: 'inherit',
                 }}
               >
-                <Button
-                  disabled={isRunning}
-                  decoration={'both'}
-                  onClick={runActions}
-                >
+                <Button disabled={isRunning} onClick={runActions}>
                   {isRunning && (
                     <span>
                       Running... ({progressNumber} /{' '}
