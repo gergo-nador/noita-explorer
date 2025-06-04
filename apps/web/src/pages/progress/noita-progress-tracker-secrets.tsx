@@ -11,6 +11,7 @@ import {
 } from '@noita-explorer/noita-component-library';
 import { CSSProperties } from 'react';
 import { BooleanIcon } from '../../components/boolean-icon.tsx';
+import { useNoitaActionsStore } from '../../stores/actions.ts';
 
 export const NoitaProgressTrackerSecrets = () => {
   const { unlockedOrbs } = useSave00Store();
@@ -32,11 +33,48 @@ export const NoitaProgressTrackerSecrets = () => {
 
 const PlayerDecorations = () => {
   const { flags, currentRun } = useSave00Store();
+  const { actionUtils } = useNoitaActionsStore();
 
   const decorations = [
-    { label: 'Golden Necklace', flag: 'secret_amulet' },
-    { label: 'Amulet Gem', flag: 'secret_amulet_gem' },
-    { label: 'Crown', flag: 'secret_hat' },
+    {
+      label: 'Golden Necklace',
+      flag: 'secret_amulet',
+      existingAction: actionUtils.playerDecoration.get('amulet'),
+      unlock: (permanent: boolean) => {
+        const existingAction = actionUtils.playerDecoration.get('amulet');
+        if (existingAction) {
+          actionUtils.removeAction(existingAction);
+        }
+
+        actionUtils.playerDecoration.create('amulet', permanent);
+      },
+    },
+    {
+      label: 'Amulet Gem',
+      flag: 'secret_amulet_gem',
+      existingAction: actionUtils.playerDecoration.get('amulet_gem'),
+      unlock: (permanent: boolean) => {
+        const existingAction = actionUtils.playerDecoration.get('amulet_gem');
+        if (existingAction) {
+          actionUtils.removeAction(existingAction);
+        }
+
+        actionUtils.playerDecoration.create('amulet_gem', permanent);
+      },
+    },
+    {
+      label: 'Crown',
+      flag: 'secret_hat',
+      existingAction: actionUtils.playerDecoration.get('crown'),
+      unlock: (permanent: boolean) => {
+        const existingAction = actionUtils.playerDecoration.get('crown');
+        if (existingAction) {
+          actionUtils.removeAction(existingAction);
+        }
+
+        actionUtils.playerDecoration.create('crown', permanent);
+      },
+    },
   ];
 
   return (
@@ -62,11 +100,27 @@ const PlayerDecorations = () => {
               {!hasFlag && (
                 <Flex gap={10} style={{ paddingLeft: 20 }}>
                   <span>Unlock: </span>
-                  <Button>permanently</Button>
+                  <Button
+                    onClick={() => decoration.unlock(true)}
+                    disabled={
+                      decoration.existingAction &&
+                      decoration.existingAction.payload.permanent
+                    }
+                  >
+                    permanently
+                  </Button>
                   {currentRun && (
                     <>
                       <span> / </span>
-                      <Button>this run only</Button>
+                      <Button
+                        onClick={() => decoration.unlock(false)}
+                        disabled={
+                          decoration.existingAction &&
+                          !decoration.existingAction.payload.permanent
+                        }
+                      >
+                        this run only
+                      </Button>
                     </>
                   )}
                 </Flex>

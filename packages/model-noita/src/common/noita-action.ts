@@ -2,7 +2,8 @@ export type NoitaAction =
   | BonesDeleteFileAction
   | UnlockPerkAction
   | UnlockSpellAction
-  | UnlockEnemyAction;
+  | UnlockEnemyAction
+  | UnlockDecorationAction;
 
 export interface NoitaActionResult {
   type: 'success' | 'error';
@@ -45,4 +46,11 @@ export interface UnlockSpellAction extends NoitaActionBase {
 export interface UnlockEnemyAction extends NoitaActionBase {
   type: 'unlock-enemy';
   payload: { enemyId: string; numberOfTimesEnemyKilled: number };
+}
+
+export type PlayerDecorationUnlock = 'amulet' | 'amulet_gem' | 'crown';
+
+export interface UnlockDecorationAction extends NoitaActionBase {
+  type: 'unlock-decoration';
+  payload: { decoration: PlayerDecorationUnlock; permanent: boolean };
 }
