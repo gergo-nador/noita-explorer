@@ -13,7 +13,7 @@ import { CSSProperties } from 'react';
 import { BooleanIcon } from '../../components/boolean-icon.tsx';
 
 export const NoitaProgressTrackerSecrets = () => {
-  const { unlockedOrbs, flags } = useSave00Store();
+  const { unlockedOrbs } = useSave00Store();
 
   return (
     <div style={{ padding: 10 }}>
@@ -25,37 +25,57 @@ export const NoitaProgressTrackerSecrets = () => {
         </Flex>
       </div>
       <h2>Decoration</h2>
-      <Flex>
-        <div>
-          <div>
-            <span>Golden necklace: </span>
-            <BooleanIcon value={flags?.has('secret_amulet')} />
-          </div>
-          <div>
-            <span>Amulet: </span>
-            <BooleanIcon value={flags?.has('secret_amulet_gem')} />
-            {!flags?.has('secret_amulet_gem') && (
-              <>
-                <Button>Unlock permanently</Button>
-                <Button>Unlock only for this run</Button>
-              </>
-            )}
-          </div>
-          <div>
-            <span>Crown: </span>
-            <BooleanIcon value={flags?.has('secret_hat')} />
-          </div>
-        </div>
-        <div style={{ paddingLeft: 100 }}>
-          <PlayerImage
-            size={100}
-            amulet={flags?.has('secret_amulet')}
-            amuletGem={flags?.has('secret_amulet_gem')}
-            crown={flags?.has('secret_hat')}
-          />
-        </div>
-      </Flex>
+      <PlayerDecorations />
     </div>
+  );
+};
+
+const PlayerDecorations = () => {
+  const { flags, currentRun } = useSave00Store();
+
+  const decorations = [
+    { label: 'Golden Necklace', flag: 'secret_amulet' },
+    { label: 'Amulet Gem', flag: 'secret_amulet_gem' },
+    { label: 'Crown', flag: 'secret_hat' },
+  ];
+
+  return (
+    <Flex>
+      <div style={{ padding: '0 20px' }}>
+        <PlayerImage
+          size={100}
+          amulet={flags?.has('secret_amulet')}
+          amuletGem={flags?.has('secret_amulet_gem')}
+          crown={flags?.has('secret_hat')}
+        />
+      </div>
+      <Flex direction='column' gap={10}>
+        {decorations.map((decoration) => {
+          const hasFlag = flags?.has(decoration.flag) ?? false;
+          return (
+            <Flex gap={5}>
+              <span className={hasFlag ? 'text-success' : ''}>
+                {decoration.label}
+              </span>
+              <BooleanIcon value={hasFlag} />
+
+              {!hasFlag && (
+                <Flex gap={10} style={{ paddingLeft: 20 }}>
+                  <span>Unlock: </span>
+                  <Button>permanently</Button>
+                  {currentRun && (
+                    <>
+                      <span> / </span>
+                      <Button>this run only</Button>
+                    </>
+                  )}
+                </Flex>
+              )}
+            </Flex>
+          );
+        })}
+      </Flex>
+    </Flex>
   );
 };
 

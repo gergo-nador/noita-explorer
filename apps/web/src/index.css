@@ -33,6 +33,14 @@
   color: #88bc1c;
 }
 
+.text-halo {
+  color: #FFDE17;
+}
+
+.text-halo-dark{
+  color: #FF2F17;
+}
+
 .text-xl {
   font-size: 20px;
 }
