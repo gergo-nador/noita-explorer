@@ -142,6 +142,7 @@ export const ActionsPanel = () => {
                     <span
                       className='hover-display'
                       onClick={() => actionUtils.removeAction(action)}
+                      style={{ cursor: 'pointer' }}
                     >
                       <Icon size={15} type='cross' />
                     </span>

@@ -99,6 +99,7 @@ const PlayerDecorations = () => {
       <Flex direction='column' gap={10}>
         {decorations.map((decoration) => {
           const hasFlag = flags?.has(decoration.flag) ?? false;
+          const action = decoration.existingAction;
           return (
             <Flex gap={5}>
               <span className={hasFlag ? 'text-success' : ''}>
@@ -115,6 +116,9 @@ const PlayerDecorations = () => {
                       decoration.existingAction &&
                       decoration.existingAction.payload.permanent
                     }
+                    onDisabledClick={() =>
+                      action && actionUtils.removeAction(action)
+                    }
                   >
                     permanently
                   </Button>
@@ -126,6 +130,9 @@ const PlayerDecorations = () => {
                         disabled={
                           decoration.existingAction &&
                           !decoration.existingAction.payload.permanent
+                        }
+                        onDisabledClick={() =>
+                          action && actionUtils.removeAction(action)
                         }
                       >
                         this run only
