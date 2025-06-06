@@ -220,9 +220,9 @@ export const useNoitaActionsStore = create<ActionsState>(
               id: idFactory.playerDecoration(decoration),
               name:
                 'Unlock decoration ' +
-                (decoration === 'amulet' ? 'Golden Necklace' : '') +
-                (decoration === 'amulet_gem' ? 'Amulet Gem' : '') +
-                (decoration === 'crown' ? 'Crown' : '') +
+                (decoration === 'secret_amulet' ? 'Golden Necklace' : '') +
+                (decoration === 'secret_amulet_gem' ? 'Amulet Gem' : '') +
+                (decoration === 'secret_hat' ? 'Crown' : '') +
                 ' ' +
                 (permanent ? 'permanently' : ' for this run'),
               payload: {

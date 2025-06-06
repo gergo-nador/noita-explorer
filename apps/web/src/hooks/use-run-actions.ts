@@ -59,6 +59,9 @@ export const useRunActions = ({
           const unlockedPerks = shallowCopyArray(prev.unlockedPerks);
           const unlockedSpells = shallowCopyArray(prev.unlockedSpells);
           const enemyStatistics = shallowCopyObject(prev.enemyStatistics, {});
+          const flags = prev.flags
+            ? new Set(setGetAllKeys(prev.flags))
+            : new Set<string>();
 
           for (const result of results) {
             if (result.type !== 'success') {
@@ -104,6 +107,14 @@ export const useRunActions = ({
               enemyStatistics[action.payload.enemyId].enemyDeathByPlayer =
                 action.payload.numberOfTimesEnemyKilled;
             }
+            if (action.type === 'unlock-decoration') {
+              if (
+                action.payload.permanent &&
+                !flags.has(action.payload.decoration)
+              ) {
+                flags.add(action.payload.decoration);
+              }
+            }
           }
 
           return {
@@ -112,6 +123,7 @@ export const useRunActions = ({
             unlockedPerks: unlockedPerks,
             unlockedSpells: unlockedSpells,
             enemyStatistics: enemyStatistics,
+            flags: flags,
           };
         });
 
@@ -205,4 +217,17 @@ const shallowCopyObject = <T extends object>(
   }
 
   return { ...obj };
+};
+
+const setGetAllKeys = <T>(set: Set<T>) => {
+  const keys = set.keys();
+  const arr: T[] = [];
+
+  let next = keys.next();
+  while (!next.done) {
+    arr.push(next.value);
+    next = keys.next();
+  }
+
+  return arr;
 };

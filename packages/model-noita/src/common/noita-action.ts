@@ -48,7 +48,10 @@ export interface UnlockEnemyAction extends NoitaActionBase {
   payload: { enemyId: string; numberOfTimesEnemyKilled: number };
 }
 
-export type PlayerDecorationUnlock = 'amulet' | 'amulet_gem' | 'crown';
+export type PlayerDecorationUnlock =
+  | 'secret_amulet'
+  | 'secret_amulet_gem'
+  | 'secret_hat';
 
 export interface UnlockDecorationAction extends NoitaActionBase {
   type: 'unlock-decoration';

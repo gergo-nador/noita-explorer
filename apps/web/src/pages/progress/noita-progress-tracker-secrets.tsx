@@ -37,42 +37,44 @@ const PlayerDecorations = () => {
 
   const decorations = [
     {
-      label: 'Golden Necklace',
-      flag: 'secret_amulet',
-      existingAction: actionUtils.playerDecoration.get('amulet'),
+      label: 'Crown',
+      flag: 'secret_hat',
+      existingAction: actionUtils.playerDecoration.get('secret_hat'),
       unlock: (permanent: boolean) => {
-        const existingAction = actionUtils.playerDecoration.get('amulet');
+        const existingAction = actionUtils.playerDecoration.get('secret_hat');
         if (existingAction) {
           actionUtils.removeAction(existingAction);
         }
 
-        actionUtils.playerDecoration.create('amulet', permanent);
+        actionUtils.playerDecoration.create('secret_hat', permanent);
+      },
+    },
+    {
+      label: 'Golden Necklace',
+      flag: 'secret_amulet',
+      existingAction: actionUtils.playerDecoration.get('secret_amulet'),
+      unlock: (permanent: boolean) => {
+        const existingAction =
+          actionUtils.playerDecoration.get('secret_amulet');
+        if (existingAction) {
+          actionUtils.removeAction(existingAction);
+        }
+
+        actionUtils.playerDecoration.create('secret_amulet', permanent);
       },
     },
     {
       label: 'Amulet Gem',
       flag: 'secret_amulet_gem',
-      existingAction: actionUtils.playerDecoration.get('amulet_gem'),
+      existingAction: actionUtils.playerDecoration.get('secret_amulet_gem'),
       unlock: (permanent: boolean) => {
-        const existingAction = actionUtils.playerDecoration.get('amulet_gem');
+        const existingAction =
+          actionUtils.playerDecoration.get('secret_amulet_gem');
         if (existingAction) {
           actionUtils.removeAction(existingAction);
         }
 
-        actionUtils.playerDecoration.create('amulet_gem', permanent);
-      },
-    },
-    {
-      label: 'Crown',
-      flag: 'secret_hat',
-      existingAction: actionUtils.playerDecoration.get('crown'),
-      unlock: (permanent: boolean) => {
-        const existingAction = actionUtils.playerDecoration.get('crown');
-        if (existingAction) {
-          actionUtils.removeAction(existingAction);
-        }
-
-        actionUtils.playerDecoration.create('crown', permanent);
+        actionUtils.playerDecoration.create('secret_amulet_gem', permanent);
       },
     },
   ];
@@ -84,15 +86,15 @@ const PlayerDecorations = () => {
           size={100}
           amulet={
             flags?.has('secret_amulet') ||
-            actionUtils.playerDecoration.isOnList('amulet')
+            actionUtils.playerDecoration.isOnList('secret_amulet')
           }
           amuletGem={
             flags?.has('secret_amulet_gem') ||
-            actionUtils.playerDecoration.isOnList('amulet_gem')
+            actionUtils.playerDecoration.isOnList('secret_amulet_gem')
           }
           crown={
             flags?.has('secret_hat') ||
-            actionUtils.playerDecoration.isOnList('crown')
+            actionUtils.playerDecoration.isOnList('secret_hat')
           }
         />
       </div>
