@@ -80,37 +80,7 @@ export const ActionsPanel = () => {
           }}
         >
           {runActionWarning.display && (
-            <div style={{ padding: 10, paddingTop: 20, maxWidth: '40vw' }}>
-              <Flex justify='center' gap={10}>
-                <Icon type={'warning'} size={20} />
-                <span style={{ fontSize: 20 }}>Warning</span>
-                <Icon type={'warning'} size={20} />
-              </Flex>
-              <br />
-              <div>
-                Actions modify your save files. In some cases it can corrupt
-                your save files, and there is no way to restore them without a
-                backup.
-              </div>
-              <br />
-              <div>
-                Before running your first action, please make a backup of your
-                save00 folder.
-              </div>
-              <br />
-              <div>
-                Noita Explorer and its developers are not responsible in any way
-                for your save files.
-              </div>
-              <br />
-              <div>So please make a backup of your save files!</div>
-              <br />
-              <br />
-              <Button onClick={() => acceptWarning()}>
-                Click here to accept the risk of running actions, and that you
-                confirm you have made a backup of your save files.
-              </Button>
-            </div>
+            <RunActionsWarning acceptWarning={acceptWarning} />
           )}
           {!runActionWarning.display && (
             <>
@@ -180,5 +150,44 @@ export const ActionsPanel = () => {
         </Card>
       </div>
     </>
+  );
+};
+
+const RunActionsWarning = ({
+  acceptWarning,
+}: {
+  acceptWarning: () => void;
+}) => {
+  return (
+    <div style={{ padding: 10, paddingTop: 20, maxWidth: '40vw' }}>
+      <Flex justify='center' gap={10}>
+        <Icon type={'warning'} size={20} />
+        <span style={{ fontSize: 20 }}>Warning</span>
+        <Icon type={'warning'} size={20} />
+      </Flex>
+      <br />
+      <div>
+        Actions modify your save files. In some cases it can corrupt your save
+        files, and there is no way to restore them without a backup.
+      </div>
+      <br />
+      <div>
+        Before running your first action, please make a backup of your save00
+        folder.
+      </div>
+      <br />
+      <div>
+        Noita Explorer and its developers are not responsible in any way for
+        your save files.
+      </div>
+      <br />
+      <div>So please make a backup of your save files!</div>
+      <br />
+      <br />
+      <Button onClick={() => acceptWarning()}>
+        Click here to accept the risk of running actions, and that you confirm
+        you have made a backup of your save files.
+      </Button>
+    </div>
   );
 };
