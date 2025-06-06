@@ -3,7 +3,12 @@ import { Dispatch, useState } from 'react';
 import { useToast } from '@noita-explorer/noita-component-library';
 import { useNoitaActionsStore } from '../stores/actions.ts';
 import { useSave00Store } from '../stores/save00.ts';
-import { NoitaActionProgress } from '@noita-explorer/model-noita';
+import {
+  NoitaActionProgress,
+  NoitaActionResult,
+} from '@noita-explorer/model-noita';
+import { StringKeyDictionary } from '@noita-explorer/model';
+import { arrayHelpers } from '@noita-explorer/tools';
 
 export const useRunActions = ({
   successCallback,
@@ -19,6 +24,9 @@ export const useRunActions = ({
   });
   const [isRunning, setIsRunning] = useState(false);
   const toast = useToast();
+  const [lastRunFailedActions, setLastRunFailedActions] = useState<
+    StringKeyDictionary<NoitaActionResult>
+  >({});
 
   const runActions = async () => {
     if (isRunning) {
@@ -128,10 +136,10 @@ export const useRunActions = ({
           toast.success(message);
         }
 
-        const numberOfErrors = results.reduce(
-          (errors, current) => errors + (current.type === 'error' ? 1 : 0),
-          0,
+        const failedActions = results.filter(
+          (result) => result.type === 'error',
         );
+        const numberOfErrors = failedActions.length;
 
         if (numberOfErrors > 0) {
           const message =
@@ -140,12 +148,20 @@ export const useRunActions = ({
               : `${numberOfErrors} actions have failed :(`;
 
           toast.error(message);
+
+          const failedActionDict = arrayHelpers.asDict(
+            failedActions,
+            (a) => a.action.id,
+          );
+          setLastRunFailedActions(failedActionDict);
+        } else {
+          setLastRunFailedActions({});
+          successCallback();
         }
       })
       .then(() => {
         setIsRunning(false);
         setProgress(undefined);
-        successCallback();
       })
       .catch((err) => {
         console.error(
@@ -162,6 +178,7 @@ export const useRunActions = ({
     progress,
     isRunning,
     runActionWarning,
+    lastRunFailedActions,
     acceptWarning: () =>
       setRunActionWarning({
         ...runActionWarning,

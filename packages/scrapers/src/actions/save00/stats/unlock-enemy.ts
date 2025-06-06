@@ -3,19 +3,17 @@ import { noitaPaths } from '../../../noita-paths.ts';
 import { cryptoSalakieli } from '../../../scrapers/cryptography/salakieli.ts';
 import { encryptedFileKeys } from '../../../scrapers/cryptography/encrypted-file-keys.ts';
 import { parseXml, toXml, XmlWrapper } from '@noita-explorer/tools/xml';
+import { UnlockEnemyAction } from '@noita-explorer/model-noita';
 
 export const unlockEnemy = async ({
   save00DirectoryApi,
-  enemyId,
-  killCount,
+  action,
 }: {
   save00DirectoryApi: FileSystemDirectoryAccess;
-  enemyId: string;
-  killCount: number;
+  action: UnlockEnemyAction;
 }) => {
-  if (killCount < 1) {
-    killCount = 1;
-  }
+  const killCount = Math.max(action.payload.numberOfTimesEnemyKilled, 1);
+  const enemyId = action.payload.enemyId;
 
   const enemyStatsDirPath = await save00DirectoryApi.path.join(
     noitaPaths.save00.stats,

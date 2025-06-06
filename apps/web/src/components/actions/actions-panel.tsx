@@ -3,15 +3,22 @@ import { useState } from 'react';
 import { useNoitaActionsStore } from '../../stores/actions.ts';
 import { useRunActions } from '../../hooks/use-run-actions.ts';
 import { Flex } from '../flex.tsx';
+import { NoitaActionResult } from '@noita-explorer/model-noita';
 
 export const ActionsPanel = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { actions, actionUtils } = useNoitaActionsStore();
   const numberOfActions = Object.keys(actions).length;
-  const { isRunning, progress, runActions, runActionWarning, acceptWarning } =
-    useRunActions({
-      successCallback: () => setIsOpen(false),
-    });
+  const {
+    isRunning,
+    progress,
+    runActions,
+    runActionWarning,
+    lastRunFailedActions,
+    acceptWarning,
+  } = useRunActions({
+    successCallback: () => setIsOpen(false),
+  });
 
   const progressNumber = (progress?.success ?? 0) + (progress?.failed ?? 0);
 
@@ -106,18 +113,33 @@ export const ActionsPanel = () => {
                 </span>
               </Flex>
               <div style={{ minHeight: 'calc(100% - 100px)' }}>
-                {Object.values(actions).map((action) => (
-                  <Flex gap={10} align='center' className='hover-container'>
-                    {action.name}{' '}
-                    <span
-                      className='hover-display'
-                      onClick={() => actionUtils.removeAction(action)}
-                      style={{ cursor: 'pointer' }}
-                    >
-                      <Icon size={15} type='cross' />
-                    </span>
-                  </Flex>
-                ))}
+                {Object.values(actions).map((action) => {
+                  const failedData: NoitaActionResult | undefined =
+                    lastRunFailedActions[action.id];
+
+                  return (
+                    <div>
+                      <Flex gap={10} align='center' className='hover-container'>
+                        {action.name}{' '}
+                        <span
+                          className='hover-display'
+                          onClick={() => actionUtils.removeAction(action)}
+                          style={{ cursor: 'pointer' }}
+                        >
+                          <Icon size={15} type='cross' />
+                        </span>
+                      </Flex>
+                      {failedData && (
+                        <div
+                          style={{ paddingLeft: 20 }}
+                          className='text-danger'
+                        >
+                          {failedData.error?.message ?? 'Unknown error D:'}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
               <Flex
                 justify='space-between'

@@ -24,23 +24,27 @@ export const runActions = async ({
       if (action.type === 'bones-wand-delete') {
         await actions.deleteBonesWands({
           save00DirectoryApi: save00FolderHandle,
-          bonesWandFileName: action.payload.bonesFileName,
+          action: action,
         });
       } else if (action.type === 'unlock-perk') {
         await actions.unlockPerk({
           save00DirectoryApi: save00FolderHandle,
-          perkId: action.payload.perkId,
+          action: action,
         });
       } else if (action.type === 'unlock-spell') {
         await actions.unlockSpell({
           save00DirectoryApi: save00FolderHandle,
-          spellId: action.payload.spellId,
+          action: action,
         });
       } else if (action.type === 'unlock-enemy') {
         await actions.unlockEnemy({
           save00DirectoryApi: save00FolderHandle,
-          enemyId: action.payload.enemyId,
-          killCount: action.payload.numberOfTimesEnemyKilled,
+          action: action,
+        });
+      } else if (action.type === 'unlock-decoration') {
+        await actions.unlockDecoration({
+          save00DirectoryApi: save00FolderHandle,
+          action: action,
         });
       } else {
         console.error(

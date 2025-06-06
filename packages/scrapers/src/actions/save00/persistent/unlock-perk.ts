@@ -1,14 +1,16 @@
 import { FileSystemDirectoryAccess } from '@noita-explorer/model';
 import { noitaPaths } from '../../../noita-paths.ts';
 import { constants } from '../../../constants.ts';
+import { UnlockPerkAction } from '@noita-explorer/model-noita';
 
 export const unlockPerk = async ({
   save00DirectoryApi,
-  perkId,
+  action,
 }: {
   save00DirectoryApi: FileSystemDirectoryAccess;
-  perkId: string;
+  action: UnlockPerkAction;
 }) => {
+  const perkId = action.payload.perkId;
   const flagsDirPath = await save00DirectoryApi.path.join(
     noitaPaths.save00.flags,
   );

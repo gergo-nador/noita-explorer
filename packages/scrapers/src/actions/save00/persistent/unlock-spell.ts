@@ -4,15 +4,16 @@ import { constants } from '../../../constants.ts';
 import { cryptoSalakieli } from '../../../scrapers/cryptography/salakieli.ts';
 import { encryptedFileKeys } from '../../../scrapers/cryptography/encrypted-file-keys.ts';
 import { parseXml, toXml, XmlWrapper } from '@noita-explorer/tools/xml';
+import { UnlockSpellAction } from '@noita-explorer/model-noita';
 
 export const unlockSpell = async ({
   save00DirectoryApi,
-  spellId,
+  action,
 }: {
   save00DirectoryApi: FileSystemDirectoryAccess;
-  spellId: string;
+  action: UnlockSpellAction;
 }) => {
-  spellId = spellId.toLowerCase();
+  const spellId = action.payload.spellId.toLowerCase();
 
   const flagsDirPath = await save00DirectoryApi.path.join(
     noitaPaths.save00.flags,
