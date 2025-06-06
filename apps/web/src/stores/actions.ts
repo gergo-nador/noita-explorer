@@ -10,6 +10,7 @@ import {
   UnlockEnemyAction,
   UnlockPerkAction,
   UnlockSpellAction,
+  UnlockFlagAction,
 } from '@noita-explorer/model-noita';
 
 interface ActionsState {
@@ -44,6 +45,11 @@ interface ActionsState {
         permanent: boolean,
       ) => UnlockDecorationAction;
     };
+    flagUnlock: {
+      isOnList: (flag: string) => boolean;
+      get: (flag: string) => UnlockFlagAction | undefined;
+      create: (flag: string, actionName?: string) => UnlockFlagAction;
+    };
     removeAction: (action: NoitaAction) => void;
   };
 
@@ -61,6 +67,7 @@ export const useNoitaActionsStore = create<ActionsState>(
       enemyUnlock: (enemyId: string) => 'enemy-unlock-' + enemyId,
       playerDecoration: (decoration: PlayerDecorationUnlock) =>
         'player-decoration-' + decoration,
+      flagUnlock: (flag: string) => 'flag-unlock-' + flag,
     };
 
     const addAction = (action: NoitaAction) => {
@@ -228,6 +235,36 @@ export const useNoitaActionsStore = create<ActionsState>(
               payload: {
                 decoration: decoration,
                 permanent: permanent,
+              },
+            };
+
+            addAction(newAction);
+
+            return newAction;
+          },
+        },
+        flagUnlock: {
+          isOnList: (flag) => {
+            const id = idFactory.flagUnlock(flag);
+            return isOnList(id);
+          },
+          get: (flag) => {
+            const id = idFactory.flagUnlock(flag);
+            const action = getAction(id);
+
+            if (action?.type !== 'unlock-flag') {
+              return;
+            }
+
+            return action;
+          },
+          create: (flag, actionName) => {
+            const newAction: UnlockFlagAction = {
+              type: 'unlock-flag',
+              id: idFactory.flagUnlock(flag),
+              name: actionName ?? `Unlock flag ${flag}`,
+              payload: {
+                flag: flag,
               },
             };
 

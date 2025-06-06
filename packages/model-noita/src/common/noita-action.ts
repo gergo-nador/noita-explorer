@@ -3,7 +3,8 @@ export type NoitaAction =
   | UnlockPerkAction
   | UnlockSpellAction
   | UnlockEnemyAction
-  | UnlockDecorationAction;
+  | UnlockDecorationAction
+  | UnlockFlagAction;
 
 export interface NoitaActionResult {
   type: 'success' | 'error';
@@ -56,4 +57,9 @@ export type PlayerDecorationUnlock =
 export interface UnlockDecorationAction extends NoitaActionBase {
   type: 'unlock-decoration';
   payload: { decoration: PlayerDecorationUnlock; permanent: boolean };
+}
+
+export interface UnlockFlagAction extends NoitaActionBase {
+  type: 'unlock-flag';
+  payload: { flag: string };
 }
