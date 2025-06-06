@@ -134,7 +134,7 @@ export const ActionsPanel = () => {
                           style={{ paddingLeft: 20 }}
                           className='text-danger'
                         >
-                          {failedData.error?.message ?? 'Unknown error D:'}
+                          {failedData.error?.message ?? 'Unknown error :C'}
                         </div>
                       )}
                     </div>
