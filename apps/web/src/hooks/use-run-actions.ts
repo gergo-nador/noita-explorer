@@ -107,13 +107,16 @@ export const useRunActions = ({
               enemyStatistics[action.payload.enemyId].enemyDeathByPlayer =
                 action.payload.numberOfTimesEnemyKilled;
             }
-            if (action.type === 'unlock-decoration') {
+            if (action.type === 'unlock-decoration' && flags) {
               if (
                 action.payload.permanent &&
                 !flags.has(action.payload.decoration)
               ) {
                 flags.add(action.payload.decoration);
               }
+            }
+            if (action.type === 'unlock-flag' && flags) {
+              flags.add(action.payload.flag);
             }
           }
 

@@ -46,6 +46,11 @@ export const runActions = async ({
           save00DirectoryApi: save00FolderHandle,
           action: action,
         });
+      } else if (action.type === 'unlock-flag') {
+        await actions.unlockFlag({
+          save00DirectoryApi: save00FolderHandle,
+          action: action,
+        });
       } else {
         console.error(
           action,

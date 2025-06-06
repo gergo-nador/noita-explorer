@@ -120,11 +120,11 @@ export const ActionsPanel = () => {
                   return (
                     <div>
                       <Flex gap={10} align='center' className='hover-container'>
-                        {action.name}{' '}
+                        {action.name}
                         <span
                           className='hover-display'
                           onClick={() => actionUtils.removeAction(action)}
-                          style={{ cursor: 'pointer' }}
+                          style={{ cursor: 'pointer', marginLeft: 10 }}
                         >
                           <Icon size={15} type='cross' />
                         </span>

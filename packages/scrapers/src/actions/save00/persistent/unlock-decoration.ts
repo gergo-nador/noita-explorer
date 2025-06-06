@@ -4,9 +4,9 @@ import {
 } from '@noita-explorer/model';
 import { UnlockDecorationAction } from '@noita-explorer/model-noita';
 import { noitaPaths } from '../../../noita-paths.ts';
-import { createFlag } from './create-flag.ts';
 import { parseXml, toXml, XmlWrapper } from '@noita-explorer/tools/xml';
 import { splitNoitaEntityTags } from '../../../scrapers/common/tags.ts';
+import { createFlagUtil } from './utils.ts';
 
 export const unlockDecoration = async ({
   save00DirectoryApi,
@@ -16,7 +16,10 @@ export const unlockDecoration = async ({
   action: UnlockDecorationAction;
 }) => {
   if (action.payload.permanent) {
-    await createFlag({ save00DirectoryApi, flag: action.payload.decoration });
+    await createFlagUtil({
+      save00DirectoryApi,
+      flag: action.payload.decoration,
+    });
   }
 
   const playerStateFilePath = await save00DirectoryApi.path.join(

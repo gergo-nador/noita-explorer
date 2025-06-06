@@ -34,7 +34,7 @@ export const NoitaProgressTrackerPillar = () => {
                 }
 
                 const shouldBeColored =
-                  !pillar.flag || flags?.has(pillar.flag ?? '');
+                  !flags || !pillar.flag || flags?.has(pillar.flag ?? '');
 
                 const isOnActionUnlockedList = pillar.flag
                   ? actionUtils.flagUnlock.isOnList(pillar.flag)
@@ -75,6 +75,10 @@ export const NoitaProgressTrackerPillar = () => {
                             : shouldBeColored
                               ? ''
                               : 'grayscale()',
+                          cursor:
+                            isOnActionUnlockedList || !shouldBeColored
+                              ? 'pointer'
+                              : 'initial',
                         }}
                         onClick={onImageClick}
                       />

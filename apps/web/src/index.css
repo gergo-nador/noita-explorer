@@ -67,5 +67,5 @@ body {
 
 .hover-container{}
 
-.hover-container:hover .hover-display, .hover-hide { display: initial }
-.hover-display, .hover-container:hover .hover-hide { display: none }
+.hover-container:hover .hover-display, .hover-hide { visibility: initial }
+.hover-display, .hover-container:hover .hover-hide { visibility: hidden }
