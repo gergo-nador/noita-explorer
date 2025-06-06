@@ -118,7 +118,7 @@ export const ActionsPanel = () => {
                     lastRunFailedActions[action.id];
 
                   return (
-                    <div>
+                    <div key={action.id}>
                       <Flex gap={10} align='center' className='hover-container'>
                         {action.name}
                         <span
