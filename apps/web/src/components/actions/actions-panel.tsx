@@ -41,7 +41,14 @@ export const ActionsPanel = () => {
           }}
           onClick={() => setIsOpen(true)}
         >
-          <Card styleContent={{ padding: 5 }}>{numberOfActions}</Card>
+          <Card styleContent={{ padding: 5 }}>
+            {isRunning && (
+              <span>
+                {progressNumber} / {Object.keys(actions).length}
+              </span>
+            )}
+            {!isRunning && <span>{numberOfActions}</span>}
+          </Card>
         </div>
       )}
 
