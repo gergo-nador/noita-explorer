@@ -25,7 +25,7 @@ export interface LuaValueWrapperType {
   asUnary: () => { operator: string; value: LuaValueWrapperType } | undefined;
 }
 
-export const LuaValuWrapper = (field: Expression): LuaValueWrapperType => {
+export const LuaValueWrapper = (field: Expression): LuaValueWrapperType => {
   const fieldValue = field;
   const fieldValueType = fieldValue['type'];
 
@@ -35,8 +35,8 @@ export const LuaValuWrapper = (field: Expression): LuaValueWrapperType => {
     }
 
     if (fieldValueType === 'MemberExpression') {
-      const base = LuaValuWrapper(fieldValue['base']);
-      const identifier = LuaValuWrapper(fieldValue['identifier']);
+      const base = LuaValueWrapper(fieldValue['base']);
+      const identifier = LuaValueWrapper(fieldValue['identifier']);
       const indexer = fieldValue['indexer'];
 
       return base.asIdentifier() + indexer + identifier.asIdentifier();
@@ -95,7 +95,7 @@ export const LuaValuWrapper = (field: Expression): LuaValueWrapperType => {
     const array: LuaValueWrapperType[] = [];
 
     for (const obj of fieldArray) {
-      const value = LuaValuWrapper(obj.value);
+      const value = LuaValueWrapper(obj.value);
       array.push(value);
     }
 
@@ -125,7 +125,7 @@ export const LuaValuWrapper = (field: Expression): LuaValueWrapperType => {
 
     return {
       operator: fieldValue.operator,
-      value: LuaValuWrapper(fieldValue.argument),
+      value: LuaValueWrapper(fieldValue.argument),
     };
   };
 

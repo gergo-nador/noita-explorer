@@ -7,7 +7,7 @@ import {
   LuaCallStatementWrapper,
   LuaCallStatementWrapperType,
 } from './lua-call-statement-wrapper.ts';
-import { LuaValuWrapper } from './lua-valu-wrapper.ts';
+import { LuaValueWrapper } from './lua-value-wrapper.ts';
 import { StringKeyDictionary } from '@noita-explorer/model';
 
 export interface LuaFunctionDeclarationWrapperType {
@@ -31,7 +31,7 @@ export const LuaFunctionDeclarationWrapper = (
         .filter((c) => c.expression.type === 'CallExpression')
         .filter(
           (c) =>
-            LuaValuWrapper(c.expression.base).asIdentifier() === identifier,
+            LuaValueWrapper(c.expression.base).asIdentifier() === identifier,
         );
 
       if (results.length === 0) return undefined;
