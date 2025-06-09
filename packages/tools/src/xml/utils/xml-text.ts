@@ -4,7 +4,7 @@ export const convertStringTag = (
   tag: string | XmlTagDeclaration,
 ): XmlTagDeclaration => {
   if (typeof tag === 'string') {
-    return { _: tag } as XmlTagDeclaration;
+    return { _: tag.trim() } as XmlTagDeclaration;
   }
 
   return tag;
