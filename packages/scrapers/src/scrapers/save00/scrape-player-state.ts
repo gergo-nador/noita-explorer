@@ -3,7 +3,11 @@ import {
   FileSystemFileAccess,
 } from '@noita-explorer/model';
 import { noitaPaths } from '../../noita-paths.ts';
-import { parseXml, XmlWrapper } from '@noita-explorer/tools/xml';
+import {
+  parseXml,
+  XmlWrapper,
+  XmlWrapperType,
+} from '@noita-explorer/tools/xml';
 import {
   NoitaPlayerState,
   NoitaEntityTransform,
@@ -132,7 +136,44 @@ export const scrapePlayerState = async ({
     inventory: {
       wands: inventoryWands,
     },
+    decorations: {
+      player_amulet: getDecoration({
+        tag: 'player_amulet',
+        entities: playerEntities,
+      }),
+      player_amulet_gem: getDecoration({
+        tag: 'player_amulet_gem',
+        entities: playerEntities,
+      }),
+      player_hat2: getDecoration({
+        tag: 'player_hat2',
+        entities: playerEntities,
+      }),
+    },
   };
 
   return playerState;
+};
+
+const getDecoration = ({
+  tag,
+  entities,
+}: {
+  tag: string;
+  entities: XmlWrapperType[];
+}): { enabled: boolean } => {
+  const tagXml = entities.find((e) => {
+    const tagsAttr = e.getAttribute('_tags')?.asText();
+    if (!tagsAttr) return false;
+
+    const tags = splitNoitaEntityTags(tagsAttr);
+    return tags.includes(tag);
+  });
+
+  if (!tagXml) {
+    return { enabled: false };
+  }
+
+  const enabled = tagXml.getAttribute('_enabled')?.asBoolean() ?? false;
+  return { enabled: enabled };
 };

@@ -12,6 +12,11 @@ export interface NoitaPlayerState {
   genomeData?: NoitaGenomeData;
   kick?: NoitaKickComponent;
   wallet?: NoitaWalletComponent;
+  decorations: {
+    player_hat2?: { enabled: boolean };
+    player_amulet?: { enabled: boolean };
+    player_amulet_gem?: { enabled: boolean };
+  };
 }
 
 // TODO: investigate MaterialInventoryComponent

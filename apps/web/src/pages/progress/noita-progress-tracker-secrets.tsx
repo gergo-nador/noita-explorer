@@ -39,6 +39,8 @@ const PlayerDecorations = () => {
     {
       label: 'Crown',
       flag: 'secret_hat',
+      isUnlockedForCurrentRun:
+        currentRun?.playerState?.decorations?.player_hat2,
       existingAction: actionUtils.playerDecoration.get('secret_hat'),
       unlock: (permanent: boolean) => {
         const existingAction = actionUtils.playerDecoration.get('secret_hat');
@@ -52,6 +54,8 @@ const PlayerDecorations = () => {
     {
       label: 'Golden Necklace',
       flag: 'secret_amulet',
+      isUnlockedForCurrentRun:
+        currentRun?.playerState?.decorations?.player_amulet,
       existingAction: actionUtils.playerDecoration.get('secret_amulet'),
       unlock: (permanent: boolean) => {
         const existingAction =
@@ -66,6 +70,8 @@ const PlayerDecorations = () => {
     {
       label: 'Amulet Gem',
       flag: 'secret_amulet_gem',
+      isUnlockedForCurrentRun:
+        currentRun?.playerState?.decorations?.player_amulet_gem,
       existingAction: actionUtils.playerDecoration.get('secret_amulet_gem'),
       unlock: (permanent: boolean) => {
         const existingAction =
@@ -86,60 +92,77 @@ const PlayerDecorations = () => {
           size={100}
           amulet={
             flags?.has('secret_amulet') ||
-            actionUtils.playerDecoration.isOnList('secret_amulet')
+            actionUtils.playerDecoration.isOnList('secret_amulet') ||
+            currentRun?.playerState?.decorations?.player_amulet?.enabled
           }
           amuletGem={
             flags?.has('secret_amulet_gem') ||
-            actionUtils.playerDecoration.isOnList('secret_amulet_gem')
+            actionUtils.playerDecoration.isOnList('secret_amulet_gem') ||
+            currentRun?.playerState?.decorations?.player_amulet_gem?.enabled
           }
           crown={
             flags?.has('secret_hat') ||
-            actionUtils.playerDecoration.isOnList('secret_hat')
+            actionUtils.playerDecoration.isOnList('secret_hat') ||
+            currentRun?.playerState?.decorations?.player_hat2?.enabled
           }
         />
       </div>
       <Flex direction='column' gap={10}>
         {decorations.map((decoration) => {
-          const hasFlag = flags?.has(decoration.flag) ?? false;
+          const isUnlockedPermanently = flags?.has(decoration.flag) ?? false;
+          const canBeUnlockedPermanently = !!flags && !isUnlockedPermanently;
+          const isUnlockedInThisRun =
+            decoration.isUnlockedForCurrentRun?.enabled ?? false;
+          const canBeUnlockedForThisRun = !!currentRun && !isUnlockedInThisRun;
+          const isUnlockedFully = isUnlockedPermanently && isUnlockedInThisRun;
+
           const action = decoration.existingAction;
+
           return (
             <Flex gap={5}>
-              <span className={hasFlag ? 'text-success' : ''}>
+              <span className={isUnlockedFully ? 'text-success' : ''}>
                 {decoration.label}
               </span>
-              <BooleanIcon value={hasFlag} />
+              <BooleanIcon
+                value={isUnlockedPermanently || isUnlockedInThisRun}
+              />
+              {!isUnlockedPermanently && isUnlockedInThisRun && (
+                <span>(unlocked for current run)</span>
+              )}
 
-              {flags && !hasFlag && (
+              {(canBeUnlockedPermanently || canBeUnlockedForThisRun) && (
                 <Flex gap={10} style={{ paddingLeft: 20 }}>
                   <span>Unlock: </span>
-                  <Button
-                    onClick={() => decoration.unlock(true)}
-                    disabled={
-                      decoration.existingAction &&
-                      decoration.existingAction.payload.permanent
-                    }
-                    onDisabledClick={() =>
-                      action && actionUtils.removeAction(action)
-                    }
-                  >
-                    permanently
-                  </Button>
-                  {currentRun && (
-                    <>
-                      <span> / </span>
-                      <Button
-                        onClick={() => decoration.unlock(false)}
-                        disabled={
-                          decoration.existingAction &&
-                          !decoration.existingAction.payload.permanent
-                        }
-                        onDisabledClick={() =>
-                          action && actionUtils.removeAction(action)
-                        }
-                      >
-                        this run only
-                      </Button>
-                    </>
+                  {canBeUnlockedPermanently && (
+                    <Button
+                      onClick={() => decoration.unlock(true)}
+                      disabled={
+                        decoration.existingAction &&
+                        decoration.existingAction.payload.permanent
+                      }
+                      onDisabledClick={() =>
+                        action && actionUtils.removeAction(action)
+                      }
+                    >
+                      permanently
+                    </Button>
+                  )}
+                  {canBeUnlockedPermanently && canBeUnlockedForThisRun && (
+                    <span> / </span>
+                  )}
+                  {canBeUnlockedForThisRun && (
+                    <Button
+                      onClick={() => decoration.unlock(false)}
+                      disabled={
+                        decoration.existingAction &&
+                        !decoration.existingAction.payload.permanent
+                      }
+                      onDisabledClick={() =>
+                        action && actionUtils.removeAction(action)
+                      }
+                    >
+                      this run only
+                    </Button>
                   )}
                 </Flex>
               )}

@@ -114,8 +114,12 @@ export const useRunActions = ({
               ) {
                 flags.add(action.payload.decoration);
               }
+
+              if (prev.currentRun) {
+                // TODO this
+              }
             }
-            if (action.type === 'unlock-flag' && flags) {
+            if (action.type === 'unlock-flag') {
               flags.add(action.payload.flag);
             }
           }
