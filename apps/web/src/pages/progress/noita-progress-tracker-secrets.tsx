@@ -110,10 +110,12 @@ const PlayerDecorations = () => {
       <Flex direction='column' gap={10}>
         {decorations.map((decoration) => {
           const isUnlockedPermanently = flags?.has(decoration.flag) ?? false;
-          const canBeUnlockedPermanently = !!flags && !isUnlockedPermanently;
+          const canBeUnlockedPermanently =
+            Boolean(flags) && !isUnlockedPermanently;
           const isUnlockedInThisRun =
             decoration.isUnlockedForCurrentRun?.enabled ?? false;
-          const canBeUnlockedForThisRun = !!currentRun && !isUnlockedInThisRun;
+          const canBeUnlockedForThisRun =
+            Boolean(currentRun) && !isUnlockedInThisRun;
           const isUnlockedFully = isUnlockedPermanently && isUnlockedInThisRun;
 
           const action = decoration.existingAction;
