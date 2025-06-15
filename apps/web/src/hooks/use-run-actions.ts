@@ -116,7 +116,19 @@ export const useRunActions = ({
               }
 
               if (prev.currentRun) {
-                // TODO this
+                const decorations = prev.currentRun.playerState.decorations;
+                if (action.payload.decoration === 'secret_hat') {
+                  decorations.player_hat2 ??= { enabled: true };
+                  decorations.player_hat2.enabled = true;
+                } else if (action.payload.decoration === 'secret_amulet') {
+                  decorations.player_amulet ??= { enabled: true };
+                  decorations.player_amulet.enabled = true;
+                } else if (action.payload.decoration === 'secret_amulet_gem') {
+                  decorations.player_amulet_gem ??= { enabled: true };
+                  decorations.player_amulet_gem.enabled = true;
+                } else {
+                  // TODO: implement this
+                }
               }
             }
             if (action.type === 'unlock-flag') {
