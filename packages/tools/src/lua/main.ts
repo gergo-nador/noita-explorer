@@ -8,5 +8,5 @@ export * from "./lua-call-statement-wrapper";
 export * from "./lua-expression-part";
 export * from "./lua-function-declaration-wrapper";
 export * from "./lua-object-declaration-wrapper";
-export * from "./lua-valu-wrapper";
+export * from "./lua-value-wrapper";
 export * from "./lua-wrapper";
