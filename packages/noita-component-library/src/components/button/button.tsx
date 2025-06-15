@@ -33,7 +33,7 @@ export const Button = ({
   onFocus,
 }: ButtonProps) => {
   const iconSize = 6;
-  const buttonRef = useRef<HTMLButtonElement>();
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
   const buttonOnClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     const isMouseClick = e.detail > 0;

@@ -23,7 +23,7 @@ export const InventoryIcon = ({
   showWarning,
   useOriginalIconSize,
 }: InventoryIconProps) => {
-  const ref = useRef<HTMLDivElement>();
+  const ref = useRef<HTMLDivElement>(null);
   const [imgSize, setImageSize] = useState({ width: 0, height: 0 });
   const backgroundImage = backgroundRegular;
 

@@ -125,6 +125,13 @@ export const MainPage = () => {
       </Button>
       <Button onClick={() => navigate(pages.settings.index)}>Settings</Button>
       <Button onClick={() => navigate(pages.credits)}>Credits</Button>
+      <Button
+        onClick={() => {
+          throw new Error('this is my first error');
+        }}
+      >
+        Throw Error
+      </Button>
     </Flex>
   );
 };
