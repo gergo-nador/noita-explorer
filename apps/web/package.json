@@ -16,6 +16,7 @@
     "@noita-explorer/noita-component-library": "*",
     "@noita-explorer/scrapers": "*",
     "@noita-explorer/tools": "*",
+    "@sentry/react": "^9.29.0",
     "buffer": "^6.0.3",
     "idb": "^8.0.1",
     "plotly.js": "^2.35.3",
