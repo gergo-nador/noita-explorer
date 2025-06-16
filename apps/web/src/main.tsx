@@ -21,7 +21,7 @@ if (val === 1) {
       (Sentry) => {
         Sentry.init({
           dsn: import.meta.env.VITE_SENTRY_DSN,
-          sendDefaultPii: true,
+          sendDefaultPii: false,
           debug: true,
           environment: environment,
         });
