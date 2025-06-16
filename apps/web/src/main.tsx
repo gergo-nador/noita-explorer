@@ -3,8 +3,8 @@ import { createRoot, RootOptions } from 'react-dom/client';
 import './index.css';
 import { App } from './app.tsx';
 import { environment } from './environment.ts';
+import { sentry } from './utils/sentry.ts';
 
-// TODO: be able to enable this in the settings
 let rootErrorHandling: RootOptions = {
   onUncaughtError: (
     error: unknown,
@@ -14,17 +14,18 @@ let rootErrorHandling: RootOptions = {
   },
 };
 
-const val = 1;
-if (val === 1) {
+const sentryDsn = import.meta.env.VITE_SENTRY_DSN;
+if (sentry.isSentryEnabled() && sentryDsn) {
   import('@sentry/react')
     .then(
       (Sentry) => {
         Sentry.init({
-          dsn: import.meta.env.VITE_SENTRY_DSN,
+          dsn: sentryDsn,
           sendDefaultPii: false,
-          debug: true,
+          debug: environment === 'development',
           environment: environment,
         });
+        sentry.hasSentryInitialized = true;
 
         rootErrorHandling = {
           // Callback called when an error is thrown and not caught by an Error Boundary.

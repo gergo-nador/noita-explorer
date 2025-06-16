@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { noitaAPI } from '../noita-api.ts';
+import { sentry } from '../utils/sentry.ts';
 
 export type SettingsUnitsType = 'default' | 'frames' | 'seconds';
 export type SettingsCursorType = 'default' | 'noita-cursor' | 'wand';
@@ -24,6 +25,7 @@ export interface Settings {
     wandSpriteId: string | undefined;
   };
   progressDisplayDebugData: boolean;
+  useSentry: boolean;
   spoilerWarningAccepted: boolean;
 }
 
@@ -50,6 +52,7 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
       wandSpriteId: undefined,
     },
     progressDisplayDebugData: false,
+    useSentry: false,
     spoilerWarningAccepted: false,
   },
 
@@ -72,6 +75,8 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
         };
       }
 
+      sentry.setNextStartup(settings.useSentry);
+
       return set({ ...state, settings: settings, loaded: true });
     } catch (err) {
       console.error('Failed to load settings: ', err);
@@ -79,9 +84,13 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
   },
   set: (callback) => {
     const state = get();
-    const settings = JSON.parse(JSON.stringify(state.settings));
+    const settings: Settings = JSON.parse(JSON.stringify(state.settings));
     callback(settings);
     set({ ...state, settings: settings });
+
+    if (state.settings.useSentry !== settings.useSentry) {
+      sentry.setNextStartup(settings.useSentry);
+    }
 
     saveSettings(settings).catch((err) =>
       console.error('Failed to save settings: ', err),
