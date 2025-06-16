@@ -11,7 +11,7 @@ import { sentry } from '../../utils/sentry.ts';
 
 export const SettingsExtras = () => {
   const { settings, set } = useSettingsStore();
-  const { progressDisplayDebugData, useSentry } = settings;
+  const { progressDisplayDebugData, sentry: sentrySettings } = settings;
 
   return (
     <Header title={'Extras'}>
@@ -66,10 +66,10 @@ export const SettingsExtras = () => {
               value: true,
             },
           ]}
-          setValue={(value) => set((s) => (s.useSentry = value))}
-          currentValue={useSentry}
+          setValue={(value) => set((s) => (s.sentry.enabled = value))}
+          currentValue={sentrySettings.enabled}
         />
-        {sentry.hasSentryInitialized !== useSentry && (
+        {sentry.hasSentryInitialized !== sentrySettings.enabled && (
           <Button onClick={() => location.reload()}>
             Refresh page to apply changes
           </Button>

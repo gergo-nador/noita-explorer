@@ -25,7 +25,10 @@ export interface Settings {
     wandSpriteId: string | undefined;
   };
   progressDisplayDebugData: boolean;
-  useSentry: boolean;
+  sentry: {
+    enabled: boolean;
+    initialPopupSeen: boolean;
+  };
   spoilerWarningAccepted: boolean;
 }
 
@@ -33,7 +36,18 @@ export interface SettingsState {
   settings: Settings;
   loaded: boolean;
   load: () => Promise<void>;
-  set: (callback: (state: Settings) => void) => void;
+  set: (
+    callback: (state: Settings) => void,
+    options?: {
+      /**
+       * WARNING: Setting this true will persist the settings
+       * for the next page refresh but will not update the current state.
+       *
+       * Use this when a page refresh is needed immediately after settings some settings.
+       */
+      skipUpdateState: boolean;
+    },
+  ) => Promise<void>;
 }
 
 export const useSettingsStore = create<SettingsState>((set, get) => ({
@@ -52,7 +66,10 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
       wandSpriteId: undefined,
     },
     progressDisplayDebugData: false,
-    useSentry: false,
+    sentry: {
+      enabled: false,
+      initialPopupSeen: false,
+    },
     spoilerWarningAccepted: false,
   },
 
@@ -75,26 +92,28 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
         };
       }
 
-      sentry.setNextStartup(settings.useSentry);
+      sentry.setNextStartup(settings.sentry.enabled);
 
       return set({ ...state, settings: settings, loaded: true });
     } catch (err) {
       console.error('Failed to load settings: ', err);
     }
   },
-  set: (callback) => {
+  set: (callback, options) => {
     const state = get();
     const settings: Settings = JSON.parse(JSON.stringify(state.settings));
     callback(settings);
-    set({ ...state, settings: settings });
 
-    if (state.settings.useSentry !== settings.useSentry) {
-      sentry.setNextStartup(settings.useSentry);
+    if (state.settings.sentry.enabled !== settings.sentry.enabled) {
+      sentry.setNextStartup(settings.sentry.enabled);
     }
 
-    saveSettings(settings).catch((err) =>
-      console.error('Failed to save settings: ', err),
-    );
+    return saveSettings(settings)
+      .catch((err) => console.error('Failed to save settings: ', err))
+      .then(() => {
+        if (options?.skipUpdateState) return;
+        set({ ...state, settings: settings });
+      });
   },
 }));
 
@@ -165,7 +184,7 @@ async function saveSettingsRecursive({
     }
 
     if (value !== undefined) {
-      noitaAPI.config.set({ key: currentPath, value: value });
+      await noitaAPI.config.set({ key: currentPath, value: value });
     }
   }
 }

@@ -12,20 +12,19 @@ import { noitaAPI } from './noita-api.ts';
 import { useSave00Store } from './stores/save00.ts';
 import { NoitaWandConfig } from '@noita-explorer/model-noita';
 import { imageHelpers, randomHelpers } from '@noita-explorer/tools';
-import { SpoilerWarningPage } from './pages/spoiler-warning-page.tsx';
 import { ActionsPanel } from './components/actions/actions-panel.tsx';
+import { Onboarding } from './pages/onboarding/onboarding.tsx';
 
 export const App = () => {
   const { loaded: settingsLoaded, settings } = useSettingsStore();
 
+  const isOnboardingDone =
+    settings.spoilerWarningAccepted && settings.sentry.initialPopupSeen;
+
   return (
     <>
-      {settingsLoaded && settings.spoilerWarningAccepted && (
-        <RouterProvider router={router} />
-      )}
-      {settingsLoaded && !settings.spoilerWarningAccepted && (
-        <SpoilerWarningPage />
-      )}
+      {settingsLoaded && isOnboardingDone && <RouterProvider router={router} />}
+      {settingsLoaded && !isOnboardingDone && <Onboarding />}
 
       <DialogWrapper />
       <ContextMenuWrapper />
@@ -169,5 +168,5 @@ const InitialLoader = () => {
     };
   }, [data, cursor]);
 
-  return <div></div>;
+  return <></>;
 };
