@@ -7,7 +7,7 @@ import { environment } from './environment.ts';
 
 // TODO: be able to enable this in the settings
 Sentry.init({
-  dsn: import.meta.env.VITE_ENV,
+  dsn: import.meta.env.VITE_SENTRY_DSN,
   sendDefaultPii: true,
   debug: true,
   environment: environment,
