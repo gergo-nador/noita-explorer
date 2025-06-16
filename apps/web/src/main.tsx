@@ -15,7 +15,7 @@ let rootErrorHandling: RootOptions = {
 };
 
 const sentryDsn = import.meta.env.VITE_SENTRY_DSN;
-if (sentry.isSentryEnabled() && sentryDsn) {
+if (sentry.isSentryEnabled && sentryDsn) {
   import('@sentry/react')
     .then(
       (Sentry) => {
