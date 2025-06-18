@@ -134,6 +134,17 @@ export const MainPage = () => {
         Throw Error
       </Button>
       <Button
+        onClick={() => {
+          try {
+            throw new Error('my first handled error');
+          } catch (ex) {
+            console.error(ex);
+          }
+        }}
+      >
+        Throw Handled Error
+      </Button>
+      <Button
         onClick={() =>
           logger.error('log my first error', { testAttr: 'hello world' })
         }
