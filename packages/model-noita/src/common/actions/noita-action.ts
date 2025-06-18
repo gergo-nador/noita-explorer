@@ -6,18 +6,6 @@ export type NoitaAction =
   | UnlockDecorationAction
   | UnlockFlagAction;
 
-export interface NoitaActionResult {
-  type: 'success' | 'error';
-  action: NoitaAction;
-  error?: Error;
-}
-
-export interface NoitaActionProgress {
-  all: number;
-  failed: number;
-  success: number;
-}
-
 interface NoitaActionBase {
   id: string;
   name: string;
