@@ -7,6 +7,7 @@ import { useSave00Store } from '../stores/save00.ts';
 import { useMemo } from 'react';
 import { Flex } from '../components/flex.tsx';
 import { environment } from '../environment.ts';
+import { logger } from '../utils/log.ts';
 
 export const MainPage = () => {
   const navigate = useNavigate();
@@ -131,6 +132,13 @@ export const MainPage = () => {
         }}
       >
         Throw Error
+      </Button>
+      <Button
+        onClick={() =>
+          logger.error('log my first error', { testAttr: 'hello world' })
+        }
+      >
+        Log Error
       </Button>
     </Flex>
   );
