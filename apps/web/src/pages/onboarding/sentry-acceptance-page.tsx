@@ -46,7 +46,7 @@ export const SentryAcceptancePage = () => {
           No
         </Button>
         <Button decoration={'right'} onClick={onOptInClick}>
-          Yes, let's help developers!
+          Yes, let's help the developers!
         </Button>
       </PageBottomComponent>
     </Card>
