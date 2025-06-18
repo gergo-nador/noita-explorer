@@ -69,10 +69,15 @@ export const SettingsExtras = () => {
           setValue={(value) => set((s) => (s.sentry.enabled = value))}
           currentValue={sentrySettings.enabled}
         />
-        {sentry.hasSentryInitialized !== sentrySettings.enabled && (
+        {sentry.isSentryEnabled !== sentrySettings.enabled && (
           <Button onClick={() => location.reload()}>
             Refresh page to apply changes
           </Button>
+        )}
+        {sentry.isSentryEnabled && !sentry.hasSentryInitialized && (
+          <NoitaTooltipWrapper content='Sentry has not been initialized'>
+            <Icon type='error' size={16} />
+          </NoitaTooltipWrapper>
         )}
       </Flex>
     </Header>

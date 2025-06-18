@@ -24,6 +24,9 @@ if (sentry.isSentryEnabled && sentryDsn) {
           sendDefaultPii: false,
           debug: environment === 'development',
           environment: environment,
+          _experiments: {
+            enableLogs: true,
+          },
         });
         sentry.hasSentryInitialized = true;
 
