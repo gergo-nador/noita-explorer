@@ -9,7 +9,6 @@ import {
 } from '@noita-explorer/model-noita';
 import { StringKeyDictionary } from '@noita-explorer/model';
 import { arrayHelpers } from '@noita-explorer/tools';
-import { logger } from '../utils/log.ts';
 
 export const useRunActions = ({
   successCallback,
@@ -128,12 +127,13 @@ export const useRunActions = ({
                   decorations.player_amulet_gem ??= { enabled: true };
                   decorations.player_amulet_gem.enabled = true;
                 } else {
-                  logger.error(
+                  // TODO
+                  /*logger.error(
                     `Handling decoration ${action.payload.decoration} not implemented.`,
                     {
                       action: JSON.stringify(action),
                     },
-                  );
+                  );*/
                 }
               }
             }
