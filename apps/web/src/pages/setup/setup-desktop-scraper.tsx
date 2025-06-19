@@ -20,6 +20,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { pages } from '../../routes/pages';
 import { useNoitaDataWakStore } from '../../stores/noita-data-wak.ts';
+import { sentry } from '../../utils/sentry.ts';
 
 export const SetupDesktopScraper = () => {
   const navigate = useNavigate();
@@ -39,11 +40,11 @@ export const SetupDesktopScraper = () => {
 
     try {
       const result = await noitaAPI.noita.dataFile.scrape();
-      console.log('noita data wak scrape result', result);
       setDataWakScrapeResult(result);
     } catch (e) {
       setDataWakScrapeResultError(e + '');
       console.log('error in scraping: ', e);
+      sentry.captureError(e);
     }
 
     setIsLoading(false);
