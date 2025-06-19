@@ -9,7 +9,7 @@ export const sentry = {
   isSentryEnabled: isSentryEnabled,
   hasSentryInitialized: false,
 
-  captureError: (error: Error) => {
+  captureError: (error: Error | string | unknown) => {
     if (isSentryEnabled) captureException(error);
   },
 };

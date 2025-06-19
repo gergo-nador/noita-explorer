@@ -6,6 +6,7 @@ import {
 import { actions } from '@noita-explorer/scrapers';
 import { FileSystemDirectoryAccess } from '@noita-explorer/model';
 import { Dispatch } from 'react';
+import { sentry } from '../sentry.ts';
 
 export const runActions = async ({
   noitaActions,
@@ -21,40 +22,40 @@ export const runActions = async ({
 
   for (const action of noitaActions) {
     try {
-      if (action.type === 'bones-wand-delete') {
+      const type = action.type;
+      if (type === 'bones-wand-delete') {
         await actions.deleteBonesWands({
           save00DirectoryApi: save00FolderHandle,
           action: action,
         });
-      } else if (action.type === 'unlock-perk') {
+      } else if (type === 'unlock-perk') {
         await actions.unlockPerk({
           save00DirectoryApi: save00FolderHandle,
           action: action,
         });
-      } else if (action.type === 'unlock-spell') {
+      } else if (type === 'unlock-spell') {
         await actions.unlockSpell({
           save00DirectoryApi: save00FolderHandle,
           action: action,
         });
-      } else if (action.type === 'unlock-enemy') {
+      } else if (type === 'unlock-enemy') {
         await actions.unlockEnemy({
           save00DirectoryApi: save00FolderHandle,
           action: action,
         });
-      } else if (action.type === 'unlock-decoration') {
+      } else if (type === 'unlock-decoration') {
         await actions.unlockDecoration({
           save00DirectoryApi: save00FolderHandle,
           action: action,
         });
-      } else if (action.type === 'unlock-flag') {
+      } else if (type === 'unlock-flag') {
         await actions.unlockFlag({
           save00DirectoryApi: save00FolderHandle,
           action: action,
         });
       } else {
-        console.error(
-          action,
-          'not implemented in "actions-run-all-button.tsx"',
+        sentry.captureError(
+          `Action type ${type} was not run as it is not implemented`,
         );
       }
 
@@ -62,6 +63,7 @@ export const runActions = async ({
     } catch (e) {
       error.push({ type: 'error', action: action, error: e as Error });
       console.error(e);
+      sentry.captureError(e);
     }
 
     try {
@@ -71,7 +73,7 @@ export const runActions = async ({
         failed: error.length,
       });
     } catch (err) {
-      console.error('Error in callback for running actions: ', err);
+      sentry.captureError(err);
     }
   }
 
