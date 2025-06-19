@@ -10,6 +10,7 @@ import {
 } from '@noita-explorer/model-noita';
 import { noiToast } from '@noita-explorer/noita-component-library';
 import { Dispatch, SetStateAction } from 'react';
+import { sentry } from '../utils/sentry.ts';
 
 interface Save00CurrentRun {
   worldState: NoitaWorldState;
@@ -81,6 +82,7 @@ export const useSave00Store = create<Save00StoreState>((set, get) => ({
       set({ ...get(), status: 'failed' });
 
       console.error(ex);
+      sentry.captureError(ex);
 
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-expect-error
