@@ -1,3 +1,5 @@
+import color from 'color';
+
 function rotateImageBase64(base64: string, degrees: number): Promise<string> {
   return new Promise((resolve, reject) => {
     // Create an Image element
@@ -209,9 +211,8 @@ function getAverageColorBase64(base64: string): Promise<string> {
       b = Math.floor(b / count);
       a = Math.floor(a / count);
 
-      resolve(
-        `#${r.toString(16)}${g.toString(16)}${b.toString(16)}${a.toString(16)}`,
-      );
+      const colorObj = color({ r, g, b, alpha: a });
+      resolve(colorObj.rgb().toString());
     };
 
     img.onerror = () => reject('Failed to load image');
