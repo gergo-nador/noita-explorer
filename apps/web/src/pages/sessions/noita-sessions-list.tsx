@@ -90,81 +90,28 @@ export const NoitaSessionsList = ({
 
   return (
     <Flex gap={20} style={{ flexDirection: 'column' }}>
-      {loadedItems.map((item) => (
-        <Header title={item.key} key={item.key}>
-          <Flex
-            gap={20}
-            style={{
-              flexDirection: 'column',
-            }}
-          >
-            {item.val.map((session) => (
-              <Card key={session.id}>
-                <div
-                  style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}
-                >
-                  <div>
-                    <div>
-                      <Icon type={'custom'} src={dieIcon} size={18} />{' '}
-                      {session.seed}
-                    </div>
-                    <div>
-                      <Icon type={'custom'} src={lifetimeIcon} size={20} />
-                      {timeHelpers.secondsToTimeString(session.playTime)}
-                    </div>
-                    <div>
-                      <Icon type={'custom'} src={moneyIcon} size={20} />
-                      {session.goldInfinite && <span>∞</span>}
-                      {!session.goldInfinite && (
-                        <NoitaTooltipWrapper
-                          content={
-                            <div style={{ fontSize: 18 }}>gold / all gold</div>
-                          }
-                        >
-                          <span>
-                            {session.gold} / {session.goldAll}
-                          </span>
-                        </NoitaTooltipWrapper>
-                      )}
-                    </div>
+      {loadedItems.map((item) => {
+        const hasNoSession = item.val.length === 0;
 
-                    <div>
-                      {!session.dead && <div>Not dead</div>}
-                      {session.dead && (
-                        <div>
-                          <Icon type={'custom'} src={deathIcon} size={20} />
-                          {session.killedByEntity === undefined &&
-                            session.killedByReason === undefined && (
-                              <span>New Game</span>
-                            )}
-                          {!!session.killedByEntity && (
-                            <span>{session.killedByEntity}: </span>
-                          )}
-                          {!!session.killedByReason && (
-                            <span>{session.killedByReason}</span>
-                          )}
-                        </div>
-                      )}
-                    </div>
-                    <div>
-                      <Icon type={'custom'} src={enemyIcon} size={20} />{' '}
-                      {session.enemiesKilled}
-                    </div>
-                  </div>
-                  <div style={{ textAlign: 'right' }}>
-                    <div>
-                      <span className={'text-secondary'}>
-                        {session.startedAt.toLocaleString()}
-                      </span>
-                    </div>
-                    <div className={'text-secondary'}>{session.buildName}</div>
-                  </div>
-                </div>
-              </Card>
-            ))}
-          </Flex>
-        </Header>
-      ))}
+        if (hasNoSession) {
+          return <></>;
+        }
+
+        return (
+          <Header title={item.key} key={item.key}>
+            <Flex
+              gap={20}
+              style={{
+                flexDirection: 'column',
+              }}
+            >
+              {item.val.map((session) => (
+                <SessionCard session={session} />
+              ))}
+            </Flex>
+          </Header>
+        );
+      })}
 
       {hasMoreItems && (
         <div onClick={loadNext} style={{ cursor: 'pointer' }}>
@@ -179,5 +126,65 @@ export const NoitaSessionsList = ({
       )}
       {!hasMoreItems && <Flex center>This is the end</Flex>}
     </Flex>
+  );
+};
+
+const SessionCard = ({ session }: { session: NoitaSession }) => {
+  return (
+    <Card key={session.id}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
+        <div>
+          <div>
+            <Icon type={'custom'} src={dieIcon} size={18} /> {session.seed}
+          </div>
+          <div>
+            <Icon type={'custom'} src={lifetimeIcon} size={20} />
+            {timeHelpers.secondsToTimeString(session.playTime)}
+          </div>
+          <div>
+            <Icon type={'custom'} src={moneyIcon} size={20} />
+            {session.goldInfinite && <span>∞</span>}
+            {!session.goldInfinite && (
+              <NoitaTooltipWrapper
+                content={<div style={{ fontSize: 18 }}>gold / all gold</div>}
+              >
+                <span>
+                  {session.gold} / {session.goldAll}
+                </span>
+              </NoitaTooltipWrapper>
+            )}
+          </div>
+
+          <div>
+            {!session.dead && <div>Not dead</div>}
+            {session.dead && (
+              <div>
+                <Icon type={'custom'} src={deathIcon} size={20} />
+                {session.killedByEntity === undefined &&
+                  session.killedByReason === undefined && <span>New Game</span>}
+                {!!session.killedByEntity && (
+                  <span>{session.killedByEntity}: </span>
+                )}
+                {!!session.killedByReason && (
+                  <span>{session.killedByReason}</span>
+                )}
+              </div>
+            )}
+          </div>
+          <div>
+            <Icon type={'custom'} src={enemyIcon} size={20} />{' '}
+            {session.enemiesKilled}
+          </div>
+        </div>
+        <div style={{ textAlign: 'right' }}>
+          <div>
+            <span className={'text-secondary'}>
+              {session.startedAt.toLocaleString()}
+            </span>
+          </div>
+          <div className={'text-secondary'}>{session.buildName}</div>
+        </div>
+      </div>
+    </Card>
   );
 };
