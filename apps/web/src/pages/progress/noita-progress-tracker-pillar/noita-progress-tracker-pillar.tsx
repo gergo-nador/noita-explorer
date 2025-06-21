@@ -6,7 +6,7 @@ import { Flex } from '../../../components/flex.tsx';
 import { useNoitaActionsStore } from '../../../stores/actions.ts';
 
 export const NoitaProgressTrackerPillar = () => {
-  const { flags } = useSave00Store();
+  const { flags, status } = useSave00Store();
   const { actionUtils } = useNoitaActionsStore();
   const pillarColumns = useNoitaProgressTrackerPillarDefinitions();
   const longestPillar = pillarColumns.reduce(
@@ -42,6 +42,7 @@ export const NoitaProgressTrackerPillar = () => {
 
                 const onImageClick = () => {
                   if (!pillar.flag) return;
+                  if (status !== 'loaded') return;
                   if (flags?.has(pillar.flag)) return;
 
                   const existingAction = actionUtils.flagUnlock.get(
