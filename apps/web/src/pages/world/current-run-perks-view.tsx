@@ -17,9 +17,8 @@ export const CurrentRunPerksView = () => {
   const previewPerks = [...currentRun.worldState.perks.pickedPerks.slice(0, 6)];
 
   return (
-    <div>
-      <div>Perks picked: </div>
-      <Flex gap={4} column>
+    <div style={{ paddingRight: '45px' }}>
+      <Flex gap={4} column align='end'>
         {previewPerks.map((pickedPerk) => {
           const perk = data.perks.find((p) => p.id === pickedPerk.perkId);
 
@@ -34,19 +33,17 @@ export const CurrentRunPerksView = () => {
           }
 
           return (
-            <div>
-              <NoitaTooltipWrapper content={perk.name} placement={'right'}>
-                <img
-                  src={perk.imageBase64}
-                  alt={perk.name}
-                  style={{
-                    width: '32px',
-                    height: '32px',
-                    imageRendering: 'pixelated',
-                  }}
-                />
-              </NoitaTooltipWrapper>
-            </div>
+            <NoitaTooltipWrapper content={perk.name} placement={'right'}>
+              <img
+                src={perk.imageBase64}
+                alt={perk.name}
+                style={{
+                  width: '32px',
+                  height: '32px',
+                  imageRendering: 'pixelated',
+                }}
+              />
+            </NoitaTooltipWrapper>
           );
         })}
       </Flex>

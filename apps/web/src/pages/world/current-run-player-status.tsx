@@ -1,5 +1,6 @@
 import healthIcon from '../../assets/hud/health.png';
 import jetpackIcon from '../../assets/hud/jetpack.png';
+import orbsIcon from '../../assets/hud/orbs.png';
 
 import {
   Icon,
@@ -23,8 +24,8 @@ export const CurrentRunPlayerStatus = () => {
     <Flex
       style={{
         display: 'grid',
-        gridTemplateColumns: '300px 5px 20px 50px',
-        gap: '5px 0',
+        gridTemplateColumns: '300px 25px 50px',
+        gap: '8px 0',
       }}
     >
       <>
@@ -43,7 +44,6 @@ export const CurrentRunPlayerStatus = () => {
             />
           </NoitaTooltipWrapper>
         </Flex>
-        <div />
         <HudIcon alt='Health' src={healthIcon} />
         <div>{mathHelpers.round(currentRun.playerState.damageModel.hp)}</div>
       </>
@@ -77,9 +77,15 @@ export const CurrentRunPlayerStatus = () => {
               />
             </NoitaTooltipWrapper>
           </Flex>
+          <HudIcon alt='Jetpack' src={jetpackIcon} />
           <div />
-          <HudIcon alt='Health' src={jetpackIcon} />
+        </>
+      )}
+      {currentRun.worldState.orbsFound.length > 0 && (
+        <>
           <div />
+          <HudIcon alt='Orbs' src={orbsIcon} />
+          <div>{currentRun.worldState.orbsFound.length}</div>
         </>
       )}
     </Flex>
@@ -87,5 +93,9 @@ export const CurrentRunPlayerStatus = () => {
 };
 
 const HudIcon = ({ alt, src }: { alt: string; src: string }) => {
-  return <Icon type='custom' alt={alt} src={src} size={15} />;
+  return (
+    <Flex center>
+      <Icon type='custom' alt={alt} src={src} size={20} />
+    </Flex>
+  );
 };

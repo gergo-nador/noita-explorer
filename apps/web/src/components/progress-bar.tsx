@@ -34,8 +34,8 @@ export const ProgressBar = ({
     <div
       style={{
         display: 'grid',
-        gridTemplateColumns: '4px 1fr 4px',
-        gridTemplateRows: '4px 1fr 4px',
+        gridTemplateColumns: '3px 1fr 3px',
+        gridTemplateRows: '3px 1fr 3px',
         width: width,
         height: height,
       }}

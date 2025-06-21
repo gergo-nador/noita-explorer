@@ -22,8 +22,8 @@ export const CurrentRun = () => {
   }
 
   return (
-    <div>
-      <div>
+    <>
+      <Flex justify='space-between'>
         <Flex gap={5}>
           {currentRun.playerState.inventory.wands.map((inventoryWand) => (
             <NoitaTooltipWrapper
@@ -43,9 +43,11 @@ export const CurrentRun = () => {
             </NoitaTooltipWrapper>
           ))}
         </Flex>
-        <CurrentRunPlayerStatus />
-        <CurrentRunPerksView />
-      </div>
-    </div>
+        <Flex column justify='end' gap={10}>
+          <CurrentRunPlayerStatus />
+          <CurrentRunPerksView />
+        </Flex>
+      </Flex>
+    </>
   );
 };

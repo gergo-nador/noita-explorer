@@ -18,6 +18,7 @@ export interface NoitaWorldState {
   };
   helplessKills: number | undefined;
   fungalShifts: NoitaRunFungalShift[];
+  orbsFound: string[];
 }
 
 export interface NoitaRunPickedPerk {

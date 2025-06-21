@@ -66,6 +66,7 @@ export const scrapeWorldState = async ({
     helplessKills: undefined,
     runType: 'normal',
     fungalShifts: [],
+    orbsFound: [],
   };
 
   const luaGlobals = worldStateComponent.findNthTag('lua_globals');
@@ -162,6 +163,16 @@ export const scrapeWorldState = async ({
       });
       shiftFrom = undefined;
     }
+  }
+
+  const orbsFound = worldStateComponent.findNthTag('orbs_found_thisrun');
+  if (orbsFound) {
+    const primitives = orbsFound.findTagArray('primitive');
+    const orbs = primitives
+      .map((p) => p.getTextContent())
+      .filter((t) => t !== undefined);
+
+    worldState.orbsFound = orbs;
   }
 
   return worldState;
