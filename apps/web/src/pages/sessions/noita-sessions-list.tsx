@@ -6,7 +6,6 @@ import {
   timeHelpers,
 } from '@noita-explorer/tools';
 import {
-  Button,
   Card,
   Header,
   Icon,
@@ -20,6 +19,7 @@ import lifetimeIcon from '../../assets/icons/spells/lifetime.webp';
 import moneyIcon from '../../assets/icons/money.png';
 import deathIcon from '../../assets/icons/icon_danger.png';
 import enemyIcon from '../../assets/icons/enemy.png';
+import { HoveredStyle } from '../../components/hovered-style.tsx';
 
 interface NoitaSessionsListProps {
   sessionsGrouped: StringKeyDictionary<NoitaSession[]>;
@@ -167,11 +167,17 @@ export const NoitaSessionsList = ({
       ))}
 
       {hasMoreItems && (
-        <div>
-          <Button onClick={loadNext}>Load More</Button>
+        <div onClick={loadNext} style={{ cursor: 'pointer' }}>
+          <HoveredStyle style={{ filter: 'brightness(1.2)' }}>
+            <Card>
+              <Flex center>
+                <span style={{ color: 'inherit' }}>Load More</span>
+              </Flex>
+            </Card>
+          </HoveredStyle>
         </div>
       )}
-      {!hasMoreItems && <div>This is the end</div>}
+      {!hasMoreItems && <Flex center>This is the end</Flex>}
     </Flex>
   );
 };
