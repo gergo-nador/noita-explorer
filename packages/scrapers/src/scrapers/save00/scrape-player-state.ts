@@ -150,6 +150,7 @@ export const scrapePlayerState = async ({
         entities: playerEntities,
       }),
     },
+    wallet: undefined,
   };
 
   const characterDataComponent = playerStateEntity.findNthTag(
@@ -174,6 +175,26 @@ export const scrapePlayerState = async ({
       rechargeSpeedGround,
       flyTimeMax,
       flyingTimeLeft,
+    };
+  }
+
+  const walletComponent = playerStateEntity.findNthTag('WalletComponent');
+  if (walletComponent) {
+    // <WalletComponent _enabled="1" mHasReachedInf="0" mMoneyPrevFrame="32603" money="32603" money_spent="16755"></WalletComponent>
+
+    const hasReachedInfinite =
+      walletComponent.getAttribute('mHasReachedInf')?.asBoolean() ?? false;
+
+    const money = walletComponent.getRequiredAttribute('money').asInt();
+
+    const moneySpent = walletComponent
+      .getRequiredAttribute('money_spent')
+      .asInt();
+
+    playerState.wallet = {
+      hasReachedInfinite,
+      money,
+      moneySpent,
     };
   }
 

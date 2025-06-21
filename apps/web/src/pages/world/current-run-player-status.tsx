@@ -1,6 +1,7 @@
 import healthIcon from '../../assets/hud/health.png';
 import jetpackIcon from '../../assets/hud/jetpack.png';
 import orbsIcon from '../../assets/hud/orbs.png';
+import moneyIcon from '../../assets/hud/money.png';
 
 import {
   Icon,
@@ -25,6 +26,7 @@ export const CurrentRunPlayerStatus = () => {
       style={{
         display: 'grid',
         gridTemplateColumns: '300px 25px 50px',
+        alignItems: 'center',
         gap: '8px 0',
       }}
     >
@@ -88,6 +90,43 @@ export const CurrentRunPlayerStatus = () => {
           <div>{currentRun.worldState.orbsFound.length}</div>
         </>
       )}
+      {currentRun.playerState.wallet && (
+        <>
+          <div />
+          <HudIcon alt='Money' src={moneyIcon} />
+          <NoitaTooltipWrapper
+            content={
+              <div>
+                <div>
+                  <span>Money: </span>
+                  {currentRun.playerState.wallet.hasReachedInfinite && '∞'}
+                  {!currentRun.playerState.wallet.hasReachedInfinite && (
+                    <span>{currentRun.playerState.wallet.money}</span>
+                  )}
+                </div>
+                <div>
+                  <span>Money spent: </span>
+                  {currentRun.playerState.wallet.moneySpent}
+                </div>
+                <div>
+                  <span>Money all: </span>
+                  {currentRun.playerState.wallet.hasReachedInfinite && '∞'}
+                  {!currentRun.playerState.wallet.hasReachedInfinite && (
+                    <span>
+                      {currentRun.playerState.wallet.money +
+                        currentRun.playerState.wallet.moneySpent}
+                    </span>
+                  )}
+                </div>
+              </div>
+            }
+          >
+            {currentRun.playerState.wallet.hasReachedInfinite
+              ? '∞'
+              : displayMoneyTruncated(currentRun.playerState.wallet.money)}
+          </NoitaTooltipWrapper>
+        </>
+      )}
     </Flex>
   );
 };
@@ -98,4 +137,18 @@ const HudIcon = ({ alt, src }: { alt: string; src: string }) => {
       <Icon type='custom' alt={alt} src={src} size={20} />
     </Flex>
   );
+};
+
+const displayMoneyTruncated = (money: number): string => {
+  if (money < 1_000) {
+    return money.toString();
+  }
+
+  if (money < 1_000_000) {
+    const kDisplay = mathHelpers.floor(money / 1_000);
+    return kDisplay + 'K';
+  }
+
+  const mDisplay = mathHelpers.floor(money / 1_000_000);
+  return mDisplay + 'M';
 };
