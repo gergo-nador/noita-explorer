@@ -24,6 +24,10 @@ if (sentry.isSentryEnabled && sentryDsn) {
           sendDefaultPii: false,
           debug: environment === 'development',
           environment: environment,
+          ignoreErrors: [
+            // the user needs to grant permission to access their file system, nothing we can do here
+            "Failed to execute 'getDirectoryHandle' on 'FileSystemDirectoryHandle': The request is not allowed by the user agent or the platform in the current context.",
+          ],
         });
         sentry.hasSentryInitialized = true;
 
