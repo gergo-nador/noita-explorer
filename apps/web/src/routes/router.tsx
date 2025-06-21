@@ -25,6 +25,7 @@ import { Credits } from '../pages/credits.tsx';
 import { NoitaProgressTrackerSecrets } from '../pages/progress/noita-progress-tracker-secrets.tsx';
 import { NoitaProgressTrackerPillar } from '../pages/progress/noita-progress-tracker-pillar/noita-progress-tracker-pillar.tsx';
 import { DocumentTitle } from '../components/document-title/document-title.tsx';
+import { environment } from '../environment.ts';
 
 export const router = createBrowserRouter([
   {
@@ -94,10 +95,14 @@ export const router = createBrowserRouter([
           { title: 'Spells', href: pages.wiki.spells },
           { title: 'Enemies', href: pages.wiki.enemies },
           { title: 'Materials', href: pages.wiki.materials },
-          {
-            title: 'Materials Tree',
-            href: pages.wiki.materialsTree,
-          },
+          ...(environment !== 'production'
+            ? [
+                {
+                  title: 'Materials Tree',
+                  href: pages.wiki.materialsTree,
+                },
+              ]
+            : []),
         ]}
       />
     ),
