@@ -21,6 +21,7 @@ export * from "./common/entity/noita-entity-transform";
 export * from "./common/entity/noita-genome-data";
 export * from "./common/entity/noita-kick-component";
 export * from "./common/entity/player/noita-damage-model";
+export * from "./common/entity/player/noita-player-fly-state";
 export * from "./common/entity/player/noita-player-inventory";
 export * from "./common/entity/player/noita-player-state";
 export * from "./common/entity/player/noita-wallet-component";

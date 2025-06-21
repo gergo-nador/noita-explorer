@@ -152,6 +152,31 @@ export const scrapePlayerState = async ({
     },
   };
 
+  const characterDataComponent = playerStateEntity.findNthTag(
+    'CharacterDataComponent',
+  );
+  if (characterDataComponent) {
+    const rechargeSpeed = characterDataComponent
+      .getRequiredAttribute('fly_recharge_spd')
+      .asFloat();
+    const rechargeSpeedGround = characterDataComponent
+      .getRequiredAttribute('fly_recharge_spd_ground')
+      .asFloat();
+    const flyTimeMax = characterDataComponent
+      .getRequiredAttribute('fly_time_max')
+      .asFloat();
+    const flyingTimeLeft = characterDataComponent
+      .getRequiredAttribute('mFlyingTimeLeft')
+      .asFloat();
+
+    playerState.fly = {
+      rechargeSpeed,
+      rechargeSpeedGround,
+      flyTimeMax,
+      flyingTimeLeft,
+    };
+  }
+
   return playerState;
 };
 

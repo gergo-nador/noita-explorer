@@ -4,6 +4,7 @@ import { NoitaKickComponent } from '../noita-kick-component.ts';
 import { NoitaWalletComponent } from './noita-wallet-component.ts';
 import { NoitaDamageModel } from './noita-damage-model.ts';
 import { NoitaPlayerInventory } from './noita-player-inventory.ts';
+import { NoitaPlayerFlyState } from './noita-player-fly-state.ts';
 
 export interface NoitaPlayerState {
   transform: NoitaEntityTransform;
@@ -17,6 +18,7 @@ export interface NoitaPlayerState {
     player_amulet?: { enabled: boolean };
     player_amulet_gem?: { enabled: boolean };
   };
+  fly?: NoitaPlayerFlyState;
 }
 
 // TODO: investigate MaterialInventoryComponent
