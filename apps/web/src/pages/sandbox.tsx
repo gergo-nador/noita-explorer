@@ -9,21 +9,21 @@ import {
   OutMode,
   type RangeValue,
   type RecursivePartial,
+  type Container,
   StartValueType,
   rgbToHsl,
   setRangeValue,
 } from '@tsparticles/engine';
 import Color from 'color';
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useRef } from 'react';
 
 export const Sandbox = () => {
-  const particlesRef = useRef(undefined);
+  const particlesRef = useRef<Container>(undefined);
   const handleFirework = useCallback(() => {
     const container = particlesRef.current;
     if (!container) return;
 
-    console.log(container);
-
+    // @ts-expect-error addEmitter exists
     container.addEmitter({
       direction: MoveDirection.top,
       life: {
@@ -58,8 +58,7 @@ export const Sandbox = () => {
         <Particles
           id='fireworks'
           options={initOptions()}
-          particlesLoaded={(container) => {
-            console.log(container);
+          particlesLoaded={async (container) => {
             particlesRef.current = container;
           }}
         />
