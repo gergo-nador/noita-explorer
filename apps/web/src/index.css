@@ -13,6 +13,11 @@
   src: url("../public/Font Small Numbers.ttf");
 }
 
+@font-face {
+  font-family: 'NoitaBlackletter';
+  src: url("../public/NoitaBlackletter-Regular.ttf");
+}
+
 :root {
   font-family: "NoitaPixel", sans-serif !important;
 }
