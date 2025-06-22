@@ -2,6 +2,8 @@ import { Separator } from '../../components/separator.tsx';
 import { getNoitaHolidays } from './get-noita-holidays.tsx';
 import { Flex } from '../../components/flex.tsx';
 import { HolidayCard } from './holiday-card.tsx';
+import { NoitaHolidayContext } from '../../contexts/noita-holiday-context.ts';
+import { useFireworkComponent } from '../../hooks/use-firework-component.tsx';
 
 export const NoitaHolidays = () => {
   const holidays = getNoitaHolidays();
@@ -10,9 +12,13 @@ export const NoitaHolidays = () => {
     (h) => h.isThisYear && !h.isHappeningNow,
   );
   const holidaysNextYear = holidays.filter((h) => h.isNextYear);
+  const { fireFireworks, FireworkBackground } = useFireworkComponent();
 
   return (
-    <>
+    <NoitaHolidayContext.Provider value={{ fireFireworks: fireFireworks }}>
+      <div style={{ position: 'absolute', pointerEvents: 'none', zIndex: 1 }}>
+        <FireworkBackground />
+      </div>
       <br />
 
       <Flex justify='center' align='center' direction='column'>
@@ -58,6 +64,6 @@ export const NoitaHolidays = () => {
           </>
         )}
       </Flex>
-    </>
+    </NoitaHolidayContext.Provider>
   );
 };

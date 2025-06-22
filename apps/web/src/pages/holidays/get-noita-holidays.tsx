@@ -5,6 +5,7 @@ import { TeamFortress2 } from './holiday-cards/team-fortress-2.tsx';
 import { Halloween } from './holiday-cards/halloween.tsx';
 import { Winter } from './holiday-cards/winter.tsx';
 import React from 'react';
+import { NewYears } from './holiday-cards/new-years.tsx';
 
 export interface NoitaHoliday {
   id: string;
@@ -107,10 +108,7 @@ export const getNoitaHolidays = () => {
     },
     {
       id: 'new_years',
-      title: 'New Years',
-      description:
-        'Powerful Firework launching boxes, Pata, will rarely spawn at the Forest start location. It has a 12.5% chance to appear.',
-      datesText: '30 December – 2 January',
+      reactComponent: <NewYears />,
       nextStartDate: dateHelpers.getNextUpcomingDate(
         (year) => new Date(year, 11, 30),
       ),

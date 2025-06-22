@@ -9,16 +9,68 @@ import {
   OutMode,
   type RangeValue,
   type RecursivePartial,
+  type Container,
   StartValueType,
   rgbToHsl,
   setRangeValue,
 } from '@tsparticles/engine';
 import Color from 'color';
+import { useCallback, useMemo, useRef } from 'react';
 
-export const Sandbox = () => {
+export const useFireworkComponent = () => {
+  const particlesRef = useRef<Container>(undefined);
+
+  const fireFireworks = useCallback((amount: number) => {
+    const container = particlesRef.current;
+    if (!container) return;
+
+    // @ts-expect-error addEmitter exists
+    container.addEmitter({
+      direction: MoveDirection.top,
+      life: {
+        count: amount,
+        duration: 0.1,
+        delay: 0.1,
+      },
+      rate: {
+        delay: 0.05,
+        quantity: 1,
+      },
+      size: {
+        width: 100,
+        height: 0,
+      },
+      position: {
+        y: 100,
+        x: 50,
+      },
+    });
+  }, []);
+
+  return {
+    FireworkBackground: () => (
+      <FireworkBackground particlesRef={particlesRef} />
+    ),
+    fireFireworks,
+  };
+};
+
+const FireworkBackground = ({
+  particlesRef,
+}: {
+  particlesRef: React.RefObject<Container | undefined>;
+}) => {
+  const options = useMemo(() => initOptions(), []);
+
   return (
-    <div style={{ width: '100%', height: '90vh', zIndex: 1 }}>
-      <Particles id='fireworks' options={initOptions()} />
+    <div style={{ width: '100%', height: '90vh' }}>
+      <Particles
+        id='holidays-fireworks-bg'
+        options={options}
+        particlesLoaded={async (container) => {
+          particlesRef.current = container;
+        }}
+      />
     </div>
   );
 };
@@ -95,6 +147,21 @@ function initOptions(): ISourceOptions {
             l: lRange,
           },
         },
+        shadow: {
+          enable: true,
+          color: {
+            value: {
+              h: hsl.h,
+              s: sRange,
+              l: lRange,
+            },
+          }, // glow color
+          blur: 10, // increase for stronger glow
+          offset: {
+            x: 0,
+            y: 0,
+          },
+        },
         stroke: {
           width: 0,
         },
@@ -154,9 +221,13 @@ function initOptions(): ISourceOptions {
     .filter((t) => t !== undefined) as RecursivePartial<IParticlesOptions>[];
 
   return {
-    detectRetina: true,
-    fpsLimit: 120,
+    background: {
+      color: 'transparent',
+      opacity: 0,
+    },
+    fpsLimit: 60,
     emitters: {
+      autoPlay: false,
       direction: MoveDirection.top,
       life: {
         count: 0,
@@ -243,7 +314,7 @@ function initOptions(): ISourceOptions {
         },
         trail: {
           fill: {
-            color: '#000',
+            color: 'transparent',
           },
           enable: true,
           length: 10,
