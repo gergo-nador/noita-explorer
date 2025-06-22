@@ -17,7 +17,7 @@ export const Valentines = () => {
   }, []);
 
   // https://particles.js.org/docs/interfaces/tsParticles_Engine.Options_Interfaces_IOptions.IOptions.html
-  const particlesOptions: ISourceOptions = {
+  const particlesPermanentOptions: ISourceOptions = {
     fpsLimit: 60,
     fullScreen: {
       enable: false,
@@ -41,7 +41,7 @@ export const Valentines = () => {
         value: ['#D13A64', '#E23F6D'],
       },
       opacity: {
-        value: { min: 0.1, max: 0.5 },
+        value: { min: 0.25, max: 0.5 },
       },
       size: {
         value: { min: 10, max: 20 },
@@ -51,6 +51,51 @@ export const Valentines = () => {
         speed: 2,
         random: false,
         direction: 'top',
+      },
+    },
+  };
+  // https://particles.js.org/docs/interfaces/tsParticles_Engine.Options_Interfaces_IOptions.IOptions.html
+  const particlesClickableOptions: ISourceOptions = {
+    fpsLimit: 60,
+    fullScreen: {
+      enable: false,
+    },
+    particles: {
+      number: {
+        value: 20,
+        density: {
+          enable: true,
+        },
+      },
+      shape: {
+        type: 'image',
+        options: {
+          image: {
+            src: charm,
+          },
+        },
+      },
+      color: {
+        value: ['#D13A64', '#E23F6D'],
+      },
+      opacity: {
+        value: { min: 0.25, max: 0.5 },
+      },
+      size: {
+        value: { min: 10, max: 20 },
+      },
+      move: {
+        enable: true,
+        speed: 2,
+        random: false,
+        direction: 'top',
+      },
+      life: {
+        duration: {
+          sync: false,
+          value: { min: 15, max: 20 },
+        },
+        count: 1,
       },
     },
     interactivity: {
@@ -114,9 +159,25 @@ export const Valentines = () => {
           }}
         >
           <Particles
-            id='tsparticles-valentines'
+            id='tsparticles-valentines-permanent'
             init={particlesInit}
-            options={particlesOptions} // prevent some typescript bullshit error
+            options={particlesPermanentOptions}
+            className={'ts-particles-wrapper'}
+          />
+        </div>
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            height: '100%',
+            width: '100%',
+          }}
+        >
+          <Particles
+            id='tsparticles-valentines-click'
+            init={particlesInit}
+            options={particlesClickableOptions}
             className={'ts-particles-wrapper'}
           />
         </div>
