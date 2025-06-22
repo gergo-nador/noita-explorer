@@ -126,7 +126,7 @@ export const Credits = () => {
         </li>
         <li>
           <CreditsLink link='https://www.reddit.com/r/noita/comments/yzajqv/i_made_a_simplified_map_while_still_keeping_all/'>
-            [Reddit] Noita map for the Death map borrowed from here
+            [Reddit] Noita map for the Death map borrowed from u/lilraz08
           </CreditsLink>
         </li>
         <li>
