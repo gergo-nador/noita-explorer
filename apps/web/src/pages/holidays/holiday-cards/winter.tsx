@@ -16,7 +16,7 @@ export const Winter = () => {
   }, []);
 
   // https://particles.js.org/docs/interfaces/tsParticles_Engine.Options_Interfaces_IOptions.IOptions.html
-  const particlesOptions: ISourceOptions = {
+  const particlesPermanentOptions: ISourceOptions = {
     fpsLimit: 60,
     fullScreen: {
       enable: false,
@@ -45,6 +45,46 @@ export const Winter = () => {
         speed: 2,
         random: false,
         direction: 'bottom',
+      },
+    },
+  };
+
+  const particlesClickableOptions: ISourceOptions = {
+    fpsLimit: 60,
+    fullScreen: {
+      enable: false,
+    },
+    particles: {
+      number: {
+        value: 500,
+        density: {
+          enable: true,
+        },
+      },
+      shape: {
+        type: 'square',
+      },
+      color: {
+        value: ['#a6c2d8', '#81b0d2'],
+      },
+      opacity: {
+        value: { min: 0.1, max: 0.5 },
+      },
+      size: {
+        value: { min: 1, max: 3 },
+      },
+      move: {
+        enable: true,
+        speed: 2,
+        random: false,
+        direction: 'bottom',
+      },
+      life: {
+        duration: {
+          sync: false,
+          value: { min: 15, max: 20 },
+        },
+        count: 1,
       },
     },
     interactivity: {
@@ -77,13 +117,29 @@ export const Winter = () => {
           }}
         >
           <Particles
-            id='tsparticles-winter'
+            id='tsparticles-winter-permanent'
             init={particlesInit}
-            options={particlesOptions} // prevent some typescript bullshit error
+            options={particlesPermanentOptions} // prevent some typescript bullshit error
             className={'ts-particles-wrapper'}
           />
         </div>
-        <div style={{ position: 'relative' }}>
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            height: '100%',
+            width: '100%',
+          }}
+        >
+          <Particles
+            id='tsparticles-winter-click'
+            init={particlesInit}
+            options={particlesClickableOptions} // prevent some typescript bullshit error
+            className={'ts-particles-wrapper'}
+          />
+        </div>
+        <div>
           <div style={{ marginBottom: 15 }}>
             <span className={'text-xl'}>Winter</span>
             <span className={'text-secondary text-xl'}>
