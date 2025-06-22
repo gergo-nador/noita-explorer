@@ -168,3 +168,17 @@ Dependency Graph:
 <img src="turbo-graph.png">
 (generated with `turbo run build --graph --dry | dot -Tpng -oturbo-graph.png`)
 (`dot` is from `brew install graphviz`)
+
+
+## Error Tracking and Reporting (Sentry)
+
+[Sentry](https://sentry.io/welcome/) was added to the project for error reporting.
+Error reporting to Sentry is disabled by default. When a user visits the page 
+for the first time, a popup will be shown to ask the user to opt-in to enable Sentry. 
+
+Enabling/Disabling Sentry error reporting can be also achieved in the Settings 
+page under the Extras.
+
+Sentry logging is only enabled in the deployed pages, both in production and 
+preview environments. It is disabled in development. Please don't enable it
+locally and don't spam the Sentry issues board.
