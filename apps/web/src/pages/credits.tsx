@@ -131,7 +131,7 @@ export const Credits = () => {
         </li>
         <li>
           <CreditsLink link='https://www.reddit.com/r/noita/comments/jp56ub/a_while_ago_i_made_noita_blackletter_this_is_now/'>
-            [Reddit] Noita Font Glyphs from here
+            [Reddit] Noita Backletter font from u/Viowlet
           </CreditsLink>
         </li>
       </ul>
