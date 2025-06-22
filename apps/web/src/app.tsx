@@ -16,6 +16,7 @@ import { ActionsPanel } from './components/actions/actions-panel.tsx';
 import { Onboarding } from './pages/onboarding/onboarding.tsx';
 import { initParticlesEngine } from '@tsparticles/react';
 import { loadFull } from 'tsparticles';
+import { loadEmittersPlugin } from '@tsparticles/plugin-emitters';
 
 export const App = () => {
   const { loaded: settingsLoaded, settings } = useSettingsStore();
@@ -180,6 +181,7 @@ const InitialLoader = () => {
       await loadFull(engine);
       //await loadSlim(engine);
       //await loadBasic(engine);
+      await loadEmittersPlugin(engine, false);
     });
   }, []);
 

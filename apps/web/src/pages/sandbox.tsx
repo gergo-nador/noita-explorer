@@ -14,12 +14,55 @@ import {
   setRangeValue,
 } from '@tsparticles/engine';
 import Color from 'color';
+import { useCallback, useRef, useState } from 'react';
 
 export const Sandbox = () => {
+  const particlesRef = useRef(undefined);
+  const handleFirework = useCallback(() => {
+    const container = particlesRef.current;
+    if (!container) return;
+
+    console.log(container);
+
+    container.addEmitter({
+      direction: MoveDirection.top,
+      life: {
+        count: 3,
+        duration: 0.1,
+        delay: 0.1,
+      },
+      rate: {
+        delay: 0.05,
+        quantity: 1,
+      },
+      size: {
+        width: 100,
+        height: 0,
+      },
+      position: {
+        y: 100,
+        x: 50,
+      },
+    });
+  }, []);
+
   return (
     <div>
+      <button
+        onClick={handleFirework}
+        style={{ position: 'absolute', zIndex: 2, top: 20, left: 20 }}
+      >
+        Launch Firework
+      </button>
       <div style={{ width: '100%', height: '90vh' }}>
-        <Particles id='fireworks' options={initOptions()} />
+        <Particles
+          id='fireworks'
+          options={initOptions()}
+          particlesLoaded={(container) => {
+            console.log(container);
+            particlesRef.current = container;
+          }}
+        />
       </div>
     </div>
   );
@@ -157,11 +200,9 @@ function initOptions(): ISourceOptions {
 
   return {
     detectRetina: true,
-    background: {
-      color: '#000',
-    },
     fpsLimit: 120,
     emitters: {
+      autoPlay: false,
       direction: MoveDirection.top,
       life: {
         count: 0,

@@ -18,6 +18,9 @@
     "@noita-explorer/tools": "*",
     "@sentry/react": "^9.29.0",
     "@sentry/vite-plugin": "^3.5.0",
+    "@tsparticles/plugin-emitters": "^3.8.1",
+    "@tsparticles/react": "^3.0.0",
+    "@tsparticles/slim": "^3.8.1",
     "buffer": "^6.0.3",
     "idb": "^8.0.1",
     "plotly.js": "^2.35.3",
@@ -26,9 +29,7 @@
     "react-plotly.js": "^2.6.0",
     "react-router-dom": "^7.0.2",
     "react-use": "^17.6.0",
-    "tsparticles": "^3.8.1",
-    "@tsparticles/react": "^3.0.0",
-    "@tsparticles/slim": "^3.8.1"
+    "tsparticles": "^3.8.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.15.0",
