@@ -1,21 +1,11 @@
 import { Card, Icon } from '@noita-explorer/noita-component-library';
-import { useCallback } from 'react';
-import type { Engine, ISourceOptions } from 'tsparticles-engine';
-import Particles from 'react-particles';
-import { loadSlim } from 'tsparticles-slim';
+import Particles from '@tsparticles/react';
+import { ISourceOptions } from '@tsparticles/engine';
 
 import charm from '../../../assets/status-indicators/charm-high-res.png';
 import heart from '../../../assets/holidays/Heart_extrahp_default.gif';
 
 export const Valentines = () => {
-  const particlesInit = useCallback(async (engine: Engine) => {
-    // you can initialize the tsParticles instance (engine) here, adding custom shapes or presets
-    // this loads the tsparticles package bundle, it's the easiest method for getting everything ready
-    // starting from v2 you can add only the features you need reducing the bundle size
-    //await loadFull(engine);
-    await loadSlim(engine);
-  }, []);
-
   // https://particles.js.org/docs/interfaces/tsParticles_Engine.Options_Interfaces_IOptions.IOptions.html
   const particlesPermanentOptions: ISourceOptions = {
     fpsLimit: 60,
@@ -160,7 +150,6 @@ export const Valentines = () => {
         >
           <Particles
             id='tsparticles-valentines-permanent'
-            init={particlesInit}
             options={particlesPermanentOptions}
             className={'ts-particles-wrapper'}
           />
@@ -176,7 +165,6 @@ export const Valentines = () => {
         >
           <Particles
             id='tsparticles-valentines-click'
-            init={particlesInit}
             options={particlesClickableOptions}
             className={'ts-particles-wrapper'}
           />

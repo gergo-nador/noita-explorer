@@ -89,7 +89,6 @@ export const MainPage = () => {
       >
         Current Run
       </Button>
-      <Button onClick={() => navigate(pages.holidays)}>Holidays</Button>
       <Button
         disabled={save00Status !== 'loaded'}
         onClick={() => navigate(pages.sessions)}
@@ -123,8 +122,12 @@ export const MainPage = () => {
       >
         Bones Wands
       </Button>
+      <Button onClick={() => navigate(pages.holidays)}>Holidays</Button>
       <Button onClick={() => navigate(pages.settings.index)}>Settings</Button>
       <Button onClick={() => navigate(pages.credits)}>Credits</Button>
+      {environment === 'development' && (
+        <Button onClick={() => navigate(pages.sandbox)}>Sandbox</Button>
+      )}
     </Flex>
   );
 };

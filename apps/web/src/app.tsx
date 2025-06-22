@@ -14,6 +14,8 @@ import { NoitaWandConfig } from '@noita-explorer/model-noita';
 import { imageHelpers, randomHelpers } from '@noita-explorer/tools';
 import { ActionsPanel } from './components/actions/actions-panel.tsx';
 import { Onboarding } from './pages/onboarding/onboarding.tsx';
+import { initParticlesEngine } from '@tsparticles/react';
+import { loadFull } from 'tsparticles';
 
 export const App = () => {
   const { loaded: settingsLoaded, settings } = useSettingsStore();
@@ -167,6 +169,19 @@ const InitialLoader = () => {
       customStyleElement.remove();
     };
   }, [data, cursor]);
+
+  useEffect(() => {
+    // this should be run only once per application lifetime
+    initParticlesEngine(async (engine) => {
+      // you can initiate the tsParticles instance (engine) here, adding custom shapes or presets
+      // this loads the tsparticles package bundle, it's the easiest method for getting everything ready
+      // starting from v2 you can add only the features you need reducing the bundle size
+      //await loadAll(engine);
+      await loadFull(engine);
+      //await loadSlim(engine);
+      //await loadBasic(engine);
+    });
+  }, []);
 
   return <></>;
 };

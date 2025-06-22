@@ -27,4 +27,5 @@ export const pages = {
   },
   currentRun: '/current-run',
   credits: '/credits',
+  sandbox: '/sandbox',
 };

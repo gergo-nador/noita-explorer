@@ -26,6 +26,7 @@ import { NoitaProgressTrackerSecrets } from '../pages/progress/noita-progress-tr
 import { NoitaProgressTrackerPillar } from '../pages/progress/noita-progress-tracker-pillar/noita-progress-tracker-pillar.tsx';
 import { DocumentTitle } from '../components/document-title/document-title.tsx';
 import { environment } from '../environment.ts';
+import { Sandbox } from '../pages/sandbox.tsx';
 
 export const router = createBrowserRouter([
   {
@@ -250,4 +251,5 @@ export const router = createBrowserRouter([
       </DocumentTitle>
     ),
   },
+  { path: 'sandbox', element: <Sandbox /> },
 ]);
