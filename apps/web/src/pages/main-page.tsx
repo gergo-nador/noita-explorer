@@ -88,7 +88,9 @@ export const MainPage = () => {
           Wiki
         </Button>
         <Button
-          disabled={!noitaDataWakLoaded || !currentRun}
+          disabled={
+            !noitaDataWakLoaded || !currentRun || environment === 'production'
+          }
           onClick={() => navigate(pages.currentRun)}
           onDisabledClick={() => {
             if (environment === 'production') {
