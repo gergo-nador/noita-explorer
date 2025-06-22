@@ -9,8 +9,8 @@ export const NewYears = () => {
     <div onClick={() => fireFireworks(1)}>
       <Card
         styling={{
-          borderDark: 'gold',
-          borderBright: 'gold',
+          borderBright: '#e1bb01',
+          borderDark: '#b68e2c',
         }}
       >
         <div style={{ position: 'relative' }}>
