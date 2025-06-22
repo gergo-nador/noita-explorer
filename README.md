@@ -172,8 +172,8 @@ Dependency Graph:
 
 ## Error Tracking and Reporting (Sentry)
 
-[Sentry](https://sentry.io/welcome/) was added to the project for error reporting.
-Error reporting to Sentry is disabled by default. When a user visits the page 
+[Sentry](https://sentry.io/welcome/) was added to the project for error reporting purposes.
+Error reporting is disabled by default. When a user visits the page 
 for the first time, a popup will be shown to ask the user to opt-in to enable Sentry. 
 
 Enabling/Disabling Sentry error reporting can be also achieved in the Settings 
