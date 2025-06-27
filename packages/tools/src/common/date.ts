@@ -66,9 +66,15 @@ const convert = {
   milliSeconds: (ms: number) => convertFunction(ms),
 };
 
+const isPrideMonth = () => {
+  const now = new Date();
+  return now.getMonth() === 5;
+};
+
 export const dateHelpers = {
   calculateEaster,
   getFirstDayOfWeek,
   getNextUpcomingDate,
   convert,
+  isPrideMonth,
 };

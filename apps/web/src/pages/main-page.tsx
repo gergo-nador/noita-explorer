@@ -7,6 +7,7 @@ import { useSave00Store } from '../stores/save00.ts';
 import { useMemo } from 'react';
 import { Flex } from '../components/flex.tsx';
 import { environment } from '../environment.ts';
+import { dateHelpers } from '@noita-explorer/tools';
 
 export const MainPage = () => {
   const navigate = useNavigate();
@@ -40,11 +41,13 @@ export const MainPage = () => {
             fontFamily: 'NoitaBlackletter',
             fontSize: 120,
             lineHeight: 'normal',
-            background:
-              'linear-gradient(to bottom, #FFF190, #FFB660, #FFB760, #FF7759, #E75654, #B9474F)',
+            background: dateHelpers.isPrideMonth()
+              ? 'linear-gradient(to bottom, #FF3C17, #F93C17, #F1780B, #DCA301, #0B5A3B, #1E3C7B, #7B27B2, #7B27B2)'
+              : 'linear-gradient(to bottom, #FFF190, #FFB660, #FFB760, #FF7759, #E75654, #B9474F)',
             WebkitBackgroundClip: 'text',
             backgroundClip: 'text',
             color: 'transparent',
+            textAlign: 'center',
           }}
         >
           Noita Explorer
