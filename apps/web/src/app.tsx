@@ -17,12 +17,11 @@ import { Onboarding } from './pages/onboarding/onboarding.tsx';
 import { initParticlesEngine } from '@tsparticles/react';
 import { loadFull } from 'tsparticles';
 import { loadEmittersPlugin } from '@tsparticles/plugin-emitters';
+import { useOnboarding } from './hooks/use-onboarding.ts';
 
 export const App = () => {
-  const { loaded: settingsLoaded, settings } = useSettingsStore();
-
-  const isOnboardingDone =
-    settings.spoilerWarningAccepted && settings.sentry.initialPopupSeen;
+  const { loaded: settingsLoaded } = useSettingsStore();
+  const { isOnboardingDone } = useOnboarding();
 
   return (
     <>

@@ -52,10 +52,12 @@
 
 html, body, #root {
   height: 100%;
+  padding: 0;
+  margin: 0;
 }
 
 body {
-  background: #2e2e2e;
+  background: transparent;
   color: white;
   line-height: 20px;
   padding: 0;
