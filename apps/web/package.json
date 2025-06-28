@@ -22,6 +22,7 @@
     "@tsparticles/react": "^3.0.0",
     "@tsparticles/slim": "^3.8.1",
     "buffer": "^6.0.3",
+    "diff": "^8.0.2",
     "idb": "^8.0.1",
     "plotly.js": "^2.35.3",
     "react": "19.1.0",

@@ -50,8 +50,6 @@ export const Button = ({
 
     if (typeof onClick === 'function') {
       onClick(e);
-    } else {
-      console.error('button not implemented');
     }
   };
 

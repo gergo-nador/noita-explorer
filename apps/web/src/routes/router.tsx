@@ -28,6 +28,7 @@ import { DocumentTitle } from '../components/document-title/document-title.tsx';
 import { environment } from '../environment.ts';
 import { Sandbox } from '../pages/sandbox.tsx';
 import { Background } from '../components/background.tsx';
+import { ErrorRoutePage } from '../pages/error-route-page.tsx';
 
 export const router = createBrowserRouter([
   {
@@ -36,6 +37,12 @@ export const router = createBrowserRouter([
       <>
         <Background />
         <Outlet />
+      </>
+    ),
+    errorElement: (
+      <>
+        <Background />
+        <ErrorRoutePage />
       </>
     ),
     children: [
@@ -55,7 +62,7 @@ export const router = createBrowserRouter([
             path: '',
             element: (
               <DocumentTitle title='Progress Tracker'>
-                <CardPageTemplate returnPath={'/'}>
+                <CardPageTemplate returnPath={pages.main}>
                   <NoitaProgressTracker />
                 </CardPageTemplate>
               </DocumentTitle>
@@ -65,7 +72,7 @@ export const router = createBrowserRouter([
             path: 'secrets',
             element: (
               <TabPageTemplate
-                returnPath={'/progress-tracker'}
+                returnPath={pages.progressTracker.index}
                 tabs={[
                   { title: 'General', href: pages.progressTracker.secrets },
                   {
@@ -100,7 +107,7 @@ export const router = createBrowserRouter([
         path: 'wiki',
         element: (
           <TabPageTemplate
-            returnPath={'/'}
+            returnPath={pages.main}
             tabs={[
               { title: 'Perks', href: pages.wiki.perks },
               { title: 'Spells', href: pages.wiki.spells },
@@ -164,7 +171,7 @@ export const router = createBrowserRouter([
         path: 'setup',
         element: (
           <DocumentTitle title='Setup - Noita Explorer'>
-            <CardPageTemplate returnPath={'/'}>
+            <CardPageTemplate returnPath={pages.main}>
               <Outlet />
             </CardPageTemplate>
           </DocumentTitle>
@@ -179,7 +186,7 @@ export const router = createBrowserRouter([
         path: 'holidays',
         element: (
           <DocumentTitle title='Holidays - Noita Explorer'>
-            <CardPageTemplate returnPath={'/'}>
+            <CardPageTemplate returnPath={pages.main}>
               <NoitaHolidays />
             </CardPageTemplate>
           </DocumentTitle>
@@ -189,7 +196,7 @@ export const router = createBrowserRouter([
         path: 'current-run',
         element: (
           <DocumentTitle title='Current Run - Noita Explorer'>
-            <CardPageTemplate returnPath={'/'}>
+            <CardPageTemplate returnPath={pages.main}>
               <CurrentRun />
             </CardPageTemplate>
           </DocumentTitle>
@@ -199,7 +206,7 @@ export const router = createBrowserRouter([
         path: 'sessions',
         element: (
           <DocumentTitle title='Sessions - Noita Explorer'>
-            <EmptyPageTemplate returnPath={'/'}>
+            <EmptyPageTemplate returnPath={pages.main}>
               <NoitaSessions />
             </EmptyPageTemplate>
           </DocumentTitle>
@@ -209,7 +216,7 @@ export const router = createBrowserRouter([
         path: 'death-map',
         element: (
           <DocumentTitle title='Death Map - Noita Explorer'>
-            <CardPageTemplate returnPath={'/'}>
+            <CardPageTemplate returnPath={pages.main}>
               <NoitaDeathMap />
             </CardPageTemplate>
           </DocumentTitle>
@@ -219,7 +226,7 @@ export const router = createBrowserRouter([
         path: 'bones-wands',
         element: (
           <DocumentTitle title='Bones Wands - Noita Explorer'>
-            <CardPageTemplate returnPath={'/'}>
+            <CardPageTemplate returnPath={pages.main}>
               <NoitaBonesWands />
             </CardPageTemplate>
           </DocumentTitle>
@@ -236,7 +243,7 @@ export const router = createBrowserRouter([
           {
             path: '',
             element: (
-              <CardPageTemplate returnPath={'/'}>
+              <CardPageTemplate returnPath={pages.main}>
                 <Settings />
               </CardPageTemplate>
             ),
@@ -244,7 +251,7 @@ export const router = createBrowserRouter([
           {
             path: 'cursor-wand-picker',
             element: (
-              <CardPageTemplate returnPath={'/settings'}>
+              <CardPageTemplate returnPath={pages.settings.index}>
                 <SettingsCursorWandPicker />
               </CardPageTemplate>
             ),
@@ -255,7 +262,7 @@ export const router = createBrowserRouter([
         path: 'credits',
         element: (
           <DocumentTitle title='Credits - Noita Explorer'>
-            <CardPageTemplate>
+            <CardPageTemplate returnPath={pages.main}>
               <Credits />
             </CardPageTemplate>
           </DocumentTitle>
