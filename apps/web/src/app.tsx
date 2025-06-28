@@ -32,6 +32,13 @@ export const App = () => {
       <Head>
         <Head.Meta property='og:site_name' content='Noita Explorer' />
         <Head.Meta name='application-name' content='Noita Explorer' />
+
+        <Head.Meta
+          name='description'
+          content='Noita Explorer helps you unlock your lost in-game progress without mods. Unlock spells, enemies, perks, achievement pillars, crown, amulet, and so on...'
+        />
+
+        <Head.Meta name='referrer' content='' />
       </Head>
 
       <DialogWrapper />

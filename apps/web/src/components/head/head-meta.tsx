@@ -1,4 +1,4 @@
-type MetaName = 'application-name' | 'description';
+type MetaName = 'application-name' | 'description' | 'referrer';
 type MetaProperty = 'og:site_name' | 'og:title';
 
 export const HeadMeta = ({
