@@ -174,9 +174,13 @@ const CreditsLink = ({
   children: string;
   link: string;
 }) => {
+  // The <Flex> wrapper is needed for Firefox compatibility, otherwise
+  // the links are misaligned
   return (
-    <a href={link} target='_blank' style={{ color: 'white' }}>
-      <Button decoration='right'>{children}</Button>
-    </a>
+    <Flex>
+      <a href={link} target='_blank' style={{ color: 'white' }}>
+        <Button decoration='right'>{children}</Button>
+      </a>
+    </Flex>
   );
 };
