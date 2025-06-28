@@ -38,7 +38,13 @@ export const App = () => {
           content='Noita Explorer helps you unlock your lost in-game progress without mods. Unlock spells, enemies, perks, achievement pillars, crown, amulet, and so on...'
         />
 
-        <Head.Meta name='referrer' content='' />
+        <Head.Meta name='referrer' content='noita-explorer.com' />
+        <Head.Meta
+          name='keywords'
+          content='noita,unlock,progress,game progress,unlock progress'
+        />
+
+        <Head.Meta property='og:type' content='website' />
       </Head>
 
       <DialogWrapper />
