@@ -34,8 +34,13 @@ export const Credits = () => {
           <p>
             If you would like to help testing the newest features, check out the
             deployment of the development branch
-            <a href={deployUrls.preview} style={{ color: 'white' }}>
-              <Button decoration='right'>{deployUrls.preview}</Button>
+            <a
+              href={deployUrls.noitaExplorer.preview}
+              style={{ color: 'white' }}
+            >
+              <Button decoration='right'>
+                {deployUrls.noitaExplorer.preview}
+              </Button>
             </a>
           </p>
         </div>
@@ -47,8 +52,13 @@ export const Credits = () => {
 
           <p>
             Bring me back to the main site
-            <a href={deployUrls.production} style={{ color: 'white' }}>
-              <Button decoration='right'>{deployUrls.production}</Button>
+            <a
+              href={deployUrls.noitaExplorer.production}
+              style={{ color: 'white' }}
+            >
+              <Button decoration='right'>
+                {deployUrls.noitaExplorer.production}
+              </Button>
             </a>
           </p>
         </div>
@@ -59,20 +69,38 @@ export const Credits = () => {
           <h2>Deployed Urls</h2>
           <ul>
             <li>
-              <Flex gap={8}>
+              <div>
                 <span>Production:</span>
-                <a href={deployUrls.production} style={{ color: 'white' }}>
-                  <Button decoration='right'>{deployUrls.production}</Button>
-                </a>
-              </Flex>
+                <ul>
+                  <li>
+                    <CreditsLink link={deployUrls.noitaExplorer.production}>
+                      {deployUrls.noitaExplorer.production}
+                    </CreditsLink>
+                  </li>
+                  <li>
+                    <CreditsLink link={deployUrls.cloudflare.production}>
+                      {deployUrls.cloudflare.production}
+                    </CreditsLink>
+                  </li>
+                </ul>
+              </div>
             </li>
             <li>
-              <Flex gap={8}>
+              <div>
                 <span>Preview:</span>
-                <a href={deployUrls.preview} style={{ color: 'white' }}>
-                  <Button decoration='right'>{deployUrls.preview}</Button>
-                </a>
-              </Flex>
+                <ul>
+                  <li>
+                    <CreditsLink link={deployUrls.noitaExplorer.preview}>
+                      {deployUrls.noitaExplorer.preview}
+                    </CreditsLink>
+                  </li>
+                  <li>
+                    <CreditsLink link={deployUrls.cloudflare.preview}>
+                      {deployUrls.cloudflare.preview}
+                    </CreditsLink>
+                  </li>
+                </ul>
+              </div>
             </li>
           </ul>
         </div>
@@ -147,7 +175,7 @@ const CreditsLink = ({
   link: string;
 }) => {
   return (
-    <a href={link} style={{ color: 'white' }}>
+    <a href={link} target='_blank' style={{ color: 'white' }}>
       <Button decoration='right'>{children}</Button>
     </a>
   );
