@@ -10,6 +10,9 @@ export { NoitaTooltipWrapper } from './components/noita-tooltip-wrapper';
 export { PixelatedImage } from './components/pixelated-image';
 export { ProgressBar } from './components/progress-bar';
 export { BooleanIcon } from './components/boolean-icon';
+export { MultiSelection } from './components/multi-selection/multi-selection';
+export { MultiSelectionBoolean } from './components/multi-selection/multi-selection-boolean';
+export { MultiSelectionBooleanNullable } from './components/multi-selection/multi-selection-boolean-nullable';
 
 export { TabView } from './components/tabs/tab-view';
 

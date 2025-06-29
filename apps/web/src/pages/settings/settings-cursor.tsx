@@ -1,5 +1,9 @@
 import { Flex } from '@noita-explorer/react-utils';
-import { Button, Header } from '@noita-explorer/noita-component-library';
+import {
+  Button,
+  Header,
+  MultiSelection,
+} from '@noita-explorer/noita-component-library';
 import {
   SettingsCursorType,
   SettingsNoitaCursorType,
@@ -11,7 +15,6 @@ import { useNoitaDataWakStore } from '../../stores/noita-data-wak.ts';
 import { NoitaWandConfig } from '@noita-explorer/model-noita';
 import { useNavigate } from 'react-router-dom';
 import { pages } from '../../routes/pages.ts';
-import { MultiSelection } from '../../components/multi-selection/multi-selection.tsx';
 
 export const SettingsCursor = () => {
   const { settings, set } = useSettingsStore();
@@ -45,42 +48,40 @@ export const SettingsCursor = () => {
       .then(setCustomCursor);
   }, [data?.wandConfigs, cursor.wandSpriteId, counter]);
 
+  const MultiSelectionCursor = MultiSelection<SettingsCursorType>();
+  const MultiSelectionNoitaCursor = MultiSelection<SettingsNoitaCursorType>();
+
   return (
     <Header title={'Cursor'}>
       <Flex style={{ width: 'max-content' }} gap={20}>
         <span>Type: </span>
         <div>
-          <MultiSelection<SettingsCursorType>
-            options={[
-              {
-                id: 'Default',
-                display: 'Default',
-                value: 'default',
-                style: {
-                  cursor: 'pointer',
-                },
-              },
-              {
-                id: 'Noita Cursor',
-                display: 'Noita Cursor',
-                value: 'noita-cursor',
-                style: {
-                  cursor: 'url(cursors/mouse_cursor_big.png) 20 20, pointer',
-                },
-              },
-              {
-                id: 'Wand',
-                display: 'Wand',
-                value: 'wand',
-                style: {
-                  cursor: `url("${customCursor}"), pointer`,
-                },
-                onClick: () => setCounter(counter + 1),
-              },
-            ]}
+          <MultiSelectionCursor
             setValue={(value) => set((s) => (s.cursor.type = value))}
             currentValue={cursor.type}
-          />
+          >
+            <MultiSelectionCursor.Item
+              value='default'
+              style={{ cursor: 'pointer' }}
+            >
+              Default
+            </MultiSelectionCursor.Item>
+            <MultiSelectionCursor.Item
+              value='noita-cursor'
+              style={{
+                cursor: 'url(cursors/mouse_cursor_big.png) 20 20, pointer',
+              }}
+            >
+              Noita Cursor
+            </MultiSelectionCursor.Item>
+            <MultiSelectionCursor.Item
+              value='wand'
+              style={{ cursor: `url("${customCursor}"), pointer` }}
+              onClick={() => setCounter(counter + 1)}
+            >
+              Wand
+            </MultiSelectionCursor.Item>
+          </MultiSelectionCursor>
         </div>
       </Flex>
 
@@ -90,29 +91,28 @@ export const SettingsCursor = () => {
         <Flex style={{ width: 'max-content' }} gap={20}>
           <span>Noita Cursor Type: </span>
           <div>
-            <MultiSelection<SettingsNoitaCursorType>
-              options={[
-                {
-                  id: 'medium',
-                  display: 'Medium',
-                  value: 'mouse_cursor_big',
-                  style: {
-                    cursor: 'url(cursors/mouse_cursor_big.png) 20 20, pointer',
-                  },
-                },
-                {
-                  id: 'large',
-                  display: ' Large',
-                  value: 'mouse_cursor_big_system',
-                  style: {
-                    cursor:
-                      'url(cursors/mouse_cursor_big_system.png) 25 25, pointer',
-                  },
-                },
-              ]}
+            <MultiSelectionNoitaCursor
               setValue={(value) => set((s) => (s.cursor.noitaCursor = value))}
               currentValue={cursor.noitaCursor}
-            />
+            >
+              <MultiSelectionNoitaCursor.Item
+                value='mouse_cursor_big'
+                style={{
+                  cursor: 'url(cursors/mouse_cursor_big.png) 20 20, pointer',
+                }}
+              >
+                Medium
+              </MultiSelectionNoitaCursor.Item>
+              <MultiSelectionNoitaCursor.Item
+                value='mouse_cursor_big_system'
+                style={{
+                  cursor:
+                    'url(cursors/mouse_cursor_big_system.png) 25 25, pointer',
+                }}
+              >
+                Large
+              </MultiSelectionNoitaCursor.Item>
+            </MultiSelectionNoitaCursor>
           </div>
         </Flex>
       )}

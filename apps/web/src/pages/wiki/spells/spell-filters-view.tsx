@@ -1,5 +1,7 @@
-import { Card } from '@noita-explorer/noita-component-library';
-import { MultiSelectionBooleanNullable } from '../../../components/multi-selection/multi-selection-boolean-nullable.tsx';
+import {
+  Card,
+  MultiSelectionBooleanNullable,
+} from '@noita-explorer/noita-component-library';
 import { Flex } from '@noita-explorer/react-utils';
 import { SpellFilters } from './spell-filters.ts';
 import { Dispatch } from 'react';

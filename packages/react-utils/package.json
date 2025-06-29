@@ -28,10 +28,7 @@
   },
   "peerDependencies": {
     "react": "19.1.0",
-    "react-contexify": "^6.0.0",
-    "react-dom": "19.1.0",
-    "react-hot-toast": "^2.4.1",
-    "react-tooltip": "^5.28.0"
+    "react-dom": "19.1.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.15.0",

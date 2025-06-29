@@ -3,6 +3,7 @@ import {
   Button,
   ProgressIcon,
   ProgressIconType,
+  MultiSelectionBoolean,
 } from '@noita-explorer/noita-component-library';
 import { useMemo } from 'react';
 import { useNoitaDataWakStore } from '../../stores/noita-data-wak.ts';
@@ -14,12 +15,12 @@ import { NoitaSpellTypesDictionary } from '../../noita/noita-spell-type-dictiona
 import { NoitaEnemyGroupTooltip } from '../../components/tooltips/noita-enemy-group-tooltip.tsx';
 import { useNoitaEnemyGroups } from '../../hooks/use-noita-enemy-groups.ts';
 import { arrayHelpers } from '@noita-explorer/tools';
-import { MultiSelectionBoolean } from '../../components/multi-selection/multi-selection-boolean.tsx';
 import { useNoitaActionsStore } from '../../stores/actions.ts';
 import { noitaAPI } from '../../noita-api.ts';
-import { Flex, useQueryParamsBoolean } from '@noita-explorer/react-utils';
+import { Flex } from '@noita-explorer/react-utils';
 import { useNavigate } from 'react-router-dom';
 import { pages } from '../../routes/pages.ts';
+import { useQueryParamsBoolean } from '../../hooks/query-params/use-query-params-boolean.ts';
 
 export const NoitaProgressTracker = () => {
   const navigate = useNavigate();

@@ -11,10 +11,8 @@ import { NoitaMaterial } from '@noita-explorer/model-noita';
 import { MaterialOverview } from './material-overview.tsx';
 import { MaterialFilters } from './material-filters.ts';
 import { MaterialFiltersView } from './material-filters-view.tsx';
-import {
-  Flex,
-  useStateWithQueryParamsString,
-} from '@noita-explorer/react-utils';
+import { Flex } from '@noita-explorer/react-utils';
+import { useStateWithQueryParamsString } from '../../../hooks/query-params/use-state-with-query-params-string.ts';
 
 export const WikiMaterials = () => {
   const { data } = useNoitaDataWakStore();

@@ -9,6 +9,7 @@ export * from "./cryptography";
 export * from "./date";
 export * from "./enumerate";
 export * from "./file-access-utils";
+export * from "./function";
 export * from "./images";
 export * from "./map";
 export * from "./math";

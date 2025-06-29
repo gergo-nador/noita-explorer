@@ -11,10 +11,8 @@ import { SpellOverview } from './spell-overview.tsx';
 import { SpellFiltersView } from './spell-filters-view.tsx';
 import { useState } from 'react';
 import { SpellFilters } from './spell-filters.ts';
-import {
-  Flex,
-  useStateWithQueryParamsString,
-} from '@noita-explorer/react-utils';
+import { Flex } from '@noita-explorer/react-utils';
+import { useStateWithQueryParamsString } from '../../../hooks/query-params/use-state-with-query-params-string.ts';
 
 export const WikiSpells = () => {
   const { data } = useNoitaDataWakStore();

@@ -1,5 +1,5 @@
 import { Flex } from '@noita-explorer/react-utils';
-import { MultiSelection } from '../../components/multi-selection/multi-selection.tsx';
+import { MultiSelectionBoolean } from '@noita-explorer/noita-component-library';
 import { useSettingsStore } from '../../stores/settings.ts';
 import {
   Button,
@@ -17,19 +17,7 @@ export const SettingsExtras = () => {
     <Header title={'Extras'}>
       <Flex style={{ width: 'max-content' }} gap={20}>
         <span>Display Debug Info: </span>
-        <MultiSelection<boolean>
-          options={[
-            {
-              id: 'no',
-              display: 'No',
-              value: false,
-            },
-            {
-              id: 'yes',
-              display: 'Yes',
-              value: true,
-            },
-          ]}
+        <MultiSelectionBoolean
           setValue={(value) => set((s) => (s.progressDisplayDebugData = value))}
           currentValue={progressDisplayDebugData}
         />
@@ -53,19 +41,7 @@ export const SettingsExtras = () => {
             <Icon type='info' />
           </NoitaTooltipWrapper>
         </Flex>
-        <MultiSelection<boolean>
-          options={[
-            {
-              id: 'no',
-              display: 'No',
-              value: false,
-            },
-            {
-              id: 'yes',
-              display: 'Yes',
-              value: true,
-            },
-          ]}
+        <MultiSelectionBoolean
           setValue={(value) => set((s) => (s.sentry.enabled = value))}
           currentValue={sentrySettings.enabled}
         />

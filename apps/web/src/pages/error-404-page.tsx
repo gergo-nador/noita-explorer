@@ -42,7 +42,9 @@ export const Error404Page = () => {
   return (
     <Flex column center style={{ padding: 10 }}>
       <Card>
-        <h1>404 - Uhhh ohhh, it looks like this page does not exist</h1>
+        <h1 style={{ lineHeight: 1.2 }}>
+          404 - Uhhh ohhh, it looks like this page does not exist
+        </h1>
         <div>The page {currentPathName} does not exist.</div>
         {potentialPath && (
           <>

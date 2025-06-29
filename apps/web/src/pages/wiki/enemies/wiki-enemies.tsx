@@ -11,10 +11,8 @@ import { Dispatch, useMemo, useState } from 'react';
 import { EnemyFilters } from './enemy-filters.ts';
 import { EnemyFiltersView } from './enemy-filters-view.tsx';
 import { arrayHelpers } from '@noita-explorer/tools';
-import {
-  Flex,
-  useStateWithQueryParamsString,
-} from '@noita-explorer/react-utils';
+import { Flex } from '@noita-explorer/react-utils';
+import { useStateWithQueryParamsString } from '../../../hooks/query-params/use-state-with-query-params-string.ts';
 
 export const WikiEnemies = () => {
   const { data } = useNoitaDataWakStore();

@@ -1,7 +1,10 @@
-import { Card, Icon } from '@noita-explorer/noita-component-library';
+import {
+  Card,
+  Icon,
+  MultiSelectionBooleanNullable,
+  MultiSelection,
+} from '@noita-explorer/noita-component-library';
 import { Flex } from '@noita-explorer/react-utils';
-import { MultiSelectionBooleanNullable } from '../../../components/multi-selection/multi-selection-boolean-nullable.tsx';
-import { MultiSelection } from '../../../components/multi-selection/multi-selection.tsx';
 import { NoitaProtections } from '../../../noita/noita-protections.ts';
 import { PerkFilters } from './perk-filters.ts';
 import { Dispatch } from 'react';
@@ -17,6 +20,8 @@ export const PerkFiltersView = ({
   showSave00RelatedFilters: boolean;
   usedProtectionIds: string[];
 }) => {
+  const MultiSelectString = MultiSelection<string | undefined>();
+
   return (
     <Card>
       <Flex gap={10} style={{ maxWidth: 'max-content', marginBottom: 10 }}>
@@ -69,29 +74,7 @@ export const PerkFiltersView = ({
 
       <Flex gap={10} style={{ maxWidth: 'max-content' }}>
         <span>Protections:</span>
-        <MultiSelection<string | undefined>
-          options={Object.keys(NoitaProtections)
-            .filter((p) => usedProtectionIds.includes(p))
-            .map((protectionId) => ({
-              id: protectionId,
-              value: protectionId,
-              display: (
-                <Icon
-                  type={'custom'}
-                  src={NoitaProtections[protectionId].image}
-                  size={30}
-                />
-              ),
-              style: {
-                opacity: 0.6,
-              },
-              selectedProperties: {
-                opacity: 1,
-              },
-              onClick: (_, isSelected) =>
-                isSelected &&
-                setFilters({ ...filters, protectionId: undefined }),
-            }))}
+        <MultiSelectString
           setValue={(value) =>
             setFilters({
               ...filters,
@@ -99,7 +82,23 @@ export const PerkFiltersView = ({
             })
           }
           currentValue={filters.protectionId}
-        />
+          unselectOnClick
+        >
+          {Object.keys(NoitaProtections)
+            .filter((p) => usedProtectionIds.includes(p))
+            .map((protectionId) => {
+              const protection = NoitaProtections[protectionId];
+              return (
+                <MultiSelectString.Item
+                  value={protectionId}
+                  style={{ opacity: 0.6 }}
+                  selectedProperties={{ opacity: 1 }}
+                >
+                  <Icon type={'custom'} src={protection.image} size={30} />
+                </MultiSelectString.Item>
+              );
+            })}
+        </MultiSelectString>
       </Flex>
     </Card>
   );

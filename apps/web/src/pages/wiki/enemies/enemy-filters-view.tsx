@@ -1,7 +1,10 @@
-import { Card, Icon } from '@noita-explorer/noita-component-library';
+import {
+  Card,
+  Icon,
+  MultiSelection,
+} from '@noita-explorer/noita-component-library';
 import { EnemyFilters } from './enemy-filters.ts';
 import { Dispatch } from 'react';
-import { MultiSelection } from '../../../components/multi-selection/multi-selection.tsx';
 import { NoitaProtections } from '../../../noita/noita-protections.ts';
 
 export const EnemyFiltersView = ({
@@ -13,33 +16,13 @@ export const EnemyFiltersView = ({
   setFilters: Dispatch<EnemyFilters>;
   usedProtectionIds: string[];
 }) => {
+  const MultiSelectionString = MultiSelection<string | undefined>();
+
   return (
     <Card>
       <div style={{ gap: 10, justifyContent: 'center' }}>
         <span>Protections:</span>
-        <MultiSelection<string | undefined>
-          options={Object.keys(NoitaProtections)
-            .filter((p) => usedProtectionIds.includes(p))
-            .map((protectionId) => ({
-              id: protectionId,
-              value: protectionId,
-              display: (
-                <Icon
-                  type={'custom'}
-                  src={NoitaProtections[protectionId].image}
-                  size={30}
-                />
-              ),
-              style: {
-                opacity: 0.6,
-              },
-              selectedProperties: {
-                opacity: 1,
-              },
-              onClick: (_, isSelected) =>
-                isSelected &&
-                setFilters({ ...filters, protectionId: undefined }),
-            }))}
+        <MultiSelectionString
           setValue={(value) =>
             setFilters({
               ...filters,
@@ -47,7 +30,23 @@ export const EnemyFiltersView = ({
             })
           }
           currentValue={filters.protectionId}
-        />
+          unselectOnClick
+        >
+          {Object.keys(NoitaProtections)
+            .filter((p) => usedProtectionIds.includes(p))
+            .map((protectionId) => {
+              const protection = NoitaProtections[protectionId];
+              return (
+                <MultiSelectionString.Item
+                  value={protectionId}
+                  style={{ opacity: 0.6 }}
+                  selectedProperties={{ opacity: 1 }}
+                >
+                  <Icon type={'custom'} src={protection.image} size={30} />
+                </MultiSelectionString.Item>
+              );
+            })}
+        </MultiSelectionString>
       </div>
     </Card>
   );
