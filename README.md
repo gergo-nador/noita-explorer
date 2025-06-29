@@ -44,10 +44,7 @@ version cannot be restored!
   - Extras / Display debug info: Reveals the collected debug information during the scraping of the data.wak, such as tags for enemies, scraped files. Currently only a limited amount of debug information is collected.
 
 Features marked with a [*] star are only available in browser that support the [File System API](https://caniuse.com/native-filesystem-api).
-At the moment writing this README, only these browser do maintain a support:
-- Chrome: 105 - current
-- Edge: 105 - current
-- Opera: 91 - current
+You can check if your browser supports it here: https://caniuse.com/native-filesystem-api
 
 ### Features - Desktop version
 
