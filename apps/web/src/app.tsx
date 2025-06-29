@@ -18,7 +18,7 @@ import { initParticlesEngine } from '@tsparticles/react';
 import { loadFull } from 'tsparticles';
 import { loadEmittersPlugin } from '@tsparticles/plugin-emitters';
 import { useOnboarding } from './hooks/use-onboarding.ts';
-import { Head } from './components/head/head.tsx';
+import { Head } from '@noita-explorer/react-utils';
 
 export const App = () => {
   const { loaded: settingsLoaded } = useSettingsStore();

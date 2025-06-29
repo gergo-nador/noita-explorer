@@ -1,13 +1,14 @@
 import { createBrowserRouter, Outlet } from 'react-router-dom';
-import { MainPage } from '../pages/main-page.tsx';
+import { DocumentTitle } from '@noita-explorer/react-utils';
+import { pages } from './pages.ts';
 
+import { MainPage } from '../pages/main-page.tsx';
 import { NoitaHolidays } from '../pages/holidays/noita-holidays.tsx';
 import { CardPageTemplate } from '../pages/_templates/card-page-template.tsx';
 import { SetupDesktopPaths } from '../pages/setup/setup-desktop-paths.tsx';
 import { SetupDesktopScraper } from '../pages/setup/setup-desktop-scraper.tsx';
 import { NoitaProgressTracker } from '../pages/progress/noita-progress-tracker.tsx';
 import { TabPageTemplate } from '../pages/_templates/tab-page-template.tsx';
-import { pages } from './pages.ts';
 import { WikiPerks } from '../pages/wiki/perks/wiki-perks.tsx';
 import { WikiSpells } from '../pages/wiki/spells/wiki-spells.tsx';
 import { WikiEnemies } from '../pages/wiki/enemies/wiki-enemies.tsx';
@@ -24,7 +25,6 @@ import { WikiMaterials } from '../pages/wiki/materials/wiki-materials.tsx';
 import { Credits } from '../pages/credits.tsx';
 import { NoitaProgressTrackerSecrets } from '../pages/progress/noita-progress-tracker-secrets.tsx';
 import { NoitaProgressTrackerPillar } from '../pages/progress/noita-progress-tracker-pillar/noita-progress-tracker-pillar.tsx';
-import { DocumentTitle } from '../components/document-title/document-title.tsx';
 import { environment } from '../environment.ts';
 import { Sandbox } from '../pages/sandbox.tsx';
 import { Background } from '../components/background.tsx';
