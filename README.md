@@ -158,8 +158,9 @@ The project is structured in the following way:
   - `packages/scrapers`: All functions related to scraping and modifying Noita files 
     - `src/actions`: Actions that modify the save files.
     - `src/scrapers`: Functions to scrape data from data.wak or save00 folder. These functions don't modify any files on the disk
-  - `noita-component-library`: Reusable Noita components without Noita logic
+  - `packages/noita-component-library`: Reusable Noita components without Noita logic
     - run `npm run dev:storybook` to view the components (not finished)
+  - `packages/react-utils`: Reusable react util components and hooks, which are not related to noita
 
 Dependency Graph:
 <img src="turbo-graph.png">
