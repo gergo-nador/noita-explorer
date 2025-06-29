@@ -8,6 +8,7 @@ export { Header } from './components/header';
 export { NoitaToaster } from './components/noita-toaster';
 export { NoitaTooltipWrapper } from './components/noita-tooltip-wrapper';
 export { PixelatedImage } from './components/pixelated-image';
+export { Flex } from './components/flex';
 
 export { TabView } from './components/tabs/tab-view';
 
