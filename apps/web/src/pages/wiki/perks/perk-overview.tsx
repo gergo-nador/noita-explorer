@@ -2,10 +2,10 @@ import { NoitaPerk } from '@noita-explorer/model-noita';
 import {
   Icon,
   NoitaTooltipWrapper,
+  BooleanIcon,
 } from '@noita-explorer/noita-component-library';
 import { Flex } from '@noita-explorer/react-utils';
 import { NoitaProtections } from '../../../noita/noita-protections.ts';
-import { BooleanIcon } from '../../../components/boolean-icon.tsx';
 
 export const PerkOverview = ({ perk }: { perk: NoitaPerk }) => {
   const tableSectionDivider = <td colSpan={3} style={{ height: 20 }}></td>;

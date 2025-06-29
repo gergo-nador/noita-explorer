@@ -9,6 +9,7 @@ export { NoitaToaster } from './components/noita-toaster';
 export { NoitaTooltipWrapper } from './components/noita-tooltip-wrapper';
 export { PixelatedImage } from './components/pixelated-image';
 export { ProgressBar } from './components/progress-bar';
+export { BooleanIcon } from './components/boolean-icon';
 
 export { TabView } from './components/tabs/tab-view';
 

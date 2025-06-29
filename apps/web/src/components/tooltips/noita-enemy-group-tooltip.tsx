@@ -1,6 +1,6 @@
 import { StringKeyDictionary } from '@noita-explorer/model';
 import { EnemyStatistic, NoitaEnemyGroup } from '@noita-explorer/model-noita';
-import { BooleanIcon } from '../boolean-icon.tsx';
+import { BooleanIcon } from '@noita-explorer/noita-component-library';
 import { Flex } from '@noita-explorer/react-utils';
 import { NoitaUnknownTooltip } from './noita-unknown-tooltip.tsx';
 

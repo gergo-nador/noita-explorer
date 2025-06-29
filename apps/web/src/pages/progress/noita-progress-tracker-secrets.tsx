@@ -8,9 +8,9 @@ import { Flex } from '@noita-explorer/react-utils';
 import {
   Button,
   PixelatedImage,
+  BooleanIcon,
 } from '@noita-explorer/noita-component-library';
 import { CSSProperties } from 'react';
-import { BooleanIcon } from '../../components/boolean-icon.tsx';
 import { useNoitaActionsStore } from '../../stores/actions.ts';
 
 export const NoitaProgressTrackerSecrets = () => {

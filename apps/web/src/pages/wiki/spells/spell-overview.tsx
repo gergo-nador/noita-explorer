@@ -1,8 +1,7 @@
 import { NoitaSpell } from '@noita-explorer/model-noita';
-import { Icon } from '@noita-explorer/noita-component-library';
+import { Icon, BooleanIcon } from '@noita-explorer/noita-component-library';
 import { NoitaSpellTypesDictionary } from '../../../noita/noita-spell-type-dictionary.ts';
 import { useNoitaUnits } from '../../../hooks/use-noita-units.ts';
-import { BooleanIcon } from '../../../components/boolean-icon.tsx';
 import { TooltipRowData } from '../../../components/tooltips/noita-spell-tooltip.tsx';
 
 import actionTypeIcon from '../../../assets/icons/spells/icon_action_type.png';
