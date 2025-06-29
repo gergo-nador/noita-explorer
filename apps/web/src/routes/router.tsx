@@ -28,7 +28,7 @@ import { DocumentTitle } from '../components/document-title/document-title.tsx';
 import { environment } from '../environment.ts';
 import { Sandbox } from '../pages/sandbox.tsx';
 import { Background } from '../components/background.tsx';
-import { ErrorRoutePage } from '../pages/error-route-page.tsx';
+import { Error404Page } from '../pages/error-404-page.tsx';
 
 export const router = createBrowserRouter([
   {
@@ -42,7 +42,7 @@ export const router = createBrowserRouter([
     errorElement: (
       <>
         <Background />
-        <ErrorRoutePage />
+        <Error404Page />
       </>
     ),
     children: [

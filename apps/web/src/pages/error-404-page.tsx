@@ -7,7 +7,7 @@ import { useMemo } from 'react';
 import { StringKeyDictionaryComposite } from '@noita-explorer/model';
 import { pages } from '../routes/pages.ts';
 
-export const ErrorRoutePage = () => {
+export const Error404Page = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const currentPathName = location.pathname;
