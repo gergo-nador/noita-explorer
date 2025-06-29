@@ -1,4 +1,4 @@
-import { Separator } from '../../components/separator.tsx';
+import { Separator } from '@noita-explorer/react-utils';
 import { getNoitaHolidays } from './get-noita-holidays.tsx';
 import { Flex } from '@noita-explorer/react-utils';
 import { HolidayCard } from './holiday-card.tsx';
