@@ -6,13 +6,15 @@ import {
 import { NoitaSpellTypesDictionary } from '../../../noita/noita-spell-type-dictionary.ts';
 import { NoitaProgressIconTable } from '../../../components/noita-progress-icon-table.tsx';
 import { useNoitaDataWakStore } from '../../../stores/noita-data-wak.ts';
-import { useStateWithQueryParamsString } from '../../../hooks/use-state-with-query-params-string.ts';
 import { NoitaSpell } from '@noita-explorer/model-noita';
 import { SpellOverview } from './spell-overview.tsx';
 import { SpellFiltersView } from './spell-filters-view.tsx';
 import { useState } from 'react';
 import { SpellFilters } from './spell-filters.ts';
-import { Flex } from '@noita-explorer/react-utils';
+import {
+  Flex,
+  useStateWithQueryParamsString,
+} from '@noita-explorer/react-utils';
 
 export const WikiSpells = () => {
   const { data } = useNoitaDataWakStore();

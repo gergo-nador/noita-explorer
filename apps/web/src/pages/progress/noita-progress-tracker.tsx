@@ -15,10 +15,9 @@ import { NoitaEnemyGroupTooltip } from '../../components/tooltips/noita-enemy-gr
 import { useNoitaEnemyGroups } from '../../hooks/use-noita-enemy-groups.ts';
 import { arrayHelpers } from '@noita-explorer/tools';
 import { MultiSelectionBoolean } from '../../components/multi-selection/multi-selection-boolean.tsx';
-import { useQueryParamsBoolean } from '../../hooks/use-query-params-boolean.ts';
 import { useNoitaActionsStore } from '../../stores/actions.ts';
 import { noitaAPI } from '../../noita-api.ts';
-import { Flex } from '@noita-explorer/react-utils';
+import { Flex, useQueryParamsBoolean } from '@noita-explorer/react-utils';
 import { useNavigate } from 'react-router-dom';
 import { pages } from '../../routes/pages.ts';
 

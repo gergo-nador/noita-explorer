@@ -7,12 +7,14 @@ import {
 } from '@noita-explorer/noita-component-library';
 import { useMemo, useState } from 'react';
 import { arrayHelpers } from '@noita-explorer/tools';
-import { useStateWithQueryParamsString } from '../../../hooks/use-state-with-query-params-string.ts';
 import { NoitaMaterial } from '@noita-explorer/model-noita';
 import { MaterialOverview } from './material-overview.tsx';
 import { MaterialFilters } from './material-filters.ts';
 import { MaterialFiltersView } from './material-filters-view.tsx';
-import { Flex } from '@noita-explorer/react-utils';
+import {
+  Flex,
+  useStateWithQueryParamsString,
+} from '@noita-explorer/react-utils';
 
 export const WikiMaterials = () => {
   const { data } = useNoitaDataWakStore();

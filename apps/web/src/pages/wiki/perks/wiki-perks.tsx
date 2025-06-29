@@ -9,11 +9,13 @@ import { useMemo, useState } from 'react';
 import { NoitaPerk } from '@noita-explorer/model-noita';
 import { useSave00Store } from '../../../stores/save00.ts';
 import { arrayHelpers } from '@noita-explorer/tools';
-import { useStateWithQueryParamsString } from '../../../hooks/use-state-with-query-params-string.ts';
 import { PerkFilters } from './perk-filters.ts';
 import { PerkFiltersView } from './perk-filters-view.tsx';
 import { PerkOverview } from './perk-overview.tsx';
-import { Flex } from '@noita-explorer/react-utils';
+import {
+  Flex,
+  useStateWithQueryParamsString,
+} from '@noita-explorer/react-utils';
 
 export const WikiPerks = () => {
   const { data } = useNoitaDataWakStore();
