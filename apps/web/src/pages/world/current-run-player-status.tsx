@@ -7,7 +7,7 @@ import {
   Icon,
   NoitaTooltipWrapper,
 } from '@noita-explorer/noita-component-library';
-import { ProgressBar } from '../../components/progress-bar.tsx';
+import { ProgressBar } from '@noita-explorer/noita-component-library';
 import { useSave00Store } from '../../stores/save00.ts';
 import { mathHelpers } from '@noita-explorer/tools';
 import { Flex } from '@noita-explorer/react-utils';
