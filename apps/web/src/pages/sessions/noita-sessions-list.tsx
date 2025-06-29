@@ -19,7 +19,7 @@ import lifetimeIcon from '../../assets/icons/spells/lifetime.webp';
 import moneyIcon from '../../assets/icons/money.png';
 import deathIcon from '../../assets/icons/icon_danger.png';
 import enemyIcon from '../../assets/icons/enemy.png';
-import { HoveredStyle } from '../../components/hovered-style.tsx';
+import { HoveredStyle } from '@noita-explorer/react-utils';
 
 interface NoitaSessionsListProps {
   sessionsGrouped: StringKeyDictionary<NoitaSession[]>;
