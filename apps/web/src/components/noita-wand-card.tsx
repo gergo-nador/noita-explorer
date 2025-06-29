@@ -26,6 +26,7 @@ import gunPermanentActionIcon from '../assets/icons/icon_gun_permanent_actions.p
 import { noitaAPI } from '../noita-api.ts';
 import { useNoitaActionsStore } from '../stores/actions.ts';
 import { Flex } from '@noita-explorer/react-utils';
+import { ConditionalWrapper } from '@noita-explorer/react-utils';
 
 interface NoitaWandCardProps {
   wand: NoitaWand;
@@ -224,133 +225,135 @@ export const NoitaWandCard = ({
     bonesFileName ?? '',
   );
 
-  const card = (
-    <div style={{ width: 'min-content' }}>
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'max-content max-content',
-          gap: 30,
-          position: 'relative',
-        }}
-      >
-        <div>
-          <div style={{ fontSize: 20 }}>{wand.name}</div>
-          {noitaAPI.environment.features.bonesWandDelete && bonesFileName && (
-            <>
-              <div style={{ opacity: 0.6, marginTop: 5 }}>{bonesFileName}</div>
-              <div
-                className={css['visible-on-hover']}
-                style={{
-                  position: 'absolute',
-                  top: 0,
-                  right: 0,
-                }}
-                onClick={() => {
-                  if (!isOnDeleteList) {
-                    actionUtils.deleteBonesWand.create(bonesFileName);
-                    return;
-                  }
-
-                  const action = actionUtils.deleteBonesWand.get(bonesFileName);
-                  if (action) {
-                    actionUtils.removeAction(action);
-                  }
-                }}
-              >
-                <Icon
-                  size={20}
-                  type={'cross'}
-                  style={
-                    isOnDeleteList
-                      ? {
-                          cursor: 'pointer',
-                          filter: 'grayscale()',
-                        }
-                      : { cursor: 'pointer' }
-                  }
-                />
-              </div>
-            </>
-          )}
-
-          <br />
-          <table>
-            <tbody>
-              {rows.map((row) => (
-                <tr key={row.text}>
-                  <td>{row.icon}</td>
-                  <td>{row.text}</td>
-                  <td style={{ paddingLeft: 15 }}>{row.value}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <Flex center>
-          {wandImage && (
-            <Icon
-              type={'custom'}
-              src={wandImage}
-              style={{ zoom: 5, transform: 'rotate(-90deg)' }}
-            />
-          )}
-        </Flex>
-      </div>
-
-      {wand.alwaysCastSpells.length > 0 && (
-        <>
-          <br />
-          <Flex
-            wrap='wrap'
-            gap={10}
-            align='center'
-            style={{
-              paddingLeft: 2,
-            }}
-          >
-            <Icon type={'custom'} src={gunPermanentActionIcon} size={15} />
-            <div style={{ paddingRight: 10 }}>Always casts</div>
-            {spellIconsAlwaysCast}
-          </Flex>
-        </>
-      )}
-
-      <br />
-      <Flex wrap='wrap' gap={5}>
-        {spellIcons?.map((icon) => (
-          <div key={icon.key} style={{ display: 'contents' }}>
-            {icon.spellComponent}
-          </div>
-        ))}
-      </Flex>
-      {wand.spellsPossibleIncorrectOrder && (
-        <div>
-          <Icon type={'warning'} size={30} />
-          <span>Spell order might be incorrect</span>
-          <Icon type={'warning'} size={30} />
-        </div>
-      )}
-    </div>
-  );
-
-  if (withoutCardBorder) {
-    return card;
-  }
-
   return (
-    <Card
-      className={css['container']}
-      style={{
-        maxWidth: '100%',
-      }}
-      styling={{
-        borderBright: isOnDeleteList ? '#d55456' : undefined,
-        borderDark: isOnDeleteList ? '#d55456' : undefined,
-      }}
+    <ConditionalWrapper
+      condition={!withoutCardBorder}
+      wrapper={(children) => (
+        <Card
+          className={css['container']}
+          style={{
+            maxWidth: '100%',
+          }}
+          styling={{
+            borderBright: isOnDeleteList ? '#d55456' : undefined,
+            borderDark: isOnDeleteList ? '#d55456' : undefined,
+          }}
+        >
+          {children}
+        </Card>
+      )}
     >
-      {card}
-    </Card>
+      <div style={{ width: 'min-content' }}>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'max-content max-content',
+            gap: 30,
+            position: 'relative',
+          }}
+        >
+          <div>
+            <div style={{ fontSize: 20 }}>{wand.name}</div>
+            {noitaAPI.environment.features.bonesWandDelete && bonesFileName && (
+              <>
+                <div style={{ opacity: 0.6, marginTop: 5 }}>
+                  {bonesFileName}
+                </div>
+                <div
+                  className={css['visible-on-hover']}
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    right: 0,
+                  }}
+                  onClick={() => {
+                    if (!isOnDeleteList) {
+                      actionUtils.deleteBonesWand.create(bonesFileName);
+                      return;
+                    }
+
+                    const action =
+                      actionUtils.deleteBonesWand.get(bonesFileName);
+                    if (action) {
+                      actionUtils.removeAction(action);
+                    }
+                  }}
+                >
+                  <Icon
+                    size={20}
+                    type={'cross'}
+                    style={
+                      isOnDeleteList
+                        ? {
+                            cursor: 'pointer',
+                            filter: 'grayscale()',
+                          }
+                        : { cursor: 'pointer' }
+                    }
+                  />
+                </div>
+              </>
+            )}
+
+            <br />
+            <table>
+              <tbody>
+                {rows.map((row) => (
+                  <tr key={row.text}>
+                    <td>{row.icon}</td>
+                    <td>{row.text}</td>
+                    <td style={{ paddingLeft: 15 }}>{row.value}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <Flex center>
+            {wandImage && (
+              <Icon
+                type={'custom'}
+                src={wandImage}
+                style={{ zoom: 5, transform: 'rotate(-90deg)' }}
+              />
+            )}
+          </Flex>
+        </div>
+
+        {wand.alwaysCastSpells.length > 0 && (
+          <>
+            <br />
+            <Flex
+              wrap='wrap'
+              gap={10}
+              align='center'
+              style={{
+                paddingLeft: 2,
+              }}
+            >
+              <Icon type={'custom'} src={gunPermanentActionIcon} size={15} />
+              <div style={{ paddingRight: 10 }}>Always casts</div>
+              {spellIconsAlwaysCast}
+            </Flex>
+          </>
+        )}
+
+        <br />
+        <Flex wrap='wrap' gap={5}>
+          {spellIcons?.map((icon) => (
+            <div key={icon.key} style={{ display: 'contents' }}>
+              {icon.spellComponent}
+            </div>
+          ))}
+        </Flex>
+        {wand.spellsPossibleIncorrectOrder && (
+          <div>
+            <Icon type={'warning'} size={30} />
+            <span>Spell order might be incorrect</span>
+            <Icon type={'warning'} size={30} />
+          </div>
+        )}
+      </div>
+    </ConditionalWrapper>
   );
 };
 
