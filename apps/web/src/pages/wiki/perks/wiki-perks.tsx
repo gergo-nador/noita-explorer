@@ -13,14 +13,11 @@ import { PerkFilters } from './perk-filters.ts';
 import { PerkFiltersView } from './perk-filters-view.tsx';
 import { PerkOverview } from './perk-overview.tsx';
 import { Flex } from '@noita-explorer/react-utils';
-import { useLocation } from 'react-router-dom';
 import { useStateWithQueryParamsString } from '../../../hooks/query-params/use-state-with-query-params-string.ts';
 
 export const WikiPerks = () => {
   const { data } = useNoitaDataWakStore();
 
-  const location = useLocation();
-  console.log(location.pathname);
   const [selectedPerk, setSelectedPerk] =
     useStateWithQueryParamsString<NoitaPerk>({
       key: 'perk',
@@ -28,10 +25,6 @@ export const WikiPerks = () => {
       findValueBasedOnQueryParam: (perkId) =>
         data?.perks?.find((perk) => perk.id === perkId),
     });
-
-  const a = undefined as unknown as { ag: string };
-
-  console.log(a.ag);
 
   const [filters, setFilters] = useState<PerkFilters>({
     stackable: undefined,
