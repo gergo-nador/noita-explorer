@@ -10,7 +10,7 @@ import {
 import { ProgressBar } from '../../components/progress-bar.tsx';
 import { useSave00Store } from '../../stores/save00.ts';
 import { mathHelpers } from '@noita-explorer/tools';
-import { Flex } from '../../components/flex.tsx';
+import { Flex } from '@noita-explorer/react-utils';
 
 export const CurrentRunPlayerStatus = () => {
   const { currentRun } = useSave00Store();

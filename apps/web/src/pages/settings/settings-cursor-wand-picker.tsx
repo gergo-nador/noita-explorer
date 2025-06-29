@@ -1,7 +1,7 @@
 import { useSettingsStore } from '../../stores/settings.ts';
 import { useNoitaDataWakStore } from '../../stores/noita-data-wak.ts';
 import { Button, Card, Icon } from '@noita-explorer/noita-component-library';
-import { Flex } from '../../components/flex.tsx';
+import { Flex } from '@noita-explorer/react-utils';
 import { useMemo } from 'react';
 
 export const SettingsCursorWandPicker = () => {

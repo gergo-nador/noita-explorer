@@ -4,7 +4,7 @@ import {
   NoitaTooltipWrapper,
 } from '@noita-explorer/noita-component-library';
 import { CurrentRunPerksView } from './current-run-perks-view.tsx';
-import { Flex } from '../../components/flex.tsx';
+import { Flex } from '@noita-explorer/react-utils';
 import { useSave00Store } from '../../stores/save00.ts';
 import { NoitaWandCard } from '../../components/noita-wand-card.tsx';
 import { CurrentRunPlayerStatus } from './current-run-player-status.tsx';

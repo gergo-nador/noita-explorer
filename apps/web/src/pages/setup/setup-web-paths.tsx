@@ -7,7 +7,7 @@ import { PathInput } from '../../components/path-input.tsx';
 import { useSettingsStore } from '../../stores/settings.ts';
 import { useSave00Store } from '../../stores/save00.ts';
 import { noitaAPI } from '../../noita-api.ts';
-import { Flex } from '../../components/flex.tsx';
+import { Flex } from '@noita-explorer/react-utils';
 
 export const SetupWebPaths = () => {
   const { settings, set: setPaths } = useSettingsStore();

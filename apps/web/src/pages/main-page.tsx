@@ -5,7 +5,7 @@ import { useNoitaDataWakStore } from '../stores/noita-data-wak.ts';
 import { noitaAPI } from '../noita-api.ts';
 import { useSave00Store } from '../stores/save00.ts';
 import { useMemo } from 'react';
-import { Flex } from '../components/flex.tsx';
+import { Flex } from '@noita-explorer/react-utils';
 import { environment } from '../environment.ts';
 import { dateHelpers } from '@noita-explorer/tools';
 

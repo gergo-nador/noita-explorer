@@ -2,7 +2,7 @@ import { useRef } from 'react';
 import { useSettingsStore } from '../../stores/settings.ts';
 import { SpoilerWarningPage } from './spoiler-warning-page.tsx';
 import { SentryAcceptancePage } from './sentry-acceptance-page.tsx';
-import { Flex } from '../../components/flex.tsx';
+import { Flex } from '@noita-explorer/react-utils';
 
 export const Onboarding = () => {
   const { settings } = useSettingsStore();

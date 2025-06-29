@@ -1,7 +1,7 @@
 import React from 'react';
 import { constants } from '../../constants.ts';
 import { useTemplatePageLogic } from '../../hooks/use-template-page-logic.tsx';
-import { Flex } from '../../components/flex.tsx';
+import { Flex } from '@noita-explorer/react-utils';
 
 interface EmptyPageTemplateProps {
   children?: React.ReactNode | React.ReactNode[];

@@ -12,7 +12,7 @@ import { Dispatch, useMemo, useState } from 'react';
 import { EnemyFilters } from './enemy-filters.ts';
 import { EnemyFiltersView } from './enemy-filters-view.tsx';
 import { arrayHelpers } from '@noita-explorer/tools';
-import { Flex } from '../../../components/flex.tsx';
+import { Flex } from '@noita-explorer/react-utils';
 
 export const WikiEnemies = () => {
   const { data } = useNoitaDataWakStore();

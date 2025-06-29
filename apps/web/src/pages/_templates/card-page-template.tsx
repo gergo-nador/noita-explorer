@@ -1,7 +1,7 @@
 import React from 'react';
 import { CardPageHeight } from '../../components/card-page-height.tsx';
 import { useTemplatePageLogic } from '../../hooks/use-template-page-logic.tsx';
-import { Flex } from '../../components/flex.tsx';
+import { Flex } from '@noita-explorer/react-utils';
 
 interface CardPageTemplateProps {
   children?: React.ReactNode | React.ReactNode[];

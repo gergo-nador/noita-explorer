@@ -12,7 +12,7 @@ import { NoitaMaterial } from '@noita-explorer/model-noita';
 import { MaterialOverview } from './material-overview.tsx';
 import { MaterialFilters } from './material-filters.ts';
 import { MaterialFiltersView } from './material-filters-view.tsx';
-import { Flex } from '../../../components/flex.tsx';
+import { Flex } from '@noita-explorer/react-utils';
 
 export const WikiMaterials = () => {
   const { data } = useNoitaDataWakStore();

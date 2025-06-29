@@ -11,7 +11,7 @@ import { pages } from '../../routes/pages';
 import { useEffect, useState } from 'react';
 import { PageBottomComponent } from '../../components/page-bottom-component.tsx';
 import { PathInput } from '../../components/path-input.tsx';
-import { Flex } from '../../components/flex.tsx';
+import { Flex } from '@noita-explorer/react-utils';
 
 export const SetupDesktopPaths = () => {
   const { settings, set: setPaths } = useSettingsStore();

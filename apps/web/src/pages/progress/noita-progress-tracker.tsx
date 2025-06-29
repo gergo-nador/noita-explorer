@@ -18,7 +18,7 @@ import { MultiSelectionBoolean } from '../../components/multi-selection/multi-se
 import { useQueryParamsBoolean } from '../../hooks/use-query-params-boolean.ts';
 import { useNoitaActionsStore } from '../../stores/actions.ts';
 import { noitaAPI } from '../../noita-api.ts';
-import { Flex } from '../../components/flex.tsx';
+import { Flex } from '@noita-explorer/react-utils';
 import { useNavigate } from 'react-router-dom';
 import { pages } from '../../routes/pages.ts';
 

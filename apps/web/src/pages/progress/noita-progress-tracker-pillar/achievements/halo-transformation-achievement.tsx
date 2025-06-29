@@ -1,7 +1,7 @@
 import { StringKeyDictionary } from '@noita-explorer/model';
 import { AchievementPerk } from '../achievement-perk.ts';
 import { arrayHelpers, colorHelpers, ifStatement } from '@noita-explorer/tools';
-import { Flex } from '../../../../components/flex.tsx';
+import { Flex } from '@noita-explorer/react-utils';
 import { Icon, ProgressIcon } from '@noita-explorer/noita-component-library';
 import halo from '../../../../assets/player_halo_light.png';
 import haloDark from '../../../../assets/player_halo_dark.png';

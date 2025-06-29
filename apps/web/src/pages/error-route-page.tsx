@@ -1,4 +1,4 @@
-import { Flex } from '../components/flex.tsx';
+import { Flex } from '@noita-explorer/react-utils';
 import { Button, Card } from '@noita-explorer/noita-component-library';
 import { useLocation, Link, useNavigate } from 'react-router-dom';
 import { diffChars } from 'diff';

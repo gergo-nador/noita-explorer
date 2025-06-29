@@ -3,7 +3,7 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useTemplatePageLogic } from '../../hooks/use-template-page-logic.tsx';
 import { useEffect, useState } from 'react';
 import { stringHelpers } from '@noita-explorer/tools';
-import { Flex } from '../../components/flex.tsx';
+import { Flex } from '@noita-explorer/react-utils';
 
 interface TabLink {
   title: string;

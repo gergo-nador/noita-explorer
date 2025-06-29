@@ -2,7 +2,7 @@ import { Button, Card, Icon } from '@noita-explorer/noita-component-library';
 import { useState } from 'react';
 import { useNoitaActionsStore } from '../../stores/actions.ts';
 import { useRunActions } from '../../hooks/use-run-actions.ts';
-import { Flex } from '../flex.tsx';
+import { Flex } from '@noita-explorer/react-utils';
 import { NoitaActionResult } from '@noita-explorer/model-noita';
 
 export const ActionsPanel = () => {

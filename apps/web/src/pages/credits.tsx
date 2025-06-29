@@ -1,6 +1,6 @@
 import github from '../assets/external/github.png';
 import { Button, Icon } from '@noita-explorer/noita-component-library';
-import { Flex } from '../components/flex.tsx';
+import { Flex } from '@noita-explorer/react-utils';
 import { deployUrls, environment } from '../environment.ts';
 
 export const Credits = () => {

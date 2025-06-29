@@ -26,7 +26,7 @@ import speedModifierIcon from '../../../assets/icons/spells/icon_speed_multiplie
 import recoilModifierIcon from '../../../assets/icons/spells/icon_recoil.png';
 import spreadModifierIcon from '../../../assets/icons/spells/icon_spread_degrees.png';
 import { NoitaNumberModifier } from '../../../components/tooltips/noita-number-modifier.tsx';
-import { Flex } from '../../../components/flex.tsx';
+import { Flex } from '@noita-explorer/react-utils';
 
 export const SpellOverview = ({ spell }: { spell: NoitaSpell }) => {
   const actionType = NoitaSpellTypesDictionary[spell.type];

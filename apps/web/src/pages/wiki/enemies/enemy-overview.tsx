@@ -8,7 +8,7 @@ import {
 } from '@noita-explorer/noita-component-library';
 import heartIcon from '../../../assets/heart.png';
 import goldNuggetIcon from '../../../assets/goldnugget_icon.png';
-import { Flex } from '../../../components/flex.tsx';
+import { Flex } from '@noita-explorer/react-utils';
 import { NoitaProtections } from '../../../noita/noita-protections.ts';
 import { DamageMultiplierDisplay } from './damage-multiplier-display.tsx';
 

@@ -1,4 +1,4 @@
-import { Flex } from '../../components/flex.tsx';
+import { Flex } from '@noita-explorer/react-utils';
 import { Header } from '@noita-explorer/noita-component-library';
 import { SettingsUnitsType, useSettingsStore } from '../../stores/settings.ts';
 import { MultiSelection } from '../../components/multi-selection/multi-selection.tsx';

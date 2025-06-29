@@ -1,7 +1,7 @@
 import { StringKeyDictionary } from '@noita-explorer/model';
 import { EnemyStatistic, NoitaEnemyGroup } from '@noita-explorer/model-noita';
 import { BooleanIcon } from '../boolean-icon.tsx';
-import { Flex } from '../flex.tsx';
+import { Flex } from '@noita-explorer/react-utils';
 import { NoitaUnknownTooltip } from './noita-unknown-tooltip.tsx';
 
 interface NoitaEnemyTooltipProps {

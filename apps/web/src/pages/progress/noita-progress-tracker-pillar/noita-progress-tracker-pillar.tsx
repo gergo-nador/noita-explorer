@@ -2,7 +2,7 @@ import { useNoitaProgressTrackerPillarDefinitions } from './noita-progress-track
 import { enumerateHelpers } from '@noita-explorer/tools';
 import { useSave00Store } from '../../../stores/save00.ts';
 import { NoitaTooltipWrapper } from '@noita-explorer/noita-component-library';
-import { Flex } from '../../../components/flex.tsx';
+import { Flex } from '@noita-explorer/react-utils';
 import { useNoitaActionsStore } from '../../../stores/actions.ts';
 
 export const NoitaProgressTrackerPillar = () => {

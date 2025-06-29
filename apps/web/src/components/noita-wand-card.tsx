@@ -25,7 +25,7 @@ import actionsPerRoundIcon from '../assets/icons/icon_gun_actions_per_round.png'
 import gunPermanentActionIcon from '../assets/icons/icon_gun_permanent_actions.png';
 import { noitaAPI } from '../noita-api.ts';
 import { useNoitaActionsStore } from '../stores/actions.ts';
-import { Flex } from './flex.tsx';
+import { Flex } from '@noita-explorer/react-utils';
 
 interface NoitaWandCardProps {
   wand: NoitaWand;

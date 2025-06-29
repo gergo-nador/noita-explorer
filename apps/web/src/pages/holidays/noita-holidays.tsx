@@ -1,6 +1,6 @@
 import { Separator } from '../../components/separator.tsx';
 import { getNoitaHolidays } from './get-noita-holidays.tsx';
-import { Flex } from '../../components/flex.tsx';
+import { Flex } from '@noita-explorer/react-utils';
 import { HolidayCard } from './holiday-card.tsx';
 import { NoitaHolidayContext } from '../../contexts/noita-holiday-context.ts';
 import { useFireworkComponent } from '../../hooks/use-firework-component.tsx';

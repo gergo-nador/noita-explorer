@@ -2,7 +2,7 @@ import { NoitaSpell, NoitaWandSpell } from '@noita-explorer/model-noita';
 import { Icon } from '@noita-explorer/noita-component-library';
 import { NoitaSpellTypesDictionary } from '../../noita/noita-spell-type-dictionary.ts';
 import { BooleanIcon } from '../boolean-icon.tsx';
-import { Flex } from '../flex.tsx';
+import { Flex } from '@noita-explorer/react-utils';
 import { useNoitaUnits } from '../../hooks/use-noita-units.ts';
 import React from 'react';
 import { NoitaUnknownTooltip } from './noita-unknown-tooltip.tsx';

@@ -7,7 +7,7 @@ import {
 } from '@noita-explorer/tools';
 import { NoitaMaterial } from '@noita-explorer/model-noita';
 import { StringKeyDictionary } from '@noita-explorer/model';
-import { Flex } from '../../components/flex.tsx';
+import { Flex } from '@noita-explorer/react-utils';
 
 interface MaterialTreeNode extends NoitaMaterial {
   children: MaterialTreeNode[];

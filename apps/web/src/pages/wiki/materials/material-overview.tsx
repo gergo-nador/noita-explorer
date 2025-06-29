@@ -2,7 +2,7 @@ import { NoitaMaterial } from '@noita-explorer/model-noita';
 import { NoitaMaterialIcon } from '../../../components/noita-material-icon.tsx';
 import { useNoitaDataWakStore } from '../../../stores/noita-data-wak.ts';
 import { useMemo } from 'react';
-import { Flex } from '../../../components/flex.tsx';
+import { Flex } from '@noita-explorer/react-utils';
 
 interface Props {
   material: NoitaMaterial;

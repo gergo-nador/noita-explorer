@@ -3,7 +3,7 @@ import {
   Icon,
   NoitaTooltipWrapper,
 } from '@noita-explorer/noita-component-library';
-import { Flex } from '../../../components/flex.tsx';
+import { Flex } from '@noita-explorer/react-utils';
 import { NoitaProtections } from '../../../noita/noita-protections.ts';
 import { BooleanIcon } from '../../../components/boolean-icon.tsx';
 

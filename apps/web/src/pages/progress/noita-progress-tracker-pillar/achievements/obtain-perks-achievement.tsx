@@ -1,5 +1,5 @@
 import { StringKeyDictionary } from '@noita-explorer/model';
-import { Flex } from '../../../../components/flex.tsx';
+import { Flex } from '@noita-explorer/react-utils';
 import { ProgressIcon } from '@noita-explorer/noita-component-library';
 import { AchievementPerk } from '../achievement-perk.ts';
 

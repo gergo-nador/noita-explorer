@@ -12,7 +12,7 @@ import { SpellOverview } from './spell-overview.tsx';
 import { SpellFiltersView } from './spell-filters-view.tsx';
 import { useState } from 'react';
 import { SpellFilters } from './spell-filters.ts';
-import { Flex } from '../../../components/flex.tsx';
+import { Flex } from '@noita-explorer/react-utils';
 
 export const WikiSpells = () => {
   const { data } = useNoitaDataWakStore();

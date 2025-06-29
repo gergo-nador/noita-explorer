@@ -4,7 +4,7 @@ import playerAmuletGem from '../../assets/player/player_amulet_gem.png';
 import playerCrown from '../../assets/player/player_crown.png';
 
 import { useSave00Store } from '../../stores/save00.ts';
-import { Flex } from '../../components/flex.tsx';
+import { Flex } from '@noita-explorer/react-utils';
 import {
   Button,
   PixelatedImage,

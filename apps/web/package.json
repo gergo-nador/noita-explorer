@@ -13,6 +13,7 @@
     "@noita-explorer/file-systems": "*",
     "@noita-explorer/model": "*",
     "@noita-explorer/model-noita": "*",
+    "@noita-explorer/react-utils": "*",
     "@noita-explorer/noita-component-library": "*",
     "@noita-explorer/scrapers": "*",
     "@noita-explorer/tools": "*",

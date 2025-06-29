@@ -1,5 +1,5 @@
 import { Card, Icon } from '@noita-explorer/noita-component-library';
-import { Flex } from '../../../components/flex.tsx';
+import { Flex } from '@noita-explorer/react-utils';
 import { MultiSelectionBooleanNullable } from '../../../components/multi-selection/multi-selection-boolean-nullable.tsx';
 import { MultiSelection } from '../../../components/multi-selection/multi-selection.tsx';
 import { NoitaProtections } from '../../../noita/noita-protections.ts';

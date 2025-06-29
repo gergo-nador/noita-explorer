@@ -1,6 +1,6 @@
 import { Button } from '@noita-explorer/noita-component-library';
 import React from 'react';
-import { Flex } from '../flex.tsx';
+import { Flex } from '@noita-explorer/react-utils';
 
 interface MultiSelectionOption<T> {
   id: string;

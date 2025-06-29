@@ -1,4 +1,4 @@
-import { Flex } from '../../components/flex.tsx';
+import { Flex } from '@noita-explorer/react-utils';
 import { Button, Header } from '@noita-explorer/noita-component-library';
 import {
   SettingsCursorType,

@@ -1,4 +1,4 @@
-import { Flex } from './flex.tsx';
+import { Flex } from '@noita-explorer/react-utils';
 
 const progressBarColors: Record<string, string> = {
   healthBar: '#87BF1C',

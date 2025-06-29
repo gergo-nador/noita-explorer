@@ -4,7 +4,7 @@ import {
   NoitaTooltipWrapper,
 } from '@noita-explorer/noita-component-library';
 import { dateHelpers } from '@noita-explorer/tools';
-import { Flex } from '../../components/flex.tsx';
+import { Flex } from '@noita-explorer/react-utils';
 
 export const HolidayCard = ({
   holiday,
