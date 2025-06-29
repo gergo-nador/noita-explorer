@@ -28,7 +28,7 @@ import { NoitaProgressTrackerPillar } from '../pages/progress/noita-progress-tra
 import { environment } from '../environment.ts';
 import { Sandbox } from '../pages/sandbox.tsx';
 import { Background } from '../components/background.tsx';
-import { Error404Page } from '../pages/error-404-page.tsx';
+import { ErrorPage } from '../pages/_errors/error-page.tsx';
 
 export const router = createBrowserRouter([
   {
@@ -42,7 +42,7 @@ export const router = createBrowserRouter([
     errorElement: (
       <>
         <Background />
-        <Error404Page />
+        <ErrorPage />
       </>
     ),
     children: [

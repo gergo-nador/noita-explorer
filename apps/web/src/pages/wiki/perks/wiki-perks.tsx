@@ -29,6 +29,10 @@ export const WikiPerks = () => {
         data?.perks?.find((perk) => perk.id === perkId),
     });
 
+  const a = undefined as unknown as { ag: string };
+
+  console.log(a.ag);
+
   const [filters, setFilters] = useState<PerkFilters>({
     stackable: undefined,
     holyMountain: undefined,

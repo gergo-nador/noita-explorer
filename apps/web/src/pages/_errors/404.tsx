@@ -1,13 +1,13 @@
+import { StringKeyDictionaryComposite } from '@noita-explorer/model';
 import { Flex } from '@noita-explorer/react-utils';
-import { Button, Card } from '@noita-explorer/noita-component-library';
-import { useLocation, Link, useNavigate } from 'react-router-dom';
+import { Button } from '@noita-explorer/noita-component-library';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { pages } from '../../routes/pages.ts';
+import { useMemo } from 'react';
 import { diffChars } from 'diff';
 import { arrayHelpers } from '@noita-explorer/tools';
-import { useMemo } from 'react';
-import { StringKeyDictionaryComposite } from '@noita-explorer/model';
-import { pages } from '../routes/pages.ts';
 
-export const Error404Page = () => {
+export const Error404 = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const currentPathName = location.pathname;
@@ -40,32 +40,30 @@ export const Error404Page = () => {
   }, [currentPathName]);
 
   return (
-    <Flex column center style={{ padding: 10 }}>
-      <Card>
-        <h1 style={{ lineHeight: 1.2 }}>
-          404 - Uhhh ohhh, it looks like this page does not exist
-        </h1>
-        <div>The page {currentPathName} does not exist.</div>
-        {potentialPath && (
-          <>
-            <br />
-            <Flex gap={8}>
-              <span>Did you mean to go to</span>
-              <Link to={potentialPath} style={{ color: 'white' }}>
-                <Button>{potentialPath}</Button>
-              </Link>
-              <span>?</span>
-            </Flex>
-          </>
-        )}
-        <br />
-        <div>
-          <Button onClick={() => navigate(pages.main)}>
-            Click here to go to main page
-          </Button>
-        </div>
-      </Card>
-    </Flex>
+    <>
+      <h1 style={{ lineHeight: 1.2 }}>
+        404 - Uhhh ohhh, it looks like this page does not exist
+      </h1>
+      <div>The page {currentPathName} does not exist.</div>
+      {potentialPath && (
+        <>
+          <br />
+          <Flex gap={8}>
+            <span>Did you mean to go to</span>
+            <Link to={potentialPath} style={{ color: 'white' }}>
+              <Button>{potentialPath}</Button>
+            </Link>
+            <span>?</span>
+          </Flex>
+        </>
+      )}
+      <br />
+      <div>
+        <Button onClick={() => navigate(pages.main)}>
+          Click here to go to main page
+        </Button>
+      </div>
+    </>
   );
 };
 
