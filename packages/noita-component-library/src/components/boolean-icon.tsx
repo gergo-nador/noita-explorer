@@ -1,4 +1,4 @@
-import { Icon } from '@noita-explorer/noita-component-library';
+import { Icon } from './icons/icon';
 
 interface BooleanIconProps {
   value: boolean | undefined;
