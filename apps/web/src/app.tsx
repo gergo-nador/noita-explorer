@@ -19,7 +19,6 @@ import { loadFull } from 'tsparticles';
 import { loadEmittersPlugin } from '@tsparticles/plugin-emitters';
 import { useOnboarding } from './hooks/use-onboarding.ts';
 import { Head } from '@noita-explorer/react-utils';
-import { environment } from './environment.ts';
 
 export const App = () => {
   const { loaded: settingsLoaded } = useSettingsStore();
@@ -38,10 +37,6 @@ export const App = () => {
           name='description'
           content='Noita Explorer helps you unlock your lost in-game progress without mods. Unlock spells, enemies, perks, achievement pillars, crown, amulet, and so on...'
         />
-
-        {environment === 'production' && (
-          <Head.Meta name='referrer' content='noita-explorer.com' />
-        )}
 
         <Head.Meta
           name='keywords'
