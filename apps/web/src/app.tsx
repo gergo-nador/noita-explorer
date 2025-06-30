@@ -19,6 +19,7 @@ import { loadFull } from 'tsparticles';
 import { loadEmittersPlugin } from '@tsparticles/plugin-emitters';
 import { useOnboarding } from './hooks/use-onboarding.ts';
 import { Head } from '@noita-explorer/react-utils';
+import { MobileViewUnsupportedWarning } from './components/mobile-view-unsupported-warning.tsx';
 
 export const App = () => {
   const { loaded: settingsLoaded } = useSettingsStore();
@@ -51,6 +52,7 @@ export const App = () => {
       <NoitaToaster />
       <InitialLoader />
       <ActionsPanel />
+      <MobileViewUnsupportedWarning />
     </>
   );
 };

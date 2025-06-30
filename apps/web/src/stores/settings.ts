@@ -30,6 +30,7 @@ export interface Settings {
     initialPopupSeen: boolean;
   };
   spoilerWarningAccepted: boolean;
+  noMobileSupportAccepted: boolean;
 }
 
 export interface SettingsState {
@@ -71,6 +72,7 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
       initialPopupSeen: false,
     },
     spoilerWarningAccepted: false,
+    noMobileSupportAccepted: false,
   },
 
   loaded: false,
