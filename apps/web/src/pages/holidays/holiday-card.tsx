@@ -36,7 +36,7 @@ export const HolidayCard = ({
             {isHappeningNow && isOneDayEvent && 'Today'}
             {isHappeningNow && !isOneDayEvent && 'Now'}
             {!isHappeningNow && holiday.nextStartDate?.toLocaleDateString()} (
-            {holiday.nextEndDate?.toLocaleDateString(undefined, {
+            {holiday.nextStartDate?.toLocaleDateString(undefined, {
               weekday: 'long',
             })}
             )
