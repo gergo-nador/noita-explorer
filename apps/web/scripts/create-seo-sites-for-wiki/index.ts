@@ -64,7 +64,7 @@ async function generateStaticAssets(data: NoitaWakData) {
     fs.mkdir(perksFolderPath, callback),
   );
 
-  data.perks.forEach((perk) => {
+  for (const perk of data.perks) {
     const redirectUrl = `/wiki/perks?perk=${perk.id}`;
     const imageWebPath = `${perksPublicImagePath}/${perk.id}.png`;
     const imagePath = `${perksFolderPath}/${perk.id}.png`;
@@ -73,7 +73,7 @@ async function generateStaticAssets(data: NoitaWakData) {
     const width = 1500;
     const height = 1500;
 
-    generateImage({
+    await generateImage({
       base64: perk.imageBase64,
       outputPath: imagePathFs,
       width: width,
@@ -104,7 +104,7 @@ async function generateStaticAssets(data: NoitaWakData) {
 
     const buffer = Buffer.from(html);
     fs.writeFileSync(`public/g/perks/${perk.id}.html`, buffer);
-  });
+  }
 
   console.log('Generated static files successfully.');
 }
