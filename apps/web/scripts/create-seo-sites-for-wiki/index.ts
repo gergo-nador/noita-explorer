@@ -9,7 +9,7 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 // only generate in preview and production
-const env = process.env.VITE_ENVIRONMENT;
+const env = process.env.VITE_ENV;
 // if set to "generate", it will ignore the environment
 const envOverwrite = process.env.GENERATE_STATIC_SITES;
 
