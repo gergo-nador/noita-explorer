@@ -1,7 +1,8 @@
 import github from '../assets/external/github.png';
 import { Button, Icon } from '@noita-explorer/noita-component-library';
 import { Flex } from '@noita-explorer/react-utils';
-import { deployUrls, environment } from '../environment.ts';
+import { environment } from '../environment.ts';
+import { deployUrls } from '../deployUrls.ts';
 
 export const Credits = () => {
   return (

@@ -3,10 +3,23 @@ import { NoitaWakData } from '@noita-explorer/model-noita';
 import { Buffer } from 'buffer';
 import { promiseHelper } from '@noita-explorer/tools';
 import { generateHtmlHead } from './generate-html';
+import { deployUrls } from '../../src/deployUrls';
+import * as dotenv from 'dotenv';
 
-const noitaWakData = readNoitaWakData();
-if (noitaWakData) {
-  generateStaticAssets(noitaWakData);
+dotenv.config();
+
+// only generate in preview and production
+const env = process.env.VITE_ENVIRONMENT;
+// if set to "generate", it will ignore the environment
+const envOverwrite = process.env.GENERATE_STATIC_SITES;
+
+const isPreviewOrProp = env === 'preview' || env === 'production';
+
+if (envOverwrite === 'generate' || isPreviewOrProp) {
+  const noitaWakData = readNoitaWakData();
+  if (noitaWakData) {
+    generateStaticAssets(noitaWakData);
+  }
 }
 
 function readNoitaWakData() {
@@ -30,20 +43,33 @@ function readNoitaWakData() {
 }
 
 async function generateStaticAssets(data: NoitaWakData) {
-  return;
   await promiseHelper.fromCallbackProvider((callback) =>
-    fs.mkdir('public/perks', callback),
+    fs.mkdir('public/g', callback),
+  );
+  await promiseHelper.fromCallbackProvider((callback) =>
+    fs.mkdir('public/g/perks', callback),
   );
 
   data.perks.forEach((perk) => {
+    const redirectUrl = `/wiki/perks?perk=${perk.id}`;
+
     const htmlHead = generateHtmlHead({
       siteName: 'Noita Explorer',
       title: perk.name,
       description: perk.description,
-      url: '',
+      url: deployUrls.noitaExplorer.production + redirectUrl,
       imageUrl: '',
     });
-    const buffer = new Buffer(perk.name);
-    fs.writeFileSync('public/perks/' + perk.id, buffer);
+
+    const html = `<!DOCTYPE html>
+<html lang="en">
+  ${htmlHead}
+  <body>
+    <script>window.location.replace('${redirectUrl}')</script>
+  </body>
+</html>`;
+
+    const buffer = Buffer.from(html);
+    fs.writeFileSync(`public/g/perks/${perk.id}.html`, buffer);
   });
 }
