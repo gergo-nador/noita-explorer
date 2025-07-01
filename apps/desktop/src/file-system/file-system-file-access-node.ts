@@ -22,7 +22,7 @@ export const FileSystemFileAccessNode = (
       asBuffer: () => nodeFileSystemHelpers.readFileAsBuffer(filePath),
       asTextLines: async () => {
         const text = await nodeFileSystemHelpers.readFileAsText(filePath);
-        return text.split(EOL);
+        return text.split(EOL).map((row) => row.trim());
       },
     },
     delete: async () => {

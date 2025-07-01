@@ -53,7 +53,6 @@ export const scrapeEnemies = async ({
 
     if (filename === '_list.txt') {
       animalList = await file.read.asTextLines();
-
       continue;
     }
 
