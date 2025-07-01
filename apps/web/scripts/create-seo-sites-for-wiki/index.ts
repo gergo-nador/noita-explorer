@@ -59,12 +59,14 @@ async function generateStaticAssets(data: NoitaWakData) {
 
   // perks
   const perksFolderPath = 'public/g/perks';
+  const perksPublicImagePath = 'g/perks';
   await promiseHelper.fromCallbackProvider((callback) =>
     fs.mkdir(perksFolderPath, callback),
   );
 
   data.perks.forEach((perk) => {
     const redirectUrl = `/wiki/perks?perk=${perk.id}`;
+    const imageWebPath = `${perksPublicImagePath}/${perk.id}.png`;
     const imagePath = `${perksFolderPath}/${perk.id}.png`;
     const imagePathFs = path.resolve(imagePath);
 
@@ -84,7 +86,7 @@ async function generateStaticAssets(data: NoitaWakData) {
       description: perk.description,
       url: deployUrls.noitaExplorer.production + redirectUrl,
       image: {
-        url: imagePath,
+        url: imageWebPath,
         mimeType: 'image/png',
         width: width.toString(),
         height: height.toString(),
