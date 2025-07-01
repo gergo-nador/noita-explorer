@@ -59,7 +59,7 @@ async function generateStaticAssets(data: NoitaWakData) {
 
   // perks
   const perksFolderPath = 'public/g/perks';
-  const perksPublicImagePath = 'g/perks';
+  const perksPublicImagePath = '/g/perks';
   await promiseHelper.fromCallbackProvider((callback) =>
     fs.mkdir(perksFolderPath, callback),
   );
