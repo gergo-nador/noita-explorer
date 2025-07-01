@@ -19,6 +19,7 @@ export const WikiEnemies = () => {
   const [selectedEnemy, setSelectedEnemy] =
     useStateWithQueryParamsString<NoitaEnemy>({
       key: 'enemy',
+      enabled: Boolean(data?.enemies),
       queryParamValueSelector: (enemy) => enemy.id,
       findValueBasedOnQueryParam: (enemyId) =>
         data?.enemies?.find((enemy) => enemy.id === enemyId),

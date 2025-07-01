@@ -34,6 +34,7 @@ export const WikiMaterials = () => {
   const [selectedMaterial, setSelectedMaterial] =
     useStateWithQueryParamsString<NoitaMaterial>({
       key: 'material',
+      enabled: Boolean(data?.materials),
       queryParamValueSelector: (material) => material.id,
       findValueBasedOnQueryParam: (materialId) =>
         materialsUnique.find((material) => material.id === materialId),

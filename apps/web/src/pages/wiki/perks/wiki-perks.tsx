@@ -21,6 +21,7 @@ export const WikiPerks = () => {
   const [selectedPerk, setSelectedPerk] =
     useStateWithQueryParamsString<NoitaPerk>({
       key: 'perk',
+      enabled: Boolean(data?.perks),
       queryParamValueSelector: (perk) => perk.id,
       findValueBasedOnQueryParam: (perkId) =>
         data?.perks?.find((perk) => perk.id === perkId),

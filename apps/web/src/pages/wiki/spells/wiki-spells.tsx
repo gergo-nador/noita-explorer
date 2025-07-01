@@ -20,6 +20,7 @@ export const WikiSpells = () => {
   const [selectedSpell, setSelectedSpell] =
     useStateWithQueryParamsString<NoitaSpell>({
       key: 'spell',
+      enabled: Boolean(data?.spells),
       queryParamValueSelector: (spell) => spell.id,
       findValueBasedOnQueryParam: (spellId) =>
         data?.spells?.find((spell) => spell.id === spellId),
