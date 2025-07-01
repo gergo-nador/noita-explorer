@@ -11,11 +11,19 @@ dotenv.config();
 // only generate in preview and production
 const env = process.env.VITE_ENV;
 // if set to "generate", it will ignore the environment
-const envOverwrite = process.env.GENERATE_STATIC_SITES;
+const envOverwrite = process.env.GENERATE_STATIC_SITES === 'generate';
 
 const isPreviewOrProp = env === 'preview' || env === 'production';
 
-if (envOverwrite === 'generate' || isPreviewOrProp) {
+if (envOverwrite) {
+  console.log('GENERATE_STATIC_SITES found, generating static assets');
+} else if (isPreviewOrProp) {
+  console.log(`VITE_ENV=${env}, generating static assets`);
+} else {
+  console.log('Skipping static asset generation');
+}
+
+if (envOverwrite || isPreviewOrProp) {
   const noitaWakData = readNoitaWakData();
   if (noitaWakData) {
     generateStaticAssets(noitaWakData);
