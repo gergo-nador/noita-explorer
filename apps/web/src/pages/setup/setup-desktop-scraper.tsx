@@ -13,6 +13,7 @@ import {
   NoitaDataWakScrapeResultStatus,
   NoitaWakData,
 } from '@noita-explorer/model-noita';
+import { scrapeUtils } from '@noita-explorer/scrapers';
 import { PageBottomComponent } from '../../components/page-bottom-component.tsx';
 import { Flex } from '@noita-explorer/react-utils';
 import { noitaAPI } from '../../noita-api.ts';
@@ -56,29 +57,7 @@ export const SetupDesktopScraper = () => {
       return new Promise((_resolve, reject) => reject());
     }
 
-    const translations = dataWakScrapeResult.translations.data ?? {};
-    const enemies = dataWakScrapeResult.enemies.data ?? [];
-    const perks = dataWakScrapeResult.perks.data ?? [];
-    const spells = dataWakScrapeResult.spells.data ?? [];
-    const wandConfigs = dataWakScrapeResult.wandConfigs.data ?? [];
-    const materials = dataWakScrapeResult.materials.data ?? [];
-    const materialReactions = dataWakScrapeResult.materialReactions.data ?? [];
-
-    const now = new Date();
-
-    const data: NoitaWakData = {
-      scrapedAt: now.toISOString(),
-      scrapedAtUnix: now.getTime(),
-      version: 1,
-
-      translations: translations,
-      enemies: enemies,
-      perks: perks,
-      spells: spells,
-      wandConfigs: wandConfigs,
-      materials: materials,
-      materialReactions: materialReactions,
-    };
+    const data = scrapeUtils.convertScrapeResultsToDataWak(dataWakScrapeResult);
 
     return noitaAPI.noita.dataFile.write(data).then(() => data);
   };

@@ -11,6 +11,7 @@ import { scrapeMaterials } from './datawak/scrape-materials.ts';
 import { scrapeWandConfigs } from './datawak/scrape-wand-configs.ts';
 import { scrapePlayerState } from './save00/scrape-player-state.ts';
 import { scrapeUnlockedOrbs } from './save00/scrape-orbs.ts';
+import { convertScrapeResultsToDataWak } from './data-wak-utils.ts';
 
 export const scrape = {
   bonesWands: scrapeBonesWands,
@@ -26,4 +27,8 @@ export const scrape = {
   translations: readTranslations,
   wandConfigs: scrapeWandConfigs,
   worldState: scrapeWorldState,
+};
+
+export const scrapeUtils = {
+  convertScrapeResultsToDataWak,
 };

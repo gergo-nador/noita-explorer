@@ -33,7 +33,7 @@ export const scrapePerks = async ({
 
   for (const luaPerk of luaPerkArray) {
     const perk: NoitaPerk = {
-      id: luaPerk.getRequiredField('id').required.asString(),
+      id: luaPerk.getRequiredField('id').required.asString().toLowerCase(),
       name: luaPerk.getRequiredField('ui_name').required.asString(),
       description: luaPerk
         .getRequiredField('ui_description')

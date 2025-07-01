@@ -78,11 +78,13 @@ export const scrapeWorldState = async ({
       const valueAttr = global.getAttribute('value');
 
       if (key.startsWith('PERK_PICKED')) {
-        const perkId = stringHelpers.trim({
-          text: key,
-          fromStart: 'PERK_PICKED_',
-          fromEnd: '_PICKUP_COUNT',
-        });
+        const perkId = stringHelpers
+          .trim({
+            text: key,
+            fromStart: 'PERK_PICKED_',
+            fromEnd: '_PICKUP_COUNT',
+          })
+          .toLowerCase();
         const pickupCount = valueAttr?.asInt();
 
         worldState.perks.pickedPerks.push({
@@ -116,7 +118,7 @@ export const scrapeWorldState = async ({
             text: text,
             fromStart: 'new_action_',
           })
-          .toUpperCase();
+          .toLowerCase();
 
         worldState.flags.newActionIds.push(newActionId);
       }
@@ -127,14 +129,16 @@ export const scrapeWorldState = async ({
             text: text,
             fromStart: 'new_perk_picked_',
           })
-          .toUpperCase();
+          .toLowerCase();
 
         worldState.flags.newPerkIds.push(newPerkId);
       } else if (text.startsWith('new_kill_')) {
-        const newEnemyId = stringHelpers.trim({
-          text: text,
-          fromStart: 'new_kill_',
-        });
+        const newEnemyId = stringHelpers
+          .trim({
+            text: text,
+            fromStart: 'new_kill_',
+          })
+          .toLowerCase();
 
         worldState.flags.newEnemyIds.push(newEnemyId);
       }

@@ -19,13 +19,11 @@ export const scrapeProgressFlags = async ({
 
   const actionFlags = fileNamesWithoutExtension
     .filter((f) => f.startsWith('action_'))
-    .map((f) => f.substring('action_'.length))
-    .map((s) => s.toUpperCase());
+    .map((f) => f.substring('action_'.length));
 
   const perkFlags = fileNamesWithoutExtension
     .filter((f) => f.startsWith('perk_picked_'))
-    .map((f) => f.substring('perk_picked_'.length))
-    .map((s) => s.toUpperCase());
+    .map((f) => f.substring('perk_picked_'.length));
 
   return {
     spells: actionFlags,

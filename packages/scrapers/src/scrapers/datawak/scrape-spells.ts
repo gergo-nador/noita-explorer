@@ -43,7 +43,7 @@ export const scrapeSpells = async ({
 
   for (const luaSpell of luaActionsArray) {
     const spell: NoitaSpell = {
-      id: luaSpell.getRequiredField('id').required.asString(),
+      id: luaSpell.getRequiredField('id').required.asString().toLowerCase(),
       name: luaSpell.getRequiredField('name').required.asString(),
       description: luaSpell.getRequiredField('description').required.asString(),
       imageBase64: '',

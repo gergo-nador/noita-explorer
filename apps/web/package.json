@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "prebuild": "npx tsx scripts/create-seo-sites-for-wiki.ts",
+    "prebuild": "npx tsx scripts/create-seo-sites-for-wiki/index.ts",
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",

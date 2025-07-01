@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import { NoitaWakData } from '@noita-explorer/model-noita';
 import { Buffer } from 'buffer';
 import { promiseHelper } from '@noita-explorer/tools';
-import { generateHtmlHead } from './create-seo-sites-for-wiki/generate-html';
+import { generateHtmlHead } from './generate-html';
 
 const noitaWakData = readNoitaWakData();
 if (noitaWakData) {
@@ -30,6 +30,7 @@ function readNoitaWakData() {
 }
 
 async function generateStaticAssets(data: NoitaWakData) {
+  return;
   await promiseHelper.fromCallbackProvider((callback) =>
     fs.mkdir('public/perks', callback),
   );
