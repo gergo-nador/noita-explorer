@@ -4,11 +4,12 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "postbuild": "npx tsx scripts/create-seo-sites-for-wiki/index.ts",
     "dev": "vite",
+    "prebuild": "npm run generate-static-assets",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "generate-static-assets": "npx tsx scripts/create-seo-sites-for-wiki/index.ts"
   },
   "dependencies": {
     "@noita-explorer/file-systems": "*",
