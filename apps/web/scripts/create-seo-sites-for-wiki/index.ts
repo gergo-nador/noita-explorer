@@ -5,6 +5,8 @@ import { promiseHelper } from '@noita-explorer/tools';
 import { generateHtmlHead } from './generate-html';
 import { deployUrls } from '../../src/deployUrls';
 import * as dotenv from 'dotenv';
+import * as path from 'node:path';
+import { generateImage } from './generate-image';
 
 dotenv.config();
 
@@ -54,19 +56,40 @@ async function generateStaticAssets(data: NoitaWakData) {
   await promiseHelper.fromCallbackProvider((callback) =>
     fs.mkdir('public/g', callback),
   );
+
+  // perks
+  const perksFolderPath = 'public/g/perks';
   await promiseHelper.fromCallbackProvider((callback) =>
-    fs.mkdir('public/g/perks', callback),
+    fs.mkdir(perksFolderPath, callback),
   );
 
   data.perks.forEach((perk) => {
     const redirectUrl = `/wiki/perks?perk=${perk.id}`;
+    const imagePath = `${perksFolderPath}/${perk.id}.png`;
+    const imagePathFs = path.resolve(imagePath);
+
+    const width = 1500;
+    const height = 1500;
+
+    generateImage({
+      base64: perk.imageBase64,
+      outputPath: imagePathFs,
+      width: width,
+      height: height,
+    });
 
     const htmlHead = generateHtmlHead({
       siteName: 'Noita Explorer',
       title: perk.name,
       description: perk.description,
       url: deployUrls.noitaExplorer.production + redirectUrl,
-      imageUrl: '',
+      image: {
+        url: imagePath,
+        mimeType: 'image/png',
+        width: width.toString(),
+        height: height.toString(),
+        alt: perk.name,
+      },
     });
 
     const html = `<!DOCTYPE html>
