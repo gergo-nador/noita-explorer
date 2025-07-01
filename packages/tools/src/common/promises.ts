@@ -18,8 +18,16 @@ const reject = <T>(error: string): Promise<T> =>
     reject(error);
   });
 
+const fromCallbackProvider = <T>(func: (callback: (t?: T) => void) => void) => {
+  return new Promise<T | undefined>((resolve) => {
+    const callback = (t?: T) => resolve(t);
+    func(callback);
+  });
+};
+
 export const promiseHelper = {
   fromValue: fromValue,
   fromCallback: fromCallback,
   reject,
+  fromCallbackProvider,
 };
