@@ -72,4 +72,6 @@ async function generateStaticAssets(data: NoitaWakData) {
     const buffer = Buffer.from(html);
     fs.writeFileSync(`public/g/perks/${perk.id}.html`, buffer);
   });
+
+  console.log('Generated static files successfully.');
 }
