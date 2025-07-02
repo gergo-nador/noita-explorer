@@ -16,14 +16,6 @@ import { useStateWithQueryParamsString } from '../../../hooks/query-params/use-s
 
 export const WikiEnemies = () => {
   const { data } = useNoitaDataWakStore();
-  const [selectedEnemy, setSelectedEnemy] =
-    useStateWithQueryParamsString<NoitaEnemy>({
-      key: 'enemy',
-      enabled: Boolean(data?.enemies),
-      queryParamValueSelector: (enemy) => enemy.id,
-      findValueBasedOnQueryParam: (enemyId) =>
-        data?.enemies?.find((enemy) => enemy.id === enemyId),
-    });
 
   const enemies = useMemo(() => {
     if (!data?.enemies) {
@@ -35,6 +27,15 @@ export const WikiEnemies = () => {
       return { ...enemy, gameEffects };
     });
   }, [data?.enemies]);
+
+  const [selectedEnemy, setSelectedEnemy] =
+    useStateWithQueryParamsString<NoitaEnemy>({
+      key: 'enemy',
+      enabled: Boolean(enemies),
+      queryParamValueSelector: (enemy) => enemy.id,
+      findValueBasedOnQueryParam: (enemyId) =>
+        enemies?.find((enemy) => enemy.id === enemyId),
+    });
 
   const [filters, setFilters] = useState<EnemyFilters>({
     protectionId: undefined,
