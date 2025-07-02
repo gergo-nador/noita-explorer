@@ -135,14 +135,14 @@ const SessionCard = ({ session }: { session: NoitaSession }) => {
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
         <div>
           <div>
-            <Icon type={'custom'} src={dieIcon} size={18} /> {session.seed}
+            <Icon src={dieIcon} size={18} /> {session.seed}
           </div>
           <div>
-            <Icon type={'custom'} src={lifetimeIcon} size={20} />
+            <Icon src={lifetimeIcon} size={20} />
             {timeHelpers.secondsToTimeString(session.playTime)}
           </div>
           <div>
-            <Icon type={'custom'} src={moneyIcon} size={20} />
+            <Icon src={moneyIcon} size={20} />
             {session.goldInfinite && <span>∞</span>}
             {!session.goldInfinite && (
               <NoitaTooltipWrapper
@@ -159,7 +159,7 @@ const SessionCard = ({ session }: { session: NoitaSession }) => {
             {!session.dead && <div>Not dead</div>}
             {session.dead && (
               <div>
-                <Icon type={'custom'} src={deathIcon} size={20} />
+                <Icon src={deathIcon} size={20} />
                 {session.killedByEntity === undefined &&
                   session.killedByReason === undefined && <span>New Game</span>}
                 {!!session.killedByEntity && (
@@ -172,7 +172,7 @@ const SessionCard = ({ session }: { session: NoitaSession }) => {
             )}
           </div>
           <div>
-            <Icon type={'custom'} src={enemyIcon} size={20} />{' '}
+            <Icon src={enemyIcon} size={20} />
             {session.enemiesKilled}
           </div>
         </div>

@@ -14,7 +14,7 @@ export const Credits = () => {
         mods, by directly modifying your save files.
       </p>
       <Flex gap={4}>
-        <Icon type='custom' src={github} alt='github' size={18} />
+        <Icon src={github} alt='github' size={18} />
 
         <a
           href='https://github.com/gergo-nador/noita-explorer'

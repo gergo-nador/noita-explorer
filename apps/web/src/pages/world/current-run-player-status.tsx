@@ -134,7 +134,7 @@ export const CurrentRunPlayerStatus = () => {
 const HudIcon = ({ alt, src }: { alt: string; src: string }) => {
   return (
     <Flex center>
-      <Icon type='custom' alt={alt} src={src} size={20} />
+      <Icon alt={alt} src={src} size={20} />
     </Flex>
   );
 };

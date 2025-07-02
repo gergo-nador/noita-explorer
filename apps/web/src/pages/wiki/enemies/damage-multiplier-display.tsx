@@ -30,10 +30,8 @@ export const DamageMultiplierDisplay = ({
     <div>
       <NoitaTooltipWrapper content={name}>
         <div style={{ width: 'fit-content' }}>
-          {value === 1 && <Icon type={'custom'} src={icon} size={iconSize} />}
-          {value !== 1 && (
-            <Icon type={'custom'} src={iconColor} size={iconSize} />
-          )}
+          {value === 1 && <Icon src={icon} size={iconSize} />}
+          {value !== 1 && <Icon src={iconColor} size={iconSize} />}
           <span style={{ color: color }}> {value}</span>
         </div>
       </NoitaTooltipWrapper>

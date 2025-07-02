@@ -118,7 +118,7 @@ export const Valentines = () => {
             transform: 'translateY(-50%) translateX(-50%) rotateZ(-15deg)',
           }}
         >
-          <Icon type={'custom'} src={heart} />
+          <Icon src={heart} />
         </div>
         <div
           style={{
@@ -128,7 +128,7 @@ export const Valentines = () => {
             transform: 'translateY(-50%) translateX(50%) rotateZ(15deg)',
           }}
         >
-          <Icon type={'custom'} src={heart} />
+          <Icon src={heart} />
         </div>
       </div>
 

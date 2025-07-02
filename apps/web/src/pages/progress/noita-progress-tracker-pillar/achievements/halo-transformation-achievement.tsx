@@ -56,8 +56,8 @@ export const HaloTransformationAchievement = ({
           </Flex>
         </Flex>
         <Flex justify='end' align='center' direction='column'>
-          {diff <= -3 && <Icon type='custom' src={haloDark} size={20} />}
-          {diff >= 3 && <Icon type='custom' src={halo} size={20} />}
+          {diff <= -3 && <Icon src={haloDark} size={20} />}
+          {diff >= 3 && <Icon src={halo} size={20} />}
           <span
             style={{
               color: ifStatement(diff === 0, 'initial')

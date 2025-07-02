@@ -6,7 +6,7 @@ import cross_large from '../../../assets/icons/cross_red_large.png';
 import React from 'react';
 
 interface IconProps {
-  type: IconType;
+  type?: IconType;
   src?: string;
   alt?: string;
   height?: number;
@@ -16,7 +16,7 @@ interface IconProps {
 }
 
 export const Icon = ({
-  type,
+  type = 'custom',
   src,
   alt,
   width,

@@ -22,13 +22,14 @@ export const PerkOverview = ({ perk }: { perk: NoitaPerk }) => {
       >
         <Flex height='100%' align='center'>
           <Icon
-            type={'custom'}
             src={perk.imageBase64}
             style={{ aspectRatio: 1, width: '100%' }}
           />
         </Flex>
         <Flex justify='center' column>
-          <div style={{ fontSize: 20, marginBottom: 10 }}>{perk.name}</div>
+          <div style={{ fontSize: 20, marginBottom: 10 }}>
+            <span>{perk.name}</span>
+          </div>
           <div>{perk.description}</div>
         </Flex>
       </div>

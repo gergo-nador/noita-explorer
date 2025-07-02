@@ -96,19 +96,19 @@ export const EnemyOverview = ({ enemy }: { enemy: NoitaEnemy }) => {
 
       <div>
         Hp:<span style={{ color: '#f14343' }}> {enemy.hp} </span>
-        <Icon type={'custom'} src={heartIcon} size={16} />
+        <Icon src={heartIcon} size={16} />
       </div>
       {enemy.maxHp !== undefined && (
         <div>
           Max Hp:<span style={{ color: '#f14343' }}> {enemy.maxHp} </span>
-          <Icon type={'custom'} src={heartIcon} size={16} />
+          <Icon src={heartIcon} size={16} />
         </div>
       )}
 
       {enemy.hasGoldDrop && (
         <div>
           Gold:<span style={{ color: '#fae27e' }}> {enemy.goldDrop} </span>
-          <Icon type={'custom'} src={goldNuggetIcon} size={16} />
+          <Icon src={goldNuggetIcon} size={16} />
         </div>
       )}
       {!enemy.hasGoldDrop && <div>Gold: -</div>}

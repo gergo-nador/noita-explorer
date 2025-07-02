@@ -60,13 +60,13 @@ export const NoitaSpellTooltip = ({
 
   const rowsGeneral: TooltipRowData[] = [
     {
-      icon: <Icon type={'custom'} src={actionTypeIcon} size={15} />,
+      icon: <Icon src={actionTypeIcon} size={15} />,
       text: 'Type',
       value: actionType.name,
       show: true,
     },
     {
-      icon: <Icon type={'custom'} src={manaDrainIcon} size={15} />,
+      icon: <Icon src={manaDrainIcon} size={15} />,
       text: 'Mana Drain',
       value: (
         <span style={{ color: warnings?.manaTooMuch ? '#e35d5d' : 'inherit' }}>
@@ -79,14 +79,14 @@ export const NoitaSpellTooltip = ({
       show: true,
     },
     {
-      icon: <Icon type={'custom'} src={maxUsesIcon} size={15} />,
+      icon: <Icon src={maxUsesIcon} size={15} />,
       text: 'Uses',
       value: spell.maxUses,
       show:
         spell.maxUses !== undefined && wandSpell?.usesRemaining === undefined,
     },
     {
-      icon: <Icon type={'custom'} src={maxUsesIcon} size={15} />,
+      icon: <Icon src={maxUsesIcon} size={15} />,
       text: 'Uses remaining',
       value: wandSpell?.usesRemaining,
       show:
@@ -106,7 +106,7 @@ export const NoitaSpellTooltip = ({
 
   const rowsTime: TooltipRowData[] = [
     {
-      icon: <Icon type={'custom'} src={lifetimeIcon} size={15} />,
+      icon: <Icon src={lifetimeIcon} size={15} />,
       text: 'Lifetime',
       value: (() => {
         if (spell.lifetime === undefined) {
@@ -141,7 +141,7 @@ export const NoitaSpellTooltip = ({
       show: spell.lifetime !== undefined,
     },
     {
-      icon: <Icon type={'custom'} src={lifetimeIcon} size={15} />,
+      icon: <Icon src={lifetimeIcon} size={15} />,
       text: 'Lifetime Modifier',
       value: (
         <NoitaNumberModifier
@@ -154,7 +154,7 @@ export const NoitaSpellTooltip = ({
       show: spell.lifetimeModifier !== undefined,
     },
     {
-      icon: <Icon type={'custom'} src={fireRateWaitModifierIcon} size={15} />,
+      icon: <Icon src={fireRateWaitModifierIcon} size={15} />,
       text: 'Cast Delay',
       value: (
         <NoitaNumberModifier
@@ -167,7 +167,7 @@ export const NoitaSpellTooltip = ({
       show: spell.fireRateWaitModifier !== undefined,
     },
     {
-      icon: <Icon type={'custom'} src={reloadModifierIcon} size={15} />,
+      icon: <Icon src={reloadModifierIcon} size={15} />,
       text: 'Reload Time',
       value: (
         <NoitaNumberModifier
@@ -183,97 +183,97 @@ export const NoitaSpellTooltip = ({
 
   const rowsDamages: TooltipRowData[] = [
     {
-      icon: <Icon type={'custom'} src={damageProjectileIcon} size={15} />,
+      icon: <Icon src={damageProjectileIcon} size={15} />,
       text: 'Projectile Damage',
       value: spell.projectileDamage,
       show: spell.projectileDamage !== undefined,
     },
     {
-      icon: <Icon type={'custom'} src={damageProjectileIcon} size={15} />,
+      icon: <Icon src={damageProjectileIcon} size={15} />,
       text: 'Projectile Damage',
       value: <NoitaNumberModifier modifier={spell.projectileDamageModifier} />,
       show: spell.projectileDamageModifier !== undefined,
     },
     {
-      icon: <Icon type={'custom'} src={damageExplosionIcon} size={15} />,
+      icon: <Icon src={damageExplosionIcon} size={15} />,
       text: 'Explosion Damage',
       value: spell.explosionDamage,
       show: spell.explosionDamage !== undefined,
     },
     {
-      icon: <Icon type={'custom'} src={damageExplosionIcon} size={15} />,
+      icon: <Icon src={damageExplosionIcon} size={15} />,
       text: 'Explosion Damage',
       value: <NoitaNumberModifier modifier={spell.explosionDamageModifier} />,
       show: spell.explosionDamageModifier !== undefined,
     },
     {
-      icon: <Icon type={'custom'} src={explosionRadiusIcon} size={15} />,
+      icon: <Icon src={explosionRadiusIcon} size={15} />,
       text: 'Explosion Radius',
       value: spell.explosionRadius,
       show: spell.explosionRadius !== undefined,
     },
     {
-      icon: <Icon type={'custom'} src={explosionRadiusIcon} size={15} />,
+      icon: <Icon src={explosionRadiusIcon} size={15} />,
       text: 'Explosion Radius',
       value: <NoitaNumberModifier modifier={spell.explosionRadiusModifier} />,
       show: spell.explosionRadiusModifier !== undefined,
     },
     {
-      icon: <Icon type={'custom'} src={damageSliceIcon} size={15} />,
+      icon: <Icon src={damageSliceIcon} size={15} />,
       text: 'Slice Damage',
       value: spell.sliceDamage,
       show: spell.sliceDamage !== undefined,
     },
     {
-      icon: <Icon type={'custom'} src={damageMeleeIcon} size={15} />,
+      icon: <Icon src={damageMeleeIcon} size={15} />,
       text: 'Melee Damage',
       value: spell.meleeDamage,
       show: spell.meleeDamage !== undefined,
     },
     {
-      icon: <Icon type={'custom'} src={damageFireIcon} size={15} />,
+      icon: <Icon src={damageFireIcon} size={15} />,
       text: 'Fire Damage',
       value: spell.fireDamage,
       show: spell.fireDamage !== undefined,
     },
     {
-      icon: <Icon type={'custom'} src={damageHealingIcon} size={15} />,
+      icon: <Icon src={damageHealingIcon} size={15} />,
       text: 'Healing Damage',
       value: spell.healingDamage,
       show: spell.healingDamage !== undefined,
     },
     {
-      icon: <Icon type={'custom'} src={damageHealingIcon} size={15} />,
+      icon: <Icon src={damageHealingIcon} size={15} />,
       text: 'Regeneration Time',
       value: spell.regenerationFrames,
       show: spell.regenerationFrames !== undefined,
     },
     {
-      icon: <Icon type={'custom'} src={damageElectricityIcon} size={15} />,
+      icon: <Icon src={damageElectricityIcon} size={15} />,
       text: 'Electricity Damage',
       value: spell.electricityDamage,
       show: spell.electricityDamage !== undefined,
     },
     {
-      icon: <Icon type={'custom'} src={damageDrillIcon} size={15} />,
+      icon: <Icon src={damageDrillIcon} size={15} />,
       text: 'Drill Damage',
       value: spell.drillDamage,
       show: spell.drillDamage !== undefined,
     },
     {
-      icon: <Icon type={'custom'} src={damageIceIcon} size={15} />,
+      icon: <Icon src={damageIceIcon} size={15} />,
       text: 'Ice Damage',
       value: spell.iceDamage,
       show: spell.iceDamage !== undefined,
     },
     {
-      icon: <Icon type={'custom'} src={damageIceIcon} size={15} />,
+      icon: <Icon src={damageIceIcon} size={15} />,
       text: 'Ice Damage',
       value: <NoitaNumberModifier modifier={spell.iceDamageModifier} />,
       show: spell.iceDamageModifier !== undefined,
     },
     {
-      icon: <Icon type={'custom'} src={damageHolyIcon} size={15} />,
+      icon: <Icon src={damageHolyIcon} size={15} />,
       text: 'Holy Damage',
       value: spell.holyDamage,
       show: spell.holyDamage !== undefined,
@@ -282,19 +282,19 @@ export const NoitaSpellTooltip = ({
 
   const rowsOther: TooltipRowData[] = [
     {
-      icon: <Icon type={'custom'} src={speedModifierIcon} size={15} />,
+      icon: <Icon src={speedModifierIcon} size={15} />,
       text: 'Speed modifier',
       value: <NoitaNumberModifier modifier={spell.speedModifier} />,
       show: spell.speedModifier !== undefined,
     },
     {
-      icon: <Icon type={'custom'} src={recoilModifierIcon} size={15} />,
+      icon: <Icon src={recoilModifierIcon} size={15} />,
       text: 'Recoil',
       value: <NoitaNumberModifier modifier={spell.recoilModifier} />,
       show: spell.recoilModifier !== undefined,
     },
     {
-      icon: <Icon type={'custom'} src={spreadModifierIcon} size={15} />,
+      icon: <Icon src={spreadModifierIcon} size={15} />,
       text: 'Spread',
       value: (
         <NoitaNumberModifier
@@ -391,7 +391,7 @@ export const NoitaSpellTooltip = ({
               alignItems: 'center',
             }}
           >
-            <Icon type={'custom'} src={spell.imageBase64} size={74} />
+            <Icon src={spell.imageBase64} size={74} />
           </Flex>
         </div>
       </div>

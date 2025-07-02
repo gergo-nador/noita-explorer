@@ -34,7 +34,7 @@ export const Halloween = () => {
             </div>
           </div>
           <div>
-            <Icon type={'custom'} src={image} alt={'Pumpkin'} width={70} />
+            <Icon src={image} alt={'Pumpkin'} width={70} />
           </div>
         </div>
       </div>

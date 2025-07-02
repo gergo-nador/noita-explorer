@@ -94,7 +94,7 @@ export const PerkFiltersView = ({
                   style={{ opacity: 0.6 }}
                   selectedProperties={{ opacity: 1 }}
                 >
-                  <Icon type={'custom'} src={protection.image} size={30} />
+                  <Icon src={protection.image} size={30} />
                 </MultiSelectString.Item>
               );
             })}

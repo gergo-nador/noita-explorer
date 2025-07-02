@@ -161,17 +161,17 @@ export const NoitaWandCard = ({
 
   const rows: RowData[] = [
     {
-      icon: <Icon type={'custom'} src={gunShuffleIcon} size={15} />,
+      icon: <Icon src={gunShuffleIcon} size={15} />,
       text: 'Shuffle',
       value: wand.shuffle ? 'Yes' : 'No',
     },
     {
-      icon: <Icon type={'custom'} src={actionsPerRoundIcon} size={15} />,
+      icon: <Icon src={actionsPerRoundIcon} size={15} />,
       text: 'Spells/Cast',
       value: wand.actionsPerRound,
     },
     {
-      icon: <Icon type={'custom'} src={fireRateWaitIcon} size={15} />,
+      icon: <Icon src={fireRateWaitIcon} size={15} />,
       text: 'Cast delay',
       value: noitaUnits.frames(
         wand.fireRateWait,
@@ -179,7 +179,7 @@ export const NoitaWandCard = ({
       ),
     },
     {
-      icon: <Icon type={'custom'} src={reloadIcon} size={15} />,
+      icon: <Icon src={reloadIcon} size={15} />,
       text: 'Rechrg. Time',
       value: noitaUnits.frames(
         wand.reloadTime,
@@ -187,12 +187,12 @@ export const NoitaWandCard = ({
       ),
     },
     {
-      icon: <Icon type={'custom'} src={manaMaxIcon} size={15} />,
+      icon: <Icon src={manaMaxIcon} size={15} />,
       text: 'Mana max',
       value: wand.manaMax,
     },
     {
-      icon: <Icon type={'custom'} src={manaChargeIcon} size={15} />,
+      icon: <Icon src={manaChargeIcon} size={15} />,
       text: 'Mana chg. Spd',
       value: (() => {
         const timeUntilFullCharge = wand.manaMax / wand.manaChargeSpeed;
@@ -205,17 +205,17 @@ export const NoitaWandCard = ({
       })(),
     },
     {
-      icon: <Icon type={'custom'} src={capacityIcon} size={15} />,
+      icon: <Icon src={capacityIcon} size={15} />,
       text: 'Capacity',
       value: wand.deckCapacity,
     },
     {
-      icon: <Icon type={'custom'} src={spreadIcon} size={15} />,
+      icon: <Icon src={spreadIcon} size={15} />,
       text: 'Spread',
       value: noitaUnits.degree(wand.spreadMultiplier),
     },
     {
-      icon: <Icon type={'custom'} src={speedModifierIcon} size={15} />,
+      icon: <Icon src={speedModifierIcon} size={15} />,
       text: 'Speed Multiplier',
       value: mathHelpers.round(wand.speedMultiplier, 3),
     },
@@ -330,7 +330,7 @@ export const NoitaWandCard = ({
                 paddingLeft: 2,
               }}
             >
-              <Icon type={'custom'} src={gunPermanentActionIcon} size={15} />
+              <Icon src={gunPermanentActionIcon} size={15} />
               <div style={{ paddingRight: 10 }}>Always casts</div>
               {spellIconsAlwaysCast}
             </Flex>
