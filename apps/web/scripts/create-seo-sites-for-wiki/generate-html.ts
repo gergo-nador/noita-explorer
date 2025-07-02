@@ -47,6 +47,11 @@ export const generateHtml = ({
     <meta name="twitter:title" content="${title}">
     <meta name="twitter:description" content="${description}">
     <meta name="twitter:image" content="${image.url}">
+    <style>
+      html, body {
+        background-color: #000000;
+      }
+    </style>
   </head>
   <body>
     <script>window.location.replace('${redirectUrl}')</script>
