@@ -32,6 +32,7 @@ import damageDrillIcon from '../../../assets/icons/damages/icon_damage_drill.png
 import damageDrillIconColor from '../../../assets/icons/damages/icon_damage_drill_color.png';
 import damageHolyIcon from '../../../assets/icons/damages/icon_damage_holy.png';
 import damageHolyIconColor from '../../../assets/icons/damages/icon_damage_holy_color.png';
+import { CopyLinkText } from '../../../components/copy-link-text.tsx';
 
 export const EnemyOverview = ({ enemy }: { enemy: NoitaEnemy }) => {
   const noitaUnits = useNoitaUnits();
@@ -60,7 +61,12 @@ export const EnemyOverview = ({ enemy }: { enemy: NoitaEnemy }) => {
             paddingLeft: 10,
           }}
         >
-          <div style={{ fontSize: 30 }}>{enemy.name}</div>
+          <CopyLinkText
+            link={`${window.location.protocol}//${window.location.host}/g/wiki/enemies/${enemy.id}`}
+            iconSize={24}
+          >
+            <div style={{ fontSize: 30 }}>{enemy.name}</div>
+          </CopyLinkText>
           {progressDisplayDebugData && (
             <div style={{ marginTop: 5 }}>{enemy.id}</div>
           )}

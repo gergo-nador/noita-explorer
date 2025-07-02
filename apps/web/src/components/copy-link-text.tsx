@@ -7,9 +7,10 @@ import { noitaAPI } from '../noita-api.ts';
 interface Props {
   children: React.ReactNode;
   link: string;
+  iconSize?: number;
 }
 
-export const CopyLinkText = ({ children, link }: Props) => {
+export const CopyLinkText = ({ children, link, iconSize }: Props) => {
   const toast = useToast();
   const copyToClipboard = () =>
     noitaAPI.clipboard
@@ -20,7 +21,7 @@ export const CopyLinkText = ({ children, link }: Props) => {
     <HoveredStyle style={{ textDecoration: 'underline', cursor: 'pointer' }}>
       <Flex onClick={() => copyToClipboard()} gap={8}>
         {children}
-        <Icon src={linkIcon} size={20} />
+        <Icon src={linkIcon} size={iconSize ?? 20} />
       </Flex>
     </HoveredStyle>
   );
