@@ -56,11 +56,7 @@ export const SettingsCursorWandPicker = () => {
                 zIndex: isSelected ? 1 : 'initial',
               }}
             >
-              <Icon
-                type={'custom'}
-                src={wandConfig.imageBase64}
-                style={{ zoom: 3 }}
-              />
+              <Icon src={wandConfig.imageBase64} style={{ zoom: 3 }} />
               <Button
                 onClick={() =>
                   set((s) => (s.cursor.wandSpriteId = wandConfig.spriteId))

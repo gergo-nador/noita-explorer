@@ -44,7 +44,6 @@ export const PerkOverview = ({ perk }: { perk: NoitaPerk }) => {
               <NoitaTooltipWrapper content={NoitaProtections[gameEffect].name}>
                 <Icon
                   key={gameEffect}
-                  type={'custom'}
                   src={NoitaProtections[gameEffect].image}
                   size={40}
                 />

@@ -28,7 +28,6 @@ export const Easter = () => {
               position: 'absolute',
               transform: 'translateY(-50%) translateX(-50%) rotateZ(-15deg)',
             }}
-            type={'custom'}
             src={egg1}
             size={50}
           />
@@ -37,7 +36,6 @@ export const Easter = () => {
               position: 'absolute',
               transform: 'translateY(100%) translateX(-50%) rotateZ(-15deg)',
             }}
-            type={'custom'}
             src={egg2}
             size={50}
           />
@@ -54,7 +52,6 @@ export const Easter = () => {
               position: 'absolute',
               transform: 'translateY(100%) translateX(-50%) rotateZ(15deg)',
             }}
-            type={'custom'}
             src={egg1}
             size={50}
           />
@@ -63,7 +60,6 @@ export const Easter = () => {
               position: 'absolute',
               transform: 'translateY(-50%) translateX(-50%) rotateZ(15deg)',
             }}
-            type={'custom'}
             src={egg2}
             size={50}
           />

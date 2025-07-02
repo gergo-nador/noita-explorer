@@ -311,7 +311,6 @@ export const NoitaWandCard = ({
           <Flex center>
             {wandImage && (
               <Icon
-                type={'custom'}
                 src={wandImage}
                 style={{ zoom: 5, transform: 'rotate(-90deg)' }}
               />

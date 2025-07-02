@@ -277,7 +277,6 @@ export const SpellOverview = ({ spell }: { spell: NoitaSpell }) => {
       >
         <Flex height='100%' align='center'>
           <Icon
-            type={'custom'}
             src={spell.imageBase64}
             style={{ aspectRatio: 1, width: '100%' }}
           />

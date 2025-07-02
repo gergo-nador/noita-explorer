@@ -50,7 +50,6 @@ export const EnemyOverview = ({ enemy }: { enemy: NoitaEnemy }) => {
         }}
       >
         <Icon
-          type={'custom'}
           src={enemy.imageBase64}
           style={{ aspectRatio: 1, width: '100%' }}
         />
@@ -151,11 +150,7 @@ export const EnemyOverview = ({ enemy }: { enemy: NoitaEnemy }) => {
                   </div>
                 }
               >
-                <Icon
-                  type={'custom'}
-                  src={NoitaProtections[gameEffect.id].image}
-                  size={50}
-                />
+                <Icon src={NoitaProtections[gameEffect.id].image} size={50} />
               </NoitaTooltipWrapper>
             ))}
         </Flex>
