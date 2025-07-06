@@ -18,8 +18,11 @@ export default defineConfig({
       output: {
         assetFileNames: 'assets/[name][extname]',
         entryFileNames: '[name].[format].js',
+        globals: {
+          jimp: 'jimp',
+        },
       },
-      external: [],
+      external: ['jimp'],
     },
   },
 });

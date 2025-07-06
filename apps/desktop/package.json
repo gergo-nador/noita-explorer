@@ -52,6 +52,7 @@
     "copy-paste": "^1.5.3",
     "electron-squirrel-startup": "^1.0.1",
     "electron-store": "^10.0.0",
-    "jsdom": "^26.1.0"
+    "jsdom": "^26.1.0",
+    "sharp": "^0.34.2"
   }
 }
