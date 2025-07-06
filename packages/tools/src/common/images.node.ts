@@ -29,7 +29,8 @@ async function cropImageBase64(
   });
 
   const outputBuffer = await image.getBuffer('image/png');
-  const outputBase64 = outputBuffer.toString('base64');
+  const outputBase64 =
+    'data:image/png;base64,' + outputBuffer.toString('base64');
 
   return outputBase64;
 }
