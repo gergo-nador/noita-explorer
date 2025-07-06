@@ -10,7 +10,7 @@ import {
 } from '@noita-explorer/model-noita';
 import {
   mathHelpers,
-  proxiedPropertiesOf,
+  objectHelpers,
   stringHelpers,
 } from '@noita-explorer/tools';
 import { LuaWrapper } from '@noita-explorer/tools/lua';
@@ -139,7 +139,7 @@ export const scrapeSpells = async ({
     }
 
     // Multiply the damages by the damage multiplier
-    const proxiedSpell = proxiedPropertiesOf(spell);
+    const proxiedSpell = objectHelpers.proxiedPropertiesOf(spell);
     const damages = [
       proxiedSpell.meleeDamage,
       proxiedSpell.projectileDamage,

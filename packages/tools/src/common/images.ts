@@ -1,4 +1,12 @@
 import color from 'color';
+import { runtimeEnvironment } from './runtime-environment.ts';
+
+// @ts-expect-error agjang akfna
+let Canvas = undefined;
+// @ts-expect-error agjang akfna
+export const setupImages = ({ canvas }) => {
+  Canvas = canvas;
+};
 
 function rotateImageBase64(base64: string, degrees: number): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -242,10 +250,107 @@ function getImageSizeBase64(
   });
 }
 
+type CropOptions = { x: number; y: number; width: number; height: number };
+
+async function cropImageBase64(
+  base64: string,
+  options: CropOptions,
+): Promise<string> {
+  return runtimeEnvironment.pick({
+    browser: () => cropImageBase64Browser(base64, options),
+    node: () => cropImageBase64Node(base64, options),
+  });
+}
+
+async function cropImageBase64Browser(
+  base64: string,
+  options: CropOptions,
+): Promise<string> {
+  const { x: cropX, y: cropY, width: cropWidth, height: cropHeight } = options;
+
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.crossOrigin = 'anonymous'; // Needed if loading from different origin
+
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = cropWidth;
+      canvas.height = cropHeight;
+
+      const ctx = canvas.getContext('2d');
+      if (!ctx) {
+        reject('Failed to get canvas context');
+        return;
+      }
+
+      ctx.drawImage(
+        img,
+        cropX,
+        cropY,
+        cropWidth,
+        cropHeight,
+        0,
+        0,
+        cropWidth,
+        cropHeight,
+      );
+      const croppedDataUrl = canvas.toDataURL('image/png');
+      resolve(croppedDataUrl);
+    };
+
+    img.onerror = (err) => reject('Image load failed: ' + err);
+    img.src = base64;
+  });
+}
+
+async function cropImageBase64Node(
+  base64: string,
+  options: CropOptions,
+): Promise<string> {
+  const { x: cropX, y: cropY, width: cropWidth, height: cropHeight } = options;
+
+  if (
+    // @ts-expect-error agjang akfna
+    typeof Canvas.Canvas === 'undefined' ||
+    // @ts-expect-error agjang akfna
+    typeof Canvas.loadImage === 'undefined'
+  ) {
+    throw new Error(
+      'Canvas package not available. Install with: npm install canvas',
+    );
+  }
+
+  try {
+    // @ts-expect-error agjang akfna
+    const img = await Canvas.loadImage(base64);
+
+    // @ts-expect-error agjang akfna
+    const canvas = new Canvas.Canvas(cropWidth, cropHeight);
+    const ctx = canvas.getContext('2d');
+
+    ctx.drawImage(
+      img,
+      cropX,
+      cropY,
+      cropWidth,
+      cropHeight,
+      0,
+      0,
+      cropWidth,
+      cropHeight,
+    );
+
+    return canvas.toDataURL('image/png');
+  } catch (error) {
+    throw new Error('Image processing failed: ' + error);
+  }
+}
+
 export const imageHelpers = {
   trimWhitespaceBase64,
   scaleImageBase64,
   rotateImageBase64,
   getAverageColorBase64,
   getImageSizeBase64,
+  cropImageBase64,
 };

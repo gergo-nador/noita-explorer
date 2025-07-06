@@ -18,9 +18,9 @@
       "require": "./dist/xml.cjs.js"
     },
     ".": {
-      "types": "./dist/common/main.d.ts",
-      "import": "./dist/common.es.js",
-      "require": "./dist/common.cjs.js"
+      "types": "./dist/main.d.ts",
+      "import": "./dist/main.es.js",
+      "require": "./dist/main.cjs.js"
     }
   },
   "scripts": {
