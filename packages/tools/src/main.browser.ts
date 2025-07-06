@@ -6,7 +6,7 @@ export { dateHelpers } from './common/date';
 export { enumerateHelpers } from './common/enumerate';
 export { fileSystemAccessHelpers } from './common/file-access-utils';
 export { functionHelpers } from './common/function';
-export { imageHelpers } from './common/images';
+export { imageHelpers } from './common/images.browser.ts';
 export { dictionaryHelpers } from './common/map';
 export { mathHelpers } from './common/math';
 export { objectHelpers } from './common/objects';
@@ -16,5 +16,3 @@ export { runtimeEnvironment } from './common/runtime-environment';
 export { stringHelpers } from './common/string';
 export { switchStatement } from './common/switch';
 export { timeHelpers } from './common/time';
-
-export { toolsSetup } from './setup.ts';
