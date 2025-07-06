@@ -7,7 +7,7 @@ export default defineConfig({
   build: {
     lib: {
       entry: {
-        main: resolve(__dirname, 'src/main.browser.ts'),
+        main: resolve(__dirname, 'src/main.ts'),
         lua: resolve(__dirname, 'src/lua/main.ts'),
         xml: resolve(__dirname, 'src/xml/main.ts'),
       },

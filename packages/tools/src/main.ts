@@ -6,7 +6,7 @@ export { dateHelpers } from './common/date';
 export { enumerateHelpers } from './common/enumerate';
 export { fileSystemAccessHelpers } from './common/file-access-utils';
 export { functionHelpers } from './common/function';
-export { imageHelpers } from './common/images.browser.ts';
+export { imageHelpers } from './common/images.ts';
 export { dictionaryHelpers } from './common/map';
 export { mathHelpers } from './common/math';
 export { objectHelpers } from './common/objects';
