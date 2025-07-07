@@ -1,4 +1,5 @@
 export { arrayHelpers } from './common/array';
+export { base64Helpers } from './common/base64.ts';
 export { colorHelpers } from './common/color-util';
 export { ifStatement } from './common/conditions';
 export { cryptographyHelpers } from './common/cryptography';

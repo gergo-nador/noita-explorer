@@ -4,6 +4,12 @@
   "version": "1.0.0",
   "description": "My Electron application description",
   "main": ".vite/build/main.js",
+  "keywords": [],
+  "author": {
+    "name": "Gergo Nador",
+    "email": "wotng2002@gmail.com"
+  },
+  "license": "MIT",
   "scripts": {
     "start": "electron-forge start",
     "inspect": "electron-forge start",
@@ -37,12 +43,6 @@
     "typescript": "~4.5.4",
     "vite": "^6.3.2"
   },
-  "keywords": [],
-  "author": {
-    "name": "Gergo Nador",
-    "email": "wotng2002@gmail.com"
-  },
-  "license": "MIT",
   "dependencies": {
     "@noita-explorer/file-systems": "*",
     "@noita-explorer/model": "*",
@@ -52,7 +52,6 @@
     "copy-paste": "^1.5.3",
     "electron-squirrel-startup": "^1.0.1",
     "electron-store": "^10.0.0",
-    "jsdom": "^26.1.0",
-    "sharp": "^0.34.2"
+    "gif-encoder-2": "^1.0.5"
   }
 }
