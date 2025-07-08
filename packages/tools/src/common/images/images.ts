@@ -46,15 +46,8 @@ async function cropImageBase64(
   base64: string,
   options: CropImageBase64Options,
 ) {
-  if (runtimeEnvironment.isNode()) {
-    const helpers = await import('./images.node.ts');
-    return helpers.imageHelpers.cropImageBase64(base64, options);
-  } else if (runtimeEnvironment.isBrowser()) {
-    const helpers = await import('./images.browser.ts');
-    return helpers.imageHelpers.cropImageBase64(base64, options);
-  }
-
-  throw new Error('runtime environment must be either node or browser');
+  const imageHelper = await getImageHelper();
+  return imageHelper.cropImageBase64(base64, options);
 }
 
 export const imageHelpers: ImageHelpersType = {
