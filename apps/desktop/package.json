@@ -32,6 +32,7 @@
     "@electron-forge/plugin-vite": "^7.6.0",
     "@electron/fuses": "^1.8.0",
     "@types/electron-squirrel-startup": "^1.0.2",
+    "@types/omggif": "^1.0.5",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
     "electron": "33.2.1",
@@ -52,6 +53,6 @@
     "copy-paste": "^1.5.3",
     "electron-squirrel-startup": "^1.0.1",
     "electron-store": "^10.0.0",
-    "gif-encoder-2": "^1.0.5"
+    "omggif": "^1.0.10"
   }
 }
