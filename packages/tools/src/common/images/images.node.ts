@@ -2,10 +2,26 @@ import { CropImageBase64Options, ImageHelpersType } from './images.types.ts';
 import { Jimp } from 'jimp';
 import { base64Helpers } from '../base64.ts';
 
-function trimWhitespaceBase64() {}
-function scaleImageBase64() {}
-function rotateImageBase64() {}
-function getAverageColorBase64() {}
+function trimWhitespaceBase64() {
+  throw new Error(
+    'trimWhitespaceBase64 is not implemented for node.js environment',
+  );
+}
+function scaleImageBase64() {
+  throw new Error(
+    'scaleImageBase64 is not implemented for node.js environment',
+  );
+}
+function rotateImageBase64() {
+  throw new Error(
+    'rotateImageBase64 is not implemented for node.js environment',
+  );
+}
+function getAverageColorBase64() {
+  throw new Error(
+    'getAverageColorBase64 is not implemented for node.js environment',
+  );
+}
 
 async function getImageSizeBase64(base64: string) {
   base64 = base64Helpers.trimMetadata(base64);
