@@ -52,17 +52,33 @@ async function createGif({
 }) {
   const { width, height } = await imageHelpers.getImageSizeBase64(frames[0]);
 
-  const encoder = new GIFEncoder(width, height, 'neuquant');
+  // octree gives more consistent colors for Noita animations
+  const algorithm: 'neuquant' | 'octree' = 'octree';
+  const useOptimizer = false;
+  const totalNumberOfFrames = frames.length;
+  const encoder = new GIFEncoder(
+    width,
+    height,
+    algorithm,
+    useOptimizer,
+    totalNumberOfFrames,
+  );
+  encoder.setQuality(1);
   encoder.setDelay(delay);
   encoder.setRepeat(repeat ? 0 : undefined);
+
   encoder.start();
 
   const canvas = createCanvas(width, height);
-  const ctx = canvas.getContext('2d');
+  const ctx = canvas.getContext('2d', { alpha: true });
 
   for (const base64 of frames) {
     const img = await loadImage(base64);
     ctx.clearRect(0, 0, width, height);
+
+    ctx.fillStyle = '#00000000';
+    ctx.fillRect(0, 0, width, height);
+
     ctx.drawImage(img, 0, 0, width, height);
 
     encoder.addFrame(ctx);
