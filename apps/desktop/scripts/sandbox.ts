@@ -2,7 +2,7 @@ import { FileSystemDirectoryAccessNode } from '../src/file-system/file-system-di
 import { scrapeExperimental } from '@noita-explorer/scrapers';
 import fs from 'fs';
 import { GifWriter } from 'omggif';
-import { createCanvas, loadImage } from 'canvas';
+import { createCanvas, ImageData, loadImage } from 'canvas';
 import { imageHelpers, base64Helpers } from '@noita-explorer/tools';
 
 const dataParentFolder = '/Users/gergo.nador/noita-explorer/noita_data';
@@ -41,7 +41,7 @@ scrapeExperimental
     }
   });
 
-function quantizeColors(imageData, maxColors = 256) {
+function quantizeColors(imageData: ImageData, maxColors = 256) {
   const pixels = imageData.data;
   const colorMap = new Map();
   const palette = [];
@@ -100,7 +100,7 @@ function quantizeColors(imageData, maxColors = 256) {
   }
 
   return {
-    indexedData,
+    indexedData: [...indexedData],
     palette: palette, // Flatten to [r,g,b,r,g,b,...]
     transparentIndex: colorMap.has('transparent')
       ? colorMap.get('transparent')
