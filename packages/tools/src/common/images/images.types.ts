@@ -1,3 +1,10 @@
+export interface CropImageBase64Options {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
 export interface ImageHelpersType {
   trimWhitespaceBase64: (base64: string) => Promise<string>;
   scaleImageBase64: (base64: string, scaleFactor: number) => Promise<string>;
@@ -8,11 +15,6 @@ export interface ImageHelpersType {
   ) => Promise<{ width: number; height: number }>;
   cropImageBase64: (
     base64: string,
-    options: {
-      x: number;
-      y: number;
-      width: number;
-      height: number;
-    },
+    options: CropImageBase64Options,
   ) => Promise<string>;
 }

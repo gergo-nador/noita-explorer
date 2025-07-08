@@ -1,6 +1,6 @@
-import { ImageHelpersType } from './images.types.ts';
+import { CropImageBase64Options, ImageHelpersType } from './images.types.ts';
 import { Jimp } from 'jimp';
-import { base64Helpers } from './base64.ts';
+import { base64Helpers } from '../base64.ts';
 
 function trimWhitespaceBase64() {}
 function scaleImageBase64() {}
@@ -17,12 +17,7 @@ async function getImageSizeBase64(base64: string) {
 
 async function cropImageBase64(
   base64: string,
-  options: {
-    x: number;
-    y: number;
-    width: number;
-    height: number;
-  },
+  options: CropImageBase64Options,
 ) {
   base64 = base64Helpers.trimMetadata(base64);
   const inputBuffer = Buffer.from(base64, 'base64');

@@ -1,14 +1,14 @@
 export { arrayHelpers } from './common/array';
 export { base64Helpers } from './common/base64.ts';
 export { colorHelpers } from './common/color-util';
-export { ifStatement } from './common/conditions';
 export { cryptographyHelpers } from './common/cryptography';
 export { dateHelpers } from './common/date';
+export { dictionaryHelpers } from './common/map';
 export { enumerateHelpers } from './common/enumerate';
 export { fileSystemAccessHelpers } from './common/file-access-utils';
 export { functionHelpers } from './common/function';
-export { imageHelpers } from './common/images.ts';
-export { dictionaryHelpers } from './common/map';
+export { ifStatement } from './common/conditions';
+export { imageHelpers } from './common/images/images.ts';
 export { mathHelpers } from './common/math';
 export { objectHelpers } from './common/objects';
 export { promiseHelper } from './common/promises';

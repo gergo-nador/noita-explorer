@@ -1,5 +1,5 @@
 import color from 'color';
-import { ImageHelpersType } from './images.types.ts';
+import { CropImageBase64Options, ImageHelpersType } from './images.types.ts';
 
 function rotateImageBase64(base64: string, degrees: number): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -245,7 +245,7 @@ function getImageSizeBase64(
 
 async function cropImageBase64(
   base64: string,
-  options: { x: number; y: number; width: number; height: number },
+  options: CropImageBase64Options,
 ): Promise<string> {
   const { x: cropX, y: cropY, width: cropWidth, height: cropHeight } = options;
 

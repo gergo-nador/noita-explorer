@@ -1,5 +1,5 @@
-import { runtimeEnvironment } from './runtime-environment.ts';
-import { ImageHelpersType } from './images.types.ts';
+import { runtimeEnvironment } from '../runtime-environment.ts';
+import { CropImageBase64Options, ImageHelpersType } from './images.types.ts';
 
 async function getImageHelper() {
   const importStatement = await runtimeEnvironment.pick({
@@ -44,12 +44,7 @@ async function getImageSizeBase64(
 
 async function cropImageBase64(
   base64: string,
-  options: {
-    x: number;
-    y: number;
-    width: number;
-    height: number;
-  },
+  options: CropImageBase64Options,
 ) {
   if (runtimeEnvironment.isNode()) {
     const helpers = await import('./images.node.ts');
