@@ -7,6 +7,7 @@ export { dictionaryHelpers } from './common/map';
 export { enumerateHelpers } from './common/enumerate';
 export { fileSystemAccessHelpers } from './common/file-access-utils';
 export { functionHelpers } from './common/function';
+export { gifHelpers } from './common/gif/gif.ts';
 export { ifStatement } from './common/conditions';
 export { imageHelpers } from './common/images/images.ts';
 export { mathHelpers } from './common/math';

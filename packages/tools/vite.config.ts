@@ -20,9 +20,11 @@ export default defineConfig({
         entryFileNames: '[name].[format].js',
         globals: {
           jimp: 'jimp',
+          omggif: 'omggif',
+          canvas: 'canvas',
         },
       },
-      external: ['jimp'],
+      external: ['jimp', 'omggif', 'canvas'],
     },
   },
 });

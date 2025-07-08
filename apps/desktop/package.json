@@ -49,10 +49,8 @@
     "@noita-explorer/model": "*",
     "@noita-explorer/scrapers": "*",
     "@noita-explorer/tools": "*",
-    "canvas": "^3.1.2",
     "copy-paste": "^1.5.3",
     "electron-squirrel-startup": "^1.0.1",
-    "electron-store": "^10.0.0",
-    "omggif": "^1.0.10"
+    "electron-store": "^10.0.0"
   }
 }
