@@ -1,13 +1,16 @@
 import {
   FileSystemDirectoryAccess,
-  FileSystemFileAccess,
   StringKeyDictionary,
 } from '@noita-explorer/model';
-import { parseXml, XmlWrapper } from '@noita-explorer/tools/xml';
-import { parseAnimationXml } from './parse-animation-xml.ts';
 import { noitaPaths } from '../../../noita-paths.ts';
-import { imageHelpers, gifHelpers } from '@noita-explorer/tools';
-import { Sprite, SpriteAnimation, NoitaGif } from '@noita-explorer/model-noita';
+import {
+  base64Helpers,
+  gifHelpers,
+  stringHelpers,
+} from '@noita-explorer/tools';
+import { Sprite, NoitaGif } from '@noita-explorer/model-noita';
+import { scrapeAnimationFrames } from './scrape-animation-frames.ts';
+import { scrapeAnimationXmlDefinition } from './scrape-animation-xml-definition.ts';
 
 export const scrapeAnimations = async ({
   dataWakParentDirectoryApi,
@@ -57,10 +60,13 @@ export const scrapeAnimations = async ({
         repeat: framesResult.animation.loop ? 0 : undefined,
       });
 
+      const gifBuffer = stringHelpers.uint8ArrayToBase64(gifResult.buffer);
+      const gifBufferBase64 = base64Helpers.appendMetadata(gifBuffer);
+
       const gif: NoitaGif = {
         animationId: framesResult.animation.name,
         sprite: framesResult.animation,
-        buffer: gifResult.buffer,
+        buffer: gifBufferBase64,
         repeat: framesResult.animation.loop,
         firstFrame: framesResult.frameImages[0],
       };
@@ -72,81 +78,4 @@ export const scrapeAnimations = async ({
   }
 
   return animationsReturnValue;
-};
-
-const scrapeAnimationXmlDefinition = async ({
-  id,
-  animationsFiles,
-}: {
-  id: string;
-  animationsFiles: FileSystemFileAccess[];
-}) => {
-  const xmlFilePath = id + '.xml';
-  const xmlFile = animationsFiles.find(
-    (file) => file.getName() === xmlFilePath,
-  );
-
-  if (!xmlFile) {
-    return undefined;
-  }
-
-  const xmlText = await xmlFile.read.asText();
-  const parsedXml = await parseXml(xmlText);
-  const xml = XmlWrapper(parsedXml);
-
-  return parseAnimationXml({ xml, id });
-};
-
-interface AnimationFramesResult {
-  animation: SpriteAnimation;
-  frameImages: string[];
-}
-
-const scrapeAnimationFrames = async ({
-  sprite,
-  dataWakParentDirectoryApi,
-}: {
-  sprite: Sprite;
-  dataWakParentDirectoryApi: FileSystemDirectoryAccess;
-}) => {
-  const png = await dataWakParentDirectoryApi.getFile(sprite.spriteFilename);
-  const imageBase64 = await png.read.asImageBase64();
-
-  const animations: AnimationFramesResult[] = [];
-  for (const spriteAnimation of sprite.animations) {
-    const framePositions = calculateFramePositions(spriteAnimation);
-    const frameImages: string[] = [];
-    for (const framePosition of framePositions) {
-      const image = await imageHelpers.cropImageBase64(imageBase64, {
-        x: framePosition.x,
-        y: framePosition.y,
-        width: spriteAnimation.frameWidth,
-        height: spriteAnimation.frameHeight,
-      });
-
-      frameImages.push(image);
-    }
-
-    animations.push({ animation: spriteAnimation, frameImages });
-  }
-
-  return animations;
-};
-
-const calculateFramePositions = (
-  animation: SpriteAnimation,
-): { x: number; y: number }[] => {
-  const positions: Array<{ x: number; y: number }> = [];
-
-  for (let frameIndex = 0; frameIndex < animation.frameCount; frameIndex++) {
-    const col = frameIndex % animation.framesPerRow;
-    const row = Math.floor(frameIndex / animation.framesPerRow);
-
-    const x = animation.posX + col * animation.frameWidth;
-    const y = animation.posY + row * animation.frameHeight;
-
-    positions.push({ x, y });
-  }
-
-  return positions;
 };
