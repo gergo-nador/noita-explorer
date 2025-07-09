@@ -1,5 +1,5 @@
 import { XmlWrapperType } from '@noita-explorer/tools/xml';
-import { Sprite, SpriteAnimation } from './types.ts';
+import { Sprite, SpriteAnimation } from '@noita-explorer/model-noita';
 
 export const parseAnimationXml = ({
   id,

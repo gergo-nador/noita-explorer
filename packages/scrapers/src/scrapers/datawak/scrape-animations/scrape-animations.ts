@@ -1,65 +1,123 @@
-import { FileSystemDirectoryAccess } from '@noita-explorer/model';
+import {
+  FileSystemDirectoryAccess,
+  FileSystemFileAccess,
+  StringKeyDictionary,
+} from '@noita-explorer/model';
 import { parseXml, XmlWrapper } from '@noita-explorer/tools/xml';
 import { parseAnimationXml } from './parse-animation-xml.ts';
 import { noitaPaths } from '../../../noita-paths.ts';
-import { imageHelpers } from '@noita-explorer/tools';
-import { SpriteAnimation } from './types.ts';
-
-type CropImageFunctionType = (
-  imageBase64: string,
-  options: { x: number; y: number; width: number; height: number },
-) => Promise<string>;
+import { imageHelpers, gifHelpers } from '@noita-explorer/tools';
+import { Sprite, SpriteAnimation, NoitaGif } from '@noita-explorer/model-noita';
 
 export const scrapeAnimations = async ({
   dataWakParentDirectoryApi,
-  cropImageOverride,
+  animationInfos,
 }: {
   dataWakParentDirectoryApi: FileSystemDirectoryAccess;
-  cropImageOverride?: CropImageFunctionType;
+  animationInfos: { id: string }[];
 }) => {
   const animationsFolderPath = await dataWakParentDirectoryApi.path.join(
     noitaPaths.noitaDataWak.entities,
   );
   const animationsFolder =
     await dataWakParentDirectoryApi.getDirectory(animationsFolderPath);
+  const animationFiles = await animationsFolder.listFiles();
 
-  return scrapeAnimation({
-    id: 'alchemist',
-    animationsFolder,
-    dataWakParentDirectoryApi,
-    cropImageOverride,
-  });
+  const animationsReturnValue: StringKeyDictionary<{
+    sprite: Sprite;
+    gifs: NoitaGif[];
+  }> = {};
+
+  for (const animationInfo of animationInfos) {
+    const sprite = await scrapeAnimationXmlDefinition({
+      id: animationInfo.id,
+      animationsFiles: animationFiles,
+    });
+
+    if (!sprite) {
+      // record this as xml file not found
+      continue;
+    }
+
+    const animations: { sprite: Sprite; gifs: NoitaGif[] } = {
+      sprite,
+      gifs: [],
+    };
+
+    const framesResults = await scrapeAnimationFrames({
+      sprite: sprite,
+      dataWakParentDirectoryApi,
+    });
+
+    for (const framesResult of framesResults) {
+      const delayMs = framesResult.animation.frameWait * 1000;
+      const gifResult = await gifHelpers.createGif({
+        frames: framesResult.frameImages,
+        delayMs: delayMs,
+        repeat: framesResult.animation.loop ? 0 : undefined,
+      });
+
+      const gif: NoitaGif = {
+        animationId: framesResult.animation.name,
+        sprite: framesResult.animation,
+        buffer: gifResult.buffer,
+        repeat: framesResult.animation.loop,
+        firstFrame: framesResult.frameImages[0],
+      };
+
+      animations.gifs.push(gif);
+    }
+
+    animationsReturnValue[animationInfo.id] = animations;
+  }
+
+  return animationsReturnValue;
 };
 
-const scrapeAnimation = async ({
+const scrapeAnimationXmlDefinition = async ({
   id,
-  animationsFolder,
-  dataWakParentDirectoryApi,
-  cropImageOverride,
+  animationsFiles,
 }: {
   id: string;
-  animationsFolder: FileSystemDirectoryAccess;
-  dataWakParentDirectoryApi: FileSystemDirectoryAccess;
-  cropImageOverride?: CropImageFunctionType;
+  animationsFiles: FileSystemFileAccess[];
 }) => {
   const xmlFilePath = id + '.xml';
-  const xmlFile = await animationsFolder.getFile(xmlFilePath);
+  const xmlFile = animationsFiles.find(
+    (file) => file.getName() === xmlFilePath,
+  );
+
+  if (!xmlFile) {
+    return undefined;
+  }
+
   const xmlText = await xmlFile.read.asText();
   const parsedXml = await parseXml(xmlText);
   const xml = XmlWrapper(parsedXml);
 
-  const sprite = parseAnimationXml({ xml, id });
+  return parseAnimationXml({ xml, id });
+};
 
+interface AnimationFramesResult {
+  animation: SpriteAnimation;
+  frameImages: string[];
+}
+
+const scrapeAnimationFrames = async ({
+  sprite,
+  dataWakParentDirectoryApi,
+}: {
+  sprite: Sprite;
+  dataWakParentDirectoryApi: FileSystemDirectoryAccess;
+}) => {
   const png = await dataWakParentDirectoryApi.getFile(sprite.spriteFilename);
   const imageBase64 = await png.read.asImageBase64();
 
-  const animations = [];
+  const animations: AnimationFramesResult[] = [];
   for (const spriteAnimation of sprite.animations) {
     const framePositions = calculateFramePositions(spriteAnimation);
     const frameImages: string[] = [];
     for (const framePosition of framePositions) {
-      const cropImage = cropImageOverride ?? imageHelpers.cropImageBase64;
-      const image = await cropImage(imageBase64, {
+      const image = await imageHelpers.cropImageBase64(imageBase64, {
         x: framePosition.x,
         y: framePosition.y,
         width: spriteAnimation.frameWidth,
@@ -72,7 +130,7 @@ const scrapeAnimation = async ({
     animations.push({ animation: spriteAnimation, frameImages });
   }
 
-  return { sprite, png, animations };
+  return animations;
 };
 
 const calculateFramePositions = (

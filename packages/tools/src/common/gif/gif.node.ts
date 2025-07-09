@@ -73,7 +73,7 @@ async function createGif({ frames, delayMs, repeat }: CreateGifOptionsType) {
 
   const buf = new Uint8Array(width * height * frames.length * 2);
   const gif = new GifWriter(buf, width, height, {
-    loop: repeat ? 0 : undefined,
+    loop: repeat,
   });
 
   const canvas = createCanvas(width, height);
