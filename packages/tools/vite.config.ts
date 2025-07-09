@@ -27,4 +27,7 @@ export default defineConfig({
       external: ['jimp', 'omggif', 'canvas'],
     },
   },
+  optimizeDeps: {
+    exclude: ['canvas'],
+  },
 });

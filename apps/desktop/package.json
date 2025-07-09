@@ -18,7 +18,7 @@
     "make": "electron-forge make",
     "publish": "electron-forge publish",
     "lint": "eslint --ext .ts,.tsx .",
-    "scrape-data-wak": "npx tsx scripts/scrape-data-wak/index.ts -t ../../noita_data/common.csv --data-f ../../noita_data -o ../web/public/noita_wak_data.json",
+    "scrape-data-wak": "npx tsx scripts/scrape-data-wak.ts -t ../../noita_data/common.csv --data-f ../../noita_data -o ../web/public"
   },
   "devDependencies": {
     "@electron-forge/cli": "^7.6.0",

@@ -15,6 +15,7 @@ export default defineConfig({
         assetFileNames: 'assets/[name][extname]',
         entryFileNames: '[name].[format].js',
       },
+      external: ['canvas'],
     },
   },
 });

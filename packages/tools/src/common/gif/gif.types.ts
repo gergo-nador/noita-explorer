@@ -7,6 +7,8 @@ export interface CreateGifOptionsType {
    * - `x` (>0): repeat x times
    */
   repeat: number | undefined;
+  width: number;
+  height: number;
 }
 
 export interface CreateGifReturnType {

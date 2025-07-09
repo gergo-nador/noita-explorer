@@ -1,5 +1,4 @@
 import { CreateGifOptionsType, GifHelpersType } from './gif.types.ts';
-import { imageHelpers } from '../images/images.node.ts';
 import { GifWriter } from 'omggif';
 import { createCanvas, ImageData, loadImage } from 'canvas';
 
@@ -68,9 +67,13 @@ function quantizeColors(imageData: ImageData, maxColors = 256) {
   };
 }
 
-async function createGif({ frames, delayMs, repeat }: CreateGifOptionsType) {
-  const { width, height } = await imageHelpers.getImageSizeBase64(frames[0]);
-
+async function createGif({
+  frames,
+  delayMs,
+  repeat,
+  width,
+  height,
+}: CreateGifOptionsType) {
   const buf = new Uint8Array(width * height * frames.length * 2);
   const gif = new GifWriter(buf, width, height, {
     loop: repeat,
