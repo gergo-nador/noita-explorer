@@ -86,8 +86,8 @@ export const scrapeAnimation = async ({
       frames: framesResult.frameImages,
       delayMs: delayMs,
       repeat: framesResult.animation.loop ? 0 : undefined,
-      width: framesResult.animation.frameWidth,
-      height: framesResult.animation.frameHeight,
+      width: framesResult.animation.frameActualWidth,
+      height: framesResult.animation.frameActualHeight,
     });
 
     const gifBuffer = stringHelpers.uint8ArrayToBase64(gifResult.buffer);

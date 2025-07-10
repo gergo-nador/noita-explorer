@@ -27,13 +27,24 @@ export const parseAnimationXml = ({
   for (const animationElement of animationElements) {
     const loopAttr = animationElement.getAttribute('loop');
 
+    const frameHeight = animationElement
+      .getRequiredAttribute('frame_height')
+      .asInt();
+    const frameWidth = animationElement
+      .getRequiredAttribute('frame_width')
+      .asInt();
+
+    const shrinkByOnePixel =
+      animationElement.getAttribute('shrink_by_one_pixel')?.asBoolean() ??
+      false;
+
     const animation: SpriteAnimation = {
       name: animationElement.getRequiredAttribute('name').asText(),
       frameCount: animationElement.getRequiredAttribute('frame_count').asInt(),
-      frameHeight: animationElement
-        .getRequiredAttribute('frame_height')
-        .asInt(),
-      frameWidth: animationElement.getRequiredAttribute('frame_width').asInt(),
+      frameHeight: frameHeight,
+      frameActualHeight: shrinkByOnePixel ? frameHeight - 1 : frameHeight,
+      frameWidth: frameWidth,
+      frameActualWidth: shrinkByOnePixel ? frameWidth - 1 : frameWidth,
       frameWait: animationElement.getRequiredAttribute('frame_wait').asFloat(),
       framesPerRow: animationElement
         .getRequiredAttribute('frames_per_row')
@@ -42,9 +53,7 @@ export const parseAnimationXml = ({
       loop: loopAttr ? (loopAttr.asBoolean() ?? false) : true,
       posX: animationElement.getRequiredAttribute('pos_x').asInt(),
       posY: animationElement.getRequiredAttribute('pos_y').asInt(),
-      shrinkByOnePixel:
-        animationElement.getAttribute('shrink_by_one_pixel')?.asBoolean() ??
-        false,
+      shrinkByOnePixel: shrinkByOnePixel,
     };
 
     sprite.animations.push(animation);

@@ -64,8 +64,7 @@ async function runScrape(args: Record<string, string>) {
 
   const gifs = await scrapeExperimental.scrapeAnimations({
     dataWakParentDirectoryApi: dataWakDir,
-    //animationInfos: dataWak.enemies.map((e) => ({ id: e.id })),
-    animationInfos: [{ id: 'necromancer_shop' }],
+    animationInfos: dataWak.enemies.map((e) => ({ id: e.id })),
   });
 
   {

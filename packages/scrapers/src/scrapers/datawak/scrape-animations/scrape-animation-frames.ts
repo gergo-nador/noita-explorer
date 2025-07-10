@@ -20,19 +20,11 @@ export const scrapeAnimationFrames = async ({
 
     const frameImages: string[] = [];
     for (const framePosition of framePositions) {
-      let cropWidth = spriteAnimation.frameWidth;
-      let cropHeight = spriteAnimation.frameHeight;
-
-      if (spriteAnimation.shrinkByOnePixel) {
-        cropWidth--;
-        cropHeight--;
-      }
-
       const image = await imageHelpers.cropImageBase64(imageBase64, {
         x: framePosition.x,
         y: framePosition.y,
-        width: cropWidth,
-        height: cropHeight,
+        width: spriteAnimation.frameActualWidth,
+        height: spriteAnimation.frameActualHeight,
       });
 
       frameImages.push(image);
