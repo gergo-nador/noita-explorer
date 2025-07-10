@@ -17,13 +17,22 @@ export const scrapeAnimationFrames = async ({
   const animations: AnimationFramesResult[] = [];
   for (const spriteAnimation of sprite.animations) {
     const framePositions = calculateFramePositions(spriteAnimation);
+
     const frameImages: string[] = [];
     for (const framePosition of framePositions) {
+      let cropWidth = spriteAnimation.frameWidth;
+      let cropHeight = spriteAnimation.frameHeight;
+
+      if (spriteAnimation.shrinkByOnePixel) {
+        cropWidth--;
+        cropHeight--;
+      }
+
       const image = await imageHelpers.cropImageBase64(imageBase64, {
         x: framePosition.x,
         y: framePosition.y,
-        width: spriteAnimation.frameWidth,
-        height: spriteAnimation.frameHeight,
+        width: cropWidth,
+        height: cropHeight,
       });
 
       frameImages.push(image);

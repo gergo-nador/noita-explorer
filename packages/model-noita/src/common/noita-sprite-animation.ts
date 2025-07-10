@@ -8,6 +8,7 @@ export interface SpriteAnimation {
   loop: boolean;
   posX: number;
   posY: number;
+  shrinkByOnePixel: boolean;
 }
 
 export interface Sprite {

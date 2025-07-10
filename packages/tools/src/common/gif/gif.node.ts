@@ -74,7 +74,7 @@ async function createGif({
   width,
   height,
 }: CreateGifOptionsType) {
-  const buf = new Uint8Array(width * height * frames.length * 2);
+  const buf: number[] = [];
   const gif = new GifWriter(buf, width, height, {
     loop: repeat,
   });
@@ -102,7 +102,8 @@ async function createGif({
   }
 
   const buffer = buf.slice(0, gif.end());
-  return { buffer };
+  const uintBuffer = new Uint8Array(buffer);
+  return { buffer: uintBuffer };
 }
 
 export const gifHelper: GifHelpersType = { createGif };

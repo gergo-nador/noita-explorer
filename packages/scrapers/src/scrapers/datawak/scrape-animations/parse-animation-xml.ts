@@ -42,6 +42,9 @@ export const parseAnimationXml = ({
       loop: loopAttr ? (loopAttr.asBoolean() ?? false) : true,
       posX: animationElement.getRequiredAttribute('pos_x').asInt(),
       posY: animationElement.getRequiredAttribute('pos_y').asInt(),
+      shrinkByOnePixel:
+        animationElement.getAttribute('shrink_by_one_pixel')?.asBoolean() ??
+        false,
     };
 
     sprite.animations.push(animation);

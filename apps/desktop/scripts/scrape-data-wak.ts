@@ -8,6 +8,7 @@ import { scrapeDataWakContent } from '../src/tools/scrape-data-wak';
 import { FileSystemDirectoryAccessNode } from '../src/file-system/file-system-directory-access-node';
 import fs from 'fs';
 import path from 'path';
+import { base64Helpers } from '@noita-explorer/tools';
 
 /**
  * Arguments:
@@ -63,7 +64,8 @@ async function runScrape(args: Record<string, string>) {
 
   const gifs = await scrapeExperimental.scrapeAnimations({
     dataWakParentDirectoryApi: dataWakDir,
-    animationInfos: dataWak.enemies.map((e) => ({ id: e.id })),
+    //animationInfos: dataWak.enemies.map((e) => ({ id: e.id })),
+    animationInfos: [{ id: 'necromancer_shop' }],
   });
 
   {
@@ -84,5 +86,17 @@ async function runScrape(args: Record<string, string>) {
     const jsonGifs = JSON.stringify(gifs, undefined, 2);
 
     fs.writeFileSync(outputGifs, jsonGifs);
+
+    for (const [key, value] of Object.entries(gifs)) {
+      const outputTempPath = path.resolve(args['o'], 'generated', key);
+      fs.mkdirSync(outputTempPath, { recursive: true });
+
+      for (const gif of value.gifs) {
+        const gifPath = path.resolve(outputTempPath, gif.animationId + '.gif');
+        const base64 = base64Helpers.trimMetadata(gif.buffer);
+
+        fs.writeFileSync(gifPath, base64, 'base64');
+      }
+    }
   }
 }
