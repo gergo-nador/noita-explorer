@@ -9,8 +9,8 @@ your previous sessions?
 
 You are at the perfect place!
 
-Website: https://noita-explorer.pages.dev/
-Dev website: https://dev.noita-explorer.pages.dev/
+Website: https://noita-explorer.com
+Dev website: https://dev.noita-explorer.com
 
 ## Disclaimer
 
@@ -123,9 +123,9 @@ in the near future, I've come up with this simple structure:
 ### Branches
 
 - `dev`: active development branch. Mainly a beta testing branch. New features can be broken.
-  - deployed: https://dev.noita-explorer.pages.dev/
+  - deployed: https://dev.noita-explorer.com (or https://dev.noita-explorer.pages.dev)
 - `main`: main production branch. If a feature is well tested in the `dev` branch, it will be merged into this one.
-  - deployed: https://noita-explorer.pages.dev/
+  - deployed: https://noita-explorer.com (or https://noita-explorer.pages.dev)
 
 
 ## Project structure
