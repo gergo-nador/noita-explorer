@@ -56,6 +56,8 @@ The desktop app is a work in progress, but eventually it is planned to be releas
 - Scrape data.wak file
 - Open folders and files in the client's operating system's file explorer
 
+Warning: The desktop features have been unmaintained, probably it is unstable, run it at your own risk.
+
 
 ### Feature request / Bug report
 

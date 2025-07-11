@@ -1,6 +1,6 @@
 import { SpriteAnimation } from '../common/noita-sprite-animation.ts';
 
-export interface NoitaGif {
+export interface NoitaScrapedGif {
   animationId: string;
   sprite: SpriteAnimation;
   buffer: string;

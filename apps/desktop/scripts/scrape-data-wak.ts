@@ -1,14 +1,9 @@
 import { FileSystemFileAccessNode } from '../src/file-system/file-system-file-access-node';
-import {
-  scrape,
-  scrapeExperimental,
-  scrapeUtils,
-} from '@noita-explorer/scrapers';
+import { scrape, scrapeUtils } from '@noita-explorer/scrapers';
 import { scrapeDataWakContent } from '../src/tools/scrape-data-wak';
 import { FileSystemDirectoryAccessNode } from '../src/file-system/file-system-directory-access-node';
 import fs from 'fs';
 import path from 'path';
-import { base64Helpers } from '@noita-explorer/tools';
 
 /**
  * Arguments:
@@ -60,12 +55,16 @@ async function runScrape(args: Record<string, string>) {
     dataWakParentDirectory: dataWakDir,
   });
 
+  const errors = Object.values(dataWakResult).filter((v) => v.error);
+  if (errors.length > 0) {
+    console.error('Error happened during scraping data wak content:', errors);
+    console.error('Aborting!');
+    return;
+  }
+
   const dataWak = scrapeUtils.convertScrapeResultsToDataWak(dataWakResult);
 
-  const gifs = await scrapeExperimental.scrapeAnimations({
-    dataWakParentDirectoryApi: dataWakDir,
-    animationInfos: dataWak.enemies.map((e) => ({ id: e.id })),
-  });
+  const gifs = dataWakResult.enemyGifs.data;
 
   {
     const noitaDataWakFileName = 'noita_wak_data.json';
@@ -82,20 +81,8 @@ async function runScrape(args: Record<string, string>) {
     const outputGifs = args
       ? path.resolve(args['o'], gifFileName)
       : path.resolve(gifFileName);
-    const jsonGifs = JSON.stringify(gifs, undefined, 2);
+    const jsonGifs = JSON.stringify(gifs);
 
     fs.writeFileSync(outputGifs, jsonGifs);
-
-    for (const [key, value] of Object.entries(gifs)) {
-      const outputTempPath = path.resolve(args['o'], 'generated', key);
-      fs.mkdirSync(outputTempPath, { recursive: true });
-
-      for (const gif of value.gifs) {
-        const gifPath = path.resolve(outputTempPath, gif.animationId + '.gif');
-        const base64 = base64Helpers.trimMetadata(gif.buffer);
-
-        fs.writeFileSync(gifPath, base64, 'base64');
-      }
-    }
   }
 }

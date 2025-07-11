@@ -9,7 +9,10 @@ import {
   gifHelpers,
   stringHelpers,
 } from '@noita-explorer/tools';
-import { NoitaGif } from '@noita-explorer/model-noita';
+import {
+  NoitaScrapedGif,
+  NoitaScrapedEnemyGif,
+} from '@noita-explorer/model-noita';
 import { scrapeAnimationFrames } from './scrape-animation-frames.ts';
 import { scrapeAnimationXmlDefinition } from './scrape-animation-xml-definition.ts';
 
@@ -19,7 +22,7 @@ export const scrapeAnimations = async ({
 }: {
   dataWakParentDirectoryApi: FileSystemDirectoryAccess;
   animationInfos: { id: string }[];
-}) => {
+}): Promise<StringKeyDictionary<NoitaScrapedEnemyGif>> => {
   const animationsFolderPath = await dataWakParentDirectoryApi.path.join(
     noitaPaths.noitaDataWak.entities,
   );
@@ -27,9 +30,7 @@ export const scrapeAnimations = async ({
     await dataWakParentDirectoryApi.getDirectory(animationsFolderPath);
   const animationFiles = await animationsFolder.listFiles();
 
-  const animationsReturnValue: StringKeyDictionary<{
-    gifs: NoitaGif[];
-  }> = {};
+  const animationsReturnValue: StringKeyDictionary<NoitaScrapedEnemyGif> = {};
 
   for (const animationInfo of animationInfos) {
     try {
@@ -71,7 +72,7 @@ export const scrapeAnimation = async ({
     return;
   }
 
-  const animations: { gifs: NoitaGif[] } = {
+  const animations: { gifs: NoitaScrapedGif[] } = {
     gifs: [],
   };
 
@@ -93,7 +94,7 @@ export const scrapeAnimation = async ({
     const gifBuffer = stringHelpers.uint8ArrayToBase64(gifResult.buffer);
     const gifBufferBase64 = base64Helpers.appendMetadata(gifBuffer);
 
-    const gif: NoitaGif = {
+    const gif: NoitaScrapedGif = {
       animationId: framesResult.animation.name,
       sprite: framesResult.animation,
       buffer: gifBufferBase64,

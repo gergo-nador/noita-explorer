@@ -28,12 +28,9 @@ export const scrape = {
   translations: readTranslations,
   wandConfigs: scrapeWandConfigs,
   worldState: scrapeWorldState,
+  enemyAnimations: scrapeAnimations,
 };
 
 export const scrapeUtils = {
   convertScrapeResultsToDataWak,
-};
-
-export const scrapeExperimental = {
-  scrapeAnimations: scrapeAnimations,
 };

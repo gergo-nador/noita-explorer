@@ -1,10 +1,10 @@
-import { NoitaEnemy } from '@noita-explorer/model-noita';
 import {
   FileSystemDirectoryAccess,
   FileSystemFileAccess,
 } from '@noita-explorer/model';
 import { parseXml, XmlWrapper } from '@noita-explorer/tools/xml';
 import { extractEnemyProperties } from './extract-enemy-properties.ts';
+import { NoitaScrapedEnemy } from '@noita-explorer/model-noita';
 
 /**
  * Traverses through the hierarchy tree of base definitions
@@ -17,7 +17,7 @@ export const traverseThroughBaseFiles = async ({
   file,
   dataWakParentDirectoryApi,
 }: {
-  enemy: NoitaEnemy;
+  enemy: NoitaScrapedEnemy;
   file: FileSystemFileAccess;
   dataWakParentDirectoryApi: FileSystemDirectoryAccess;
 }) => {

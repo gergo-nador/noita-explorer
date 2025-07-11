@@ -1,7 +1,6 @@
 import {
   NoitaDataWakScrapeResult,
   NoitaDataWakScrapeResultStatus,
-  NoitaEnemy,
   NoitaMaterial,
   NoitaMaterialReaction,
   NoitaPerk,
@@ -20,6 +19,8 @@ import { nodeFileSystemHelpers } from './file-system';
 import { Buffer } from 'buffer';
 import { FileSystemDirectoryAccessDataWakMemory } from '@noita-explorer/file-systems';
 import { FileSystemDirectoryAccessNode } from '../file-system/file-system-directory-access-node';
+import { NoitaScrapedEnemy } from '@noita-explorer/model-noita/src/scraping/noita-scraped-enemy';
+import { NoitaScrapedEnemyGif } from '@noita-explorer/model-noita/src/scraping/noita-scraped-enemy-gif';
 
 export const scrapeDataWak = async ({
   commonCsvPath,
@@ -47,6 +48,9 @@ export const scrapeDataWak = async ({
         },
       },
       enemies: {
+        status: NoitaDataWakScrapeResultStatus.SKIPPED,
+      },
+      enemyGifs: {
         status: NoitaDataWakScrapeResultStatus.SKIPPED,
       },
       perks: {
@@ -130,7 +134,7 @@ export const scrapeDataWakContent = async ({
     spellsError = e;
   }
 
-  let enemies: NoitaEnemy[] = [];
+  let enemies: NoitaScrapedEnemy[] = [];
   let enemiesError: unknown | undefined = undefined;
   try {
     enemies = await scrape.enemies({
@@ -139,6 +143,20 @@ export const scrapeDataWakContent = async ({
     });
   } catch (err) {
     enemiesError = err;
+  }
+
+  let enemyGifs: StringKeyDictionary<NoitaScrapedEnemyGif> = {};
+  let enemyGifErrors: unknown | undefined = undefined;
+  const shouldSkipEnemyGifScraping = enemies.length === 0;
+  try {
+    if (!shouldSkipEnemyGifScraping) {
+      enemyGifs = await scrape.enemyAnimations({
+        dataWakParentDirectoryApi: dataWakParentDirectory,
+        animationInfos: enemies.map((e) => ({ id: e.id })),
+      });
+    }
+  } catch (err) {
+    enemyGifErrors = err;
   }
 
   let wandConfigs: NoitaWandConfig[] = [];
@@ -194,6 +212,15 @@ export const scrapeDataWakContent = async ({
           : NoitaDataWakScrapeResultStatus.FAILED,
       data: enemies,
       error: enemiesError,
+    },
+    enemyGifs: {
+      status: shouldSkipEnemyGifScraping
+        ? NoitaDataWakScrapeResultStatus.SKIPPED
+        : enemyGifs === undefined
+          ? NoitaDataWakScrapeResultStatus.SUCCESS
+          : NoitaDataWakScrapeResultStatus.FAILED,
+      data: enemyGifs,
+      error: enemyGifErrors,
     },
     wandConfigs: {
       status:
