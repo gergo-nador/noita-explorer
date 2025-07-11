@@ -27,6 +27,18 @@ export default defineConfig(({ mode }) => {
 
     build: {
       sourcemap: true,
+      rollupOptions: {
+        output: {
+          assetFileNames: 'assets/[name][extname]',
+          entryFileNames: '[name].[format].js',
+          globals: {
+            jimp: 'jimp',
+            omggif: 'omggif',
+            canvas: 'canvas',
+          },
+        },
+        external: ['jimp', 'omggif', 'canvas'],
+      },
     },
   };
 });

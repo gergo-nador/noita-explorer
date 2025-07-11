@@ -24,7 +24,7 @@
   },
   "scripts": {
     "dev": "vite build --watch",
-    "build": "tsc && vite build --mode node && vite build --mode browser",
+    "build": "tsc && vite build",
     "preview": "vite preview",
     "generate-barrels": "barrelsby --config barrels.config.json",
     "pretest": "tsc --noEmit",
