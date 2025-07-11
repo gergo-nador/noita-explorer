@@ -1,6 +1,7 @@
 import { NoitaProgressEntity } from '../noita-progress-entity.ts';
 import { NoitaDamageMultipliers } from './noita-damage-multiplier.ts';
 import { NoitaGenomeData } from './noita-genome-data.ts';
+import { StringKeyDictionary } from '@noita-explorer/model';
 
 export interface NoitaEnemy extends NoitaProgressEntity {
   id: string;
@@ -24,6 +25,8 @@ export interface NoitaEnemy extends NoitaProgressEntity {
   gameEffects: NoitaEnemyGameEffect[];
 
   debug: NoitaEnemyDebugObject;
+
+  gifs: StringKeyDictionary<NoitaEnemyGif> | undefined;
 }
 
 export interface NoitaEnemyMaterialDamage {
@@ -33,7 +36,7 @@ export interface NoitaEnemyMaterialDamage {
 
 export interface NoitaEnemyVariant {
   variantId: string;
-  enemy: NoitaEnemy;
+  enemy: Omit<NoitaEnemy, 'variants'>;
 }
 
 export interface NoitaEnemyGameEffect {
@@ -45,4 +48,13 @@ export interface NoitaEnemyDebugObject {
   fileHierarchy: string[];
   entityTags: string[];
   imagePath: string;
+}
+
+export interface NoitaEnemyGif {
+  name: string;
+  frameCount: number;
+  frameWait: number;
+  frameHeight: number;
+  frameWidth: number;
+  loop: boolean;
 }

@@ -1,4 +1,7 @@
-import { NoitaEnemy, NoitaEnemyGameEffect } from '@noita-explorer/model-noita';
+import {
+  NoitaEnemyGameEffect,
+  NoitaScrapedEnemy,
+} from '@noita-explorer/model-noita';
 import { XmlWrapperType } from '@noita-explorer/tools/xml';
 import { splitNoitaEntityTags } from '../../common/tags.ts';
 import { arrayHelpers } from '@noita-explorer/tools';
@@ -16,7 +19,7 @@ export const extractEnemyProperties = ({
   enemy,
   entityTag,
 }: {
-  enemy: NoitaEnemy;
+  enemy: NoitaScrapedEnemy;
   entityTag: XmlWrapperType;
 }) => {
   const tags = entityTag.getAttribute('tags')?.asText();

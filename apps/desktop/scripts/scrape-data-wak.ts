@@ -1,15 +1,15 @@
-import { FileSystemFileAccessNode } from '../../src/file-system/file-system-file-access-node';
+import { FileSystemFileAccessNode } from '../src/file-system/file-system-file-access-node';
 import { scrape, scrapeUtils } from '@noita-explorer/scrapers';
-import { scrapeDataWakContent } from '../../src/tools/scrape-data-wak';
-import { FileSystemDirectoryAccessNode } from '../../src/file-system/file-system-directory-access-node';
+import { scrapeDataWakContent } from '../src/tools/scrape-data-wak';
+import { FileSystemDirectoryAccessNode } from '../src/file-system/file-system-directory-access-node';
 import fs from 'fs';
 import path from 'path';
 
 /**
  * Arguments:
- *  -t: path for translation file
- *  --data-f: path for data.wak extracted into a folder (parent folder)
- *  -o: output path
+ *  - -t: path for translation file
+ *  - --data-f: path for data.wak extracted into a folder (parent folder)
+ *  - -o: output directory
  */
 
 const argv: Record<string, string> = require('minimist')(process.argv.slice(2));
@@ -55,10 +55,34 @@ async function runScrape(args: Record<string, string>) {
     dataWakParentDirectory: dataWakDir,
   });
 
+  const errors = Object.values(dataWakResult).filter((v) => v.error);
+  if (errors.length > 0) {
+    console.error('Error happened during scraping data wak content:', errors);
+    console.error('Aborting!');
+    return;
+  }
+
   const dataWak = scrapeUtils.convertScrapeResultsToDataWak(dataWakResult);
 
-  const json = JSON.stringify(dataWak);
-  const output = path.resolve(args['o'] ?? 'noita_data_wak.json');
+  const gifs = dataWakResult.enemyGifs.data;
 
-  fs.writeFileSync(output, json);
+  {
+    const noitaDataWakFileName = 'noita_wak_data.json';
+    const outputMain = args
+      ? path.resolve(args['o'], noitaDataWakFileName)
+      : path.resolve(noitaDataWakFileName);
+    const jsonMain = JSON.stringify(dataWak);
+
+    fs.writeFileSync(outputMain, jsonMain);
+  }
+
+  {
+    const gifFileName = 'noita_data_gifs.json';
+    const outputGifs = args
+      ? path.resolve(args['o'], gifFileName)
+      : path.resolve(gifFileName);
+    const jsonGifs = JSON.stringify(gifs);
+
+    fs.writeFileSync(outputGifs, jsonGifs);
+  }
 }

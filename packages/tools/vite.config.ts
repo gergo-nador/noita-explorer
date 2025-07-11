@@ -8,7 +8,6 @@ export default defineConfig({
     lib: {
       entry: {
         main: resolve(__dirname, 'src/main.ts'),
-        common: resolve(__dirname, 'src/common/main.ts'),
         lua: resolve(__dirname, 'src/lua/main.ts'),
         xml: resolve(__dirname, 'src/xml/main.ts'),
       },
@@ -19,8 +18,16 @@ export default defineConfig({
       output: {
         assetFileNames: 'assets/[name][extname]',
         entryFileNames: '[name].[format].js',
+        globals: {
+          jimp: 'jimp',
+          omggif: 'omggif',
+          canvas: 'canvas',
+        },
       },
-      external: [],
+      external: ['jimp', 'omggif', 'canvas'],
     },
+  },
+  optimizeDeps: {
+    exclude: ['canvas'],
   },
 });

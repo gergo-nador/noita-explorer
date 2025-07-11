@@ -3,10 +3,10 @@ import {
   StringKeyDictionary,
 } from '@noita-explorer/model';
 import {
-  NoitaEnemy,
-  NoitaEnemyVariant,
   NoitaTranslation,
   getDefaultNoitaDamageMultipliers,
+  NoitaScrapedEnemy,
+  NoitaScrapedEnemyVariant,
 } from '@noita-explorer/model-noita';
 import { parseXml, XmlWrapper } from '@noita-explorer/tools/xml';
 import {
@@ -30,7 +30,7 @@ export const scrapeEnemies = async ({
 }: {
   dataWakParentDirectoryApi: FileSystemDirectoryAccess;
   translations: StringKeyDictionary<NoitaTranslation>;
-}): Promise<NoitaEnemy[]> => {
+}): Promise<NoitaScrapedEnemy[]> => {
   // Part 1: Getting a list of animal ids and their corresponding images
   const animalsDirPath = await dataWakParentDirectoryApi.path.join(
     noitaPaths.noitaDataWak.icons.animals,
@@ -81,13 +81,13 @@ export const scrapeEnemies = async ({
   const animalsDataDirectory =
     await dataWakParentDirectoryApi.getDirectory(animalsDataDirPath);
 
-  const noitaEnemies: NoitaEnemy[] = [];
+  const noitaEnemies: NoitaScrapedEnemy[] = [];
 
   for (const animal of animalsProcessQueue) {
     try {
       const defaultName = translations['animal_' + animal.animalId]?.en;
 
-      const enemy: NoitaEnemy = {
+      const enemy: NoitaScrapedEnemy = {
         id: animal.animalId,
         imageBase64: animal.imageBase64,
         name: defaultName ?? animal.animalId,
@@ -150,7 +150,7 @@ const scrapeEnemyMain = async ({
   animalsDataDirectory,
   entitiesDataDirectory,
 }: {
-  enemy: NoitaEnemy;
+  enemy: NoitaScrapedEnemy;
   translations: StringKeyDictionary<NoitaTranslation>;
   dataWakParentDirectoryApi: FileSystemDirectoryAccess;
   animalsDataDirectory: FileSystemDirectoryAccess;
@@ -264,14 +264,14 @@ const scrapeEnemyMain = async ({
       continue;
     }
 
-    const variant: NoitaEnemyVariant = {
+    const variant: NoitaScrapedEnemyVariant = {
       // the variant id is the folder right before the file name
       variantId: variantFullPathSplit[variantFullPathSplit.length - 2],
-      enemy: objectHelpers.deepCopy(enemy),
+      enemy: createVariantEnemy(enemy),
     };
 
     extractEnemyProperties({
-      enemy: variant.enemy,
+      enemy: variant.enemy as NoitaScrapedEnemy,
       entityTag: variantEntityTag,
     });
 
@@ -279,4 +279,13 @@ const scrapeEnemyMain = async ({
   }
 
   return enemy;
+};
+
+const createVariantEnemy = (
+  enemy: NoitaScrapedEnemy,
+): NoitaScrapedEnemyVariant['enemy'] => {
+  const enemyCopy = { ...enemy };
+  // @ts-expect-error remove the variants property of the enemy to not copy that over
+  delete enemyCopy['variants'];
+  return objectHelpers.deepCopy(enemyCopy);
 };

@@ -3,7 +3,7 @@ const deepCopy = <T>(obj: T): T => {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function proxiedPropertiesOf<TObj>(_obj?: TObj) {
+function proxiedPropertiesOf<TObj>(_obj?: TObj) {
   // https://stackoverflow.com/questions/33547583/safe-way-to-extract-property-names
   return new Proxy(
     {},

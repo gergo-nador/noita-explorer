@@ -1,4 +1,5 @@
 import color from 'color';
+import { CropImageBase64Options, ImageHelpersType } from './images.types.ts';
 
 function rotateImageBase64(base64: string, degrees: number): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -242,10 +243,52 @@ function getImageSizeBase64(
   });
 }
 
-export const imageHelpers = {
+async function cropImageBase64(
+  base64: string,
+  options: CropImageBase64Options,
+): Promise<string> {
+  const { x: cropX, y: cropY, width: cropWidth, height: cropHeight } = options;
+
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.crossOrigin = 'anonymous'; // Needed if loading from different origin
+
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = cropWidth;
+      canvas.height = cropHeight;
+
+      const ctx = canvas.getContext('2d');
+      if (!ctx) {
+        reject('Failed to get canvas context');
+        return;
+      }
+
+      ctx.drawImage(
+        img,
+        cropX,
+        cropY,
+        cropWidth,
+        cropHeight,
+        0,
+        0,
+        cropWidth,
+        cropHeight,
+      );
+      const croppedDataUrl = canvas.toDataURL('image/png');
+      resolve(croppedDataUrl);
+    };
+
+    img.onerror = (err) => reject('Image load failed: ' + err);
+    img.src = base64;
+  });
+}
+
+export const imageHelpers: ImageHelpersType = {
   trimWhitespaceBase64,
   scaleImageBase64,
   rotateImageBase64,
   getAverageColorBase64,
   getImageSizeBase64,
+  cropImageBase64,
 };
