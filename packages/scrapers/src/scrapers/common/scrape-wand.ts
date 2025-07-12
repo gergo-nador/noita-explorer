@@ -83,11 +83,12 @@ export const scrapeWand = ({ wandXml }: { wandXml: XmlWrapperType }) => {
 
     const spellId = itemActionComponent
       .getRequiredAttribute('action_id')
-      .asText() as string;
+      .asText()
+      .toLowerCase();
 
     let inventorySlot = itemComponent
       .getRequiredAttribute('inventory_slot.x')
-      .asInt() as number;
+      .asInt();
 
     const isAlwaysCastSpell =
       itemComponent.getAttribute('permanently_attached')?.asBoolean() ?? false;
