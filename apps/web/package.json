@@ -9,7 +9,7 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "generate-static-assets": "npx tsx scripts/create-seo-sites-for-wiki/index.ts"
+    "generate-static-assets": "npx tsx scripts/generate-seo-sites-for-wiki/index.ts"
   },
   "dependencies": {
     "@noita-explorer/file-systems": "*",
