@@ -85,7 +85,7 @@ export const EnemyOverview = ({ enemy }: { enemy: NoitaEnemy }) => {
             link={`${window.location.protocol}//${window.location.host}/g/wiki/enemies/${enemy.id}`}
             iconSize={24}
           >
-            <div style={{ fontSize: 30 }}>{enemy.name}</div>
+            <div style={{ fontSize: 30, lineHeight: 1.2 }}>{enemy.name}</div>
           </CopyLinkText>
           {progressDisplayDebugData && (
             <div style={{ marginTop: 5 }}>{enemy.id}</div>
