@@ -55,7 +55,7 @@ export const NoitaEnemyGifCard = ({ enemy, gif, width, height }: Props) => {
       {gif.loop ? (
         <div>
           <PixelatedImage
-            src={`/public/g/enemy-gifs/${enemy.id}/${gif.name}.gif`}
+            src={`/g/enemy-gifs/${enemy.id}/${gif.name}.gif`}
             alt={`${enemy.name} ${gif.name}`}
             width={width}
             height={height}
@@ -69,7 +69,7 @@ export const NoitaEnemyGifCard = ({ enemy, gif, width, height }: Props) => {
         >
           {showGif ? (
             <PixelatedImage
-              src={`/public/g/enemy-gifs/${enemy.id}/${gif.name}.gif?c=${gifRestartCounter}`}
+              src={`/g/enemy-gifs/${enemy.id}/${gif.name}.gif?c=${gifRestartCounter}`}
               alt={`${enemy.name} ${gif.name}`}
               width={width}
               height={height}
@@ -77,7 +77,7 @@ export const NoitaEnemyGifCard = ({ enemy, gif, width, height }: Props) => {
             />
           ) : (
             <PixelatedImage
-              src={`/public/g/enemy-gifs/${enemy.id}/${gif.name}-f.png`}
+              src={`/g/enemy-gifs/${enemy.id}/${gif.name}-f.png`}
               alt={`${enemy.name} ${gif.name}`}
               width={width}
               height={height}
