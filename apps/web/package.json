@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "prebuild": "npm run generate-static-assets",
-    "build": "tsc -b && NODE_OPTIONS=--max-old-space-size=4096 vite build",
+    "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "generate-static-assets": "npx tsx scripts/create-seo-sites-for-wiki/index.ts"
