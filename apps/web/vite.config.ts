@@ -31,11 +31,6 @@ export default defineConfig(({ mode }) => {
         output: {
           assetFileNames: 'assets/[name][extname]',
           entryFileNames: '[name].[format].js',
-          globals: {
-            jimp: 'jimp',
-            omggif: 'omggif',
-            canvas: 'canvas',
-          },
         },
         // exclude all
         external: ['jimp', 'omggif', 'canvas', /\.node/],
