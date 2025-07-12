@@ -6,6 +6,7 @@ import {
   useCounter,
 } from '@noita-explorer/noita-component-library';
 import { useState } from 'react';
+import { Flex } from '@noita-explorer/react-utils';
 
 interface Props {
   enemy: NoitaEnemy;
@@ -19,8 +20,11 @@ export const NoitaEnemyGifCard = ({ enemy, gif, width, height }: Props) => {
     useCounter();
   const [showGif, setShowGif] = useState(false);
 
+  // @ts-expect-error string.replaceAll does exist, idk why it is flagged
+  const gifDisplayName = gif.name.replaceAll('_', ' ');
+
   return (
-    <div>
+    <Flex style={{ width: 'fit-content' }} column center>
       <NoitaTooltipWrapper
         content={
           <div>
@@ -35,8 +39,16 @@ export const NoitaEnemyGifCard = ({ enemy, gif, width, height }: Props) => {
           </div>
         }
       >
-        <div style={{ wordWrap: 'break-word' }}>
-          {gif.name.replace('_', ' ')}
+        <div style={{ maxWidth: '100%' }}>
+          <span
+            style={{
+              wordWrap: 'break-word',
+              textWrap: 'wrap',
+              width: 'min-content',
+            }}
+          >
+            {gifDisplayName}
+          </span>
           {gif.loop && <span style={{ fontSize: 10 }}> ∞</span>}
         </div>
       </NoitaTooltipWrapper>
@@ -74,6 +86,6 @@ export const NoitaEnemyGifCard = ({ enemy, gif, width, height }: Props) => {
           )}
         </div>
       )}
-    </div>
+    </Flex>
   );
 };
