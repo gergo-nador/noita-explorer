@@ -14,7 +14,7 @@ export default defineConfig(({ mode }) => {
       sentryVitePlugin({
         org: 'noita-explorer',
         project: 'javascript-react',
-        telemetry: true,
+        telemetry: false,
         // don't upload source maps when the sentry auth token is not present
         disable: !env.VITE_SENTRY_AUTH_TOKEN,
         authToken: env.VITE_SENTRY_AUTH_TOKEN,
