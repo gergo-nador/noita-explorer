@@ -27,4 +27,5 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 
 
 httpd = socketserver.TCPServer(HOST, Handler)
+print('Up and running on port 8000')
 httpd.serve_forever()
