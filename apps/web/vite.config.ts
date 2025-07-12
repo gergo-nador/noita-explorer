@@ -34,7 +34,7 @@ export default defineConfig(({ mode }) => {
           entryFileNames: '[name].[format].js',
         },
         // exclude all
-        external: ['jimp', 'omggif', 'canvas', /\.node-/],
+        external: ['jimp', 'omggif', 'canvas', /images\.node-/, /gif\.node-/],
       },
     },
   };
