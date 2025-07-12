@@ -64,7 +64,10 @@ export const NoitaEnemyGifCard = ({ enemy, gif, width, height }: Props) => {
         ) : (
           <div
             onClick={() => increaseGifRestartCounter()}
-            onMouseEnter={() => setShowGif(true)}
+            onMouseEnter={() => {
+              setShowGif(true);
+              increaseGifRestartCounter();
+            }}
             onMouseLeave={() => setShowGif(false)}
           >
             {showGif ? (
@@ -73,7 +76,6 @@ export const NoitaEnemyGifCard = ({ enemy, gif, width, height }: Props) => {
                 alt={`${enemy.name} ${gif.name}`}
                 width={width}
                 height={height}
-                onMouseEnter={() => increaseGifRestartCounter()}
               />
             ) : (
               <PixelatedImage
@@ -81,7 +83,6 @@ export const NoitaEnemyGifCard = ({ enemy, gif, width, height }: Props) => {
                 alt={`${enemy.name} ${gif.name}`}
                 width={width}
                 height={height}
-                onMouseEnter={() => increaseGifRestartCounter()}
               />
             )}
           </div>
