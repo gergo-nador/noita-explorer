@@ -23,6 +23,7 @@ export { ProgressIcon } from './components/icons/progress-icon';
 export type { ProgressIconType } from './components/icons/progress-icon';
 
 export { useBool } from './hooks/use-bool';
+export { useCounter } from './hooks/use-counter';
 export { useToast } from './hooks/use-toast';
 
 export type { ContextMenuItemSeparator } from './ui-models/context-menu-item-separator';

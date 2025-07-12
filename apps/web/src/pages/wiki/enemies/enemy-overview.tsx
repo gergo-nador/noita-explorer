@@ -33,11 +33,32 @@ import damageDrillIconColor from '../../../assets/icons/damages/icon_damage_dril
 import damageHolyIcon from '../../../assets/icons/damages/icon_damage_holy.png';
 import damageHolyIconColor from '../../../assets/icons/damages/icon_damage_holy_color.png';
 import { CopyLinkText } from '../../../components/copy-link-text.tsx';
+import { NoitaEnemyGifCard } from '../../../components/noita-enemy-gif-card.tsx';
+import { useMemo } from 'react';
 
 export const EnemyOverview = ({ enemy }: { enemy: NoitaEnemy }) => {
   const noitaUnits = useNoitaUnits();
   const { settings } = useSettingsStore();
   const { progressDisplayDebugData } = settings;
+
+  const gifs = useMemo(() => {
+    if (!enemy.gifs) {
+      return undefined;
+    }
+
+    const gifs = [...Object.values(enemy.gifs)];
+    gifs.sort((g1, g2) => {
+      // sort infinite animations in front
+      const loopDiff = Number(g2.loop) - Number(g1.loop);
+      if (loopDiff !== 0) {
+        return loopDiff;
+      }
+
+      // sort alphabetically
+      return g1.name.localeCompare(g2.name);
+    });
+    return gifs;
+  }, [enemy.gifs]);
 
   return (
     <div>
@@ -242,6 +263,23 @@ export const EnemyOverview = ({ enemy }: { enemy: NoitaEnemy }) => {
       </div>
 
       <br />
+
+      {gifs && (
+        <>
+          <hr />
+          <Flex gap={16} wrap='wrap'>
+            {gifs.map((gif) => (
+              <NoitaEnemyGifCard
+                gif={gif}
+                enemy={enemy}
+                width={'auto'}
+                height={gif.frameHeight * 3}
+              />
+            ))}
+          </Flex>
+          <hr />
+        </>
+      )}
 
       <div>
         Variants:
