@@ -16,17 +16,9 @@ export default defineConfig(({ mode }) => {
         project: 'javascript-react',
         telemetry: false,
         // don't upload source maps when the sentry auth token is not present
-        disable: !env.VITE_SENTRY_AUTH_TOKEN,
+        // disable: !env.VITE_SENTRY_AUTH_TOKEN,
+        disable: true,
         authToken: env.VITE_SENTRY_AUTH_TOKEN,
-        sourcemaps: { disable: true },
-        bundleSizeOptimizations: {
-          excludeDebugStatements: true,
-          excludeTracing: true,
-          excludeReplayIframe: true,
-          excludeReplayShadowDom: true,
-          excludeReplayWorker: true,
-        },
-        debug: true,
       }),
     ],
 
@@ -42,7 +34,7 @@ export default defineConfig(({ mode }) => {
           entryFileNames: '[name].[format].js',
         },
         // exclude all
-        external: ['jimp', 'omggif', 'canvas', /\.node/],
+        external: ['jimp', 'omggif', 'canvas', /\.node-/],
       },
     },
   };
