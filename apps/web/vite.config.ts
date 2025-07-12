@@ -19,6 +19,14 @@ export default defineConfig(({ mode }) => {
         disable: !env.VITE_SENTRY_AUTH_TOKEN,
         authToken: env.VITE_SENTRY_AUTH_TOKEN,
         sourcemaps: { disable: true },
+        bundleSizeOptimizations: {
+          excludeDebugStatements: true,
+          excludeTracing: true,
+          excludeReplayIframe: true,
+          excludeReplayShadowDom: true,
+          excludeReplayWorker: true,
+        },
+        debug: true,
       }),
     ],
 
