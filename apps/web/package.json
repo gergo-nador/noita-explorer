@@ -10,7 +10,8 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "generate-static-assets": "npx tsx scripts/generate-seo-sites-for-wiki/index.ts",
-    "generate-enemy-gifs": "npx tsx scripts/generate-enemy-gifs/index.ts"
+    "generate-enemy-gifs": "npx tsx scripts/generate-enemy-gifs/index.ts",
+    "production-server-local": " cd dist && python3 ../scripts/http-server.py"
   },
   "dependencies": {
     "@noita-explorer/file-systems": "*",
