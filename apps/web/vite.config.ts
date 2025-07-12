@@ -37,7 +37,8 @@ export default defineConfig(({ mode }) => {
             canvas: 'canvas',
           },
         },
-        external: ['jimp', 'omggif', 'canvas'],
+        // exclude all
+        external: ['jimp', 'omggif', 'canvas', /\.node/],
       },
     },
   };
