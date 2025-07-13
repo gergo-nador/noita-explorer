@@ -1,4 +1,3 @@
-import * as https from 'https';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as dotenv from 'dotenv';
@@ -36,24 +35,18 @@ if (!fs.existsSync(translationsPath)) {
 function download(url: string, filePath: string) {
   const outputPath = path.resolve(filePath);
 
-  const file = fs.createWriteStream(outputPath);
-
-  https
-    .get(url, (response) => {
-      if (response.statusCode !== 200) {
-        console.error(`Download failed: ${response.statusCode}`);
-        return;
+  fetch(url)
+    .then((response) => {
+      if (!response.ok) {
+        const errorMessage = `Download failed with error code ${response.status} for url ${url}`;
+        throw new Error(errorMessage);
       }
 
-      response.pipe(file);
-
-      file.on('finish', () => {
-        file.close();
-        console.log('Download complete.');
-      });
+      return response.arrayBuffer();
     })
-    .on('error', (err) => {
-      fs.unlink(outputPath, () => {}); // Delete file on error
-      console.error('Error downloading the file:', err.message);
-    });
+    .then((arrayBuffer) => {
+      const buffer = Buffer.from(arrayBuffer);
+      fs.writeFileSync(outputPath, buffer);
+    })
+    .catch((err) => console.error('Error: ', err));
 }
