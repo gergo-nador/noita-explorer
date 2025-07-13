@@ -5,14 +5,16 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "prebuild": "npm run generate-gifs && npm run generate-static-assets",
+    "prebuild": "sh scripts/ci.sh",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "generate-static-assets": "npx tsx scripts/generate-seo-sites-for-wiki/index.ts",
-    "generate-gifs": "npx tsx scripts/generate-gifs/index.ts",
-    "production-server-local": " cd dist && python3 ../scripts/http-server.py",
-    "data-wak:download": "npx tsx scripts/data-wak/download.ts"
+    "production-server-local": "cd dist && python3 ../scripts/http-server.py",
+
+    "data-wak-download": "npx tsx scripts/data-wak/download.ts -o dist-tmp",
+    "scrape-data-wak": "npx tsx scripts/data-wak/scrape.ts -t dist-tmp/common.csv --data-wak dist-tmp/data.wak --o-wak public/noita_wak_data.json --o-gif dist-tmp/noita_data_gifs.json",
+    "generate-gifs": "npx tsx scripts/generate-gifs/index.ts --gif-data dist-tmp/noita_data_gifs.json -o public",
+    "generate-static-assets": "npx tsx scripts/generate-seo-sites-for-wiki/index.ts --wak-data public/noita_wak_data.json -o public"
   },
   "dependencies": {
     "@noita-explorer/file-systems": "*",
@@ -27,6 +29,7 @@
     "@tsparticles/plugin-emitters": "^3.8.1",
     "@tsparticles/react": "^3.0.0",
     "@tsparticles/slim": "^3.8.1",
+    "@types/minimist": "^1.2.5",
     "buffer": "^6.0.3",
     "diff": "^8.0.2",
     "idb": "^8.0.1",
@@ -49,6 +52,7 @@
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.14",
     "globals": "^15.12.0",
+    "minimist": "^1.2.8",
     "sharp": "^0.34.2",
     "tsx": "^4.20.3",
     "typescript": "~5.6.2",

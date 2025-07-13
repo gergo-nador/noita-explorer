@@ -6,36 +6,38 @@ import { deployUrls } from '../../src/deployUrls';
 import * as dotenv from 'dotenv';
 import * as path from 'node:path';
 import { generateImage } from './generate-image';
+// @ts-expect-error no esModuleInterop error pls, it works
+import minimist from 'minimist';
+// @ts-expect-error no esModuleInterop error pls, it works
+import process from 'node:process';
 
 dotenv.config();
 
-// only generate in preview and production
-const env = process.env.VITE_ENV;
-// if set to "generate", it will ignore the environment
-const envOverwrite = process.env.GENERATE_STATIC_SITES === 'generate';
+const argv: Record<string, string> = minimist(process.argv.slice(2));
 
-const isPreviewOrProp = env === 'preview' || env === 'production';
-
-if (envOverwrite) {
-  console.log('GENERATE_STATIC_SITES found, generating static assets');
-} else if (isPreviewOrProp) {
-  console.log(`VITE_ENV=${env}, generating static assets`);
-} else {
-  console.log('Skipping static asset generation');
+const dataWakJsonPath = argv['wak-data'];
+if (!dataWakJsonPath) {
+  console.log('--wak-data argument must point to the noita_wak_data.json file');
+  process.exit(1);
 }
 
-if (envOverwrite || isPreviewOrProp) {
-  const noitaWakData = readNoitaWakData();
-  if (noitaWakData) {
-    generateStaticAssets(noitaWakData);
-  }
+const outputFolder = argv['o'];
+if (!outputFolder) {
+  console.log('output -o argument must be provided');
+  process.exit(1);
+}
+
+const noitaWakData = readNoitaWakData();
+if (noitaWakData) {
+  generateStaticAssets(noitaWakData);
 }
 
 function readNoitaWakData() {
-  const noitaWakDataPath = 'public/noita_wak_data.json';
+  const noitaWakDataPath = dataWakJsonPath;
 
   const noitaWakDataExists = fs.existsSync(noitaWakDataPath);
   if (!noitaWakDataExists) {
+    console.log('noita data wak file does not exist');
     return;
   }
 
@@ -52,7 +54,7 @@ function readNoitaWakData() {
 }
 
 async function generateStaticAssets(data: NoitaWakData) {
-  const fsPath = 'public/g/wiki';
+  const fsPath = path.resolve(outputFolder, 'g', 'wiki');
   const webPath = '/g/wiki';
   fs.mkdirSync(fsPath, { recursive: true });
 

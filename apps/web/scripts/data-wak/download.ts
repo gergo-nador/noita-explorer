@@ -2,29 +2,58 @@ import * as https from 'https';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as dotenv from 'dotenv';
+// @ts-expect-error no esModuleInterop error pls, it works
+import minimist from 'minimist';
+// @ts-expect-error no esModuleInterop error pls, it works
+import process from 'node:process';
 
 dotenv.config();
 
-const url = process.env.CI_DATA_WAK_URL;
-const outputPath = path.resolve('data.wak');
+const argv: Record<string, string> = minimist(process.argv.slice(2));
+const outputFolder = argv['o'];
 
-const file = fs.createWriteStream(outputPath);
+if (!outputFolder) {
+  console.error('output folder must be specified with argument -o');
+  process.exit(1);
+}
 
-https
-  .get(url, (response) => {
-    if (response.statusCode !== 200) {
-      console.error(`Download failed: ${response.statusCode}`);
-      return;
-    }
+fs.mkdirSync(outputFolder, { recursive: true });
 
-    response.pipe(file);
+const dataWakPath = path.resolve(outputFolder, 'data.wak');
+if (!fs.existsSync(dataWakPath)) {
+  download(process.env.CI_DATA_WAK_URL, dataWakPath);
+} else {
+  console.log('data.wak is already downloaded');
+}
 
-    file.on('finish', () => {
-      file.close();
-      console.log('Download complete.');
+const translationsPath = path.resolve(outputFolder, 'common.csv');
+if (!fs.existsSync(translationsPath)) {
+  download(process.env.CI_TRANSLATIONS_URL, translationsPath);
+} else {
+  console.log('common.csv is already downloaded');
+}
+
+function download(url: string, filePath: string) {
+  const outputPath = path.resolve(filePath);
+
+  const file = fs.createWriteStream(outputPath);
+
+  https
+    .get(url, (response) => {
+      if (response.statusCode !== 200) {
+        console.error(`Download failed: ${response.statusCode}`);
+        return;
+      }
+
+      response.pipe(file);
+
+      file.on('finish', () => {
+        file.close();
+        console.log('Download complete.');
+      });
+    })
+    .on('error', (err) => {
+      fs.unlink(outputPath, () => {}); // Delete file on error
+      console.error('Error downloading the file:', err.message);
     });
-  })
-  .on('error', (err) => {
-    fs.unlink(outputPath, () => {}); // Delete file on error
-    console.error('Error downloading the file:', err.message);
-  });
+}

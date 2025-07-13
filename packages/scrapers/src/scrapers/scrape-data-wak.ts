@@ -10,34 +10,24 @@ import {
   NoitaWandConfig,
   NoitaScrapedEnemy,
 } from '@noita-explorer/model-noita';
-import path from 'path';
-import { noitaPaths, scrape } from '@noita-explorer/scrapers';
 import {
   FileSystemDirectoryAccess,
+  FileSystemFileAccess,
   StringKeyDictionary,
 } from '@noita-explorer/model';
-import { Buffer } from 'buffer';
-import { FileSystemDirectoryAccessDataWakMemory } from '@noita-explorer/file-systems';
-import {
-  FileSystemFileAccessNode,
-  nodeFileSystemHelpers,
-  FileSystemDirectoryAccessNode,
-} from '@noita-explorer/file-systems/node';
+import { scrape } from './scrape';
 
 const statusSkipped = {
   status: NoitaDataWakScrapeResultStatus.SKIPPED,
 };
 
 export const scrapeDataWak = async ({
-  commonCsvPath,
-  dataWakPath,
-  nollaGamesNoitaPath,
+  translationFile,
+  dataWakParentDirectory,
 }: {
-  commonCsvPath: string;
-  dataWakPath: string;
-  nollaGamesNoitaPath: string;
+  translationFile: FileSystemFileAccess;
+  dataWakParentDirectory: FileSystemDirectoryAccess;
 }): Promise<NoitaDataWakScrapeResult> => {
-  const translationFile = FileSystemFileAccessNode(commonCsvPath);
   let translations: StringKeyDictionary<NoitaTranslation>;
 
   try {
@@ -62,37 +52,6 @@ export const scrapeDataWak = async ({
       materials: statusSkipped,
       materialReactions: statusSkipped,
     };
-  }
-
-  // provide the NollaGamesNoita folder instead of the actual data folder as
-  // the code expects the directory above the extracted data wak folder
-  let dataWakParentDirectory: FileSystemDirectoryAccess = undefined;
-
-  try {
-    if (nodeFileSystemHelpers.checkPathExist(dataWakPath)) {
-      let buffer = await nodeFileSystemHelpers.readFileAsBuffer(dataWakPath);
-
-      buffer = Buffer.from(buffer);
-      dataWakParentDirectory = FileSystemDirectoryAccessDataWakMemory(buffer);
-    }
-  } catch {
-    console.error(
-      'Could not load data.wak file into memory. Trying extracted data.wak folder for fallback.',
-    );
-  }
-
-  if (dataWakParentDirectory === undefined) {
-    const dataFolder = path.join(
-      nollaGamesNoitaPath,
-      ...noitaPaths.noitaDataWak.folder,
-    );
-    if (!nodeFileSystemHelpers.checkPathExist(dataFolder)) {
-      throw new Error(
-        'Could not load data.wak file and extracted data.wak folder does not exist.',
-      );
-    }
-
-    dataWakParentDirectory = FileSystemDirectoryAccessNode(nollaGamesNoitaPath);
   }
 
   return scrapeDataWakContent({ dataWakParentDirectory, translations });

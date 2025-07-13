@@ -3,11 +3,11 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "main": "dist/main.js",
-  "module": "dist/main.js",
-  "types": "dist/main.d.ts",
+  "main": "./dist/node-filesystem.cjs.js",
+  "module": "./dist/node-filesystem.es.js",
+  "types": "./dist/main-node.d.ts",
   "exports": {
-    ".": {
+    "./browser": {
       "types": "./dist/main.d.ts",
       "import": "./dist/main.es.js",
       "require": "./dist/main.cjs.js"
@@ -27,7 +27,7 @@
       "import": "./dist/data-wak-memory-filesystem.es.js",
       "require": "./dist/data-wak-memory-filesystem.cjs.js"
     },
-    "./node": {
+    ".": {
       "types": "./dist/main-node.d.ts",
       "import": "./dist/node-filesystem.es.js",
       "require": "./dist/node-filesystem.cjs.js"
