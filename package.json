@@ -2,7 +2,7 @@
   "name": "noita-explorer",
   "private": true,
   "scripts": {
-    "build": "CI_DISABLED=1 turbo build",
+    "build": "turbo build",
     "dev": "turbo dev",
     "dev:web": "turbo dev --filter=@noita-explorer/web",
     "dev:desktop": "turbo dev --filter=@noita-explorer/desktop",

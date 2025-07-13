@@ -6,11 +6,7 @@ import minimist from 'minimist';
 // @ts-expect-error no esModuleInterop error pls, it works
 import process from 'node:process';
 
-console.log('env before dotenv', process.env);
-
 dotenv.config();
-
-console.log('env after dotenv', process.env);
 
 const argv: Record<string, string> = minimist(process.argv.slice(2));
 const outputFolder = argv['o'];
@@ -23,7 +19,7 @@ if (!outputFolder) {
 
 fs.mkdirSync(outputFolder, { recursive: true });
 
-const dataWakUrl = process.env.CI_DATA_WAK_URL;
+const dataWakUrl = process.env.NE_CI_DATA_WAK_URL;
 const dataWakPath = path.resolve(outputFolder, 'data.wak');
 if (!dataWakUrl) {
   console.error('data.wak url is undefined');
@@ -34,7 +30,7 @@ if (!dataWakUrl) {
   console.log('data.wak is already downloaded');
 }
 
-const translationsUrl = process.env.CI_TRANSLATIONS_URL;
+const translationsUrl = process.env.NE_CI_TRANSLATIONS_URL;
 const translationsPath = path.resolve(outputFolder, 'common.csv');
 if (!translationsUrl) {
   console.error('translations url is undefined');
