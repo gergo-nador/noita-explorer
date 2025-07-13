@@ -5,42 +5,45 @@ import { NoitaScrapedGifWrapper } from '@noita-explorer/model-noita';
 import { StringKeyDictionary } from '@noita-explorer/model';
 import { base64Helpers } from '@noita-explorer/tools';
 import { Buffer } from 'buffer';
+// @ts-expect-error no esModuleInterop error pls, it works
+import minimist from 'minimist';
+// @ts-expect-error no esModuleInterop error pls, it works
+import process from 'node:process';
 
 dotenv.config();
 
-// only generate in preview and production
-const env = process.env.VITE_ENV;
-// if set to "generate", it will ignore the environment
-const envOverwrite = process.env.GENERATE_GIFS === 'generate';
+const argv: Record<string, string> = minimist(process.argv.slice(2));
 
-const isPreviewOrProp = env === 'preview' || env === 'production';
-
-if (envOverwrite) {
-  console.log('GENERATE_GIFS found, generating gifs');
-} else if (isPreviewOrProp) {
-  console.log(`VITE_ENV=${env}, generating gifs`);
-} else {
-  console.log('Skipping gif generation');
+const dataGifJsonPath = argv['gif-data'];
+if (!dataGifJsonPath) {
+  console.log(
+    '--gif-data argument must point to the noita_data_gifs.json file',
+  );
+  process.exit(1);
 }
 
-if (envOverwrite || isPreviewOrProp) {
-  const noitaGif = readNoitaGif();
-  if (!noitaGif) {
-    process.exit(1);
-  }
+const outputFolder = argv['o'];
+if (!outputFolder) {
+  console.log('output -o argument must be provided');
+  process.exit(1);
+}
 
-  for (const [key, gifCollection] of Object.entries(noitaGif)) {
-    console.log('Generating gifs ' + key);
-    generateGifs(key, gifCollection);
-  }
+const noitaGif = readNoitaGif();
+if (!noitaGif) {
+  process.exit(1);
+}
+
+for (const [key, gifCollection] of Object.entries(noitaGif)) {
+  console.log('Generating gifs ' + key);
+  generateGifs(key, gifCollection);
 }
 
 function readNoitaGif() {
-  const noitaGifPath = 'public/noita_data_gifs.json';
+  const noitaGifPath = dataGifJsonPath;
 
   const noitaGifExists = fs.existsSync(noitaGifPath);
   if (!noitaGifExists) {
-    console.error('public/noita_data_gifs.json does not exist');
+    console.error(noitaGifPath + ' does not exist');
     return;
   }
 
@@ -62,7 +65,7 @@ function generateGifs(
   key: string,
   gifs: StringKeyDictionary<NoitaScrapedGifWrapper>,
 ) {
-  const fsPath = 'public/g/' + key;
+  const fsPath = path.resolve(outputFolder, 'g', key);
   fs.mkdirSync(fsPath, { recursive: true });
 
   for (const [id, gifCollection] of Object.entries(gifs)) {

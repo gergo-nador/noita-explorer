@@ -1,9 +1,9 @@
 import fs from 'fs';
 import path from 'path';
 import { FileSystemDirectoryAccess } from '@noita-explorer/model';
-import { nodeFileSystemHelpers } from '../tools/file-system';
 import { promiseHelper } from '@noita-explorer/tools';
 import { FileSystemFileAccessNode } from './file-system-file-access-node';
+import { nodeFileSystemHelpers } from './node-file-system-helpers.ts';
 
 export const FileSystemDirectoryAccessNode = (
   directoryPath: string,
@@ -68,5 +68,10 @@ export const FileSystemDirectoryAccessNode = (
     listDirectories: () => listDirectories(),
     getFile: (path) =>
       promiseHelper.fromValue(FileSystemFileAccessNode(getAbsolutePath(path))),
+    createFile: () => {
+      throw new Error(
+        'createFile not implemented for FileSystemDirectoryAccessNode',
+      );
+    },
   };
 };

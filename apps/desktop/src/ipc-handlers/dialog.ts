@@ -1,5 +1,5 @@
 import { BrowserWindow, dialog, ipcMain } from 'electron';
-import { nodeFileSystemHelpers } from '../tools/file-system';
+import { nodeFileSystemHelpers } from '@noita-explorer/file-systems/node';
 
 export const registerDialogHandlers = () => {
   ipcMain.handle('dialog:openDirectory', async (event, args) => {

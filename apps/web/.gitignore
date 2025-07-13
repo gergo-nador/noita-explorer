@@ -1,6 +1,9 @@
 # generated static sites
 public/g
 
+dist-tmp
+public/noita_wak_data.json
+
 # Logs
 logs
 *.log
