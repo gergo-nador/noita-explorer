@@ -14,6 +14,7 @@ console.log('env after dotenv', process.env);
 
 const argv: Record<string, string> = minimist(process.argv.slice(2));
 const outputFolder = argv['o'];
+const forceDownload = argv['f'] !== undefined;
 
 if (!outputFolder) {
   console.error('output folder must be specified with argument -o');
@@ -22,16 +23,24 @@ if (!outputFolder) {
 
 fs.mkdirSync(outputFolder, { recursive: true });
 
+const dataWakUrl = process.env.CI_DATA_WAK_URL;
 const dataWakPath = path.resolve(outputFolder, 'data.wak');
-if (!fs.existsSync(dataWakPath)) {
-  download(process.env.CI_DATA_WAK_URL, dataWakPath);
+if (!dataWakUrl) {
+  console.error('data.wak url is undefined');
+  process.exit(1);
+} else if (!fs.existsSync(dataWakPath) || forceDownload) {
+  download(dataWakUrl, dataWakPath);
 } else {
   console.log('data.wak is already downloaded');
 }
 
+const translationsUrl = process.env.CI_TRANSLATIONS_URL;
 const translationsPath = path.resolve(outputFolder, 'common.csv');
-if (!fs.existsSync(translationsPath)) {
-  download(process.env.CI_TRANSLATIONS_URL, translationsPath);
+if (!translationsUrl) {
+  console.error('translations url is undefined');
+  process.exit(1);
+} else if (!fs.existsSync(translationsPath) || forceDownload) {
+  download(translationsUrl, translationsPath);
 } else {
   console.log('common.csv is already downloaded');
 }
