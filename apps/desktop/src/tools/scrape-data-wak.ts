@@ -7,6 +7,7 @@ import {
   NoitaSpell,
   NoitaTranslation,
   NoitaWandConfig,
+  NoitaScrapedGifWrapper,
 } from '@noita-explorer/model-noita';
 import path from 'path';
 import { noitaPaths, scrape } from '@noita-explorer/scrapers';
@@ -20,7 +21,6 @@ import { Buffer } from 'buffer';
 import { FileSystemDirectoryAccessDataWakMemory } from '@noita-explorer/file-systems';
 import { FileSystemDirectoryAccessNode } from '../file-system/file-system-directory-access-node';
 import { NoitaScrapedEnemy } from '@noita-explorer/model-noita/src/scraping/noita-scraped-enemy';
-import { NoitaScrapedEnemyGif } from '@noita-explorer/model-noita/src/scraping/noita-scraped-enemy-gif';
 
 export const scrapeDataWak = async ({
   commonCsvPath,
@@ -145,7 +145,7 @@ export const scrapeDataWakContent = async ({
     enemiesError = err;
   }
 
-  let enemyGifs: StringKeyDictionary<NoitaScrapedEnemyGif> = {};
+  let enemyGifs: StringKeyDictionary<NoitaScrapedGifWrapper> = {};
   let enemyGifErrors: unknown | undefined = undefined;
   const shouldSkipEnemyGifScraping = enemies.length === 0;
   try {

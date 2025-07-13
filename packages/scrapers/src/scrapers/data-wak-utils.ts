@@ -3,7 +3,7 @@ import {
   NoitaEnemy,
   NoitaEnemyGif,
   NoitaEnemyVariant,
-  NoitaScrapedEnemyGif,
+  NoitaScrapedGifWrapper,
   NoitaWakData,
 } from '@noita-explorer/model-noita';
 
@@ -31,7 +31,7 @@ export const convertScrapeResultsToDataWak = (
       enemy: { ...v.enemy, gifs: undefined },
     }));
 
-    const scrapedGif: NoitaScrapedEnemyGif | undefined = enemyGifs[e.id];
+    const scrapedGif: NoitaScrapedGifWrapper | undefined = enemyGifs[e.id];
     const processedGifs = scrapedGif?.gifs?.map((g) => {
       const noitaEnemyGif: NoitaEnemyGif = {
         name: g.sprite.name,

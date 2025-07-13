@@ -1,5 +1,5 @@
 import { NoitaScrapedGif } from './noita-scraped-gif.ts';
 
-export interface NoitaScrapedEnemyGif {
+export interface NoitaScrapedGifWrapper {
   gifs: NoitaScrapedGif[];
 }
