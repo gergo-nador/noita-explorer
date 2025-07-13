@@ -12,7 +12,7 @@ import { scrapeWandConfigs } from './datawak/scrape-wand-configs.ts';
 import { scrapePlayerState } from './save00/scrape-player-state.ts';
 import { scrapeUnlockedOrbs } from './save00/scrape-orbs.ts';
 import { convertScrapeResultsToDataWak } from './data-wak-utils.ts';
-import { scrapeAnimations } from './datawak/scrape-animations/scrape-animations.ts';
+import { scrapeEnemyAnimation } from './datawak/scrape-enemies/scrape-enemy-animation.ts';
 
 export const scrape = {
   bonesWands: scrapeBonesWands,
@@ -28,7 +28,7 @@ export const scrape = {
   translations: readTranslations,
   wandConfigs: scrapeWandConfigs,
   worldState: scrapeWorldState,
-  enemyAnimations: scrapeAnimations,
+  enemyAnimations: scrapeEnemyAnimation,
 };
 
 export const scrapeUtils = {

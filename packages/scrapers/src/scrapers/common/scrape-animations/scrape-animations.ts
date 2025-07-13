@@ -3,7 +3,6 @@ import {
   FileSystemFileAccess,
   StringKeyDictionary,
 } from '@noita-explorer/model';
-import { noitaPaths } from '../../../noita-paths.ts';
 import {
   base64Helpers,
   gifHelpers,
@@ -15,17 +14,19 @@ import {
 } from '@noita-explorer/model-noita';
 import { scrapeAnimationFrames } from './scrape-animation-frames.ts';
 import { scrapeAnimationXmlDefinition } from './scrape-animation-xml-definition.ts';
+import { AnimationInfo } from './types.ts';
 
 export const scrapeAnimations = async ({
   dataWakParentDirectoryApi,
   animationInfos,
+  animationsPath,
 }: {
   dataWakParentDirectoryApi: FileSystemDirectoryAccess;
-  animationInfos: { id: string }[];
+  animationInfos: AnimationInfo[];
+  animationsPath: string[];
 }): Promise<StringKeyDictionary<NoitaScrapedGifWrapper>> => {
-  const animationsFolderPath = await dataWakParentDirectoryApi.path.join(
-    noitaPaths.noitaDataWak.entities,
-  );
+  const animationsFolderPath =
+    await dataWakParentDirectoryApi.path.join(animationsPath);
   const animationsFolder =
     await dataWakParentDirectoryApi.getDirectory(animationsFolderPath);
   const animationFiles = await animationsFolder.listFiles();
@@ -54,7 +55,7 @@ export const scrapeAnimations = async ({
   return animationsReturnValue;
 };
 
-export const scrapeAnimation = async ({
+const scrapeAnimation = async ({
   id,
   dataWakParentDirectoryApi,
   animationFiles,

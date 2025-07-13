@@ -4,3 +4,7 @@ export interface AnimationFramesResult {
   animation: SpriteAnimation;
   frameImages: string[];
 }
+
+export interface AnimationInfo {
+  id: string;
+}
