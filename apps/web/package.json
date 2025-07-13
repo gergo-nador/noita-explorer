@@ -11,7 +11,8 @@
     "preview": "vite preview",
     "generate-static-assets": "npx tsx scripts/generate-seo-sites-for-wiki/index.ts",
     "generate-gifs": "npx tsx scripts/generate-gifs/index.ts",
-    "production-server-local": " cd dist && python3 ../scripts/http-server.py"
+    "production-server-local": " cd dist && python3 ../scripts/http-server.py",
+    "data-wak:download": "npx tsx scripts/data-wak/download.ts"
   },
   "dependencies": {
     "@noita-explorer/file-systems": "*",
