@@ -6,11 +6,8 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
 
 # 1. Load .env safely
-if [[ -f .env ]]; then
-  set -a               # export all sourced variables
-  # shellcheck disable=SC1091
-  source ./.env
-  set +a
+if [ -f .env ]; then
+    export $(grep -v '^#' .env | xargs)
 fi
 
 # 2. Honor CI_DISABLED
