@@ -1,18 +1,15 @@
 #!/usr/bin/env bash
 
-# Absolute path to project root (directory that contains this script)
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
 
-# 1. Load .env safely
 if [ -f .env ]; then
     export $(grep -v '^#' .env | xargs)
 fi
 
-# 2. Honor CI_DISABLED
-if [[ "${CI_DISABLED:-0}" == "1" ]]; then
-  echo "CI_DISABLED is set to 1. Exiting."
-  exit 0
+if [ "$CI_DISABLED" = "1" ]; then
+    echo "CI_DISABLED is set to 1. Exiting."
+    exit 0
 fi
 
 # Run CI pipeline
