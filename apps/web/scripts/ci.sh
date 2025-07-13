@@ -4,8 +4,8 @@ if [ -f .env ]; then
     export $(grep -v '^#' .env | xargs)
 fi
 
-if [ "$NE_CI_DISABLED" = "1" ]; then
-    echo "NE_CI_DISABLED is set to 1. Exiting."
+if [ "$VITE_CI_DISABLED" = "1" ]; then
+    echo "$VITE_CI_DISABLED is set to 1. Exiting."
     exit 0
 fi
 

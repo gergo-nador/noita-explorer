@@ -9,7 +9,6 @@ export default defineConfig(({ mode }) => {
 
   return {
     base: '/',
-    envPrefix: ['VITE', 'SENTRY', 'NE_CI'],
     plugins: [
       react(),
       mkcert(),
