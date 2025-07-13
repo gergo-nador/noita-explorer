@@ -8,8 +8,9 @@ import {
 } from '@noita-explorer/model-noita';
 
 /**
- * Important Note: This function will only save metadata of the gifs in the enemies,
- *                 the buffer will be discarded. It is the consumer's responsibility to save the gifs.
+ * Important Note: only gif metadata of the enemies will be saved, the buffer will be discarded.
+ *                 It is the caller's responsibility to save the actual gifs.
+ * Important Note: orb gifs are discarded
  * @param results
  */
 export const convertScrapeResultsToDataWak = (

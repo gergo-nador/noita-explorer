@@ -19,6 +19,9 @@ export interface NoitaDataWakScrapeResult {
   enemyGifs: NoitaDataWakScrapeResultPart<
     StringKeyDictionary<NoitaScrapedGifWrapper>
   >;
+  orbGifs: NoitaDataWakScrapeResultPart<
+    StringKeyDictionary<NoitaScrapedGifWrapper>
+  >;
   wandConfigs: NoitaDataWakScrapeResultPart<NoitaWandConfig[]>;
   materials: NoitaDataWakScrapeResultPart<NoitaMaterial[]>;
   materialReactions: NoitaDataWakScrapeResultPart<NoitaMaterialReaction[]>;

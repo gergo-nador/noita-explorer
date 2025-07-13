@@ -2,6 +2,7 @@ export const noitaPaths = {
   noitaDataWak: {
     folder: ['data'],
     entities: ['data', 'enemies_gfx'],
+    orbs: ['data', 'items_gfx', 'orbs'],
     icons: {
       inventory: ['data', 'ui_gfx', 'inventory'],
       animals: ['data', 'ui_gfx', 'animal_icons'],

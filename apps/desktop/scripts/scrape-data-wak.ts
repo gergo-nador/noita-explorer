@@ -64,7 +64,8 @@ async function runScrape(args: Record<string, string>) {
 
   const dataWak = scrapeUtils.convertScrapeResultsToDataWak(dataWakResult);
 
-  const gifs = dataWakResult.enemyGifs.data;
+  const enemyGifs = dataWakResult.enemyGifs.data;
+  const orbGifs = dataWakResult.orbGifs.data;
 
   {
     const noitaDataWakFileName = 'noita_wak_data.json';
@@ -81,7 +82,10 @@ async function runScrape(args: Record<string, string>) {
     const outputGifs = args
       ? path.resolve(args['o'], gifFileName)
       : path.resolve(gifFileName);
-    const jsonGifs = JSON.stringify(gifs);
+    const jsonGifs = JSON.stringify({
+      'enemy-gifs': enemyGifs,
+      'orb-gifs': orbGifs,
+    });
 
     fs.writeFileSync(outputGifs, jsonGifs);
   }

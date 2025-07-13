@@ -4,10 +4,10 @@ import {
   NoitaMaterial,
   NoitaMaterialReaction,
   NoitaPerk,
+  NoitaScrapedGifWrapper,
   NoitaSpell,
   NoitaTranslation,
   NoitaWandConfig,
-  NoitaScrapedGifWrapper,
 } from '@noita-explorer/model-noita';
 import path from 'path';
 import { noitaPaths, scrape } from '@noita-explorer/scrapers';
@@ -21,6 +21,10 @@ import { Buffer } from 'buffer';
 import { FileSystemDirectoryAccessDataWakMemory } from '@noita-explorer/file-systems';
 import { FileSystemDirectoryAccessNode } from '../file-system/file-system-directory-access-node';
 import { NoitaScrapedEnemy } from '@noita-explorer/model-noita/src/scraping/noita-scraped-enemy';
+
+const statusSkipped = {
+  status: NoitaDataWakScrapeResultStatus.SKIPPED,
+};
 
 export const scrapeDataWak = async ({
   commonCsvPath,
@@ -47,27 +51,14 @@ export const scrapeDataWak = async ({
           errorData: e,
         },
       },
-      enemies: {
-        status: NoitaDataWakScrapeResultStatus.SKIPPED,
-      },
-      enemyGifs: {
-        status: NoitaDataWakScrapeResultStatus.SKIPPED,
-      },
-      perks: {
-        status: NoitaDataWakScrapeResultStatus.SKIPPED,
-      },
-      spells: {
-        status: NoitaDataWakScrapeResultStatus.SKIPPED,
-      },
-      wandConfigs: {
-        status: NoitaDataWakScrapeResultStatus.SKIPPED,
-      },
-      materials: {
-        status: NoitaDataWakScrapeResultStatus.SKIPPED,
-      },
-      materialReactions: {
-        status: NoitaDataWakScrapeResultStatus.SKIPPED,
-      },
+      enemies: statusSkipped,
+      orbGifs: statusSkipped,
+      enemyGifs: statusSkipped,
+      perks: statusSkipped,
+      spells: statusSkipped,
+      wandConfigs: statusSkipped,
+      materials: statusSkipped,
+      materialReactions: statusSkipped,
     };
   }
 
@@ -183,6 +174,16 @@ export const scrapeDataWakContent = async ({
     materialError = err;
   }
 
+  let orbs: StringKeyDictionary<NoitaScrapedGifWrapper> = {};
+  let orbsError: unknown | undefined = undefined;
+  try {
+    orbs = await scrape.orbAnimations({
+      dataWakParentDirectoryApi: dataWakParentDirectory,
+    });
+  } catch (err) {
+    orbsError = err;
+  }
+
   return {
     translations: {
       status: NoitaDataWakScrapeResultStatus.SUCCESS,
@@ -245,6 +246,14 @@ export const scrapeDataWakContent = async ({
           : NoitaDataWakScrapeResultStatus.FAILED,
       data: materialReactions,
       error: materialError,
+    },
+    orbGifs: {
+      status:
+        orbsError === undefined
+          ? NoitaDataWakScrapeResultStatus.SUCCESS
+          : NoitaDataWakScrapeResultStatus.FAILED,
+      data: orbs,
+      error: orbsError,
     },
   };
 };
