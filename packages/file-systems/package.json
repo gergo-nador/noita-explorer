@@ -26,6 +26,11 @@
       "types": "./dist/data-wak-memory-filesystem/main.d.ts",
       "import": "./dist/data-wak-memory-filesystem.es.js",
       "require": "./dist/data-wak-memory-filesystem.cjs.js"
+    },
+    "./node": {
+      "types": "./dist/main-node.d.ts",
+      "import": "./dist/node-filesystem.es.js",
+      "require": "./dist/node-filesystem.cjs.js"
     }
   },
   "scripts": {

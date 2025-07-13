@@ -1,8 +1,7 @@
 import fs from 'fs';
-import path from 'node:path';
+import path from 'path';
 import { spawn } from 'child_process';
-import { Platform } from './platform';
-import { promiseHelper, stringHelpers } from '@noita-explorer/tools';
+import { platformHelpers, stringHelpers } from '@noita-explorer/tools';
 
 const getPathsFromDirectory = (directoryPath: string): Promise<string[]> => {
   return new Promise((resolve, reject) => {
@@ -95,7 +94,7 @@ function getMimeTypeFromExtension(fileName: string): string {
 }
 
 const openExplorer = (path: string) => {
-  Platform.select({
+  platformHelpers.select({
     windows: () => {
       spawn('explorer', ['/select,', path], {
         stdio: 'ignore',

@@ -2,7 +2,7 @@
 // https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts
 import { contextBridge, ipcRenderer } from 'electron';
 import { NoitaAPI } from '@noita-explorer/model-noita';
-import { Platform } from './tools/platform';
+import { platformHelpers } from '@noita-explorer/tools';
 
 const noitaApi: NoitaAPI = {
   config: {
@@ -30,13 +30,22 @@ const noitaApi: NoitaAPI = {
       scrapeSessions: () => ipcRenderer.invoke('save00:scrape-sessions'),
       scrapeBonesWands: () => ipcRenderer.invoke('save00:scrape-bones-wands'),
       scrapeWorldState: () => ipcRenderer.invoke('save00:scrape-world-state'),
+      scrapePlayerState: () => {
+        throw new Error('scrapePlayerState not implemented in preload.ts');
+      },
+      scrapeOrbsUnlocked: () => {
+        throw new Error('scrapeOrbsUnlocked not implemented in preload.ts');
+      },
     },
     launch: {
       master: (args) => ipcRenderer.invoke('noita:launch-master', args),
     },
     actions: {
       runActions: (actions) => {
-        throw new Error('not implemented');
+        throw new Error('runActions not implemented in preload.ts');
+      },
+      getNumberOfActionsRan: () => {
+        throw new Error('getNumberOfActionsRan not implemented in preload.ts');
       },
     },
   },
@@ -54,12 +63,14 @@ const noitaApi: NoitaAPI = {
   environment: {
     web: undefined,
     desktop: {
-      isMacOs: Platform.isMacOs,
-      isLinux: Platform.isLinux,
-      isWindows: Platform.isWindows,
+      isMacOs: platformHelpers.isMacOs,
+      isLinux: platformHelpers.isLinux,
+      isWindows: platformHelpers.isWindows,
     },
     features: {
       bonesWandDelete: true,
+      launchGame: true,
+      progressUnlockMode: true,
     },
   },
 };

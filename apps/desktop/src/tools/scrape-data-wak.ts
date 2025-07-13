@@ -8,19 +8,21 @@ import {
   NoitaSpell,
   NoitaTranslation,
   NoitaWandConfig,
+  NoitaScrapedEnemy,
 } from '@noita-explorer/model-noita';
 import path from 'path';
 import { noitaPaths, scrape } from '@noita-explorer/scrapers';
-import { FileSystemFileAccessNode } from '../file-system/file-system-file-access-node';
 import {
   FileSystemDirectoryAccess,
   StringKeyDictionary,
 } from '@noita-explorer/model';
-import { nodeFileSystemHelpers } from './file-system';
 import { Buffer } from 'buffer';
 import { FileSystemDirectoryAccessDataWakMemory } from '@noita-explorer/file-systems';
-import { FileSystemDirectoryAccessNode } from '../file-system/file-system-directory-access-node';
-import { NoitaScrapedEnemy } from '@noita-explorer/model-noita/src/scraping/noita-scraped-enemy';
+import {
+  FileSystemFileAccessNode,
+  nodeFileSystemHelpers,
+  FileSystemDirectoryAccessNode,
+} from '@noita-explorer/file-systems/node';
 
 const statusSkipped = {
   status: NoitaDataWakScrapeResultStatus.SKIPPED,

@@ -2,29 +2,13 @@ import { ipcMain } from 'electron';
 import path from 'path';
 import { electronPaths } from '../electron-paths';
 import {
-  FileSystemDirectoryAccess,
-  StringKeyDictionary,
-} from '@noita-explorer/model';
-import {
   NoitaDataWakScrapeResult,
-  NoitaDataWakScrapeResultStatus,
-  NoitaEnemy,
-  NoitaMaterial,
-  NoitaMaterialReaction,
-  NoitaPerk,
-  NoitaSpell,
-  NoitaTranslation,
   NoitaWakData,
-  NoitaWandConfig,
 } from '@noita-explorer/model-noita';
-import { noitaPaths, scrape } from '@noita-explorer/scrapers';
+import { noitaPaths } from '@noita-explorer/scrapers';
 import { getConfig } from '../persistence/config-store';
-import { nodeFileSystemHelpers } from '../tools/file-system';
-import { FileSystemFileAccessNode } from '../file-system/file-system-file-access-node';
-import { FileSystemDirectoryAccessNode } from '../file-system/file-system-directory-access-node';
-import { FileSystemDirectoryAccessDataWakMemory } from '@noita-explorer/file-systems';
-import { Buffer } from 'buffer';
 import { scrapeDataWak } from '../tools/scrape-data-wak';
+import { nodeFileSystemHelpers } from '@noita-explorer/file-systems/node';
 
 const noitaWakDataPath = path.join(
   electronPaths.appData,

@@ -1,7 +1,7 @@
 import { FileSystemFileAccess } from '@noita-explorer/model';
-import { nodeFileSystemHelpers } from '../tools/file-system';
 import path from 'path';
 import { EOL } from 'os';
+import { nodeFileSystemHelpers } from './node-file-system-helpers.ts';
 
 export const FileSystemFileAccessNode = (
   filePath: string,
@@ -27,6 +27,18 @@ export const FileSystemFileAccessNode = (
     },
     delete: async () => {
       await nodeFileSystemHelpers.deleteFile(filePath);
+    },
+    modify: {
+      fromBuffer: () => {
+        throw new Error(
+          'modify.fromBuffer is not implemented in FileSystemFileAccessNode',
+        );
+      },
+      fromText: () => {
+        throw new Error(
+          'modify.fromText is not implemented in FileSystemFileAccessNode',
+        );
+      },
     },
   };
 };

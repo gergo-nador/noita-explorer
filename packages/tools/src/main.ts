@@ -12,6 +12,7 @@ export { ifStatement } from './common/conditions';
 export { imageHelpers } from './common/images/images.ts';
 export { mathHelpers } from './common/math';
 export { objectHelpers } from './common/objects';
+export { platformHelpers } from './common/runtime-platform.ts';
 export { promiseHelper } from './common/promises';
 export { randomHelpers } from './common/random';
 export { runtimeEnvironment } from './common/runtime-environment';

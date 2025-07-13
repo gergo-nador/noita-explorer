@@ -1,7 +1,9 @@
-import { FileSystemFileAccessNode } from '../src/file-system/file-system-file-access-node';
 import { scrape, scrapeUtils } from '@noita-explorer/scrapers';
 import { scrapeDataWakContent } from '../src/tools/scrape-data-wak';
-import { FileSystemDirectoryAccessNode } from '../src/file-system/file-system-directory-access-node';
+import {
+  FileSystemFileAccessNode,
+  FileSystemDirectoryAccessNode,
+} from '@noita-explorer/file-systems/node';
 import fs from 'fs';
 import path from 'path';
 

@@ -2,7 +2,7 @@ import { ipcMain } from 'electron';
 import { scrape, noitaPaths } from '@noita-explorer/scrapers';
 import { getConfig } from '../persistence/config-store';
 import path from 'path';
-import { FileSystemDirectoryAccessNode } from '../file-system/file-system-directory-access-node';
+import { FileSystemDirectoryAccessNode } from '@noita-explorer/file-systems/node';
 
 export const registerSave00Handlers = () => {
   const getSave00DirectoryApi = () => {

@@ -7,7 +7,6 @@ import {
 } from 'electron';
 import path from 'path';
 import started from 'electron-squirrel-startup';
-import { Platform } from './tools/platform';
 import { registerClipboardIpcHandlers } from './ipc-handlers/clipboard';
 import { registerConfigIpcHandlers } from './ipc-handlers/config';
 import { registerNoitaDataFileHandlers } from './ipc-handlers/noita-data-file';
@@ -15,6 +14,7 @@ import { registerNoitaDefaultPathsHandlers } from './ipc-handlers/noita-default-
 import { registerDialogHandlers } from './ipc-handlers/dialog';
 import { registerSave00Handlers } from './ipc-handlers/save00';
 import { registerLaunchHandlers } from './ipc-handlers/launch';
+import { platformHelpers } from '@noita-explorer/tools';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
@@ -53,7 +53,7 @@ const template: (MenuItemConstructorOptions | MenuItem)[] = [
           browserWindow.webContents.loadURL('https://localhost:4000');
         },
       },
-      Platform.isMacOs ? { role: 'close' } : { role: 'quit' },
+      platformHelpers.isMacOs ? { role: 'close' } : { role: 'quit' },
     ],
   },
 ];
@@ -97,7 +97,7 @@ app.on('ready', () => {
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
 app.on('window-all-closed', () => {
-  if (!Platform.isMacOs) {
+  if (!platformHelpers.isMacOs) {
     app.quit();
   }
 });

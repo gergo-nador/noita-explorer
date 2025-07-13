@@ -1,10 +1,12 @@
-function isBrowser() {
-  return typeof window !== 'undefined' && window.document;
+function isBrowser(): boolean {
+  return typeof window !== 'undefined' && window.document !== undefined;
 }
 
-function isNode() {
+function isNode(): boolean {
   return (
-    typeof process !== 'undefined' && process.versions && process.versions.node
+    typeof process !== 'undefined' &&
+    process.versions &&
+    process.versions.node !== undefined
   );
 }
 

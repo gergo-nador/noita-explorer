@@ -17,6 +17,7 @@ export default defineConfig({
           __dirname,
           'src/browser-file-access-api/main.ts',
         ),
+        'node-filesystem': resolve(__dirname, 'src/main-node.ts'),
       },
       formats: ['es', 'cjs'],
       fileName: (format, entryName) => `${entryName}.${format}.js`,
@@ -26,6 +27,7 @@ export default defineConfig({
         assetFileNames: 'assets/[name][extname]',
         entryFileNames: '[name].[format].js',
       },
+      external: ['fs', 'child_process', 'path', 'os'],
     },
   },
 });
