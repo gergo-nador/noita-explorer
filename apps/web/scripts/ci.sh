@@ -20,7 +20,14 @@ if [[ "${CI_DISABLED:-0}" == "1" ]]; then
 fi
 
 # Run CI pipeline
+echo Starting data wak download...
 npm run data-wak-download
+
+echo Scraping data wak...
 npm run scrape-data-wak
+
+echo Generating gifs...
 npm run generate-gifs
+
+echo Generating static assets
 npm run generate-static-assets
