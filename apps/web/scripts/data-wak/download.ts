@@ -6,7 +6,11 @@ import minimist from 'minimist';
 // @ts-expect-error no esModuleInterop error pls, it works
 import process from 'node:process';
 
+console.log('env before dotenv', process.env);
+
 dotenv.config();
+
+console.log('env after dotenv', process.env);
 
 const argv: Record<string, string> = minimist(process.argv.slice(2));
 const outputFolder = argv['o'];
