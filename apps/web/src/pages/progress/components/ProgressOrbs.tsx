@@ -17,12 +17,14 @@ export const ProgressOrbs = () => {
   };
 
   return (
-    <div>
+    <Flex width='100%' justify='center'>
       <div
         style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(3, 1fr)',
           maxWidth: '600px',
+          width: '100%',
+          gap: 16,
         }}
       >
         {enumerateHelpers.range(0, 12).map((orbId) => {
@@ -77,6 +79,6 @@ export const ProgressOrbs = () => {
           );
         })}
       </div>
-    </div>
+    </Flex>
   );
 };
