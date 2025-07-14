@@ -19,7 +19,7 @@ if (!outputFolder) {
 
 fs.mkdirSync(outputFolder, { recursive: true });
 
-const dataWakUrl = process.env.VITE_CI_DATA_WAK_URL;
+const dataWakUrl = process.env.CI_DATA_WAK_URL;
 const dataWakPath = path.resolve(outputFolder, 'data.wak');
 if (!dataWakUrl) {
   console.error('data.wak url is undefined');
@@ -30,7 +30,7 @@ if (!dataWakUrl) {
   console.log('data.wak is already downloaded');
 }
 
-const translationsUrl = process.env.VITE_CI_TRANSLATIONS_URL;
+const translationsUrl = process.env.CI_TRANSLATIONS_URL;
 const translationsPath = path.resolve(outputFolder, 'common.csv');
 if (!translationsUrl) {
   console.error('translations url is undefined');
