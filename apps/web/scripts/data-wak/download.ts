@@ -25,7 +25,9 @@ if (!dataWakUrl) {
   console.error('data.wak url is undefined');
   process.exit(1);
 } else if (!fs.existsSync(dataWakPath) || forceDownload) {
+  console.log('downloading data.wak ...');
   download(dataWakUrl, dataWakPath);
+  console.log(`data.wak successfully downloaded`);
 } else {
   console.log('data.wak is already downloaded');
 }
@@ -36,7 +38,9 @@ if (!translationsUrl) {
   console.error('translations url is undefined');
   process.exit(1);
 } else if (!fs.existsSync(translationsPath) || forceDownload) {
+  console.log('downloading common.csv ...');
   download(translationsUrl, translationsPath);
+  console.log(`common.csv successfully downloaded`);
 } else {
   console.log('common.csv is already downloaded');
 }
