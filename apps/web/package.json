@@ -25,7 +25,6 @@
     "@noita-explorer/scrapers": "*",
     "@noita-explorer/tools": "*",
     "@sentry/react": "^9.29.0",
-    "@sentry/vite-plugin": "^3.5.0",
     "@tsparticles/plugin-emitters": "^3.8.1",
     "@tsparticles/react": "^3.0.0",
     "@tsparticles/slim": "^3.8.1",
