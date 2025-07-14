@@ -7,10 +7,10 @@
     "dev": "vite",
     "prebuild": "sh scripts/ci.sh",
     "build": "tsc -b && vite build",
+    "postbuild": "sh scripts/ci-post.sh",
     "lint": "eslint .",
     "preview": "vite preview",
     "production-server-local": "cd dist && python3 ../scripts/http-server.py",
-
     "data-wak-download": "npx tsx scripts/data-wak/download.ts -o dist-tmp",
     "scrape-data-wak": "npx tsx scripts/data-wak/scrape.ts -t dist-tmp/common.csv --data-wak dist-tmp/data.wak --o-wak public/noita_wak_data.json --o-gif dist-tmp/noita_data_gifs.json",
     "generate-gifs": "npx tsx scripts/generate-gifs/index.ts --gif-data dist-tmp/noita_data_gifs.json -o public",
@@ -42,6 +42,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.15.0",
+    "@sentry/cli": "^2.47.1",
     "@types/react": "19.1.8",
     "@types/react-dom": "19.1.6",
     "@types/react-plotly.js": "^2.6.3",
