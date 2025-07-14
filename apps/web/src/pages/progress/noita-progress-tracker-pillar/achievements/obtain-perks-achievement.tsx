@@ -20,10 +20,13 @@ export const ObtainPerksAchievement = ({
       <Flex justify='space-evenly'>
         {perksToObtain.map((perkToObtain) => {
           const achievementPerk = perks[perkToObtain.id];
-          const count = achievementPerk.count ?? 0;
+          const count = achievementPerk?.count ?? 0;
           return (
             <Flex direction='column' align='center' gap={5}>
-              <ProgressIcon icon={achievementPerk.perk.imageBase64} size={40} />
+              <ProgressIcon
+                icon={achievementPerk?.perk?.imageBase64}
+                size={40}
+              />
               <span
                 className={count >= perkToObtain.amount ? 'text-success' : ''}
               >
