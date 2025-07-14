@@ -17,8 +17,7 @@ export default defineConfig(({ mode }) => {
         project: 'javascript-react',
         telemetry: false,
         // don't upload source maps when the sentry auth token is not present
-        // disable: !env.VITE_SENTRY_AUTH_TOKEN,
-        disable: true,
+        disable: !env.VITE_SENTRY_AUTH_TOKEN,
         authToken: env.VITE_SENTRY_AUTH_TOKEN,
       }),
     ],
