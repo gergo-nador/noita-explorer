@@ -6,7 +6,16 @@
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": [".next/**", "!.next/cache/**"],
-      "env": ["NE_CI_TEST"]
+      "env": [
+        "VITE_ENV",
+        "VITE_SENTRY_DSN",
+        "CI_DATA_WAK_URL",
+        "CI_TRANSLATIONS_URL",
+        "CI_DISABLED",
+        "SENTRY_ORG",
+        "SENTRY_PROJECT",
+        "SENTRY_AUTH_TOKEN"
+      ]
     },
     "lint": {
       "dependsOn": ["^lint"]
