@@ -61,11 +61,13 @@ export const NoitaProgressTrackerPillar = () => {
                   );
                 };
 
+                const imagePath = `/images/achievement-pillars/${pillar.img}.png`;
+
                 return (
                   <NoitaTooltipWrapper placement='right' content={pillar.info}>
                     <Flex height={140}>
                       <img
-                        src={pillar.img}
+                        src={imagePath}
                         alt={pillar.title}
                         title={pillar.title}
                         height={140}
