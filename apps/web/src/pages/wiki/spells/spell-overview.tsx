@@ -27,6 +27,7 @@ import spreadModifierIcon from '../../../assets/icons/spells/icon_spread_degrees
 import { NoitaNumberModifier } from '../../../components/tooltips/noita-number-modifier.tsx';
 import { Flex } from '@noita-explorer/react-utils';
 import { CopyLinkText } from '../../../components/copy-link-text.tsx';
+import { publicPaths } from '../../../utils/public-paths.ts';
 
 export const SpellOverview = ({ spell }: { spell: NoitaSpell }) => {
   const actionType = NoitaSpellTypesDictionary[spell.type];
@@ -283,9 +284,7 @@ export const SpellOverview = ({ spell }: { spell: NoitaSpell }) => {
         </Flex>
 
         <Flex justify='center' column>
-          <CopyLinkText
-            link={`${window.location.protocol}//${window.location.host}/g/wiki/spells/${spell.id}`}
-          >
+          <CopyLinkText link={publicPaths.wiki.spells(spell.id)}>
             <div style={{ fontSize: 20, marginBottom: 10 }}>{spell.name}</div>
           </CopyLinkText>
           <div>{spell.description}</div>

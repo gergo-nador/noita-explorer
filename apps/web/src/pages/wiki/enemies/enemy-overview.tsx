@@ -35,6 +35,7 @@ import damageHolyIconColor from '../../../assets/icons/damages/icon_damage_holy_
 import { CopyLinkText } from '../../../components/copy-link-text.tsx';
 import { NoitaEnemyGifCard } from '../../../components/noita-enemy-gif-card.tsx';
 import { useMemo } from 'react';
+import { publicPaths } from '../../../utils/public-paths.ts';
 
 export const EnemyOverview = ({ enemy }: { enemy: NoitaEnemy }) => {
   const noitaUnits = useNoitaUnits();
@@ -81,10 +82,7 @@ export const EnemyOverview = ({ enemy }: { enemy: NoitaEnemy }) => {
             paddingLeft: 10,
           }}
         >
-          <CopyLinkText
-            link={`${window.location.protocol}//${window.location.host}/g/wiki/enemies/${enemy.id}`}
-            iconSize={24}
-          >
+          <CopyLinkText link={publicPaths.wiki.enemies(enemy.id)} iconSize={24}>
             <div
               style={{
                 fontSize: 'clamp(1.4rem, 2vw, 2.2rem)',
@@ -103,7 +101,7 @@ export const EnemyOverview = ({ enemy }: { enemy: NoitaEnemy }) => {
       <br />
       {progressDisplayDebugData && (
         <div>
-          <Header title={'Debug'}>
+          <Header title='Debug'>
             <div style={{ fontSize: 18 }}>Tags:</div>
             <div>{enemy.debug.entityTags.join(', ')}</div>
             <br />
@@ -277,6 +275,7 @@ export const EnemyOverview = ({ enemy }: { enemy: NoitaEnemy }) => {
           <Flex gap={16} wrap='wrap'>
             {gifs.map((gif) => (
               <NoitaEnemyGifCard
+                key={gif.name}
                 gif={gif}
                 enemy={enemy}
                 width={'auto'}

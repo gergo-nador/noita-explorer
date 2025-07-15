@@ -7,6 +7,7 @@ import {
 } from '@noita-explorer/noita-component-library';
 import { useState } from 'react';
 import { Flex } from '@noita-explorer/react-utils';
+import { publicPaths } from '../utils/public-paths.ts';
 
 interface Props {
   enemy: NoitaEnemy;
@@ -22,6 +23,13 @@ export const NoitaEnemyGifCard = ({ enemy, gif, width, height }: Props) => {
 
   // @ts-expect-error string.replaceAll does exist, idk why it is flagged
   const gifDisplayName = gif.name.replaceAll('_', ' ');
+  const media = publicPaths.enemyGifs({
+    enemyId: enemy.id,
+    gifName: gif.name,
+    gifReloadCounter: gifRestartCounter,
+  });
+  const gifPath = media.gif;
+  const firstFramePath = media.firstFrame;
 
   return (
     <NoitaTooltipWrapper
@@ -55,7 +63,7 @@ export const NoitaEnemyGifCard = ({ enemy, gif, width, height }: Props) => {
         {gif.loop ? (
           <div>
             <PixelatedImage
-              src={`/g/enemy-gifs/${enemy.id}/${gif.name}.gif`}
+              src={gifPath}
               alt={`${enemy.name} ${gif.name}`}
               width={width}
               height={height}
@@ -72,14 +80,14 @@ export const NoitaEnemyGifCard = ({ enemy, gif, width, height }: Props) => {
           >
             {showGif ? (
               <PixelatedImage
-                src={`/g/enemy-gifs/${enemy.id}/${gif.name}.gif?c=${gifRestartCounter}`}
+                src={gifPath}
                 alt={`${enemy.name} ${gif.name}`}
                 width={width}
                 height={height}
               />
             ) : (
               <PixelatedImage
-                src={`/g/enemy-gifs/${enemy.id}/${gif.name}-f.png`}
+                src={firstFramePath}
                 alt={`${enemy.name} ${gif.name}`}
                 width={width}
                 height={height}

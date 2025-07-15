@@ -2,18 +2,18 @@ import { PixelatedImage } from '@noita-explorer/noita-component-library';
 import { enumerateHelpers } from '@noita-explorer/tools';
 import { useSave00Store } from '../../../stores/save00.ts';
 import { Flex } from '@noita-explorer/react-utils';
+import { publicPaths } from '../../../utils/public-paths.ts';
 
 export const ProgressOrbs = () => {
   const { unlockedOrbs, flags } = useSave00Store();
 
   const OrbGif = ({
-    src,
+    orbId,
   }: {
-    src: string | 'orb_red_evil' | 'orb_picked' | 'orb_discovered';
+    orbId: string | 'orb_red_evil' | 'orb_picked' | 'orb_discovered';
   }) => {
-    return (
-      <PixelatedImage src={`/g/orb-gifs/${src}/default.gif`} height={120} />
-    );
+    const path = publicPaths.orbs({ orbId: orbId }).gif;
+    return <PixelatedImage src={path} height={120} />;
   };
 
   return (
@@ -45,9 +45,9 @@ export const ProgressOrbs = () => {
                 {hasWest && (
                   <>
                     {isOrbWestPickedUp ? (
-                      <OrbGif src='orb_picked' />
+                      <OrbGif orbId='orb_picked' />
                     ) : (
-                      <OrbGif src='orb_red_evil' />
+                      <OrbGif orbId='orb_red_evil' />
                     )}
                     <div>Orb {orbId} West</div>
                   </>
@@ -55,11 +55,11 @@ export const ProgressOrbs = () => {
               </Flex>
               <Flex center column>
                 {isOrbPickedUp ? (
-                  <OrbGif src='orb_picked' />
+                  <OrbGif orbId='orb_picked' />
                 ) : progressFlagUnlocked ? (
-                  <OrbGif src='orb_discovered' />
+                  <OrbGif orbId='orb_discovered' />
                 ) : (
-                  <OrbGif src={'orb_' + orbIdString} />
+                  <OrbGif orbId={'orb_' + orbIdString} />
                 )}
                 <div>Orb {orbId}</div>
               </Flex>
@@ -67,9 +67,9 @@ export const ProgressOrbs = () => {
                 {hasEast && (
                   <>
                     {isOrbEastPickedUp ? (
-                      <OrbGif src='orb_picked' />
+                      <OrbGif orbId='orb_picked' />
                     ) : (
-                      <OrbGif src='orb_red_evil' />
+                      <OrbGif orbId='orb_red_evil' />
                     )}
                     <div>Orb {orbId} East</div>
                   </>
