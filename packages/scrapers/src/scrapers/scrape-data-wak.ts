@@ -102,9 +102,21 @@ export const scrapeDataWakContent = async ({
   const shouldSkipEnemyGifScraping = enemies.length === 0;
   try {
     if (!shouldSkipEnemyGifScraping) {
+      const extraAnimationIds = [
+        'player_amulet',
+        'player_amulet_gem',
+        'player_hat2',
+        'player_hat2_shadow',
+      ];
+
+      const animationInfos = [
+        ...enemies.map((e) => e.id),
+        ...extraAnimationIds,
+      ];
+
       enemyGifs = await scrape.enemyAnimations({
         dataWakParentDirectoryApi: dataWakParentDirectory,
-        animationInfos: enemies.map((e) => ({ id: e.id })),
+        animationInfos: animationInfos.map((id) => ({ id: id })),
       });
     }
   } catch (err) {
