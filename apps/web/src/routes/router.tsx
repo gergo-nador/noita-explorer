@@ -27,7 +27,7 @@ import { NoitaProgressTrackerSecrets } from '../pages/progress/noita-progress-tr
 import { NoitaProgressTrackerPillar } from '../pages/progress/noita-progress-tracker-pillar/noita-progress-tracker-pillar.tsx';
 import { environment } from '../environment.ts';
 import { Sandbox } from '../pages/sandbox.tsx';
-import { Background } from '../components/background.tsx';
+import { PageBackground } from '../components/page-background.tsx';
 import { ErrorPage } from '../pages/_errors/error-page.tsx';
 
 export const router = createBrowserRouter([
@@ -35,13 +35,13 @@ export const router = createBrowserRouter([
     path: '/',
     element: (
       <>
-        <Background />
+        <PageBackground />
         <Outlet />
       </>
     ),
     errorElement: (
       <>
-        <Background />
+        <PageBackground />
         <ErrorPage />
       </>
     ),

@@ -1,5 +1,5 @@
 export const ifStatement = <T>(condition: boolean, value: T) =>
-  inlineIfStatement(condition, value, false, undefined);
+  inlineIfStatement<T>(condition, value, undefined);
 
 interface IfStatementType<T> {
   elseIf: (condition: boolean, value: T) => IfStatementType<T>;
@@ -9,23 +9,21 @@ interface IfStatementType<T> {
 const inlineIfStatement = <T>(
   condition: boolean,
   value: T,
-  hasReturnValue: boolean,
-  returnValue: T,
+  existingReturnValue: { val: T } | undefined,
 ): IfStatementType<T> => {
-  if (!hasReturnValue && condition) {
-    hasReturnValue = true;
-    returnValue = value;
+  if (!existingReturnValue && condition) {
+    existingReturnValue = { val: value };
   }
 
   return {
     elseIf: (condition: boolean, value: T): IfStatementType<T> =>
-      inlineIfStatement(condition, value, hasReturnValue, returnValue),
+      inlineIfStatement(condition, value, existingReturnValue),
     else: (value: T): T => {
-      if (!hasReturnValue) {
-        returnValue = value;
+      if (existingReturnValue) {
+        value = existingReturnValue.val;
       }
 
-      return returnValue;
+      return value;
     },
   };
 };
