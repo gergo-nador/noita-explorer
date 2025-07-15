@@ -1,9 +1,4 @@
-import player from '../../../assets/player/player.png';
-import playerAmulet from '../../../assets/player/player_amulet.png';
-import playerAmuletGem from '../../../assets/player/player_amulet_gem.png';
-import playerCrown from '../../../assets/player/player_crown.png';
-
-import { CSSProperties } from 'react';
+import { CSSProperties, useRef, useState } from 'react';
 import {
   BooleanIcon,
   Button,
@@ -12,6 +7,7 @@ import {
 import { Flex } from '@noita-explorer/react-utils';
 import { useSave00Store } from '../../../stores/save00.ts';
 import { useNoitaActionsStore } from '../../../stores/actions.ts';
+import { publicPaths } from '../../../utils/public-paths.ts';
 
 export const PlayerDecorations = () => {
   const { flags, currentRun } = useSave00Store();
@@ -169,22 +165,55 @@ const PlayerImage = ({
   amuletGem: boolean | undefined;
   crown: boolean | undefined;
 }) => {
+  const [gifName, setGifName] = useState('stand');
   const overlayStyle: CSSProperties = { position: 'absolute', top: 0, left: 0 };
+
+  // whenever the component is re-rendered (the arguments change)
+  // restart all the gif animations so the newly added animation is synchronized
+  const ref = useRef(0);
+  ref.current += 1;
+
+  const getGifPath = (enemyId: string) =>
+    publicPaths.enemyGifs({
+      enemyId: enemyId,
+      gifName: gifName,
+      gifReloadCounter: ref.current,
+    }).gif;
+
   return (
-    <div style={{ position: 'relative' }}>
-      <PixelatedImage src={player} height={size} />
+    <div
+      style={{ position: 'relative' }}
+      onMouseEnter={() => setGifName('walk')}
+      onMouseLeave={() => setGifName('stand')}
+    >
+      <PixelatedImage src={getGifPath('player')} height={size} />
       {(amulet || amuletGem) && (
-        <PixelatedImage src={playerAmulet} height={size} style={overlayStyle} />
+        <PixelatedImage
+          src={getGifPath('player_amulet')}
+          height={size}
+          style={overlayStyle}
+        />
       )}
       {amuletGem && (
         <PixelatedImage
-          src={playerAmuletGem}
+          src={getGifPath('player_amulet_gem')}
           height={size}
           style={overlayStyle}
         />
       )}
       {crown && (
-        <PixelatedImage src={playerCrown} height={size} style={overlayStyle} />
+        <>
+          <PixelatedImage
+            src={getGifPath('player_hat2')}
+            height={size}
+            style={overlayStyle}
+          />
+          <PixelatedImage
+            src={getGifPath('player_hat2_shadow')}
+            height={size}
+            style={overlayStyle}
+          />
+        </>
       )}
     </div>
   );
