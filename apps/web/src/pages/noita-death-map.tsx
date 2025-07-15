@@ -1,5 +1,4 @@
 import Plot from 'react-plotly.js';
-import noitaMap from '../assets/noita-map.webp';
 import { useSave00Store } from '../stores/save00.ts';
 import { StringKeyDictionary } from '@noita-explorer/model';
 import { Data, Layout } from 'plotly.js';
@@ -77,7 +76,7 @@ export const NoitaDeathMap = () => {
     margin: { l: 0, r: 0, t: 0, b: 0 },
     images: [
       {
-        source: noitaMap, // Replace with your image URL or base64
+        source: '/images/noita-map.webp',
         x: rangeXLeft,
         y: rangeYBottom,
         xref: 'x',
