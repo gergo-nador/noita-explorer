@@ -12,10 +12,10 @@ export const HaloTransformationAchievement = ({
   perks: StringKeyDictionary<AchievementPerk>;
 }) => {
   const plusOnePerks = [
-    'RESPAWN',
-    'SAVING_GRACE',
-    'PEACE_WITH_GODS',
-    'GENOME_MORE_LOVE',
+    'respawn',
+    'saving_grace',
+    'peace_with_gods',
+    'genome_more_love',
   ];
   const plusOneSum = arrayHelpers.sumBy(
     plusOnePerks,
@@ -23,10 +23,10 @@ export const HaloTransformationAchievement = ({
   );
 
   const minusOnePerks = [
-    'VAMPIRISM',
-    'GLOBAL_GORE',
-    'EXPLODING_CORPSES',
-    'GENOME_MORE_HATRED',
+    'vampirism',
+    'global_gore',
+    'exploding_corpses',
+    'genome_more_hatred',
   ];
   const minusOneSum = arrayHelpers.sumBy(
     minusOnePerks,
@@ -47,8 +47,8 @@ export const HaloTransformationAchievement = ({
         <Flex gap={2} direction='column'>
           {minusOnePerks.map((perkId) => (
             <Flex gap={4} align='center'>
-              <ProgressIcon icon={perks[perkId].perk.imageBase64} size={30} />
-              <span>{perks[perkId].count ?? 0}</span>
+              <ProgressIcon icon={perks[perkId]?.perk?.imageBase64} size={30} />
+              <span>{perks[perkId]?.count ?? 0}</span>
             </Flex>
           ))}
           <Flex justify='end'>
@@ -80,8 +80,8 @@ export const HaloTransformationAchievement = ({
         <Flex gap={2} direction='column'>
           {plusOnePerks.map((perkId) => (
             <Flex gap={4} align='center'>
-              <span>{perks[perkId].count ?? 0}</span>
-              <ProgressIcon icon={perks[perkId].perk.imageBase64} size={30} />
+              <span>{perks[perkId]?.count ?? 0}</span>
+              <ProgressIcon icon={perks[perkId]?.perk?.imageBase64} size={30} />
             </Flex>
           ))}
           <Flex justify='start'>

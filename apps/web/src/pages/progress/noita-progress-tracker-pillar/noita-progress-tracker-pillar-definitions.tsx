@@ -35,10 +35,6 @@ export const useNoitaProgressTrackerPillarDefinitions = (): NoitaPillar[][] => {
     return arrayHelpers.asDict(perkData, (p) => p.id);
   }, [data?.perks, currentRun?.worldState.perks.pickedPerks]);
 
-  if (!data) {
-    return [];
-  }
-
   const pillar1: NoitaPillar[] = [
     { img: 'pillar_end_01' },
 
@@ -58,9 +54,9 @@ export const useNoitaProgressTrackerPillarDefinitions = (): NoitaPillar[][] => {
           title='Lukki Transformation'
           perks={perks}
           perksToObtain={[
-            { id: 'LUKKI_MINION', amount: 1 },
-            { id: 'ATTACK_FOOT', amount: 2 },
-            { id: 'LEGGY_FEET', amount: 2 },
+            { id: 'lukki_minion', amount: 1 },
+            { id: 'attack_foot', amount: 2 },
+            { id: 'leggy_feet', amount: 2 },
           ]}
         />
       ),
@@ -74,9 +70,9 @@ export const useNoitaProgressTrackerPillarDefinitions = (): NoitaPillar[][] => {
           title='Funky Transformation'
           perks={perks}
           perksToObtain={[
-            { id: 'CORDYCEPS', amount: 1 },
-            { id: 'MOLD', amount: 1 },
-            { id: 'FUNGAL_DISEASE', amount: 1 },
+            { id: 'cordyceps', amount: 1 },
+            { id: 'mold', amount: 1 },
+            { id: 'fungal_disease', amount: 1 },
           ]}
         />
       ),
@@ -90,9 +86,9 @@ export const useNoitaProgressTrackerPillarDefinitions = (): NoitaPillar[][] => {
           title='Ratty Transformation'
           perks={perks}
           perksToObtain={[
-            { id: 'PLAGUE_RATS', amount: 1 },
-            { id: 'REVENGE_RATS', amount: 1 },
-            { id: 'VOMIT_RATS', amount: 1 },
+            { id: 'plague_rats', amount: 1 },
+            { id: 'revenge_rats', amount: 1 },
+            { id: 'vomit_rats', amount: 1 },
           ]}
         />
       ),
@@ -106,9 +102,9 @@ export const useNoitaProgressTrackerPillarDefinitions = (): NoitaPillar[][] => {
           title='Ghostly Transformation'
           perks={perks}
           perksToObtain={[
-            { id: 'HUNGRY_GHOST', amount: 1 },
-            { id: 'ANGRY_GHOST', amount: 1 },
-            { id: 'DEATH_GHOST', amount: 1 },
+            { id: 'hungry_ghost', amount: 1 },
+            { id: 'angry_ghost', amount: 1 },
+            { id: 'death_ghost', amount: 1 },
           ]}
         />
       ),
