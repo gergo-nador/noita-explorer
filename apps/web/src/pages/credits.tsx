@@ -1,4 +1,3 @@
-import github from '../assets/external/github.png';
 import { Button, Icon } from '@noita-explorer/noita-component-library';
 import { Flex } from '@noita-explorer/react-utils';
 import { environment } from '../environment.ts';
@@ -14,7 +13,7 @@ export const Credits = () => {
         mods, by directly modifying your save files.
       </p>
       <Flex gap={4}>
-        <Icon src={github} alt='github' size={18} />
+        <Icon src={'/images/external/github.png'} alt='github' size={18} />
 
         <a
           href='https://github.com/gergo-nador/noita-explorer'
