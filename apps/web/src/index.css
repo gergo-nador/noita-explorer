@@ -1,21 +1,21 @@
 @font-face {
-  font-family: 'NoitaPixel'; /*a name to be used later*/
-  src: url("../public/NoitaPixel.ttf"); /*URL to font*/
+  font-family: 'NoitaPixel';
+  src: url("../public/fonts/NoitaPixel.ttf");
 }
 
 @font-face {
   font-family: 'NoitaGlyph';
-  src: url("../public/NoitaGlyphScaled.ttf");
+  src: url("../public/fonts/NoitaGlyphScaled.ttf");
 }
 
 @font-face {
   font-family: 'NoitaSmallNumbers';
-  src: url("../public/Font Small Numbers.ttf");
+  src: url("../public/fonts/Font Small Numbers.ttf");
 }
 
 @font-face {
   font-family: 'NoitaBlackletter';
-  src: url("../public/NoitaBlackletter-Regular.ttf");
+  src: url("../public/fonts/NoitaBlackletter-Regular.ttf");
 }
 
 :root {
