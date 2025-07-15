@@ -1,9 +1,9 @@
 import { Card, Icon } from '@noita-explorer/noita-component-library';
 
-import egg1 from '../../../assets/holidays/egg.png';
-import egg2 from '../../../assets/holidays/hollow_egg.png';
-
 export const Easter = () => {
+  const egg1 = '/images/holidays/egg.png';
+  const egg2 = '/images/holidays/hollow_egg.png';
+
   // https://www.irt.org/articles/js052/index.htm
   return (
     <div style={{ position: 'relative' }}>
@@ -72,8 +72,8 @@ export const Easter = () => {
         }}
       >
         <div style={{ marginBottom: 15 }}>
-          <span className={'text-xl'}>Easter</span>
-          <span className={'text-secondary text-xl'}>
+          <span className='text-xl'>Easter</span>
+          <span className='text-secondary text-xl'>
             {' '}
             - 7 days before Easter
           </span>

@@ -2,10 +2,10 @@ import { Card, Icon } from '@noita-explorer/noita-component-library';
 import Particles from '@tsparticles/react';
 import { ISourceOptions } from '@tsparticles/engine';
 
-import charm from '../../../assets/status-indicators/charm-high-res.png';
-import heart from '../../../assets/holidays/Heart_extrahp_default.gif';
-
 export const Valentines = () => {
+  const heartGif = '/images/holidays/Heart_extrahp_default.gif';
+  const heartImage = '/images/holidays/charm-high-res.png';
+
   // https://particles.js.org/docs/interfaces/tsParticles_Engine.Options_Interfaces_IOptions.IOptions.html
   const particlesPermanentOptions: ISourceOptions = {
     fpsLimit: 60,
@@ -23,7 +23,7 @@ export const Valentines = () => {
         type: 'image',
         options: {
           image: {
-            src: charm,
+            src: heartImage,
           },
         },
       },
@@ -61,7 +61,7 @@ export const Valentines = () => {
         type: 'image',
         options: {
           image: {
-            src: charm,
+            src: heartImage,
           },
         },
       },
@@ -118,7 +118,7 @@ export const Valentines = () => {
             transform: 'translateY(-50%) translateX(-50%) rotateZ(-15deg)',
           }}
         >
-          <Icon src={heart} />
+          <Icon src={heartGif} />
         </div>
         <div
           style={{
@@ -128,7 +128,7 @@ export const Valentines = () => {
             transform: 'translateY(-50%) translateX(50%) rotateZ(15deg)',
           }}
         >
-          <Icon src={heart} />
+          <Icon src={heartGif} />
         </div>
       </div>
 
@@ -151,7 +151,7 @@ export const Valentines = () => {
           <Particles
             id='tsparticles-valentines-permanent'
             options={particlesPermanentOptions}
-            className={'ts-particles-wrapper'}
+            className='ts-particles-wrapper'
           />
         </div>
         <div
@@ -166,13 +166,13 @@ export const Valentines = () => {
           <Particles
             id='tsparticles-valentines-click'
             options={particlesClickableOptions}
-            className={'ts-particles-wrapper'}
+            className='ts-particles-wrapper'
           />
         </div>
         <div>
           <div style={{ marginBottom: 15 }}>
-            <span className={'text-xl'}>Valentine's Day</span>
-            <span className={'text-secondary text-xl'}> - 14 February</span>
+            <span className='text-xl'>Valentine's Day</span>
+            <span className='text-secondary text-xl'> - 14 February</span>
           </div>
           <div>Extra Max Health and Pheromone will spawn more often.</div>
         </div>

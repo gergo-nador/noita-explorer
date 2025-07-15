@@ -1,0 +1,6 @@
+- gif global color palette instead of frame palette
+- gif variants
+- gifs extensions
+- update readme with relevant info
+- clean up images: don't import static assets, but place them under public/
+- clean up base64 images from noita_wak_data.json

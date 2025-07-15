@@ -1,7 +1,5 @@
 import { Card } from '@noita-explorer/noita-component-library';
 
-import teamFortressGunner from '../../../assets/holidays/team-fortress-2.webp';
-
 export const TeamFortress2 = () => {
   return (
     <Card
@@ -14,8 +12,8 @@ export const TeamFortress2 = () => {
       <div style={{ display: 'grid', gridTemplateColumns: '1fr auto' }}>
         <div>
           <div style={{ marginBottom: 15 }}>
-            <span className={'text-xl'}>Team Fortress's birthday</span>
-            <span className={'text-secondary text-xl'}> - 24 August</span>
+            <span className='text-xl'>Team Fortress's birthday</span>
+            <span className='text-secondary text-xl'> - 24 August</span>
           </div>
           <div>
             A variant of Snipuhiisi will rarely spawn in the Snowy Depths and
@@ -25,10 +23,10 @@ export const TeamFortress2 = () => {
         </div>
         <div>
           <img
-            src={teamFortressGunner}
-            alt={'Team Fortress 2 Gunner'}
-            width={'150px'}
-            height={'auto'}
+            src='/images/holidays/team-fortress-2.webp'
+            alt='Team Fortress 2 Gunner'
+            width='150px'
+            height='auto'
           />
         </div>
       </div>

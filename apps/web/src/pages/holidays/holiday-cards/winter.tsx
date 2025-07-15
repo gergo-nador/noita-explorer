@@ -1,9 +1,10 @@
 import { Card } from '@noita-explorer/noita-component-library';
-import snow from '../../../assets/holidays/snowrock.png';
 import { ISourceOptions } from '@tsparticles/engine';
 import Particles from '@tsparticles/react';
 
 export const Winter = () => {
+  const snowRockImage = '/images/holidays/snowrock.png';
+
   // https://particles.js.org/docs/interfaces/tsParticles_Engine.Options_Interfaces_IOptions.IOptions.html
   const particlesPermanentOptions: ISourceOptions = {
     fpsLimit: 60,
@@ -93,7 +94,7 @@ export const Winter = () => {
         styling={{
           borderDark: '#a6c2d8',
           borderBright: '#81b0d2',
-          backgroundImage: snow,
+          backgroundImage: snowRockImage,
         }}
       >
         <div
@@ -108,7 +109,7 @@ export const Winter = () => {
           <Particles
             id='tsparticles-winter-permanent'
             options={particlesPermanentOptions}
-            className={'ts-particles-wrapper'}
+            className='ts-particles-wrapper'
           />
         </div>
         <div
@@ -123,13 +124,13 @@ export const Winter = () => {
           <Particles
             id='tsparticles-winter-click'
             options={particlesClickableOptions}
-            className={'ts-particles-wrapper'}
+            className='ts-particles-wrapper'
           />
         </div>
         <div>
           <div style={{ marginBottom: 15 }}>
-            <span className={'text-xl'}>Winter</span>
-            <span className={'text-secondary text-xl'}>
+            <span className='text-xl'>Winter</span>
+            <span className='text-secondary text-xl'>
               {' '}
               - December – February
             </span>
