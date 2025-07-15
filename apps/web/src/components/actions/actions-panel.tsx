@@ -4,6 +4,7 @@ import { useNoitaActionsStore } from '../../stores/actions.ts';
 import { useRunActions } from '../../hooks/use-run-actions.ts';
 import { Flex } from '@noita-explorer/react-utils';
 import { NoitaActionResult } from '@noita-explorer/model-noita';
+import { SpaceCharacter } from '../space-character.tsx';
 
 export const ActionsPanel = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -169,7 +170,10 @@ export const ActionsPanel = () => {
                 <Button disabled={isRunning} onClick={runActions}>
                   {isRunning && (
                     <span>
-                      Running... ({progressNumber} /{' '}
+                      Running... ({progressNumber}
+                      <SpaceCharacter />
+                      /
+                      <SpaceCharacter />
                       {Object.keys(actions).length})
                     </span>
                   )}

@@ -1,6 +1,7 @@
 import { Card } from '@noita-explorer/noita-component-library';
 import { useContext } from 'react';
 import { NoitaHolidayContext } from '../../../contexts/noita-holiday-context.ts';
+import { SpaceCharacter } from '../../../components/space-character.tsx';
 
 export const NewYears = () => {
   const { fireFireworks } = useContext(NoitaHolidayContext);
@@ -19,8 +20,7 @@ export const NewYears = () => {
               <div style={{ marginBottom: 15 }}>
                 <span className={'text-xl'}>New Years</span>
                 <span className={'text-secondary text-xl'}>
-                  {' '}
-                  - 30 December – 2 January
+                  <SpaceCharacter />- 30 December – 2 January
                 </span>
               </div>
               <div>

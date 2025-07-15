@@ -1,6 +1,7 @@
 import { timeHelpers, arrayHelpers, mathHelpers } from '@noita-explorer/tools';
 import { NoitaSession } from '@noita-explorer/model-noita';
 import { useMemo } from 'react';
+import { SpaceCharacter } from '../../components/space-character.tsx';
 
 interface NoitaSessionsStatisticsProps {
   sessions: NoitaSession[];
@@ -36,12 +37,14 @@ export const NoitaSessionsStatistics = ({
       Statistics
       <ul>
         <li>
-          First day played (time since then):{' '}
+          First day played (time since then):
+          <SpaceCharacter />
           {statsFirstDayPlayed?.toLocaleDateString()}
         </li>
         <li>Most played on one day: {statsMostPlayedOneDay}</li>
         <li>
-          average game per game day:{' '}
+          average game per game day:
+          <SpaceCharacter />
           {mathHelpers.round(statsAvgPlayPerDay ?? 0, 2)}
         </li>
         <li>Sum Playtime: {timeHelpers.secondsToTimeString(sumPlaytime)}</li>

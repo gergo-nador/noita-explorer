@@ -1,6 +1,7 @@
 import { Card } from '@noita-explorer/noita-component-library';
 import { ISourceOptions } from '@tsparticles/engine';
 import Particles from '@tsparticles/react';
+import { SpaceCharacter } from '../../../components/space-character.tsx';
 
 export const Winter = () => {
   const snowRockImage = '/images/holidays/snowrock.png';
@@ -131,8 +132,7 @@ export const Winter = () => {
           <div style={{ marginBottom: 15 }}>
             <span className='text-xl'>Winter</span>
             <span className='text-secondary text-xl'>
-              {' '}
-              - December – February
+              <SpaceCharacter />- December – February
             </span>
           </div>
           <div>

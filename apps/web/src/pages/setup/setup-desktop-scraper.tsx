@@ -22,6 +22,7 @@ import { useNavigate } from 'react-router-dom';
 import { pages } from '../../routes/pages';
 import { useNoitaDataWakStore } from '../../stores/noita-data-wak.ts';
 import { sentry } from '../../utils/sentry.ts';
+import { SpaceCharacter } from '../../components/space-character.tsx';
 
 export const SetupDesktopScraper = () => {
   const navigate = useNavigate();
@@ -120,7 +121,8 @@ export const SetupDesktopScraper = () => {
                   </div>
                   {!!dataWakScrapeResult.translations.error && (
                     <div>
-                      Error:{' '}
+                      Error:
+                      <SpaceCharacter />
                       {JSON.stringify(dataWakScrapeResult.translations.error)}
                     </div>
                   )}

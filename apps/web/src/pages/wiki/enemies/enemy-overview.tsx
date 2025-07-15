@@ -36,6 +36,7 @@ import { CopyLinkText } from '../../../components/copy-link-text.tsx';
 import { NoitaEnemyGifCard } from '../../../components/noita-enemy-gif-card.tsx';
 import { useMemo } from 'react';
 import { publicPaths } from '../../../utils/public-paths.ts';
+import { SpaceCharacter } from '../../../components/space-character.tsx';
 
 export const EnemyOverview = ({ enemy }: { enemy: NoitaEnemy }) => {
   const noitaUnits = useNoitaUnits();
@@ -165,7 +166,8 @@ export const EnemyOverview = ({ enemy }: { enemy: NoitaEnemy }) => {
                     </div>
                     {gameEffect.frames !== -1 && (
                       <div style={{ textAlign: 'center' }}>
-                        (For{' '}
+                        (For
+                        <SpaceCharacter />
                         {noitaUnits.frames(
                           gameEffect.frames,
                           noitaUnits.frameDefaultUnits.gameEffectTime,

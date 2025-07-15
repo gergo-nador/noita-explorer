@@ -12,6 +12,7 @@ import {
 import { NoitaSessionsFilterAdvanced } from './noita-sessions-filter-advanced.tsx';
 import { arrayHelpers } from '@noita-explorer/tools';
 import { useState } from 'react';
+import { SpaceCharacter } from '../../components/space-character.tsx';
 
 interface NoitaSessionsFilterProps {
   sessions: NoitaSession[];
@@ -99,7 +100,8 @@ export const NoitaSessionsFilter = ({
           <Button
             onClick={() => setShowAdvancedDialog((prevState) => !prevState)}
           >
-            Advanced Filters{' '}
+            Advanced Filters
+            <SpaceCharacter />
             {advancedFilterCount > 0 ? `(${advancedFilterCount})` : ''}
           </Button>
         </div>
