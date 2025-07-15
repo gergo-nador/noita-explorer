@@ -4,3 +4,4 @@
 - update readme with relevant info
 - clean up images: don't import static assets, but place them under public/
 - clean up base64 images from noita_wak_data.json
+- fix gif player hand
