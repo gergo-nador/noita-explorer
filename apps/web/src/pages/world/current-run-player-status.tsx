@@ -1,8 +1,3 @@
-import healthIcon from '../../assets/hud/health.png';
-import jetpackIcon from '../../assets/hud/jetpack.png';
-import orbsIcon from '../../assets/hud/orbs.png';
-import moneyIcon from '../../assets/hud/money.png';
-
 import {
   Icon,
   NoitaTooltipWrapper,
@@ -46,7 +41,7 @@ export const CurrentRunPlayerStatus = () => {
             />
           </NoitaTooltipWrapper>
         </Flex>
-        <HudIcon alt='Health' src={healthIcon} />
+        <HudIcon alt='Health' type='health' />
         <div>{mathHelpers.round(currentRun.playerState.damageModel.hp)}</div>
       </>
       {fly && (
@@ -79,21 +74,21 @@ export const CurrentRunPlayerStatus = () => {
               />
             </NoitaTooltipWrapper>
           </Flex>
-          <HudIcon alt='Jetpack' src={jetpackIcon} />
+          <HudIcon alt='Jetpack' type='jetpack' />
           <div />
         </>
       )}
       {currentRun.worldState.orbsFound.length > 0 && (
         <>
           <div />
-          <HudIcon alt='Orbs' src={orbsIcon} />
+          <HudIcon alt='Orbs' type='orbs' />
           <div>{currentRun.worldState.orbsFound.length}</div>
         </>
       )}
       {currentRun.playerState.wallet && (
         <>
           <div />
-          <HudIcon alt='Money' src={moneyIcon} />
+          <HudIcon alt='Money' type='money' />
           <NoitaTooltipWrapper
             content={
               <div>
@@ -131,10 +126,10 @@ export const CurrentRunPlayerStatus = () => {
   );
 };
 
-const HudIcon = ({ alt, src }: { alt: string; src: string }) => {
+const HudIcon = ({ alt, type }: { alt: string; type: string }) => {
   return (
     <Flex center>
-      <Icon alt={alt} src={src} size={20} />
+      <Icon alt={alt} src={`/images/hud/${type}.png`} size={20} />
     </Flex>
   );
 };
