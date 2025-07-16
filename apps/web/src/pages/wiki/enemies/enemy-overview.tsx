@@ -280,7 +280,7 @@ export const EnemyOverview = ({ enemy }: { enemy: NoitaEnemy }) => {
                 key={gif.name}
                 gif={gif}
                 enemy={enemy}
-                width={'auto'}
+                width={gif.frameWidth * 3}
                 height={gif.frameHeight * 3}
               />
             ))}
