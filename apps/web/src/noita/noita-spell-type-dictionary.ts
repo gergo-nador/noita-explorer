@@ -1,54 +1,47 @@
 import { StringKeyDictionary } from '@noita-explorer/model';
 import { NoitaSpellType } from '@noita-explorer/model-noita';
 
-import bg_draw_many from '../assets/spell_backgrounds/item_bg_draw_many.png';
-import bg_material from '../assets/spell_backgrounds/item_bg_material.png';
-import bg_modifier from '../assets/spell_backgrounds/item_bg_modifier.png';
-import bg_other from '../assets/spell_backgrounds/item_bg_other.png';
-import bg_passive from '../assets/spell_backgrounds/item_bg_passive.png';
-import bg_projectile from '../assets/spell_backgrounds/item_bg_projectile.png';
-import bg_static_projectile from '../assets/spell_backgrounds/item_bg_static_projectile.png';
-import bg_utility from '../assets/spell_backgrounds/item_bg_utility.png';
+const bgBasePath = '/images/spell_backgrounds/';
 
 export const NoitaSpellTypesDictionary: StringKeyDictionary<NoitaSpellType> = {
   ACTION_TYPE_DRAW_MANY: {
     id: 'ACTION_TYPE_DRAW_MANY',
     name: 'Multicast',
-    image: bg_draw_many,
+    image: bgBasePath + 'item_bg_draw_many.png',
   },
   ACTION_TYPE_MATERIAL: {
     id: 'ACTION_TYPE_MATERIAL',
     name: 'Material',
-    image: bg_material,
+    image: bgBasePath + 'item_bg_material.png',
   },
   ACTION_TYPE_MODIFIER: {
     id: 'ACTION_TYPE_MODIFIER',
     name: 'Projectile Modifier',
-    image: bg_modifier,
+    image: bgBasePath + 'item_bg_modifier.png',
   },
   ACTION_TYPE_OTHER: {
     id: 'ACTION_TYPE_OTHER',
     name: 'Other',
-    image: bg_other,
+    image: bgBasePath + 'item_bg_other.png',
   },
   ACTION_TYPE_PASSIVE: {
     id: 'ACTION_TYPE_PASSIVE',
     name: 'Passive',
-    image: bg_passive,
+    image: bgBasePath + 'item_bg_passive.png',
   },
   ACTION_TYPE_PROJECTILE: {
     id: 'ACTION_TYPE_PROJECTILE',
     name: 'Projectile',
-    image: bg_projectile,
+    image: bgBasePath + 'item_bg_projectile.png',
   },
   ACTION_TYPE_STATIC_PROJECTILE: {
     id: 'ACTION_TYPE_STATIC_PROJECTILE',
     name: 'Static Projectile',
-    image: bg_static_projectile,
+    image: bgBasePath + 'item_bg_static_projectile.png',
   },
   ACTION_TYPE_UTILITY: {
     id: 'ACTION_TYPE_UTILITY',
     name: 'Utility',
-    image: bg_utility,
+    image: bgBasePath + 'item_bg_utility.png',
   },
 } as const;
