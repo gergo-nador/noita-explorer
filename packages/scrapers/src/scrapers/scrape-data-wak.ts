@@ -16,6 +16,7 @@ import {
   StringKeyDictionary,
 } from '@noita-explorer/model';
 import { scrape } from './scrape';
+import { AnimationInfo } from './common/scrape-animations/types.ts';
 
 const statusSkipped = {
   status: NoitaDataWakScrapeResultStatus.SKIPPED,
@@ -109,14 +110,31 @@ export const scrapeDataWakContent = async ({
         'player_hat2_shadow',
       ];
 
-      const animationInfos = [
-        ...enemies.map((e) => e.id),
-        ...extraAnimationIds,
+      const animationInfos: AnimationInfo[] = [
+        ...enemies.filter((e) => e.id !== 'player').map((e) => ({ id: e.id })),
+        ...extraAnimationIds.map((id) => ({ id })),
+        {
+          id: 'player',
+          layers: [
+            {
+              id: 'player_uv_src',
+              imageManipulation: {
+                reColor: {
+                  _: '#00000000',
+                  // hand end
+                  '#FF00FF': '#DBC067',
+                  // hand
+                  '#FF00FF40': '#7f5476',
+                },
+              },
+            },
+          ],
+        },
       ];
 
       enemyGifs = await scrape.enemyAnimations({
         dataWakParentDirectoryApi: dataWakParentDirectory,
-        animationInfos: animationInfos.map((id) => ({ id: id })),
+        animationInfos: animationInfos,
       });
     }
   } catch (err) {

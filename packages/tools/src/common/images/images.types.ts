@@ -5,6 +5,8 @@ export interface CropImageBase64Options {
   height: number;
 }
 
+export type PixelColorOptions = Record<string | '_', string>;
+
 export interface ImageHelpersType {
   trimWhitespaceBase64: (base64: string) => Promise<string>;
   scaleImageBase64: (base64: string, scaleFactor: number) => Promise<string>;
@@ -17,4 +19,6 @@ export interface ImageHelpersType {
     base64: string,
     options: CropImageBase64Options,
   ) => Promise<string>;
+  pixelRecolor: (base64: string, map: PixelColorOptions) => Promise<string>;
+  overlayImages: (background: string, overlay: string) => Promise<string>;
 }

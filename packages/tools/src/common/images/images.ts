@@ -1,5 +1,9 @@
 import { runtimeEnvironment } from '../runtime-environment.ts';
-import { CropImageBase64Options, ImageHelpersType } from './images.types.ts';
+import {
+  CropImageBase64Options,
+  ImageHelpersType,
+  PixelColorOptions,
+} from './images.types.ts';
 
 async function getImageHelper() {
   const importStatement = await runtimeEnvironment.pick({
@@ -50,6 +54,16 @@ async function cropImageBase64(
   return imageHelper.cropImageBase64(base64, options);
 }
 
+async function pixelRecolor(base64: string, options: PixelColorOptions) {
+  const imageHelper = await getImageHelper();
+  return imageHelper.pixelRecolor(base64, options);
+}
+
+async function overlayImages(background: string, overlay: string) {
+  const imageHelper = await getImageHelper();
+  return imageHelper.overlayImages(background, overlay);
+}
+
 export const imageHelpers: ImageHelpersType = {
   trimWhitespaceBase64,
   scaleImageBase64,
@@ -57,4 +71,6 @@ export const imageHelpers: ImageHelpersType = {
   getAverageColorBase64,
   getImageSizeBase64,
   cropImageBase64,
+  pixelRecolor,
+  overlayImages,
 };

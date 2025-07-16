@@ -1,43 +1,58 @@
-import { CropImageBase64Options, ImageHelpersType } from './images.types.ts';
-import { Jimp } from 'jimp';
+import {
+  CropImageBase64Options,
+  ImageHelpersType,
+  PixelColorOptions,
+} from './images.types.ts';
+import { Jimp, BlendMode, JimpMime } from 'jimp';
 import { base64Helpers } from '../base64.ts';
+import { colorHelpers } from '../color-util.ts';
 
-function trimWhitespaceBase64() {
+function trimWhitespaceBase64(): Promise<string> {
   throw new Error(
     'trimWhitespaceBase64 is not implemented for node.js environment',
   );
 }
-function scaleImageBase64() {
+function scaleImageBase64(): Promise<string> {
   throw new Error(
     'scaleImageBase64 is not implemented for node.js environment',
   );
 }
-function rotateImageBase64() {
+function rotateImageBase64(): Promise<string> {
   throw new Error(
     'rotateImageBase64 is not implemented for node.js environment',
   );
 }
-function getAverageColorBase64() {
+function getAverageColorBase64(): Promise<string> {
   throw new Error(
     'getAverageColorBase64 is not implemented for node.js environment',
   );
 }
 
-async function getImageSizeBase64(base64: string) {
-  base64 = base64Helpers.trimMetadata(base64);
-  const inputBuffer = Buffer.from(base64, 'base64');
-  const image = await Jimp.read(inputBuffer);
+async function getJimpImage(base64: string) {
+  const trimmedBase64 = base64Helpers.trimMetadata(base64);
+  const inputBuffer = Buffer.from(trimmedBase64, 'base64');
+  return await Jimp.read(inputBuffer);
+}
 
+async function jimpToBase64(image: {
+  getBuffer: (mime: 'image/png') => Promise<Buffer>;
+}) {
+  const outputBuffer = await image.getBuffer(JimpMime.png);
+  const outputBase64 = outputBuffer.toString('base64');
+
+  return base64Helpers.appendMetadata(outputBase64);
+}
+
+async function getImageSizeBase64(base64: string) {
+  const image = await getJimpImage(base64);
   return { height: image.height, width: image.width };
 }
 
 async function cropImageBase64(
   base64: string,
   options: CropImageBase64Options,
-) {
-  base64 = base64Helpers.trimMetadata(base64);
-  const inputBuffer = Buffer.from(base64, 'base64');
-  const image = await Jimp.read(inputBuffer);
+): Promise<string> {
+  const image = await getJimpImage(base64);
 
   image.crop({
     x: options.x,
@@ -46,21 +61,60 @@ async function cropImageBase64(
     h: options.height,
   });
 
-  const outputBuffer = await image.getBuffer('image/png');
-  const outputBase64 = outputBuffer.toString('base64');
+  return await jimpToBase64(image);
+}
 
-  return base64Helpers.appendMetadata(outputBase64);
+async function pixelRecolor(
+  base64: string,
+  map: PixelColorOptions,
+): Promise<string> {
+  const image = await getJimpImage(base64);
+
+  const convertedColors = Object.entries(map)
+    .filter(([key]) => key !== '_')
+    .map(([key, value]) => {
+      const keyColor = colorHelpers.conversion.rgbaToNumber(key);
+      const valueColor = colorHelpers.conversion.rgbaToNumber(value);
+
+      return [keyColor, valueColor] as [number, number];
+    });
+  const colorMap = Object.fromEntries(convertedColors);
+
+  const defaultColor =
+    '_' in map ? colorHelpers.conversion.rgbaToNumber(map['_']) : undefined;
+
+  image.scan(function (x, y) {
+    const color = image.getPixelColor(x, y);
+    if (colorMap[color] !== undefined) {
+      const newColor = colorMap[color];
+      image.setPixelColor(newColor, x, y);
+    } else if (defaultColor !== undefined) {
+      image.setPixelColor(defaultColor, x, y);
+    }
+  });
+
+  return await jimpToBase64(image);
+}
+
+async function overlayImages(backgroundBase64: string, overlayBase64: string) {
+  const background = await getJimpImage(backgroundBase64);
+  const overlay = await getJimpImage(overlayBase64);
+
+  background.composite(overlay, 0, 0, {
+    mode: BlendMode.SRC_OVER,
+    opacitySource: 1.0,
+  });
+
+  return await jimpToBase64(background);
 }
 
 export const imageHelpers: ImageHelpersType = {
-  // @ts-expect-error not needed (yet)
   trimWhitespaceBase64,
-  // @ts-expect-error not needed (yet)
   scaleImageBase64,
-  // @ts-expect-error not needed (yet)
   rotateImageBase64,
-  // @ts-expect-error not needed (yet)
   getAverageColorBase64,
   getImageSizeBase64,
   cropImageBase64,
+  pixelRecolor,
+  overlayImages,
 };

@@ -284,6 +284,14 @@ async function cropImageBase64(
   });
 }
 
+async function pixelRecolor(): Promise<string> {
+  throw new Error('pixelRecolor is not implemented in images.browser.ts');
+}
+
+async function overlayImages(): Promise<string> {
+  throw new Error('overlayImages is not implemented in images.browser.ts');
+}
+
 export const imageHelpers: ImageHelpersType = {
   trimWhitespaceBase64,
   scaleImageBase64,
@@ -291,4 +299,6 @@ export const imageHelpers: ImageHelpersType = {
   getAverageColorBase64,
   getImageSizeBase64,
   cropImageBase64,
+  pixelRecolor,
+  overlayImages,
 };

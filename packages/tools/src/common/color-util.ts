@@ -41,9 +41,25 @@ function lightenColor(baseColor: string, ratio: number): string {
   return c.lighten(ratio).hex().toString();
 }
 
+function convertTextRgbaColorToNumber(rgba: string): number {
+  const c = color(rgba);
+  const a = Math.floor(c.alpha() * 255);
+
+  const number = (c.red() << 24) | (c.green() << 16) | (c.blue() << 8) | a;
+  // back to unsigned
+  return number >>> 0;
+}
+
+function convertTextRgbColorToNumber(rgb: string): number {
+  const c = color(rgb);
+  return (c.red() << 16) | (c.green() << 8) | c.blue();
+}
+
 export const colorHelpers = {
   conversion: {
     argbToRgba: convertARGBToRGBA,
+    rgbaToNumber: convertTextRgbaColorToNumber,
+    rgbToNumber: convertTextRgbColorToNumber,
   },
   getRgbaContractsColor: getContrastColor,
   manipulation: {

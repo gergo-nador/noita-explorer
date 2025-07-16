@@ -15,6 +15,7 @@ import {
 import { scrapeAnimationFrames } from './scrape-animation-frames.ts';
 import { scrapeAnimationXmlDefinition } from './scrape-animation-xml-definition.ts';
 import { AnimationInfo } from './types.ts';
+import { readImageFromAnimationInfo } from './read-image-from-animation-info.ts';
 
 export const scrapeAnimations = async ({
   dataWakParentDirectoryApi,
@@ -37,7 +38,7 @@ export const scrapeAnimations = async ({
     try {
       const animations = await scrapeAnimation({
         animationFiles,
-        id: animationInfo.id,
+        animationInfo: animationInfo,
         dataWakParentDirectoryApi,
       });
 
@@ -56,14 +57,16 @@ export const scrapeAnimations = async ({
 };
 
 const scrapeAnimation = async ({
-  id,
+  animationInfo,
   dataWakParentDirectoryApi,
   animationFiles,
 }: {
-  id: string;
+  animationInfo: AnimationInfo;
   dataWakParentDirectoryApi: FileSystemDirectoryAccess;
   animationFiles: FileSystemFileAccess[];
 }) => {
+  const id = animationInfo.id;
+
   const sprite = await scrapeAnimationXmlDefinition({
     id: id,
     animationsFiles: animationFiles,
@@ -77,9 +80,16 @@ const scrapeAnimation = async ({
     gifs: [],
   };
 
+  const imageBase64 = await readImageFromAnimationInfo({
+    animationInfo: animationInfo,
+    animationFiles: animationFiles,
+    sprite: sprite,
+    dataWakParentDirectoryApi: dataWakParentDirectoryApi,
+  });
+
   const framesResults = await scrapeAnimationFrames({
     sprite: sprite,
-    dataWakParentDirectoryApi,
+    imageBase64: imageBase64,
   });
 
   for (const framesResult of framesResults) {
