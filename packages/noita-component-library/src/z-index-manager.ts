@@ -9,5 +9,4 @@ export const ZIndexManager = {
     hoveredTab: 1,
     defaultTab: 0,
   },
-  actionsBar: 10,
 };

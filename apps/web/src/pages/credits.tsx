@@ -1,7 +1,7 @@
 import { Button, Icon } from '@noita-explorer/noita-component-library';
 import { Flex } from '@noita-explorer/react-utils';
 import { environment } from '../environment.ts';
-import { deployUrls } from '../deployUrls.ts';
+import { deployUrls } from '../utils/deployUrls.ts';
 
 export const Credits = () => {
   return (

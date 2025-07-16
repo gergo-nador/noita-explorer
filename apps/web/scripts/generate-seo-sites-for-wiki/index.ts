@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import { NoitaWakData } from '@noita-explorer/model-noita';
 import { Buffer } from 'buffer';
 import { generateHtml } from './generate-html';
-import { deployUrls } from '../../src/deployUrls';
+import { deployUrls } from '../../src/utils/deployUrls';
 import * as dotenv from 'dotenv';
 import * as path from 'node:path';
 import { generateImage } from './generate-image';

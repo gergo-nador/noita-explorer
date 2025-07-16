@@ -3,6 +3,7 @@ import { useNoitaDataWakStore } from '../../stores/noita-data-wak.ts';
 import { Button, Card, Icon } from '@noita-explorer/noita-component-library';
 import { Flex } from '@noita-explorer/react-utils';
 import { useMemo } from 'react';
+import { zIndexManager } from '../../utils/zIndexManager.ts';
 
 export const SettingsCursorWandPicker = () => {
   const { settings, set } = useSettingsStore();
@@ -33,7 +34,9 @@ export const SettingsCursorWandPicker = () => {
             position: isRandom ? 'sticky' : 'initial',
             top: 0,
             bottom: 0,
-            zIndex: isRandom ? 1 : 'initial',
+            zIndex: isRandom
+              ? zIndexManager.settingsCursorWandActive
+              : 'initial',
           }}
         >
           <Button
@@ -53,7 +56,9 @@ export const SettingsCursorWandPicker = () => {
                 position: isSelected ? 'sticky' : 'initial',
                 top: 0,
                 bottom: 0,
-                zIndex: isSelected ? 1 : 'initial',
+                zIndex: isSelected
+                  ? zIndexManager.settingsCursorWandActive
+                  : 'initial',
               }}
             >
               <Icon src={wandConfig.imageBase64} style={{ zoom: 3 }} />
