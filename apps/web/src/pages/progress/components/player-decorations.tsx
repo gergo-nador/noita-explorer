@@ -110,42 +110,43 @@ export const PlayerDecorations = () => {
                 <span>(unlocked for current run)</span>
               )}
 
-              {(canBeUnlockedPermanently || canBeUnlockedForThisRun) && (
-                <Flex gap={10} style={{ paddingLeft: 20 }}>
-                  <span>Unlock: </span>
-                  {canBeUnlockedPermanently && (
-                    <Button
-                      onClick={() => decoration.unlock(true)}
-                      disabled={
-                        decoration.existingAction &&
-                        decoration.existingAction.payload.permanent
-                      }
-                      onDisabledClick={() =>
-                        action && actionUtils.removeAction(action)
-                      }
-                    >
-                      permanently
-                    </Button>
-                  )}
-                  {canBeUnlockedPermanently && canBeUnlockedForThisRun && (
-                    <span> / </span>
-                  )}
-                  {canBeUnlockedForThisRun && (
-                    <Button
-                      onClick={() => decoration.unlock(false)}
-                      disabled={
-                        decoration.existingAction &&
-                        !decoration.existingAction.payload.permanent
-                      }
-                      onDisabledClick={() =>
-                        action && actionUtils.removeAction(action)
-                      }
-                    >
-                      this run only
-                    </Button>
-                  )}
-                </Flex>
-              )}
+              {(canBeUnlockedPermanently || canBeUnlockedForThisRun) &&
+                !isUnlockedPermanently && (
+                  <Flex gap={10} style={{ paddingLeft: 20 }}>
+                    <span>Unlock: </span>
+                    {canBeUnlockedPermanently && (
+                      <Button
+                        onClick={() => decoration.unlock(true)}
+                        disabled={
+                          decoration.existingAction &&
+                          decoration.existingAction.payload.permanent
+                        }
+                        onDisabledClick={() =>
+                          action && actionUtils.removeAction(action)
+                        }
+                      >
+                        permanently
+                      </Button>
+                    )}
+                    {canBeUnlockedPermanently && canBeUnlockedForThisRun && (
+                      <span> / </span>
+                    )}
+                    {canBeUnlockedForThisRun && (
+                      <Button
+                        onClick={() => decoration.unlock(false)}
+                        disabled={
+                          decoration.existingAction &&
+                          !decoration.existingAction.payload.permanent
+                        }
+                        onDisabledClick={() =>
+                          action && actionUtils.removeAction(action)
+                        }
+                      >
+                        this run only
+                      </Button>
+                    )}
+                  </Flex>
+                )}
             </Flex>
           );
         })}
