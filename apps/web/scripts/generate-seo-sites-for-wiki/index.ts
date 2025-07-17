@@ -11,6 +11,16 @@ import minimist from 'minimist';
 // @ts-expect-error no esModuleInterop error pls, it works
 import process from 'node:process';
 
+/**
+ * Generates search engine optimized html files for perks,
+ * spells and enemies. Scaled up version of the images associated
+ * with the objects are also generated and linked in the html files
+ *
+ * Process arguments
+ * - --wak-data: path to the noita_data_wak.json file
+ * - -o: output directory. The generated files will be places in {-o}/g/wiki/{perks|spells|enemies}/
+ */
+
 dotenv.config();
 
 const argv: Record<string, string> = minimist(process.argv.slice(2));

@@ -6,6 +6,19 @@ import minimist from 'minimist';
 // @ts-expect-error no esModuleInterop error pls, it works
 import process from 'node:process';
 
+/**
+ * This process downloads the data.wak and the common.csv files
+ * from the given urls.
+ *
+ * Environment variables:
+ * - CI_DATA_WAK_URL: url to download data.wak from
+ * - CI_TRANSLATIONS_URL: url to download common.csv from
+ *
+ * Process arguments:
+ * - o: output directory
+ * - f: if provided, the files will be force downloaded and will override the current version
+ */
+
 dotenv.config();
 
 const argv: Record<string, string> = minimist(process.argv.slice(2));

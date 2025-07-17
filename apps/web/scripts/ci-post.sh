@@ -8,6 +8,6 @@ fi
 sentry-cli sourcemaps inject dist
 sentry-cli sourcemaps upload dist
 
-# delete sourcemaps, they just take up space
+# delete sourcemaps, to not take up space in the production deployment
 rm ./dist/*.map
 rm ./dist/**/*.map

@@ -10,6 +10,14 @@ import minimist from 'minimist';
 // @ts-expect-error no esModuleInterop error pls, it works
 import process from 'node:process';
 
+/**
+ * Generate gifs from the scraped data.wak content.
+ *
+ * Process arguments:
+ * - --gif-data: the json file which contains the base64 encoded gifs and first frames
+ * - -o: output folder for the gifs. The gifs will be placed under {-o}/g/{main_key}/{animation_id}/{gif_name}.gif
+ */
+
 dotenv.config();
 
 const argv: Record<string, string> = minimist(process.argv.slice(2));

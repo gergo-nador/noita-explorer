@@ -12,6 +12,8 @@ import {
 } from '@noita-explorer/file-systems';
 
 /**
+ * Scrapes the data.wak file.
+ *
  * Arguments:
  *  - -t: path for translation file
  *  - --data-wak: path to data.wak file
