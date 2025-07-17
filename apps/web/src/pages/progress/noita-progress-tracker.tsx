@@ -36,9 +36,11 @@ export const NoitaProgressTracker = () => {
 
   const [showAll, setShowAll] = useQueryParamsBoolean('showAll');
   const [__unlockMode, setUnlockMode] = useQueryParamsBoolean('unlockMode');
-  const unlockMode = noitaAPI.environment.features.progressUnlockMode
-    ? __unlockMode
-    : false;
+  const unlockMode =
+    save00Status === 'loaded' &&
+    noitaAPI.environment.features.progressUnlockMode
+      ? __unlockMode
+      : false;
 
   const enemies = useNoitaEnemyGroups({
     enemies: data?.enemies,
@@ -74,16 +76,17 @@ export const NoitaProgressTracker = () => {
         <Button onClick={() => navigate(pages.progressTracker.secrets)}>
           Secrets
         </Button>
-        {noitaAPI.environment.features.progressUnlockMode && (
-          <>
-            <HorizontalDivider />
-            <div>
-              <Button onClick={() => setUnlockMode(!unlockMode)}>
-                Unlock mode: {unlockMode ? 'on' : 'off'}
-              </Button>
-            </div>
-          </>
-        )}
+        {save00Status === 'loaded' &&
+          noitaAPI.environment.features.progressUnlockMode && (
+            <>
+              <HorizontalDivider />
+              <div>
+                <Button onClick={() => setUnlockMode(!unlockMode)}>
+                  Unlock mode: {unlockMode ? 'on' : 'off'}
+                </Button>
+              </div>
+            </>
+          )}
         {unlockMode && (
           <>
             <HorizontalDivider />
