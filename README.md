@@ -2,53 +2,73 @@
 
 Welcome to **Noita Explorer**!
 
-Have you lost your unlocked perks, spells or enemies progress recently? 
-Or would you like to just check what you haven't unlocked yet? Are you
-interested in a map visualizing your death locations? Or to check statistics of
-your previous sessions? 
+Have you recently lost your unlocked perks, spells or enemies progress? 
+Or you are just here to just check what's still unlocked? 
+Are you interested in a map of your death locations? 
+Or to check statistics of your previous sessions? 
 
 You are at the perfect place!
 
-Website: https://noita-explorer.com
-Dev website: https://dev.noita-explorer.com
+Check out our deployed website: https://noita-explorer.com
 
 ## Disclaimer
 
-Noita Explorer is a free, ad-free, open-source and fully client side tool to unlock perk, 
-spell and enemy progress.
-It achieves it without mods, by directly modifying your save files. 
-While I've tested the features that modifies files as thoroughly as I could, it is software after all, 
-and anything that can go wrong will go wrong one day. 
-Therefore, it is YOUR responsibility (and highly advised) to create a backup of your game
-files before using this tool. 
-I do not take any responsibility if this tool breaks your save files and the previous 
-version cannot be restored!
+Noita Explorer is a free, ad-free, open-source and fully client side tool to unlock perks, spells and enemy progress.
+Unlocking these resources is done by directly modifying your save files (without mods). 
+While many features have been tested, it is highly advised and is your responsibility to create a backup of your game
+files before using this tool. Features that modify the game files are called "actions". When a user wants to run an action,
+the action is first pushed into a preview queue, where the user has an overview of all the actions that will be run.
 
+Use at your own risk. We strongly recommend backing up your save files before use. We are not liable for any potential data loss or file corruption.
 
 ## Features
 
+Before many of these features, you need to give access to your noita save folder. You can do so in the "Setup" menu item.
+
 ### Features - Browser version
 
-- Progress: View your in-game progress of the unlocked items
-- [*] Progress: Unlock any perk, spell or enemy, without mods (achievements still work)!
-- [WIP] Wiki: An auto generated wiki from the data.wak file.
-- [WIP] Current run: View details of your current run.
-- Holidays: View the upcoming holidays, sorted by the event's date
-- Sessions: View all your sessions and statistics about it. Filter by what killed you :D
-- Death map: An interactive death map, using plotly.js
-- Bones wands: Inspect the wands stored in the bones wands files. 
-- [*] Bones wands: Delete any or all bones files from your disk.
-- Settings: 
-  - Units / Time: The default option chooses the time unit that fits the context the best. Though you can force the time unit to be either frames or seconds throughout the app.
-  - Cursor / Type: A bit buggy, but you can customize your cursor to be more Noita like! I'll plan to investigate the rendering issue with the custom cursor
-  - Extras / Display debug info: Reveals the collected debug information during the scraping of the data.wak, such as tags for enemies, scraped files. Currently only a limited amount of debug information is collected.
+#### Without access to Noita save folder
 
-Features marked with a [*] star are only available in browser that support the [File System API](https://caniuse.com/native-filesystem-api).
+- [Progress > Show all]: View all unlockable perks, spells and enemies
+- [Progress > Secrets]: View available orbs
+- [Progress > Secrets > Achievement Pillar]: View all achievement pillars
+
+- [Wiki]: Filter, view details, share the perks, spells and enemies (auto generated from the data.wak file)
+- [Wiki > Materials]: Work in progress
+
+- [Holidays]: View in-game holidays and their next start date
+
+- [Settings > Units]: Choose your preferred time unit:
+  - Default: automatically chosen
+  - Frames: forces all time units to be in frames
+  - Seconds: forces all time units to be in seconds
+- [Settings > Cursor]: Pick your cursor type (a bit broken, needs a fix)
+
+#### With read access to Noita save folder
+
+!! It's important you select the NollaGamesNoita folder and not the save00 !!
+
+- [Progress]: View your unlocked (and newly unlocked) perks, spells and enemies
+- [Progress > Secrets]: Inspect the unlocked player decorations
+- [Progress > Secrets]: Check out picked up orbs in the current game
+- [Progress > Secrets > Achievement Pillar]: View unlocked achievement pillars
+- [Sessions]: View statistics of your previous Noita sessions, filter by many options
+- [Death map]: A map of all* the places where you died *(limited to the main world)
+- [Bones wands]: See the bones wands, that can come back in your future runs in a hand of the Kummitus
+
+#### With write access to Noita save folder
+
+- [Progress > Unlock Mode]: Unlock perks, spells or enemies individually or in all of them
+- [Progress > Secrets]: Unlock player cosmetics (permanently or for the current game), such as the crown, amulet or the amulet gem
+- [Progress > Secrets > Achievement Pillar]: Unlock achievement pillars
+- [Bones wands]: Delete any or all bones wands
+
+Features that require write access to the Noita save folder are only available in browsers that support the [File System API](https://caniuse.com/native-filesystem-api).
 You can check if your browser supports it here: https://caniuse.com/native-filesystem-api
 
 ### Features - Desktop version
 
-The desktop app is a work in progress, but eventually it is planned to be released.
+The desktop app is a work in progress.
 
 - Everything from web, plus:
 - Launch the Noita game
@@ -56,7 +76,7 @@ The desktop app is a work in progress, but eventually it is planned to be releas
 - Scrape data.wak file
 - Open folders and files in the client's operating system's file explorer
 
-Warning: The desktop features have been unmaintained, probably it is unstable, run it at your own risk.
+Warning: The desktop features have been unmaintained for a while, probably it is unstable, run it at your own risk.
 
 
 ### Feature request / Bug report
@@ -84,12 +104,27 @@ npm install
 3. Create an environment file in the path `apps/web/.env` with the following content:
 
 ```dotenv
+CI_DATA_WAK_URL=https://storage.noita-explorer.com/data.wak
+CI_TRANSLATIONS_URL=https://storage.noita-explorer.com/common.csv
+# If set to "1", it skips generating static assets for the website
+CI_DISABLED=0
+# VITE_ENV is set to "production" in the deployed main branch
+# and is set to "preview" in the deployed non-main branches
 VITE_ENV=development
 ```
 
-(`VITE_ENV` will resolve to `preview` in the development deployment, and `production` in production deployment)
-
 ### Running the Website development server
+
+0. If you are running the website for the first time, run the build script with the `CI_DISABLED=0`
+
+Important: running the build script with `CI_DISABLED` not equal to `1` will download the `data.wak` and `common.csv` 
+files from the noita-explorer's hosted storage. More about this in the CI section.
+
+```shell
+npm run build
+```
+
+(later you can set the `CI_DISABLED` to back to `1`)
 
 1. Run development server
 
@@ -99,20 +134,8 @@ npm run dev:web
 
 2. Visit https://localhost:4000 in your preferred browser
 
-### Running the Electron app
-
-1. Run electron startup script
-```shell
-npm run dev:desktop
-```
-
-Note: only tested this on Windows
-
 
 ## Branches and Environments
-
-Since I'm the only one developing this project, and I don't expect any contributors
-in the near future, I've come up with this simple structure:
 
 ### Environments (`import.meta.env.VITE_ENV`)
 
@@ -123,30 +146,27 @@ in the near future, I've come up with this simple structure:
 ### Branches
 
 - `dev`: active development branch. Mainly a beta testing branch. New features can be broken.
-  - deployed: https://dev.noita-explorer.com (or https://dev.noita-explorer.pages.dev)
+  - deployed: https://dev.noita-explorer.com
 - `main`: main production branch. If a feature is well tested in the `dev` branch, it will be merged into this one.
-  - deployed: https://noita-explorer.com (or https://noita-explorer.pages.dev)
+  - deployed: https://noita-explorer.com
 
 
 ## Project structure
 
-As you may have noticed, this repository consists of two applications,
-an Electron desktop app, and a browser based app. While the electron 
-runs the browser app internally, they still need different logic, especially
-in the file handling. Therefore it was decided to separate them into projects.
+[Turborepo](https://turborepo.com/) is used as a build system.
 
-After a lot of research the choice was made to use [Turborepo](https://turborepo.com/)
-as a build system.
+The runnable applications are in the `/apps` folder, the re-usable packages
+are in the `/packages` folder.
 
 The project is structured in the following way:
 
 - Apps
-  - `apps/desktop`: Electron app
-  - `apps/web`: Browser app
+  - `apps/desktop`: electron app (not maintained, not published)
+  - `apps/web`: website (published)
 
 - Packages
-  - `packages/model`: Base helper interfaces, not related to Noita
-  - `packages/model-noita`: Types for Noita
+  - `packages/model`: Base interfaces
+  - `packages/model-noita`: Interfaces and types related to Noita
   - `packages/tools`: General tools and utility functions
     - `src/common`: General utility functions
     - `src/lua`: Wrapper around `luaparse` package
@@ -156,18 +176,60 @@ The project is structured in the following way:
     - `src/browser-fallback`: Fallback file using `browser-fs-access` for cases when the File System API is not available
     - `src/browser-file-access-api`: File system used when File System API is available
     - `src/data-wak-memory-filesystem`: Read files directly from the data.wak compressed file without unpacking it
-    - `/apps/desktop/src/file-system`: Node implementation of the file system access interfaces
+    - `src/node`: Node implementation of the file system access interfaces
   - `packages/scrapers`: All functions related to scraping and modifying Noita files 
     - `src/actions`: Actions that modify the save files.
     - `src/scrapers`: Functions to scrape data from data.wak or save00 folder. These functions don't modify any files on the disk
-  - `packages/noita-component-library`: Reusable Noita components without Noita logic
+  - `packages/react-utils`: Reusable react components and utility functions/hooks
+  - `packages/noita-component-library`: Reusable Noita components
     - run `npm run dev:storybook` to view the components (not finished)
-  - `packages/react-utils`: Reusable react util components and hooks, which are not related to noita
 
 Dependency Graph:
-<img src="turbo-graph.png">
-(generated with `turbo run build --graph --dry | dot -Tpng -oturbo-graph.png`)
+<img src="docs/turbo-graph.png">
+(generated with `turbo run build --graph --dry | dot -Tpng -odocs/turbo-graph.png`)
 (`dot` is from `brew install graphviz`)
+
+
+## Hosting
+
+The `apps/web` react app is hosted on Cloudflare Pages.
+
+The official domains of Noita Explorers are:
+- https://noita-explorer.com or https://www.noita-explorer.com (main branch)
+- https://dev.noita-explorer.com (dev branch)
+
+Access site directly:
+- https://noita-explorer.pages.dev (main branch direct cloudflare link)
+- https://noita-explorer.pages.dev (dev branch direct cloudflare link)
+
+## CI
+
+The `apps/web` project contains scripts that automatically run when the project is build.
+These scripts prepare static assets for the website to work. 
+As these assets are required for the web app to work, the scripts are needed to be run initially, but later 
+can be disabled by setting the `CI_DISABLED` environment variable to `1`
+
+Here is a breakdown of what happens when the `apps/web` project is built:
+
+### `prebuild`
+
+The prebuild runs the `scripts/ci.sh` shell file. 
+This file will 
+1. import and set all the environment variables which can be found in the `.env` file
+2. check if `CI_DISABLED` flag is `1`, if yes, exit with code `0`
+3. `npm run data-wak-download`: downloads the `data.wak` and the `common.csv` from the urls in `CI_DATA_WAK_URL`
+and `CI_TRANSLATIONS_URL`. These files are hosted on cloudflare. If you wish to skip downloading them, copy these files from the
+game directory into the `dist-tmp` folder.
+4. `npm run scrape-data-wak`: scrapes the previously downloaded `data.wak` file for perk, spell and enemy data, for
+media files. Outputs two json files, the `public/noita_wak_data.json` contains the metadata of many in-game objects. The
+second one is placed in `dist-tmp/noita_data_gifs.json`, it contains all the gifs in base64 encoded format.
+5. `npm run generate-gifs`: generates gifs from the file `dist-tmp/noita_data_gifs.json` and outputs them in the `public` folder
+6. `npm run generate-static-assets`: generates SEO optimized HTML pages for the sharing wiki links
+
+### `postbuild`
+
+If the `SENTRY_AUTH_TOKEN` environment variable is present (it should only be present in the CI pipelines, not locally),
+it will upload the source maps to Sentry. After the uploading has completed, the source maps are deleted.
 
 
 ## Error Tracking and Reporting (Sentry)
@@ -176,9 +238,9 @@ Dependency Graph:
 Error reporting is disabled by default. When a user visits the page 
 for the first time, a popup will be shown to ask the user to opt-in to enable Sentry. 
 
-Enabling/Disabling Sentry error reporting can be also achieved in the Settings 
+Enabling/Disabling Sentry error reporting can be done in the Settings 
 page under the Extras.
 
 Sentry logging is only enabled in the deployed pages, both in production and 
 preview environments. It is disabled in development. Please don't enable it
-locally and don't spam the Sentry issues board.
+locally and don't spam the Sentry issues board <3
