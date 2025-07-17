@@ -186,8 +186,7 @@ The project is structured in the following way:
 
 Dependency Graph:
 <img src="docs/turbo-graph.png">
-(generated with `turbo run build --graph --dry | dot -Tpng -odocs/turbo-graph.png`)
-(`dot` is from `brew install graphviz`)
+generated with `npm run generate-dep-graph`
 
 
 ## Hosting

@@ -9,7 +9,8 @@
     "dev:storybook": "turbo storybook --filter=@noita-explorer/noita-component-library",
     "lint": "turbo lint",
     "generate-barrels": "turbo generate-barrels",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "generate-dep-graph": "turbo run build --graph --dry | npx graphviz -Tpng -odocs/turbo-graph.png"
   },
   "devDependencies": {
     "@eslint/js": "^9.13.0",
@@ -20,6 +21,7 @@
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.14",
+    "graphviz-cli": "^2.0.0",
     "prettier": "^3.2.5",
     "turbo": "^2.3.3",
     "typescript": "5.5.4"
