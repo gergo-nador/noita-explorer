@@ -5,7 +5,6 @@ import { ProgressOrbs } from './components/ProgressOrbs.tsx';
 export const NoitaProgressTrackerSecrets = () => {
   return (
     <div style={{ padding: 10 }}>
-      <h1>Secrets</h1>
       <Header title='Decorations'>
         <PlayerDecorations />
       </Header>
