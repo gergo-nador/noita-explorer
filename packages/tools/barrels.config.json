@@ -1,5 +1,0 @@
-{
-  "directory": ["./src/lua"],
-  "delete": true,
-  "name": "main.ts"
-}
