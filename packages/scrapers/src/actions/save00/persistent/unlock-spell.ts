@@ -3,7 +3,7 @@ import { noitaPaths } from '../../../noita-paths.ts';
 import { constants } from '../../../constants.ts';
 import { cryptoSalakieli } from '../../../scrapers/cryptography/salakieli.ts';
 import { encryptedFileKeys } from '../../../scrapers/cryptography/encrypted-file-keys.ts';
-import { parseXml, toXml, XmlWrapper } from '@noita-explorer/tools/xml';
+import { parseXml, XmlWrapper } from '@noita-explorer/tools/xml';
 import { UnlockSpellAction } from '@noita-explorer/model-noita';
 
 export const unlockSpell = async ({
@@ -71,7 +71,7 @@ export const unlockSpell = async ({
     });
   }
 
-  const xmlText = toXml(xml._getCurrentXmlObj());
+  const xmlText = xml.toXmlString();
   const encryptedStats = await cryptoSalakieli.encrypt({
     text: xmlText,
     key: encryptedFileKeys.stats_salakieli.key,

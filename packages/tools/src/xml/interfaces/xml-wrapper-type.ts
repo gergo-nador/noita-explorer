@@ -2,9 +2,10 @@ import {
   XmlAttributeReadOptions,
   XmlRequiredAttributeReadOptions,
 } from './xml-attribute-read-options.ts';
+import { XmlRootWrapper, XmlTagDeclaration } from './xml-inner-types.ts';
 
 export interface XmlWrapperType {
-  _getCurrentXmlObj: () => object;
+  _getCurrentXmlObj: () => XmlRootWrapper | XmlTagDeclaration;
   /**
    * Finds the first tag whose child matches the `tagName`, and gets the
    * nth child (zero indexed) of the type `tagName`
@@ -59,4 +60,9 @@ export interface XmlWrapperType {
     tagName: string,
     by: (a: XmlWrapperType, b: XmlWrapperType) => number,
   ) => void;
+
+  /**
+   * Converts the xml object tree to xml string
+   */
+  toXmlString(): string;
 }

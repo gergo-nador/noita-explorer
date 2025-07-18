@@ -4,7 +4,7 @@ import {
 } from '@noita-explorer/model';
 import { UnlockDecorationAction } from '@noita-explorer/model-noita';
 import { noitaPaths } from '../../../noita-paths.ts';
-import { parseXml, toXml, XmlWrapper } from '@noita-explorer/tools/xml';
+import { parseXml, XmlWrapper } from '@noita-explorer/tools/xml';
 import { splitNoitaEntityTags } from '../../../scrapers/common/tags.ts';
 import { createFlagUtil } from './utils.ts';
 
@@ -77,6 +77,6 @@ export const unlockDecoration = async ({
 
   spriteComponent.setAttribute('_enabled', '1');
 
-  const xmlText = toXml(xmlWrapper._getCurrentXmlObj());
+  const xmlText = xmlWrapper.toXmlString();
   await playerStateFile.modify.fromText(xmlText);
 };

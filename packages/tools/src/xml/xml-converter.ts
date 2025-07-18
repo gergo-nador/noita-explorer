@@ -1,5 +1,8 @@
 import { Builder, parseStringPromise, RenderOptions } from 'xml2js';
-import { XmlRootWrapper } from './interfaces/xml-inner-types.ts';
+import {
+  XmlRootWrapper,
+  XmlTagDeclaration,
+} from './interfaces/xml-inner-types.ts';
 
 /**
  * Parses a text to an XML object
@@ -10,7 +13,9 @@ export const parseXml = (text: string): Promise<XmlRootWrapper> => {
   return parseStringPromise(commentsRemoved);
 };
 
-export const toXml = (obj: object): string => {
+export const toXmlString = (
+  obj: XmlRootWrapper | XmlTagDeclaration,
+): string => {
   const renderOpts: RenderOptions = {
     pretty: true,
     // there shouldn't be any self-closing xml tags in noita xml files

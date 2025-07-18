@@ -14,6 +14,7 @@ import {
   XmlTagDeclaration,
 } from './interfaces/xml-inner-types.ts';
 import { addChild } from './utils/child.ts';
+import { toXmlString } from './xml-converter.ts';
 
 /**
  * Wrapper object providing many utility methods. Provide the parsed xml object
@@ -123,5 +124,8 @@ const XmlWrapperInternal = ({
     setAttribute: addOrModifyAttributeInternal,
     addChild: addChildInternal,
     sortChildrenArray: sortChildrenArrayInternal,
+    toXmlString: () => {
+      return toXmlString(xmlObj);
+    },
   };
 };

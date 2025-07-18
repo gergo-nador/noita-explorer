@@ -1,5 +1,6 @@
 import { describe, it, expect } from '@jest/globals';
-import { parseXml, toXml } from '../../src/xml/xml-converter';
+import { parseXml, toXmlString } from '../../src/xml/xml-converter';
+import { XmlRootWrapper } from '../../src/xml/interfaces/xml-inner-types';
 
 describe('XmlConverter', () => {
   it('should succeed', () => {
@@ -244,9 +245,9 @@ describe('XmlConverter', () => {
           },
         ],
       },
-    };
+    } as unknown as XmlRootWrapper;
 
-    const text = await toXml(xmlObj);
+    const text = await toXmlString(xmlObj);
 
     expect(text).toBeTruthy();
     expect(text).toBe(`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
