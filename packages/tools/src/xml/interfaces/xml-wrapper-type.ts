@@ -5,7 +5,6 @@ import {
 import { XmlRootWrapper, XmlTagDeclaration } from './xml-inner-types.ts';
 
 export interface XmlWrapperType {
-  _getCurrentXmlObj: () => XmlRootWrapper | XmlTagDeclaration;
   /**
    * Finds the first tag whose child matches the `tagName`, and gets the
    * nth child (zero indexed) of the type `tagName`
@@ -65,4 +64,11 @@ export interface XmlWrapperType {
    * Converts the xml object tree to xml string
    */
   toXmlString(): string;
+
+  _experimental: {
+    /**
+     * Returns a reference to the current xml object
+     */
+    getCurrentXmlObjReference: () => XmlRootWrapper | XmlTagDeclaration;
+  };
 }

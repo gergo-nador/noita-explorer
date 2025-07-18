@@ -114,7 +114,6 @@ const XmlWrapperInternal = ({
   };
 
   return {
-    _getCurrentXmlObj: () => xmlObj,
     findNthTag: findNthTagInternal,
     findTagArray: findTagArrayInternal,
     findAllTags: findAllTagsInternal,
@@ -126,6 +125,9 @@ const XmlWrapperInternal = ({
     sortChildrenArray: sortChildrenArrayInternal,
     toXmlString: () => {
       return toXmlString(xmlObj);
+    },
+    _experimental: {
+      getCurrentXmlObjReference: () => xmlObj,
     },
   };
 };
