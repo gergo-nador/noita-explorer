@@ -44,6 +44,7 @@ export interface XmlWrapperType {
    * Gets all children elements
    */
   getAllChildren: () => Record<string, XmlWrapperType[]>;
+  getAllAttributes: () => Record<string, string>;
   /**
    * Adds a new tag as a child to the current tag
    * @param tagName

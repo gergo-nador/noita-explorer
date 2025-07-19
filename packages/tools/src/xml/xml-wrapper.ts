@@ -168,6 +168,9 @@ const XmlWrapperInternal = ({
     delete xmlObj['_parentInfo'];
   };
 
+  const getAllAttributes = (): Record<string, string> =>
+    (xmlObj.$ ?? {}) as Record<string, string>;
+
   return {
     findNthTag: findNthTagInternal,
     findTagArray: findTagArrayInternal,
@@ -176,6 +179,7 @@ const XmlWrapperInternal = ({
     getRequiredAttribute: getRequiredAttributeInternal,
     getTextContent: getTextContentInternal,
     getAllChildren: getAllChildren,
+    getAllAttributes: getAllAttributes,
     setAttribute: addOrModifyAttributeInternal,
     addChild: addChildInternal,
     sortChildrenArray: sortChildrenArrayInternal,

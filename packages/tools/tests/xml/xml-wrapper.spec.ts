@@ -69,6 +69,8 @@ describe('XmlWrapper', () => {
             <child3_remove data-testid="5"></child3_remove>
             <child2_remove data-testid="6"></child2_remove>
           </children_remove_test>
+          <many_attributes attr1="1" attr2="test" attr3="ola"></many_attributes>
+          <zero_attributes></zero_attributes>
         </root>
       `;
 
@@ -236,7 +238,7 @@ describe('XmlWrapper', () => {
     expect(textAdvanced.getTextContent()).toBe('Test text');
   });
 
-  it('should get all children elements name', () => {
+  it('should get all children elements', () => {
     const childrenElementTest = xmlWrapper.findNthTag('children_element_test');
     expect(childrenElementTest).toBeTruthy();
 
@@ -246,6 +248,20 @@ describe('XmlWrapper', () => {
       'child2',
       'child3',
     ]);
+  });
+
+  it('should get all attributes <many_attributes>', () => {
+    const manyAttributes = xmlWrapper.findNthTag('many_attributes');
+    expect(manyAttributes.getAllAttributes()).toStrictEqual({
+      attr1: '1',
+      attr2: 'test',
+      attr3: 'ola',
+    });
+  });
+
+  it('should get all attributes <zero_attributes>', () => {
+    const zeroAttributes = xmlWrapper.findNthTag('zero_attributes');
+    expect(zeroAttributes.getAllAttributes()).toStrictEqual({});
   });
 
   it('should add a new attribute', () => {
