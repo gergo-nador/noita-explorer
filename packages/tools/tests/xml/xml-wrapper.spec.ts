@@ -346,4 +346,25 @@ describe('XmlWrapper', () => {
     expect(child2AfterRemoveTestId).toBe('3');
     expect(childRemoveTest.findTagArray('child2_remove').length).toBe(3);
   });
+
+  it('should remove child2 data-testid="3"', () => {
+    const childRemoveTest = xmlWrapper.findNthTag('children_remove_test');
+
+    // pre-check
+    expect(childRemoveTest.findTagArray('child2_remove').length).toBe(4);
+
+    const child2ToBeRemoved = xmlWrapper
+      .findTagArray('child2_remove')
+      .find((x) => x.getAttribute('data-testid').asText() === '3');
+
+    child2ToBeRemoved.remove();
+
+    // post-check
+    const child2AfterRemoveTestId = xmlWrapper
+      .findNthTag('child2_remove')
+      .getRequiredAttribute('data-testid')
+      .asText();
+    expect(child2AfterRemoveTestId).toBe('2');
+    expect(childRemoveTest.findTagArray('child2_remove').length).toBe(3);
+  });
 });
