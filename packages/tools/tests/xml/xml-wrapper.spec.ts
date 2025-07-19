@@ -322,7 +322,7 @@ describe('XmlWrapper', () => {
     childRemoveTest.findNthTag('child1_remove').remove();
 
     // post-check
-    expect(() => xmlWrapper.findNthTag('child1_remove')).toThrow();
+    expect(xmlWrapper.findNthTag('child1_remove')).toBeUndefined();
   });
 
   it('should remove child2 data-testid="2"', () => {

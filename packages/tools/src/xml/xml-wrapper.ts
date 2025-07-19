@@ -160,7 +160,11 @@ const XmlWrapperInternal = ({
       return;
     }
 
-    childArray.splice(index, 1);
+    if (childArray.length === 1) {
+      delete parent[childKey];
+    } else {
+      childArray.splice(index, 1);
+    }
     delete xmlObj['_parentInfo'];
   };
 
