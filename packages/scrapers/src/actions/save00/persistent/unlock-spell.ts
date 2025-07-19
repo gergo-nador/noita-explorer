@@ -58,7 +58,7 @@ export const unlockSpell = async ({
 
       alreadyExistingEntityTag.setAttribute('value', String(newValue));
     } else {
-      const child = keyValueStats.addChild('E');
+      const child = keyValueStats.addNewChild('E');
       child.setAttribute('key', actionId);
       child.setAttribute('value', String(1));
     }

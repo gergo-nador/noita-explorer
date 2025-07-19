@@ -1,20 +1,36 @@
 import { XmlTagDeclaration } from '../interfaces/xml-tag-declaration.ts';
 
-export const addChild = (
+export const addNewChild = (
   xmlObject: XmlTagDeclaration,
   tagName: string,
 ): XmlTagDeclaration => {
+  const child = {} as XmlTagDeclaration;
+
+  addChild(xmlObject, tagName, child);
+
+  return child;
+};
+
+export const addChild = (
+  xmlObject: XmlTagDeclaration,
+  tagName: string,
+  xmlChild: XmlTagDeclaration,
+  index?: number,
+) => {
   if (!(tagName in xmlObject)) {
     xmlObject[tagName] = [];
   }
 
   const list = xmlObject[tagName];
-  const child = {
-    _parentInfo: { parent: xmlObject, tagName },
-  } as XmlTagDeclaration;
+  xmlChild._parentInfo = { parent: xmlObject, tagName };
 
-  list.push(child);
-  return child;
+  if (index !== undefined) {
+    index = Math.max(index, 0);
+    index = Math.min(index, list.length);
+    list.splice(index, 0, xmlChild);
+  } else {
+    list.push(xmlChild);
+  }
 };
 
 export const isChild = (key: string) => {

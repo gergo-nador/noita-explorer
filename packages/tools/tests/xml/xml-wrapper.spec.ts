@@ -280,7 +280,7 @@ describe('XmlWrapper', () => {
 
   it('should add a new tag with existing siblings with same tag', () => {
     const third = xmlWrapper.findNthTag('third');
-    const newChild = third.addChild('second');
+    const newChild = third.addNewChild('second');
     expect(third.findTagArray('second')).toHaveLength(2);
 
     newChild.setAttribute('id', 'second-4');
@@ -294,7 +294,7 @@ describe('XmlWrapper', () => {
 
   it('should add a new tag without any existing siblings with same tag', () => {
     const third = xmlWrapper.findNthTag('third');
-    const newChild = third.addChild('newtag');
+    const newChild = third.addNewChild('newtag');
     expect(third.findTagArray('newtag')).toHaveLength(1);
 
     newChild.setAttribute('hello', 'test');

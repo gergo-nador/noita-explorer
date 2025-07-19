@@ -8,7 +8,7 @@ import {
   findNthTag,
   findTagArray,
 } from './utils/xml-finder.ts';
-import { addChild, isChild } from './utils/child.ts';
+import { addChild, addNewChild, isChild } from './utils/child.ts';
 import { toXmlString } from './xml-converter.ts';
 import { XmlWrapperType } from './xml-wrapper.type.ts';
 import { XmlTagDeclaration } from './interfaces/xml-tag-declaration.ts';
@@ -89,13 +89,30 @@ const XmlWrapperInternal = ({
     return xmlObj._ as string | undefined;
   };
 
-  const addChildInternal = (tagName: string): XmlWrapperType => {
+  const addNewChildInternal = (tagName: string): XmlWrapperType => {
     if (isRoot) {
       throw new Error('Cannot add a new child to the root');
     }
 
-    const child = addChild(xmlObj as XmlTagDeclaration, tagName);
+    const child = addNewChild(xmlObj as XmlTagDeclaration, tagName);
     return XmlWrapperInternal({ xmlObj: child, isRoot: false });
+  };
+
+  const addExistingChildNode = (
+    tagName: string,
+    child: XmlWrapperType,
+    index?: number,
+  ) => {
+    if (isRoot) {
+      throw new Error('Cannot add a new child to the root');
+    }
+
+    addChild(
+      xmlObj as XmlTagDeclaration,
+      tagName,
+      child._experimental.getCurrentXmlObjReference() as XmlTagDeclaration,
+      index,
+    );
   };
 
   const sortChildrenArrayInternal = (
@@ -181,7 +198,8 @@ const XmlWrapperInternal = ({
     getAllChildren: getAllChildren,
     getAllAttributes: getAllAttributes,
     setAttribute: addOrModifyAttributeInternal,
-    addChild: addChildInternal,
+    addNewChild: addNewChildInternal,
+    addExistingChildNode: addExistingChildNode,
     sortChildrenArray: sortChildrenArrayInternal,
     remove: removeFromNodeTree,
     toXmlString: () => {

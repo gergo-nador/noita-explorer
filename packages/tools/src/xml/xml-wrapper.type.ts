@@ -49,7 +49,18 @@ export interface XmlWrapperType {
    * Adds a new tag as a child to the current tag
    * @param tagName
    */
-  addChild: (tagName: string) => XmlWrapperType;
+  addNewChild: (tagName: string) => XmlWrapperType;
+  /**
+   * Add an existing node as a child
+   * @param tagName node name
+   * @param xml xml node
+   * @param index
+   */
+  addExistingChildNode: (
+    tagName: string,
+    child: XmlWrapperType,
+    index?: number,
+  ) => void;
   /**
    * Adds or modifies an attribute to the specified content
    * @param attributeName

@@ -59,7 +59,7 @@ export const unlockEnemy = async ({
     if (alreadyExistingEntityTag) {
       alreadyExistingEntityTag.setAttribute('value', String(killCount));
     } else {
-      const child = keyValueStats.addChild('E');
+      const child = keyValueStats.addNewChild('E');
       child.setAttribute('key', enemyId);
       child.setAttribute('value', String(killCount));
     }
