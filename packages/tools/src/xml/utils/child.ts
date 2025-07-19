@@ -1,4 +1,4 @@
-import { XmlTagDeclaration } from '../interfaces/xml-inner-types.ts';
+import { XmlTagDeclaration } from '../interfaces/xml-tag-declaration.ts';
 
 export const addChild = (
   xmlObject: XmlTagDeclaration,
@@ -9,7 +9,14 @@ export const addChild = (
   }
 
   const list = xmlObject[tagName];
-  const child = {};
+  const child = {
+    _parentInfo: { parent: xmlObject, tagName },
+  } as XmlTagDeclaration;
+
   list.push(child);
   return child;
+};
+
+export const isChild = (key: string) => {
+  return key !== '_' && key !== '$' && key !== '_parentInfo';
 };

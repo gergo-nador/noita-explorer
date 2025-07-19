@@ -2,7 +2,7 @@ import {
   XmlAttributeReadOptions,
   XmlRequiredAttributeReadOptions,
 } from '../interfaces/xml-attribute-read-options.ts';
-import { XmlTagDeclaration } from '../interfaces/xml-inner-types.ts';
+import { XmlTagDeclaration } from '../interfaces/xml-tag-declaration.ts';
 
 /**
  * Gets an attribute from a XML tag.

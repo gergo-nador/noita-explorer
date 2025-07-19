@@ -1,10 +1,8 @@
-import {
-  XmlRootWrapper,
-  XmlTagDeclaration,
-} from '../interfaces/xml-inner-types.ts';
-import { convertStringTag } from './xml-text.ts';
+import { isChild } from './child.ts';
+import { XmlTagDeclaration } from '../interfaces/xml-tag-declaration.ts';
+import { XmlRootDeclaration } from '../interfaces/xml-root-declaration.ts';
 
-export type XmlFindable = XmlRootWrapper | XmlTagDeclaration;
+export type XmlFindable = XmlRootDeclaration | XmlTagDeclaration;
 
 /**
  * Finds the first XML tag declaration with the specified name.
@@ -43,7 +41,7 @@ export const findAllTagsRecursively = (
 ): XmlTagDeclaration[] => {
   for (const key in xmlObject) {
     // skip the text content and the attributes
-    if (key === '$' || key === '_') {
+    if (!isChild(key)) {
       continue;
     }
 
@@ -60,14 +58,11 @@ export const findAllTagsRecursively = (
     }
 
     for (let i = 0; i < tag.length; i++) {
-      const convertedTag = convertStringTag(tag[i]);
-      tag[i] = convertedTag;
-
       if (tagNameMatch) {
-        tags.push(convertedTag);
+        tags.push(tag[i]);
       }
 
-      findAllTagsRecursively(convertedTag, tagName, tags);
+      findAllTagsRecursively(tag[i], tagName, tags);
     }
   }
 
@@ -116,19 +111,19 @@ const findXmlTag = (
 
   for (const key in xmlObject) {
     // skip the text content and the attributes
-    if (key === '$' || key === '_') {
+    if (!isChild(key)) {
       continue;
     }
 
     const tagNameMatch = key === tagName;
-    const tag = xmlObject[key];
+    const tags = xmlObject[key];
 
-    if (!Array.isArray(tag)) {
+    if (!Array.isArray(tags)) {
       if (tagNameMatch) {
-        return tag;
+        return tags;
       }
 
-      const result = findXmlTag(tag, tagName);
+      const result = findXmlTag(tags, tagName);
       if (result) {
         return result;
       }
@@ -136,15 +131,12 @@ const findXmlTag = (
       continue;
     }
 
-    const convertedTags = tag.map((t) => convertStringTag(t));
-    xmlObject[key] = convertedTags;
-
     if (tagNameMatch) {
-      return convertedTags;
+      return tags;
     }
 
-    for (const convertedTag of convertedTags) {
-      const result = findXmlTag(convertedTag, tagName);
+    for (const tag of tags) {
+      const result = findXmlTag(tag, tagName);
       if (result) {
         return result;
       }

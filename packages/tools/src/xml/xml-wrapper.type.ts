@@ -1,8 +1,9 @@
 import {
   XmlAttributeReadOptions,
   XmlRequiredAttributeReadOptions,
-} from './xml-attribute-read-options.ts';
-import { XmlRootWrapper, XmlTagDeclaration } from './xml-inner-types.ts';
+} from './interfaces/xml-attribute-read-options.ts';
+import { XmlTagDeclaration } from './interfaces/xml-tag-declaration.ts';
+import { XmlRootDeclaration } from './interfaces/xml-root-declaration.ts';
 
 export interface XmlWrapperType {
   /**
@@ -40,6 +41,10 @@ export interface XmlWrapperType {
    */
   getTextContent: () => string | undefined;
   /**
+   * Gets all children elements
+   */
+  getAllChildren: () => Record<string, XmlWrapperType[]>;
+  /**
    * Adds a new tag as a child to the current tag
    * @param tagName
    */
@@ -61,6 +66,11 @@ export interface XmlWrapperType {
   ) => void;
 
   /**
+   * Removes the current Xml node from the xml tree
+   */
+  remove: () => void;
+
+  /**
    * Converts the xml object tree to xml string
    */
   toXmlString(): string;
@@ -69,6 +79,6 @@ export interface XmlWrapperType {
     /**
      * Returns a reference to the current xml object
      */
-    getCurrentXmlObjReference: () => XmlRootWrapper | XmlTagDeclaration;
+    getCurrentXmlObjReference: () => XmlRootDeclaration | XmlTagDeclaration;
   };
 }
