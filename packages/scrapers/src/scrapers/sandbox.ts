@@ -1,3 +1,6 @@
+/*
+devDependencies: "diff": "^8.0.2",
+
 import { FileSystemDirectoryAccessNode } from '@noita-explorer/file-systems';
 import { mergeXmlBaseFiles } from './datawak/scrape-enemies/merge-xml-base-files.ts';
 import { diffChars } from 'diff';
@@ -57,3 +60,4 @@ async function sandbox() {
 }
 
 sandbox();
+*/
