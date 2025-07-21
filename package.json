@@ -3,7 +3,6 @@
   "private": true,
   "scripts": {
     "build": "turbo build",
-    "build:scraper": "turbo build --filter=@noita-explorer/scrapers",
     "dev": "turbo dev",
     "dev:web": "turbo dev --filter=@noita-explorer/web",
     "dev:desktop": "turbo dev --filter=@noita-explorer/desktop",
