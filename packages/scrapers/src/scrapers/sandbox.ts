@@ -5,19 +5,19 @@ import { diffChars } from 'diff';
 const folder = FileSystemDirectoryAccessNode(
   '/Users/gergo.nador/noita-explorer/noita_data',
 );
-const pathHumanoid = 'data/entities/base_humanoid.xml';
-const pathBase = 'data/entities/base_enemy_basic.xml';
-const pathZombie = 'data/entities/animals/zombie.xml';
-const pathZombieWeak = 'data/entities/animals/zombie_weak.xml';
+const paths = [
+  'data/entities/base_enemy_flying.xml',
+  'data/entities/animals/scavenger_grenade.xml',
+];
 
 async function getXml(path: string) {
   const file = await folder.getFile(path);
-  const xml = await mergeXmlBaseFiles({
+  const merged = await mergeXmlBaseFiles({
     file: file,
     dataWakParentDirectoryApi: folder,
   });
 
-  return xml.toXmlString();
+  return merged.xml.toXmlString();
 }
 
 async function diffText(text1: string, text2: string) {
@@ -41,29 +41,19 @@ async function diffText(text1: string, text2: string) {
 }
 
 async function sandbox() {
-  const xml = await Promise.all([
-    getXml(pathHumanoid),
-    getXml(pathBase),
-    getXml(pathZombie),
-    getXml(pathZombieWeak),
-  ]);
+  for (let i = 0; i < paths.length; i++) {
+    if (paths[i + 1] === undefined) break;
 
-  console.log('---------------------------------------------------');
-  console.log('Humanoid -> Base Enemy');
-  console.log('---------------------------------------------------');
-  await diffText(xml[0], xml[1]);
+    const from = await getXml(paths[i]);
+    const to = await getXml(paths[i + 1]);
 
-  console.log('\n');
-  console.log('---------------------------------------------------');
-  console.log('Base Enemy -> Zombie');
-  console.log('---------------------------------------------------');
-  await diffText(xml[1], xml[2]);
-
-  console.log('\n');
-  console.log('---------------------------------------------------');
-  console.log('Zombie -> Zombie Weak');
-  console.log('---------------------------------------------------');
-  await diffText(xml[2], xml[3]);
+    console.log();
+    console.log();
+    console.log('---------------------------------------------------');
+    console.log(`${paths[i]} -> ${paths[i + 1]}`);
+    console.log('---------------------------------------------------');
+    await diffText(from, to);
+  }
 }
 
 sandbox();

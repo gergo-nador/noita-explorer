@@ -16,8 +16,8 @@ import {
 } from '@noita-explorer/tools';
 import { noitaPaths } from '../../../noita-paths.ts';
 import { extractEnemyProperties } from './extract-enemy-properties.ts';
-import { traverseThroughBaseFiles } from './traverse-through-base-files.ts';
 import { calculateEnemyGold } from './calculate-enemy-gold.ts';
+import { mergeXmlBaseFiles } from './merge-xml-base-files.ts';
 
 /**
  * Scraping all the enemies/animals
@@ -178,9 +178,13 @@ const scrapeEnemyMain = async ({
     return undefined;
   }
 
-  const xmlText = await file.read.asText();
-  const xmlObj = await parseXml(xmlText);
-  const xml = XmlWrapper(xmlObj);
+  const enemyXml = await mergeXmlBaseFiles({
+    file: file,
+    dataWakParentDirectoryApi: dataWakParentDirectoryApi,
+  });
+
+  const xml = enemyXml.xml;
+  enemy.debug.fileHierarchy = enemyXml.filePathsTraversed;
 
   const entityTag = xml.findNthTag('Entity');
   if (entityTag === undefined) {
@@ -206,14 +210,6 @@ const scrapeEnemyMain = async ({
   }
 
   enemy.name = entityName;
-
-  // before starting to extract properties for enemy,
-  // traverse through the Base tag hierarchy
-  await traverseThroughBaseFiles({
-    enemy: enemy,
-    file: file,
-    dataWakParentDirectoryApi: dataWakParentDirectoryApi,
-  });
 
   // then extract the more specific properties for the enemy
   extractEnemyProperties({ enemy, entityTag });

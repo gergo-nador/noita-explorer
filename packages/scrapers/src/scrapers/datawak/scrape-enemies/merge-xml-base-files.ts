@@ -29,7 +29,7 @@ interface Props {
 export const mergeXmlBaseFiles = async ({
   file,
   dataWakParentDirectoryApi,
-}: Props): Promise<XmlWrapperType> => {
+}: Props) => {
   return await mergeXmlBaseFilesInternal({
     file: file,
     dataWakParentDirectoryApi: dataWakParentDirectoryApi,
@@ -39,10 +39,19 @@ export const mergeXmlBaseFiles = async ({
 const mergeXmlBaseFilesInternal = async ({
   file,
   dataWakParentDirectoryApi,
+  filePathsTraversed,
 }: {
   file: FileSystemFileAccess;
   dataWakParentDirectoryApi: FileSystemDirectoryAccess;
-}): Promise<XmlWrapperType> => {
+  filePathsTraversed?: string[];
+}) => {
+  filePathsTraversed ??= [];
+
+  const filePath = file
+    .getFullPath()
+    .substring(dataWakParentDirectoryApi.getFullPath().length);
+  filePathsTraversed.push(filePath);
+
   const xmlText = await file.read.asText();
   const xmlObj = await parseXml(xmlText);
   const xmlWrapper = XmlWrapper(xmlObj);
@@ -63,10 +72,11 @@ const mergeXmlBaseFilesInternal = async ({
       const baseFileXml = await mergeXmlBaseFilesInternal({
         file: baseFile,
         dataWakParentDirectoryApi: dataWakParentDirectoryApi,
+        filePathsTraversed: filePathsTraversed,
       });
 
       const baseXml = overrideBaseXml({
-        baseFileXml: baseFileXml,
+        baseFileXml: baseFileXml.xml,
         baseTag: baseTag,
         mainEntityTag: rootEntity,
       });
@@ -86,7 +96,7 @@ const mergeXmlBaseFilesInternal = async ({
     }
   }
 
-  return xmlWrapper;
+  return { xml: xmlWrapper, filePathsTraversed };
 };
 
 const overrideBaseXml = ({
@@ -98,22 +108,54 @@ const overrideBaseXml = ({
   baseTag: XmlWrapperType;
   mainEntityTag: XmlWrapperType;
 }): XmlWrapperType => {
-  const baseTagChildren = baseTag.getAllChildren();
   const baseFileXmlEntity = baseFileXml.findNthTag('Entity');
   if (!baseFileXmlEntity) {
     throw new Error(`Base file does not contain Entity tag`);
   }
 
-  const baseFileXmlChildren = baseFileXmlEntity.getAllChildren();
+  overrideXmlChildren({ xmlFrom: baseTag, xmlTo: baseFileXmlEntity });
 
-  for (const [tagName, tags] of Object.entries(baseTagChildren)) {
-    if (!(tagName in baseFileXmlChildren)) {
-      // the tag should be in the baseXmlChildren
-      // maybe then we should add the tags as children to baseFileXmlChildren
+  // Copy Entity tags
+  const baseEntityTags = baseFileXmlEntity?.getAttribute('tags')?.asText();
+  if (baseEntityTags) {
+    const mainEntityTags = mainEntityTag.getAttribute('tags')?.asText();
+    if (!mainEntityTags) {
+      mainEntityTag.setAttribute('tags', baseEntityTags);
+    } else {
+      const allTags = [
+        ...splitNoitaEntityTags(baseEntityTags),
+        ...splitNoitaEntityTags(mainEntityTags),
+      ];
+
+      const uniqueTags = [...new Set(allTags)];
+      const newTags = joinNoitaEntityTags(uniqueTags);
+      mainEntityTag.setAttribute('tags', newTags);
+    }
+  }
+
+  return baseFileXml;
+};
+
+const overrideXmlChildren = ({
+  xmlFrom,
+  xmlTo,
+}: {
+  xmlFrom: XmlWrapperType;
+  xmlTo: XmlWrapperType;
+}) => {
+  const xmlFromChildren = xmlFrom.getAllChildren();
+  const xmlToChildren = xmlTo.getAllChildren();
+
+  for (const [tagName, tags] of Object.entries(xmlFromChildren)) {
+    if (!(tagName in xmlToChildren)) {
+      tags.forEach((tag) => {
+        tag.remove();
+        xmlTo.addExistingChildNode(tagName, tag);
+      });
       continue;
     }
 
-    const baseFileXmlTags = baseFileXmlChildren[tagName];
+    const baseFileXmlTags = xmlToChildren[tagName];
 
     // 1. Remove tags with _remove_from_base="1"
     for (let i = 0; i < tags.length && i < baseFileXmlTags.length; i++) {
@@ -123,7 +165,6 @@ const overrideBaseXml = ({
       if (removeFromBase) {
         tags[i].remove();
         baseFileXmlTags[i].remove();
-        i--;
       }
     }
 
@@ -137,26 +178,8 @@ const overrideBaseXml = ({
       for (const [key, value] of Object.entries(attributes)) {
         tagToBeOverriden.setAttribute(key, value);
       }
-    }
 
-    // 3. Copy Entity tags
-    const baseEntityTags = baseFileXmlEntity?.getAttribute('tags')?.asText();
-    if (baseEntityTags) {
-      const mainEntityTags = mainEntityTag.getAttribute('tags')?.asText();
-      if (!mainEntityTags) {
-        mainEntityTag.setAttribute('tags', baseEntityTags);
-      } else {
-        const allTags = [
-          ...splitNoitaEntityTags(baseEntityTags),
-          ...splitNoitaEntityTags(mainEntityTags),
-        ];
-
-        const uniqueTags = [...new Set(allTags)];
-        const newTags = joinNoitaEntityTags(uniqueTags);
-        mainEntityTag.setAttribute('tags', newTags);
-      }
+      overrideXmlChildren({ xmlFrom: tagWithNewData, xmlTo: tagToBeOverriden });
     }
   }
-
-  return baseFileXml;
 };
