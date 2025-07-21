@@ -104,7 +104,7 @@ export const EnemyOverview = ({ enemy }: { enemy: NoitaEnemy }) => {
         <div>
           <Header title='Debug'>
             <div style={{ fontSize: 18 }}>Tags:</div>
-            <div>{enemy.debug.entityTags.join(', ')}</div>
+            <div>{enemy.tags.join(', ')}</div>
             <br />
             <div style={{ fontSize: 18 }}>Scraped Files:</div>
             <div>

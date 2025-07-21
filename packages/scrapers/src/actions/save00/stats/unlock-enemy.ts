@@ -2,7 +2,7 @@ import { FileSystemDirectoryAccess } from '@noita-explorer/model';
 import { noitaPaths } from '../../../noita-paths.ts';
 import { cryptoSalakieli } from '../../../scrapers/cryptography/salakieli.ts';
 import { encryptedFileKeys } from '../../../scrapers/cryptography/encrypted-file-keys.ts';
-import { parseXml, toXml, XmlWrapper } from '@noita-explorer/tools/xml';
+import { parseXml, XmlWrapper } from '@noita-explorer/tools/xml';
 import { UnlockEnemyAction } from '@noita-explorer/model-noita';
 
 export const unlockEnemy = async ({
@@ -59,7 +59,7 @@ export const unlockEnemy = async ({
     if (alreadyExistingEntityTag) {
       alreadyExistingEntityTag.setAttribute('value', String(killCount));
     } else {
-      const child = keyValueStats.addChild('E');
+      const child = keyValueStats.addNewChild('E');
       child.setAttribute('key', enemyId);
       child.setAttribute('value', String(killCount));
     }
@@ -72,7 +72,7 @@ export const unlockEnemy = async ({
     });
   }
 
-  const xmlText = toXml(xml._getCurrentXmlObj());
+  const xmlText = xml.toXmlString();
   const encryptedStats = await cryptoSalakieli.encrypt({
     text: xmlText,
     key: encryptedFileKeys.stats_salakieli.key,

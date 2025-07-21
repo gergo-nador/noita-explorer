@@ -1,10 +1,11 @@
 import {
   XmlAttributeReadOptions,
   XmlRequiredAttributeReadOptions,
-} from './xml-attribute-read-options.ts';
+} from './interfaces/xml-attribute-read-options.ts';
+import { XmlTagDeclaration } from './interfaces/xml-tag-declaration.ts';
+import { XmlRootDeclaration } from './interfaces/xml-root-declaration.ts';
 
 export interface XmlWrapperType {
-  _getCurrentXmlObj: () => object;
   /**
    * Finds the first tag whose child matches the `tagName`, and gets the
    * nth child (zero indexed) of the type `tagName`
@@ -40,10 +41,26 @@ export interface XmlWrapperType {
    */
   getTextContent: () => string | undefined;
   /**
+   * Gets all children elements
+   */
+  getAllChildren: () => Record<string, XmlWrapperType[]>;
+  getAllAttributes: () => Record<string, string>;
+  /**
    * Adds a new tag as a child to the current tag
    * @param tagName
    */
-  addChild: (tagName: string) => XmlWrapperType;
+  addNewChild: (tagName: string) => XmlWrapperType;
+  /**
+   * Add an existing node as a child
+   * @param tagName node name
+   * @param xml xml node
+   * @param index
+   */
+  addExistingChildNode: (
+    tagName: string,
+    child: XmlWrapperType,
+    index?: number,
+  ) => void;
   /**
    * Adds or modifies an attribute to the specified content
    * @param attributeName
@@ -59,4 +76,21 @@ export interface XmlWrapperType {
     tagName: string,
     by: (a: XmlWrapperType, b: XmlWrapperType) => number,
   ) => void;
+
+  /**
+   * Removes the current Xml node from the xml tree
+   */
+  remove: () => void;
+
+  /**
+   * Converts the xml object tree to xml string
+   */
+  toXmlString(): string;
+
+  _experimental: {
+    /**
+     * Returns a reference to the current xml object
+     */
+    getCurrentXmlObjReference: () => XmlRootDeclaration | XmlTagDeclaration;
+  };
 }

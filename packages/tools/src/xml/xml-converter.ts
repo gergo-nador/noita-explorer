@@ -1,16 +1,21 @@
 import { Builder, parseStringPromise, RenderOptions } from 'xml2js';
-import { XmlRootWrapper } from './interfaces/xml-inner-types.ts';
+import { XmlRootDeclaration } from './interfaces/xml-root-declaration.ts';
+import { xmlPreProcess } from './xml-processing/xml-pre-process.ts';
+import { xmlPostProcess } from './xml-processing/xml-post-process.ts';
 
 /**
  * Parses a text to an XML object
  * @param text
  */
-export const parseXml = (text: string): Promise<XmlRootWrapper> => {
+export const parseXml = async (text: string): Promise<XmlRootDeclaration> => {
   const commentsRemoved = removeXmlComments(text);
-  return parseStringPromise(commentsRemoved);
+  const xmlObj = await parseStringPromise(commentsRemoved);
+
+  const rootObj = xmlPreProcess(xmlObj);
+  return rootObj;
 };
 
-export const toXml = (obj: object): string => {
+export const toXmlString = (xml: XmlRootDeclaration): string => {
   const renderOpts: RenderOptions = {
     pretty: true,
     // there shouldn't be any self-closing xml tags in noita xml files
@@ -23,6 +28,7 @@ export const toXml = (obj: object): string => {
     // no xml declaration in noita xml files
     headless: true,
   });
+  const obj = xmlPostProcess(xml);
   return builder.buildObject(obj);
 };
 

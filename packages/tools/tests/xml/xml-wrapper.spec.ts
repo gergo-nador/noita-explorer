@@ -1,12 +1,12 @@
-import { describe, it, expect, beforeAll } from '@jest/globals';
-import { XmlWrapperType } from '../../src/xml/interfaces/xml-wrapper-type';
+import { describe, it, expect, beforeEach } from '@jest/globals';
 import { parseXml } from '../../src/xml/xml-converter';
 import { XmlWrapper } from '../../src/xml/xml-wrapper';
+import { XmlWrapperType } from '../../src/xml/xml-wrapper.type';
 
 describe('XmlWrapper', () => {
   let xmlWrapper: XmlWrapperType;
 
-  beforeAll(async () => {
+  beforeEach(async () => {
     const xml = `
         <root>
           <first>
@@ -55,6 +55,22 @@ describe('XmlWrapper', () => {
             <sort_item value="2"></sort_item>
             <sort_item value="5"></sort_item>
           </sorting>
+          <children_element_test value="1" test="2">
+            <child1>Hello</child1>
+            <child2 data-value="3"/>
+            Text content
+            <child3>What</child3>
+          </children_element_test>
+          <children_remove_test>
+            <child1_remove data-testid="1"></child1_remove>
+            <child2_remove data-testid="2"></child2_remove>
+            <child2_remove data-testid="3"></child2_remove>
+            <child2_remove data-testid="4"></child2_remove>
+            <child3_remove data-testid="5"></child3_remove>
+            <child2_remove data-testid="6"></child2_remove>
+          </children_remove_test>
+          <many_attributes attr1="1" attr2="test" attr3="ola"></many_attributes>
+          <zero_attributes></zero_attributes>
         </root>
       `;
 
@@ -222,6 +238,32 @@ describe('XmlWrapper', () => {
     expect(textAdvanced.getTextContent()).toBe('Test text');
   });
 
+  it('should get all children elements', () => {
+    const childrenElementTest = xmlWrapper.findNthTag('children_element_test');
+    expect(childrenElementTest).toBeTruthy();
+
+    const childrenElementNames = childrenElementTest.getAllChildren();
+    expect(Object.keys(childrenElementNames)).toStrictEqual([
+      'child1',
+      'child2',
+      'child3',
+    ]);
+  });
+
+  it('should get all attributes <many_attributes>', () => {
+    const manyAttributes = xmlWrapper.findNthTag('many_attributes');
+    expect(manyAttributes.getAllAttributes()).toStrictEqual({
+      attr1: '1',
+      attr2: 'test',
+      attr3: 'ola',
+    });
+  });
+
+  it('should get all attributes <zero_attributes>', () => {
+    const zeroAttributes = xmlWrapper.findNthTag('zero_attributes');
+    expect(zeroAttributes.getAllAttributes()).toStrictEqual({});
+  });
+
   it('should add a new attribute', () => {
     const empty = xmlWrapper.findNthTag('empty');
     empty.setAttribute('added', 'hello');
@@ -238,7 +280,7 @@ describe('XmlWrapper', () => {
 
   it('should add a new tag with existing siblings with same tag', () => {
     const third = xmlWrapper.findNthTag('third');
-    const newChild = third.addChild('second');
+    const newChild = third.addNewChild('second');
     expect(third.findTagArray('second')).toHaveLength(2);
 
     newChild.setAttribute('id', 'second-4');
@@ -252,7 +294,7 @@ describe('XmlWrapper', () => {
 
   it('should add a new tag without any existing siblings with same tag', () => {
     const third = xmlWrapper.findNthTag('third');
-    const newChild = third.addChild('newtag');
+    const newChild = third.addNewChild('newtag');
     expect(third.findTagArray('newtag')).toHaveLength(1);
 
     newChild.setAttribute('hello', 'test');
@@ -281,5 +323,64 @@ describe('XmlWrapper', () => {
     expect(sortedItems[3].getAttribute('value').asInt()).toBe(4);
     expect(sortedItems[4].getAttribute('value').asInt()).toBe(5);
     expect(sortedItems[5].getAttribute('value').asInt()).toBe(6);
+  });
+
+  it('should throw when trying to remove root', () => {
+    expect(() => xmlWrapper.remove()).toThrow();
+  });
+
+  it('should remove child1', () => {
+    const childRemoveTest = xmlWrapper.findNthTag('children_remove_test');
+
+    // pre-check
+    expect(xmlWrapper.findNthTag('child1_remove')).toBeTruthy();
+
+    childRemoveTest.findNthTag('child1_remove').remove();
+
+    // post-check
+    expect(xmlWrapper.findNthTag('child1_remove')).toBeUndefined();
+  });
+
+  it('should remove child2 data-testid="2"', () => {
+    const childRemoveTest = xmlWrapper.findNthTag('children_remove_test');
+
+    // pre-check
+    const child2BeforeRemoveTestId = xmlWrapper
+      .findNthTag('child2_remove')
+      .getRequiredAttribute('data-testid')
+      .asText();
+    expect(child2BeforeRemoveTestId).toBe('2');
+    expect(childRemoveTest.findTagArray('child2_remove').length).toBe(4);
+
+    childRemoveTest.findNthTag('child2_remove').remove();
+
+    // post-check
+    const child2AfterRemoveTestId = xmlWrapper
+      .findNthTag('child2_remove')
+      .getRequiredAttribute('data-testid')
+      .asText();
+    expect(child2AfterRemoveTestId).toBe('3');
+    expect(childRemoveTest.findTagArray('child2_remove').length).toBe(3);
+  });
+
+  it('should remove child2 data-testid="3"', () => {
+    const childRemoveTest = xmlWrapper.findNthTag('children_remove_test');
+
+    // pre-check
+    expect(childRemoveTest.findTagArray('child2_remove').length).toBe(4);
+
+    const child2ToBeRemoved = xmlWrapper
+      .findTagArray('child2_remove')
+      .find((x) => x.getAttribute('data-testid').asText() === '3');
+
+    child2ToBeRemoved.remove();
+
+    // post-check
+    const child2AfterRemoveTestId = xmlWrapper
+      .findNthTag('child2_remove')
+      .getRequiredAttribute('data-testid')
+      .asText();
+    expect(child2AfterRemoveTestId).toBe('2');
+    expect(childRemoveTest.findTagArray('child2_remove').length).toBe(3);
   });
 });

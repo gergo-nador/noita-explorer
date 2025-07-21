@@ -24,11 +24,8 @@ export const extractEnemyProperties = ({
 }) => {
   const tags = entityTag.getAttribute('tags')?.asText();
   if (tags !== undefined) {
-    const splitted = splitNoitaEntityTags(tags);
-    enemy.debug.entityTags = arrayHelpers.unique([
-      ...enemy.debug.entityTags,
-      ...splitted,
-    ]);
+    const split = splitNoitaEntityTags(tags);
+    enemy.tags = arrayHelpers.unique(split);
   }
 
   const damageModelComponent = entityTag.findNthTag('DamageModelComponent');

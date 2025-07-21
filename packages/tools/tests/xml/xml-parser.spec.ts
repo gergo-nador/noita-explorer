@@ -1,5 +1,7 @@
 import { describe, it, expect } from '@jest/globals';
-import { parseXml, toXml } from '../../src/xml/xml-converter';
+import { parseXml, toXmlString } from '../../src/xml/xml-converter';
+import { XmlRootDeclaration } from '../../src/xml/interfaces/xml-root-declaration';
+import { xmlPostProcess } from '../../src/xml/xml-processing/xml-post-process';
 
 describe('XmlConverter', () => {
   it('should succeed', () => {
@@ -22,13 +24,14 @@ describe('XmlConverter', () => {
       </root>
     `;
 
-    const parsed = await parseXml(xml);
+    let parsed = await parseXml(xml);
+    parsed = xmlPostProcess(parsed);
 
     expect(parsed).toBeTruthy();
     expect(parsed).toStrictEqual({
       root: {
         $: { id: '123', name: 'rootNode' },
-        single: ['Single item'],
+        single: [{ _: 'Single item' }],
         child: [
           {
             _: 'Child 1',
@@ -43,7 +46,11 @@ describe('XmlConverter', () => {
             },
           },
         ],
-        childless: [''],
+        childless: [
+          {
+            _: '',
+          },
+        ],
         childless_attr: [
           {
             $: {
@@ -100,11 +107,24 @@ describe('XmlConverter', () => {
       </root2>
     `;
 
-    const parsed = await parseXml(xml);
+    let parsed = await parseXml(xml);
+    parsed = xmlPostProcess(parsed);
 
     expect(parsed).toBeTruthy();
     expect(parsed).toStrictEqual({
-      root: { hello: [{ _: 'Whatsup', $: { attr1: '1' }, childless: [''] }] },
+      root: {
+        hello: [
+          {
+            _: 'Whatsup',
+            $: { attr1: '1' },
+            childless: [
+              {
+                _: '',
+              },
+            ],
+          },
+        ],
+      },
     });
   });
 
@@ -123,16 +143,21 @@ describe('XmlConverter', () => {
       </root>
     `;
 
-    const parsed = await parseXml(xml);
+    let parsed = await parseXml(xml);
+    parsed = xmlPostProcess(parsed);
 
     expect(parsed).toBeTruthy();
     expect(parsed).toStrictEqual({
       root: {
         $: { id: '123', name: 'rootNode' },
-        single: ['Single item'],
+        single: [{ _: 'Single item' }],
         single1: [
           {
-            childless: [''],
+            childless: [
+              {
+                _: '',
+              },
+            ],
           },
         ],
         child: [
@@ -185,7 +210,7 @@ describe('XmlConverter', () => {
     const xmlObj = {
       root: {
         $: { id: '123', name: 'rootNode' },
-        single: ['Single item'],
+        single: [{ _: 'Single item' }],
         child: [
           {
             _: 'Child 1',
@@ -200,7 +225,7 @@ describe('XmlConverter', () => {
             },
           },
         ],
-        childless: [''],
+        childless: [{ _: '' }],
         childless_attr: [
           {
             $: {
@@ -244,13 +269,12 @@ describe('XmlConverter', () => {
           },
         ],
       },
-    };
+    } as unknown as XmlRootDeclaration;
 
-    const text = await toXml(xmlObj);
+    const text = toXmlString(xmlObj);
 
     expect(text).toBeTruthy();
-    expect(text).toBe(`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<root id="123" name="rootNode">
+    expect(text).toBe(`<root id="123" name="rootNode">
   <single>Single item</single>
   <child id="1">Child 1</child>
   <child id="2">Child 2</child>

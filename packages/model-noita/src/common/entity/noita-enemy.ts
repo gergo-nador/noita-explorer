@@ -24,6 +24,7 @@ export interface NoitaEnemy extends NoitaProgressEntity {
   variants: NoitaEnemyVariant[];
   gameEffects: NoitaEnemyGameEffect[];
 
+  tags: string[];
   debug: NoitaEnemyDebugObject;
 
   gifs: StringKeyDictionary<NoitaEnemyGif> | undefined;
@@ -46,7 +47,6 @@ export interface NoitaEnemyGameEffect {
 
 export interface NoitaEnemyDebugObject {
   fileHierarchy: string[];
-  entityTags: string[];
   imagePath: string;
 }
 

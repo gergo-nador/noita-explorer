@@ -191,28 +191,28 @@ const collectAllProtectionsForEnemy = (enemy: NoitaEnemy) => {
     });
   }
 
-  if (enemy.debug.entityTags.includes('polymorphable_NOT')) {
+  if (enemy.tags.includes('polymorphable_NOT')) {
     gameEffects.push({
       id: 'PROTECTION_POLYMORPH',
       frames: -1,
     });
   }
 
-  if (enemy.debug.entityTags.includes('necrobot_NOT')) {
+  if (enemy.tags.includes('necrobot_NOT')) {
     gameEffects.push({
       id: 'PROTECTION_RESURRECTION',
       frames: -1,
     });
   }
 
-  if (enemy.debug.entityTags.includes('glue_NOT')) {
+  if (enemy.tags.includes('glue_NOT')) {
     gameEffects.push({
       id: 'PROTECTION_GLUE',
       frames: -1,
     });
   }
 
-  if (enemy.debug.entityTags.includes('touchmagic_immunity')) {
+  if (enemy.tags.includes('touchmagic_immunity')) {
     gameEffects.push({
       id: 'PROTECTION_TOUCH_MAGIC',
       frames: -1,
