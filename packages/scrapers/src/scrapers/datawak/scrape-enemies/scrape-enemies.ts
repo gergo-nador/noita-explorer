@@ -106,9 +106,9 @@ export const scrapeEnemies = async ({
         damageMultipliers: getDefaultNoitaDamageMultipliers(),
         variants: [],
         gameEffects: [],
+        tags: [],
         debug: {
           fileHierarchy: [],
-          entityTags: [],
           imagePath: animal.imagePath,
         },
       };
