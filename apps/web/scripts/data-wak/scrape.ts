@@ -83,13 +83,6 @@ async function runScrape(args: Record<string, string>) {
   }
 
   {
-    const outputMain = path.resolve('dist-tmp', 'noita-enemies.json');
-    const jsonMain = JSON.stringify(dataWak.enemies, undefined, 2);
-
-    fs.writeFileSync(outputMain, jsonMain);
-  }
-
-  {
     const outputGifs = path.resolve(args['o-gif']);
     const jsonGifs = JSON.stringify({
       'enemy-gifs': enemyGifs,
