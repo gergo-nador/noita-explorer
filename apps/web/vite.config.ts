@@ -5,7 +5,7 @@ import { execSync } from 'child_process';
 
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
-  const deployIds = getDeployInfo();
+  const deployInfo = getDeployInfo();
   const environment = getEnvironment({ mode });
 
   return {
@@ -16,8 +16,8 @@ export default defineConfig(({ mode }) => {
       port: 4000,
     },
     define: {
-      __DEPLOY_ID__: JSON.stringify(deployIds.id),
-      __DEPLOY_TIME__: JSON.stringify(deployIds.time),
+      __DEPLOY_ID__: JSON.stringify(deployInfo.id),
+      __DEPLOY_TIME__: JSON.stringify(deployInfo.time),
       __ENV__: JSON.stringify(environment),
     },
 
