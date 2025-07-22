@@ -53,11 +53,6 @@ export const MainPage = () => {
         </div>
       </Flex>
       <Flex center column gap={5}>
-        <div>
-          <div>{__DEPLOY_COMMIT__}</div>
-          <div>{__DEPLOY_ID__}</div>
-          <div>{__ENV__}</div>
-        </div>
         {noitaAPI.environment.features.launchGame && (
           <Button onClick={() => noitaAPI.noita.launch.master()}>
             Launch Game

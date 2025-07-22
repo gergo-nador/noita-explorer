@@ -38,7 +38,12 @@ export function browserNoitaApi(): NoitaAPI {
         nollaGamesNoitaDefault: throwNotAllowedInThisModeError,
       },
       dataFile: {
-        get: () => fetch('/noita_wak_data.json').then((r) => r.json()),
+        get: () => {
+          // in case the data structure of the json file changes between deploys,
+          // then it force re-fetches the file
+          const url = `/noita_wak_data.json?id=${__DEPLOY_ID__}`;
+          return fetch(url).then((r) => r.json());
+        },
         exists: () => promiseHelper.fromValue(true),
         write: throwNotAllowedInThisModeError,
         scrape: throwNotAllowedInThisModeError,
