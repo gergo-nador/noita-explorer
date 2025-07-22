@@ -1,6 +1,5 @@
 import { Button, Icon } from '@noita-explorer/noita-component-library';
 import { Flex } from '@noita-explorer/react-utils';
-import { environment } from '../environment.ts';
 import { deployUrls } from '../utils/deployUrls.ts';
 
 export const Credits = () => {
@@ -26,7 +25,7 @@ export const Credits = () => {
         </a>
       </Flex>
 
-      {environment === 'production' && (
+      {__ENV__ === 'production' && (
         <div>
           <br />
           <h2>Beta testing</h2>
@@ -45,7 +44,7 @@ export const Credits = () => {
           </p>
         </div>
       )}
-      {environment === 'preview' && (
+      {__ENV__ === 'preview' && (
         <div>
           <br />
           <h2>Main site</h2>
@@ -63,7 +62,7 @@ export const Credits = () => {
           </p>
         </div>
       )}
-      {environment === 'development' && (
+      {__ENV__ === 'development' && (
         <div>
           <br />
           <h2>Deployed Urls</h2>

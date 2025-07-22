@@ -6,7 +6,6 @@ import { noitaAPI } from '../noita-api.ts';
 import { useSave00Store } from '../stores/save00.ts';
 import { useMemo } from 'react';
 import { Flex } from '@noita-explorer/react-utils';
-import { environment } from '../environment.ts';
 import { dateHelpers } from '@noita-explorer/tools';
 
 export const MainPage = () => {
@@ -54,6 +53,11 @@ export const MainPage = () => {
         </div>
       </Flex>
       <Flex center column gap={5}>
+        <div>
+          <div>{__DEPLOY_COMMIT__}</div>
+          <div>{__DEPLOY_ID__}</div>
+          <div>{__ENV__}</div>
+        </div>
         {noitaAPI.environment.features.launchGame && (
           <Button onClick={() => noitaAPI.noita.launch.master()}>
             Launch Game
@@ -92,11 +96,11 @@ export const MainPage = () => {
         </Button>
         <Button
           disabled={
-            !noitaDataWakLoaded || !currentRun || environment === 'production'
+            !noitaDataWakLoaded || !currentRun || __ENV__ === 'production'
           }
           onClick={() => navigate(pages.currentRun)}
           onDisabledClick={() => {
-            if (environment === 'production') {
+            if (__ENV__ === 'production') {
               toast.info(
                 "This page is still in development. If you want to view it's current state, check out the dev page",
               );
@@ -147,7 +151,7 @@ export const MainPage = () => {
         <Button onClick={() => navigate(pages.holidays)}>Holidays</Button>
         <Button onClick={() => navigate(pages.settings.index)}>Settings</Button>
         <Button onClick={() => navigate(pages.credits)}>Credits</Button>
-        {environment === 'development' && (
+        {__ENV__ === 'development' && (
           <Button onClick={() => navigate(pages.sandbox)}>Sandbox</Button>
         )}
       </Flex>

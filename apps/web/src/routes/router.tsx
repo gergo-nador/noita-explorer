@@ -25,7 +25,6 @@ import { WikiMaterials } from '../pages/wiki/materials/wiki-materials.tsx';
 import { Credits } from '../pages/credits.tsx';
 import { NoitaProgressTrackerSecrets } from '../pages/progress/noita-progress-tracker-secrets.tsx';
 import { NoitaProgressTrackerPillar } from '../pages/progress/noita-progress-tracker-pillar/noita-progress-tracker-pillar.tsx';
-import { environment } from '../environment.ts';
 import { Sandbox } from '../pages/sandbox.tsx';
 import { PageBackground } from '../components/page-background.tsx';
 import { ErrorPage } from '../pages/_errors/error-page.tsx';
@@ -113,7 +112,7 @@ export const router = createBrowserRouter([
               { title: 'Spells', href: pages.wiki.spells },
               { title: 'Enemies', href: pages.wiki.enemies },
               { title: 'Materials', href: pages.wiki.materials },
-              ...(environment !== 'production'
+              ...(__ENV__ !== 'production'
                 ? [
                     {
                       title: 'Materials Tree',

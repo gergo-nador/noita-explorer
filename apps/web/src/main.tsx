@@ -2,7 +2,6 @@ import { StrictMode } from 'react';
 import { createRoot, RootOptions } from 'react-dom/client';
 import './index.css';
 import { App } from './app.tsx';
-import { environment } from './environment.ts';
 import { sentry } from './utils/sentry.ts';
 
 let rootErrorHandling: RootOptions = {
@@ -22,8 +21,8 @@ if (sentry.isSentryEnabled && sentryDsn) {
         Sentry.init({
           dsn: sentryDsn,
           sendDefaultPii: false,
-          debug: environment === 'development',
-          environment: environment,
+          debug: __ENV__ === 'development',
+          environment: __ENV__,
           ignoreErrors: [
             // the user needs to grant permission to access their file system, nothing we can do here
             "Failed to execute 'getDirectoryHandle' on 'FileSystemDirectoryHandle': The request is not allowed by the user agent or the platform in the current context.",

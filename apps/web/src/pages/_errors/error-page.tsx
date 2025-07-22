@@ -2,7 +2,6 @@ import { Flex } from '@noita-explorer/react-utils';
 import { useRouteError } from 'react-router-dom';
 import { Card } from '@noita-explorer/noita-component-library';
 import { Error404 } from './404.tsx';
-import { environment } from '../../environment.ts';
 import { UnknownError } from './unknown-error.tsx';
 import React from 'react';
 
@@ -23,7 +22,7 @@ export const ErrorPage = () => {
       <Card>
         <ErrorComponent />
 
-        {environment !== 'production' && (
+        {__ENV__ !== 'production' && (
           <div style={{ paddingTop: 50, whiteSpace: 'pre' }}>
             Error object (only visible in preview and development):
             <div>{JSON.stringify(error, undefined, 2)}</div>
