@@ -5,7 +5,7 @@ import { execSync } from 'child_process';
 
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
-  const deployIds = getDeployIds();
+  const deployIds = getDeployInfo();
   const environment = getEnvironment({ mode });
 
   return {
@@ -16,8 +16,8 @@ export default defineConfig(({ mode }) => {
       port: 4000,
     },
     define: {
-      __DEPLOY_ID__: JSON.stringify(deployIds.short),
-      __DEPLOY_COMMIT__: JSON.stringify(deployIds.long),
+      __DEPLOY_ID__: JSON.stringify(deployIds.id),
+      __DEPLOY_TIME__: JSON.stringify(deployIds.time),
       __ENV__: JSON.stringify(environment),
     },
 
@@ -35,15 +35,14 @@ export default defineConfig(({ mode }) => {
   };
 });
 
-function getDeployIds() {
+function getDeployInfo() {
   const run = (command: string) => execSync(command).toString().trim();
 
   const commitHashShort = 'git rev-parse --short HEAD';
-  const commitHashLong = 'git rev-parse HEAD';
 
   return {
-    short: run(commitHashShort),
-    long: run(commitHashLong),
+    id: run(commitHashShort),
+    time: new Date().getTime(),
   };
 }
 
