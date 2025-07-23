@@ -1,6 +1,6 @@
 import { PlayerDecorations } from './components/player-decorations.tsx';
 import { Header } from '@noita-explorer/noita-component-library';
-import { ProgressOrbs } from './components/ProgressOrbs.tsx';
+import { ProgressOrbs } from './components/progress-orbs.tsx';
 
 export const NoitaProgressTrackerSecrets = () => {
   return (
