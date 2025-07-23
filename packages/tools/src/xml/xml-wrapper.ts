@@ -28,10 +28,10 @@ export const XmlWrapper = (
 
 const XmlWrapperInternal = ({
   xmlObj,
-  isRoot,
+  isRoot = false,
 }: {
   xmlObj: XmlRootDeclaration | XmlTagDeclaration;
-  isRoot: boolean;
+  isRoot?: boolean;
 }): XmlWrapperType => {
   // extra checks because you never know
   if (xmlObj === undefined) {
@@ -45,18 +45,18 @@ const XmlWrapperInternal = ({
   const findNthTagInternal = (tagName: string, index: number | undefined) => {
     const tag = findNthTag(xmlObj, tagName, index);
     if (tag) {
-      return XmlWrapperInternal({ xmlObj: tag, isRoot: false });
+      return XmlWrapperInternal({ xmlObj: tag });
     }
   };
 
   const findTagArrayInternal = (tagName: string) => {
     const result = findTagArray(xmlObj, tagName);
-    return result.map((t) => XmlWrapperInternal({ xmlObj: t, isRoot: false }));
+    return result.map((t) => XmlWrapperInternal({ xmlObj: t }));
   };
 
   const findAllTagsInternal = (tagName: string) => {
     const result = findAllTagsRecursively(xmlObj, tagName);
-    return result.map((t) => XmlWrapperInternal({ xmlObj: t, isRoot: false }));
+    return result.map((t) => XmlWrapperInternal({ xmlObj: t }));
   };
 
   const getAttributeInternal = (attributeName: string) => {
@@ -95,7 +95,7 @@ const XmlWrapperInternal = ({
     }
 
     const child = addNewChild(xmlObj as XmlTagDeclaration, tagName);
-    return XmlWrapperInternal({ xmlObj: child, isRoot: false });
+    return XmlWrapperInternal({ xmlObj: child });
   };
 
   const addExistingChildNode = (
@@ -121,8 +121,8 @@ const XmlWrapperInternal = ({
   ) => {
     const items = findTagArray(xmlObj, tagName);
     items.sort((a, b) => {
-      const wrapperA = XmlWrapperInternal({ xmlObj: a, isRoot: false });
-      const wrapperB = XmlWrapperInternal({ xmlObj: b, isRoot: false });
+      const wrapperA = XmlWrapperInternal({ xmlObj: a });
+      const wrapperB = XmlWrapperInternal({ xmlObj: b });
 
       return by(wrapperA, wrapperB);
     });
@@ -138,16 +138,32 @@ const XmlWrapperInternal = ({
 
       if (Array.isArray(children)) {
         result[key] = children.map((xml) =>
-          XmlWrapperInternal({ xmlObj: xml, isRoot: false }),
+          XmlWrapperInternal({ xmlObj: xml }),
         );
 
         continue;
       }
 
-      result[key] = [XmlWrapperInternal({ xmlObj: children, isRoot: false })];
+      result[key] = [XmlWrapperInternal({ xmlObj: children })];
     }
 
     return result;
+  };
+
+  const getChild = (tag: string): XmlWrapperType[] | undefined => {
+    if (!isChild(tag)) {
+      return undefined;
+    }
+    if (!(tag in xmlObj)) {
+      return undefined;
+    }
+
+    const child = xmlObj[tag];
+    if (!Array.isArray(child)) {
+      return [XmlWrapperInternal({ xmlObj: child })];
+    }
+
+    return child.map((c) => XmlWrapperInternal({ xmlObj: c }));
   };
 
   const removeFromNodeTree = () => {
@@ -195,6 +211,7 @@ const XmlWrapperInternal = ({
     getAttribute: getAttributeInternal,
     getRequiredAttribute: getRequiredAttributeInternal,
     getTextContent: getTextContentInternal,
+    getChild: getChild,
     getAllChildren: getAllChildren,
     getAllAttributes: getAllAttributes,
     setAttribute: addOrModifyAttributeInternal,

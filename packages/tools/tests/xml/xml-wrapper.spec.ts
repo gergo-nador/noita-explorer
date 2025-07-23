@@ -56,7 +56,7 @@ describe('XmlWrapper', () => {
             <sort_item value="5"></sort_item>
           </sorting>
           <children_element_test value="1" test="2">
-            <child1>Hello</child1>
+            <child1 data-value="2">Hello</child1>
             <child2 data-value="3"/>
             Text content
             <child3>What</child3>
@@ -250,7 +250,7 @@ describe('XmlWrapper', () => {
     ]);
   });
 
-  it('should get all attributes <many_attributes>', () => {
+  it('should get all attributes <many_attributes> children', () => {
     const manyAttributes = xmlWrapper.findNthTag('many_attributes');
     expect(manyAttributes.getAllAttributes()).toStrictEqual({
       attr1: '1',
@@ -259,9 +259,34 @@ describe('XmlWrapper', () => {
     });
   });
 
-  it('should get all attributes <zero_attributes>', () => {
+  it('should get all attributes <zero_attributes> children', () => {
     const zeroAttributes = xmlWrapper.findNthTag('zero_attributes');
     expect(zeroAttributes.getAllAttributes()).toStrictEqual({});
+  });
+
+  it('should get child child1', () => {
+    const childrenElementTest = xmlWrapper.findNthTag('children_element_test');
+    const child1Arr = childrenElementTest.getChild('child1');
+    expect(child1Arr.length).toBe(1);
+
+    const child1 = child1Arr[0];
+    expect(child1.getAttribute('data-value').asInt()).toBe(2);
+    expect(child1.getTextContent()).toBe('Hello');
+  });
+
+  it('should get child child2', () => {
+    const childrenElementTest = xmlWrapper.findNthTag('children_element_test');
+    const child2Arr = childrenElementTest.getChild('child2');
+    expect(child2Arr.length).toBe(1);
+
+    const child2 = child2Arr[0];
+    expect(child2.getAttribute('data-value').asInt()).toBe(3);
+  });
+
+  it('should not get child child_not_existing', () => {
+    const childrenElementTest = xmlWrapper.findNthTag('children_element_test');
+    const child2Arr = childrenElementTest.getChild('child_not_existing');
+    expect(child2Arr).toBeUndefined();
   });
 
   it('should add a new attribute', () => {
