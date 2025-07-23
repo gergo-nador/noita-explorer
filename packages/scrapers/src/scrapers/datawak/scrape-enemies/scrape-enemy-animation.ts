@@ -4,7 +4,6 @@ import {
 } from '@noita-explorer/model';
 import { NoitaScrapedGifWrapper } from '@noita-explorer/model-noita';
 import { scrapeAnimations } from '../../common/scrape-animations/scrape-animations.ts';
-import { noitaPaths } from '../../../noita-paths.ts';
 import { AnimationInfo } from '../../common/scrape-animations/types.ts';
 
 export const scrapeEnemyAnimation = async ({
@@ -17,6 +16,5 @@ export const scrapeEnemyAnimation = async ({
   return scrapeAnimations({
     dataWakParentDirectoryApi,
     animationInfos,
-    animationsPath: noitaPaths.noitaDataWak.entities,
   });
 };

@@ -1,4 +1,5 @@
 import { SpriteAnimation } from '@noita-explorer/model-noita';
+import { FileSystemFileAccess } from '@noita-explorer/model';
 
 export interface AnimationFramesResult {
   animation: SpriteAnimation;
@@ -7,6 +8,7 @@ export interface AnimationFramesResult {
 
 export interface AnimationInfo {
   id: string;
+  file: FileSystemFileAccess;
   layers?: AnimationInfo[];
   imageManipulation?: {
     /**

@@ -109,27 +109,61 @@ export const scrapeDataWakContent = async ({
         'player_hat2',
         'player_hat2_shadow',
       ];
+      const getEnemySpriteFile = async (
+        id: string,
+        type: 'xml' | 'png' = 'xml',
+      ) => {
+        const path = await dataWakParentDirectory.path.join([
+          'data',
+          'enemies_gfx',
+          id + '.' + type,
+        ]);
+        try {
+          return dataWakParentDirectory.getFile(path);
+        } catch {
+          return undefined;
+        }
+      };
 
-      const animationInfos: AnimationInfo[] = [
-        ...enemies.filter((e) => e.id !== 'player').map((e) => ({ id: e.id })),
-        ...extraAnimationIds.map((id) => ({ id })),
-        {
-          id: 'player',
-          layers: [
-            {
-              id: 'player_uv_src',
-              imageManipulation: {
-                reColor: {
-                  _: '#00000000',
-                  // hand end
-                  '#FF00FF': '#DBC067',
-                  // hand
-                  '#FF00FF40': '#7f5476',
-                },
+      const enemySprite: AnimationInfo = {
+        id: 'player',
+        file: (await getEnemySpriteFile('player')) as FileSystemFileAccess,
+        layers: [
+          {
+            id: 'player_uv_src',
+            file: (await getEnemySpriteFile(
+              'player_uv_src',
+              'png',
+            )) as FileSystemFileAccess,
+            imageManipulation: {
+              reColor: {
+                _: '#00000000',
+                // hand end
+                '#FF00FF': '#DBC067',
+                // hand
+                '#FF00FF40': '#7f5476',
               },
             },
-          ],
-        },
+          },
+        ],
+      };
+
+      const ids = [...enemies.map((e) => e.id), ...extraAnimationIds]
+        .filter((e) => e !== 'player')
+        .map(async (e) => {
+          return {
+            id: e,
+            file: (await getEnemySpriteFile(e)) as FileSystemFileAccess,
+          };
+        })
+        .filter(async (e) => {
+          const animation = await e;
+          return animation.file !== undefined;
+        });
+
+      const animationInfos: AnimationInfo[] = [
+        ...(await Promise.all(ids)),
+        enemySprite,
       ];
 
       enemyGifs = await scrape.enemyAnimations({

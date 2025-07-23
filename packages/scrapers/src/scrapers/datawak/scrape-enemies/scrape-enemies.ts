@@ -8,7 +8,11 @@ import {
   NoitaScrapedEnemy,
   NoitaScrapedEnemyVariant,
 } from '@noita-explorer/model-noita';
-import { parseXml, XmlWrapper } from '@noita-explorer/tools/xml';
+import {
+  parseXml,
+  XmlWrapper,
+  XmlWrapperType,
+} from '@noita-explorer/tools/xml';
 import {
   fileSystemAccessHelpers,
   stringHelpers,
@@ -18,6 +22,7 @@ import { noitaPaths } from '../../../noita-paths.ts';
 import { extractEnemyProperties } from './extract-enemy-properties.ts';
 import { calculateEnemyGold } from './calculate-enemy-gold.ts';
 import { mergeXmlBaseFiles } from './merge-xml-base-files.ts';
+import { splitNoitaEntityTags } from '../../common/tags.ts';
 
 /**
  * Scraping all the enemies/animals
@@ -215,13 +220,15 @@ const scrapeEnemyMain = async ({
   extractEnemyProperties({ enemy, entityTag });
 
   // dropped gold
-
   if (enemy.hasGoldDrop) {
     const enemyHpForGold = enemy.maxHp ?? enemy.hp;
     if (enemyHpForGold !== undefined) {
       enemy.goldDrop = calculateEnemyGold(enemyHpForGold);
     }
   }
+
+  // sprites
+  getSprites({ entityTag, id: enemy.id });
 
   // look for variants
   const subDirectories = await entitiesDataDirectory.listDirectories();
@@ -284,4 +291,43 @@ const createVariantEnemy = (
   // @ts-expect-error remove the variants property of the enemy to not copy that over
   delete enemyCopy['variants'];
   return objectHelpers.deepCopy(enemyCopy);
+};
+
+const getSprites = ({
+  entityTag,
+  id,
+}: {
+  entityTag: XmlWrapperType;
+  id: string;
+}) => {
+  let sprites = entityTag.getChild('SpriteComponent');
+
+  if (sprites === undefined) {
+    return;
+  }
+
+  // filter out ui and health-bar sprites
+  sprites = sprites.filter((sprite) => {
+    const tags = sprite.getAttribute('_tags')?.asText();
+    if (tags === undefined) return true;
+
+    const split = splitNoitaEntityTags(tags);
+
+    const notAllowedTags = ['ui', 'health_bar_back', 'health_bar'];
+    return !notAllowedTags.some((tag) => split.includes(tag));
+  });
+
+  if (sprites.length === 0) {
+    console.error(`Enemy ${id} has no sprites after ui filter`);
+    return;
+  }
+
+  if (sprites.length === 1) {
+    // cool
+  }
+
+  // emissive: boolean
+  // additive: boolean
+  // _tags="laser_sight"
+  // visible="0"
 };

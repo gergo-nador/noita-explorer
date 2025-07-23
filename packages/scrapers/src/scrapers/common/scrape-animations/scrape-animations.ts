@@ -1,6 +1,5 @@
 import {
   FileSystemDirectoryAccess,
-  FileSystemFileAccess,
   StringKeyDictionary,
 } from '@noita-explorer/model';
 import {
@@ -20,30 +19,20 @@ import { readImageFromAnimationInfo } from './read-image-from-animation-info.ts'
 export const scrapeAnimations = async ({
   dataWakParentDirectoryApi,
   animationInfos,
-  animationsPath,
 }: {
   dataWakParentDirectoryApi: FileSystemDirectoryAccess;
   animationInfos: AnimationInfo[];
-  animationsPath: string[];
 }): Promise<StringKeyDictionary<NoitaScrapedGifWrapper>> => {
-  const animationsFolderPath =
-    await dataWakParentDirectoryApi.path.join(animationsPath);
-  const animationsFolder =
-    await dataWakParentDirectoryApi.getDirectory(animationsFolderPath);
-  const animationFiles = await animationsFolder.listFiles();
-
   const animationsReturnValue: StringKeyDictionary<NoitaScrapedGifWrapper> = {};
 
   for (const animationInfo of animationInfos) {
     try {
       const animations = await scrapeAnimation({
-        animationFiles,
         animationInfo: animationInfo,
         dataWakParentDirectoryApi,
       });
 
       if (!animations) {
-        console.error('Could not find animation for id ' + animationInfo.id);
         continue;
       }
 
@@ -59,22 +48,14 @@ export const scrapeAnimations = async ({
 const scrapeAnimation = async ({
   animationInfo,
   dataWakParentDirectoryApi,
-  animationFiles,
 }: {
   animationInfo: AnimationInfo;
   dataWakParentDirectoryApi: FileSystemDirectoryAccess;
-  animationFiles: FileSystemFileAccess[];
 }) => {
-  const id = animationInfo.id;
-
   const sprite = await scrapeAnimationXmlDefinition({
-    id: id,
-    animationsFiles: animationFiles,
+    id: animationInfo.id,
+    file: animationInfo.file,
   });
-
-  if (!sprite) {
-    return;
-  }
 
   const animations: NoitaScrapedGifWrapper = {
     gifs: [],
@@ -82,7 +63,6 @@ const scrapeAnimation = async ({
 
   const imageBase64 = await readImageFromAnimationInfo({
     animationInfo: animationInfo,
-    animationFiles: animationFiles,
     sprite: sprite,
     dataWakParentDirectoryApi: dataWakParentDirectoryApi,
   });
