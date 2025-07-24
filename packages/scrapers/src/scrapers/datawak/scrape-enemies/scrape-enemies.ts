@@ -7,6 +7,7 @@ import {
   getDefaultNoitaDamageMultipliers,
   NoitaScrapedEnemy,
   NoitaScrapedEnemyVariant,
+  NoitaScrapedSprite,
 } from '@noita-explorer/model-noita';
 import {
   parseXml,
@@ -112,6 +113,7 @@ export const scrapeEnemies = async ({
         variants: [],
         gameEffects: [],
         tags: [],
+        sprites: undefined,
         debug: {
           fileHierarchy: [],
           imagePath: animal.imagePath,
@@ -228,7 +230,7 @@ const scrapeEnemyMain = async ({
   }
 
   // sprites
-  getSprites({ entityTag, id: enemy.id });
+  enemy.sprites = getSprites({ entityTag });
 
   // look for variants
   const subDirectories = await entitiesDataDirectory.listDirectories();
@@ -295,39 +297,52 @@ const createVariantEnemy = (
 
 const getSprites = ({
   entityTag,
-  id,
 }: {
   entityTag: XmlWrapperType;
-  id: string;
-}) => {
+}): NoitaScrapedSprite[] | undefined => {
   let sprites = entityTag.getChild('SpriteComponent');
 
   if (sprites === undefined) {
     return;
   }
 
-  // filter out ui and health-bar sprites
-  sprites = sprites.filter((sprite) => {
-    const tags = sprite.getAttribute('_tags')?.asText();
-    if (tags === undefined) return true;
+  sprites = sprites
+    // filter out ui, health_bar and laser_sight sprites
+    .filter((sprite) => {
+      const tags = sprite.getAttribute('_tags')?.asText();
+      if (tags === undefined) return true;
 
-    const split = splitNoitaEntityTags(tags);
+      const split = splitNoitaEntityTags(tags);
 
-    const notAllowedTags = ['ui', 'health_bar_back', 'health_bar'];
-    return !notAllowedTags.some((tag) => split.includes(tag));
+      const notAllowedTags = ['ui', 'health_bar_back', 'health_bar', 'l'];
+      return !notAllowedTags.some((tag) => split.includes(tag));
+    })
+    // filter out invisible sprites
+    .filter((sprite) => {
+      const isVisible = sprite.getAttribute('visible')?.asBoolean();
+      return isVisible !== false;
+    })
+    // filter out sprites without image file
+    .filter((sprite) => {
+      const imageFile = sprite.getAttribute('image_file')?.asText();
+      return Boolean(imageFile);
+    })
+    .filter((sprite) => {
+      const fogOfWarHole = sprite.getAttribute('fog_of_war_hole')?.asBoolean();
+      return fogOfWarHole;
+    });
+
+  return sprites.map((sprite): NoitaScrapedSprite => {
+    return {
+      imageFile: sprite.getRequiredAttribute('image_file').asText(),
+      alpha: sprite.getAttribute('alpha')?.asFloat(),
+      additive: sprite.getAttribute('additive')?.asBoolean(),
+      emissive: sprite.getAttribute('emissive')?.asBoolean(),
+      offsetX: sprite.getAttribute('offset_x')?.asInt(),
+      offsetY: sprite.getAttribute('offset_y')?.asInt(),
+    };
   });
-
-  if (sprites.length === 0) {
-    console.error(`Enemy ${id} has no sprites after ui filter`);
-    return;
-  }
-
-  if (sprites.length === 1) {
-    // cool
-  }
 
   // emissive: boolean
   // additive: boolean
-  // _tags="laser_sight"
-  // visible="0"
 };

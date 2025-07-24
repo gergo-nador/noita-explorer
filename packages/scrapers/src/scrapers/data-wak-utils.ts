@@ -45,11 +45,14 @@ export const convertScrapeResultsToDataWak = (
       return [g.sprite.name, noitaEnemyGif] as [string, NoitaEnemyGif];
     });
 
-    return {
+    const enemy = {
       ...e,
       gifs: processedGifs ? Object.fromEntries(processedGifs) : undefined,
       variants: variants,
+      sprites: undefined,
     };
+
+    return enemy;
   });
 
   const now = new Date();

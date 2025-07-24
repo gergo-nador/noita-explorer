@@ -42,5 +42,6 @@ export * from "./scraping/noita-progress-flags";
 export * from "./scraping/noita-scraped-enemy";
 export * from "./scraping/noita-scraped-gif-wrapper";
 export * from "./scraping/noita-scraped-gif";
+export * from "./scraping/noita-scraped-sprite";
 export * from "./scraping/noita-translation";
 export * from "./scraping/noita-wak-data";

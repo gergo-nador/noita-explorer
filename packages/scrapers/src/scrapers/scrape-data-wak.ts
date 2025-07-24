@@ -119,7 +119,7 @@ export const scrapeDataWakContent = async ({
           id + '.' + type,
         ]);
         try {
-          return dataWakParentDirectory.getFile(path);
+          return await dataWakParentDirectory.getFile(path);
         } catch {
           return undefined;
         }
@@ -151,9 +151,11 @@ export const scrapeDataWakContent = async ({
       const ids = [...enemies.map((e) => e.id), ...extraAnimationIds]
         .filter((e) => e !== 'player')
         .map(async (e) => {
+          const file = (await getEnemySpriteFile(e)) as FileSystemFileAccess;
+
           return {
             id: e,
-            file: (await getEnemySpriteFile(e)) as FileSystemFileAccess,
+            file: file,
           };
         })
         .filter(async (e) => {
