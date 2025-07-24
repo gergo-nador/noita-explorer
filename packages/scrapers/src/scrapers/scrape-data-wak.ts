@@ -9,6 +9,7 @@ import {
   NoitaTranslation,
   NoitaWandConfig,
   NoitaScrapedEnemy,
+  NoitaScrapedSprite,
 } from '@noita-explorer/model-noita';
 import {
   FileSystemDirectoryAccess,
@@ -103,74 +104,9 @@ export const scrapeDataWakContent = async ({
   const shouldSkipEnemyGifScraping = enemies.length === 0;
   try {
     if (!shouldSkipEnemyGifScraping) {
-      const extraAnimationIds = [
-        'player_amulet',
-        'player_amulet_gem',
-        'player_hat2',
-        'player_hat2_shadow',
-      ];
-      const getEnemySpriteFile = async (
-        id: string,
-        type: 'xml' | 'png' = 'xml',
-      ) => {
-        const path = await dataWakParentDirectory.path.join([
-          'data',
-          'enemies_gfx',
-          id + '.' + type,
-        ]);
-        try {
-          return await dataWakParentDirectory.getFile(path);
-        } catch {
-          return undefined;
-        }
-      };
-
-      const enemySprite: AnimationInfo = {
-        id: 'player',
-        file: (await getEnemySpriteFile('player')) as FileSystemFileAccess,
-        layers: [
-          {
-            id: 'player_uv_src',
-            file: (await getEnemySpriteFile(
-              'player_uv_src',
-              'png',
-            )) as FileSystemFileAccess,
-            imageManipulation: {
-              reColor: {
-                _: '#00000000',
-                // hand end
-                '#FF00FF': '#DBC067',
-                // hand
-                '#FF00FF40': '#7f5476',
-              },
-            },
-          },
-        ],
-      };
-
-      const ids = [...enemies.map((e) => e.id), ...extraAnimationIds]
-        .filter((e) => e !== 'player')
-        .map(async (e) => {
-          const file = (await getEnemySpriteFile(e)) as FileSystemFileAccess;
-
-          return {
-            id: e,
-            file: file,
-          };
-        })
-        .filter(async (e) => {
-          const animation = await e;
-          return animation.file !== undefined;
-        });
-
-      const animationInfos: AnimationInfo[] = [
-        ...(await Promise.all(ids)),
-        enemySprite,
-      ];
-
-      enemyGifs = await scrape.enemyAnimations({
-        dataWakParentDirectoryApi: dataWakParentDirectory,
-        animationInfos: animationInfos,
+      enemyGifs = await scrapeEnemyGifs({
+        dataWakParentDirectory,
+        enemies,
       });
     }
   } catch (err) {
@@ -283,4 +219,119 @@ export const scrapeDataWakContent = async ({
       error: orbsError,
     },
   };
+};
+
+const scrapeEnemyGifs = async ({
+  dataWakParentDirectory,
+  enemies,
+}: {
+  dataWakParentDirectory: FileSystemDirectoryAccess;
+  enemies: NoitaScrapedEnemy[];
+}) => {
+  const getEnemySpriteFile = async (
+    id: string,
+    type: 'xml' | 'png' = 'xml',
+  ) => {
+    const path = await dataWakParentDirectory.path.join([
+      'data',
+      'enemies_gfx',
+      id + '.' + type,
+    ]);
+    try {
+      return await dataWakParentDirectory.getFile(path);
+    } catch {
+      return undefined;
+    }
+  };
+
+  const extraAnimationIds = [
+    'player_amulet',
+    'player_amulet_gem',
+    'player_hat2',
+    'player_hat2_shadow',
+  ];
+
+  const enemySprite: AnimationInfo = {
+    id: 'player',
+    file: (await getEnemySpriteFile('player')) as FileSystemFileAccess,
+    layers: [
+      {
+        id: 'player_uv_src',
+        file: (await getEnemySpriteFile(
+          'player_uv_src',
+          'png',
+        )) as FileSystemFileAccess,
+        imageManipulation: {
+          reColor: {
+            _: '#00000000',
+            // hand end
+            '#FF00FF': '#DBC067',
+            // hand
+            '#FF00FF40': '#7f5476',
+          },
+        },
+      },
+    ],
+  };
+
+  /*const ids = [...enemies.map((e) => e.id), ...extraAnimationIds]
+    .filter((e) => e !== 'player')
+    .map(async (e) => {
+      const file = await getEnemySpriteFile(e);
+
+      return {
+        id: e,
+        file: file as FileSystemFileAccess,
+      };
+    })
+    .filter(async (e) => {
+      const animation = await e;
+      return animation.file !== undefined;
+    });*/
+
+  const infos = enemies
+    .filter((e) => e.id !== 'player')
+    .map((e): Promise<AnimationInfo> | undefined => {
+      let sprite: NoitaScrapedSprite | undefined = undefined;
+      if (e.sprites?.length === 1) {
+        sprite = e.sprites[0];
+      } else if (e.sprites?.length === 2) {
+        if (e.sprites[0].emissive) {
+          sprite = e.sprites[1];
+        }
+        if (e.sprites[1].emissive) {
+          sprite = e.sprites[0];
+        }
+      }
+
+      if (sprite === undefined) {
+        return;
+      }
+
+      return dataWakParentDirectory.getFile(sprite.imageFile).then((file) => ({
+        id: e.id,
+        file: file,
+      }));
+    })
+    .filter((e) => e !== undefined);
+
+  const allAnimationInfos: AnimationInfo[] = [
+    ...(await Promise.all(infos)),
+    enemySprite,
+    ...(
+      await Promise.all(
+        extraAnimationIds.map((id) =>
+          getEnemySpriteFile(id).then((file) => ({
+            id: id,
+            file: file as FileSystemFileAccess,
+          })),
+        ),
+      )
+    ).filter((e) => e.file !== undefined),
+  ];
+
+  return await scrape.enemyAnimations({
+    dataWakParentDirectoryApi: dataWakParentDirectory,
+    animationInfos: allAnimationInfos,
+  });
 };

@@ -329,7 +329,7 @@ const getSprites = ({
     })
     .filter((sprite) => {
       const fogOfWarHole = sprite.getAttribute('fog_of_war_hole')?.asBoolean();
-      return fogOfWarHole;
+      return !fogOfWarHole;
     });
 
   return sprites.map((sprite): NoitaScrapedSprite => {
