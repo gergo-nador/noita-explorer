@@ -9,7 +9,6 @@ import {
   NoitaTranslation,
   NoitaWandConfig,
   NoitaScrapedEnemy,
-  NoitaScrapedSprite,
 } from '@noita-explorer/model-noita';
 import {
   FileSystemDirectoryAccess,
@@ -274,60 +273,81 @@ const scrapeEnemyGifs = async ({
     ],
   };
 
-  /*const ids = [...enemies.map((e) => e.id), ...extraAnimationIds]
-    .filter((e) => e !== 'player')
-    .map(async (e) => {
-      const file = await getEnemySpriteFile(e);
+  const infos: AnimationInfo[] = [];
+  for (const enemy of enemies) {
+    if (enemy.id === 'player') continue;
 
-      return {
-        id: e,
-        file: file as FileSystemFileAccess,
+    if (!enemy.sprites) {
+      console.log('undefined sprites for enemy ' + enemy.id);
+      continue;
+    }
+
+    const sprites = enemy.sprites.filter((s) => !s.emissive);
+    const emissiveSprites = enemy.sprites.filter((s) => s.emissive);
+
+    if (sprites.length === 0 && !enemy.physicsImageShapes?.length) {
+      console.log(`zero sprites for enemy ` + enemy.id);
+      continue;
+    }
+
+    if (sprites.length !== 1) {
+      console.log(
+        `enemy ${enemy.id} has ${sprites.length} sprites and ${emissiveSprites.length} emissive and ${enemy.physicsImageShapes?.length} phyisics`,
+      );
+      continue;
+    }
+
+    // extra check: <LimbBossComponent state="1"> for
+    // - lukki_tiny
+    // - lukki_longleg
+    // - lukki_creepy_long
+    // - lukki_dark
+    // - boss_meat
+    // - boss_pit
+    // - boss_robot
+    // - parallel_tentacles
+    // - boss_centipede
+
+    const physicsImageShapes = enemy.physicsImageShapes ?? [];
+    if (physicsImageShapes.length > 0) {
+      const imageFilePath = physicsImageShapes[0].imageFile;
+      const imageFile = await dataWakParentDirectory.getFile(imageFilePath);
+      const base64 = await imageFile.read.asImageBase64();
+      // todo save the base64, and maybe assign with a different object (as it is not a gif)
+      continue;
+    }
+
+    const mainSprite = sprites[0];
+
+    if (!mainSprite.imageFile.endsWith('.xml')) {
+      console.log('main sprite does not end with xml: ' + mainSprite.imageFile);
+      continue;
+    }
+
+    try {
+      const animationInfo: AnimationInfo = {
+        id: enemy.id,
+        file: await dataWakParentDirectory.getFile(mainSprite.imageFile),
       };
-    })
-    .filter(async (e) => {
-      const animation = await e;
-      return animation.file !== undefined;
-    });*/
+      infos.push(animationInfo);
+    } catch (err) {
+      console.error(err);
+    }
+  }
 
-  const infos = enemies
-    .filter((e) => e.id !== 'player')
-    .map((e): Promise<AnimationInfo> | undefined => {
-      let sprite: NoitaScrapedSprite | undefined = undefined;
-      if (e.sprites?.length === 1) {
-        sprite = e.sprites[0];
-      } else if (e.sprites?.length === 2) {
-        if (e.sprites[0].emissive) {
-          sprite = e.sprites[1];
-        }
-        if (e.sprites[1].emissive) {
-          sprite = e.sprites[0];
-        }
-      }
-
-      if (sprite === undefined) {
-        return;
-      }
-
-      return dataWakParentDirectory.getFile(sprite.imageFile).then((file) => ({
-        id: e.id,
-        file: file,
-      }));
-    })
-    .filter((e) => e !== undefined);
+  const extraAnimationInfos = await Promise.all(
+    extraAnimationIds.map((id) =>
+      getEnemySpriteFile(id).then((file) => ({
+        id: id,
+        file: file as FileSystemFileAccess,
+      })),
+    ),
+  );
 
   const allAnimationInfos: AnimationInfo[] = [
-    ...(await Promise.all(infos)),
+    ...infos,
     enemySprite,
-    ...(
-      await Promise.all(
-        extraAnimationIds.map((id) =>
-          getEnemySpriteFile(id).then((file) => ({
-            id: id,
-            file: file as FileSystemFileAccess,
-          })),
-        ),
-      )
-    ).filter((e) => e.file !== undefined),
+    ...extraAnimationInfos,
   ];
 
   return await scrape.enemyAnimations({

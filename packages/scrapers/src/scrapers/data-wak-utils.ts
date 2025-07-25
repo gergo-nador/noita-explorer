@@ -29,7 +29,12 @@ export const convertScrapeResultsToDataWak = (
   const enemies: NoitaEnemy[] = scrapedEnemies.map((e): NoitaEnemy => {
     const variants: NoitaEnemyVariant[] = e.variants.map((v) => ({
       ...v,
-      enemy: { ...v.enemy, gifs: undefined },
+      enemy: {
+        ...v.enemy,
+        gifs: undefined,
+        physicsImageShapes: undefined,
+        sprites: undefined,
+      },
     }));
 
     const scrapedGif: NoitaScrapedGifWrapper | undefined = enemyGifs[e.id];
@@ -50,6 +55,7 @@ export const convertScrapeResultsToDataWak = (
       gifs: processedGifs ? Object.fromEntries(processedGifs) : undefined,
       variants: variants,
       sprites: undefined,
+      physicsImageShapes: undefined,
     };
 
     return enemy;

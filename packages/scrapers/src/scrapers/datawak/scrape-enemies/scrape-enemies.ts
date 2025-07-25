@@ -8,6 +8,7 @@ import {
   NoitaScrapedEnemy,
   NoitaScrapedEnemyVariant,
   NoitaScrapedSprite,
+  NoitaScrapedPhysicsImageShapeComponent,
 } from '@noita-explorer/model-noita';
 import {
   parseXml,
@@ -114,6 +115,7 @@ export const scrapeEnemies = async ({
         gameEffects: [],
         tags: [],
         sprites: undefined,
+        physicsImageShapes: undefined,
         debug: {
           fileHierarchy: [],
           imagePath: animal.imagePath,
@@ -231,6 +233,7 @@ const scrapeEnemyMain = async ({
 
   // sprites
   enemy.sprites = getSprites({ entityTag });
+  enemy.physicsImageShapes = getPhysicsImageShapeComponents({ entityTag });
 
   // look for variants
   const subDirectories = await entitiesDataDirectory.listDirectories();
@@ -342,7 +345,25 @@ const getSprites = ({
       offsetY: sprite.getAttribute('offset_y')?.asInt(),
     };
   });
+};
 
-  // emissive: boolean
-  // additive: boolean
+const getPhysicsImageShapeComponents = ({
+  entityTag,
+}: {
+  entityTag: XmlWrapperType;
+}): NoitaScrapedPhysicsImageShapeComponent[] | undefined => {
+  const physicsImageShapes = entityTag.getChild('PhysicsImageShapeComponent');
+
+  if (physicsImageShapes === undefined) {
+    return;
+  }
+
+  return physicsImageShapes.map(
+    (s): NoitaScrapedPhysicsImageShapeComponent => ({
+      imageFile: s.getRequiredAttribute('image_file').asText(),
+      offsetX: s.getAttribute('offset_x')?.asInt(),
+      offsetY: s.getAttribute('offset_y')?.asInt(),
+      material: s.getAttribute('material')?.asText(),
+    }),
+  );
 };
