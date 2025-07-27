@@ -116,6 +116,17 @@ async function overlayImages(
     overlayBlendModeMap[options?.blendMode ?? 'source_over'] ??
     BlendMode.SRC_OVER;
 
+  if (options?.destinationPosition === 'below') {
+    const image = new Jimp({
+      width: background.width,
+      height: background.height,
+      color: 0x00000000,
+    });
+    image.composite(overlay, 0, 0);
+    image.composite(background, 0, 0, { mode: blendMode, opacitySource: 1.0 });
+    return await jimpToBase64(image);
+  }
+
   background.composite(overlay, 0, 0, {
     mode: blendMode,
     opacitySource: 1.0,

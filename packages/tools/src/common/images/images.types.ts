@@ -10,6 +10,11 @@ export type PixelColorOptions = Record<string | '_', string>;
 export type OverlayBlendMode = 'source_over' | 'additive' | 'overlay';
 export interface OverlayOptions {
   blendMode?: OverlayBlendMode;
+  /**
+   * - `below`: destination image is below source
+   * - `over`: destination image is over source (default)
+   */
+  destinationPosition?: 'below' | 'over';
   opacitySource?: number;
   opacityDestination?: number;
 }

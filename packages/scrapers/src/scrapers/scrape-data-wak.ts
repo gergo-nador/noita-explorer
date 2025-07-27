@@ -309,17 +309,20 @@ const scrapeEnemyMedia = async ({
       continue;
     }
 
-    const sprites = enemy.sprites
+    const mainSprite = enemy.sprites[0];
+    const remainingSprites = enemy.sprites.slice(1);
+
+    const sprites = remainingSprites
       .filter((s) => !s.additive)
       .filter((s) => !s.tags.includes('gun'));
-    const additiveSprites = enemy.sprites.filter((s) => s.additive);
+    const additiveSprites = remainingSprites.filter(
+      (s) => s.additive || mainSprite.additive,
+    );
 
     if (sprites.length > 1) {
       console.log(`enemy ${enemy.id} has ${sprites.length} sprites`);
       continue;
     }
-
-    const mainSprite = sprites[0] ?? additiveSprites[0];
 
     if (mainSprite === undefined) {
       console.log('Main sprite undefined for id: ' + enemy.id);
@@ -335,7 +338,7 @@ const scrapeEnemyMedia = async ({
 
     {
       // guns
-      const guns = enemy.sprites
+      const guns = remainingSprites
         .filter((s) => s.tags.includes('gun'))
         .map(
           async (gun): Promise<AnimationInfoLayer> => ({
@@ -349,12 +352,7 @@ const scrapeEnemyMedia = async ({
       layers = layers.concat(await Promise.all(guns));
     }
     {
-      // additive
-      const additiveSpritesFiltered =
-        sprites.length > 0 ? additiveSprites : additiveSprites.slice(1);
-
-      const additive = additiveSpritesFiltered
-        .filter((s) => s.additive)
+      const additive = additiveSprites
         // sort by z-index
         .sort((a, b) => {
           const zIndexA = a.zIndex;
@@ -371,7 +369,7 @@ const scrapeEnemyMedia = async ({
             id: s.imageFile,
             file: await dataWakParentDirectory.getFile(s.imageFile),
             overlayOptions: {
-              blendMode: 'overlay',
+              blendMode: 'source_over',
             },
           }),
         );
