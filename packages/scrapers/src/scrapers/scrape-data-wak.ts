@@ -289,18 +289,6 @@ const scrapeEnemyMedia = async ({
     const sprites = enemy.sprites.filter((s) => !s.emissive);
     const emissiveSprites = enemy.sprites.filter((s) => s.emissive);
 
-    if (sprites.length === 0 && !enemy.physicsImageShapes?.length) {
-      console.log(`zero sprites for enemy ` + enemy.id);
-      continue;
-    }
-
-    if (sprites.length > 1) {
-      console.log(
-        `enemy ${enemy.id} has ${sprites.length} sprites and ${emissiveSprites.length} emissive and ${enemy.physicsImageShapes?.length} phyisics`,
-      );
-      continue;
-    }
-
     // extra check: <LimbBossComponent state="1"> for
     // - lukki_tiny
     // - lukki_longleg
@@ -331,7 +319,19 @@ const scrapeEnemyMedia = async ({
       continue;
     }
 
-    const mainSprite = sprites[0];
+    if (sprites.length === 0 && emissiveSprites.length === 0) {
+      console.log(`zero sprites for enemy ` + enemy.id);
+      continue;
+    }
+
+    if (sprites.length > 1) {
+      console.log(
+        `enemy ${enemy.id} has ${sprites.length} sprites and ${emissiveSprites.length} emissive`,
+      );
+      continue;
+    }
+
+    const mainSprite = sprites[0] ?? emissiveSprites[0];
 
     if (!mainSprite.imageFile.endsWith('.xml')) {
       console.log('main sprite does not end with xml: ' + mainSprite.imageFile);
