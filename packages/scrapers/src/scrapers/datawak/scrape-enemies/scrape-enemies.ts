@@ -323,7 +323,8 @@ const getSprites = ({
     // filter out invisible sprites
     .filter((sprite) => {
       const isVisible = sprite.getAttribute('visible')?.asBoolean();
-      return isVisible !== false;
+      const alpha = sprite.getAttribute('alpha')?.asFloat();
+      return isVisible !== false && alpha !== 0;
     })
     // filter out sprites without image file
     .filter((sprite) => {
