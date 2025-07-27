@@ -50,16 +50,5 @@ export const readImageFromAnimationInfo = async ({
     );
   }
 
-  if (animationInfo.layers) {
-    for (const layer of animationInfo.layers) {
-      const image = await readImageFromAnimationInfo({
-        animationInfo: layer,
-        dataWakParentDirectoryApi: dataWakParentDirectoryApi,
-      });
-
-      imageBase64 = await imageHelpers.overlayImages(imageBase64, image);
-    }
-  }
-
   return imageBase64;
 };

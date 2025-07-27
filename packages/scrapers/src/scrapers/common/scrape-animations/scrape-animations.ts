@@ -5,6 +5,7 @@ import {
 import {
   base64Helpers,
   gifHelpers,
+  imageHelpers,
   stringHelpers,
 } from '@noita-explorer/tools';
 import {
@@ -52,25 +53,14 @@ const scrapeAnimation = async ({
   animationInfo: AnimationInfo;
   dataWakParentDirectoryApi: FileSystemDirectoryAccess;
 }) => {
-  const sprite = await scrapeAnimationXmlDefinition({
-    id: animationInfo.id,
-    file: animationInfo.file,
-  });
-
   const animations: NoitaScrapedMediaGif = {
     type: 'gif',
     gifs: [],
   };
 
-  const imageBase64 = await readImageFromAnimationInfo({
-    animationInfo: animationInfo,
-    sprite: sprite,
+  const { framesResults } = await assembleAnimationFrames({
+    info: animationInfo,
     dataWakParentDirectoryApi: dataWakParentDirectoryApi,
-  });
-
-  const framesResults = await scrapeAnimationFrames({
-    sprite: sprite,
-    imageBase64: imageBase64,
   });
 
   for (const framesResult of framesResults) {
@@ -97,4 +87,67 @@ const scrapeAnimation = async ({
     animations.gifs.push(gif);
   }
   return animations;
+};
+
+const assembleAnimationFrames = async ({
+  info,
+  dataWakParentDirectoryApi,
+}: {
+  info: AnimationInfo;
+  dataWakParentDirectoryApi: FileSystemDirectoryAccess;
+}) => {
+  const sprite = await scrapeAnimationXmlDefinition({
+    id: info.id,
+    file: info.file,
+  });
+
+  const imageBase64 = await readImageFromAnimationInfo({
+    animationInfo: info,
+    sprite: sprite,
+    dataWakParentDirectoryApi: dataWakParentDirectoryApi,
+  });
+
+  const framesResults = await scrapeAnimationFrames({
+    sprite: sprite,
+    imageBase64: imageBase64,
+  });
+
+  if (!info.layers) {
+    return { framesResults, sprite };
+  }
+
+  for (const layer of info.layers) {
+    const { framesResults: layerFrameResults, sprite: layerSprite } =
+      await assembleAnimationFrames({
+        info: layer,
+        dataWakParentDirectoryApi,
+      });
+
+    for (const animation of framesResults) {
+      // get the matching layer animation
+      let layerAnimation = layerFrameResults.find(
+        (a) => a.animation.name === animation.animation.name,
+      );
+
+      // or the default animation if the matching animation does not exist
+      layerAnimation ??= layerFrameResults.find(
+        (a) => a.animation.name === layerSprite.defaultAnimation,
+      );
+
+      if (layerAnimation === undefined) continue;
+
+      for (let i = 0; i < animation.frameImages.length; i++) {
+        const mainFrame = animation.frameImages[i];
+        const layerFrame =
+          layerAnimation.frameImages[i % layerAnimation.frameImages.length];
+
+        animation.frameImages[i] = await imageHelpers.overlayImages(
+          mainFrame,
+          layerFrame,
+        );
+      }
+    }
+  }
+
+  return { framesResults, sprite };
 };
