@@ -1,10 +1,8 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import * as dotenv from 'dotenv';
-// @ts-expect-error no esModuleInterop error pls, it works
 import minimist from 'minimist';
-// @ts-expect-error no esModuleInterop error pls, it works
-import process from 'node:process';
+import * as process from 'node:process';
 
 /**
  * This process downloads the data.wak and the common.csv files

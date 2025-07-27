@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "prebuild": "sh scripts/ci.sh",
+    "prebuild": "tsc -p tsconfig.ci.json && sh scripts/ci.sh",
     "build": "tsc -b && vite build",
     "postbuild": "sh scripts/ci-post.sh",
     "lint": "eslint .",

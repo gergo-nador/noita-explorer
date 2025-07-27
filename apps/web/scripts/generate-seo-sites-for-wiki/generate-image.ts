@@ -1,6 +1,5 @@
-// @ts-expect-error it says sharp cannot be imported this way, but it can be?
-//                  at least it works
 import sharp from 'sharp';
+import { WithImplicitCoercion } from 'buffer';
 
 export const generateImage = async ({
   base64,
@@ -15,7 +14,10 @@ export const generateImage = async ({
 }) => {
   try {
     const uri = base64.split(';base64,').pop();
-    const imgBuffer = Buffer.from(uri, 'base64');
+    const imgBuffer = Buffer.from(
+      uri as WithImplicitCoercion<string>,
+      'base64',
+    );
     await sharp(imgBuffer)
       .resize(width, height, {
         kernel: 'nearest',

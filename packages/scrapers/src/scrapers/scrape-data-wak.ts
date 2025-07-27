@@ -4,11 +4,13 @@ import {
   NoitaMaterial,
   NoitaMaterialReaction,
   NoitaPerk,
-  NoitaScrapedGifWrapper,
   NoitaSpell,
   NoitaTranslation,
   NoitaWandConfig,
   NoitaScrapedEnemy,
+  NoitaScrapedMedia,
+  NoitaScrapedMediaGif,
+  NoitaScrapedMediaImage,
 } from '@noita-explorer/model-noita';
 import {
   FileSystemDirectoryAccess,
@@ -46,7 +48,7 @@ export const scrapeDataWak = async ({
       },
       enemies: statusSkipped,
       orbGifs: statusSkipped,
-      enemyGifs: statusSkipped,
+      enemyMedia: statusSkipped,
       perks: statusSkipped,
       spells: statusSkipped,
       wandConfigs: statusSkipped,
@@ -98,12 +100,12 @@ export const scrapeDataWakContent = async ({
     enemiesError = err;
   }
 
-  let enemyGifs: StringKeyDictionary<NoitaScrapedGifWrapper> = {};
+  let enemyMedia: StringKeyDictionary<NoitaScrapedMedia> = {};
   let enemyGifErrors: unknown | undefined = undefined;
-  const shouldSkipEnemyGifScraping = enemies.length === 0;
+  const shouldSkipEnemyMediaScraping = enemies.length === 0;
   try {
-    if (!shouldSkipEnemyGifScraping) {
-      enemyGifs = await scrapeEnemyGifs({
+    if (!shouldSkipEnemyMediaScraping) {
+      enemyMedia = await scrapeEnemyMedia({
         dataWakParentDirectory,
         enemies,
       });
@@ -136,7 +138,7 @@ export const scrapeDataWakContent = async ({
     materialError = err;
   }
 
-  let orbs: StringKeyDictionary<NoitaScrapedGifWrapper> = {};
+  let orbs: StringKeyDictionary<NoitaScrapedMediaGif> = {};
   let orbsError: unknown | undefined = undefined;
   try {
     orbs = await scrape.orbAnimations({
@@ -176,13 +178,13 @@ export const scrapeDataWakContent = async ({
       data: enemies,
       error: enemiesError,
     },
-    enemyGifs: {
-      status: shouldSkipEnemyGifScraping
+    enemyMedia: {
+      status: shouldSkipEnemyMediaScraping
         ? NoitaDataWakScrapeResultStatus.SKIPPED
-        : enemyGifs === undefined
+        : enemyMedia === undefined
           ? NoitaDataWakScrapeResultStatus.SUCCESS
           : NoitaDataWakScrapeResultStatus.FAILED,
-      data: enemyGifs,
+      data: enemyMedia,
       error: enemyGifErrors,
     },
     wandConfigs: {
@@ -220,13 +222,13 @@ export const scrapeDataWakContent = async ({
   };
 };
 
-const scrapeEnemyGifs = async ({
+const scrapeEnemyMedia = async ({
   dataWakParentDirectory,
   enemies,
 }: {
   dataWakParentDirectory: FileSystemDirectoryAccess;
   enemies: NoitaScrapedEnemy[];
-}) => {
+}): Promise<StringKeyDictionary<NoitaScrapedMedia>> => {
   const getEnemySpriteFile = async (
     id: string,
     type: 'xml' | 'png' = 'xml',
@@ -273,6 +275,7 @@ const scrapeEnemyGifs = async ({
     ],
   };
 
+  const enemyScrapedMedia: StringKeyDictionary<NoitaScrapedMedia> = {};
   const infos: AnimationInfo[] = [];
   for (const enemy of enemies) {
     if (enemy.id === 'player') continue;
@@ -290,7 +293,7 @@ const scrapeEnemyGifs = async ({
       continue;
     }
 
-    if (sprites.length !== 1) {
+    if (sprites.length > 1) {
       console.log(
         `enemy ${enemy.id} has ${sprites.length} sprites and ${emissiveSprites.length} emissive and ${enemy.physicsImageShapes?.length} phyisics`,
       );
@@ -312,8 +315,15 @@ const scrapeEnemyGifs = async ({
     if (physicsImageShapes.length > 0) {
       const imageFilePath = physicsImageShapes[0].imageFile;
       const imageFile = await dataWakParentDirectory.getFile(imageFilePath);
+
       const base64 = await imageFile.read.asImageBase64();
-      // todo save the base64, and maybe assign with a different object (as it is not a gif)
+      const imageMedia: NoitaScrapedMediaImage = {
+        type: 'image',
+        imageType: 'physics',
+        imageBase64: base64,
+      };
+
+      enemyScrapedMedia[enemy.id] = imageMedia;
       continue;
     }
 
@@ -350,8 +360,10 @@ const scrapeEnemyGifs = async ({
     ...extraAnimationInfos,
   ];
 
-  return await scrape.enemyAnimations({
+  const animations = await scrape.enemyAnimations({
     dataWakParentDirectoryApi: dataWakParentDirectory,
     animationInfos: allAnimationInfos,
   });
+
+  return { ...enemyScrapedMedia, ...animations };
 };

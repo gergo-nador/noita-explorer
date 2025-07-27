@@ -1,7 +1,6 @@
 import { scrapeDataWak, scrapeUtils } from '@noita-explorer/scrapers';
 import * as fs from 'fs';
 import * as path from 'path';
-// @ts-expect-error no esModuleInterop error pls, it works
 import minimist from 'minimist';
 import * as process from 'node:process';
 import { Buffer } from 'buffer';
@@ -72,7 +71,7 @@ async function runScrape(args: Record<string, string>) {
 
   const dataWak = scrapeUtils.convertScrapeResultsToDataWak(dataWakResult);
 
-  const enemyGifs = dataWakResult.enemyGifs.data;
+  const enemyMedia = dataWakResult.enemyMedia.data;
   const orbGifs = dataWakResult.orbGifs.data;
 
   {
@@ -85,7 +84,7 @@ async function runScrape(args: Record<string, string>) {
   {
     const outputGifs = path.resolve(args['o-gif']);
     const jsonGifs = JSON.stringify({
-      'enemy-gifs': enemyGifs,
+      'enemy-media': enemyMedia,
       'orb-gifs': orbGifs,
     });
 

@@ -9,7 +9,7 @@ import {
 } from '@noita-explorer/tools';
 import {
   NoitaScrapedGif,
-  NoitaScrapedGifWrapper,
+  NoitaScrapedMediaGif,
 } from '@noita-explorer/model-noita';
 import { scrapeAnimationFrames } from './scrape-animation-frames.ts';
 import { scrapeAnimationXmlDefinition } from './scrape-animation-xml-definition.ts';
@@ -22,8 +22,8 @@ export const scrapeAnimations = async ({
 }: {
   dataWakParentDirectoryApi: FileSystemDirectoryAccess;
   animationInfos: AnimationInfo[];
-}): Promise<StringKeyDictionary<NoitaScrapedGifWrapper>> => {
-  const animationsReturnValue: StringKeyDictionary<NoitaScrapedGifWrapper> = {};
+}): Promise<StringKeyDictionary<NoitaScrapedMediaGif>> => {
+  const animationsReturnValue: StringKeyDictionary<NoitaScrapedMediaGif> = {};
 
   for (const animationInfo of animationInfos) {
     try {
@@ -57,7 +57,8 @@ const scrapeAnimation = async ({
     file: animationInfo.file,
   });
 
-  const animations: NoitaScrapedGifWrapper = {
+  const animations: NoitaScrapedMediaGif = {
+    type: 'gif',
     gifs: [],
   };
 

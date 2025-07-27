@@ -1,14 +1,16 @@
 import * as dotenv from 'dotenv';
 import * as fs from 'fs';
 import * as path from 'node:path';
-import { NoitaScrapedGifWrapper } from '@noita-explorer/model-noita';
 import { StringKeyDictionary } from '@noita-explorer/model';
 import { base64Helpers } from '@noita-explorer/tools';
 import { Buffer } from 'buffer';
-// @ts-expect-error no esModuleInterop error pls, it works
 import minimist from 'minimist';
-// @ts-expect-error no esModuleInterop error pls, it works
 import process from 'node:process';
+import {
+  NoitaScrapedMedia,
+  NoitaScrapedMediaGif,
+  NoitaScrapedMediaImage,
+} from '@noita-explorer/model-noita';
 
 /**
  * Generate gifs from the scraped data.wak content.
@@ -36,17 +38,20 @@ if (!outputFolder) {
   process.exit(1);
 }
 
-const noitaGif = readNoitaGif();
-if (!noitaGif) {
+const noitaMedia = readNoitaMedia();
+if (!noitaMedia) {
+  console.error(dataGifJsonPath + ' does not exist');
   process.exit(1);
 }
 
-for (const [key, gifCollection] of Object.entries(noitaGif)) {
+for (const [key, mediaCollection] of Object.entries(noitaMedia)) {
   console.log('Generating gifs ' + key);
-  generateGifs(key, gifCollection);
+  generateMedia(key, mediaCollection);
 }
 
-function readNoitaGif() {
+function readNoitaMedia():
+  | StringKeyDictionary<StringKeyDictionary<NoitaScrapedMedia>>
+  | undefined {
   const noitaGifPath = dataGifJsonPath;
 
   const noitaGifExists = fs.existsSync(noitaGifPath);
@@ -58,46 +63,79 @@ function readNoitaGif() {
   try {
     const gifBuffer = fs.readFileSync(noitaGifPath);
     const gifString = gifBuffer.toString('utf8');
-    const gifJson: StringKeyDictionary<
-      StringKeyDictionary<NoitaScrapedGifWrapper>
-    > = JSON.parse(gifString);
+    // orb-gifs and enemy-gifs form the top level StringKeyDict
+    const gifJson: StringKeyDictionary<StringKeyDictionary<NoitaScrapedMedia>> =
+      JSON.parse(gifString);
 
     return gifJson;
   } catch (error) {
     console.error('Error reading or parsing noita_data_gifs.json:', error);
-    return null;
+    return undefined;
   }
 }
 
-function generateGifs(
+function generateMedia(
   key: string,
-  gifs: StringKeyDictionary<NoitaScrapedGifWrapper>,
+  mediaDict: StringKeyDictionary<NoitaScrapedMedia>,
 ) {
   const fsPath = path.resolve(outputFolder, 'g', key);
   fs.mkdirSync(fsPath, { recursive: true });
 
-  for (const [id, gifCollection] of Object.entries(gifs)) {
-    const gifPath = path.resolve(fsPath, id);
-    fs.mkdirSync(gifPath, { recursive: true });
+  for (const [id, media] of Object.entries(mediaDict)) {
+    const mediaPath = path.resolve(fsPath, id);
+    fs.mkdirSync(mediaPath, { recursive: true });
 
-    for (const gif of gifCollection.gifs) {
-      const gifFileName = path.resolve(gifPath, `${gif.animationId}.gif`);
-      const firstFrameFileName = path.resolve(
-        gifPath,
-        `${gif.animationId}-f.png`,
-      );
-
-      const gifBuffer = Buffer.from(
-        base64Helpers.trimMetadata(gif.buffer),
-        'base64',
-      );
-      fs.writeFileSync(gifFileName, gifBuffer);
-
-      const firstFrameBuffer = Buffer.from(
-        base64Helpers.trimMetadata(gif.firstFrame),
-        'base64',
-      );
-      fs.writeFileSync(firstFrameFileName, firstFrameBuffer);
+    if (media.type === 'image') {
+      generateImage({ fsPath: mediaPath, media: media });
+    } else if (media.type === 'gif') {
+      generateGifs({ fsPath: mediaPath, media: media });
     }
+  }
+}
+
+function generateImage({
+  fsPath,
+  media,
+}: {
+  fsPath: string;
+  media: NoitaScrapedMediaImage;
+}) {
+  const imagesPath = path.resolve(fsPath, 'images');
+  fs.mkdirSync(imagesPath, { recursive: true });
+
+  const imageFilePath = path.resolve(imagesPath, media.imageType + '.png');
+  const base64 = base64Helpers.trimMetadata(media.imageBase64);
+  const buffer = Buffer.from(base64, 'base64');
+  fs.writeFileSync(imageFilePath, buffer);
+}
+
+function generateGifs({
+  fsPath,
+  media,
+}: {
+  fsPath: string;
+  media: NoitaScrapedMediaGif;
+}) {
+  const gifPath = path.resolve(fsPath, 'gifs');
+  fs.mkdirSync(gifPath, { recursive: true });
+
+  for (const gif of media.gifs) {
+    const gifFileName = path.resolve(gifPath, `${gif.animationId}.gif`);
+    const firstFrameFileName = path.resolve(
+      gifPath,
+      `${gif.animationId}-f.png`,
+    );
+
+    const gifBuffer = Buffer.from(
+      base64Helpers.trimMetadata(gif.buffer),
+      'base64',
+    );
+    fs.writeFileSync(gifFileName, gifBuffer);
+
+    const firstFrameBuffer = Buffer.from(
+      base64Helpers.trimMetadata(gif.firstFrame),
+      'base64',
+    );
+    fs.writeFileSync(firstFrameFileName, firstFrameBuffer);
   }
 }
