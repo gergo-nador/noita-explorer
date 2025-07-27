@@ -1,4 +1,4 @@
-import { NoitaDamageMultipliers } from '../noita-damage-multiplier.ts';
+import { NoitaDamageMultipliers } from '../enemy/noita-damage-multiplier.ts';
 
 export interface NoitaDamageModel {
   airInLungs: number | undefined;

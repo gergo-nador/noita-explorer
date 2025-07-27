@@ -6,9 +6,7 @@ import { deployUrls } from '../../src/utils/deployUrls';
 import * as dotenv from 'dotenv';
 import * as path from 'node:path';
 import { generateImage } from './generate-image';
-// @ts-expect-error no esModuleInterop error pls, it works
 import minimist from 'minimist';
-// @ts-expect-error no esModuleInterop error pls, it works
 import process from 'node:process';
 
 /**

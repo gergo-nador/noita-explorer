@@ -4,21 +4,12 @@ import { parseAnimationXml } from './parse-animation-xml.ts';
 
 export const scrapeAnimationXmlDefinition = async ({
   id,
-  animationsFiles,
+  file,
 }: {
   id: string;
-  animationsFiles: FileSystemFileAccess[];
+  file: FileSystemFileAccess;
 }) => {
-  const xmlFilePath = id + '.xml';
-  const xmlFile = animationsFiles.find(
-    (file) => file.getName() === xmlFilePath,
-  );
-
-  if (!xmlFile) {
-    return undefined;
-  }
-
-  const xmlText = await xmlFile.read.asText();
+  const xmlText = await file.read.asText();
   const parsedXml = await parseXml(xmlText);
   const xml = XmlWrapper(parsedXml);
 

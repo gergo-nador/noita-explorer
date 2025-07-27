@@ -256,30 +256,30 @@ Issue: Sprite split into multiple layers, need to merge them before as they shou
 </SpriteComponent>
 ```
 
-3 sprite components for turret_right - turret, laser, emissive
-3 sprite components for lukki - main, emissive, wiggle
-3 sprite components for missilecrab - main, laser, emissive
-3 sprite components for tank - main, emissive, gun
-3 sprite components for tank_super - main emissive gun
-3 sprite components for wraith_storm - main, fog of war, circle
-4 sprite components for tank_rocket - main, rocket, emissive, laser
-6 sprite components for boss_limbs - body, eye1, eye2 (upper case file name), skull, health bar
-5 sprite components for boss_ghost - body eye pupil, health bar
-6 sprite components for boss_wizard - body head helmet hand, health bar
+- 3 sprite components for turret_right - turret, laser, emissive
+- 3 sprite components for lukki - main, emissive, wiggle
+- 3 sprite components for missilecrab - main, laser, emissive
+- 3 sprite components for tank - main, emissive, gun
+- 3 sprite components for tank_super - main emissive gun
+- 3 sprite components for wraith_storm - main, fog of war, circle
+- 4 sprite components for tank_rocket - main, rocket, emissive, laser
+- 6 sprite components for boss_limbs - body, eye1, eye2 (upper case file name), skull, health bar
+- 5 sprite components for boss_ghost - body eye pupil, health bar
+- 6 sprite components for boss_wizard - body head helmet hand, health bar
 
 
 
 Many parts - Wormlike
-13 sprite components for boss_dragon - head body tail, health bar
-5 sprite components for eel - head body body body tail
-8 sprite components for fish_giga - eye, body, tentacles, health bar
-9 sprite components for meatmaggot - head, body x 7, tail
-6 sprite components for worm - head body tail
-9 sprite components for worm_big - head body tail, health bar
-15 sprite components for worm_end - head, body x 13, tail
-15 sprite components for worm_skull - head body tail
-7 sprite components for worm_tiny - head body tail
-24 sprite components for maggot_tiny - head body tail, health bar, emissive head, emissive body, emissive tail
+- 13 sprite components for boss_dragon - head body tail, health bar
+- 5 sprite components for eel - head body body body tail
+- 8 sprite components for fish_giga - eye, body, tentacles, health bar
+- 9 sprite components for meatmaggot - head, body x 7, tail
+- 6 sprite components for worm - head body tail
+- 9 sprite components for worm_big - head body tail, health bar
+- 15 sprite components for worm_end - head, body x 13, tail
+- 15 sprite components for worm_skull - head body tail
+- 7 sprite components for worm_tiny - head body tail
+- 24 sprite components for maggot_tiny - head body tail, health bar, emissive head, emissive body, emissive tail
 
 
 ## Single behaviors

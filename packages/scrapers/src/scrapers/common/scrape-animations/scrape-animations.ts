@@ -1,16 +1,17 @@
 import {
   FileSystemDirectoryAccess,
-  FileSystemFileAccess,
   StringKeyDictionary,
 } from '@noita-explorer/model';
 import {
   base64Helpers,
   gifHelpers,
+  imageHelpers,
   stringHelpers,
 } from '@noita-explorer/tools';
 import {
   NoitaScrapedGif,
-  NoitaScrapedGifWrapper,
+  NoitaScrapedMediaGif,
+  Sprite,
 } from '@noita-explorer/model-noita';
 import { scrapeAnimationFrames } from './scrape-animation-frames.ts';
 import { scrapeAnimationXmlDefinition } from './scrape-animation-xml-definition.ts';
@@ -20,30 +21,20 @@ import { readImageFromAnimationInfo } from './read-image-from-animation-info.ts'
 export const scrapeAnimations = async ({
   dataWakParentDirectoryApi,
   animationInfos,
-  animationsPath,
 }: {
   dataWakParentDirectoryApi: FileSystemDirectoryAccess;
   animationInfos: AnimationInfo[];
-  animationsPath: string[];
-}): Promise<StringKeyDictionary<NoitaScrapedGifWrapper>> => {
-  const animationsFolderPath =
-    await dataWakParentDirectoryApi.path.join(animationsPath);
-  const animationsFolder =
-    await dataWakParentDirectoryApi.getDirectory(animationsFolderPath);
-  const animationFiles = await animationsFolder.listFiles();
-
-  const animationsReturnValue: StringKeyDictionary<NoitaScrapedGifWrapper> = {};
+}): Promise<StringKeyDictionary<NoitaScrapedMediaGif>> => {
+  const animationsReturnValue: StringKeyDictionary<NoitaScrapedMediaGif> = {};
 
   for (const animationInfo of animationInfos) {
     try {
       const animations = await scrapeAnimation({
-        animationFiles,
         animationInfo: animationInfo,
         dataWakParentDirectoryApi,
       });
 
       if (!animations) {
-        console.error('Could not find animation for id ' + animationInfo.id);
         continue;
       }
 
@@ -59,37 +50,18 @@ export const scrapeAnimations = async ({
 const scrapeAnimation = async ({
   animationInfo,
   dataWakParentDirectoryApi,
-  animationFiles,
 }: {
   animationInfo: AnimationInfo;
   dataWakParentDirectoryApi: FileSystemDirectoryAccess;
-  animationFiles: FileSystemFileAccess[];
 }) => {
-  const id = animationInfo.id;
-
-  const sprite = await scrapeAnimationXmlDefinition({
-    id: id,
-    animationsFiles: animationFiles,
-  });
-
-  if (!sprite) {
-    return;
-  }
-
-  const animations: NoitaScrapedGifWrapper = {
+  const animations: NoitaScrapedMediaGif = {
+    type: 'gif',
     gifs: [],
   };
 
-  const imageBase64 = await readImageFromAnimationInfo({
-    animationInfo: animationInfo,
-    animationFiles: animationFiles,
-    sprite: sprite,
+  const { framesResults } = await assembleAnimationFrames({
+    info: animationInfo,
     dataWakParentDirectoryApi: dataWakParentDirectoryApi,
-  });
-
-  const framesResults = await scrapeAnimationFrames({
-    sprite: sprite,
-    imageBase64: imageBase64,
   });
 
   for (const framesResult of framesResults) {
@@ -116,4 +88,73 @@ const scrapeAnimation = async ({
     animations.gifs.push(gif);
   }
   return animations;
+};
+
+const assembleAnimationFrames = async ({
+  info,
+  dataWakParentDirectoryApi,
+  overrideSprite,
+}: {
+  info: AnimationInfo;
+  dataWakParentDirectoryApi: FileSystemDirectoryAccess;
+  overrideSprite?: Sprite;
+}) => {
+  const sprite =
+    overrideSprite ??
+    (await scrapeAnimationXmlDefinition({
+      id: info.id,
+      file: info.file,
+    }));
+
+  const imageBase64 = await readImageFromAnimationInfo({
+    animationInfo: info,
+    sprite: sprite,
+    dataWakParentDirectoryApi: dataWakParentDirectoryApi,
+  });
+
+  const framesResults = await scrapeAnimationFrames({
+    sprite: sprite,
+    imageBase64: imageBase64,
+  });
+
+  if (!info.layers) {
+    return { framesResults, sprite };
+  }
+
+  for (const layer of info.layers) {
+    const { framesResults: layerFrameResults, sprite: layerSprite } =
+      await assembleAnimationFrames({
+        info: layer,
+        dataWakParentDirectoryApi,
+        overrideSprite: layer.useSameSprite ? sprite : undefined,
+      });
+
+    for (const animation of framesResults) {
+      // get the matching layer animation
+      let layerAnimation = layerFrameResults.find(
+        (a) => a.animation.name === animation.animation.name,
+      );
+
+      // or the default animation if the matching animation does not exist
+      layerAnimation ??= layerFrameResults.find(
+        (a) => a.animation.name === layerSprite.defaultAnimation,
+      );
+
+      if (layerAnimation === undefined) continue;
+
+      for (let i = 0; i < animation.frameImages.length; i++) {
+        const mainFrame = animation.frameImages[i];
+        const layerFrame =
+          layerAnimation.frameImages[i % layerAnimation.frameImages.length];
+
+        animation.frameImages[i] = await imageHelpers.overlayImages(
+          mainFrame,
+          layerFrame,
+          layer.overlayOptions,
+        );
+      }
+    }
+  }
+
+  return { framesResults, sprite };
 };

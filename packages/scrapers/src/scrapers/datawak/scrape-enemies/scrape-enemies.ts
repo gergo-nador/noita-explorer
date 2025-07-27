@@ -7,8 +7,14 @@ import {
   getDefaultNoitaDamageMultipliers,
   NoitaScrapedEnemy,
   NoitaScrapedEnemyVariant,
+  NoitaScrapedSprite,
+  NoitaScrapedPhysicsImageShapeComponent,
 } from '@noita-explorer/model-noita';
-import { parseXml, XmlWrapper } from '@noita-explorer/tools/xml';
+import {
+  parseXml,
+  XmlWrapper,
+  XmlWrapperType,
+} from '@noita-explorer/tools/xml';
 import {
   fileSystemAccessHelpers,
   stringHelpers,
@@ -18,6 +24,7 @@ import { noitaPaths } from '../../../noita-paths.ts';
 import { extractEnemyProperties } from './extract-enemy-properties.ts';
 import { calculateEnemyGold } from './calculate-enemy-gold.ts';
 import { mergeXmlBaseFiles } from './merge-xml-base-files.ts';
+import { splitNoitaEntityTags } from '../../common/tags.ts';
 
 /**
  * Scraping all the enemies/animals
@@ -107,6 +114,8 @@ export const scrapeEnemies = async ({
         variants: [],
         gameEffects: [],
         tags: [],
+        sprites: undefined,
+        physicsImageShapes: undefined,
         debug: {
           fileHierarchy: [],
           imagePath: animal.imagePath,
@@ -215,13 +224,16 @@ const scrapeEnemyMain = async ({
   extractEnemyProperties({ enemy, entityTag });
 
   // dropped gold
-
   if (enemy.hasGoldDrop) {
     const enemyHpForGold = enemy.maxHp ?? enemy.hp;
     if (enemyHpForGold !== undefined) {
       enemy.goldDrop = calculateEnemyGold(enemyHpForGold);
     }
   }
+
+  // sprites
+  enemy.sprites = getSprites({ entityTag });
+  enemy.physicsImageShapes = getPhysicsImageShapeComponents({ entityTag });
 
   // look for variants
   const subDirectories = await entitiesDataDirectory.listDirectories();
@@ -284,4 +296,79 @@ const createVariantEnemy = (
   // @ts-expect-error remove the variants property of the enemy to not copy that over
   delete enemyCopy['variants'];
   return objectHelpers.deepCopy(enemyCopy);
+};
+
+const getSprites = ({
+  entityTag,
+}: {
+  entityTag: XmlWrapperType;
+}): NoitaScrapedSprite[] | undefined => {
+  let sprites = entityTag.getChild('SpriteComponent');
+
+  if (sprites === undefined) {
+    return;
+  }
+
+  sprites = sprites
+    // filter out ui, health_bar and laser_sight sprites
+    .filter((sprite) => {
+      const tags = sprite.getAttribute('_tags')?.asText();
+      if (tags === undefined) return true;
+
+      const split = splitNoitaEntityTags(tags);
+
+      const notAllowedTags = ['ui', 'health_bar_back', 'health_bar', 'l'];
+      return !notAllowedTags.some((tag) => split.includes(tag));
+    })
+    // filter out invisible sprites
+    .filter((sprite) => {
+      const isVisible = sprite.getAttribute('visible')?.asBoolean();
+      const alpha = sprite.getAttribute('alpha')?.asFloat();
+      return isVisible !== false && alpha !== 0;
+    })
+    // filter out sprites without image file
+    .filter((sprite) => {
+      const imageFile = sprite.getAttribute('image_file')?.asText();
+      return Boolean(imageFile);
+    })
+    .filter((sprite) => {
+      const fogOfWarHole = sprite.getAttribute('fog_of_war_hole')?.asBoolean();
+      return !fogOfWarHole;
+    });
+
+  return sprites.map((sprite): NoitaScrapedSprite => {
+    const tags = sprite.getAttribute('_tags')?.asText();
+
+    return {
+      tags: tags ? splitNoitaEntityTags(tags) : [],
+      imageFile: sprite.getRequiredAttribute('image_file').asText(),
+      alpha: sprite.getAttribute('alpha')?.asFloat(),
+      additive: sprite.getAttribute('additive')?.asBoolean(),
+      emissive: sprite.getAttribute('emissive')?.asBoolean(),
+      offsetX: sprite.getAttribute('offset_x')?.asInt(),
+      offsetY: sprite.getAttribute('offset_y')?.asInt(),
+      zIndex: sprite.getAttribute('z_index')?.asFloat(),
+    };
+  });
+};
+
+const getPhysicsImageShapeComponents = ({
+  entityTag,
+}: {
+  entityTag: XmlWrapperType;
+}): NoitaScrapedPhysicsImageShapeComponent[] | undefined => {
+  const physicsImageShapes = entityTag.getChild('PhysicsImageShapeComponent');
+
+  if (physicsImageShapes === undefined) {
+    return;
+  }
+
+  return physicsImageShapes.map(
+    (s): NoitaScrapedPhysicsImageShapeComponent => ({
+      imageFile: s.getRequiredAttribute('image_file').asText(),
+      offsetX: s.getAttribute('offset_x')?.asInt(),
+      offsetY: s.getAttribute('offset_y')?.asInt(),
+      material: s.getAttribute('material')?.asText(),
+    }),
+  );
 };

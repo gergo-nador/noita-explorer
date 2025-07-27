@@ -7,6 +7,19 @@ export interface CropImageBase64Options {
 
 export type PixelColorOptions = Record<string | '_', string>;
 
+export type OverlayBlendMode = 'source_over' | 'additive' | 'overlay';
+export interface OverlayOptions {
+  blendMode?: OverlayBlendMode;
+  /**
+   * - `below`: destination image is below source
+   * - `over`: destination image is over source (default)
+   */
+  destinationPosition?: 'below' | 'over';
+  opacitySource?: number;
+  opacityDestination?: number;
+  destinationPlacement?: 'default' | 'center';
+}
+
 export interface ImageHelpersType {
   trimWhitespaceBase64: (base64: string) => Promise<string>;
   scaleImageBase64: (base64: string, scaleFactor: number) => Promise<string>;
@@ -20,5 +33,9 @@ export interface ImageHelpersType {
     options: CropImageBase64Options,
   ) => Promise<string>;
   pixelRecolor: (base64: string, map: PixelColorOptions) => Promise<string>;
-  overlayImages: (background: string, overlay: string) => Promise<string>;
+  overlayImages: (
+    background: string,
+    overlay: string,
+    options?: OverlayOptions,
+  ) => Promise<string>;
 }

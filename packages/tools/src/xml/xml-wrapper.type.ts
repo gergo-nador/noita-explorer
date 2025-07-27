@@ -41,6 +41,10 @@ export interface XmlWrapperType {
    */
   getTextContent: () => string | undefined;
   /**
+   * Gets children elements with the specified tag
+   */
+  getChild: (tagName: string) => XmlWrapperType[] | undefined;
+  /**
    * Gets all children elements
    */
   getAllChildren: () => Record<string, XmlWrapperType[]>;

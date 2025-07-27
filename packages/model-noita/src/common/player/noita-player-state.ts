@@ -1,10 +1,10 @@
-import { NoitaGenomeData } from '../noita-genome-data.ts';
-import { NoitaEntityTransform } from '../noita-entity-transform.ts';
-import { NoitaKickComponent } from '../noita-kick-component.ts';
 import { NoitaWalletComponent } from './noita-wallet-component.ts';
 import { NoitaDamageModel } from './noita-damage-model.ts';
 import { NoitaPlayerInventory } from './noita-player-inventory.ts';
 import { NoitaPlayerFlyState } from './noita-player-fly-state.ts';
+import { NoitaEntityTransform } from '../enemy/noita-entity-transform.ts';
+import { NoitaGenomeData } from '../enemy/noita-genome-data.ts';
+import { NoitaKickComponent } from '../enemy/noita-kick-component.ts';
 
 export interface NoitaPlayerState {
   transform: NoitaEntityTransform;
