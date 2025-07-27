@@ -2,8 +2,9 @@ import {
   NoitaDataWakScrapeResult,
   NoitaEnemy,
   NoitaEnemyGif,
+  NoitaEnemyMedia,
   NoitaEnemyVariant,
-  NoitaScrapedGifWrapper,
+  NoitaScrapedMedia,
   NoitaWakData,
 } from '@noita-explorer/model-noita';
 
@@ -18,7 +19,7 @@ export const convertScrapeResultsToDataWak = (
 ): NoitaWakData => {
   const translations = results.translations.data ?? {};
   const scrapedEnemies = results.enemies.data ?? [];
-  const enemyGifs = results.enemyGifs.data ?? {};
+  const scrapedEnemyMedia = results.enemyMedia.data ?? {};
   const perks = results.perks.data ?? [];
   const spells = results.spells.data ?? [];
   const wandConfigs = results.wandConfigs.data ?? [];
@@ -29,27 +30,28 @@ export const convertScrapeResultsToDataWak = (
   const enemies: NoitaEnemy[] = scrapedEnemies.map((e): NoitaEnemy => {
     const variants: NoitaEnemyVariant[] = e.variants.map((v) => ({
       ...v,
-      enemy: { ...v.enemy, gifs: undefined },
+      enemy: {
+        ...v.enemy,
+        media: undefined,
+        physicsImageShapes: undefined,
+        sprites: undefined,
+      },
     }));
 
-    const scrapedGif: NoitaScrapedGifWrapper | undefined = enemyGifs[e.id];
-    const processedGifs = scrapedGif?.gifs?.map((g) => {
-      const noitaEnemyGif: NoitaEnemyGif = {
-        name: g.sprite.name,
-        frameCount: g.sprite.frameCount,
-        frameHeight: g.sprite.frameActualHeight,
-        frameWidth: g.sprite.frameActualWidth,
-        frameWait: g.sprite.frameWait,
-        loop: g.repeat,
-      };
-      return [g.sprite.name, noitaEnemyGif] as [string, NoitaEnemyGif];
+    const scrapedMedia: NoitaScrapedMedia | undefined = scrapedEnemyMedia[e.id];
+    const enemyMedia: NoitaEnemyMedia | undefined = getEnemyMedia({
+      media: scrapedMedia,
     });
 
-    return {
+    const enemy = {
       ...e,
-      gifs: processedGifs ? Object.fromEntries(processedGifs) : undefined,
+      media: enemyMedia,
       variants: variants,
+      sprites: undefined,
+      physicsImageShapes: undefined,
     };
+
+    return enemy;
   });
 
   const now = new Date();
@@ -67,4 +69,38 @@ export const convertScrapeResultsToDataWak = (
     materials: materials,
     materialReactions: materialReactions,
   };
+};
+
+const getEnemyMedia = ({
+  media,
+}: {
+  media: NoitaScrapedMedia | undefined;
+}): NoitaEnemyMedia | undefined => {
+  if (!media) return;
+
+  if (media.type === 'gif') {
+    const processedGifs = media?.gifs?.map((g) => {
+      const noitaEnemyGif: NoitaEnemyGif = {
+        name: g.sprite.name,
+        frameCount: g.sprite.frameCount,
+        frameHeight: g.sprite.frameActualHeight,
+        frameWidth: g.sprite.frameActualWidth,
+        frameWait: g.sprite.frameWait,
+        loop: g.repeat,
+      };
+      return [g.sprite.name, noitaEnemyGif] as [string, NoitaEnemyGif];
+    });
+
+    if (processedGifs && processedGifs.length > 0) {
+      const gifs = Object.fromEntries(processedGifs);
+      return { type: 'gif', gifs: gifs };
+    }
+  } else if (media.type === 'image') {
+    return {
+      type: 'image',
+      imageType: media.imageType,
+      width: media.width,
+      height: media.height,
+    };
+  }
 };

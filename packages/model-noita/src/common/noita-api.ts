@@ -1,12 +1,12 @@
 import { NoitaWakData } from '../scraping/noita-wak-data.ts';
 import { NoitaDataWakScrapeResult } from '../scraping/noita-data-wak-scrape-result.ts';
 import { StringKeyDictionary } from '@noita-explorer/model';
-import { EnemyStatistic } from '../scraping/enemy-statistics.ts';
-import { NoitaProgressFlags } from '../scraping/noita-progress-flags.ts';
+import { EnemyStatistic } from './enemy/enemy-statistics.ts';
+import { NoitaProgressFlags } from './noita-progress-flags.ts';
 import { NoitaSession } from './noita-session.ts';
 import { NoitaWorldState } from './noita-world-state.ts';
 import { NoitaWandBonesFile } from './wand/noita-wand-bones-file.ts';
-import { NoitaPlayerState } from './entity/player/noita-player-state.ts';
+import { NoitaPlayerState } from './player/noita-player-state.ts';
 import { NoitaAction } from './actions/noita-action.ts';
 import { NoitaActionProgress } from './actions/noita-action-progress.ts';
 import { NoitaActionResult } from './actions/noita-action-result.ts';

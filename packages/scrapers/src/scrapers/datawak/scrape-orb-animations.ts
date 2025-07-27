@@ -1,9 +1,10 @@
 import { scrapeAnimations } from '../common/scrape-animations/scrape-animations.ts';
 import { FileSystemDirectoryAccess } from '@noita-explorer/model';
-import { noitaPaths } from '../../noita-paths.ts';
 import { enumerateHelpers } from '@noita-explorer/tools';
+import { AnimationInfo } from '../common/scrape-animations/types.ts';
+import { noitaPaths } from '../../noita-paths.ts';
 
-export const scrapeOrbAnimations = ({
+export const scrapeOrbAnimations = async ({
   dataWakParentDirectoryApi,
 }: {
   dataWakParentDirectoryApi: FileSystemDirectoryAccess;
@@ -13,11 +14,25 @@ export const scrapeOrbAnimations = ({
 
   const extraOrbs = ['discovered', 'picked', 'red', 'red_evil'];
 
+  const animationInfos = [...mainOrbs, ...extraOrbs].map(
+    async (o): Promise<AnimationInfo> => {
+      const orbId = 'orb_' + o;
+      const path = await dataWakParentDirectoryApi.path.join([
+        ...noitaPaths.noitaDataWak.orbs,
+        orbId + '.xml',
+      ]);
+
+      const file = await dataWakParentDirectoryApi.getFile(path);
+
+      return {
+        id: orbId,
+        file: file,
+      };
+    },
+  );
+
   return scrapeAnimations({
-    animationInfos: [...mainOrbs, ...extraOrbs].map((o) => ({
-      id: 'orb_' + o,
-    })),
+    animationInfos: await Promise.all(animationInfos),
     dataWakParentDirectoryApi: dataWakParentDirectoryApi,
-    animationsPath: noitaPaths.noitaDataWak.orbs,
   });
 };

@@ -7,7 +7,10 @@ import { NoitaWandConfig } from '../common/wand/noita-wand-config.ts';
 import { NoitaMaterial } from '../common/noita-material.ts';
 import { NoitaMaterialReaction } from '../common/noita-material-reaction.ts';
 import { NoitaScrapedEnemy } from './noita-scraped-enemy.ts';
-import { NoitaScrapedGifWrapper } from './noita-scraped-gif-wrapper.ts';
+import {
+  NoitaScrapedMedia,
+  NoitaScrapedMediaGif,
+} from './noita-scraped-media.ts';
 
 export interface NoitaDataWakScrapeResult {
   translations: NoitaDataWakScrapeResultPart<
@@ -16,11 +19,11 @@ export interface NoitaDataWakScrapeResult {
   spells: NoitaDataWakScrapeResultPart<NoitaSpell[]>;
   perks: NoitaDataWakScrapeResultPart<NoitaPerk[]>;
   enemies: NoitaDataWakScrapeResultPart<NoitaScrapedEnemy[]>;
-  enemyGifs: NoitaDataWakScrapeResultPart<
-    StringKeyDictionary<NoitaScrapedGifWrapper>
+  enemyMedia: NoitaDataWakScrapeResultPart<
+    StringKeyDictionary<NoitaScrapedMedia>
   >;
   orbGifs: NoitaDataWakScrapeResultPart<
-    StringKeyDictionary<NoitaScrapedGifWrapper>
+    StringKeyDictionary<NoitaScrapedMediaGif>
   >;
   wandConfigs: NoitaDataWakScrapeResultPart<NoitaWandConfig[]>;
   materials: NoitaDataWakScrapeResultPart<NoitaMaterial[]>;

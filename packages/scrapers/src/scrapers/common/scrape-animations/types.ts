@@ -1,4 +1,6 @@
 import { SpriteAnimation } from '@noita-explorer/model-noita';
+import { FileSystemFileAccess } from '@noita-explorer/model';
+import { OverlayOptions } from '@noita-explorer/tools';
 
 export interface AnimationFramesResult {
   animation: SpriteAnimation;
@@ -7,11 +9,17 @@ export interface AnimationFramesResult {
 
 export interface AnimationInfo {
   id: string;
-  layers?: AnimationInfo[];
+  file: FileSystemFileAccess;
+  layers?: AnimationInfoLayer[];
   imageManipulation?: {
     /**
      * Assign a new color for an existing color. Underscore will be used as the default color if present.
      */
     reColor: Record<string | '_', string>;
   };
+}
+
+export interface AnimationInfoLayer extends AnimationInfo {
+  useSameSprite?: boolean;
+  overlayOptions?: OverlayOptions;
 }
