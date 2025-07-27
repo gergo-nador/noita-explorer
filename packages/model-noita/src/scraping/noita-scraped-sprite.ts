@@ -6,6 +6,7 @@ export interface NoitaScrapedSprite {
   offsetY: number | undefined;
   additive: boolean | undefined;
   emissive: boolean | undefined;
+  zIndex: number | undefined;
 }
 
 export interface NoitaScrapedPhysicsImageShapeComponent {

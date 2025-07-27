@@ -346,6 +346,7 @@ const getSprites = ({
       emissive: sprite.getAttribute('emissive')?.asBoolean(),
       offsetX: sprite.getAttribute('offset_x')?.asInt(),
       offsetY: sprite.getAttribute('offset_y')?.asInt(),
+      zIndex: sprite.getAttribute('z_index')?.asFloat(),
     };
   });
 };
