@@ -340,20 +340,36 @@ const scrapeEnemyMedia = async ({
       continue;
     }
 
-    const guns = enemy.sprites
-      .filter((s) => s.tags.includes('gun'))
-      .map(
-        async (gun): Promise<AnimationInfo> => ({
-          id: gun.imageFile,
-          file: await dataWakParentDirectory.getFile(gun.imageFile),
-        }),
-      );
+    let layers: AnimationInfo[] = [];
+
+    {
+      // guns
+      const guns = enemy.sprites
+        .filter((s) => s.tags.includes('gun'))
+        .map(
+          async (gun): Promise<AnimationInfo> => ({
+            id: gun.imageFile,
+            file: await dataWakParentDirectory.getFile(gun.imageFile),
+          }),
+        );
+      layers = layers.concat(await Promise.all(guns));
+    }
+    {
+      // emissive
+      if (emissiveSprites.length > 0 && sprites.length > 0) {
+        const emissiveSprite = emissiveSprites[0];
+        layers.push({
+          id: emissiveSprite.imageFile,
+          file: await dataWakParentDirectory.getFile(emissiveSprite.imageFile),
+        });
+      }
+    }
 
     try {
       const animationInfo: AnimationInfo = {
         id: enemy.id,
         file: await dataWakParentDirectory.getFile(mainSprite.imageFile),
-        layers: guns.length > 0 ? await Promise.all(guns) : undefined,
+        layers: layers.length > 0 ? layers : undefined,
       };
       infos.push(animationInfo);
     } catch (err) {
