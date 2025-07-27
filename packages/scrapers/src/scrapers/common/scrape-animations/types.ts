@@ -9,11 +9,15 @@ export interface AnimationFramesResult {
 export interface AnimationInfo {
   id: string;
   file: FileSystemFileAccess;
-  layers?: AnimationInfo[];
+  layers?: AnimationInfoLayer[];
   imageManipulation?: {
     /**
      * Assign a new color for an existing color. Underscore will be used as the default color if present.
      */
     reColor: Record<string | '_', string>;
   };
+}
+
+export interface AnimationInfoLayer extends AnimationInfo {
+  useSameSprite?: boolean;
 }

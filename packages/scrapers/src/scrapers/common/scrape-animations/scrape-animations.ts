@@ -11,6 +11,7 @@ import {
 import {
   NoitaScrapedGif,
   NoitaScrapedMediaGif,
+  Sprite,
 } from '@noita-explorer/model-noita';
 import { scrapeAnimationFrames } from './scrape-animation-frames.ts';
 import { scrapeAnimationXmlDefinition } from './scrape-animation-xml-definition.ts';
@@ -92,14 +93,18 @@ const scrapeAnimation = async ({
 const assembleAnimationFrames = async ({
   info,
   dataWakParentDirectoryApi,
+  overrideSprite,
 }: {
   info: AnimationInfo;
   dataWakParentDirectoryApi: FileSystemDirectoryAccess;
+  overrideSprite?: Sprite;
 }) => {
-  const sprite = await scrapeAnimationXmlDefinition({
-    id: info.id,
-    file: info.file,
-  });
+  const sprite =
+    overrideSprite ??
+    (await scrapeAnimationXmlDefinition({
+      id: info.id,
+      file: info.file,
+    }));
 
   const imageBase64 = await readImageFromAnimationInfo({
     animationInfo: info,
@@ -121,6 +126,7 @@ const assembleAnimationFrames = async ({
       await assembleAnimationFrames({
         info: layer,
         dataWakParentDirectoryApi,
+        overrideSprite: layer.useSameSprite ? sprite : undefined,
       });
 
     for (const animation of framesResults) {

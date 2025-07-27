@@ -272,6 +272,7 @@ const scrapeEnemyMedia = async ({
             '#FF00FF40': '#7f5476',
           },
         },
+        useSameSprite: true,
       },
     ],
   };
