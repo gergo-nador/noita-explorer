@@ -1,6 +1,8 @@
 import {
   CropImageBase64Options,
   ImageHelpersType,
+  OverlayBlendMode,
+  OverlayOptions,
   PixelColorOptions,
 } from './images.types.ts';
 import { Jimp, BlendMode, JimpMime } from 'jimp';
@@ -96,12 +98,25 @@ async function pixelRecolor(
   return await jimpToBase64(image);
 }
 
-async function overlayImages(backgroundBase64: string, overlayBase64: string) {
+const overlayBlendModeMap = {
+  additive: BlendMode.ADD,
+  source_over: BlendMode.SRC_OVER,
+} satisfies Record<OverlayBlendMode, BlendMode>;
+
+async function overlayImages(
+  backgroundBase64: string,
+  overlayBase64: string,
+  options?: OverlayOptions,
+) {
   const background = await getJimpImage(backgroundBase64);
   const overlay = await getJimpImage(overlayBase64);
 
+  const blendMode =
+    overlayBlendModeMap[options?.blendMode ?? 'source_over'] ??
+    BlendMode.SRC_OVER;
+
   background.composite(overlay, 0, 0, {
-    mode: BlendMode.SRC_OVER,
+    mode: blendMode,
     opacitySource: 1.0,
   });
 

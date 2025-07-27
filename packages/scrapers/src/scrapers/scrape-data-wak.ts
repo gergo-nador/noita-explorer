@@ -18,7 +18,10 @@ import {
   StringKeyDictionary,
 } from '@noita-explorer/model';
 import { scrape } from './scrape';
-import { AnimationInfo } from './common/scrape-animations/types.ts';
+import {
+  AnimationInfo,
+  AnimationInfoLayer,
+} from './common/scrape-animations/types.ts';
 import { imageHelpers } from '@noita-explorer/tools';
 
 const statusSkipped = {
@@ -341,16 +344,17 @@ const scrapeEnemyMedia = async ({
       continue;
     }
 
-    let layers: AnimationInfo[] = [];
+    let layers: AnimationInfoLayer[] = [];
 
     {
       // guns
       const guns = enemy.sprites
         .filter((s) => s.tags.includes('gun'))
         .map(
-          async (gun): Promise<AnimationInfo> => ({
+          async (gun): Promise<AnimationInfoLayer> => ({
             id: gun.imageFile,
             file: await dataWakParentDirectory.getFile(gun.imageFile),
+            additive: gun.additive,
           }),
         );
       layers = layers.concat(await Promise.all(guns));
@@ -362,6 +366,7 @@ const scrapeEnemyMedia = async ({
         layers.push({
           id: emissiveSprite.imageFile,
           file: await dataWakParentDirectory.getFile(emissiveSprite.imageFile),
+          additive: emissiveSprite.additive,
         });
       }
     }

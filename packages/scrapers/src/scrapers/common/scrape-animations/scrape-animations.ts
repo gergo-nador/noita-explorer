@@ -150,6 +150,9 @@ const assembleAnimationFrames = async ({
         animation.frameImages[i] = await imageHelpers.overlayImages(
           mainFrame,
           layerFrame,
+          {
+            blendMode: layer.additive ? 'additive' : 'source_over',
+          },
         );
       }
     }

@@ -20,4 +20,5 @@ export interface AnimationInfo {
 
 export interface AnimationInfoLayer extends AnimationInfo {
   useSameSprite?: boolean;
+  additive?: boolean;
 }

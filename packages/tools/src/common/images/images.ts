@@ -2,6 +2,7 @@ import { runtimeEnvironment } from '../runtime-environment.ts';
 import {
   CropImageBase64Options,
   ImageHelpersType,
+  OverlayOptions,
   PixelColorOptions,
 } from './images.types.ts';
 
@@ -59,9 +60,13 @@ async function pixelRecolor(base64: string, options: PixelColorOptions) {
   return imageHelper.pixelRecolor(base64, options);
 }
 
-async function overlayImages(background: string, overlay: string) {
+async function overlayImages(
+  background: string,
+  overlay: string,
+  options?: OverlayOptions,
+) {
   const imageHelper = await getImageHelper();
-  return imageHelper.overlayImages(background, overlay);
+  return imageHelper.overlayImages(background, overlay, options);
 }
 
 export const imageHelpers: ImageHelpersType = {
