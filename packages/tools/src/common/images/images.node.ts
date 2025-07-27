@@ -116,18 +116,27 @@ async function overlayImages(
     overlayBlendModeMap[options?.blendMode ?? 'source_over'] ??
     BlendMode.SRC_OVER;
 
+  const x =
+    options?.destinationPlacement === 'center'
+      ? (background.width - overlay.width) / 2
+      : 0;
+  const y =
+    options?.destinationPlacement === 'center'
+      ? (background.height - overlay.height) / 2
+      : 0;
+
   if (options?.destinationPosition === 'below') {
     const image = new Jimp({
       width: background.width,
       height: background.height,
       color: 0x00000000,
     });
-    image.composite(overlay, 0, 0);
+    image.composite(overlay, x, y);
     image.composite(background, 0, 0, { mode: blendMode, opacitySource: 1.0 });
     return await jimpToBase64(image);
   }
 
-  background.composite(overlay, 0, 0, {
+  background.composite(overlay, x, y, {
     mode: blendMode,
     opacitySource: 1.0,
   });

@@ -370,6 +370,9 @@ const scrapeEnemyMedia = async ({
             file: await dataWakParentDirectory.getFile(s.imageFile),
             overlayOptions: {
               blendMode: 'source_over',
+              destinationPlacement: mainSprite.tags.includes('magic_eye')
+                ? 'center'
+                : 'default',
             },
           }),
         );

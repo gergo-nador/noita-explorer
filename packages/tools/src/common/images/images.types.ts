@@ -17,6 +17,7 @@ export interface OverlayOptions {
   destinationPosition?: 'below' | 'over';
   opacitySource?: number;
   opacityDestination?: number;
+  destinationPlacement?: 'default' | 'center';
 }
 
 export interface ImageHelpersType {
