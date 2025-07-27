@@ -11,4 +11,6 @@ export interface NoitaScrapedMediaImage {
   type: 'image';
   imageType: 'physics';
   imageBase64: string;
+  width: number;
+  height: number;
 }

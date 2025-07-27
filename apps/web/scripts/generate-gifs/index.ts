@@ -5,7 +5,7 @@ import { StringKeyDictionary } from '@noita-explorer/model';
 import { base64Helpers } from '@noita-explorer/tools';
 import { Buffer } from 'buffer';
 import minimist from 'minimist';
-import process from 'node:process';
+import * as process from 'node:process';
 import {
   NoitaScrapedMedia,
   NoitaScrapedMediaGif,

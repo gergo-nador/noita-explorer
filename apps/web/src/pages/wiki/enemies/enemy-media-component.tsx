@@ -44,6 +44,8 @@ export const EnemyMediaComponent = ({ enemy }: Props) => {
               enemyId: enemy.id,
               type: enemy.media.imageType,
             })}
+            width={enemy.media.width * 3}
+            height={enemy.media.height * 3}
           />
         </div>
       )}

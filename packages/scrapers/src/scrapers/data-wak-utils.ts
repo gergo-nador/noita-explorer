@@ -96,6 +96,11 @@ const getEnemyMedia = ({
       return { type: 'gif', gifs: gifs };
     }
   } else if (media.type === 'image') {
-    return { type: 'image', imageType: media.imageType };
+    return {
+      type: 'image',
+      imageType: media.imageType,
+      width: media.width,
+      height: media.height,
+    };
   }
 };

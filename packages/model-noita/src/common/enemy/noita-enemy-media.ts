@@ -19,4 +19,6 @@ export interface NoitaEnemyGif {
 export interface NoitaEnemyImageMedia {
   type: 'image';
   imageType: 'physics';
+  width: number;
+  height: number;
 }

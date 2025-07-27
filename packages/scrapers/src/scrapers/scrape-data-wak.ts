@@ -19,6 +19,7 @@ import {
 } from '@noita-explorer/model';
 import { scrape } from './scrape';
 import { AnimationInfo } from './common/scrape-animations/types.ts';
+import { imageHelpers } from '@noita-explorer/tools';
 
 const statusSkipped = {
   status: NoitaDataWakScrapeResultStatus.SKIPPED,
@@ -317,10 +318,13 @@ const scrapeEnemyMedia = async ({
       const imageFile = await dataWakParentDirectory.getFile(imageFilePath);
 
       const base64 = await imageFile.read.asImageBase64();
+      const { width, height } = await imageHelpers.getImageSizeBase64(base64);
       const imageMedia: NoitaScrapedMediaImage = {
         type: 'image',
         imageType: 'physics',
         imageBase64: base64,
+        width,
+        height,
       };
 
       enemyScrapedMedia[enemy.id] = imageMedia;
