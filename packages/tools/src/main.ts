@@ -10,7 +10,7 @@ export { functionHelpers } from './common/function';
 export { gifHelpers } from './common/gif/gif.ts';
 export { ifStatement } from './common/conditions';
 export { imageHelpers } from './common/images/images.ts';
-export type { OverlayBlendMode } from './common/images/images.types.ts';
+export type { OverlayOptions } from './common/images/images.types.ts';
 export { mathHelpers } from './common/math';
 export { objectHelpers } from './common/objects';
 export { platformHelpers } from './common/runtime-platform.ts';

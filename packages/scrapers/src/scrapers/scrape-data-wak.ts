@@ -341,7 +341,9 @@ const scrapeEnemyMedia = async ({
           async (gun): Promise<AnimationInfoLayer> => ({
             id: gun.imageFile,
             file: await dataWakParentDirectory.getFile(gun.imageFile),
-            blendMode: 'source_over',
+            overlayOptions: {
+              blendMode: 'source_over',
+            },
           }),
         );
       layers = layers.concat(await Promise.all(guns));
@@ -368,7 +370,9 @@ const scrapeEnemyMedia = async ({
           async (s): Promise<AnimationInfoLayer> => ({
             id: s.imageFile,
             file: await dataWakParentDirectory.getFile(s.imageFile),
-            blendMode: 'overlay',
+            overlayOptions: {
+              blendMode: 'overlay',
+            },
           }),
         );
 
