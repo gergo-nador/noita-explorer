@@ -5,6 +5,7 @@ import {
 } from '@noita-explorer/model';
 import { imageHelpers } from '@noita-explorer/tools';
 import { Sprite } from '@noita-explorer/model-noita';
+import { scrapeAnimationXmlDefinition } from './scrape-animation-xml-definition.ts';
 
 interface Props {
   animationInfo: AnimationInfo;
@@ -17,12 +18,18 @@ export const readImageFromAnimationInfo = async ({
   dataWakParentDirectoryApi,
 }: Props): Promise<string> => {
   const fileName = animationInfo.file.getName();
+  const isXmlFile = fileName.endsWith('.xml');
   const isPngFile = fileName.endsWith('.png');
 
   let pngFile: FileSystemFileAccess;
   if (isPngFile) {
     pngFile = animationInfo.file;
-  } else if (sprite) {
+  } else if (sprite || isXmlFile) {
+    sprite ??= await scrapeAnimationXmlDefinition({
+      id: animationInfo.id,
+      file: animationInfo.file,
+    });
+
     pngFile = await dataWakParentDirectoryApi.getFile(sprite.spriteFilename);
   } else {
     throw new Error('No png file for id: ' + animationInfo.id);

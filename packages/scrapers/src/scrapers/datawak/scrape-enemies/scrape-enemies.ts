@@ -336,7 +336,10 @@ const getSprites = ({
     });
 
   return sprites.map((sprite): NoitaScrapedSprite => {
+    const tags = sprite.getAttribute('_tags')?.asText();
+
     return {
+      tags: tags ? splitNoitaEntityTags(tags) : [],
       imageFile: sprite.getRequiredAttribute('image_file').asText(),
       alpha: sprite.getAttribute('alpha')?.asFloat(),
       additive: sprite.getAttribute('additive')?.asBoolean(),

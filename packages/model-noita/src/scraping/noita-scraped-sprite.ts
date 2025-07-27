@@ -1,4 +1,5 @@
 export interface NoitaScrapedSprite {
+  tags: string[];
   imageFile: string;
   alpha: number | undefined;
   offsetX: number | undefined;

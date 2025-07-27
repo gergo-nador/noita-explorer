@@ -286,9 +286,6 @@ const scrapeEnemyMedia = async ({
       continue;
     }
 
-    const sprites = enemy.sprites.filter((s) => !s.emissive);
-    const emissiveSprites = enemy.sprites.filter((s) => s.emissive);
-
     // extra check: <LimbBossComponent state="1"> for
     // - lukki_tiny
     // - lukki_longleg
@@ -319,6 +316,11 @@ const scrapeEnemyMedia = async ({
       continue;
     }
 
+    const sprites = enemy.sprites
+      .filter((s) => !s.emissive)
+      .filter((s) => !s.tags.includes('gun'));
+
+    const emissiveSprites = enemy.sprites.filter((s) => s.emissive);
     if (sprites.length === 0 && emissiveSprites.length === 0) {
       console.log(`zero sprites for enemy ` + enemy.id);
       continue;
@@ -338,10 +340,20 @@ const scrapeEnemyMedia = async ({
       continue;
     }
 
+    const guns = enemy.sprites
+      .filter((s) => s.tags.includes('gun'))
+      .map(
+        async (gun): Promise<AnimationInfo> => ({
+          id: gun.imageFile,
+          file: await dataWakParentDirectory.getFile(gun.imageFile),
+        }),
+      );
+
     try {
       const animationInfo: AnimationInfo = {
         id: enemy.id,
         file: await dataWakParentDirectory.getFile(mainSprite.imageFile),
+        layers: guns.length > 0 ? await Promise.all(guns) : undefined,
       };
       infos.push(animationInfo);
     } catch (err) {
