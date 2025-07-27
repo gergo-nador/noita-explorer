@@ -151,7 +151,7 @@ const assembleAnimationFrames = async ({
           mainFrame,
           layerFrame,
           {
-            blendMode: layer.additive ? 'additive' : 'source_over',
+            blendMode: layer.blendMode,
           },
         );
       }

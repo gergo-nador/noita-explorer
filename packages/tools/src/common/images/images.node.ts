@@ -5,7 +5,7 @@ import {
   OverlayOptions,
   PixelColorOptions,
 } from './images.types.ts';
-import { Jimp, BlendMode, JimpMime } from 'jimp';
+import { BlendMode, Jimp, JimpMime } from 'jimp';
 import { base64Helpers } from '../base64.ts';
 import { colorHelpers } from '../color-util.ts';
 
@@ -101,6 +101,7 @@ async function pixelRecolor(
 const overlayBlendModeMap = {
   additive: BlendMode.ADD,
   source_over: BlendMode.SRC_OVER,
+  overlay: BlendMode.OVERLAY,
 } satisfies Record<OverlayBlendMode, BlendMode>;
 
 async function overlayImages(

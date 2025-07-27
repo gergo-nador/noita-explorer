@@ -7,7 +7,7 @@ export interface CropImageBase64Options {
 
 export type PixelColorOptions = Record<string | '_', string>;
 
-export type OverlayBlendMode = 'source_over' | 'additive';
+export type OverlayBlendMode = 'source_over' | 'additive' | 'overlay';
 export interface OverlayOptions {
   blendMode?: OverlayBlendMode;
 }

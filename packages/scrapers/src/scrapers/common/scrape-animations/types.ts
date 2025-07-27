@@ -1,5 +1,6 @@
 import { SpriteAnimation } from '@noita-explorer/model-noita';
 import { FileSystemFileAccess } from '@noita-explorer/model';
+import { OverlayBlendMode } from '@noita-explorer/tools';
 
 export interface AnimationFramesResult {
   animation: SpriteAnimation;
@@ -20,5 +21,5 @@ export interface AnimationInfo {
 
 export interface AnimationInfoLayer extends AnimationInfo {
   useSameSprite?: boolean;
-  additive?: boolean;
+  blendMode?: OverlayBlendMode;
 }

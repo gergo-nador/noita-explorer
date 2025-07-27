@@ -310,23 +310,21 @@ const scrapeEnemyMedia = async ({
     }
 
     const sprites = enemy.sprites
-      .filter((s) => !s.emissive)
+      .filter((s) => !s.additive)
       .filter((s) => !s.tags.includes('gun'));
-
-    const emissiveSprites = enemy.sprites.filter((s) => s.emissive);
-    if (sprites.length === 0 && emissiveSprites.length === 0) {
-      console.log(`zero sprites for enemy ` + enemy.id);
-      continue;
-    }
+    const additiveSprites = enemy.sprites.filter((s) => s.additive);
 
     if (sprites.length > 1) {
-      console.log(
-        `enemy ${enemy.id} has ${sprites.length} sprites and ${emissiveSprites.length} emissive`,
-      );
+      console.log(`enemy ${enemy.id} has ${sprites.length} sprites`);
       continue;
     }
 
-    const mainSprite = sprites[0] ?? emissiveSprites[0];
+    const mainSprite = sprites[0] ?? additiveSprites[0];
+
+    if (mainSprite === undefined) {
+      console.log('Main sprite undefined for id: ' + enemy.id);
+      continue;
+    }
 
     if (!mainSprite.imageFile.endsWith('.xml')) {
       console.log('main sprite does not end with xml: ' + mainSprite.imageFile);
@@ -343,21 +341,38 @@ const scrapeEnemyMedia = async ({
           async (gun): Promise<AnimationInfoLayer> => ({
             id: gun.imageFile,
             file: await dataWakParentDirectory.getFile(gun.imageFile),
-            additive: gun.additive,
+            blendMode: 'source_over',
           }),
         );
       layers = layers.concat(await Promise.all(guns));
     }
     {
-      // emissive
-      if (emissiveSprites.length > 0 && sprites.length > 0) {
-        const emissiveSprite = emissiveSprites[0];
-        layers.push({
-          id: emissiveSprite.imageFile,
-          file: await dataWakParentDirectory.getFile(emissiveSprite.imageFile),
-          additive: emissiveSprite.additive,
-        });
-      }
+      // additive
+      const additiveSpritesFiltered =
+        sprites.length > 0 ? additiveSprites : additiveSprites.slice(1);
+
+      const additive = additiveSpritesFiltered
+        .filter((s) => s.additive)
+        // sort by z-index
+        .sort((a, b) => {
+          const zIndexA = a.zIndex;
+          const zIndexB = b.zIndex;
+
+          if (zIndexA === undefined && zIndexB === undefined) {
+            return 0;
+          }
+
+          return (zIndexA ?? 0) - (zIndexB ?? 0);
+        })
+        .map(
+          async (s): Promise<AnimationInfoLayer> => ({
+            id: s.imageFile,
+            file: await dataWakParentDirectory.getFile(s.imageFile),
+            blendMode: 'overlay',
+          }),
+        );
+
+      layers = layers.concat(await Promise.all(additive));
     }
 
     try {
