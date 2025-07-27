@@ -290,17 +290,6 @@ const scrapeEnemyMedia = async ({
       continue;
     }
 
-    // extra check: <LimbBossComponent state="1"> for
-    // - lukki_tiny
-    // - lukki_longleg
-    // - lukki_creepy_long
-    // - lukki_dark
-    // - boss_meat
-    // - boss_pit
-    // - boss_robot
-    // - parallel_tentacles
-    // - boss_centipede
-
     const physicsImageShapes = enemy.physicsImageShapes ?? [];
     if (physicsImageShapes.length > 0) {
       const imageFilePath = physicsImageShapes[0].imageFile;
