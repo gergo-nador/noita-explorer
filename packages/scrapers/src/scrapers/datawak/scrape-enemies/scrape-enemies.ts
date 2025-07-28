@@ -1,6 +1,7 @@
 import {
   FileSystemDirectoryAccess,
   StringKeyDictionary,
+  Vector2d,
 } from '@noita-explorer/model';
 import {
   NoitaTranslation,
@@ -336,6 +337,21 @@ const getSprites = ({
       return !fogOfWarHole;
     });
 
+  const transformObjects = entityTag.findTagArray('_Transform');
+  const scale = transformObjects.reduce(
+    (scale, current): Vector2d => ({
+      x:
+        scale.x !== 1
+          ? scale.x
+          : (current.getAttribute('scale.x')?.asFloat() ?? 1),
+      y:
+        scale.y !== 1
+          ? scale.y
+          : (current.getAttribute('scale.y')?.asFloat() ?? 1),
+    }),
+    { x: 1, y: 1 },
+  );
+
   return sprites.map((sprite): NoitaScrapedSprite => {
     const tags = sprite.getAttribute('_tags')?.asText();
 
@@ -348,6 +364,12 @@ const getSprites = ({
       offsetX: sprite.getAttribute('offset_x')?.asInt(),
       offsetY: sprite.getAttribute('offset_y')?.asInt(),
       zIndex: sprite.getAttribute('z_index')?.asFloat(),
+      transform: {
+        scale: {
+          x: scale.x,
+          y: scale.y,
+        },
+      },
     };
   });
 };

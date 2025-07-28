@@ -368,6 +368,7 @@ const scrapeEnemyMedia = async ({
           async (s): Promise<AnimationInfoLayer> => ({
             id: s.imageFile,
             file: await dataWakParentDirectory.getFile(s.imageFile),
+            imageManipulation: { scale: s.transform?.scale },
             overlayOptions: {
               blendMode: 'source_over',
               destinationPlacement: mainSprite.tags.includes('magic_eye')
@@ -385,6 +386,7 @@ const scrapeEnemyMedia = async ({
         id: enemy.id,
         file: await dataWakParentDirectory.getFile(mainSprite.imageFile),
         layers: layers.length > 0 ? layers : undefined,
+        imageManipulation: { scale: mainSprite.transform?.scale },
       };
       infos.push(animationInfo);
     } catch (err) {

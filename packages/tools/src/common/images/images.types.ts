@@ -20,6 +20,11 @@ export interface OverlayOptions {
   destinationPlacement?: 'default' | 'center';
 }
 
+export interface FlipOptions {
+  horizontal: boolean;
+  vertical: boolean;
+}
+
 export interface ImageHelpersType {
   trimWhitespaceBase64: (base64: string) => Promise<string>;
   scaleImageBase64: (base64: string, scaleFactor: number) => Promise<string>;
@@ -38,4 +43,5 @@ export interface ImageHelpersType {
     overlay: string,
     options?: OverlayOptions,
   ) => Promise<string>;
+  flipImage: (base64: string, options?: FlipOptions) => Promise<string>;
 }

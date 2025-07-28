@@ -1,5 +1,6 @@
 import {
   CropImageBase64Options,
+  FlipOptions,
   ImageHelpersType,
   OverlayBlendMode,
   OverlayOptions,
@@ -144,6 +145,14 @@ async function overlayImages(
   return await jimpToBase64(background);
 }
 
+async function flipImage(imageBase64: string, options?: FlipOptions) {
+  const image = await getJimpImage(imageBase64);
+
+  image.flip({ horizontal: options?.horizontal, vertical: options?.vertical });
+
+  return await jimpToBase64(image);
+}
+
 export const imageHelpers: ImageHelpersType = {
   trimWhitespaceBase64,
   scaleImageBase64,
@@ -153,4 +162,5 @@ export const imageHelpers: ImageHelpersType = {
   cropImageBase64,
   pixelRecolor,
   overlayImages,
+  flipImage,
 };

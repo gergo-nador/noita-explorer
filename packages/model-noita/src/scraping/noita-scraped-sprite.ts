@@ -1,3 +1,5 @@
+import { Vector2d } from '@noita-explorer/model';
+
 export interface NoitaScrapedSprite {
   tags: string[];
   imageFile: string;
@@ -7,6 +9,9 @@ export interface NoitaScrapedSprite {
   additive: boolean | undefined;
   emissive: boolean | undefined;
   zIndex: number | undefined;
+  transform?: {
+    scale?: Vector2d;
+  };
 }
 
 export interface NoitaScrapedPhysicsImageShapeComponent {

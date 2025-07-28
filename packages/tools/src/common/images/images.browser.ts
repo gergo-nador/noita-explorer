@@ -292,6 +292,10 @@ async function overlayImages(): Promise<string> {
   throw new Error('overlayImages is not implemented in images.browser.ts');
 }
 
+async function flipImage(): Promise<string> {
+  throw new Error('flipImage is not implemented in images.browser.ts');
+}
+
 export const imageHelpers: ImageHelpersType = {
   trimWhitespaceBase64,
   scaleImageBase64,
@@ -301,4 +305,5 @@ export const imageHelpers: ImageHelpersType = {
   cropImageBase64,
   pixelRecolor,
   overlayImages,
+  flipImage,
 };

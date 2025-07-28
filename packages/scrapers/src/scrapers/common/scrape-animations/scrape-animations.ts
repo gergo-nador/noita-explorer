@@ -15,7 +15,7 @@ import {
 } from '@noita-explorer/model-noita';
 import { scrapeAnimationFrames } from './scrape-animation-frames.ts';
 import { scrapeAnimationXmlDefinition } from './scrape-animation-xml-definition.ts';
-import { AnimationInfo } from './types.ts';
+import { AnimationFramesResult, AnimationInfo } from './types.ts';
 import { readImageFromAnimationInfo } from './read-image-from-animation-info.ts';
 
 export const scrapeAnimations = async ({
@@ -117,9 +117,30 @@ const assembleAnimationFrames = async ({
     imageBase64: imageBase64,
   });
 
-  if (!info.layers) {
-    return { framesResults, sprite };
-  }
+  await handleLayers({
+    info,
+    sprite,
+    framesResults,
+    dataWakParentDirectoryApi,
+  });
+
+  await flipImages({ info, framesResults });
+
+  return { framesResults, sprite };
+};
+
+const handleLayers = async ({
+  info,
+  sprite,
+  framesResults,
+  dataWakParentDirectoryApi,
+}: {
+  info: AnimationInfo;
+  sprite: Sprite;
+  framesResults: AnimationFramesResult[];
+  dataWakParentDirectoryApi: FileSystemDirectoryAccess;
+}) => {
+  if (!info.layers) return;
 
   for (const layer of info.layers) {
     const { framesResults: layerFrameResults, sprite: layerSprite } =
@@ -155,6 +176,29 @@ const assembleAnimationFrames = async ({
       }
     }
   }
+};
 
-  return { framesResults, sprite };
+const flipImages = async ({
+  info,
+  framesResults,
+}: {
+  info: AnimationInfo;
+  framesResults: AnimationFramesResult[];
+}) => {
+  if (
+    info.imageManipulation?.scale?.x !== -1 &&
+    info.imageManipulation?.scale?.y !== -1
+  ) {
+    return;
+  }
+
+  for (const framesResult of framesResults) {
+    for (let i = 0; i < framesResult.frameImages.length; i++) {
+      const image = framesResult.frameImages[i];
+      framesResult.frameImages[i] = await imageHelpers.flipImage(image, {
+        horizontal: info.imageManipulation?.scale?.x === -1,
+        vertical: info.imageManipulation?.scale?.y === -1,
+      });
+    }
+  }
 };

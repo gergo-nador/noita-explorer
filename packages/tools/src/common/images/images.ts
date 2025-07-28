@@ -1,6 +1,7 @@
 import { runtimeEnvironment } from '../runtime-environment.ts';
 import {
   CropImageBase64Options,
+  FlipOptions,
   ImageHelpersType,
   OverlayOptions,
   PixelColorOptions,
@@ -69,6 +70,11 @@ async function overlayImages(
   return imageHelper.overlayImages(background, overlay, options);
 }
 
+async function flipImage(base64: string, options?: FlipOptions) {
+  const imageHelper = await getImageHelper();
+  return imageHelper.flipImage(base64, options);
+}
+
 export const imageHelpers: ImageHelpersType = {
   trimWhitespaceBase64,
   scaleImageBase64,
@@ -78,4 +84,5 @@ export const imageHelpers: ImageHelpersType = {
   cropImageBase64,
   pixelRecolor,
   overlayImages,
+  flipImage,
 };

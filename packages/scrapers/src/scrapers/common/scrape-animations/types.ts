@@ -1,5 +1,5 @@
 import { SpriteAnimation } from '@noita-explorer/model-noita';
-import { FileSystemFileAccess } from '@noita-explorer/model';
+import { FileSystemFileAccess, Vector2d } from '@noita-explorer/model';
 import { OverlayOptions } from '@noita-explorer/tools';
 
 export interface AnimationFramesResult {
@@ -15,7 +15,8 @@ export interface AnimationInfo {
     /**
      * Assign a new color for an existing color. Underscore will be used as the default color if present.
      */
-    reColor: Record<string | '_', string>;
+    reColor?: Record<string | '_', string>;
+    scale?: Vector2d;
   };
 }
 
