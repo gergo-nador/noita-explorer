@@ -318,7 +318,7 @@ const getSprites = ({
 
       const split = splitNoitaEntityTags(tags);
 
-      const notAllowedTags = ['ui', 'health_bar_back', 'health_bar', 'l'];
+      const notAllowedTags = ['ui', 'health_bar_back', 'health_bar'];
       return !notAllowedTags.some((tag) => split.includes(tag));
     })
     // filter out invisible sprites
