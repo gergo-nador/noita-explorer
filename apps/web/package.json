@@ -28,7 +28,6 @@
     "@tsparticles/plugin-emitters": "^3.8.1",
     "@tsparticles/react": "^3.0.0",
     "@tsparticles/slim": "^3.8.1",
-    "@types/minimist": "^1.2.5",
     "buffer": "^6.0.3",
     "diff": "^8.0.2",
     "idb": "^8.0.1",
@@ -43,6 +42,7 @@
   "devDependencies": {
     "@eslint/js": "^9.15.0",
     "@sentry/cli": "^2.47.1",
+    "@types/minimist": "^1.2.5",
     "@types/react": "19.1.8",
     "@types/react-dom": "19.1.6",
     "@types/react-plotly.js": "^2.6.3",
