@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { pages } from '../routes/pages.ts';
 import { ifStatement } from '@noita-explorer/tools';
-import { zIndexManager } from '../utils/zIndexManager.ts';
+import { ZIndexManager } from '../utils/z-index-manager.ts';
 
 const bgBasePath = '/images/backgrounds/';
 const bgImages = {
@@ -64,7 +64,7 @@ export const PageBackground = () => {
         left: 0,
         width: '100%',
         height: '100%',
-        zIndex: zIndexManager.pageBackground,
+        zIndex: ZIndexManager.pageBackground,
         filter: backgroundFilter,
         transition: 'filter 200ms',
         overflow: 'hidden',

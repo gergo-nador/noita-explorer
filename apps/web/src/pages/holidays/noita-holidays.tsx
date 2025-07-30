@@ -4,7 +4,7 @@ import { Flex } from '@noita-explorer/react-utils';
 import { HolidayCard } from './holiday-card.tsx';
 import { NoitaHolidayContext } from '../../contexts/noita-holiday-context.ts';
 import { useFireworkComponent } from '../../hooks/use-firework-component.tsx';
-import { zIndexManager } from '../../utils/zIndexManager.ts';
+import { ZIndexManager } from '../../utils/z-index-manager.ts';
 
 export const NoitaHolidays = () => {
   const holidays = getNoitaHolidays();
@@ -21,7 +21,7 @@ export const NoitaHolidays = () => {
         style={{
           position: 'absolute',
           pointerEvents: 'none',
-          zIndex: zIndexManager.holidayFireworkBackground,
+          zIndex: ZIndexManager.holidayFireworkBackground,
         }}
       >
         <FireworkBackground />

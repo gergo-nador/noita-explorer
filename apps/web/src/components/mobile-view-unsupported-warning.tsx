@@ -2,7 +2,7 @@ import css from './mobile-view-unsupported-warning.module.css';
 import { Button, Card } from '@noita-explorer/noita-component-library';
 import { Flex } from '@noita-explorer/react-utils';
 import { useSettingsStore } from '../stores/settings.ts';
-import { zIndexManager } from '../utils/zIndexManager.ts';
+import { ZIndexManager } from '../utils/z-index-manager.ts';
 
 export const MobileViewUnsupportedWarning = () => {
   const { loaded, settings, set } = useSettingsStore();
@@ -16,7 +16,7 @@ export const MobileViewUnsupportedWarning = () => {
           position: 'absolute',
           bottom: 0,
           width: '100%',
-          zIndex: zIndexManager.mobileUnsupportedViewDialog,
+          zIndex: ZIndexManager.mobileUnsupportedViewDialog,
         }}
       >
         <Flex justify='center' style={{ padding: 10 }}>
