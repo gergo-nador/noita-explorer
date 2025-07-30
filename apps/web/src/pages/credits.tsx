@@ -1,6 +1,6 @@
 import { Button, Header, Icon } from '@noita-explorer/noita-component-library';
 import { Flex } from '@noita-explorer/react-utils';
-import { deployUrls } from '../utils/deployUrls.ts';
+import { deployUrls } from '../utils/deploy-urls.ts';
 
 export const Credits = () => {
   return (
