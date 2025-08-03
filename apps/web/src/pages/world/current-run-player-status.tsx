@@ -129,7 +129,7 @@ export const CurrentRunPlayerStatus = () => {
 const HudIcon = ({ alt, type }: { alt: string; type: string }) => {
   return (
     <Flex center>
-      <Icon alt={alt} src={`/images/hud/${type}.png`} size={20} />
+      <Icon alt={alt} src={`/images/data-wak/hud/${type}.png`} size={20} />
     </Flex>
   );
 };

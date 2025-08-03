@@ -1,7 +1,7 @@
 import { StringKeyDictionary } from '@noita-explorer/model';
 import { NoitaSpellType } from '@noita-explorer/model-noita';
 
-const bgBasePath = '/images/spell_backgrounds/';
+const bgBasePath = '/images/data-wak/spell-backgrounds/';
 
 export const NoitaSpellTypesDictionary: StringKeyDictionary<NoitaSpellType> = {
   ACTION_TYPE_DRAW_MANY: {

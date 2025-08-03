@@ -61,7 +61,7 @@ export const NoitaProgressTrackerPillar = () => {
                   );
                 };
 
-                const imagePath = `/images/achievement-pillars/${pillar.img}.png`;
+                const imagePath = `/images/data-wak/achievement-pillars/${pillar.img}.png`;
 
                 return (
                   <NoitaTooltipWrapper placement='right' content={pillar.info}>
