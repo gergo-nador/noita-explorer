@@ -1,5 +1,5 @@
 import { useSearchParams } from 'react-router-dom';
-import { Dispatch, useRef } from 'react';
+import { Dispatch, useEffect } from 'react';
 
 export const useQueryParamsBoolean = ({
   key,
@@ -9,7 +9,6 @@ export const useQueryParamsBoolean = ({
   defaultValue?: boolean;
 }): [boolean, Dispatch<boolean>] => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const isFirstRenderRef = useRef(true);
 
   const queryParamValue = searchParams.get(key) === '1';
 
@@ -19,12 +18,11 @@ export const useQueryParamsBoolean = ({
       return state;
     });
 
-  if (isFirstRenderRef.current) {
-    isFirstRenderRef.current = false;
+  useEffect(() => {
     if (defaultValue) {
       setQueryParamValue(defaultValue);
     }
-  }
+  }, []);
 
   return [queryParamValue, setQueryParamValue];
 };
