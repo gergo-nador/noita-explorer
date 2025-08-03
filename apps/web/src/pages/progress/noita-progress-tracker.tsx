@@ -34,8 +34,13 @@ export const NoitaProgressTracker = () => {
   } = useSave00Store();
   const { actionUtils } = useNoitaActionsStore();
 
-  const [showAll, setShowAll] = useQueryParamsBoolean('showAll');
-  const [__unlockMode, setUnlockMode] = useQueryParamsBoolean('unlockMode');
+  const [showAll, setShowAll] = useQueryParamsBoolean({
+    key: 'showAll',
+    defaultValue: save00Status === 'unset',
+  });
+  const [__unlockMode, setUnlockMode] = useQueryParamsBoolean({
+    key: 'unlockMode',
+  });
   const unlockMode =
     save00Status === 'loaded' &&
     noitaAPI.environment.features.progressUnlockMode
