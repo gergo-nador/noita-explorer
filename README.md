@@ -137,7 +137,7 @@ npm run dev:web
 
 ## Branches and Environments
 
-### Environments (`import.meta.env.VITE_ENV`)
+### Environments (`import.meta.env.VITE_ENV` or `__ENV__`)
 
 - on local machine: `development`
 - on preview deployment from `dev` branch: `preview`
@@ -199,7 +199,7 @@ The official domains of Noita Explorers are:
 
 Access site directly:
 - https://noita-explorer.pages.dev (main branch direct cloudflare link)
-- https://noita-explorer.pages.dev (dev branch direct cloudflare link)
+- https://dev.noita-explorer.pages.dev (dev branch direct cloudflare link)
 
 ## CI
 
@@ -216,14 +216,17 @@ The prebuild runs the `scripts/ci.sh` shell file.
 This file will 
 1. import and set all the environment variables which can be found in the `.env` file
 2. check if `CI_DISABLED` flag is `1`, if yes, exit with code `0`
-3. `npm run data-wak-download`: downloads the `data.wak` and the `common.csv` from the urls in `CI_DATA_WAK_URL`
+3. type checking for typescript files in the scripts folder
+4. build `apps/web` as a library in `dist-lib` folder for the scripts
+5. `npm run data-wak-download`: downloads the `data.wak` and the `common.csv` from the urls in `CI_DATA_WAK_URL`
 and `CI_TRANSLATIONS_URL`. These files are hosted on cloudflare. If you wish to skip downloading them, copy these files from the
 game directory into the `dist-tmp` folder.
-4. `npm run scrape-data-wak`: scrapes the previously downloaded `data.wak` file for perk, spell and enemy data, for
+6. `npm run scrape-data-wak`: scrapes the previously downloaded `data.wak` file for perk, spell and enemy data, for
 media files. Outputs two json files, the `public/noita_wak_data.json` contains the metadata of many in-game objects. The
 second one is placed in `dist-tmp/noita_data_gifs.json`, it contains all the gifs in base64 encoded format.
-5. `npm run generate-gifs`: generates gifs from the file `dist-tmp/noita_data_gifs.json` and outputs them in the `public` folder
-6. `npm run generate-static-assets`: generates SEO optimized HTML pages for the sharing wiki links
+7. `npm run generate-gifs`: generates gifs from the file `dist-tmp/noita_data_gifs.json` and outputs them in the `public` folder
+8. `npm run generate-static-assets`: generates SEO optimized HTML pages for the sharing wiki links
+9. `npm run generate-sitemap`: generates sitemap for SEO
 
 ### `postbuild`
 

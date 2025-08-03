@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import { NoitaWakData } from '@noita-explorer/model-noita';
 import { Buffer } from 'buffer';
 import { generateHtml } from './generate-html';
-import { deployUrls } from '../../src/utils/deploy-urls';
+import { getDeployUrl } from '../utils/get-deploy-url';
 import * as dotenv from 'dotenv';
 import * as path from 'node:path';
 import { generateImage } from './generate-image';
@@ -94,7 +94,7 @@ async function generateStaticAssets(data: NoitaWakData) {
         siteName: 'Noita Explorer',
         title: perk.name,
         description: perk.description,
-        url: deployUrls.noitaExplorer.production + redirectUrl,
+        url: getDeployUrl() + redirectUrl,
         image: {
           url: imageWebPath,
           mimeType: 'image/png',
@@ -140,7 +140,7 @@ async function generateStaticAssets(data: NoitaWakData) {
         siteName: 'Noita Explorer',
         title: spell.name,
         description: spell.description,
-        url: deployUrls.noitaExplorer.production + redirectUrl,
+        url: getDeployUrl() + redirectUrl,
         image: {
           url: imageWebPath,
           mimeType: 'image/png',
@@ -186,7 +186,7 @@ async function generateStaticAssets(data: NoitaWakData) {
         siteName: 'Noita Explorer',
         title: enemy.name,
         description: `${enemy.hp}❤️ ${enemy.hasGoldDrop ? enemy.goldDrop : '-'}💰`,
-        url: deployUrls.noitaExplorer.production + redirectUrl,
+        url: getDeployUrl() + redirectUrl,
         image: {
           url: imageWebPath,
           mimeType: 'image/png',

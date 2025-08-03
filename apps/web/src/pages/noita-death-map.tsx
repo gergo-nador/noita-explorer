@@ -1,11 +1,12 @@
-import Plot from 'react-plotly.js';
 import { useSave00Store } from '../stores/save00.ts';
 import { StringKeyDictionary } from '@noita-explorer/model';
 import { Data, Layout } from 'plotly.js';
 import { arrayHelpers } from '@noita-explorer/tools';
+import { use } from 'react';
 
 export const NoitaDeathMap = () => {
   const { sessions } = useSave00Store();
+  const ReactPlotly = use(import('react-plotly.js'));
 
   if (sessions === undefined) {
     return <div>No Sessions loaded</div>;
@@ -116,7 +117,7 @@ export const NoitaDeathMap = () => {
 
   return (
     <div>
-      <Plot
+      <ReactPlotly.default
         data={traces}
         layout={layout}
         config={{ responsive: true }}

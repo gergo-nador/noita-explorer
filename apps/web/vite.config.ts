@@ -1,12 +1,15 @@
-import { defineConfig, loadEnv } from 'vite';
+import { defineConfig, loadEnv, UserConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import mkcert from 'vite-plugin-mkcert';
 import { execSync } from 'child_process';
+import { resolve } from 'path';
 
 // https://vite.dev/config/
-export default defineConfig(({ mode }) => {
+export default defineConfig(({ mode }): UserConfig => {
   const deployInfo = getDeployInfo();
   const environment = getEnvironment({ mode });
+
+  const isLibMode = mode === 'lib';
 
   return {
     base: '/',
@@ -22,6 +25,13 @@ export default defineConfig(({ mode }) => {
     },
 
     build: {
+      lib: isLibMode && {
+        entry: { routes: resolve(__dirname, 'src/routes/router.tsx') },
+        formats: ['es', 'cjs'],
+        fileName: (format, entryName) => `${entryName}.${format}.js`,
+      },
+      outDir: isLibMode ? 'dist-lib' : 'dist',
+      minify: !isLibMode,
       sourcemap: true,
       rollupOptions: {
         output: {

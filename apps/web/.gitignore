@@ -1,6 +1,8 @@
 # generated static sites
 public/g
+public/sitemap.txt
 
+dist-lib
 dist-tmp
 public/noita_wak_data.json
 
