@@ -10,6 +10,7 @@ export default defineConfig({
       formats: ['es', 'cjs'],
       fileName: (format, entryName) => `${entryName}.${format}.js`,
     },
+    minify: false,
     rollupOptions: {
       output: {
         assetFileNames: 'assets/[name][extname]',
