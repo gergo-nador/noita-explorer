@@ -1,6 +1,5 @@
 import { Flex } from '@noita-explorer/react-utils';
 import {
-  Button,
   Header,
   MultiSelection,
 } from '@noita-explorer/noita-component-library';
@@ -13,14 +12,13 @@ import { imageHelpers, randomHelpers } from '@noita-explorer/tools';
 import { useEffect, useState } from 'react';
 import { useNoitaDataWakStore } from '../../stores/noita-data-wak.ts';
 import { NoitaWandConfig } from '@noita-explorer/model-noita';
-import { useNavigate } from 'react-router-dom';
 import { pages } from '../../routes/pages.ts';
+import { Link } from '../../components/link.tsx';
 
 export const SettingsCursor = () => {
   const { settings, set } = useSettingsStore();
   const { cursor } = settings;
   const { data } = useNoitaDataWakStore();
-  const navigate = useNavigate();
 
   const [customCursor, setCustomCursor] = useState<string>();
   const [counter, setCounter] = useState(0);
@@ -118,9 +116,7 @@ export const SettingsCursor = () => {
       )}
       {cursor.type === 'wand' && (
         <div>
-          <Button onClick={() => navigate(pages.settings.cursorWandPicker)}>
-            Open Wands
-          </Button>
+          <Link to={pages.settings.cursorWandPicker}>Open Wands</Link>
         </div>
       )}
     </Header>

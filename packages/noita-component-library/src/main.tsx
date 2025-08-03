@@ -1,4 +1,5 @@
 export { Button } from './components/button/button';
+export type { ButtonDecoration } from './components/button/button';
 export { Card } from './components/card/card';
 export { ContextMenuWrapper } from './components/context-menu-wrapper';
 export { DialogButton } from './components/dialog-button';

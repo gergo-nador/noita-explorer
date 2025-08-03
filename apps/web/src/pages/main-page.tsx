@@ -1,5 +1,4 @@
 import { Button, useToast } from '@noita-explorer/noita-component-library';
-import { useNavigate } from 'react-router-dom';
 import { pages } from '../routes/pages';
 import { useNoitaDataWakStore } from '../stores/noita-data-wak.ts';
 import { noitaAPI } from '../noita-api.ts';
@@ -7,9 +6,9 @@ import { useSave00Store } from '../stores/save00.ts';
 import { useMemo } from 'react';
 import { Flex } from '@noita-explorer/react-utils';
 import { dateHelpers } from '@noita-explorer/tools';
+import { Link } from '../components/link.tsx';
 
 export const MainPage = () => {
-  const navigate = useNavigate();
   const { loaded: noitaDataWakLoaded, data } = useNoitaDataWakStore();
   const { status: save00Status, currentRun } = useSave00Store();
   const toast = useToast();
@@ -52,104 +51,82 @@ export const MainPage = () => {
           Noita Explorer
         </div>
       </Flex>
-      <Flex center column gap={5}>
-        {noitaAPI.environment.features.launchGame && (
-          <Button onClick={() => noitaAPI.noita.launch.master()}>
-            Launch Game
-          </Button>
-        )}
-        {!!noitaAPI.environment.desktop && (
-          <Button onClick={() => navigate(pages.setup.desktopPaths)}>
-            Setup
-          </Button>
-        )}
-        {noitaAPI.environment.web && (
-          <Button onClick={() => navigate(pages.setup.webPaths)}>Setup</Button>
-        )}
+      <nav>
+        <Flex center column gap={5}>
+          {noitaAPI.environment.features.launchGame && (
+            <Button onClick={() => noitaAPI.noita.launch.master()}>
+              Launch Game
+            </Button>
+          )}
+          {noitaAPI.environment.desktop && (
+            <Link to={pages.setup.desktopPaths}>Setup</Link>
+          )}
+          {noitaAPI.environment.web && (
+            <Link to={pages.setup.webPaths}>Setup</Link>
+          )}
 
-        <Button
-          disabled={!noitaDataWakLoaded}
-          onClick={() => navigate(pages.progressTracker.index)}
-          onDisabledClick={() =>
-            toast.error(
-              'Noita Data is not set up. Please click on the Setup menu.',
-            )
-          }
-        >
-          Progress {newProgress > 0 && <span>( {newProgress} )</span>}
-        </Button>
-        <Button
-          disabled={!noitaDataWakLoaded}
-          onClick={() => navigate(pages.wiki.perks)}
-          onDisabledClick={() =>
-            toast.error(
-              'Noita Data is not set up. Please click on the Setup menu.',
-            )
-          }
-        >
-          Wiki
-        </Button>
-        <Button
-          disabled={
-            !noitaDataWakLoaded || !currentRun || __ENV__ === 'production'
-          }
-          onClick={() => navigate(pages.currentRun)}
-          onDisabledClick={() => {
-            if (__ENV__ === 'production') {
-              toast.info(
-                "This page is still in development. If you want to view it's current state, check out the dev page",
-              );
-            } else if (!noitaDataWakLoaded) {
-              toast.error(
-                'Noita Data is not set up. Please click on the Setup menu.',
-              );
-            } else if (!currentRun) {
-              toast.error('No ongoing run detected.');
+          <Link
+            to={pages.progressTracker.index}
+            disabled={!noitaDataWakLoaded}
+            disabledToast='Noita Data is not set up. Loading...'
+          >
+            Progress {newProgress > 0 && <span>( {newProgress} )</span>}
+          </Link>
+          <Link
+            to={pages.wiki.perks}
+            disabled={!noitaDataWakLoaded}
+            disabledToast='Noita Data is not set up. Loading...'
+          >
+            Wiki
+          </Link>
+          <Link
+            to={pages.currentRun}
+            disabled={
+              !noitaDataWakLoaded || !currentRun || __ENV__ === 'production'
             }
-          }}
-        >
-          Current Run
-        </Button>
-        <Button
-          disabled={save00Status !== 'loaded'}
-          onClick={() => navigate(pages.sessions)}
-          onDisabledClick={() =>
-            toast.error(
-              'To view sessions you need to set up reading from save00 folder.',
-            )
-          }
-        >
-          Sessions
-        </Button>
-        <Button
-          disabled={save00Status !== 'loaded'}
-          onClick={() => navigate(pages.deathMap)}
-          onDisabledClick={() =>
-            toast.error(
-              'To view death map you need to set up reading from save00 folder.',
-            )
-          }
-        >
-          Death Map
-        </Button>
-        <Button
-          disabled={save00Status !== 'loaded'}
-          onClick={() => navigate(pages.bonesWands)}
-          onDisabledClick={() =>
-            toast.error(
-              'To view bones wands you need to set up reading from save00 folder.',
-            )
-          }
-        >
-          Bones Wands
-        </Button>
-        <Button onClick={() => navigate(pages.holidays)}>Holidays</Button>
-        <Button onClick={() => navigate(pages.settings.index)}>Settings</Button>
-        <Button onClick={() => navigate(pages.credits)}>Credits</Button>
-        {__ENV__ === 'development' && (
-          <Button onClick={() => navigate(pages.sandbox)}>Sandbox</Button>
-        )}
-      </Flex>
+            onDisabledClick={() => {
+              if (__ENV__ === 'production') {
+                toast.info(
+                  "This page is still in development. If you want to view it's current state, check out the dev page",
+                );
+              } else if (!noitaDataWakLoaded) {
+                toast.error(
+                  'Noita Data is not set up. Please click on the Setup menu.',
+                );
+              } else if (!currentRun) {
+                toast.error('No ongoing run detected.');
+              }
+            }}
+          >
+            Current Run
+          </Link>
+          <Link
+            to={pages.sessions}
+            disabled={save00Status !== 'loaded'}
+            disabledToast='To view sessions you need to set up reading from save00 folder.'
+          >
+            Sessions
+          </Link>
+          <Link
+            to={pages.deathMap}
+            disabled={save00Status !== 'loaded'}
+            disabledToast='To view death map you need to set up reading from save00 folder.'
+          >
+            Death Map
+          </Link>
+          <Link
+            to={pages.bonesWands}
+            disabled={save00Status !== 'loaded'}
+            disabledToast='To view bones wands you need to set up reading from save00 folder.'
+          >
+            Bones Wands
+          </Link>
+          <Link to={pages.holidays}>Holidays</Link>
+          <Link to={pages.settings.index}>Settings</Link>
+          <Link to={pages.credits}>Credits</Link>
+          {__ENV__ === 'development' && <Link to={pages.sandbox}>Sandbox</Link>}
+        </Flex>
+      </nav>
     </Flex>
   );
 };

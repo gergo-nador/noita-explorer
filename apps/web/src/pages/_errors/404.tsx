@@ -1,15 +1,15 @@
 import { StringKeyDictionaryComposite } from '@noita-explorer/model';
 import { Flex } from '@noita-explorer/react-utils';
 import { Button } from '@noita-explorer/noita-component-library';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { pages } from '../../routes/pages.ts';
 import { useMemo } from 'react';
 import { diffChars } from 'diff';
 import { arrayHelpers } from '@noita-explorer/tools';
+import { Link } from '../../components/link.tsx';
 
 export const Error404 = () => {
   const location = useLocation();
-  const navigate = useNavigate();
   const currentPathName = location.pathname;
 
   const potentialPath = useMemo(() => {
@@ -50,7 +50,7 @@ export const Error404 = () => {
           <br />
           <Flex gap={8}>
             <span>Did you mean to go to</span>
-            <Link to={potentialPath} style={{ color: 'white' }}>
+            <Link to={potentialPath}>
               <Button>{potentialPath}</Button>
             </Link>
             <span>?</span>
@@ -59,9 +59,7 @@ export const Error404 = () => {
       )}
       <br />
       <div>
-        <Button onClick={() => navigate(pages.main)}>
-          Click here to go to main page
-        </Button>
+        <Link to={pages.main}>Click here to go to main page</Link>
       </div>
     </>
   );

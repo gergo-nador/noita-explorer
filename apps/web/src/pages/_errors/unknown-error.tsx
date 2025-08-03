@@ -1,12 +1,10 @@
 import { sentry } from '../../utils/sentry.ts';
-import { useNavigate } from 'react-router-dom';
 import { Button } from '@noita-explorer/noita-component-library';
 import { pages } from '../../routes/pages.ts';
 import { Flex } from '@noita-explorer/react-utils';
+import { Link } from '../../components/link.tsx';
 
 export const UnknownError = () => {
-  const navigate = useNavigate();
-
   return (
     <>
       <h1 style={{ lineHeight: 1.2 }}>Uhhh ohhh, something wrong happened.</h1>
@@ -48,9 +46,7 @@ export const UnknownError = () => {
             you to enable the anonymous bug reporting in the Settings.
           </div>
           <br />
-          <Button onClick={() => navigate(pages.settings.index)}>
-            Bring me to Settings
-          </Button>
+          <Link to={pages.settings.index}>Bring me to Settings</Link>
         </div>
       )}
 
@@ -58,7 +54,7 @@ export const UnknownError = () => {
       <Flex gap={10}>
         <Button onClick={() => location.reload()}>Refresh Page</Button>
         <span>/</span>
-        <Button onClick={() => navigate(pages.main)}>Go to Main Menu</Button>
+        <Link to={pages.main}>Go to Main Menu</Link>
       </Flex>
     </>
   );

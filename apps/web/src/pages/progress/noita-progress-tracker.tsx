@@ -18,12 +18,11 @@ import { arrayHelpers } from '@noita-explorer/tools';
 import { useNoitaActionsStore } from '../../stores/actions.ts';
 import { noitaAPI } from '../../noita-api.ts';
 import { Flex } from '@noita-explorer/react-utils';
-import { useNavigate } from 'react-router-dom';
 import { pages } from '../../routes/pages.ts';
 import { useQueryParamsBoolean } from '../../hooks/query-params/use-query-params-boolean.ts';
+import { Link } from '../../components/link.tsx';
 
 export const NoitaProgressTracker = () => {
-  const navigate = useNavigate();
   const { data } = useNoitaDataWakStore();
   const {
     enemyStatistics,
@@ -78,9 +77,7 @@ export const NoitaProgressTracker = () => {
           <MultiSelectionBoolean setValue={setShowAll} currentValue={showAll} />
         </Flex>
         <HorizontalDivider />
-        <Button onClick={() => navigate(pages.progressTracker.secrets)}>
-          Secrets
-        </Button>
+        <Link to={pages.progressTracker.secrets}>Secrets</Link>
         {save00Status === 'loaded' &&
           noitaAPI.environment.features.progressUnlockMode && (
             <>

@@ -23,6 +23,7 @@ import { pages } from '../../routes/pages';
 import { useNoitaDataWakStore } from '../../stores/noita-data-wak.ts';
 import { sentry } from '../../utils/sentry.ts';
 import { SpaceCharacter } from '../../components/space-character.tsx';
+import { Link } from '../../components/link.tsx';
 
 export const SetupDesktopScraper = () => {
   const navigate = useNavigate();
@@ -216,9 +217,7 @@ export const SetupDesktopScraper = () => {
       </Header>
       <PageBottomComponent>
         <Flex gap={10}>
-          <Button onClick={() => navigate(pages.setup.desktopPaths)}>
-            Back
-          </Button>
+          <Link to={pages.setup.desktopPaths}>Back</Link>
         </Flex>
 
         <Flex gap={20}>

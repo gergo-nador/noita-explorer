@@ -6,17 +6,16 @@ import {
 } from '@noita-explorer/noita-component-library';
 import { useSettingsStore } from '../../stores/settings';
 import { noitaAPI } from '../../noita-api.ts';
-import { useNavigate } from 'react-router-dom';
 import { pages } from '../../routes/pages';
 import { useEffect, useState } from 'react';
 import { PageBottomComponent } from '../../components/page-bottom-component.tsx';
 import { PathInput } from '../../components/path-input.tsx';
 import { Flex } from '@noita-explorer/react-utils';
+import { Link } from '../../components/link.tsx';
 
 export const SetupDesktopPaths = () => {
   const { settings, set: setPaths } = useSettingsStore();
   const { paths } = settings;
-  const navigate = useNavigate();
   const toast = useToast();
   const [nextEnabled, setNextEnabled] = useState(false);
 
@@ -107,12 +106,9 @@ export const SetupDesktopPaths = () => {
         <div></div>
         <Flex gap={20}>
           <Button onClick={() => autoFill()}>Auto fill</Button>
-          <Button
-            disabled={!nextEnabled}
-            onClick={() => navigate(pages.setup.desktopScrape)}
-          >
+          <Link to={pages.setup.desktopScrape} disabled={!nextEnabled}>
             Next
-          </Button>
+          </Link>
         </Flex>
       </PageBottomComponent>
     </>

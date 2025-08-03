@@ -3,10 +3,12 @@ import arrowLeft from '../../../assets/button/keyboard_cursor_left_active.png';
 import arrowRight from '../../../assets/button/keyboard_cursor_right_active.png';
 import React, { MutableRefObject, useRef } from 'react';
 
+export type ButtonDecoration = 'left' | 'right' | 'both' | 'none';
+
 export interface ButtonProps {
   children?: string | React.ReactNode | React.ReactNode[];
   className?: string;
-  decoration?: 'left' | 'right' | 'both' | 'none';
+  decoration?: ButtonDecoration;
   disabled?: boolean;
   style?: React.CSSProperties;
   textStyle?: React.CSSProperties;
