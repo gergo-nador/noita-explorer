@@ -23,7 +23,7 @@ export const NoitaEnemyGifCard = ({ enemy, gif, width, height }: Props) => {
 
   // @ts-expect-error string.replaceAll does exist, idk why it is flagged
   const gifDisplayName = gif.name.replaceAll('_', ' ');
-  const media = publicPaths.enemyGifs({
+  const media = publicPaths.generated.enemyGifs({
     enemyId: enemy.id,
     gifName: gif.name,
     gifReloadCounter: gifRestartCounter,

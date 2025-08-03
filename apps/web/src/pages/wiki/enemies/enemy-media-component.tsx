@@ -40,7 +40,7 @@ export const EnemyMediaComponent = ({ enemy }: Props) => {
       {enemy.media.type === 'image' && (
         <div>
           <PixelatedImage
-            src={publicPaths.enemyImage({
+            src={publicPaths.generated.enemyImage({
               enemyId: enemy.id,
               type: enemy.media.imageType,
             })}

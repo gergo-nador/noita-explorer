@@ -13,13 +13,12 @@ import {
 } from '@noita-explorer/noita-component-library';
 import { Flex } from '@noita-explorer/react-utils';
 import { useEffect, useMemo, useState } from 'react';
+import { HoveredStyle } from '@noita-explorer/react-utils';
 
 import dieIcon from '../../assets/icons/die2.png';
-import lifetimeIcon from '../../assets/icons/spells/lifetime.webp';
 import moneyIcon from '../../assets/icons/money.png';
 import deathIcon from '../../assets/icons/icon_danger.png';
 import enemyIcon from '../../assets/icons/enemy.png';
-import { HoveredStyle } from '@noita-explorer/react-utils';
 
 interface NoitaSessionsListProps {
   sessionsGrouped: StringKeyDictionary<NoitaSession[]>;
@@ -138,7 +137,7 @@ const SessionCard = ({ session }: { session: NoitaSession }) => {
             <Icon src={dieIcon} size={18} /> {session.seed}
           </div>
           <div>
-            <Icon src={lifetimeIcon} size={20} />
+            <Icon src='images/data-wak/spells/lifetime.webp' size={20} />
             {timeHelpers.secondsToTimeString(session.playTime)}
           </div>
           <div>

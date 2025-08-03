@@ -12,7 +12,7 @@ export const ProgressOrbs = () => {
   }: {
     orbId: string | 'orb_red_evil' | 'orb_picked' | 'orb_discovered';
   }) => {
-    const path = publicPaths.orbs({ orbId: orbId }).gif;
+    const path = publicPaths.generated.orbs({ orbId: orbId }).gif;
     return <PixelatedImage src={path} height={120} />;
   };
 

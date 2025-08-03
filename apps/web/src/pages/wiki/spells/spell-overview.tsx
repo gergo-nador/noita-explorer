@@ -4,15 +4,8 @@ import { NoitaSpellTypesDictionary } from '../../../noita/noita-spell-type-dicti
 import { useNoitaUnits } from '../../../hooks/use-noita-units.ts';
 import { TooltipRowData } from '../../../components/tooltips/noita-spell-tooltip.tsx';
 
-import actionTypeIcon from '../../../assets/icons/spells/icon_action_type.png';
-import manaDrainIcon from '../../../assets/icons/spells/icon_mana_drain.png';
-import maxUsesIcon from '../../../assets/icons/spells/icon_action_max_uses.png';
-import lifetimeIcon from '../../../assets/icons/spells/lifetime.webp';
-import fireRateWaitModifierIcon from '../../../assets/icons/spells/icon_fire_rate_wait.png';
-import reloadModifierIcon from '../../../assets/icons/spells/icon_reload_time.png';
 import damageProjectileIcon from '../../../assets/icons/damages/icon_damage_projectile.png';
 import damageExplosionIcon from '../../../assets/icons/damages/icon_damage_explosion.png';
-import explosionRadiusIcon from '../../../assets/icons/spells/icon_explosion_radius.png';
 import damageSliceIcon from '../../../assets/icons/damages/icon_damage_slice.png';
 import damageMeleeIcon from '../../../assets/icons/damages/icon_damage_melee.png';
 import damageFireIcon from '../../../assets/icons/damages/icon_damage_fire.png';
@@ -21,9 +14,6 @@ import damageElectricityIcon from '../../../assets/icons/damages/icon_damage_ele
 import damageDrillIcon from '../../../assets/icons/damages/icon_damage_drill.png';
 import damageIceIcon from '../../../assets/icons/damages/icon_damage_ice.png';
 import damageHolyIcon from '../../../assets/icons/damages/icon_damage_holy.png';
-import speedModifierIcon from '../../../assets/icons/spells/icon_speed_multiplier.png';
-import recoilModifierIcon from '../../../assets/icons/spells/icon_recoil.png';
-import spreadModifierIcon from '../../../assets/icons/spells/icon_spread_degrees.png';
 import { NoitaNumberModifier } from '../../../components/tooltips/noita-number-modifier.tsx';
 import { Flex } from '@noita-explorer/react-utils';
 import { CopyLinkText } from '../../../components/copy-link-text.tsx';
@@ -35,19 +25,36 @@ export const SpellOverview = ({ spell }: { spell: NoitaSpell }) => {
 
   const rowsGeneral: TooltipRowData[] = [
     {
-      icon: <Icon src={actionTypeIcon} size={15} />,
+      icon: (
+        <Icon
+          src={publicPaths.static.dataWak.spellProperties('icon_action_type')}
+          size={15}
+        />
+      ),
       text: 'Type',
       value: actionType.name,
       show: true,
     },
     {
-      icon: <Icon src={manaDrainIcon} size={15} />,
+      icon: (
+        <Icon
+          src={publicPaths.static.dataWak.spellProperties('icon_mana_drain')}
+          size={15}
+        />
+      ),
       text: 'Mana Drain',
       value: <span>{spell.manaDrain}</span>,
       show: true,
     },
     {
-      icon: <Icon src={maxUsesIcon} size={15} />,
+      icon: (
+        <Icon
+          src={publicPaths.static.dataWak.spellProperties(
+            'icon_action_max_uses',
+          )}
+          size={15}
+        />
+      ),
       text: 'Uses',
       value: spell.maxUses,
       show: spell.maxUses !== undefined,
@@ -66,7 +73,12 @@ export const SpellOverview = ({ spell }: { spell: NoitaSpell }) => {
 
   const rowsTime: TooltipRowData[] = [
     {
-      icon: <Icon src={lifetimeIcon} size={15} />,
+      icon: (
+        <Icon
+          src={publicPaths.static.dataWak.spellProperties('lifetime')}
+          size={15}
+        />
+      ),
       text: 'Lifetime',
       value: (() => {
         if (spell.lifetime === undefined) {
@@ -101,7 +113,12 @@ export const SpellOverview = ({ spell }: { spell: NoitaSpell }) => {
       show: spell.lifetime !== undefined,
     },
     {
-      icon: <Icon src={lifetimeIcon} size={15} />,
+      icon: (
+        <Icon
+          src={publicPaths.static.dataWak.spellProperties('lifetime')}
+          size={15}
+        />
+      ),
       text: 'Lifetime Modifier',
       value: (
         <NoitaNumberModifier
@@ -114,7 +131,14 @@ export const SpellOverview = ({ spell }: { spell: NoitaSpell }) => {
       show: spell.lifetimeModifier !== undefined,
     },
     {
-      icon: <Icon src={fireRateWaitModifierIcon} size={15} />,
+      icon: (
+        <Icon
+          src={publicPaths.static.dataWak.spellProperties(
+            'icon_fire_rate_wait',
+          )}
+          size={15}
+        />
+      ),
       text: 'Cast Delay',
       value: (
         <NoitaNumberModifier
@@ -127,7 +151,12 @@ export const SpellOverview = ({ spell }: { spell: NoitaSpell }) => {
       show: spell.fireRateWaitModifier !== undefined,
     },
     {
-      icon: <Icon src={reloadModifierIcon} size={15} />,
+      icon: (
+        <Icon
+          src={publicPaths.static.dataWak.spellProperties('icon_reload_time')}
+          size={15}
+        />
+      ),
       text: 'Reload Time',
       value: (
         <NoitaNumberModifier
@@ -167,13 +196,27 @@ export const SpellOverview = ({ spell }: { spell: NoitaSpell }) => {
       show: spell.explosionDamageModifier !== undefined,
     },
     {
-      icon: <Icon src={explosionRadiusIcon} size={15} />,
+      icon: (
+        <Icon
+          src={publicPaths.static.dataWak.spellProperties(
+            'icon_explosion_radius',
+          )}
+          size={15}
+        />
+      ),
       text: 'Explosion Radius',
       value: spell.explosionRadius,
       show: spell.explosionRadius !== undefined,
     },
     {
-      icon: <Icon src={explosionRadiusIcon} size={15} />,
+      icon: (
+        <Icon
+          src={publicPaths.static.dataWak.spellProperties(
+            'icon_explosion_radius',
+          )}
+          size={15}
+        />
+      ),
       text: 'Explosion Radius',
       value: <NoitaNumberModifier modifier={spell.explosionRadiusModifier} />,
       show: spell.explosionRadiusModifier !== undefined,
@@ -242,19 +285,38 @@ export const SpellOverview = ({ spell }: { spell: NoitaSpell }) => {
 
   const rowsOther: TooltipRowData[] = [
     {
-      icon: <Icon src={speedModifierIcon} size={15} />,
+      icon: (
+        <Icon
+          src={publicPaths.static.dataWak.spellProperties(
+            'icon_speed_multiplier',
+          )}
+          size={15}
+        />
+      ),
       text: 'Speed modifier',
       value: <NoitaNumberModifier modifier={spell.speedModifier} />,
       show: spell.speedModifier !== undefined,
     },
     {
-      icon: <Icon src={recoilModifierIcon} size={15} />,
+      icon: (
+        <Icon
+          src={publicPaths.static.dataWak.spellProperties('icon_recoil')}
+          size={15}
+        />
+      ),
       text: 'Recoil',
       value: <NoitaNumberModifier modifier={spell.recoilModifier} />,
       show: spell.recoilModifier !== undefined,
     },
     {
-      icon: <Icon src={spreadModifierIcon} size={15} />,
+      icon: (
+        <Icon
+          src={publicPaths.static.dataWak.spellProperties(
+            'icon_spread_degrees',
+          )}
+          size={15}
+        />
+      ),
       text: 'Spread',
       value: (
         <NoitaNumberModifier
@@ -284,7 +346,7 @@ export const SpellOverview = ({ spell }: { spell: NoitaSpell }) => {
         </Flex>
 
         <Flex justify='center' column>
-          <CopyLinkText link={publicPaths.wiki.spells(spell.id)}>
+          <CopyLinkText link={publicPaths.generated.wiki.spells(spell.id)}>
             <div style={{ fontSize: 20, marginBottom: 10 }}>{spell.name}</div>
           </CopyLinkText>
           <div>{spell.description}</div>

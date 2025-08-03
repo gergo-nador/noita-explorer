@@ -4,16 +4,16 @@ import { useLocation } from 'react-router-dom';
 import { pages } from '../routes/pages.ts';
 import { ifStatement } from '@noita-explorer/tools';
 import { ZIndexManager } from '../utils/z-index-manager.ts';
+import { publicPaths } from '../utils/public-paths.ts';
 
-const bgBasePath = '/images/backgrounds/';
 const bgImages = {
-  wideScreenBg: bgBasePath + 'wide_screen_bg.jpg',
+  wideScreenBg: publicPaths.static.backgrounds('wide_screen_bg.jpg'),
   // one of the perfect background
-  altarNightBg: bgBasePath + 'altar_night.jpg',
+  altarNightBg: publicPaths.static.backgrounds('altar_night.jpg'),
   // not that great with the large red circle in the middle
-  theWork: bgBasePath + 'the_work.webp',
+  theWork: publicPaths.static.backgrounds('the_work.webp'),
   // pretty great bg
-  theWorkRegular: bgBasePath + 'the_work_regular.webp',
+  theWorkRegular: publicPaths.static.backgrounds('the_work_regular.webp'),
 };
 
 const random = Math.random();

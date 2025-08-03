@@ -29,7 +29,7 @@ export const PerkOverview = ({ perk }: { perk: NoitaPerk }) => {
           />
         </Flex>
         <Flex justify='center' column>
-          <CopyLinkText link={publicPaths.wiki.perks(perk.id)}>
+          <CopyLinkText link={publicPaths.generated.wiki.perks(perk.id)}>
             <div style={{ fontSize: 20, marginBottom: 10 }}>{perk.name}</div>
           </CopyLinkText>
           <div>{perk.description}</div>

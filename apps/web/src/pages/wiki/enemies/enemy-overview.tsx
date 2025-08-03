@@ -63,7 +63,10 @@ export const EnemyOverview = ({ enemy }: { enemy: NoitaEnemy }) => {
             paddingLeft: 10,
           }}
         >
-          <CopyLinkText link={publicPaths.wiki.enemies(enemy.id)} iconSize={24}>
+          <CopyLinkText
+            link={publicPaths.generated.wiki.enemies(enemy.id)}
+            iconSize={24}
+          >
             <div
               style={{
                 fontSize: 'clamp(1.4rem, 2vw, 2.2rem)',

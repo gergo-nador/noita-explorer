@@ -175,7 +175,7 @@ const PlayerImage = ({
   ref.current += 1;
 
   const getGifPath = (enemyId: string) =>
-    publicPaths.enemyGifs({
+    publicPaths.generated.enemyGifs({
       enemyId: enemyId,
       gifName: gifName,
       gifReloadCounter: ref.current,

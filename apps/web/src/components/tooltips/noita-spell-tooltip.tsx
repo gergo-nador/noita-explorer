@@ -7,19 +7,8 @@ import React from 'react';
 import { NoitaUnknownTooltip } from './noita-unknown-tooltip.tsx';
 import { NoitaNumberModifier } from './noita-number-modifier.tsx';
 
-import actionTypeIcon from '../../assets/icons/spells/icon_action_type.png';
-import maxUsesIcon from '../../assets/icons/spells/icon_action_max_uses.png';
-import manaDrainIcon from '../../assets/icons/spells/icon_mana_drain.png';
-import lifetimeIcon from '../../assets/icons/spells/lifetime.webp';
-import recoilModifierIcon from '../../assets/icons/spells/icon_recoil.png';
-import fireRateWaitModifierIcon from '../../assets/icons/spells/icon_fire_rate_wait.png';
-import reloadModifierIcon from '../../assets/icons/spells/icon_reload_time.png';
-import speedModifierIcon from '../../assets/icons/spells/icon_speed_multiplier.png';
-import spreadModifierIcon from '../../assets/icons/spells/icon_spread_degrees.png';
-
 import damageProjectileIcon from '../../assets/icons/damages/icon_damage_projectile.png';
 import damageExplosionIcon from '../../assets/icons/damages/icon_damage_explosion.png';
-import explosionRadiusIcon from '../../assets/icons/spells/icon_explosion_radius.png';
 import damageHealingIcon from '../../assets/icons/damages/icon_damage_healing.png';
 import damageSliceIcon from '../../assets/icons/damages/icon_damage_slice.png';
 import damageMeleeIcon from '../../assets/icons/damages/icon_damage_melee.png';
@@ -28,6 +17,7 @@ import damageElectricityIcon from '../../assets/icons/damages/icon_damage_electr
 import damageDrillIcon from '../../assets/icons/damages/icon_damage_drill.png';
 import damageIceIcon from '../../assets/icons/damages/icon_damage_ice.png';
 import damageHolyIcon from '../../assets/icons/damages/icon_damage_holy.png';
+import { publicPaths } from '../../utils/public-paths.ts';
 
 export interface TooltipRowData {
   icon?: React.ReactNode;
@@ -60,13 +50,23 @@ export const NoitaSpellTooltip = ({
 
   const rowsGeneral: TooltipRowData[] = [
     {
-      icon: <Icon src={actionTypeIcon} size={15} />,
+      icon: (
+        <Icon
+          src={publicPaths.static.dataWak.spellProperties('icon_action_type')}
+          size={15}
+        />
+      ),
       text: 'Type',
       value: actionType.name,
       show: true,
     },
     {
-      icon: <Icon src={manaDrainIcon} size={15} />,
+      icon: (
+        <Icon
+          src={publicPaths.static.dataWak.spellProperties('icon_mana_drain')}
+          size={15}
+        />
+      ),
       text: 'Mana Drain',
       value: (
         <span style={{ color: warnings?.manaTooMuch ? '#e35d5d' : 'inherit' }}>
@@ -79,14 +79,28 @@ export const NoitaSpellTooltip = ({
       show: true,
     },
     {
-      icon: <Icon src={maxUsesIcon} size={15} />,
+      icon: (
+        <Icon
+          src={publicPaths.static.dataWak.spellProperties(
+            'icon_action_max_uses',
+          )}
+          size={15}
+        />
+      ),
       text: 'Uses',
       value: spell.maxUses,
       show:
         spell.maxUses !== undefined && wandSpell?.usesRemaining === undefined,
     },
     {
-      icon: <Icon src={maxUsesIcon} size={15} />,
+      icon: (
+        <Icon
+          src={publicPaths.static.dataWak.spellProperties(
+            'icon_action_max_uses',
+          )}
+          size={15}
+        />
+      ),
       text: 'Uses remaining',
       value: wandSpell?.usesRemaining,
       show:
@@ -106,7 +120,12 @@ export const NoitaSpellTooltip = ({
 
   const rowsTime: TooltipRowData[] = [
     {
-      icon: <Icon src={lifetimeIcon} size={15} />,
+      icon: (
+        <Icon
+          src={publicPaths.static.dataWak.spellProperties('lifetime')}
+          size={15}
+        />
+      ),
       text: 'Lifetime',
       value: (() => {
         if (spell.lifetime === undefined) {
@@ -141,7 +160,12 @@ export const NoitaSpellTooltip = ({
       show: spell.lifetime !== undefined,
     },
     {
-      icon: <Icon src={lifetimeIcon} size={15} />,
+      icon: (
+        <Icon
+          src={publicPaths.static.dataWak.spellProperties('lifetime')}
+          size={15}
+        />
+      ),
       text: 'Lifetime Modifier',
       value: (
         <NoitaNumberModifier
@@ -154,7 +178,14 @@ export const NoitaSpellTooltip = ({
       show: spell.lifetimeModifier !== undefined,
     },
     {
-      icon: <Icon src={fireRateWaitModifierIcon} size={15} />,
+      icon: (
+        <Icon
+          src={publicPaths.static.dataWak.spellProperties(
+            'icon_fire_rate_wait',
+          )}
+          size={15}
+        />
+      ),
       text: 'Cast Delay',
       value: (
         <NoitaNumberModifier
@@ -167,7 +198,12 @@ export const NoitaSpellTooltip = ({
       show: spell.fireRateWaitModifier !== undefined,
     },
     {
-      icon: <Icon src={reloadModifierIcon} size={15} />,
+      icon: (
+        <Icon
+          src={publicPaths.static.dataWak.spellProperties('icon_reload_time')}
+          size={15}
+        />
+      ),
       text: 'Reload Time',
       value: (
         <NoitaNumberModifier
@@ -207,13 +243,27 @@ export const NoitaSpellTooltip = ({
       show: spell.explosionDamageModifier !== undefined,
     },
     {
-      icon: <Icon src={explosionRadiusIcon} size={15} />,
+      icon: (
+        <Icon
+          src={publicPaths.static.dataWak.spellProperties(
+            'icon_explosion_radius',
+          )}
+          size={15}
+        />
+      ),
       text: 'Explosion Radius',
       value: spell.explosionRadius,
       show: spell.explosionRadius !== undefined,
     },
     {
-      icon: <Icon src={explosionRadiusIcon} size={15} />,
+      icon: (
+        <Icon
+          src={publicPaths.static.dataWak.spellProperties(
+            'icon_explosion_radius',
+          )}
+          size={15}
+        />
+      ),
       text: 'Explosion Radius',
       value: <NoitaNumberModifier modifier={spell.explosionRadiusModifier} />,
       show: spell.explosionRadiusModifier !== undefined,
@@ -282,19 +332,38 @@ export const NoitaSpellTooltip = ({
 
   const rowsOther: TooltipRowData[] = [
     {
-      icon: <Icon src={speedModifierIcon} size={15} />,
+      icon: (
+        <Icon
+          src={publicPaths.static.dataWak.spellProperties(
+            'icon_speed_multiplier',
+          )}
+          size={15}
+        />
+      ),
       text: 'Speed modifier',
       value: <NoitaNumberModifier modifier={spell.speedModifier} />,
       show: spell.speedModifier !== undefined,
     },
     {
-      icon: <Icon src={recoilModifierIcon} size={15} />,
+      icon: (
+        <Icon
+          src={publicPaths.static.dataWak.spellProperties('icon_recoil')}
+          size={15}
+        />
+      ),
       text: 'Recoil',
       value: <NoitaNumberModifier modifier={spell.recoilModifier} />,
       show: spell.recoilModifier !== undefined,
     },
     {
-      icon: <Icon src={spreadModifierIcon} size={15} />,
+      icon: (
+        <Icon
+          src={publicPaths.static.dataWak.spellProperties(
+            'icon_spread_degrees',
+          )}
+          size={15}
+        />
+      ),
       text: 'Spread',
       value: (
         <NoitaNumberModifier

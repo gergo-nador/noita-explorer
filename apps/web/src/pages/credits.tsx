@@ -14,7 +14,7 @@ export const Credits = () => {
       <br />
       <Header title='Source code'>
         <Flex gap={4}>
-          <Icon src={'/images/external/github.png'} alt='github' size={18} />
+          <Icon src='/images/external/github.png' alt='github' size={18} />
 
           <a
             href='https://github.com/gergo-nador/noita-explorer'

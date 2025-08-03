@@ -14,10 +14,6 @@ import { NoitaSpellTypesDictionary } from '../noita/noita-spell-type-dictionary.
 import css from './noita-wand-card.module.css';
 
 import gunShuffleIcon from '../assets/icons/icon_gun_shuffle.png';
-import fireRateWaitIcon from '../assets/icons/spells/icon_fire_rate_wait.png';
-import reloadIcon from '../assets/icons/spells/icon_reload_time.png';
-import speedModifierIcon from '../assets/icons/spells/icon_speed_multiplier.png';
-import spreadIcon from '../assets/icons/spells/icon_spread_degrees.png';
 import capacityIcon from '../assets/icons/icon_gun_capacity.png';
 import manaMaxIcon from '../assets/icons/icon_mana_max.png';
 import manaChargeIcon from '../assets/icons/icon_mana_charge_speed.png';
@@ -27,6 +23,7 @@ import { noitaAPI } from '../noita-api.ts';
 import { useNoitaActionsStore } from '../stores/actions.ts';
 import { Flex } from '@noita-explorer/react-utils';
 import { ConditionalWrapper } from '@noita-explorer/react-utils';
+import { publicPaths } from '../utils/public-paths.ts';
 
 interface NoitaWandCardProps {
   wand: NoitaWand;
@@ -171,7 +168,14 @@ export const NoitaWandCard = ({
       value: wand.actionsPerRound,
     },
     {
-      icon: <Icon src={fireRateWaitIcon} size={15} />,
+      icon: (
+        <Icon
+          src={publicPaths.static.dataWak.spellProperties(
+            'icon_fire_rate_wait',
+          )}
+          size={15}
+        />
+      ),
       text: 'Cast delay',
       value: noitaUnits.frames(
         wand.fireRateWait,
@@ -179,7 +183,12 @@ export const NoitaWandCard = ({
       ),
     },
     {
-      icon: <Icon src={reloadIcon} size={15} />,
+      icon: (
+        <Icon
+          src={publicPaths.static.dataWak.spellProperties('icon_reload_time')}
+          size={15}
+        />
+      ),
       text: 'Rechrg. Time',
       value: noitaUnits.frames(
         wand.reloadTime,
@@ -210,12 +219,26 @@ export const NoitaWandCard = ({
       value: wand.deckCapacity,
     },
     {
-      icon: <Icon src={spreadIcon} size={15} />,
+      icon: (
+        <Icon
+          src={publicPaths.static.dataWak.spellProperties(
+            'icon_spread_degrees',
+          )}
+          size={15}
+        />
+      ),
       text: 'Spread',
       value: noitaUnits.degree(wand.spreadMultiplier),
     },
     {
-      icon: <Icon src={speedModifierIcon} size={15} />,
+      icon: (
+        <Icon
+          src={publicPaths.static.dataWak.spellProperties(
+            'icon_speed_multiplier',
+          )}
+          size={15}
+        />
+      ),
       text: 'Speed Multiplier',
       value: mathHelpers.round(wand.speedMultiplier, 3),
     },
