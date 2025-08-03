@@ -3,8 +3,7 @@ import { AchievementPerk } from '../achievement-perk.ts';
 import { arrayHelpers, colorHelpers, ifStatement } from '@noita-explorer/tools';
 import { Flex } from '@noita-explorer/react-utils';
 import { Icon, ProgressIcon } from '@noita-explorer/noita-component-library';
-import halo from '../../../../assets/player_halo_light.png';
-import haloDark from '../../../../assets/player_halo_dark.png';
+import { publicPaths } from '../../../../utils/public-paths.ts';
 
 export const HaloTransformationAchievement = ({
   perks,
@@ -56,8 +55,18 @@ export const HaloTransformationAchievement = ({
           </Flex>
         </Flex>
         <Flex justify='end' align='center' direction='column'>
-          {diff <= -3 && <Icon src={haloDark} size={20} />}
-          {diff >= 3 && <Icon src={halo} size={20} />}
+          {diff <= -3 && (
+            <Icon
+              src={publicPaths.static.dataWak.misc('player_halo_dark')}
+              size={20}
+            />
+          )}
+          {diff >= 3 && (
+            <Icon
+              src={publicPaths.static.dataWak.misc('player_halo_light')}
+              size={20}
+            />
+          )}
           <span
             style={{
               color: ifStatement(diff === 0, 'initial')

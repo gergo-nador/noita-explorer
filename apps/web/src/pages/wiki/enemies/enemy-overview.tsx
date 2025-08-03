@@ -6,8 +6,6 @@ import {
   Icon,
   NoitaTooltipWrapper,
 } from '@noita-explorer/noita-component-library';
-import heartIcon from '../../../assets/heart.png';
-import goldNuggetIcon from '../../../assets/goldnugget_icon.png';
 import { Flex } from '@noita-explorer/react-utils';
 import { NoitaProtections } from '../../../noita/noita-protections.ts';
 import { DamageMultiplierDisplay } from './damage-multiplier-display.tsx';
@@ -90,19 +88,22 @@ export const EnemyOverview = ({ enemy }: { enemy: NoitaEnemy }) => {
 
       <div>
         Hp:<span style={{ color: '#f14343' }}> {enemy.hp} </span>
-        <Icon src={heartIcon} size={16} />
+        <Icon src={publicPaths.static.dataWak.misc('heart')} size={16} />
       </div>
       {enemy.maxHp !== undefined && (
         <div>
           Max Hp:<span style={{ color: '#f14343' }}> {enemy.maxHp} </span>
-          <Icon src={heartIcon} size={16} />
+          <Icon src={publicPaths.static.dataWak.misc('heart')} size={16} />
         </div>
       )}
 
       {enemy.hasGoldDrop && (
         <div>
           Gold:<span style={{ color: '#fae27e' }}> {enemy.goldDrop} </span>
-          <Icon src={goldNuggetIcon} size={16} />
+          <Icon
+            src={publicPaths.static.dataWak.misc('goldnugget_icon')}
+            size={16}
+          />
         </div>
       )}
       {!enemy.hasGoldDrop && <div>Gold: -</div>}

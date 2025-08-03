@@ -12,13 +12,6 @@ import { useNoitaDataWakStore } from '../stores/noita-data-wak.ts';
 import { NoitaSpellTooltip } from './tooltips/noita-spell-tooltip.tsx';
 import { NoitaSpellTypesDictionary } from '../noita/noita-spell-type-dictionary.ts';
 import css from './noita-wand-card.module.css';
-
-import gunShuffleIcon from '../assets/icons/icon_gun_shuffle.png';
-import capacityIcon from '../assets/icons/icon_gun_capacity.png';
-import manaMaxIcon from '../assets/icons/icon_mana_max.png';
-import manaChargeIcon from '../assets/icons/icon_mana_charge_speed.png';
-import actionsPerRoundIcon from '../assets/icons/icon_gun_actions_per_round.png';
-import gunPermanentActionIcon from '../assets/icons/icon_gun_permanent_actions.png';
 import { noitaAPI } from '../noita-api.ts';
 import { useNoitaActionsStore } from '../stores/actions.ts';
 import { Flex } from '@noita-explorer/react-utils';
@@ -158,12 +151,22 @@ export const NoitaWandCard = ({
 
   const rows: RowData[] = [
     {
-      icon: <Icon src={gunShuffleIcon} size={15} />,
+      icon: (
+        <Icon
+          src={publicPaths.static.dataWak.icons('icon_gun_shuffle')}
+          size={15}
+        />
+      ),
       text: 'Shuffle',
       value: wand.shuffle ? 'Yes' : 'No',
     },
     {
-      icon: <Icon src={actionsPerRoundIcon} size={15} />,
+      icon: (
+        <Icon
+          src={publicPaths.static.dataWak.icons('icon_gun_actions_per_round')}
+          size={15}
+        />
+      ),
       text: 'Spells/Cast',
       value: wand.actionsPerRound,
     },
@@ -196,12 +199,22 @@ export const NoitaWandCard = ({
       ),
     },
     {
-      icon: <Icon src={manaMaxIcon} size={15} />,
+      icon: (
+        <Icon
+          src={publicPaths.static.dataWak.icons('icon_mana_max')}
+          size={15}
+        />
+      ),
       text: 'Mana max',
       value: wand.manaMax,
     },
     {
-      icon: <Icon src={manaChargeIcon} size={15} />,
+      icon: (
+        <Icon
+          src={publicPaths.static.dataWak.icons('icon_mana_charge_speed')}
+          size={15}
+        />
+      ),
       text: 'Mana chg. Spd',
       value: (() => {
         const timeUntilFullCharge = wand.manaMax / wand.manaChargeSpeed;
@@ -214,7 +227,12 @@ export const NoitaWandCard = ({
       })(),
     },
     {
-      icon: <Icon src={capacityIcon} size={15} />,
+      icon: (
+        <Icon
+          src={publicPaths.static.dataWak.icons('icon_gun_capacity')}
+          size={15}
+        />
+      ),
       text: 'Capacity',
       value: wand.deckCapacity,
     },
@@ -352,7 +370,12 @@ export const NoitaWandCard = ({
                 paddingLeft: 2,
               }}
             >
-              <Icon src={gunPermanentActionIcon} size={15} />
+              <Icon
+                src={publicPaths.static.dataWak.icons(
+                  'icon_gun_permanent_actions',
+                )}
+                size={15}
+              />
               <div style={{ paddingRight: 10 }}>Always casts</div>
               {spellIconsAlwaysCast}
             </Flex>

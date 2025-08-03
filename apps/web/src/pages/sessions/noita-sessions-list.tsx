@@ -14,11 +14,8 @@ import {
 import { Flex } from '@noita-explorer/react-utils';
 import { useEffect, useMemo, useState } from 'react';
 import { HoveredStyle } from '@noita-explorer/react-utils';
-
-import dieIcon from '../../assets/icons/die2.png';
-import moneyIcon from '../../assets/icons/money.png';
-import deathIcon from '../../assets/icons/icon_danger.png';
-import enemyIcon from '../../assets/icons/enemy.png';
+import { publicPaths } from '../../utils/public-paths.ts';
+import { SpaceCharacter } from '../../components/space-character.tsx';
 
 interface NoitaSessionsListProps {
   sessionsGrouped: StringKeyDictionary<NoitaSession[]>;
@@ -134,14 +131,16 @@ const SessionCard = ({ session }: { session: NoitaSession }) => {
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
         <div>
           <div>
-            <Icon src={dieIcon} size={18} /> {session.seed}
+            <Icon src={publicPaths.static.dataWak.icons('die2')} size={18} />
+            <SpaceCharacter />
+            {session.seed}
           </div>
           <div>
             <Icon src='images/data-wak/spells/lifetime.webp' size={20} />
             {timeHelpers.secondsToTimeString(session.playTime)}
           </div>
           <div>
-            <Icon src={moneyIcon} size={20} />
+            <Icon src={publicPaths.static.dataWak.icons('money')} size={20} />
             {session.goldInfinite && <span>∞</span>}
             {!session.goldInfinite && (
               <NoitaTooltipWrapper
@@ -158,7 +157,10 @@ const SessionCard = ({ session }: { session: NoitaSession }) => {
             {!session.dead && <div>Not dead</div>}
             {session.dead && (
               <div>
-                <Icon src={deathIcon} size={20} />
+                <Icon
+                  src={publicPaths.static.dataWak.icons('icon_danger')}
+                  size={20}
+                />
                 {session.killedByEntity === undefined &&
                   session.killedByReason === undefined && <span>New Game</span>}
                 {!!session.killedByEntity && (
@@ -171,7 +173,7 @@ const SessionCard = ({ session }: { session: NoitaSession }) => {
             )}
           </div>
           <div>
-            <Icon src={enemyIcon} size={20} />
+            <Icon src={publicPaths.static.dataWak.icons('enemy')} size={20} />
             {session.enemiesKilled}
           </div>
         </div>

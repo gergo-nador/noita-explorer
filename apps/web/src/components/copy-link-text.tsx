@@ -1,8 +1,8 @@
 import React, { useRef, useState } from 'react';
 import { Flex, HoveredStyle } from '@noita-explorer/react-utils';
-import linkIcon from '../assets/icons/link-icon.png';
 import { Icon, useToast } from '@noita-explorer/noita-component-library';
 import { noitaAPI } from '../noita-api.ts';
+import { publicPaths } from '../utils/public-paths.ts';
 
 interface Props {
   children: React.ReactNode;
@@ -35,7 +35,12 @@ export const CopyLinkText = ({ children, link, iconSize }: Props) => {
     <HoveredStyle style={{ textDecoration: 'underline', cursor: 'pointer' }}>
       <Flex onClick={() => copyToClipboard()} gap={8}>
         {children}
-        {icon === 'link' && <Icon src={linkIcon} size={iconSize ?? 20} />}
+        {icon === 'link' && (
+          <Icon
+            src={publicPaths.static.dataWak.icons('link-icon')}
+            size={iconSize ?? 20}
+          />
+        )}
         {icon === 'check' && <Icon type='check' size={iconSize ?? 20} />}
         {icon === 'error' && <Icon type='cross' size={iconSize ?? 20} />}
       </Flex>

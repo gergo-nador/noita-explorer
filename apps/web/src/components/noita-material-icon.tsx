@@ -1,9 +1,8 @@
 import color from 'color';
-import potionPng from '../assets/potion.png';
-import pouchPng from '../assets/material_pouch.png';
 import { NoitaMaterial } from '@noita-explorer/model-noita';
 import { InventoryIcon } from '@noita-explorer/noita-component-library';
 import { useEffect, useState } from 'react';
+import { publicPaths } from '../utils/public-paths.ts';
 
 interface NoitaMaterialIconProps {
   material: NoitaMaterial;
@@ -42,14 +41,14 @@ export const NoitaMaterialIcon = ({ material }: NoitaMaterialIconProps) => {
 
     if (iconType === 'potion') {
       iconPromise = colorNoitaPotion({
-        potionBaseImage: potionPng,
+        potionBaseImage: publicPaths.static.dataWak.misc('potion'),
         potionColor: material.graphicsColor ?? material.wangColorHtml,
         potionMouthRowStart: 2,
         potionMouthRowEnd: 2,
       });
     } else {
       iconPromise = colorNoitaPotion({
-        potionBaseImage: pouchPng,
+        potionBaseImage: publicPaths.static.dataWak.misc('material_pouch'),
         potionColor: material.graphicsColor ?? material.wangColorHtml,
         potionMouthRowStart: 1,
         potionMouthRowEnd: 2,

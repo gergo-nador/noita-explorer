@@ -11,6 +11,8 @@ export const publicPaths = {
         `/images/data-wak/spell-properties/${fileName}.png`,
       protections: (fileName: string) =>
         `/images/data-wak/protections/${fileName}.png`,
+      icons: (fileName: string) => `/images/data-wak/icons/${fileName}.png`,
+      misc: (fileName: string) => `/images/data-wak/misc/${fileName}.png`,
     },
   },
   generated: {
