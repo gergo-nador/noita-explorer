@@ -4,6 +4,7 @@ export const publicPaths = {
   static: {
     backgrounds: (file: string) => '/images/backgrounds/' + file,
     dataWak: {
+      damages: (fileName: string) => `/images/data-wak/damages/${fileName}.png`,
       spellBackgrounds: (fileName: string) =>
         `/images/data-wak/spell-backgrounds/${fileName}.png`,
       spellProperties: (fileName: string) =>

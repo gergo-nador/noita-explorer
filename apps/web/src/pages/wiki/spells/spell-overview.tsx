@@ -3,17 +3,6 @@ import { Icon, BooleanIcon } from '@noita-explorer/noita-component-library';
 import { NoitaSpellTypesDictionary } from '../../../noita/noita-spell-type-dictionary.ts';
 import { useNoitaUnits } from '../../../hooks/use-noita-units.ts';
 import { TooltipRowData } from '../../../components/tooltips/noita-spell-tooltip.tsx';
-
-import damageProjectileIcon from '../../../assets/icons/damages/icon_damage_projectile.png';
-import damageExplosionIcon from '../../../assets/icons/damages/icon_damage_explosion.png';
-import damageSliceIcon from '../../../assets/icons/damages/icon_damage_slice.png';
-import damageMeleeIcon from '../../../assets/icons/damages/icon_damage_melee.png';
-import damageFireIcon from '../../../assets/icons/damages/icon_damage_fire.png';
-import damageHealingIcon from '../../../assets/icons/damages/icon_damage_healing.png';
-import damageElectricityIcon from '../../../assets/icons/damages/icon_damage_electricity.png';
-import damageDrillIcon from '../../../assets/icons/damages/icon_damage_drill.png';
-import damageIceIcon from '../../../assets/icons/damages/icon_damage_ice.png';
-import damageHolyIcon from '../../../assets/icons/damages/icon_damage_holy.png';
 import { NoitaNumberModifier } from '../../../components/tooltips/noita-number-modifier.tsx';
 import { Flex } from '@noita-explorer/react-utils';
 import { CopyLinkText } from '../../../components/copy-link-text.tsx';
@@ -172,25 +161,45 @@ export const SpellOverview = ({ spell }: { spell: NoitaSpell }) => {
 
   const rowsDamages: TooltipRowData[] = [
     {
-      icon: <Icon src={damageProjectileIcon} size={15} />,
+      icon: (
+        <Icon
+          src={publicPaths.static.dataWak.damages('icon_damage_projectile')}
+          size={15}
+        />
+      ),
       text: 'Projectile Damage',
       value: spell.projectileDamage,
       show: spell.projectileDamage !== undefined,
     },
     {
-      icon: <Icon src={damageProjectileIcon} size={15} />,
+      icon: (
+        <Icon
+          src={publicPaths.static.dataWak.damages('icon_damage_projectile')}
+          size={15}
+        />
+      ),
       text: 'Projectile Damage',
       value: <NoitaNumberModifier modifier={spell.projectileDamageModifier} />,
       show: spell.projectileDamageModifier !== undefined,
     },
     {
-      icon: <Icon src={damageExplosionIcon} size={15} />,
+      icon: (
+        <Icon
+          src={publicPaths.static.dataWak.damages('icon_damage_explosion')}
+          size={15}
+        />
+      ),
       text: 'Explosion Damage',
       value: spell.explosionDamage,
       show: spell.explosionDamage !== undefined,
     },
     {
-      icon: <Icon src={damageExplosionIcon} size={15} />,
+      icon: (
+        <Icon
+          src={publicPaths.static.dataWak.damages('icon_damage_explosion')}
+          size={15}
+        />
+      ),
       text: 'Explosion Damage',
       value: <NoitaNumberModifier modifier={spell.explosionDamageModifier} />,
       show: spell.explosionDamageModifier !== undefined,
@@ -222,61 +231,111 @@ export const SpellOverview = ({ spell }: { spell: NoitaSpell }) => {
       show: spell.explosionRadiusModifier !== undefined,
     },
     {
-      icon: <Icon src={damageSliceIcon} size={15} />,
+      icon: (
+        <Icon
+          src={publicPaths.static.dataWak.damages('icon_damage_slice')}
+          size={15}
+        />
+      ),
       text: 'Slice Damage',
       value: spell.sliceDamage,
       show: spell.sliceDamage !== undefined,
     },
     {
-      icon: <Icon src={damageMeleeIcon} size={15} />,
+      icon: (
+        <Icon
+          src={publicPaths.static.dataWak.damages('icon_damage_melee')}
+          size={15}
+        />
+      ),
       text: 'Melee Damage',
       value: spell.meleeDamage,
       show: spell.meleeDamage !== undefined,
     },
     {
-      icon: <Icon src={damageFireIcon} size={15} />,
+      icon: (
+        <Icon
+          src={publicPaths.static.dataWak.damages('icon_damage_fire')}
+          size={15}
+        />
+      ),
       text: 'Fire Damage',
       value: spell.fireDamage,
       show: spell.fireDamage !== undefined,
     },
     {
-      icon: <Icon src={damageHealingIcon} size={15} />,
+      icon: (
+        <Icon
+          src={publicPaths.static.dataWak.damages('icon_damage_healing')}
+          size={15}
+        />
+      ),
       text: 'Healing Damage',
       value: spell.healingDamage,
       show: spell.healingDamage !== undefined,
     },
     {
-      icon: <Icon src={damageHealingIcon} size={15} />,
+      icon: (
+        <Icon
+          src={publicPaths.static.dataWak.damages('icon_damage_healing')}
+          size={15}
+        />
+      ),
       text: 'Regeneration Time',
       value: spell.regenerationFrames,
       show: spell.regenerationFrames !== undefined,
     },
     {
-      icon: <Icon src={damageElectricityIcon} size={15} />,
+      icon: (
+        <Icon
+          src={publicPaths.static.dataWak.damages('icon_damage_electricity')}
+          size={15}
+        />
+      ),
       text: 'Electricity Damage',
       value: spell.electricityDamage,
       show: spell.electricityDamage !== undefined,
     },
     {
-      icon: <Icon src={damageDrillIcon} size={15} />,
+      icon: (
+        <Icon
+          src={publicPaths.static.dataWak.damages('icon_damage_drill')}
+          size={15}
+        />
+      ),
       text: 'Drill Damage',
       value: spell.drillDamage,
       show: spell.drillDamage !== undefined,
     },
     {
-      icon: <Icon src={damageIceIcon} size={15} />,
+      icon: (
+        <Icon
+          src={publicPaths.static.dataWak.damages('icon_damage_ice')}
+          size={15}
+        />
+      ),
       text: 'Ice Damage',
       value: spell.iceDamage,
       show: spell.iceDamage !== undefined,
     },
     {
-      icon: <Icon src={damageIceIcon} size={15} />,
+      icon: (
+        <Icon
+          src={publicPaths.static.dataWak.damages('icon_damage_ice')}
+          size={15}
+        />
+      ),
       text: 'Ice Damage',
       value: <NoitaNumberModifier modifier={spell.iceDamageModifier} />,
       show: spell.iceDamageModifier !== undefined,
     },
     {
-      icon: <Icon src={damageHolyIcon} size={15} />,
+      icon: (
+        <Icon
+          src={publicPaths.static.dataWak.damages('icon_damage_holy')}
+          size={15}
+        />
+      ),
       text: 'Holy Damage',
       value: spell.holyDamage,
       show: spell.holyDamage !== undefined,

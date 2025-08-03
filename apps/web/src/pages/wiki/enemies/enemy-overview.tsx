@@ -11,27 +11,6 @@ import goldNuggetIcon from '../../../assets/goldnugget_icon.png';
 import { Flex } from '@noita-explorer/react-utils';
 import { NoitaProtections } from '../../../noita/noita-protections.ts';
 import { DamageMultiplierDisplay } from './damage-multiplier-display.tsx';
-
-import damageProjectileIcon from '../../../assets/icons/damages/icon_damage_projectile.png';
-import damageProjectileIconColor from '../../../assets/icons/damages/icon_damage_projectile_color.png';
-import damageExplosionIcon from '../../../assets/icons/damages/icon_damage_explosion.png';
-import damageExplosionIconColor from '../../../assets/icons/damages/icon_damage_explosion_color.png';
-import damageMeleeIcon from '../../../assets/icons/damages/icon_damage_melee.png';
-import damageMeleeIconColor from '../../../assets/icons/damages/icon_damage_melee_color.png';
-import damageSliceIcon from '../../../assets/icons/damages/icon_damage_slice.png';
-import damageSliceIconColor from '../../../assets/icons/damages/icon_damage_slice_color.png';
-import damageFireIcon from '../../../assets/icons/damages/icon_damage_fire.png';
-import damageFireIconColor from '../../../assets/icons/damages/icon_damage_fire_color.png';
-import damageElectricityIcon from '../../../assets/icons/damages/icon_damage_electricity.png';
-import damageElectricityIconColor from '../../../assets/icons/damages/icon_damage_electricity_color.png';
-import damageIceIcon from '../../../assets/icons/damages/icon_damage_ice.png';
-import damageIceIconColor from '../../../assets/icons/damages/icon_damage_ice_color.png';
-import damageRadioActivityIcon from '../../../assets/icons/damages/icon_damage_radioactivity.png';
-import damageRadioActivityIconColor from '../../../assets/icons/damages/icon_damage_radioactivity_color.png';
-import damageDrillIcon from '../../../assets/icons/damages/icon_damage_drill.png';
-import damageDrillIconColor from '../../../assets/icons/damages/icon_damage_drill_color.png';
-import damageHolyIcon from '../../../assets/icons/damages/icon_damage_holy.png';
-import damageHolyIconColor from '../../../assets/icons/damages/icon_damage_holy_color.png';
 import { CopyLinkText } from '../../../components/copy-link-text.tsx';
 import { publicPaths } from '../../../utils/public-paths.ts';
 import { SpaceCharacter } from '../../../components/space-character.tsx';
@@ -172,81 +151,103 @@ export const EnemyOverview = ({ enemy }: { enemy: NoitaEnemy }) => {
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr' }}>
         <div style={{ gridColumnStart: 1, gridColumnEnd: -1 }}>
           <DamageMultiplierDisplay
-            name={'projectile'}
-            icon={damageProjectileIcon}
-            iconColor={damageProjectileIconColor}
+            name='projectile'
+            icon={publicPaths.static.dataWak.damages('icon_damage_projectile')}
+            iconColor={publicPaths.static.dataWak.damages(
+              'icon_damage_projectile_color',
+            )}
             value={enemy.damageMultipliers.projectile}
           />
         </div>
         <div>
           <DamageMultiplierDisplay
-            name={'explosion'}
-            icon={damageExplosionIcon}
-            iconColor={damageExplosionIconColor}
+            name='explosion'
+            icon={publicPaths.static.dataWak.damages('icon_damage_explosion')}
+            iconColor={publicPaths.static.dataWak.damages(
+              'icon_damage_explosion_color',
+            )}
             value={enemy.damageMultipliers.explosion}
           />
         </div>
         <div>
           <DamageMultiplierDisplay
-            name={'melee'}
-            icon={damageMeleeIcon}
-            iconColor={damageMeleeIconColor}
+            name='melee'
+            icon={publicPaths.static.dataWak.damages('icon_damage_melee')}
+            iconColor={publicPaths.static.dataWak.damages(
+              'icon_damage_melee_color',
+            )}
             value={enemy.damageMultipliers.melee}
           />
         </div>
         <div>
           <DamageMultiplierDisplay
-            name={'slice'}
-            icon={damageSliceIcon}
-            iconColor={damageSliceIconColor}
+            name='slice'
+            icon={publicPaths.static.dataWak.damages('icon_damage_slice')}
+            iconColor={publicPaths.static.dataWak.damages(
+              'icon_damage_slice_color',
+            )}
             value={enemy.damageMultipliers.slice}
           />
         </div>
         <div>
           <DamageMultiplierDisplay
-            name={'fire'}
-            icon={damageFireIcon}
-            iconColor={damageFireIconColor}
+            name='fire'
+            icon={publicPaths.static.dataWak.damages('icon_damage_fire')}
+            iconColor={publicPaths.static.dataWak.damages(
+              'icon_damage_fire_color',
+            )}
             value={enemy.damageMultipliers.fire}
           />
         </div>
         <div>
           <DamageMultiplierDisplay
-            name={'electric'}
-            icon={damageElectricityIcon}
-            iconColor={damageElectricityIconColor}
+            name='electric'
+            icon={publicPaths.static.dataWak.damages('icon_damage_electricity')}
+            iconColor={publicPaths.static.dataWak.damages(
+              'icon_damage_electricity_color',
+            )}
             value={enemy.damageMultipliers.electricity}
           />
         </div>
         <div>
           <DamageMultiplierDisplay
-            name={'ice'}
-            icon={damageIceIcon}
-            iconColor={damageIceIconColor}
+            name='ice'
+            icon={publicPaths.static.dataWak.damages('icon_damage_ice')}
+            iconColor={publicPaths.static.dataWak.damages(
+              'icon_damage_ice_color',
+            )}
             value={enemy.damageMultipliers.ice}
           />
         </div>
         <div>
           <DamageMultiplierDisplay
-            name={'toxic'}
-            icon={damageRadioActivityIcon}
-            iconColor={damageRadioActivityIconColor}
+            name='toxic'
+            icon={publicPaths.static.dataWak.damages(
+              'icon_damage_radioactivity',
+            )}
+            iconColor={publicPaths.static.dataWak.damages(
+              'icon_damage_radioactivity_color',
+            )}
             value={enemy.damageMultipliers.radioactive}
           />
         </div>
         <div>
           <DamageMultiplierDisplay
-            name={'drill'}
-            icon={damageDrillIcon}
-            iconColor={damageDrillIconColor}
+            name='drill'
+            icon={publicPaths.static.dataWak.damages('icon_damage_drill')}
+            iconColor={publicPaths.static.dataWak.damages(
+              'icon_damage_drill_color',
+            )}
             value={enemy.damageMultipliers.drill}
           />
         </div>
         <div>
           <DamageMultiplierDisplay
-            name={'holy'}
-            icon={damageHolyIcon}
-            iconColor={damageHolyIconColor}
+            name='holy'
+            icon={publicPaths.static.dataWak.damages('icon_damage_holy')}
+            iconColor={publicPaths.static.dataWak.damages(
+              'icon_damage_holy_color',
+            )}
             value={enemy.damageMultipliers.holy}
           />
         </div>
