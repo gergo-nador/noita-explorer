@@ -63,7 +63,8 @@ function readNoitaWakData() {
 
 async function generateStaticAssets(data: NoitaWakData) {
   const fsPath = path.resolve(outputFolder, 'g', 'wiki');
-  const webPath = '/g/wiki';
+  const deployUrl = getDeployUrl();
+  const webPath = deployUrl + '/g/wiki';
   fs.mkdirSync(fsPath, { recursive: true });
 
   // perks
@@ -94,7 +95,7 @@ async function generateStaticAssets(data: NoitaWakData) {
         siteName: 'Noita Explorer',
         title: perk.name,
         description: perk.description,
-        url: getDeployUrl() + redirectUrl,
+        url: deployUrl + redirectUrl,
         image: {
           url: imageWebPath,
           mimeType: 'image/png',
@@ -140,7 +141,7 @@ async function generateStaticAssets(data: NoitaWakData) {
         siteName: 'Noita Explorer',
         title: spell.name,
         description: spell.description,
-        url: getDeployUrl() + redirectUrl,
+        url: deployUrl + redirectUrl,
         image: {
           url: imageWebPath,
           mimeType: 'image/png',
@@ -186,7 +187,7 @@ async function generateStaticAssets(data: NoitaWakData) {
         siteName: 'Noita Explorer',
         title: enemy.name,
         description: `${enemy.hp}❤️ ${enemy.hasGoldDrop ? enemy.goldDrop : '-'}💰`,
-        url: getDeployUrl() + redirectUrl,
+        url: deployUrl + redirectUrl,
         image: {
           url: imageWebPath,
           mimeType: 'image/png',
