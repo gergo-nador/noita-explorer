@@ -1,6 +1,7 @@
-import { createBrowserRouter, Outlet } from 'react-router-dom';
+import { createBrowserRouter, Outlet, RouteObject } from 'react-router-dom';
 import { DocumentTitle } from '@noita-explorer/react-utils';
 import { pages } from './pages.ts';
+import { noitaAPI } from '../noita-api.ts';
 
 import { MainPage } from '../pages/main-page.tsx';
 import { NoitaHolidays } from '../pages/holidays/noita-holidays.tsx';
@@ -29,9 +30,9 @@ import { Sandbox } from '../pages/sandbox.tsx';
 import { PageBackground } from '../components/page-background.tsx';
 import { ErrorPage } from '../pages/_errors/error-page.tsx';
 
-export const router = createBrowserRouter([
+export const routes: RouteObject[] = [
   {
-    path: '/',
+    path: '',
     element: (
       <>
         <PageBackground />
@@ -112,14 +113,10 @@ export const router = createBrowserRouter([
               { title: 'Spells', href: pages.wiki.spells },
               { title: 'Enemies', href: pages.wiki.enemies },
               { title: 'Materials', href: pages.wiki.materials },
-              ...(__ENV__ !== 'production'
-                ? [
-                    {
-                      title: 'Materials Tree',
-                      href: pages.wiki.materialsTree,
-                    },
-                  ]
-                : []),
+              ...addIf(__ENV__ !== 'production', {
+                title: 'Materials Tree',
+                href: pages.wiki.materialsTree,
+              }),
             ]}
           />
         ),
@@ -156,14 +153,14 @@ export const router = createBrowserRouter([
               </DocumentTitle>
             ),
           },
-          {
+          ...addIf(__ENV__ !== 'production', {
             path: 'materials-tree',
             element: (
               <DocumentTitle title='Material Tree - Wiki'>
                 <WikiMaterialsTree />
               </DocumentTitle>
             ),
-          },
+          }),
         ],
       },
       {
@@ -176,9 +173,14 @@ export const router = createBrowserRouter([
           </DocumentTitle>
         ),
         children: [
-          { path: 'desktop-paths', element: <SetupDesktopPaths /> },
-          { path: 'desktop-scrape', element: <SetupDesktopScraper /> },
-          { path: 'web-paths', element: <SetupWebPaths /> },
+          ...addIf(Boolean(noitaAPI.environment.desktop), [
+            { path: 'desktop-paths', element: <SetupDesktopPaths /> },
+            { path: 'desktop-scrape', element: <SetupDesktopScraper /> },
+          ]),
+          ...addIf(Boolean(noitaAPI.environment.web), {
+            path: 'web-paths',
+            element: <SetupWebPaths />,
+          }),
         ],
       },
       {
@@ -267,7 +269,23 @@ export const router = createBrowserRouter([
           </DocumentTitle>
         ),
       },
-      { path: 'sandbox', element: <Sandbox /> },
+      ...addIf(__ENV__ !== 'production', {
+        path: 'sandbox',
+        element: <Sandbox />,
+      }),
     ],
   },
-]);
+];
+
+export const browserRouter = createBrowserRouter(routes);
+
+function addIf<T>(condition: boolean, obj: T | T[]): T[] {
+  if (!condition) {
+    return [];
+  }
+
+  if (Array.isArray(obj)) {
+    return obj;
+  }
+  return [obj];
+}

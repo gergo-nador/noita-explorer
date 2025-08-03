@@ -4,7 +4,7 @@ import {
   DialogWrapper,
 } from '@noita-explorer/noita-component-library';
 import { RouterProvider } from 'react-router-dom';
-import { router } from './routes/router';
+import { browserRouter } from './routes/router';
 import { useSettingsStore } from './stores/settings';
 import { useEffect } from 'react';
 import { useNoitaDataWakStore } from './stores/noita-data-wak.ts';
@@ -27,7 +27,9 @@ export const App = () => {
 
   return (
     <>
-      {settingsLoaded && isOnboardingDone && <RouterProvider router={router} />}
+      {settingsLoaded && isOnboardingDone && (
+        <RouterProvider router={browserRouter} />
+      )}
       {settingsLoaded && !isOnboardingDone && <Onboarding />}
 
       <Head>
