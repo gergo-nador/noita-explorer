@@ -1,5 +1,6 @@
-export const ZIndexManager = {
+export const zIndexManager = {
   actionPanel: 10,
+  onboardingPanel: 100,
   holidayFireworkBackground: 1,
   mobileUnsupportedViewDialog: 15,
   pageBackground: -1,

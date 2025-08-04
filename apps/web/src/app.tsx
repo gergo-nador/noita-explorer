@@ -27,9 +27,7 @@ export const App = () => {
 
   return (
     <>
-      {settingsLoaded && isOnboardingDone && (
-        <RouterProvider router={browserRouter} />
-      )}
+      <RouterProvider router={browserRouter} />
       {settingsLoaded && !isOnboardingDone && <Onboarding />}
 
       <Head>
