@@ -1,13 +1,12 @@
+import '../utils/dotenv-init';
 import * as fs from 'fs';
 import { NoitaWakData } from '@noita-explorer/model-noita';
 import { Buffer } from 'buffer';
 import { generateHtml } from './generate-html';
 import { getDeployUrl } from '../utils/get-deploy-url';
-import * as dotenv from 'dotenv';
 import * as path from 'node:path';
 import { generateImage } from './generate-image';
-import minimist from 'minimist';
-import process from 'node:process';
+import { args } from '../utils/process-args';
 
 /**
  * Generates search engine optimized html files for perks,
@@ -19,17 +18,13 @@ import process from 'node:process';
  * - -o: output directory. The generated files will be places in {-o}/g/wiki/{perks|spells|enemies}/
  */
 
-dotenv.config();
-
-const argv: Record<string, string> = minimist(process.argv.slice(2));
-
-const dataWakJsonPath = argv['wak-data'];
+const dataWakJsonPath = args['wak-data'];
 if (!dataWakJsonPath) {
   console.log('--wak-data argument must point to the noita_wak_data.json file');
   process.exit(1);
 }
 
-const outputFolder = argv['o'];
+const outputFolder = args['o'];
 if (!outputFolder) {
   console.log('output -o argument must be provided');
   process.exit(1);

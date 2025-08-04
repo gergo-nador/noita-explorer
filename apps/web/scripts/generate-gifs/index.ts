@@ -1,16 +1,16 @@
-import * as dotenv from 'dotenv';
+import '../utils/dotenv-init';
 import * as fs from 'fs';
 import * as path from 'node:path';
 import { StringKeyDictionary } from '@noita-explorer/model';
 import { base64Helpers } from '@noita-explorer/tools';
 import { Buffer } from 'buffer';
-import minimist from 'minimist';
 import * as process from 'node:process';
 import {
   NoitaScrapedMedia,
   NoitaScrapedMediaGif,
   NoitaScrapedMediaImage,
 } from '@noita-explorer/model-noita';
+import { args } from '../utils/process-args';
 
 /**
  * Generate gifs from the scraped data.wak content.
@@ -20,11 +20,7 @@ import {
  * - -o: output folder for the gifs. The gifs will be placed under {-o}/g/{main_key}/{animation_id}/{gif_name}.gif
  */
 
-dotenv.config();
-
-const argv: Record<string, string> = minimist(process.argv.slice(2));
-
-const dataGifJsonPath = argv['gif-data'];
+const dataGifJsonPath = args['gif-data'];
 if (!dataGifJsonPath) {
   console.log(
     '--gif-data argument must point to the noita_data_gifs.json file',
@@ -32,7 +28,7 @@ if (!dataGifJsonPath) {
   process.exit(1);
 }
 
-const outputFolder = argv['o'];
+const outputFolder = args['o'];
 if (!outputFolder) {
   console.log('output -o argument must be provided');
   process.exit(1);
