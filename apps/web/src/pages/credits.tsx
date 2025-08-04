@@ -1,6 +1,7 @@
-import { Button, Header, Icon } from '@noita-explorer/noita-component-library';
+import { Header, Icon } from '@noita-explorer/noita-component-library';
 import { Flex } from '@noita-explorer/react-utils';
 import { deployUrls } from '../utils/deploy-urls.ts';
+import { Link } from '../components/link.tsx';
 
 export const Credits = () => {
   return (
@@ -15,16 +16,13 @@ export const Credits = () => {
       <Header title='Source code'>
         <Flex gap={4}>
           <Icon src='/images/external/github.png' alt='github' size={18} />
-
-          <a
-            href='https://github.com/gergo-nador/noita-explorer'
-            target='_blank'
-            style={{ color: 'white' }}
+          <Link
+            to='https://github.com/gergo-nador/noita-explorer'
+            external
+            buttonDecoration='right'
           >
-            <Button decoration='right'>
-              https://github.com/gergo-nador/noita-explorer
-            </Button>
-          </a>
+            https://github.com/gergo-nador/noita-explorer
+          </Link>
         </Flex>
       </Header>
 
@@ -35,14 +33,13 @@ export const Credits = () => {
             <p>
               If you would like to help testing the newest features, check out
               the deployment of the development branch
-              <a
-                href={deployUrls.noitaExplorer.preview}
-                style={{ color: 'white' }}
+              <Link
+                to={deployUrls.noitaExplorer.preview}
+                external
+                buttonDecoration='right'
               >
-                <Button decoration='right'>
-                  {deployUrls.noitaExplorer.preview}
-                </Button>
-              </a>
+                {deployUrls.noitaExplorer.preview}
+              </Link>
             </p>
           </Header>
         </div>
@@ -53,14 +50,13 @@ export const Credits = () => {
           <Header title='Main site'>
             <p>
               Bring me back to the main site
-              <a
-                href={deployUrls.noitaExplorer.production}
-                style={{ color: 'white' }}
+              <Link
+                to={deployUrls.noitaExplorer.production}
+                external
+                buttonDecoration='right'
               >
-                <Button decoration='right'>
-                  {deployUrls.noitaExplorer.production}
-                </Button>
-              </a>
+                {deployUrls.noitaExplorer.production}
+              </Link>
             </p>
           </Header>
         </div>
@@ -75,14 +71,22 @@ export const Credits = () => {
                   <span>Production:</span>
                   <ul>
                     <li>
-                      <CreditsLink link={deployUrls.noitaExplorer.production}>
+                      <Link
+                        to={deployUrls.noitaExplorer.production}
+                        external
+                        buttonDecoration='right'
+                      >
                         {deployUrls.noitaExplorer.production}
-                      </CreditsLink>
+                      </Link>
                     </li>
                     <li>
-                      <CreditsLink link={deployUrls.cloudflare.production}>
+                      <Link
+                        to={deployUrls.cloudflare.production}
+                        external
+                        buttonDecoration='right'
+                      >
                         {deployUrls.cloudflare.production}
-                      </CreditsLink>
+                      </Link>
                     </li>
                   </ul>
                 </div>
@@ -92,14 +96,22 @@ export const Credits = () => {
                   <span>Preview:</span>
                   <ul>
                     <li>
-                      <CreditsLink link={deployUrls.noitaExplorer.preview}>
+                      <Link
+                        to={deployUrls.noitaExplorer.preview}
+                        external
+                        buttonDecoration='right'
+                      >
                         {deployUrls.noitaExplorer.preview}
-                      </CreditsLink>
+                      </Link>
                     </li>
                     <li>
-                      <CreditsLink link={deployUrls.cloudflare.preview}>
+                      <Link
+                        to={deployUrls.cloudflare.preview}
+                        external
+                        buttonDecoration='right'
+                      >
                         {deployUrls.cloudflare.preview}
-                      </CreditsLink>
+                      </Link>
                     </li>
                   </ul>
                 </div>
@@ -116,54 +128,94 @@ export const Credits = () => {
         </p>
         <ul>
           <li>
-            <CreditsLink link='https://github.com/TwoAbove/noita-tools'>
+            <Link
+              to='https://github.com/TwoAbove/noita-tools'
+              external
+              buttonDecoration='right'
+            >
               [Github] TwoAbove / noita-tools
-            </CreditsLink>
+            </Link>
           </li>
           <li>
-            <CreditsLink link='https://github.com/ipeterov/noita-progress'>
+            <Link
+              to='https://github.com/ipeterov/noita-progress'
+              external
+              buttonDecoration='right'
+            >
               [Github] ipeterov / noita-progress
-            </CreditsLink>
+            </Link>
           </li>
           <li>
-            <CreditsLink link='https://github.com/Takiro/noita-savegame-editor'>
+            <Link
+              to='https://github.com/Takiro/noita-savegame-editor'
+              external
+              buttonDecoration='right'
+            >
               [Github] Takiro / noita-savegame-editor
-            </CreditsLink>
+            </Link>
           </li>
           <li>
-            <CreditsLink link='https://github.com/acidflow-noita/noitamap'>
+            <Link
+              to='https://github.com/acidflow-noita/noitamap'
+              external
+              buttonDecoration='right'
+            >
               [Github] acidflow-noita / noitamap
-            </CreditsLink>
+            </Link>
           </li>
           <li>
-            <CreditsLink link='https://github.com/kamiheku/noited'>
+            <Link
+              to='https://github.com/kamiheku/noited'
+              external
+              buttonDecoration='right'
+            >
               [Github] kamiheku / noited
-            </CreditsLink>
+            </Link>
           </li>
           <li>
-            <CreditsLink link='https://github.com/isJuhn/UnWak'>
+            <Link
+              to='https://github.com/isJuhn/UnWak'
+              external
+              buttonDecoration='right'
+            >
               [Github] isJuhn / UnWak
-            </CreditsLink>
+            </Link>
           </li>
           <li>
-            <CreditsLink link='https://www.lightbourn.net/games/Noita/editor.html'>
+            <Link
+              to='https://www.lightbourn.net/games/Noita/editor.html'
+              external
+              buttonDecoration='right'
+            >
               Noita .salakieli Editor
-            </CreditsLink>
+            </Link>
           </li>
           <li>
-            <CreditsLink link='https://noita.wiki.gg/wiki/Noita_Wiki'>
+            <Link
+              to='https://noita.wiki.gg/wiki/Noita_Wiki'
+              external
+              buttonDecoration='right'
+            >
               Noita Wiki
-            </CreditsLink>
+            </Link>
           </li>
           <li>
-            <CreditsLink link='https://www.reddit.com/r/noita/comments/yzajqv/i_made_a_simplified_map_while_still_keeping_all/'>
+            <Link
+              to='https://www.reddit.com/r/noita/comments/yzajqv/i_made_a_simplified_map_while_still_keeping_all/'
+              external
+              buttonDecoration='right'
+            >
               [Reddit] Noita map for the Death map from u/lilraz08
-            </CreditsLink>
+            </Link>
           </li>
           <li>
-            <CreditsLink link='https://www.reddit.com/r/noita/comments/jp56ub/a_while_ago_i_made_noita_blackletter_this_is_now/'>
+            <Link
+              to='https://www.reddit.com/r/noita/comments/jp56ub/a_while_ago_i_made_noita_blackletter_this_is_now/'
+              external
+              buttonDecoration='right'
+            >
               [Reddit] Noita Backletter font from u/Viowlet
-            </CreditsLink>
+            </Link>
           </li>
         </ul>
       </Header>
@@ -176,23 +228,5 @@ export const Credits = () => {
         <span>{new Date(parseInt(__DEPLOY_TIME__)).toLocaleString()}</span>
       </Flex>
     </div>
-  );
-};
-
-const CreditsLink = ({
-  children,
-  link,
-}: {
-  children: string;
-  link: string;
-}) => {
-  // The <Flex> wrapper is needed for Firefox compatibility, otherwise
-  // the links are misaligned
-  return (
-    <Flex>
-      <a href={link} target='_blank' style={{ color: 'white' }}>
-        <Button decoration='right'>{children}</Button>
-      </a>
-    </Flex>
   );
 };
