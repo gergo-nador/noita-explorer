@@ -26,7 +26,10 @@ export default defineConfig(({ mode }): UserConfig => {
 
     build: {
       lib: isLibMode && {
-        entry: { routes: resolve(__dirname, 'src/routes/router.tsx') },
+        entry: {
+          routes: resolve(__dirname, 'src/routes/router.tsx'),
+          app: resolve(__dirname, 'src/render-route-ssg.tsx'),
+        },
         formats: ['es', 'cjs'],
         fileName: (format, entryName) => `${entryName}.${format}.js`,
       },

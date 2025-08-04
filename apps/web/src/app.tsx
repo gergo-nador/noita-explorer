@@ -3,8 +3,8 @@ import {
   NoitaToaster,
   DialogWrapper,
 } from '@noita-explorer/noita-component-library';
-import { RouterProvider } from 'react-router-dom';
-import { browserRouter } from './routes/router';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { routes } from './routes/router';
 import { useSettingsStore } from './stores/settings';
 import { useEffect } from 'react';
 import { useNoitaDataWakStore } from './stores/noita-data-wak.ts';
@@ -20,6 +20,8 @@ import { loadEmittersPlugin } from '@tsparticles/plugin-emitters';
 import { useOnboarding } from './hooks/use-onboarding.ts';
 import { Head } from '@noita-explorer/react-utils';
 import { MobileViewUnsupportedWarning } from './components/mobile-view-unsupported-warning.tsx';
+
+const browserRouter = createBrowserRouter(routes);
 
 export const App = () => {
   const { loaded: settingsLoaded } = useSettingsStore();
