@@ -31,6 +31,3 @@ npm run generate-static-assets
 
 echo Generate sitemap.txt
 npm run generate-sitemap
-
-echo SSG
-npx tsx ssg/index.ts
