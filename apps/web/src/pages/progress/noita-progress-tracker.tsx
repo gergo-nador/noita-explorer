@@ -199,6 +199,10 @@ export const NoitaProgressTracker = () => {
               }
             }
 
+            if (__SSG__) {
+              iconType = 'regular';
+            }
+
             return (
               <ActiveIconWrapper
                 id={'perk-' + perk.id}
@@ -263,6 +267,10 @@ export const NoitaProgressTracker = () => {
               } else if (isUnlockActionPresent) {
                 iconType = 'new';
               }
+            }
+
+            if (__SSG__) {
+              iconType = 'regular';
             }
 
             return (
@@ -352,6 +360,10 @@ export const NoitaProgressTracker = () => {
                 } else if (isUnlockActionPresent) {
                   iconType = 'new';
                 }
+              }
+
+              if (__SSG__) {
+                iconType = 'regular';
               }
 
               return (
