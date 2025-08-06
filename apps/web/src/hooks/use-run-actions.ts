@@ -1,4 +1,4 @@
-import { noitaAPI } from '../noita-api.ts';
+import { noitaAPI } from '../utils/noita-api.ts';
 import { Dispatch, useState } from 'react';
 import { useToast } from '@noita-explorer/noita-component-library';
 import { useNoitaActionsStore } from '../stores/actions.ts';

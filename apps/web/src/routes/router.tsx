@@ -1,7 +1,7 @@
 import { Outlet, RouteObject } from 'react-router-dom';
 import { DocumentTitle } from '@noita-explorer/react-utils';
 import { pages } from './pages.ts';
-import { noitaAPI } from '../noita-api.ts';
+import { noitaAPI } from '../utils/noita-api.ts';
 
 import { MainPage } from '../pages/main-page.tsx';
 import { NoitaHolidays } from '../pages/holidays/noita-holidays.tsx';

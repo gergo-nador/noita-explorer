@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { noitaAPI } from '../noita-api.ts';
+import { noitaAPI } from '../utils/noita-api.ts';
 import { StringKeyDictionary } from '@noita-explorer/model';
 import {
   EnemyStatistic,

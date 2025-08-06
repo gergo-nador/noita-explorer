@@ -1,5 +1,5 @@
 import React from 'react';
-import { constants } from '../../constants.ts';
+import { constants } from '../../utils/constants.ts';
 import { useTemplatePageLogic } from '../../hooks/use-template-page-logic.tsx';
 import { Flex } from '@noita-explorer/react-utils';
 

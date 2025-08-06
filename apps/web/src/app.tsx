@@ -8,7 +8,7 @@ import { routes } from './routes/router';
 import { useSettingsStore } from './stores/settings';
 import { useEffect } from 'react';
 import { useNoitaDataWakStore } from './stores/noita-data-wak.ts';
-import { noitaAPI } from './noita-api.ts';
+import { noitaAPI } from './utils/noita-api.ts';
 import { useSave00Store } from './stores/save00.ts';
 import { NoitaWandConfig } from '@noita-explorer/model-noita';
 import { imageHelpers, randomHelpers } from '@noita-explorer/tools';

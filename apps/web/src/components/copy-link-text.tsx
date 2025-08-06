@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { Flex, HoveredStyle } from '@noita-explorer/react-utils';
 import { Icon, useToast } from '@noita-explorer/noita-component-library';
-import { noitaAPI } from '../noita-api.ts';
+import { noitaAPI } from '../utils/noita-api.ts';
 import { publicPaths } from '../utils/public-paths.ts';
 
 interface Props {

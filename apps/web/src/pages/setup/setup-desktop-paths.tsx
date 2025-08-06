@@ -5,7 +5,7 @@ import {
   useToast,
 } from '@noita-explorer/noita-component-library';
 import { useSettingsStore } from '../../stores/settings';
-import { noitaAPI } from '../../noita-api.ts';
+import { noitaAPI } from '../../utils/noita-api.ts';
 import { pages } from '../../routes/pages';
 import { useEffect, useState } from 'react';
 import { PageBottomComponent } from '../../components/page-bottom-component.tsx';

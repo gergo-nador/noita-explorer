@@ -16,7 +16,7 @@ import { NoitaEnemyGroupTooltip } from '../../components/tooltips/noita-enemy-gr
 import { useNoitaEnemyGroups } from '../../hooks/use-noita-enemy-groups.ts';
 import { arrayHelpers } from '@noita-explorer/tools';
 import { useNoitaActionsStore } from '../../stores/actions.ts';
-import { noitaAPI } from '../../noita-api.ts';
+import { noitaAPI } from '../../utils/noita-api.ts';
 import { Flex } from '@noita-explorer/react-utils';
 import { pages } from '../../routes/pages.ts';
 import { useQueryParamsBoolean } from '../../hooks/query-params/use-query-params-boolean.ts';
