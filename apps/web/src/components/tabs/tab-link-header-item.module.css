@@ -1,5 +1,12 @@
 .container{}
 
+.container a {
+    text-decoration: none;
+}
+.container:hover a {
+    text-decoration: underline;
+}
+
 .grid-main{
     --border-width: 8px;
     --corner-width: 4px;
@@ -68,6 +75,12 @@
     padding: 10px 15px;
     background: var(--background-color);
     text-align: center;
+
+    color: #d1d1d1;
+}
+
+.content:hover{
+    color: #e8e8e8;
 }
 
 /* This is to override the onfocus specificity */
