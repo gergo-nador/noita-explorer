@@ -1,5 +1,5 @@
 import { StrictMode } from 'react';
-import { createRoot, RootOptions } from 'react-dom/client';
+import { createRoot, hydrateRoot, RootOptions } from 'react-dom/client';
 import './index.css';
 import { App } from './app.tsx';
 import { sentry } from './utils/sentry.ts';
@@ -57,11 +57,15 @@ if (sentry.isSentryEnabled && sentryDsn) {
 
 function startApp() {
   const container = document.getElementById('root')!;
-  const root = createRoot(container, rootErrorHandling);
+  if (container.hasChildNodes()) {
+    hydrateRoot(container, <App />);
+  } else {
+    const root = createRoot(container, rootErrorHandling);
 
-  root.render(
-    <StrictMode>
-      <App />
-    </StrictMode>,
-  );
+    root.render(
+      <StrictMode>
+        <App />
+      </StrictMode>,
+    );
+  }
 }

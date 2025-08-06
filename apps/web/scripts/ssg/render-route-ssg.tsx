@@ -72,7 +72,10 @@ const HtmlDoc = ({
         <link rel='stylesheet' href='/assets/index.css' />
       </head>
       <body>
-        <StaticRouterProvider router={router} context={context} />
+        <div id='root'>
+          <StaticRouterProvider router={router} context={context} />
+        </div>
+        <script src='/index.es.js' type='module' />
       </body>
     </html>
   );
