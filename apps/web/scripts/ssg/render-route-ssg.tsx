@@ -3,12 +3,15 @@ import {
   createStaticRouter,
   StaticHandlerContext,
   StaticRouterProvider,
+  StaticRouterProviderProps,
 } from 'react-router-dom';
 import { routes } from '../../src/routes/router';
 import { renderToString } from 'react-dom/server.browser';
 import '../../src/index.css';
+import { noitaDataWakStore } from '../../src/stores/noita-data-wak';
+import { NoitaWakData } from '@noita-explorer/model-noita';
 
-export const renderRouteSsg = async (path: string) => {
+export const renderRouteSsg = async (path: string, dataWak: NoitaWakData) => {
   if (!path.startsWith('/')) {
     path = '/' + path;
   }
@@ -19,9 +22,26 @@ export const renderRouteSsg = async (path: string) => {
     new Request(url),
   )) as StaticHandlerContext;
 
+  noitaDataWakStore.getState().load(dataWak);
   const router = createStaticRouter(routes, context);
 
   const html = renderToString(
+    <HtmlDoc canonicalUrl={url} router={router} context={context} />,
+  );
+
+  return '<!DOCTYPE html>' + html;
+};
+
+const HtmlDoc = ({
+  canonicalUrl,
+  router,
+  context,
+}: {
+  canonicalUrl: string;
+  router: StaticRouterProviderProps['router'];
+  context: StaticHandlerContext;
+}) => {
+  return (
     <html>
       <head>
         <meta charSet='UTF-8' />
@@ -39,7 +59,7 @@ export const renderRouteSsg = async (path: string) => {
           name='keywords'
           content='noita,unlock,progress,game progress,unlock progress'
         />
-        <link rel='canonical' href={url} />
+        <link rel='canonical' href={canonicalUrl} />
         <meta
           name='google-site-verification'
           content='pC4tL9YCkPCuXtbGTraiIcDlsFQntUuwn17pNtr01Ek'
@@ -54,8 +74,6 @@ export const renderRouteSsg = async (path: string) => {
       <body>
         <StaticRouterProvider router={router} context={context} />
       </body>
-    </html>,
+    </html>
   );
-
-  return html;
 };

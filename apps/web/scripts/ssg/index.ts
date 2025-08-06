@@ -6,6 +6,10 @@ import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { generateSitemapPaths } from '../sitemap/sitemap-text';
 import { stringHelpers } from '@noita-explorer/tools';
+import { NoitaWakData } from '@noita-explorer/model-noita';
+
+const wakDataJson = fs.readFileSync('public/noita_wak_data.json').toString()
+const wakData:NoitaWakData = JSON.parse(wakDataJson)
 
 generateStaticSites()
   .then(() => {
@@ -20,8 +24,7 @@ async function generateStaticSites() {
   const urlPaths = generateSitemapPaths(routes);
   for (const urlPath of urlPaths) {
     try {
-      const htmlDocument: string = await renderRouteSsg(urlPath);
-      const html = '<!DOCTYPE html>' + htmlDocument;
+      const html: string = await renderRouteSsg(urlPath, wakData);
 
       const fsPath = createFsPathFromWebPath(urlPath);
 

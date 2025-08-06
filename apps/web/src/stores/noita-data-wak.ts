@@ -1,4 +1,5 @@
-import { create } from 'zustand';
+import { createStore } from 'zustand/vanilla';
+import { useStore } from 'zustand';
 import { NoitaWakData } from '@noita-explorer/model-noita';
 import { Dispatch, SetStateAction } from 'react';
 
@@ -12,7 +13,7 @@ interface NoitaDataWakState {
   modify: Dispatch<SetStateAction<NoitaDataWakState>>;
 }
 
-export const useNoitaDataWakStore = create<NoitaDataWakState>((set) => ({
+export const noitaDataWakStore = createStore<NoitaDataWakState>((set) => ({
   loaded: false,
   exists: undefined,
   data: undefined,
@@ -32,3 +33,10 @@ export const useNoitaDataWakStore = create<NoitaDataWakState>((set) => ({
   },
   modify: (args) => set(args),
 }));
+
+export const useNoitaDataWakStore = (): NoitaDataWakState => {
+  const value = useStore(noitaDataWakStore);
+
+  // for some reason useStore doesn't work with SSG
+  return __SSG__ ? noitaDataWakStore.getState() : value;
+};

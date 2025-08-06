@@ -22,6 +22,7 @@ export default defineConfig(({ mode }): UserConfig => {
       __DEPLOY_ID__: JSON.stringify(deployInfo.id),
       __DEPLOY_TIME__: JSON.stringify(deployInfo.time),
       __ENV__: JSON.stringify(environment),
+      __SSG__: JSON.stringify(isLibMode),
     },
 
     build: {
