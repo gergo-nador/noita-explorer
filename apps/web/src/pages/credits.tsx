@@ -30,17 +30,17 @@ export const Credits = () => {
         <div>
           <br />
           <Header title='Beta testing'>
-            <p>
+            <span>
               If you would like to help testing the newest features, check out
               the deployment of the development branch
-              <Link
-                to={deployUrls.noitaExplorer.preview}
-                external
-                buttonDecoration='right'
-              >
-                {deployUrls.noitaExplorer.preview}
-              </Link>
-            </p>
+            </span>
+            <Link
+              to={deployUrls.noitaExplorer.preview}
+              external
+              buttonDecoration='right'
+            >
+              {deployUrls.noitaExplorer.preview}
+            </Link>
           </Header>
         </div>
       )}
@@ -48,16 +48,14 @@ export const Credits = () => {
         <div>
           <br />
           <Header title='Main site'>
-            <p>
-              Bring me back to the main site
-              <Link
-                to={deployUrls.noitaExplorer.production}
-                external
-                buttonDecoration='right'
-              >
-                {deployUrls.noitaExplorer.production}
-              </Link>
-            </p>
+            <span>Bring me back to the main site</span>
+            <Link
+              to={deployUrls.noitaExplorer.production}
+              external
+              buttonDecoration='right'
+            >
+              {deployUrls.noitaExplorer.production}
+            </Link>
           </Header>
         </div>
       )}
