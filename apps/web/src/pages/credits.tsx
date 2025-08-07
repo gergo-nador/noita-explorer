@@ -223,9 +223,7 @@ export const Credits = () => {
       <Flex gap={10} center className='text-secondary'>
         <span>{__DEPLOY_ID__}</span>
         <span>-</span>
-        <span>
-          {new Date(parseInt(__DEPLOY_TIME__)).toLocaleString('en-GB')}
-        </span>
+        <span>{new Date(parseInt(__DEPLOY_TIME__)).toLocaleString()}</span>
       </Flex>
     </div>
   );
