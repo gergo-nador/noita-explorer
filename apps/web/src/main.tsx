@@ -6,12 +6,37 @@ import { sentry } from './utils/sentry.ts';
 import { noitaAPI } from './utils/noita-api.ts';
 import { noitaDataWakStore } from './stores/noita-data-wak.ts';
 
+const loadDataWakPromise = noitaAPI.noita.dataFile.get().then((data) => {
+  noitaDataWakStore.getState().load(data);
+});
+
 let rootErrorHandling: RootOptions = {
   onUncaughtError: (
     error: unknown,
     errorInfo: { componentStack?: string | undefined },
   ) => {
     console.error('Uncaught error: ', error, errorInfo);
+  },
+  onRecoverableError: (error, errorInfo) => {
+    if (!error || typeof error !== 'object' || !('message' in error)) {
+      console.error('Recoverable error: ', error, errorInfo);
+      return;
+    }
+
+    if (
+      typeof error.message === 'string' &&
+      error.message.startsWith('Minified React error #418;')
+    ) {
+      if (__ENV__ === 'development') {
+        console.error("HYDRATION ISSUE but it's okay react can recover huhh");
+      }
+
+      // let's ignore hydration issues in production,
+      // do your job react and re-render the tree pls
+      return;
+    }
+
+    console.error('Recoverable error: ', error, errorInfo);
   },
 };
 
@@ -56,12 +81,11 @@ if (sentry.isSentryEnabled && sentryDsn) {
 }
 
 async function startApp() {
-  const data = await noitaAPI.noita.dataFile.get();
-  noitaDataWakStore.getState().load(data);
+  await loadDataWakPromise;
 
   const container = document.getElementById('root')!;
   if (container.hasChildNodes()) {
-    hydrateRoot(container, <App />);
+    hydrateRoot(container, <App />, rootErrorHandling);
   } else {
     const root = createRoot(container, rootErrorHandling);
 
