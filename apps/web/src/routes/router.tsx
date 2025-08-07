@@ -1,4 +1,4 @@
-import { Outlet, RouteObject } from 'react-router-dom';
+import { createBrowserRouter, Outlet, RouteObject } from 'react-router-dom';
 import { DocumentTitle } from '@noita-explorer/react-utils';
 import { pages } from './pages.ts';
 import { noitaAPI } from '../utils/noita-api.ts';
@@ -276,6 +276,8 @@ export const routes: RouteObject[] = [
     ],
   },
 ];
+
+export const browserRouter = createBrowserRouter(routes);
 
 function addIf<T>(condition: boolean, obj: T | T[]): T[] {
   if (!condition) {

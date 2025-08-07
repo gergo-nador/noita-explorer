@@ -3,6 +3,8 @@ import { createRoot, hydrateRoot, RootOptions } from 'react-dom/client';
 import './index.css';
 import { App } from './app.tsx';
 import { sentry } from './utils/sentry.ts';
+import { noitaAPI } from './utils/noita-api.ts';
+import { noitaDataWakStore } from './stores/noita-data-wak.ts';
 
 let rootErrorHandling: RootOptions = {
   onUncaughtError: (
@@ -55,7 +57,10 @@ if (sentry.isSentryEnabled && sentryDsn) {
   startApp();
 }
 
-function startApp() {
+async function startApp() {
+  const data = await noitaAPI.noita.dataFile.get();
+  noitaDataWakStore.getState().load(data);
+
   const container = document.getElementById('root')!;
   if (container.hasChildNodes()) {
     hydrateRoot(container, <App />);

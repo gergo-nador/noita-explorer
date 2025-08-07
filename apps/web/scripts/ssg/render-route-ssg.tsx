@@ -5,11 +5,13 @@ import {
   StaticRouterProvider,
   StaticRouterProviderProps,
 } from 'react-router-dom';
-import { routes } from '../../src/routes/router';
 import { renderToString } from 'react-dom/server.browser';
-import '../../src/index.css';
-import { noitaDataWakStore } from '../../src/stores/noita-data-wak';
 import { NoitaWakData } from '@noita-explorer/model-noita';
+
+import '../../src/index.css';
+import { routes } from '../../src/routes/router';
+import { noitaDataWakStore } from '../../src/stores/noita-data-wak';
+import { App } from '../../src/app';
 
 export const renderRouteSsg = async (path: string, dataWak: NoitaWakData) => {
   if (!path.startsWith('/')) {
@@ -73,7 +75,9 @@ const HtmlDoc = ({
       </head>
       <body>
         <div id='root'>
-          <StaticRouterProvider router={router} context={context} />
+          <App>
+            <StaticRouterProvider router={router} context={context} />
+          </App>
         </div>
         <script src='/index.es.js' type='module' />
       </body>
