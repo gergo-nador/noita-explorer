@@ -50,9 +50,7 @@ if (sentry.isSentryEnabled && sentryDsn) {
     .catch(() => {
       console.error('Failed to initialize Sentry');
     })
-    .then(() => {
-      startApp();
-    });
+    .then(() => startApp());
 } else {
   startApp();
 }
