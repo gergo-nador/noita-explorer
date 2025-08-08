@@ -16,7 +16,7 @@ import {
 import { scrapeUtils } from '@noita-explorer/scrapers';
 import { PageBottomComponent } from '../../components/page-bottom-component.tsx';
 import { Flex } from '@noita-explorer/react-utils';
-import { noitaAPI } from '../../noita-api.ts';
+import { noitaAPI } from '../../utils/noita-api.ts';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { pages } from '../../routes/pages';

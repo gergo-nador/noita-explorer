@@ -11,6 +11,8 @@ if [ "$CI_DISABLED" = "1" ]; then
     exit 0
 fi
 
+npm run generate-index-html
+
 # build app in lib mode, as some scripts depend on it
 vite build --mode lib
 

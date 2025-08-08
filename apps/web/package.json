@@ -4,18 +4,25 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
+    "predev": "npm run generate-index-html",
     "dev": "vite",
+
     "prebuild": "sh scripts/ci.sh",
     "build": "tsc -b && vite build",
     "postbuild": "sh scripts/ci-post.sh",
+
     "lint": "eslint .",
     "preview": "vite preview",
+
     "production-server-local": "cd dist && python3 ../scripts/http-server.py",
+
+    "generate-index-html": "npx tsx scripts/index-html/index.ts -o index.html",
     "data-wak-download": "npx tsx scripts/data-wak/download.ts -o dist-tmp",
     "scrape-data-wak": "npx tsx scripts/data-wak/scrape.ts -t dist-tmp/common.csv --data-wak dist-tmp/data.wak --o-wak public/noita_wak_data.json --o-gif dist-tmp/noita_data_gifs.json",
     "generate-gifs": "npx tsx scripts/generate-gifs/index.ts --gif-data dist-tmp/noita_data_gifs.json -o public",
     "generate-static-assets": "npx tsx scripts/generate-seo-sites-for-wiki/index.ts --wak-data public/noita_wak_data.json -o public",
-    "generate-sitemap": "npx tsx scripts/sitemap/sitemap-text.ts -o public/sitemap.txt"
+    "generate-sitemap": "npx tsx scripts/sitemap/sitemap-text.ts -o public/sitemap.txt",
+    "generate-statis-site": "npx tsx scripts/ssg/index.ts"
   },
   "dependencies": {
     "@noita-explorer/file-systems": "*",

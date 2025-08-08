@@ -5,7 +5,7 @@ import { useRunActions } from '../../hooks/use-run-actions.ts';
 import { Flex } from '@noita-explorer/react-utils';
 import { NoitaActionResult } from '@noita-explorer/model-noita';
 import { SpaceCharacter } from '../space-character.tsx';
-import { ZIndexManager } from '../../utils/z-index-manager.ts';
+import { zIndexManager } from '../../utils/z-index-manager.ts';
 
 export const ActionsPanel = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -66,7 +66,7 @@ export const ActionsPanel = () => {
           opacity: isOpen ? '1' : '0',
           pointerEvents: isOpen ? 'initial' : 'none',
           transition: 'opacity 200ms',
-          zIndex: ZIndexManager.actionPanel,
+          zIndex: zIndexManager.actionPanel,
         }}
         onClick={() => setIsOpen(false)}
       />
@@ -77,7 +77,7 @@ export const ActionsPanel = () => {
           top: 0,
           transform: isOpen ? 'translate(-20px)' : 'translate(100%)',
           transition: 'transform 200ms',
-          zIndex: ZIndexManager.actionPanel,
+          zIndex: zIndexManager.actionPanel,
         }}
       >
         <Card

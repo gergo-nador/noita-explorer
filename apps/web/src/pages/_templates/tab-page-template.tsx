@@ -1,9 +1,8 @@
-import { TabView } from '@noita-explorer/noita-component-library';
-import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import { useTemplatePageLogic } from '../../hooks/use-template-page-logic.tsx';
-import { useEffect, useState } from 'react';
 import { stringHelpers } from '@noita-explorer/tools';
 import { Flex } from '@noita-explorer/react-utils';
+import { TabView } from '../../components/tabs/tab-view.tsx';
 
 interface TabLink {
   title: string;
@@ -17,27 +16,25 @@ interface TabPageTemplateProps {
 
 export const TabPageTemplate = ({ tabs, returnPath }: TabPageTemplateProps) => {
   const templatePageLogic = useTemplatePageLogic(returnPath);
-  const navigate = useNavigate();
   const location = useLocation();
 
-  const [activeTab, setActiveTab] = useState<TabLink | undefined>(
-    tabs.length > 0 ? tabs[0] : undefined,
-  );
+  const getActiveTab = () => {
+    const path = stringHelpers.trim({
+      text: location.pathname,
+      fromEnd: '/',
+    });
 
-  useEffect(() => {
-    const tab = tabs.find(
-      (t) =>
-        stringHelpers.trim({
-          text: t.href,
-          fromEnd: '/',
-        }) ===
-        stringHelpers.trim({
-          text: location.pathname,
-          fromEnd: '/',
-        }),
-    );
-    setActiveTab(tab);
-  }, [tabs, location.pathname]);
+    return tabs.find((t) => {
+      const tabPath = stringHelpers.trim({
+        text: t.href,
+        fromEnd: '/',
+      });
+
+      return tabPath === path;
+    });
+  };
+
+  const activeTab = getActiveTab() ?? tabs[0];
 
   return (
     <Flex width='100%' height='100%' center column>
@@ -48,23 +45,26 @@ export const TabPageTemplate = ({ tabs, returnPath }: TabPageTemplateProps) => {
         }}
       >
         {activeTab && (
-          <TabView
-            styleCard={{
-              maxHeight: '85vh',
-            }}
-            activeTabId={activeTab.title}
-          >
-            {tabs.map((t, index) => (
-              <TabView.Item
-                key={t.title}
-                id={t.title}
-                text={t.title}
-                index={index}
-                onClick={() => navigate(t.href)}
-              >
-                <Outlet />
-              </TabView.Item>
-            ))}
+          <TabView activeTabId={activeTab.title} numberOfTabs={tabs.length}>
+            <TabView.HeaderGroup>
+              {tabs.map((t, index) => (
+                <TabView.LinkHeaderItem
+                  key={t.title}
+                  id={t.title}
+                  index={index}
+                  to={t.href}
+                >
+                  {t.title}
+                </TabView.LinkHeaderItem>
+              ))}
+            </TabView.HeaderGroup>
+            <TabView.Body
+              style={{
+                maxHeight: '85vh',
+              }}
+            >
+              <Outlet />
+            </TabView.Body>
           </TabView>
         )}
 

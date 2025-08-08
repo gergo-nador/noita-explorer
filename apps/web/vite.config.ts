@@ -22,11 +22,15 @@ export default defineConfig(({ mode }): UserConfig => {
       __DEPLOY_ID__: JSON.stringify(deployInfo.id),
       __DEPLOY_TIME__: JSON.stringify(deployInfo.time),
       __ENV__: JSON.stringify(environment),
+      __SSG__: JSON.stringify(isLibMode),
     },
 
     build: {
       lib: isLibMode && {
-        entry: { routes: resolve(__dirname, 'src/routes/router.tsx') },
+        entry: {
+          routes: resolve(__dirname, 'src/routes/router.tsx'),
+          ssg: resolve(__dirname, 'scripts/ssg/render-route-ssg.tsx'),
+        },
         formats: ['es', 'cjs'],
         fileName: (format, entryName) => `${entryName}.${format}.js`,
       },

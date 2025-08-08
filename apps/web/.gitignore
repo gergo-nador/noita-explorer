@@ -6,6 +6,8 @@ dist-lib
 dist-tmp
 public/noita_wak_data.json
 
+index.html
+
 # Logs
 logs
 *.log

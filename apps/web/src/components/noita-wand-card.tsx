@@ -12,7 +12,7 @@ import { useNoitaDataWakStore } from '../stores/noita-data-wak.ts';
 import { NoitaSpellTooltip } from './tooltips/noita-spell-tooltip.tsx';
 import { NoitaSpellTypesDictionary } from '../noita/noita-spell-type-dictionary.ts';
 import css from './noita-wand-card.module.css';
-import { noitaAPI } from '../noita-api.ts';
+import { noitaAPI } from '../utils/noita-api.ts';
 import { useNoitaActionsStore } from '../stores/actions.ts';
 import { Flex } from '@noita-explorer/react-utils';
 import { ConditionalWrapper } from '@noita-explorer/react-utils';

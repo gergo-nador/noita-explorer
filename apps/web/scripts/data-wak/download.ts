@@ -1,8 +1,8 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import * as dotenv from 'dotenv';
-import minimist from 'minimist';
 import * as process from 'node:process';
+import { args } from '../utils/process-args';
+import '../utils/dotenv-init';
 
 /**
  * This process downloads the data.wak and the common.csv files
@@ -17,11 +17,8 @@ import * as process from 'node:process';
  * - f: if provided, the files will be force downloaded and will override the current version
  */
 
-dotenv.config();
-
-const argv: Record<string, string> = minimist(process.argv.slice(2));
-const outputFolder = argv['o'];
-const forceDownload = argv['f'] !== undefined;
+const outputFolder = args['o'];
+const forceDownload = args['f'] !== undefined;
 
 if (!outputFolder) {
   console.error('output folder must be specified with argument -o');

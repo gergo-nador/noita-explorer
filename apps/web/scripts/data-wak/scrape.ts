@@ -1,7 +1,6 @@
 import { scrapeDataWak, scrapeUtils } from '@noita-explorer/scrapers';
 import * as fs from 'fs';
 import * as path from 'path';
-import minimist from 'minimist';
 import * as process from 'node:process';
 import { Buffer } from 'buffer';
 import {
@@ -9,6 +8,7 @@ import {
   FileSystemFileAccessNode,
   FileSystemDirectoryAccessDataWakMemory,
 } from '@noita-explorer/file-systems';
+import { args } from '../utils/process-args';
 
 /**
  * Scrapes the data.wak file.
@@ -20,9 +20,7 @@ import {
  *  - --o-gif: output path of the gif json file
  */
 
-const argv: Record<string, string> = minimist(process.argv.slice(2));
-
-runScrape(argv);
+runScrape(args);
 
 async function runScrape(args: Record<string, string>) {
   if (!('t' in args)) {

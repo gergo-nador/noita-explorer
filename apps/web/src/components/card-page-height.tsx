@@ -1,6 +1,6 @@
 import { Card } from '@noita-explorer/noita-component-library';
 import React from 'react';
-import { constants } from '../constants.ts';
+import { constants } from '../utils/constants.ts';
 
 interface CardPageHeightProps {
   children: React.ReactNode | React.ReactNode[];

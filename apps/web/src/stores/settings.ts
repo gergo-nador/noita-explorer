@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { noitaAPI } from '../noita-api.ts';
+import { noitaAPI } from '../utils/noita-api.ts';
 import { sentry } from '../utils/sentry.ts';
 
 export type SettingsUnitsType = 'default' | 'frames' | 'seconds';

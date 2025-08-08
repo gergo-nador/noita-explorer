@@ -15,8 +15,6 @@ export { MultiSelection } from './components/multi-selection/multi-selection';
 export { MultiSelectionBoolean } from './components/multi-selection/multi-selection-boolean';
 export { MultiSelectionBooleanNullable } from './components/multi-selection/multi-selection-boolean-nullable';
 
-export { TabView } from './components/tabs/tab-view';
-
 export { ActiveIconWrapper } from './components/icons/active-icon-wrapper';
 export { Icon } from './components/icons/icon';
 export { InventoryIcon } from './components/icons/inventory-icon';
