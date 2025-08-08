@@ -1,15 +1,15 @@
 import '../utils/fake-browser-apis';
 
-import { routes } from '../../dist-lib/routes.es';
-import { renderRouteSsg } from '../../dist-lib/ssg.es';
-import * as fs from 'node:fs';
-import * as path from 'node:path';
-import { generateSitemapPaths } from '../sitemap/sitemap-text';
 import { stringHelpers } from '@noita-explorer/tools';
 import { NoitaWakData } from '@noita-explorer/model-noita';
+import * as path from 'node:path';
+import * as fs from 'node:fs';
+import { routes } from '../../dist-lib/routes.es';
+import { renderRouteSsg } from '../../dist-lib/ssg.es';
+import { generateSitemapPaths } from '../sitemap/sitemap-text';
 
-const wakDataJson = fs.readFileSync('public/noita_wak_data.json').toString()
-const wakData:NoitaWakData = JSON.parse(wakDataJson)
+const wakDataJson = fs.readFileSync('public/noita_wak_data.json').toString();
+const wakData: NoitaWakData = JSON.parse(wakDataJson);
 
 generateStaticSites()
   .then(() => {
