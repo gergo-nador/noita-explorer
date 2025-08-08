@@ -1,7 +1,7 @@
 import '../utils/fake-browser-apis';
 
 import { getArgumentPath } from '../utils/process-args';
-import { renderRawHtmlFile } from '../../dist-lib/ssg.es';
+import { renderRawHtmlFile } from './render-raw-html';
 import * as fs from 'fs';
 
 /**

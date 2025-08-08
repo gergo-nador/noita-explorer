@@ -16,7 +16,7 @@
 
     "production-server-local": "cd dist && python3 ../scripts/http-server.py",
 
-    "generate-index-html": "npx tsx scripts/ssg/index-html.ts -o index.html",
+    "generate-index-html": "npx tsx scripts/index-html/index.ts -o index.html",
     "data-wak-download": "npx tsx scripts/data-wak/download.ts -o dist-tmp",
     "scrape-data-wak": "npx tsx scripts/data-wak/scrape.ts -t dist-tmp/common.csv --data-wak dist-tmp/data.wak --o-wak public/noita_wak_data.json --o-gif dist-tmp/noita_data_gifs.json",
     "generate-gifs": "npx tsx scripts/generate-gifs/index.ts --gif-data dist-tmp/noita_data_gifs.json -o public",

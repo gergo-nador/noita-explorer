@@ -8,6 +8,10 @@ import { routes } from '../../dist-lib/routes.es';
 import { renderRouteSsg } from '../../dist-lib/ssg.es';
 import { generateSitemapPaths } from '../sitemap/sitemap-text';
 
+/**
+ * Generates static sites of the react app
+ */
+
 const wakDataJson = fs.readFileSync('public/noita_wak_data.json').toString();
 const wakData: NoitaWakData = JSON.parse(wakDataJson);
 

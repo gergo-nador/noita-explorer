@@ -40,13 +40,3 @@ export const renderRouteSsg = async (path: string, dataWak: NoitaWakData) => {
 
   return '<!DOCTYPE html>' + html;
 };
-
-export const renderRawHtmlFile = () => {
-  const html = renderToString(
-    <HtmlDoc>
-      <HtmlDoc.Root />
-      <HtmlDoc.MainScript tsx={true} />
-    </HtmlDoc>,
-  );
-  return '<!DOCTYPE html>' + html;
-};
