@@ -108,6 +108,8 @@ export const routes: NoitaRouteObject[] = [
       },
       {
         path: 'wiki',
+        ssg: false,
+        sitemap: false,
         element: (
           <TabPageTemplate
             returnPath={pages.main}
@@ -167,6 +169,7 @@ export const routes: NoitaRouteObject[] = [
           },
           {
             path: 'materials',
+            ssg: false,
             element: (
               <DocumentTitle title='Materials - Wiki'>
                 <WikiMaterials />
@@ -192,6 +195,8 @@ export const routes: NoitaRouteObject[] = [
             </CardPageTemplate>
           </DocumentTitle>
         ),
+        ssg: false,
+        sitemap: false,
         children: [
           ...addIf(Boolean(noitaAPI.environment.desktop), [
             { path: 'desktop-paths', element: <SetupDesktopPaths /> },

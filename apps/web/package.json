@@ -22,7 +22,7 @@
     "generate-gifs": "npx tsx scripts/generate-gifs/index.ts --gif-data dist-tmp/noita_data_gifs.json -o public",
     "generate-static-assets": "npx tsx scripts/generate-seo-sites-for-wiki/index.ts --wak-data public/noita_wak_data.json -o public",
     "generate-sitemap": "npx tsx scripts/sitemap/index.ts -o public/sitemap.txt",
-    "generate-statis-site": "npx tsx scripts/ssg/index.ts"
+    "generate-static-site": "npx tsx scripts/ssg/index.ts"
   },
   "dependencies": {
     "@noita-explorer/file-systems": "*",

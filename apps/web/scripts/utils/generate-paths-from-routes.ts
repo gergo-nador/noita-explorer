@@ -5,17 +5,27 @@ interface GeneratePathOptions {
   filterBy?: (route: NoitaRouteObject) => boolean;
 }
 
+interface GeneratePathReturn {
+  path: string;
+  route: NoitaRouteObject;
+}
+
 export function generatePathsFromRoutes(
   routes: NoitaRouteObject[],
   options?: GeneratePathOptions,
-) {
+): GeneratePathReturn[] {
   const paths = generatePathsFromRoutesInternal({
     routes,
     prefix: '',
     options,
-  }).map((path) => stringHelpers.trim({ text: path, fromEnd: '/' }));
+  }).map((generatedPath) => {
+    return {
+      ...generatedPath,
+      path: stringHelpers.trim({ text: generatedPath.path, fromEnd: '/' }),
+    };
+  });
 
-  return arrayHelpers.unique(paths);
+  return arrayHelpers.uniqueBy(paths, (path) => path.path);
 }
 
 function generatePathsFromRoutesInternal({
@@ -26,8 +36,8 @@ function generatePathsFromRoutesInternal({
   routes: NoitaRouteObject[];
   prefix: string;
   options?: GeneratePathOptions;
-}) {
-  let results: string[] = [];
+}): GeneratePathReturn[] {
+  let results: GeneratePathReturn[] = [];
 
   const hasSlash = prefix?.endsWith('/');
   if (!hasSlash) {
@@ -37,13 +47,6 @@ function generatePathsFromRoutesInternal({
   for (const route of routes) {
     if (route.path === undefined) {
       continue;
-    }
-
-    if (typeof options?.filterBy === 'function') {
-      const shouldKeep = options.filterBy(route);
-      if (!shouldKeep) {
-        continue;
-      }
     }
 
     let subPrefixes: string[] = [];
@@ -62,12 +65,23 @@ function generatePathsFromRoutesInternal({
           prefix: subPrefix,
           options,
         });
+
         results = results.concat(subResults);
       }
     }
 
+    if (typeof options?.filterBy === 'function') {
+      const shouldKeep = options.filterBy(route);
+      if (!shouldKeep) {
+        continue;
+      }
+    }
+
     // only push current url if it's a leaf node
-    results = results.concat(subPrefixes);
+    const routeResults = subPrefixes.map(
+      (path): GeneratePathReturn => ({ path: path, route }),
+    );
+    results = results.concat(routeResults);
   }
 
   return results;

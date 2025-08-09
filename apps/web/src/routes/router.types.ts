@@ -2,11 +2,11 @@ import { RouteObject } from 'react-router-dom';
 
 export type NoitaRouteObject = RouteObject & {
   /**
-   * If false, no SSG will be generated. By default, it is true.
+   * If true, this page will be pre-rendered
    */
   ssg?: boolean;
   /**
-   * If false, this route will be ignored for sitemaps. By default it is true.
+   * If true, this page will show up in the sitemap
    */
   sitemap?: boolean;
   /**

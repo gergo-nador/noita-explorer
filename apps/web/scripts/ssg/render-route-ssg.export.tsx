@@ -10,14 +10,12 @@ import '../../src/index.css';
 import { routes } from '../../src/routes/router';
 import { App } from '../../src/app';
 import { HtmlDoc } from '../../src/html-doc';
+import { deployUrls } from '../../src/utils/deploy-urls';
 
 export { noitaDataWakStore } from '../../src/stores/noita-data-wak';
 
 export const renderRouteSsg = async (path: string) => {
-  if (!path.startsWith('/')) {
-    path = '/' + path;
-  }
-  const url = 'https://noita-explorer.com' + path;
+  const url = deployUrls.noitaExplorer.production + path;
 
   const handler = createStaticHandler(routes);
   const context = (await handler.query(

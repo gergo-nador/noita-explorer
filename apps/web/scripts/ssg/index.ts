@@ -7,6 +7,8 @@ import { routes } from '../../dist-lib/routes.es';
 import { renderRouteSsg, noitaDataWakStore } from '../../dist-lib/ssg.es';
 import { setDataWak } from '../utils/set-data-wak';
 import { generatePathsFromRoutes } from '../utils/generate-paths-from-routes';
+import { renderNoSsgIndexHtml } from './render-no-ssg-index-html';
+import { deployUrls } from '../../src/utils/deploy-urls';
 
 /**
  * Generates static sites of the React app
@@ -24,15 +26,26 @@ generateStaticSites()
   });
 
 async function generateStaticSites() {
-  const urlPaths = generatePathsFromRoutes(routes, {
-    filterBy: (route) => route.ssg !== false,
-  });
+  const generatedPaths = generatePathsFromRoutes(routes);
 
-  for (const urlPath of urlPaths) {
+  for (const generatedPath of generatedPaths) {
+    let webPath = generatedPath.path;
+    if (!generatedPath.path.startsWith('/')) {
+      webPath = '/' + webPath;
+    }
+
+    console.log(webPath);
+
+    const canonicalUrl = deployUrls.noitaExplorer.production + webPath;
+
+    const hasSSG = generatedPath.route.ssg !== false;
+
     try {
-      const html: string = await renderRouteSsg(urlPath);
+      const html: string = hasSSG
+        ? await renderRouteSsg(webPath)
+        : renderNoSsgIndexHtml(canonicalUrl);
 
-      const fsPath = createFsPathFromWebPath(urlPath);
+      const fsPath = createFsPathFromWebPath(generatedPath.path);
 
       const dirPath = path.resolve('dist', ...fsPath.directory);
       fs.mkdirSync(dirPath, { recursive: true });
@@ -40,7 +53,7 @@ async function generateStaticSites() {
       const htmlPath = path.resolve(dirPath, fsPath.file);
       fs.writeFileSync(htmlPath, html);
     } catch (ex) {
-      console.log('Could not render path ' + urlPath, ex);
+      console.log('Could not render path ' + generatedPath.path, ex);
     }
   }
 }

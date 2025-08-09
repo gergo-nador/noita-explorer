@@ -12,7 +12,7 @@ if [ "$CI_DISABLED" = "1" ]; then
 fi
 
 echo SSG
-npm run generate-statis-site
+npm run generate-static-site
 
 # Sentry upload source maps
 if [ -z "$SENTRY_AUTH_TOKEN" ]; then
