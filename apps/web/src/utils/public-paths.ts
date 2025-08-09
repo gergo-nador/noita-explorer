@@ -47,16 +47,5 @@ export const publicPaths = {
     }) => {
       return `/g/enemy-media/${enemyId}/images/${type}.png`;
     },
-    wiki: {
-      perks: (perkId: string) =>
-        getCurrentBaseUrl() + `/g/wiki/perks/${perkId}`,
-      spells: (spellId: string) =>
-        getCurrentBaseUrl() + `/g/wiki/spells/${spellId}`,
-      enemies: (enemyId: string) =>
-        getCurrentBaseUrl() + `/g/wiki/enemies/${enemyId}`,
-    },
   },
 };
-
-const getCurrentBaseUrl = () =>
-  `${window.location.protocol}//${window.location.host}`;

@@ -9,6 +9,8 @@ import { generateImage } from './generate-image';
 import { args } from '../utils/process-args';
 
 /**
+ * Deprecated, we now have SSG, no need for this hack
+ *
  * Generates search engine optimized html files for perks,
  * spells and enemies. Scaled up version of the images associated
  * with the objects are also generated and linked in the html files
@@ -17,6 +19,8 @@ import { args } from '../utils/process-args';
  * - --wak-data: path to the noita_data_wak.json file
  * - -o: output directory. The generated files will be places in {-o}/g/wiki/{perks|spells|enemies}/
  */
+
+process.exit(0);
 
 const dataWakJsonPath = args['wak-data'];
 if (!dataWakJsonPath) {

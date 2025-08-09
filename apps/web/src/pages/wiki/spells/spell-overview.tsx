@@ -405,7 +405,7 @@ export const SpellOverview = ({ spell }: { spell: NoitaSpell }) => {
         </Flex>
 
         <Flex justify='center' column>
-          <CopyLinkText link={publicPaths.generated.wiki.spells(spell.id)}>
+          <CopyLinkText link={location.href}>
             <div style={{ fontSize: 20, marginBottom: 10 }}>{spell.name}</div>
           </CopyLinkText>
           <div>{spell.description}</div>

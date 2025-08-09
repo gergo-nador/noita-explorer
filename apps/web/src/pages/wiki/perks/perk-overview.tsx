@@ -7,7 +7,6 @@ import {
 import { Flex } from '@noita-explorer/react-utils';
 import { NoitaProtections } from '../../../noita/noita-protections.ts';
 import { CopyLinkText } from '../../../components/copy-link-text.tsx';
-import { publicPaths } from '../../../utils/public-paths.ts';
 
 export const PerkOverview = ({ perk }: { perk: NoitaPerk }) => {
   const tableSectionDivider = <td colSpan={3} style={{ height: 20 }}></td>;
@@ -29,7 +28,7 @@ export const PerkOverview = ({ perk }: { perk: NoitaPerk }) => {
           />
         </Flex>
         <Flex justify='center' column>
-          <CopyLinkText link={publicPaths.generated.wiki.perks(perk.id)}>
+          <CopyLinkText link={location.href}>
             <div style={{ fontSize: 20, marginBottom: 10 }}>{perk.name}</div>
           </CopyLinkText>
           <div>{perk.description}</div>
