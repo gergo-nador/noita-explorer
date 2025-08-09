@@ -1,4 +1,4 @@
-import { createBrowserRouter, Outlet, RouteObject } from 'react-router-dom';
+import { createBrowserRouter, Outlet } from 'react-router-dom';
 import { DocumentTitle } from '@noita-explorer/react-utils';
 import { pages } from './pages.ts';
 import { noitaAPI } from '../utils/noita-api.ts';
@@ -29,8 +29,11 @@ import { NoitaProgressTrackerPillar } from '../pages/progress/noita-progress-tra
 import { Sandbox } from '../pages/sandbox.tsx';
 import { PageBackground } from '../components/page-background.tsx';
 import { ErrorPage } from '../pages/_errors/error-page.tsx';
+import { WikiPerkDetails } from '../pages/wiki/perks/wiki-perk-details.tsx';
+import { NoitaRouteObject } from './router.types.ts';
+import { noitaDataWakStore } from '../stores/noita-data-wak.ts';
 
-export const routes: RouteObject[] = [
+export const routes: NoitaRouteObject[] = [
   {
     path: '',
     element: (
@@ -128,6 +131,23 @@ export const routes: RouteObject[] = [
                 <WikiPerks />
               </DocumentTitle>
             ),
+            children: [
+              {
+                path: ':perkId',
+                element: <WikiPerkDetails />,
+                getAllDynamicParams: () => {
+                  const perkIds = noitaDataWakStore
+                    .getState()
+                    .data?.perks?.map((perk) => perk.id);
+
+                  if (perkIds === undefined) {
+                    return [];
+                  }
+
+                  return perkIds;
+                },
+              },
+            ],
           },
           {
             path: 'spells',
@@ -272,6 +292,8 @@ export const routes: RouteObject[] = [
       ...addIf(__ENV__ !== 'production', {
         path: 'sandbox',
         element: <Sandbox />,
+        ssg: false,
+        sitemap: false,
       }),
     ],
   },

@@ -12,6 +12,7 @@ export const pages = {
   },
   wiki: {
     perks: '/wiki/perks',
+    perkDetail: (perkId: string) => '/wiki/perks/' + perkId,
     spells: '/wiki/spells',
     enemies: '/wiki/enemies',
     materials: '/wiki/materials',

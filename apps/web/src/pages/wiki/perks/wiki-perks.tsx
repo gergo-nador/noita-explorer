@@ -11,21 +11,13 @@ import { useSave00Store } from '../../../stores/save00.ts';
 import { arrayHelpers } from '@noita-explorer/tools';
 import { PerkFilters } from './perk-filters.ts';
 import { PerkFiltersView } from './perk-filters-view.tsx';
-import { PerkOverview } from './perk-overview.tsx';
 import { Flex } from '@noita-explorer/react-utils';
-import { useStateWithQueryParamsString } from '../../../hooks/query-params/use-state-with-query-params-string.ts';
+import { Link, Outlet, useParams } from 'react-router-dom';
+import { pages } from '../../../routes/pages.ts';
 
 export const WikiPerks = () => {
+  const { perkId } = useParams();
   const { data } = useNoitaDataWakStore();
-
-  const [selectedPerk, setSelectedPerk] =
-    useStateWithQueryParamsString<NoitaPerk>({
-      key: 'perk',
-      enabled: Boolean(data?.perks),
-      queryParamValueSelector: (perk) => perk.id,
-      findValueBasedOnQueryParam: (perkId) =>
-        data?.perks?.find((perk) => perk.id === perkId),
-    });
 
   const [filters, setFilters] = useState<PerkFilters>({
     stackable: undefined,
@@ -88,7 +80,11 @@ export const WikiPerks = () => {
               unlockedPerks,
             });
             const icon = (
-              <ProgressIcon type={'regular'} icon={perk.imageBase64} />
+              <ProgressIcon
+                type={'regular'}
+                icon={perk.imageBase64}
+                style={{ cursor: 'pointer' }}
+              />
             );
 
             return (
@@ -100,18 +96,19 @@ export const WikiPerks = () => {
               >
                 {!filter && icon}
                 {filter && (
-                  <ActiveIconWrapper
-                    id={'perk-' + perk.id}
-                    key={'perk-' + perk.id}
-                    onClick={() => setSelectedPerk(perk)}
-                    tooltip={
-                      <div>
-                        <div style={{ fontSize: 20 }}>{perk.name}</div>
-                      </div>
-                    }
-                  >
-                    {icon}
-                  </ActiveIconWrapper>
+                  <Link to={pages.wiki.perkDetail(perk.id)}>
+                    <ActiveIconWrapper
+                      id={'perk-' + perk.id}
+                      key={'perk-' + perk.id}
+                      tooltip={
+                        <div>
+                          <div style={{ fontSize: 20 }}>{perk.name}</div>
+                        </div>
+                      }
+                    >
+                      {icon}
+                    </ActiveIconWrapper>
+                  </Link>
                 )}
               </div>
             );
@@ -128,10 +125,8 @@ export const WikiPerks = () => {
           top: 0,
         }}
       >
-        {!selectedPerk && <span>Select a perk</span>}
-        {selectedPerk && (
-          <PerkOverview key={selectedPerk.id} perk={selectedPerk} />
-        )}
+        {!perkId && <span>Select a perk</span>}
+        {perkId && <Outlet />}
       </Card>
     </Flex>
   );

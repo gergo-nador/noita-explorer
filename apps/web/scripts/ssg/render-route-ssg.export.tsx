@@ -5,15 +5,15 @@ import {
   StaticRouterProvider,
 } from 'react-router-dom';
 import { renderToString } from 'react-dom/server.browser';
-import { NoitaWakData } from '@noita-explorer/model-noita';
 
 import '../../src/index.css';
 import { routes } from '../../src/routes/router';
-import { noitaDataWakStore } from '../../src/stores/noita-data-wak';
 import { App } from '../../src/app';
 import { HtmlDoc } from '../../src/html-doc';
 
-export const renderRouteSsg = async (path: string, dataWak: NoitaWakData) => {
+export { noitaDataWakStore } from '../../src/stores/noita-data-wak';
+
+export const renderRouteSsg = async (path: string) => {
   if (!path.startsWith('/')) {
     path = '/' + path;
   }
@@ -24,7 +24,6 @@ export const renderRouteSsg = async (path: string, dataWak: NoitaWakData) => {
     new Request(url),
   )) as StaticHandlerContext;
 
-  noitaDataWakStore.getState().load(dataWak);
   const router = createStaticRouter(routes, context);
 
   const html = renderToString(

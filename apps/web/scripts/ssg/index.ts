@@ -1,19 +1,18 @@
 import '../utils/fake-browser-apis';
 
 import { stringHelpers } from '@noita-explorer/tools';
-import { NoitaWakData } from '@noita-explorer/model-noita';
 import * as path from 'node:path';
 import * as fs from 'node:fs';
 import { routes } from '../../dist-lib/routes.es';
-import { renderRouteSsg } from '../../dist-lib/ssg.es';
-import { generateSitemapPaths } from '../sitemap/sitemap-text';
+import { renderRouteSsg, noitaDataWakStore } from '../../dist-lib/ssg.es';
+import { setDataWak } from '../utils/set-data-wak';
+import { generatePathsFromRoutes } from '../utils/generate-paths-from-routes';
 
 /**
- * Generates static sites of the react app
+ * Generates static sites of the React app
  */
 
-const wakDataJson = fs.readFileSync('public/noita_wak_data.json').toString();
-const wakData: NoitaWakData = JSON.parse(wakDataJson);
+setDataWak(noitaDataWakStore);
 
 generateStaticSites()
   .then(() => {
@@ -25,10 +24,13 @@ generateStaticSites()
   });
 
 async function generateStaticSites() {
-  const urlPaths = generateSitemapPaths(routes);
+  const urlPaths = generatePathsFromRoutes(routes, {
+    filterBy: (route) => route.ssg !== false,
+  });
+
   for (const urlPath of urlPaths) {
     try {
-      const html: string = await renderRouteSsg(urlPath, wakData);
+      const html: string = await renderRouteSsg(urlPath);
 
       const fsPath = createFsPathFromWebPath(urlPath);
 
