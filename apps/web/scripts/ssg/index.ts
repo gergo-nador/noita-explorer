@@ -34,8 +34,6 @@ async function generateStaticSites() {
       webPath = '/' + webPath;
     }
 
-    console.log(webPath);
-
     const canonicalUrl = deployUrls.noitaExplorer.production + webPath;
 
     const hasSSG = generatedPath.route.ssg !== false;

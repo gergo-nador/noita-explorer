@@ -30,7 +30,7 @@ export const TabPageTemplate = ({ tabs, returnPath }: TabPageTemplateProps) => {
         fromEnd: '/',
       });
 
-      return tabPath === path;
+      return path.startsWith(tabPath);
     });
   };
 

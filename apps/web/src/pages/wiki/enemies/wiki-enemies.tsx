@@ -6,15 +6,16 @@ import {
 import { NoitaProgressIconTable } from '../../../components/noita-progress-icon-table.tsx';
 import { useNoitaDataWakStore } from '../../../stores/noita-data-wak.ts';
 import { NoitaEnemy } from '@noita-explorer/model-noita';
-import { EnemyOverview } from './enemy-overview.tsx';
-import { Dispatch, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { EnemyFilters } from './enemy-filters.ts';
 import { EnemyFiltersView } from './enemy-filters-view.tsx';
 import { arrayHelpers } from '@noita-explorer/tools';
 import { Flex } from '@noita-explorer/react-utils';
-import { useStateWithQueryParamsString } from '../../../hooks/query-params/use-state-with-query-params-string.ts';
+import { Link, Outlet, useParams } from 'react-router-dom';
+import { pages } from '../../../routes/pages.ts';
 
 export const WikiEnemies = () => {
+  const { enemyId } = useParams();
   const { data } = useNoitaDataWakStore();
 
   const enemies = useMemo(() => {
@@ -27,15 +28,6 @@ export const WikiEnemies = () => {
       return { ...enemy, gameEffects };
     });
   }, [data?.enemies]);
-
-  const [selectedEnemy, setSelectedEnemy] =
-    useStateWithQueryParamsString<NoitaEnemy>({
-      key: 'enemy',
-      enabled: Boolean(enemies),
-      queryParamValueSelector: (enemy) => enemy.id,
-      findValueBasedOnQueryParam: (enemyId) =>
-        enemies?.find((enemy) => enemy.id === enemyId),
-    });
 
   const [filters, setFilters] = useState<EnemyFilters>({
     protectionId: undefined,
@@ -89,12 +81,7 @@ export const WikiEnemies = () => {
           columnCount={9}
         >
           {enemies?.map((enemy) => (
-            <EnemyProgressIcon
-              key={enemy.id}
-              enemy={enemy}
-              filters={filters}
-              setSelectedEnemy={setSelectedEnemy}
-            />
+            <EnemyProgressIcon key={enemy.id} enemy={enemy} filters={filters} />
           ))}
         </NoitaProgressIconTable>
       </div>
@@ -108,10 +95,8 @@ export const WikiEnemies = () => {
           top: 0,
         }}
       >
-        {!selectedEnemy && <span>Select an enemy</span>}
-        {selectedEnemy && (
-          <EnemyOverview key={selectedEnemy.id} enemy={selectedEnemy} />
-        )}
+        {!enemyId && <span>Select an enemy</span>}
+        {enemyId && <Outlet />}
       </Card>
     </Flex>
   );
@@ -136,11 +121,9 @@ const evaluateFiltersForEnemy = ({
 const EnemyProgressIcon = ({
   enemy,
   filters,
-  setSelectedEnemy,
 }: {
   enemy: NoitaEnemy;
   filters: EnemyFilters;
-  setSelectedEnemy: Dispatch<NoitaEnemy>;
 }) => {
   const filter = evaluateFiltersForEnemy({ enemy, filters });
   const icon = <ProgressIcon type={'regular'} icon={enemy.imageBase64} />;
@@ -154,18 +137,19 @@ const EnemyProgressIcon = ({
     >
       {!filter && icon}
       {filter && (
-        <ActiveIconWrapper
-          id={'enemy-' + enemy.id}
-          key={'enemy-' + enemy.id}
-          tooltip={
-            <div>
-              <div style={{ fontSize: 20 }}>{enemy.name}</div>
-            </div>
-          }
-          onClick={() => setSelectedEnemy(enemy)}
-        >
-          <ProgressIcon type={'regular'} icon={enemy.imageBase64} />
-        </ActiveIconWrapper>
+        <Link to={pages.wiki.enemyDetail(enemy.id)}>
+          <ActiveIconWrapper
+            id={'enemy-' + enemy.id}
+            key={'enemy-' + enemy.id}
+            tooltip={
+              <div>
+                <div style={{ fontSize: 20 }}>{enemy.name}</div>
+              </div>
+            }
+          >
+            <ProgressIcon type={'regular'} icon={enemy.imageBase64} />
+          </ActiveIconWrapper>
+        </Link>
       )}
     </div>
   );

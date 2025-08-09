@@ -7,24 +7,16 @@ import { NoitaSpellTypesDictionary } from '../../../noita/noita-spell-type-dicti
 import { NoitaProgressIconTable } from '../../../components/noita-progress-icon-table.tsx';
 import { useNoitaDataWakStore } from '../../../stores/noita-data-wak.ts';
 import { NoitaSpell } from '@noita-explorer/model-noita';
-import { SpellOverview } from './spell-overview.tsx';
 import { SpellFiltersView } from './spell-filters-view.tsx';
 import { useState } from 'react';
 import { SpellFilters } from './spell-filters.ts';
 import { Flex } from '@noita-explorer/react-utils';
-import { useStateWithQueryParamsString } from '../../../hooks/query-params/use-state-with-query-params-string.ts';
+import { Link, Outlet, useParams } from 'react-router-dom';
+import { pages } from '../../../routes/pages.ts';
 
 export const WikiSpells = () => {
+  const { spellId } = useParams();
   const { data } = useNoitaDataWakStore();
-
-  const [selectedSpell, setSelectedSpell] =
-    useStateWithQueryParamsString<NoitaSpell>({
-      key: 'spell',
-      enabled: Boolean(data?.spells),
-      queryParamValueSelector: (spell) => spell.id,
-      findValueBasedOnQueryParam: (spellId) =>
-        data?.spells?.find((spell) => spell.id === spellId),
-    });
 
   const [filters, setFilters] = useState<SpellFilters>({
     friendlyFire: undefined,
@@ -74,18 +66,19 @@ export const WikiSpells = () => {
               <div key={spell.id} style={{ opacity: filter ? 1 : 0.35 }}>
                 {!filter && icon}
                 {filter && (
-                  <ActiveIconWrapper
-                    id={'spell-' + spell.id}
-                    key={'spell-' + spell.id}
-                    onClick={() => setSelectedSpell(spell)}
-                    tooltip={
-                      <div>
-                        <div style={{ fontSize: 20 }}>{spell.name}</div>
-                      </div>
-                    }
-                  >
-                    {icon}
-                  </ActiveIconWrapper>
+                  <Link to={pages.wiki.spellDetail(spell.id)}>
+                    <ActiveIconWrapper
+                      id={'spell-' + spell.id}
+                      key={'spell-' + spell.id}
+                      tooltip={
+                        <div>
+                          <div style={{ fontSize: 20 }}>{spell.name}</div>
+                        </div>
+                      }
+                    >
+                      {icon}
+                    </ActiveIconWrapper>
+                  </Link>
                 )}
               </div>
             );
@@ -101,10 +94,8 @@ export const WikiSpells = () => {
           top: 0,
         }}
       >
-        {!selectedSpell && <span>Select a spell</span>}
-        {selectedSpell && (
-          <SpellOverview key={selectedSpell.id} spell={selectedSpell} />
-        )}
+        {!spellId && <span>Select a spell</span>}
+        {spellId && <Outlet />}
       </Card>
     </Flex>
   );

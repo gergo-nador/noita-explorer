@@ -32,6 +32,8 @@ import { ErrorPage } from '../pages/_errors/error-page.tsx';
 import { WikiPerkDetails } from '../pages/wiki/perks/wiki-perk-details.tsx';
 import { NoitaRouteObject } from './router.types.ts';
 import { noitaDataWakStore } from '../stores/noita-data-wak.ts';
+import { WikiSpellDetails } from '../pages/wiki/spells/wiki-spell-details.tsx';
+import { WikiEnemyDetails } from '../pages/wiki/enemies/wiki-enemy-details.tsx';
 
 export const routes: NoitaRouteObject[] = [
   {
@@ -158,6 +160,23 @@ export const routes: NoitaRouteObject[] = [
                 <WikiSpells />
               </DocumentTitle>
             ),
+            children: [
+              {
+                path: ':spellId',
+                element: <WikiSpellDetails />,
+                getAllDynamicParams: () => {
+                  const spellIds = noitaDataWakStore
+                    .getState()
+                    .data?.spells?.map((spell) => spell.id);
+
+                  if (spellIds === undefined) {
+                    return [];
+                  }
+
+                  return spellIds;
+                },
+              },
+            ],
           },
           {
             path: 'enemies',
@@ -166,6 +185,23 @@ export const routes: NoitaRouteObject[] = [
                 <WikiEnemies />
               </DocumentTitle>
             ),
+            children: [
+              {
+                path: ':enemyId',
+                element: <WikiEnemyDetails />,
+                getAllDynamicParams: () => {
+                  const enemyIds = noitaDataWakStore
+                    .getState()
+                    .data?.enemies?.map((enemy) => enemy.id);
+
+                  if (enemyIds === undefined) {
+                    return [];
+                  }
+
+                  return enemyIds;
+                },
+              },
+            ],
           },
           {
             path: 'materials',
