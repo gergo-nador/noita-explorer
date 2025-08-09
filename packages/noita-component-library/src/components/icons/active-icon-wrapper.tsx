@@ -1,6 +1,6 @@
 import { useBool } from '../../hooks/use-bool';
 import { ZIndexManager } from '../../z-index-manager';
-import React from 'react';
+import React, { CSSProperties } from 'react';
 import { Tooltip } from 'react-tooltip';
 import { Card } from '../card/card';
 import css from './active-icon-wrapper.module.css';
@@ -10,6 +10,7 @@ interface ActiveProgressIconProps {
   children: React.ReactNode;
   tooltip: React.ReactNode;
   onClick?: () => void;
+  style?: CSSProperties;
 }
 
 export const ActiveIconWrapper = ({
@@ -17,6 +18,7 @@ export const ActiveIconWrapper = ({
   children,
   tooltip,
   onClick,
+  style,
 }: ActiveProgressIconProps) => {
   const { state, setTrue, setFalse } = useBool();
 
@@ -50,6 +52,7 @@ export const ActiveIconWrapper = ({
         style={{
           aspectRatio: 1,
           cursor: onClick !== undefined ? 'pointer' : 'auto',
+          ...style,
         }}
         onClick={onClick}
       >

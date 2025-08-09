@@ -80,11 +80,7 @@ export const WikiPerks = () => {
               unlockedPerks,
             });
             const icon = (
-              <ProgressIcon
-                type={'regular'}
-                icon={perk.imageBase64}
-                style={{ cursor: 'pointer' }}
-              />
+              <ProgressIcon type={'regular'} icon={perk.imageBase64} />
             );
 
             return (
@@ -105,6 +101,7 @@ export const WikiPerks = () => {
                           <div style={{ fontSize: 20 }}>{perk.name}</div>
                         </div>
                       }
+                      style={{ cursor: 'pointer' }}
                     >
                       {icon}
                     </ActiveIconWrapper>

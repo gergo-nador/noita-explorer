@@ -146,8 +146,9 @@ const EnemyProgressIcon = ({
                 <div style={{ fontSize: 20 }}>{enemy.name}</div>
               </div>
             }
+            style={{ cursor: 'pointer' }}
           >
-            <ProgressIcon type={'regular'} icon={enemy.imageBase64} />
+            {icon}
           </ActiveIconWrapper>
         </Link>
       )}

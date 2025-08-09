@@ -75,6 +75,7 @@ export const WikiSpells = () => {
                           <div style={{ fontSize: 20 }}>{spell.name}</div>
                         </div>
                       }
+                      style={{ cursor: 'pointer' }}
                     >
                       {icon}
                     </ActiveIconWrapper>
