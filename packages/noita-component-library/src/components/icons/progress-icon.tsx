@@ -71,7 +71,7 @@ export const ProgressIcon = ({
       {!isUnknown && (
         <img
           src={icon}
-          alt='progress icon'
+          alt=''
           style={{
             imageRendering: 'pixelated',
             height: '94.11765%', // images are 16x16, background is 17x17 -> 16/17 = 94.11765
