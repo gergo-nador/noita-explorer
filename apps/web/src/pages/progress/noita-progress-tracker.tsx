@@ -21,6 +21,7 @@ import { Flex } from '@noita-explorer/react-utils';
 import { pages } from '../../routes/pages.ts';
 import { useQueryParamsBoolean } from '../../hooks/query-params/use-query-params-boolean.ts';
 import { Link } from '../../components/link.tsx';
+import { publicPaths } from '../../utils/public-paths.ts';
 
 export const NoitaProgressTracker = () => {
   const { data } = useNoitaDataWakStore();
@@ -231,7 +232,10 @@ export const NoitaProgressTracker = () => {
                   }
                 }}
               >
-                <ProgressIcon type={iconType} icon={perk.imageBase64} />
+                <ProgressIcon
+                  type={iconType}
+                  icon={publicPaths.generated.perk.image({ perkId: perk.id })}
+                />
               </ActiveIconWrapper>
             );
           })}
@@ -305,7 +309,9 @@ export const NoitaProgressTracker = () => {
               >
                 <ProgressIcon
                   type={iconType}
-                  icon={spell.imageBase64}
+                  icon={publicPaths.generated.spell.image({
+                    spellId: spell.id,
+                  })}
                   spellBackground={NoitaSpellTypesDictionary[spell.type].image}
                 />
               </ActiveIconWrapper>
@@ -403,10 +409,7 @@ export const NoitaProgressTracker = () => {
                     });
                   }}
                 >
-                  <ProgressIcon
-                    type={iconType}
-                    icon={e.enemyGroup.imageBase64}
-                  />
+                  <ProgressIcon type={iconType} icon={e.enemyGroup.imagePath} />
                 </ActiveIconWrapper>
               );
             })}

@@ -5,6 +5,7 @@ import {
   NoitaEnemy,
   NoitaEnemyGroup,
 } from '@noita-explorer/model-noita';
+import { publicPaths } from '../utils/public-paths.ts';
 
 interface useNoitaEnemyGroupsProps {
   enemies?: NoitaEnemy[];
@@ -33,7 +34,9 @@ export const useNoitaEnemyGroups = ({
             baseId: baseId,
             name: enemy.name,
             index: i,
-            imageBase64: enemy.imageBase64,
+            imagePath: publicPaths.generated.enemy.image({
+              enemyId: enemy.id,
+            }),
             enemies: [],
           },
           statistics: {},

@@ -519,7 +519,10 @@ export const NoitaSpellTooltip = ({
               alignItems: 'center',
             }}
           >
-            <Icon src={spell.imageBase64} size={74} />
+            <Icon
+              src={publicPaths.generated.spell.image({ spellId: spell.id })}
+              size={74}
+            />
           </Flex>
         </div>
       </div>

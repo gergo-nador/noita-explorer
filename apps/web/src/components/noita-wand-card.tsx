@@ -97,7 +97,7 @@ export const NoitaWandCard = ({
           }
         >
           <InventoryIcon
-            icon={spell.imageBase64}
+            icon={publicPaths.generated.spell.image({ spellId: spell.id })}
             spellBackground={NoitaSpellTypesDictionary[spell.type].image}
             size={iconSize}
             usesRemaining={wandSpell.usesRemaining}
@@ -136,7 +136,7 @@ export const NoitaWandCard = ({
           tooltip={<NoitaSpellTooltip spell={spell} />}
         >
           <InventoryIcon
-            icon={spell.imageBase64}
+            icon={publicPaths.generated.spell.image({ spellId: spell.id })}
             spellBackground={NoitaSpellTypesDictionary[spell.type].image}
             size={iconSize}
           />

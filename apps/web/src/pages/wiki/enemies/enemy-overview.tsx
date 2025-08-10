@@ -31,7 +31,7 @@ export const EnemyOverview = ({ enemy }: { enemy: NoitaEnemy }) => {
         }}
       >
         <Icon
-          src={enemy.imageBase64}
+          src={publicPaths.generated.enemy.image({ enemyId: enemy.id })}
           style={{ aspectRatio: 1, width: '100%' }}
         />
         <Flex

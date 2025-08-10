@@ -20,32 +20,45 @@ export const publicPaths = {
       const path = `/g/orbs/${orbId}/gifs/`;
       return { gif: path + 'default.gif', firstFrame: path + 'default-f.png' };
     },
-    enemyGifs: ({
-      enemyId,
-      gifName,
-      gifReloadCounter,
-    }: {
-      enemyId: string;
-      gifName: string;
-      gifReloadCounter?: number;
-    }) => {
-      const path = `/g/enemies/${enemyId}/gifs/${gifName}`;
-      const queryParams =
-        gifReloadCounter !== undefined ? '?r=' + gifReloadCounter : '';
-
-      return {
-        gif: path + '.gif' + queryParams,
-        firstFrame: path + '-f.png',
-      };
+    perk: {
+      image: ({ perkId }: { perkId: string }) => {
+        return `/g/perks/${perkId}/images/default.png`;
+      },
     },
-    enemyImage: ({
-      enemyId,
-      type,
-    }: {
-      enemyId: string;
-      type: NoitaEnemyImageMedia['imageType'];
-    }) => {
-      return `/g/enemies/${enemyId}/images/${type}.png`;
+    spell: {
+      image: ({ spellId }: { spellId: string }) => {
+        return `/g/spells/${spellId}/images/default.png`;
+      },
+    },
+    enemy: {
+      image: ({
+        enemyId,
+        type,
+      }: {
+        enemyId: string;
+        type?: NoitaEnemyImageMedia['imageType'];
+      }) => {
+        type ??= 'default';
+        return `/g/enemies/${enemyId}/images/${type}.png`;
+      },
+      gifs: ({
+        enemyId,
+        gifName,
+        gifReloadCounter,
+      }: {
+        enemyId: string;
+        gifName: string;
+        gifReloadCounter?: number;
+      }) => {
+        const path = `/g/enemies/${enemyId}/gifs/${gifName}`;
+        const queryParams =
+          gifReloadCounter !== undefined ? '?r=' + gifReloadCounter : '';
+
+        return {
+          gif: path + '.gif' + queryParams,
+          firstFrame: path + '-f.png',
+        };
+      },
     },
   },
 };

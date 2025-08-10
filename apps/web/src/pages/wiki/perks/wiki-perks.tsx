@@ -14,6 +14,7 @@ import { PerkFiltersView } from './perk-filters-view.tsx';
 import { Flex } from '@noita-explorer/react-utils';
 import { Link, Outlet, useParams } from 'react-router-dom';
 import { pages } from '../../../routes/pages.ts';
+import { publicPaths } from '../../../utils/public-paths.ts';
 
 export const WikiPerks = () => {
   const { perkId } = useParams();
@@ -80,7 +81,10 @@ export const WikiPerks = () => {
               unlockedPerks,
             });
             const icon = (
-              <ProgressIcon type={'regular'} icon={perk.imageBase64} />
+              <ProgressIcon
+                type={'regular'}
+                icon={publicPaths.generated.perk.image({ perkId: perk.id })}
+              />
             );
 
             return (

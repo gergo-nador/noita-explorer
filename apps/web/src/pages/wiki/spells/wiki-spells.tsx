@@ -13,6 +13,7 @@ import { SpellFilters } from './spell-filters.ts';
 import { Flex } from '@noita-explorer/react-utils';
 import { Link, Outlet, useParams } from 'react-router-dom';
 import { pages } from '../../../routes/pages.ts';
+import { publicPaths } from '../../../utils/public-paths.ts';
 
 export const WikiSpells = () => {
   const { spellId } = useParams();
@@ -57,7 +58,7 @@ export const WikiSpells = () => {
             const icon = (
               <ProgressIcon
                 type={'regular'}
-                icon={spell.imageBase64}
+                icon={publicPaths.generated.spell.image({ spellId: spell.id })}
                 spellBackground={NoitaSpellTypesDictionary[spell.type].image}
               />
             );

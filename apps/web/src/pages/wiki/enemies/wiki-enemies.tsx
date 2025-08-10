@@ -13,6 +13,7 @@ import { arrayHelpers } from '@noita-explorer/tools';
 import { Flex } from '@noita-explorer/react-utils';
 import { Link, Outlet, useParams } from 'react-router-dom';
 import { pages } from '../../../routes/pages.ts';
+import { publicPaths } from '../../../utils/public-paths.ts';
 
 export const WikiEnemies = () => {
   const { enemyId } = useParams();
@@ -77,7 +78,7 @@ export const WikiEnemies = () => {
         <br />
         <NoitaProgressIconTable
           count={data.enemies.length}
-          name={'Enemies'}
+          name='Enemies'
           columnCount={9}
         >
           {enemies?.map((enemy) => (
@@ -126,7 +127,12 @@ const EnemyProgressIcon = ({
   filters: EnemyFilters;
 }) => {
   const filter = evaluateFiltersForEnemy({ enemy, filters });
-  const icon = <ProgressIcon type={'regular'} icon={enemy.imageBase64} />;
+  const icon = (
+    <ProgressIcon
+      type='regular'
+      icon={publicPaths.generated.enemy.image({ enemyId: enemy.id })}
+    />
+  );
 
   return (
     <div

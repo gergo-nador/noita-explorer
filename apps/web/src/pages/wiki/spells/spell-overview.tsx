@@ -400,7 +400,7 @@ export const SpellOverview = ({ spell }: { spell: NoitaSpell }) => {
       >
         <Flex height='100%' align='center'>
           <Icon
-            src={spell.imageBase64}
+            src={publicPaths.generated.spell.image({ spellId: spell.id })}
             style={{ aspectRatio: 1, width: '100%' }}
           />
         </Flex>

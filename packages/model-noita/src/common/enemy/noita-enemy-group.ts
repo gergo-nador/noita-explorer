@@ -4,6 +4,6 @@ export interface NoitaEnemyGroup {
   baseId: string;
   name: string;
   index: number;
-  imageBase64: string;
+  imagePath: string;
   enemies: NoitaEnemy[];
 }

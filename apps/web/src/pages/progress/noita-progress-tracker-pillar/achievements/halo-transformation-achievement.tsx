@@ -46,7 +46,10 @@ export const HaloTransformationAchievement = ({
         <Flex gap={2} direction='column'>
           {minusOnePerks.map((perkId) => (
             <Flex gap={4} align='center'>
-              <ProgressIcon icon={perks[perkId]?.perk?.imageBase64} size={30} />
+              <ProgressIcon
+                icon={publicPaths.generated.perk.image({ perkId: perkId })}
+                size={30}
+              />
               <span>{perks[perkId]?.count ?? 0}</span>
             </Flex>
           ))}
@@ -90,7 +93,10 @@ export const HaloTransformationAchievement = ({
           {plusOnePerks.map((perkId) => (
             <Flex gap={4} align='center'>
               <span>{perks[perkId]?.count ?? 0}</span>
-              <ProgressIcon icon={perks[perkId]?.perk?.imageBase64} size={30} />
+              <ProgressIcon
+                icon={publicPaths.generated.perk.image({ perkId: perkId })}
+                size={30}
+              />
             </Flex>
           ))}
           <Flex justify='start'>

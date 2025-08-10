@@ -2,6 +2,7 @@ import { StringKeyDictionary } from '@noita-explorer/model';
 import { Flex } from '@noita-explorer/react-utils';
 import { ProgressIcon } from '@noita-explorer/noita-component-library';
 import { AchievementPerk } from '../achievement-perk.ts';
+import { publicPaths } from '../../../../utils/public-paths.ts';
 
 export const ObtainPerksAchievement = ({
   title,
@@ -24,7 +25,9 @@ export const ObtainPerksAchievement = ({
           return (
             <Flex direction='column' align='center' gap={5}>
               <ProgressIcon
-                icon={achievementPerk?.perk?.imageBase64}
+                icon={publicPaths.generated.perk.image({
+                  perkId: achievementPerk?.perk?.id,
+                })}
                 size={40}
               />
               <span

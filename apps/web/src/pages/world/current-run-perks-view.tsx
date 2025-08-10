@@ -3,8 +3,10 @@ import { useSave00Store } from '../../stores/save00.ts';
 import {
   Icon,
   NoitaTooltipWrapper,
+  PixelatedImage,
 } from '@noita-explorer/noita-component-library';
 import { Flex } from '@noita-explorer/react-utils';
+import { publicPaths } from '../../utils/public-paths.ts';
 
 export const CurrentRunPerksView = () => {
   const { data } = useNoitaDataWakStore();
@@ -34,13 +36,12 @@ export const CurrentRunPerksView = () => {
 
           return (
             <NoitaTooltipWrapper content={perk.name} placement={'right'}>
-              <img
-                src={perk.imageBase64}
+              <PixelatedImage
+                src={publicPaths.generated.perk.image({ perkId: perk.id })}
                 alt={perk.name}
                 style={{
                   width: '32px',
                   height: '32px',
-                  imageRendering: 'pixelated',
                 }}
               />
             </NoitaTooltipWrapper>
