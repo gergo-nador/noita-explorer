@@ -20,7 +20,7 @@ export default defineConfig(({ mode }): UserConfig => {
       viteStaticCopy({
         targets: [
           {
-            src: '../../node_modules/@noita-explorer/noita-component-library/assets/*',
+            src: '../../node_modules/@noita-explorer/noita-component-library/dist/media/*',
             dest: 'noita-component-library',
           },
         ],
