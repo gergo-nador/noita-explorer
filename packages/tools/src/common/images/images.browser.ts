@@ -1,5 +1,6 @@
 import color from 'color';
 import { CropImageBase64Options, ImageHelpersType } from './images.types.ts';
+import { throwHelpers } from '../throw.ts';
 
 function rotateImageBase64(base64: string, degrees: number): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -285,15 +286,15 @@ async function cropImageBase64(
 }
 
 async function pixelRecolor(): Promise<string> {
-  throw new Error('pixelRecolor is not implemented in images.browser.ts');
+  return throwHelpers.notImplementedInCurrentEnvironment(pixelRecolor);
 }
 
 async function overlayImages(): Promise<string> {
-  throw new Error('overlayImages is not implemented in images.browser.ts');
+  return throwHelpers.notImplementedInCurrentEnvironment(overlayImages);
 }
 
 async function flipImage(): Promise<string> {
-  throw new Error('flipImage is not implemented in images.browser.ts');
+  return throwHelpers.notImplementedInCurrentEnvironment(flipImage);
 }
 
 export const imageHelpers: ImageHelpersType = {

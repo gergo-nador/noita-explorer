@@ -9,26 +9,19 @@ import {
 import { BlendMode, Jimp, JimpMime } from 'jimp';
 import { base64Helpers } from '../base64.ts';
 import { colorHelpers } from '../color-util.ts';
+import { throwHelpers } from '../throw.ts';
 
 function trimWhitespaceBase64(): Promise<string> {
-  throw new Error(
-    'trimWhitespaceBase64 is not implemented for node.js environment',
-  );
+  return throwHelpers.notImplementedInCurrentEnvironment(trimWhitespaceBase64);
 }
 function scaleImageBase64(): Promise<string> {
-  throw new Error(
-    'scaleImageBase64 is not implemented for node.js environment',
-  );
+  return throwHelpers.notImplementedInCurrentEnvironment(scaleImageBase64);
 }
 function rotateImageBase64(): Promise<string> {
-  throw new Error(
-    'rotateImageBase64 is not implemented for node.js environment',
-  );
+  return throwHelpers.notImplementedInCurrentEnvironment(rotateImageBase64);
 }
 function getAverageColorBase64(): Promise<string> {
-  throw new Error(
-    'getAverageColorBase64 is not implemented for node.js environment',
-  );
+  return throwHelpers.notImplementedInCurrentEnvironment(getAverageColorBase64);
 }
 
 async function getJimpImage(base64: string) {
