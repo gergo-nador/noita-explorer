@@ -7,7 +7,7 @@ interface Props {
 
 export const HtmlDoc = ({ children, canonicalUrl }: Props) => {
   return (
-    <html>
+    <html lang='en'>
       <head>
         <meta charSet='UTF-8' />
         <link rel='icon' type='image/png' href='/favicon.png' />
@@ -29,6 +29,7 @@ export const HtmlDoc = ({ children, canonicalUrl }: Props) => {
           name='google-site-verification'
           content='pC4tL9YCkPCuXtbGTraiIcDlsFQntUuwn17pNtr01Ek'
         />
+        {/*<meta name='robots' content='index, follow' />*/}
         <style
           dangerouslySetInnerHTML={{
             __html: 'html { background-color: #000000; }',

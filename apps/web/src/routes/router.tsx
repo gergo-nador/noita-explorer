@@ -1,5 +1,5 @@
 import { createBrowserRouter, Outlet } from 'react-router-dom';
-import { DocumentTitle } from '@noita-explorer/react-utils';
+import { DocumentTitle, SeoDefaultPage } from '@noita-explorer/react-utils';
 import { pages } from './pages.ts';
 import { noitaAPI } from '../utils/noita-api.ts';
 
@@ -66,11 +66,15 @@ export const routes: NoitaRouteObject[] = [
           {
             path: '',
             element: (
-              <DocumentTitle title='Progress Tracker'>
+              <>
+                <SeoDefaultPage
+                  title='Progress Tracker'
+                  description='See your in-game progress, and unlock any perk, spell or enemy.'
+                />
                 <CardPageTemplate returnPath={pages.main}>
                   <NoitaProgressTracker />
                 </CardPageTemplate>
-              </DocumentTitle>
+              </>
             ),
           },
           {
