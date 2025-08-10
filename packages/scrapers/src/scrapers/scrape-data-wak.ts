@@ -3,14 +3,14 @@ import {
   NoitaDataWakScrapeResultStatus,
   NoitaMaterial,
   NoitaMaterialReaction,
-  NoitaPerk,
-  NoitaSpell,
   NoitaTranslation,
   NoitaWandConfig,
   NoitaScrapedEnemy,
   NoitaScrapedMedia,
   NoitaScrapedMediaGif,
   NoitaScrapedMediaImage,
+  NoitaScrapedSpell,
+  NoitaScrapedPerk,
 } from '@noita-explorer/model-noita';
 import {
   FileSystemDirectoryAccess,
@@ -71,7 +71,7 @@ export const scrapeDataWakContent = async ({
   dataWakParentDirectory: FileSystemDirectoryAccess;
   translations: StringKeyDictionary<NoitaTranslation>;
 }): Promise<NoitaDataWakScrapeResult> => {
-  let perks: NoitaPerk[] = [];
+  let perks: NoitaScrapedPerk[] = [];
   let perkError: unknown | undefined = undefined;
   try {
     perks = await scrape.perks({
@@ -82,7 +82,7 @@ export const scrapeDataWakContent = async ({
     perkError = e;
   }
 
-  let spells: NoitaSpell[] = [];
+  let spells: NoitaScrapedSpell[] = [];
   let spellsError: unknown | undefined = undefined;
   try {
     spells = await scrape.spells({

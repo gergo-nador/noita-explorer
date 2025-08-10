@@ -2,7 +2,10 @@ import {
   FileSystemDirectoryAccess,
   StringKeyDictionary,
 } from '@noita-explorer/model';
-import { NoitaPerk, NoitaTranslation } from '@noita-explorer/model-noita';
+import {
+  NoitaScrapedPerk,
+  NoitaTranslation,
+} from '@noita-explorer/model-noita';
 import { stringHelpers } from '@noita-explorer/tools';
 import { LuaWrapper } from '@noita-explorer/tools/lua';
 import { noitaPaths } from '../../noita-paths.ts';
@@ -13,7 +16,7 @@ export const scrapePerks = async ({
 }: {
   dataWakParentDirectoryApi: FileSystemDirectoryAccess;
   translations: StringKeyDictionary<NoitaTranslation>;
-}): Promise<NoitaPerk[]> => {
+}): Promise<NoitaScrapedPerk[]> => {
   const perkListLuaScriptPath = await dataWakParentDirectoryApi.path.join(
     noitaPaths.noitaDataWak.luaScripts.perks,
   );
@@ -29,10 +32,10 @@ export const scrapePerks = async ({
     .first();
   const luaPerkArray = perkListStatement.asArrayObjectDeclarationList();
 
-  const perks: NoitaPerk[] = [];
+  const perks: NoitaScrapedPerk[] = [];
 
   for (const luaPerk of luaPerkArray) {
-    const perk: NoitaPerk = {
+    const perk: NoitaScrapedPerk = {
       id: luaPerk.getRequiredField('id').required.asString().toLowerCase(),
       name: luaPerk.getRequiredField('ui_name').required.asString(),
       description: luaPerk

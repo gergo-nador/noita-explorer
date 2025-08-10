@@ -43,6 +43,8 @@ export * from "./scraping/noita-data-wak-scrape-result";
 export * from "./scraping/noita-scraped-enemy";
 export * from "./scraping/noita-scraped-gif";
 export * from "./scraping/noita-scraped-media";
+export * from "./scraping/noita-scraped-perk";
+export * from "./scraping/noita-scraped-spell";
 export * from "./scraping/noita-scraped-sprite";
 export * from "./scraping/noita-translation";
 export * from "./scraping/noita-wak-data";

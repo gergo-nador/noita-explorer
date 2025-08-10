@@ -4,7 +4,9 @@ import {
   NoitaEnemyGif,
   NoitaEnemyMedia,
   NoitaEnemyVariant,
+  NoitaPerk,
   NoitaScrapedMedia,
+  NoitaSpell,
   NoitaWakData,
 } from '@noita-explorer/model-noita';
 
@@ -20,18 +22,31 @@ export const convertScrapeResultsToDataWak = (
   const translations = results.translations.data ?? {};
   const scrapedEnemies = results.enemies.data ?? [];
   const scrapedEnemyMedia = results.enemyMedia.data ?? {};
-  const perks = results.perks.data ?? [];
-  const spells = results.spells.data ?? [];
   const wandConfigs = results.wandConfigs.data ?? [];
   const materials = results.materials.data ?? [];
   const materialReactions = results.materialReactions.data ?? [];
 
-  // handle gifs
+  // handle perks
+  const perksWithoutImage = results.perks.data?.map((perk) => ({
+    ...perk,
+    imageBase64: undefined,
+  }));
+  const perks: NoitaPerk[] = perksWithoutImage ?? [];
+
+  // handle spells
+  const spellsWithoutImage = results.spells.data?.map((spell) => ({
+    ...spell,
+    imageBase64: undefined,
+  }));
+  const spells: NoitaSpell[] = spellsWithoutImage ?? [];
+
+  // handle enemies
   const enemies: NoitaEnemy[] = scrapedEnemies.map((e): NoitaEnemy => {
     const variants: NoitaEnemyVariant[] = e.variants.map((v) => ({
       ...v,
       enemy: {
         ...v.enemy,
+        imageBase64: undefined,
         media: undefined,
         physicsImageShapes: undefined,
         sprites: undefined,
@@ -54,6 +69,7 @@ export const convertScrapeResultsToDataWak = (
     return enemy;
   });
 
+  // finalize data wak
   const now = new Date();
 
   return {

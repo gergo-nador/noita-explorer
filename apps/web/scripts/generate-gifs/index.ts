@@ -46,7 +46,7 @@ for (const [key, mediaCollection] of Object.entries(noitaMedia)) {
 }
 
 function readNoitaMedia():
-  | StringKeyDictionary<StringKeyDictionary<NoitaScrapedMedia>>
+  | StringKeyDictionary<StringKeyDictionary<NoitaScrapedMedia[]>>
   | undefined {
   const noitaGifPath = dataGifJsonPath;
 
@@ -60,8 +60,9 @@ function readNoitaMedia():
     const gifBuffer = fs.readFileSync(noitaGifPath);
     const gifString = gifBuffer.toString('utf8');
     // orb-gifs and enemy-gifs form the top level StringKeyDict
-    const gifJson: StringKeyDictionary<StringKeyDictionary<NoitaScrapedMedia>> =
-      JSON.parse(gifString);
+    const gifJson: StringKeyDictionary<
+      StringKeyDictionary<NoitaScrapedMedia[]>
+    > = JSON.parse(gifString);
 
     return gifJson;
   } catch (error) {
@@ -72,20 +73,21 @@ function readNoitaMedia():
 
 function generateMedia(
   key: string,
-  mediaDict: StringKeyDictionary<NoitaScrapedMedia>,
+  mediaDict: StringKeyDictionary<NoitaScrapedMedia[]>,
 ) {
   const fsPath = path.resolve(outputFolder, 'g', key);
   fs.mkdirSync(fsPath, { recursive: true });
 
-  for (const [id, media] of Object.entries(mediaDict)) {
+  for (const [id, mediaArr] of Object.entries(mediaDict)) {
     const mediaPath = path.resolve(fsPath, id);
     fs.mkdirSync(mediaPath, { recursive: true });
 
-    if (media.type === 'image') {
-      generateImage({ fsPath: mediaPath, media: media });
-    } else if (media.type === 'gif') {
-      generateGifs({ fsPath: mediaPath, media: media });
-    }
+    for (const media of mediaArr)
+      if (media.type === 'image') {
+        generateImage({ fsPath: mediaPath, media: media });
+      } else if (media.type === 'gif') {
+        generateGifs({ fsPath: mediaPath, media: media });
+      }
   }
 }
 

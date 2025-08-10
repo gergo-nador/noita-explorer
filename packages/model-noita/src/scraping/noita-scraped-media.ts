@@ -9,7 +9,7 @@ export interface NoitaScrapedMediaGif {
 
 export interface NoitaScrapedMediaImage {
   type: 'image';
-  imageType: 'physics';
+  imageType: 'default' | 'physics';
   imageBase64: string;
   width: number;
   height: number;

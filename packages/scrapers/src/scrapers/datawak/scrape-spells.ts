@@ -4,7 +4,7 @@ import {
 } from '@noita-explorer/model';
 import {
   NoitaConstants,
-  NoitaSpell,
+  NoitaScrapedSpell,
   NoitaTranslation,
   SpellModifierNumberUnit,
 } from '@noita-explorer/model-noita';
@@ -23,7 +23,7 @@ export const scrapeSpells = async ({
 }: {
   dataWakParentDirectoryApi: FileSystemDirectoryAccess;
   translations: StringKeyDictionary<NoitaTranslation>;
-}) => {
+}): Promise<NoitaScrapedSpell[]> => {
   const spellListLuaScriptPath = await dataWakParentDirectoryApi.path.join(
     noitaPaths.noitaDataWak.luaScripts.guns,
   );
@@ -39,10 +39,10 @@ export const scrapeSpells = async ({
 
   const luaActionsArray = actionListStatement.asArrayObjectDeclarationList();
 
-  const spells: NoitaSpell[] = [];
+  const spells: NoitaScrapedSpell[] = [];
 
   for (const luaSpell of luaActionsArray) {
-    const spell: NoitaSpell = {
+    const spell: NoitaScrapedSpell = {
       id: luaSpell.getRequiredField('id').required.asString().toLowerCase(),
       name: luaSpell.getRequiredField('name').required.asString(),
       description: luaSpell.getRequiredField('description').required.asString(),
@@ -264,7 +264,7 @@ export const scrapeSpells = async ({
 const scrapeXmlSpellData = async (
   dataWakDirectoryApi: FileSystemDirectoryAccess,
   xmlRelativePath: string,
-  spell: NoitaSpell,
+  spell: NoitaScrapedSpell,
 ) => {
   const xmlFilePath = await dataWakDirectoryApi.path.join(
     xmlRelativePath.split('/'),
