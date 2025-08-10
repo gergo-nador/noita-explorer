@@ -29,6 +29,12 @@ export const HtmlDoc = ({ children, canonicalUrl }: Props) => {
           name='google-site-verification'
           content='pC4tL9YCkPCuXtbGTraiIcDlsFQntUuwn17pNtr01Ek'
         />
+        <link rel='manifest' href='/manifest.json' />
+        <link
+          rel='apple-touch-icon'
+          sizes='256x256'
+          href='/icons/icon-256.png'
+        />
         {/*<meta name='robots' content='index, follow' />*/}
         <style
           dangerouslySetInnerHTML={{
