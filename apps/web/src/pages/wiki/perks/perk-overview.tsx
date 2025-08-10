@@ -41,7 +41,10 @@ export const PerkOverview = ({ perk }: { perk: NoitaPerk }) => {
           {perk.gameEffects
             .filter((gameEffect) => gameEffect in NoitaProtections)
             .map((gameEffect) => (
-              <NoitaTooltipWrapper content={NoitaProtections[gameEffect].name}>
+              <NoitaTooltipWrapper
+                key={gameEffect}
+                content={NoitaProtections[gameEffect].name}
+              >
                 <Icon
                   key={gameEffect}
                   src={NoitaProtections[gameEffect].image}

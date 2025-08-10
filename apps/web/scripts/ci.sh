@@ -25,11 +25,8 @@ npm run data-wak-download
 echo Scraping data wak...
 npm run scrape-data-wak
 
-echo Generating gifs...
-npm run generate-gifs
-
-echo Generating scaled up media
-npm run generate-scaled-media
+echo Generating media files...
+npm run generate-media
 
 echo Generate sitemap.txt
 npm run generate-sitemap

@@ -17,7 +17,6 @@ import { initParticlesEngine } from '@tsparticles/react';
 import { loadFull } from 'tsparticles';
 import { loadEmittersPlugin } from '@tsparticles/plugin-emitters';
 import { useOnboarding } from './hooks/use-onboarding.ts';
-import { Head } from '@noita-explorer/react-utils';
 import { MobileViewUnsupportedWarning } from './components/mobile-view-unsupported-warning.tsx';
 
 interface Props {
@@ -36,22 +35,7 @@ export const App = ({ children }: Props) => {
     <>
       {children ?? <RouterProvider router={browserRouter} />}
       {settingsLoaded && !isOnboardingDone && <Onboarding />}
-      <Head>
-        <Head.Meta property='og:site_name' content='Noita Explorer' />
-        <Head.Meta name='application-name' content='Noita Explorer' />
 
-        <Head.Meta
-          name='description'
-          content='Noita Explorer helps you unlock your lost in-game progress without mods. Unlock spells, enemies, perks, achievement pillars, crown, amulet, and so on...'
-        />
-
-        <Head.Meta
-          name='keywords'
-          content='noita,unlock,progress,game progress,unlock progress'
-        />
-
-        <Head.Meta property='og:type' content='website' />
-      </Head>
       <DialogWrapper />
       <ContextMenuWrapper />
       <NoitaToaster />
