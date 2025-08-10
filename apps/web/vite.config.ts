@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react';
 import mkcert from 'vite-plugin-mkcert';
 import { execSync } from 'child_process';
 import { resolve } from 'path';
+import { viteStaticCopy } from 'vite-plugin-static-copy';
 
 // https://vite.dev/config/
 export default defineConfig(({ mode }): UserConfig => {
@@ -13,7 +14,18 @@ export default defineConfig(({ mode }): UserConfig => {
 
   return {
     base: '/',
-    plugins: [react(), mkcert()],
+    plugins: [
+      react(),
+      mkcert(),
+      viteStaticCopy({
+        targets: [
+          {
+            src: '../../node_modules/@noita-explorer/noita-component-library/assets/*',
+            dest: 'noita-component-library',
+          },
+        ],
+      }),
+    ],
 
     server: {
       port: 4000,

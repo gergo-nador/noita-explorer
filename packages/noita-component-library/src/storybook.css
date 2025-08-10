@@ -6,5 +6,5 @@ body{
 
 @font-face {
     font-family: 'NoitaPixel'; /*a name to be used later*/
-    src: url("../assets/NoitaPixel.ttf"); /*URL to font*/
+    src: url("../assets-internal/NoitaPixel.ttf"); /*URL to font*/
 }

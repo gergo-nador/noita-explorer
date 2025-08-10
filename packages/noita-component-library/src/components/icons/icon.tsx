@@ -1,9 +1,5 @@
-import error_icon from '../../../assets/icons/mods_newer.png';
-import info_icon from '../../../assets/icons/icon_info.png';
-import warning_icon from '../../../assets/icons/icon_warning.png';
-import checkmark from '../../../assets/icons/checkmark.png';
-import cross_large from '../../../assets/icons/cross_red_large.png';
 import React from 'react';
+import { assetsManager } from '../../assets-manager';
 
 interface IconProps {
   type?: IconType;
@@ -25,11 +21,11 @@ export const Icon = ({
   style,
 }: IconProps) => {
   const mapping = {
-    error: error_icon,
-    warning: warning_icon,
-    info: info_icon,
-    check: checkmark,
-    cross: cross_large,
+    error: assetsManager.get('icons/mods_newer.png'),
+    warning: assetsManager.get('icons/icon_warning.png'),
+    info: assetsManager.get('icons/icon_info.png'),
+    check: assetsManager.get('icons/checkmark.png'),
+    cross: assetsManager.get('icons/cross_red_large.png'),
     custom: src,
   };
 

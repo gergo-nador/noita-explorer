@@ -1,7 +1,6 @@
 import css from './button.module.css';
-import arrowLeft from '../../../assets/button/keyboard_cursor_left_active.png';
-import arrowRight from '../../../assets/button/keyboard_cursor_right_active.png';
 import React, { MutableRefObject, useRef } from 'react';
+import { assetsManager } from '../../assets-manager';
 
 export type ButtonDecoration = 'left' | 'right' | 'both' | 'none';
 
@@ -80,11 +79,11 @@ export const Button = ({
             className={`${css['icon-container']} ${css['icon-container-left']}`}
           >
             <img
-              src={arrowLeft}
+              src={assetsManager.get('button/keyboard_cursor_left_active.png')}
               height={iconSize * 2}
               width={iconSize}
               className={css['icon']}
-              alt={'Button Arrow'}
+              alt='Button Arrow'
             />
           </span>
         )}
@@ -103,11 +102,11 @@ export const Button = ({
             className={`${css['icon-container']} ${css['icon-container-right']}`}
           >
             <img
-              src={arrowRight}
+              src={assetsManager.get('button/keyboard_cursor_right_active.png')}
               height={iconSize * 2}
               width={iconSize}
               className={css['icon']}
-              alt={'Button Arrow'}
+              alt='Button Arrow'
             />
           </span>
         )}

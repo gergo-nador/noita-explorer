@@ -1,8 +1,6 @@
-import backgroundRegular from '../../../assets/progress-boxes/grid_box.png';
-import backgroundUnknown from '../../../assets/progress-boxes/grid_box_unknown.png';
-import backgroundLayerNew from '../../../assets/progress-boxes/grid_highlight_new.png';
 import React from 'react';
 import css from './progress-icon.module.css';
+import { assetsManager } from '../../assets-manager';
 
 export type ProgressIconType = 'regular' | 'unknown' | 'new';
 
@@ -21,9 +19,11 @@ export const ProgressIcon = ({
   style = {},
   spellBackground,
 }: ProgressIconProps) => {
-  const backgroundImage =
-    type === 'unknown' ? backgroundUnknown : backgroundRegular;
   const isUnknown = type === 'unknown';
+
+  const backgroundImage = isUnknown
+    ? assetsManager.get('progress-boxes/grid_box_unknown.png')
+    : assetsManager.get('progress-boxes/grid_box.png');
 
   size ??= '100%';
 
@@ -41,7 +41,7 @@ export const ProgressIcon = ({
       {/* The main background image for every Progress Icon*/}
       <img
         src={backgroundImage}
-        alt={'background image'}
+        alt='progress background'
         style={{
           imageRendering: 'pixelated',
           height: '100%',
@@ -54,7 +54,7 @@ export const ProgressIcon = ({
       {!isUnknown && spellBackground && (
         <img
           src={spellBackground}
-          alt={'bg image'}
+          alt='bg image'
           style={{
             position: 'absolute',
             height: '94.11765%', // images are 16x16, background is 17x17 -> 16/17 = 94.11765
@@ -71,7 +71,7 @@ export const ProgressIcon = ({
       {!isUnknown && (
         <img
           src={icon}
-          alt={'main image'}
+          alt='progress icon'
           style={{
             imageRendering: 'pixelated',
             height: '94.11765%', // images are 16x16, background is 17x17 -> 16/17 = 94.11765
@@ -86,8 +86,8 @@ export const ProgressIcon = ({
       {/* New progress indicator */}
       {type === 'new' && (
         <img
-          src={backgroundLayerNew}
-          alt={'background image'}
+          src={assetsManager.get('progress-boxes/grid_highlight_new.png')}
+          alt='new progress indicator'
           className={css['progress-icon-new-animation']}
           style={{
             imageRendering: 'pixelated',

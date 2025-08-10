@@ -26,8 +26,8 @@
   },
   "dependencies": {
     "@noita-explorer/model": "*",
-    "@noita-explorer/tools": "*",
-    "@noita-explorer/react-utils": "*"
+    "@noita-explorer/react-utils": "*",
+    "@noita-explorer/tools": "*"
   },
   "peerDependencies": {
     "react": "19.1.0",
@@ -67,6 +67,7 @@
     "vite": "^6.0.1",
     "vite-plugin-dts": "^4.3.0",
     "vite-plugin-lib-inject-css": "^2.1.1",
+    "vite-plugin-static-copy": "^3.1.1",
     "zustand": "^5.0.1"
   },
   "eslintConfig": {

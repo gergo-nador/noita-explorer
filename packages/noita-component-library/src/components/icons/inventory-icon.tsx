@@ -1,8 +1,8 @@
-import backgroundRegular from '../../../assets/inventory-boxes/full_inventory_box.png';
 import React, { LegacyRef, useEffect, useRef, useState } from 'react';
 import { Icon } from './icon';
 import { imageHelpers } from '@noita-explorer/tools';
 import css from './inventory-icon.module.css';
+import { assetsManager } from '../../assets-manager';
 
 interface InventoryIconProps {
   icon?: string;
@@ -25,7 +25,6 @@ export const InventoryIcon = ({
 }: InventoryIconProps) => {
   const ref = useRef<HTMLDivElement>(null);
   const [imgSize, setImageSize] = useState({ width: 0, height: 0 });
-  const backgroundImage = backgroundRegular;
 
   size ??= '100%';
 
@@ -66,7 +65,7 @@ export const InventoryIcon = ({
     >
       {/* The main background image for every Progress Icon*/}
       <img
-        src={backgroundImage}
+        src={assetsManager.get('inventory-boxes/full_inventory_box.png')}
         alt={'background image'}
         style={{
           imageRendering: 'pixelated',
