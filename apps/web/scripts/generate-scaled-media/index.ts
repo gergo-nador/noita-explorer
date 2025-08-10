@@ -7,26 +7,16 @@ import { getDeployUrl } from '../utils/get-deploy-url';
 import * as path from 'node:path';
 import { generateImage } from './generate-image';
 import { args } from '../utils/process-args';
+import { readDataWak } from '../utils/set-data-wak';
 
 /**
- * Deprecated, we now have SSG, no need for this hack
- *
- * Generates search engine optimized html files for perks,
- * spells and enemies. Scaled up version of the images associated
- * with the objects are also generated and linked in the html files
+ * Generates scaled up media files of perks, spells, enemies, gifs.
  *
  * Process arguments
- * - --wak-data: path to the noita_data_wak.json file
- * - -o: output directory. The generated files will be places in {-o}/g/wiki/{perks|spells|enemies}/
+ * - -o: output directory. The generated files will be places in {-o}/g/{}/{perks|spells|enemies}/
  */
 
 process.exit(0);
-
-const dataWakJsonPath = args['wak-data'];
-if (!dataWakJsonPath) {
-  console.log('--wak-data argument must point to the noita_wak_data.json file');
-  process.exit(1);
-}
 
 const outputFolder = args['o'];
 if (!outputFolder) {
@@ -34,30 +24,9 @@ if (!outputFolder) {
   process.exit(1);
 }
 
-const noitaWakData = readNoitaWakData();
+const noitaWakData = readDataWak();
 if (noitaWakData) {
   generateStaticAssets(noitaWakData);
-}
-
-function readNoitaWakData() {
-  const noitaWakDataPath = dataWakJsonPath;
-
-  const noitaWakDataExists = fs.existsSync(noitaWakDataPath);
-  if (!noitaWakDataExists) {
-    console.log('noita data wak file does not exist');
-    return;
-  }
-
-  try {
-    const wakDataBuffer = fs.readFileSync(noitaWakDataPath);
-    const wakDataString = wakDataBuffer.toString('utf8');
-    const wakDataJson: NoitaWakData = JSON.parse(wakDataString);
-
-    return wakDataJson;
-  } catch (error) {
-    console.error('Error reading or parsing noita_wak_data.json:', error);
-    return null;
-  }
 }
 
 async function generateStaticAssets(data: NoitaWakData) {

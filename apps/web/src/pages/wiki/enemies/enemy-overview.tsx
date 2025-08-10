@@ -13,6 +13,7 @@ import { CopyLinkText } from '../../../components/copy-link-text.tsx';
 import { publicPaths } from '../../../utils/public-paths.ts';
 import { SpaceCharacter } from '../../../components/space-character.tsx';
 import { EnemyMediaComponent } from './enemy-media-component.tsx';
+import { pages } from '../../../routes/pages.ts';
 
 export const EnemyOverview = ({ enemy }: { enemy: NoitaEnemy }) => {
   const noitaUnits = useNoitaUnits();
@@ -40,7 +41,7 @@ export const EnemyOverview = ({ enemy }: { enemy: NoitaEnemy }) => {
             paddingLeft: 10,
           }}
         >
-          <CopyLinkText link={location.href} iconSize={24}>
+          <CopyLinkText link={pages.wiki.enemyDetail(enemy.id)} iconSize={24}>
             <div
               style={{
                 fontSize: 'clamp(1.4rem, 2vw, 2.2rem)',

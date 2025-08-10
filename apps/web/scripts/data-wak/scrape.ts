@@ -82,8 +82,8 @@ async function runScrape(args: Record<string, string>) {
   {
     const outputGifs = path.resolve(args['o-gif']);
     const jsonGifs = JSON.stringify({
-      'enemy-media': enemyMedia,
-      'orb-gifs': orbGifs,
+      enemies: enemyMedia,
+      orbs: orbGifs,
     });
 
     fs.writeFileSync(outputGifs, jsonGifs);

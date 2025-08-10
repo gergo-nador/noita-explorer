@@ -36,7 +36,6 @@ export const App = ({ children }: Props) => {
     <>
       {children ?? <RouterProvider router={browserRouter} />}
       {settingsLoaded && !isOnboardingDone && <Onboarding />}
-
       <Head>
         <Head.Meta property='og:site_name' content='Noita Explorer' />
         <Head.Meta name='application-name' content='Noita Explorer' />
@@ -53,7 +52,6 @@ export const App = ({ children }: Props) => {
 
         <Head.Meta property='og:type' content='website' />
       </Head>
-
       <DialogWrapper />
       <ContextMenuWrapper />
       <NoitaToaster />

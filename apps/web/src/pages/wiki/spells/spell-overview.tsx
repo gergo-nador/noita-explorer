@@ -7,6 +7,7 @@ import { NoitaNumberModifier } from '../../../components/tooltips/noita-number-m
 import { Flex } from '@noita-explorer/react-utils';
 import { CopyLinkText } from '../../../components/copy-link-text.tsx';
 import { publicPaths } from '../../../utils/public-paths.ts';
+import { pages } from '../../../routes/pages.ts';
 
 export const SpellOverview = ({ spell }: { spell: NoitaSpell }) => {
   const actionType = NoitaSpellTypesDictionary[spell.type];
@@ -405,7 +406,7 @@ export const SpellOverview = ({ spell }: { spell: NoitaSpell }) => {
         </Flex>
 
         <Flex justify='center' column>
-          <CopyLinkText link={location.href}>
+          <CopyLinkText link={pages.wiki.spellDetail(spell.id)}>
             <div style={{ fontSize: 20, marginBottom: 10 }}>{spell.name}</div>
           </CopyLinkText>
           <div>{spell.description}</div>

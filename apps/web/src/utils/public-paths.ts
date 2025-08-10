@@ -17,7 +17,7 @@ export const publicPaths = {
   },
   generated: {
     orbs: ({ orbId }: { orbId: string }) => {
-      const path = `/g/orb-gifs/${orbId}/gifs/`;
+      const path = `/g/orbs/${orbId}/gifs/`;
       return { gif: path + 'default.gif', firstFrame: path + 'default-f.png' };
     },
     enemyGifs: ({
@@ -29,7 +29,7 @@ export const publicPaths = {
       gifName: string;
       gifReloadCounter?: number;
     }) => {
-      const path = `/g/enemy-media/${enemyId}/gifs/${gifName}`;
+      const path = `/g/enemies/${enemyId}/gifs/${gifName}`;
       const queryParams =
         gifReloadCounter !== undefined ? '?r=' + gifReloadCounter : '';
 
@@ -45,7 +45,7 @@ export const publicPaths = {
       enemyId: string;
       type: NoitaEnemyImageMedia['imageType'];
     }) => {
-      return `/g/enemy-media/${enemyId}/images/${type}.png`;
+      return `/g/enemies/${enemyId}/images/${type}.png`;
     },
   },
 };

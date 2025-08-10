@@ -28,8 +28,8 @@ npm run scrape-data-wak
 echo Generating gifs...
 npm run generate-gifs
 
-echo Generating static assets
-npm run generate-static-assets
+echo Generating scaled up media
+npm run generate-scaled-media
 
 echo Generate sitemap.txt
 npm run generate-sitemap
