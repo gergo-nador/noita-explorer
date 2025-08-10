@@ -66,7 +66,6 @@ export const Error404 = () => {
 };
 
 const getAllPaths = (
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
   pathObj: StringKeyDictionaryComposite<string | Function>,
   paths?: string[],
 ) => {
