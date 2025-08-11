@@ -1,5 +1,5 @@
 import { createBrowserRouter, Outlet } from 'react-router-dom';
-import { DocumentTitle, SeoDefaultPage } from '@noita-explorer/react-utils';
+import { SeoDefaultPage } from '@noita-explorer/react-utils';
 import { pages } from './pages.ts';
 import { noitaAPI } from '../utils/noita-api.ts';
 
@@ -54,9 +54,13 @@ export const routes: NoitaRouteObject[] = [
       {
         path: '',
         element: (
-          <DocumentTitle title='Noita Explorer'>
+          <>
+            <SeoDefaultPage
+              title='Noita Explorer'
+              description='Noita Explorer helps you unlock your lost in-game progress without mods. Unlock spells, enemies, perks, achievement pillars, crown, amulet, and so on...'
+            />
             <MainPage />
-          </DocumentTitle>
+          </>
         ),
       },
       {
@@ -95,17 +99,25 @@ export const routes: NoitaRouteObject[] = [
               {
                 path: '',
                 element: (
-                  <DocumentTitle title='Secrets - Progress Tracker'>
+                  <>
+                    <SeoDefaultPage
+                      title='Secrets - Progress Tracker'
+                      description='Shhhhh. You might spoiler it for yourself'
+                    />
                     <NoitaProgressTrackerSecrets />
-                  </DocumentTitle>
+                  </>
                 ),
               },
               {
                 path: 'pillar',
                 element: (
-                  <DocumentTitle title='Achievement Pillar - Progress Tracker'>
+                  <>
+                    <SeoDefaultPage
+                      title='Achievement Pillar - Progress Tracker'
+                      description='Check your unlocked achievements progress, and unlock any of the pillars'
+                    />
                     <NoitaProgressTrackerPillar />
-                  </DocumentTitle>
+                  </>
                 ),
               },
             ],
@@ -135,9 +147,13 @@ export const routes: NoitaRouteObject[] = [
           {
             path: 'perks',
             element: (
-              <DocumentTitle title='Perks - Wiki'>
+              <>
+                <SeoDefaultPage
+                  title='Perks - Wiki'
+                  description='Browse any in-game perk.'
+                />
                 <WikiPerks />
-              </DocumentTitle>
+              </>
             ),
             children: [
               {
@@ -160,9 +176,13 @@ export const routes: NoitaRouteObject[] = [
           {
             path: 'spells',
             element: (
-              <DocumentTitle title='Spells - Wiki'>
+              <>
+                <SeoDefaultPage
+                  title='Spells - Wiki'
+                  description='Browse any in-game spell.'
+                />
                 <WikiSpells />
-              </DocumentTitle>
+              </>
             ),
             children: [
               {
@@ -185,9 +205,13 @@ export const routes: NoitaRouteObject[] = [
           {
             path: 'enemies',
             element: (
-              <DocumentTitle title='Enemies - Wiki'>
+              <>
+                <SeoDefaultPage
+                  title='Enemies - Wiki'
+                  description='Browse any in-game enemy.'
+                />
                 <WikiEnemies />
-              </DocumentTitle>
+              </>
             ),
             children: [
               {
@@ -211,17 +235,25 @@ export const routes: NoitaRouteObject[] = [
             path: 'materials',
             ssg: false,
             element: (
-              <DocumentTitle title='Materials - Wiki'>
+              <>
+                <SeoDefaultPage
+                  title='Materials - Wiki'
+                  description='Browse any in-game material.'
+                />
                 <WikiMaterials />
-              </DocumentTitle>
+              </>
             ),
           },
           ...addIf(__ENV__ !== 'production', {
             path: 'materials-tree',
             element: (
-              <DocumentTitle title='Material Tree - Wiki'>
+              <>
+                <SeoDefaultPage
+                  title='Material Tree - Wiki'
+                  description='Show the relations between the materials.'
+                />
                 <WikiMaterialsTree />
-              </DocumentTitle>
+              </>
             ),
           }),
         ],
@@ -229,11 +261,15 @@ export const routes: NoitaRouteObject[] = [
       {
         path: 'setup',
         element: (
-          <DocumentTitle title='Setup - Noita Explorer'>
+          <>
+            <SeoDefaultPage
+              title='Setup'
+              description='Set up your in-game folder to continue.'
+            />
             <CardPageTemplate returnPath={pages.main}>
               <Outlet />
             </CardPageTemplate>
-          </DocumentTitle>
+          </>
         ),
         ssg: false,
         sitemap: false,
@@ -251,75 +287,103 @@ export const routes: NoitaRouteObject[] = [
       {
         path: 'holidays',
         element: (
-          <DocumentTitle title='Holidays - Noita Explorer'>
+          <>
+            <SeoDefaultPage
+              title='Noita Holidays'
+              description='View upcoming in-game holidays in the Noita Holiday Calendar.'
+            />
             <CardPageTemplate returnPath={pages.main}>
               <NoitaHolidays />
             </CardPageTemplate>
-          </DocumentTitle>
+          </>
         ),
       },
-      {
+      addIf(__ENV__ !== 'production', {
         path: 'current-run',
         element: (
-          <DocumentTitle title='Current Run - Noita Explorer'>
+          <>
+            <SeoDefaultPage
+              title='Current Run'
+              description='Check your current run'
+            />
             <CardPageTemplate returnPath={pages.main}>
               <CurrentRun />
             </CardPageTemplate>
-          </DocumentTitle>
+          </>
         ),
-      },
+      }),
       {
         path: 'sessions',
         element: (
-          <DocumentTitle title='Sessions - Noita Explorer'>
+          <>
+            <SeoDefaultPage
+              title='Sessions'
+              description='View your previous sessions, find out how many times did you die because of explosion, and check out other statistics.'
+            />
             <EmptyPageTemplate returnPath={pages.main}>
               <NoitaSessions />
             </EmptyPageTemplate>
-          </DocumentTitle>
+          </>
         ),
       },
       {
         path: 'death-map',
         element: (
-          <DocumentTitle title='Death Map - Noita Explorer'>
+          <>
+            <SeoDefaultPage
+              title='Death Map'
+              description='Check out your death locations of your previous runs in one map.'
+            />
             <CardPageTemplate returnPath={pages.main}>
               <NoitaDeathMap />
             </CardPageTemplate>
-          </DocumentTitle>
+          </>
         ),
       },
       {
         path: 'bones-wands',
         element: (
-          <DocumentTitle title='Bones Wands - Noita Explorer'>
+          <>
+            <SeoDefaultPage
+              title='Bones Wands'
+              description="Scared of your old wand builds haunting you? Don't worry no more!"
+            />
             <CardPageTemplate returnPath={pages.main}>
               <NoitaBonesWands />
             </CardPageTemplate>
-          </DocumentTitle>
+          </>
         ),
       },
       {
         path: 'settings',
-        element: (
-          <DocumentTitle title='Settings - Noita Explorer'>
-            <Outlet />
-          </DocumentTitle>
-        ),
+        element: <Outlet />,
         children: [
           {
             path: '',
             element: (
-              <CardPageTemplate returnPath={pages.main}>
-                <Settings />
-              </CardPageTemplate>
+              <>
+                <SeoDefaultPage
+                  title='Settings'
+                  description="This is a settings page. Not a lot, but it's honest work."
+                />
+                <CardPageTemplate returnPath={pages.main}>
+                  <Settings />
+                </CardPageTemplate>
+              </>
             ),
           },
           {
             path: 'cursor-wand-picker',
             element: (
-              <CardPageTemplate returnPath={pages.settings.index}>
-                <SettingsCursorWandPicker />
-              </CardPageTemplate>
+              <>
+                <SeoDefaultPage
+                  title='Cursor Wand Picker - Settings'
+                  description='Pick your favorite wand to use it as a cursor.'
+                />
+                <CardPageTemplate returnPath={pages.settings.index}>
+                  <SettingsCursorWandPicker />
+                </CardPageTemplate>
+              </>
             ),
           },
         ],
@@ -327,11 +391,15 @@ export const routes: NoitaRouteObject[] = [
       {
         path: 'credits',
         element: (
-          <DocumentTitle title='Credits - Noita Explorer'>
+          <>
+            <SeoDefaultPage
+              title='Credits'
+              description='A way of saying thank you to the Noita community.'
+            />
             <CardPageTemplate returnPath={pages.main}>
               <Credits />
             </CardPageTemplate>
-          </DocumentTitle>
+          </>
         ),
       },
       ...addIf(__ENV__ !== 'production', {
