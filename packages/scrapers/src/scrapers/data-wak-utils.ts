@@ -61,6 +61,7 @@ export const convertScrapeResultsToDataWak = (
 
     const enemy = {
       ...e,
+      imageBase64: undefined,
       media: enemyMedia,
       variants: variants,
       sprites: undefined,
