@@ -11,12 +11,11 @@ import { EnemyFilters } from './enemy-filters.ts';
 import { EnemyFiltersView } from './enemy-filters-view.tsx';
 import { arrayHelpers } from '@noita-explorer/tools';
 import { Flex } from '@noita-explorer/react-utils';
-import { Link, Outlet, useParams } from 'react-router-dom';
+import { Link, Outlet } from 'react-router-dom';
 import { pages } from '../../../routes/pages.ts';
 import { publicPaths } from '../../../utils/public-paths.ts';
 
 export const WikiEnemies = () => {
-  const { enemyId } = useParams();
   const { data } = useNoitaDataWakStore();
 
   const enemies = useMemo(() => {
@@ -96,8 +95,7 @@ export const WikiEnemies = () => {
           top: 0,
         }}
       >
-        {!enemyId && <span>Select an enemy</span>}
-        {enemyId && <Outlet />}
+        <Outlet />
       </Card>
     </Flex>
   );

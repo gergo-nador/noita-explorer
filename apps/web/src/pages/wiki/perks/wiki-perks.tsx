@@ -12,12 +12,11 @@ import { arrayHelpers } from '@noita-explorer/tools';
 import { PerkFilters } from './perk-filters.ts';
 import { PerkFiltersView } from './perk-filters-view.tsx';
 import { Flex } from '@noita-explorer/react-utils';
-import { Link, Outlet, useParams } from 'react-router-dom';
+import { Link, Outlet } from 'react-router-dom';
 import { pages } from '../../../routes/pages.ts';
 import { publicPaths } from '../../../utils/public-paths.ts';
 
 export const WikiPerks = () => {
-  const { perkId } = useParams();
   const { data } = useNoitaDataWakStore();
 
   const [filters, setFilters] = useState<PerkFilters>({
@@ -126,8 +125,7 @@ export const WikiPerks = () => {
           top: 0,
         }}
       >
-        {!perkId && <span>Select a perk</span>}
-        {perkId && <Outlet />}
+        <Outlet />
       </Card>
     </Flex>
   );

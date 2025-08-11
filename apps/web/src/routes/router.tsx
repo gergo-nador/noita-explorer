@@ -146,16 +146,20 @@ export const routes: NoitaRouteObject[] = [
         children: [
           {
             path: 'perks',
-            element: (
-              <>
-                <SeoDefaultPage
-                  title='Perks - Wiki'
-                  description='Browse any in-game perk.'
-                />
-                <WikiPerks />
-              </>
-            ),
+            element: <WikiPerks />,
             children: [
+              {
+                path: '',
+                element: (
+                  <>
+                    <SeoDefaultPage
+                      title='Perks - Wiki'
+                      description='Browse any in-game perk.'
+                    />
+                    <div>Select a perk</div>
+                  </>
+                ),
+              },
               {
                 path: ':perkId',
                 element: <WikiPerkDetails />,
@@ -175,16 +179,20 @@ export const routes: NoitaRouteObject[] = [
           },
           {
             path: 'spells',
-            element: (
-              <>
-                <SeoDefaultPage
-                  title='Spells - Wiki'
-                  description='Browse any in-game spell.'
-                />
-                <WikiSpells />
-              </>
-            ),
+            element: <WikiSpells />,
             children: [
+              {
+                path: '',
+                element: (
+                  <>
+                    <SeoDefaultPage
+                      title='Spells - Wiki'
+                      description='Browse any in-game spell.'
+                    />
+                    <div>Select a spell</div>
+                  </>
+                ),
+              },
               {
                 path: ':spellId',
                 element: <WikiSpellDetails />,
@@ -204,16 +212,20 @@ export const routes: NoitaRouteObject[] = [
           },
           {
             path: 'enemies',
-            element: (
-              <>
-                <SeoDefaultPage
-                  title='Enemies - Wiki'
-                  description='Browse any in-game enemy.'
-                />
-                <WikiEnemies />
-              </>
-            ),
+            element: <WikiEnemies />,
             children: [
+              {
+                path: '',
+                element: (
+                  <>
+                    <SeoDefaultPage
+                      title='Enemies - Wiki'
+                      description='Browse any in-game enemy.'
+                    />
+                    <div>Select an enemy</div>
+                  </>
+                ),
+              },
               {
                 path: ':enemyId',
                 element: <WikiEnemyDetails />,

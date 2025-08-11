@@ -11,12 +11,11 @@ import { SpellFiltersView } from './spell-filters-view.tsx';
 import { useState } from 'react';
 import { SpellFilters } from './spell-filters.ts';
 import { Flex } from '@noita-explorer/react-utils';
-import { Link, Outlet, useParams } from 'react-router-dom';
+import { Link, Outlet } from 'react-router-dom';
 import { pages } from '../../../routes/pages.ts';
 import { publicPaths } from '../../../utils/public-paths.ts';
 
 export const WikiSpells = () => {
-  const { spellId } = useParams();
   const { data } = useNoitaDataWakStore();
 
   const [filters, setFilters] = useState<SpellFilters>({
@@ -96,8 +95,7 @@ export const WikiSpells = () => {
           top: 0,
         }}
       >
-        {!spellId && <span>Select a spell</span>}
-        {spellId && <Outlet />}
+        <Outlet />
       </Card>
     </Flex>
   );
