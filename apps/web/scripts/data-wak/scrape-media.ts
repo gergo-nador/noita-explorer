@@ -5,6 +5,7 @@ import {
   NoitaScrapedMediaImage,
 } from '@noita-explorer/model-noita';
 import { imageHelpers } from '@noita-explorer/tools';
+import { scaleUpImage } from './scale-up-image';
 
 interface Props {
   dataWakResult: NoitaDataWakScrapeResult;
@@ -53,14 +54,52 @@ const appendBase64ImagesToMedia = async (
 
     const imageSize = await imageHelpers.getImageSizeBase64(item.imageBase64);
 
-    const image: NoitaScrapedMediaImage = {
-      type: 'image',
-      imageType: 'default',
-      imageBase64: item.imageBase64,
-      width: imageSize.width,
-      height: imageSize.height,
-    };
+    // base image
+    {
+      const image: NoitaScrapedMediaImage = {
+        type: 'image',
+        imageType: 'default',
+        imageBase64: item.imageBase64,
+        width: imageSize.width,
+        height: imageSize.height,
+      };
 
-    media[id].push(image);
+      media[id].push(image);
+    }
+
+    // high quality image (around 500 pixels height or width)
+    {
+      const maxSize = 500;
+
+      let newWidth: number;
+      let newHeight: number;
+
+      if (imageSize.width === imageSize.height) {
+        newWidth = maxSize;
+        newHeight = maxSize;
+      } else if (imageSize.width < imageSize.height) {
+        newWidth = maxSize;
+        newHeight = (maxSize / imageSize.width) * imageSize.height;
+      } else {
+        newWidth = (maxSize / imageSize.height) * imageSize.width;
+        newHeight = maxSize;
+      }
+
+      const highQualityImageBase64 = await scaleUpImage({
+        base64: item.imageBase64,
+        width: newWidth,
+        height: newHeight,
+      });
+
+      const highQualityImage: NoitaScrapedMediaImage = {
+        type: 'image',
+        imageType: 'default-high-q',
+        imageBase64: highQualityImageBase64,
+        width: newWidth,
+        height: newHeight,
+      };
+
+      media[id].push(highQualityImage);
+    }
   }
 };

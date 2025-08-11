@@ -13,17 +13,17 @@ import {
 import { args } from '../utils/process-args';
 
 /**
- * Generate gifs from the scraped data.wak content.
+ * Generate media from the scraped data.wak content.
  *
  * Process arguments:
- * - --gif-data: the json file which contains the base64 encoded gifs and first frames
- * - -o: output folder for the gifs. The gifs will be placed under {-o}/g/{main_key}/{animation_id}/{gif_name}.gif
+ * - --media-data: the json file which contains the base64 encoded media data
+ * - -o: output folder for the media files. The media files will be placed under {-o}/g/{main_key}/{object_id}/
  */
 
-const dataGifJsonPath = args['gif-data'];
-if (!dataGifJsonPath) {
+const dataMediaJsonPath = args['media-data'];
+if (!dataMediaJsonPath) {
   console.log(
-    '--gif-data argument must point to the noita_data_gifs.json file',
+    '--media-data argument must point to the noita_data_media.json file',
   );
   process.exit(1);
 }
@@ -36,19 +36,19 @@ if (!outputFolder) {
 
 const noitaMedia = readNoitaMedia();
 if (!noitaMedia) {
-  console.error(dataGifJsonPath + ' does not exist');
+  console.error(dataMediaJsonPath + ' does not exist');
   process.exit(1);
 }
 
 for (const [key, mediaCollection] of Object.entries(noitaMedia)) {
-  console.log('Generating gifs ' + key);
+  console.log('Generating media ' + key);
   generateMedia(key, mediaCollection);
 }
 
 function readNoitaMedia():
   | StringKeyDictionary<StringKeyDictionary<NoitaScrapedMedia[]>>
   | undefined {
-  const noitaGifPath = dataGifJsonPath;
+  const noitaGifPath = dataMediaJsonPath;
 
   const noitaGifExists = fs.existsSync(noitaGifPath);
   if (!noitaGifExists) {

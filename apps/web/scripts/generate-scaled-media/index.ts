@@ -5,7 +5,7 @@ import { Buffer } from 'buffer';
 import { generateHtml } from './generate-html';
 import { getDeployUrl } from '../utils/get-deploy-url';
 import * as path from 'node:path';
-import { generateImage } from './generate-image';
+import { scaleUpImage } from '../data-wak/scale-up-image';
 import { args } from '../utils/process-args';
 import { readDataWak } from '../utils/set-data-wak';
 
@@ -51,7 +51,7 @@ async function generateStaticAssets(data: NoitaWakData) {
       const height = 1500;
 
       if (!fs.existsSync(imagePathFs)) {
-        await generateImage({
+        await scaleUpImage({
           base64: perk.imageBase64,
           outputPath: imagePathFs,
           width: width,
@@ -97,7 +97,7 @@ async function generateStaticAssets(data: NoitaWakData) {
       const height = 1500;
 
       if (!fs.existsSync(imagePathFs)) {
-        await generateImage({
+        await scaleUpImage({
           base64: spell.imageBase64,
           outputPath: imagePathFs,
           width: width,
@@ -143,7 +143,7 @@ async function generateStaticAssets(data: NoitaWakData) {
       const height = 1500;
 
       if (!fs.existsSync(imagePathFs)) {
-        await generateImage({
+        await scaleUpImage({
           base64: enemy.imageBase64,
           outputPath: imagePathFs,
           width: width,

@@ -2,6 +2,7 @@ import {
   NoitaDataWakScrapeResult,
   NoitaEnemy,
   NoitaEnemyGif,
+  NoitaEnemyImageMedia,
   NoitaEnemyMedia,
   NoitaEnemyVariant,
   NoitaPerk,
@@ -114,7 +115,7 @@ const getEnemyMedia = ({
   } else if (media.type === 'image') {
     return {
       type: 'image',
-      imageType: media.imageType,
+      imageType: media.imageType as NoitaEnemyImageMedia['imageType'],
       width: media.width,
       height: media.height,
     };

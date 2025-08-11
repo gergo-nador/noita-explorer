@@ -9,12 +9,6 @@ import {
   FileSystemDirectoryAccessDataWakMemory,
 } from '@noita-explorer/file-systems';
 import { args } from '../utils/process-args';
-import { StringKeyDictionary } from '@noita-explorer/model';
-import {
-  NoitaScrapedMedia,
-  NoitaScrapedMediaImage,
-} from '@noita-explorer/model-noita';
-import { imageHelpers } from '@noita-explorer/tools';
 import { scrapeMedia } from './scrape-media';
 
 /**
