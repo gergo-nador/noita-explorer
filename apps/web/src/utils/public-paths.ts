@@ -1,4 +1,4 @@
-import { NoitaEnemyImageMedia } from '@noita-explorer/model-noita';
+import { NoitaScrapedMediaImage } from '@noita-explorer/model-noita';
 
 export const publicPaths = {
   static: {
@@ -21,12 +21,26 @@ export const publicPaths = {
       return { gif: path + 'default.gif', firstFrame: path + 'default-f.png' };
     },
     perk: {
-      image: ({ perkId }: { perkId: string }) => {
+      image: ({
+        perkId,
+        type,
+      }: {
+        perkId: string;
+        type?: NoitaScrapedMediaImage['imageType'];
+      }) => {
+        type ??= 'default';
         return `/g/perks/${perkId}/images/default.png`;
       },
     },
     spell: {
-      image: ({ spellId }: { spellId: string }) => {
+      image({
+        spellId,
+        type,
+      }: {
+        spellId: string;
+        type?: NoitaScrapedMediaImage['imageType'];
+      }) {
+        type ??= 'default';
         return `/g/spells/${spellId}/images/default.png`;
       },
     },
@@ -36,7 +50,7 @@ export const publicPaths = {
         type,
       }: {
         enemyId: string;
-        type?: NoitaEnemyImageMedia['imageType'];
+        type?: NoitaScrapedMediaImage['imageType'];
       }) => {
         type ??= 'default';
         return `/g/enemies/${enemyId}/images/${type}.png`;
