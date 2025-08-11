@@ -29,7 +29,7 @@ export const publicPaths = {
         type?: NoitaScrapedMediaImage['imageType'];
       }) => {
         type ??= 'default';
-        return `/g/perks/${perkId}/images/default.png`;
+        return `/g/perks/${perkId}/images/${type}.png`;
       },
     },
     spell: {
@@ -41,7 +41,7 @@ export const publicPaths = {
         type?: NoitaScrapedMediaImage['imageType'];
       }) {
         type ??= 'default';
-        return `/g/spells/${spellId}/images/default.png`;
+        return `/g/spells/${spellId}/images/${type}.png`;
       },
     },
     enemy: {
