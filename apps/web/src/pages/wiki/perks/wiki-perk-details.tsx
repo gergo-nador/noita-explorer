@@ -2,7 +2,6 @@ import { useParams } from 'react-router-dom';
 import { useNoitaDataWakStore } from '../../../stores/noita-data-wak.ts';
 import { PerkOverview } from './perk-overview.tsx';
 import { SeoDefaultPage } from '@noita-explorer/react-utils';
-import { WikiEnemies } from '../enemies/wiki-enemies.tsx';
 import { publicPaths } from '../../../utils/public-paths.ts';
 
 export const WikiPerkDetails = () => {
@@ -25,7 +24,6 @@ export const WikiPerkDetails = () => {
           type: 'default-high-q',
         })}
       />
-      <WikiEnemies />
       <div>
         {!perk && <span>Select a perk</span>}
         {perk && <PerkOverview key={perk.id} perk={perk} />}
