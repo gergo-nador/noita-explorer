@@ -1,7 +1,6 @@
 import {
   NoitaDataWakScrapeResult,
   NoitaDataWakScrapeResultStatus,
-  NoitaMaterial,
   NoitaMaterialReaction,
   NoitaTranslation,
   NoitaWandConfig,
@@ -11,6 +10,7 @@ import {
   NoitaScrapedMediaImage,
   NoitaScrapedSpell,
   NoitaScrapedPerk,
+  NoitaScrapedMaterial,
 } from '@noita-explorer/model-noita';
 import {
   FileSystemDirectoryAccess,
@@ -128,7 +128,7 @@ export const scrapeDataWakContent = async ({
     wandConfigError = err;
   }
 
-  let materials: NoitaMaterial[] = [];
+  let materials: NoitaScrapedMaterial[] = [];
   let materialReactions: NoitaMaterialReaction[] = [];
   let materialError: unknown | undefined = undefined;
   try {

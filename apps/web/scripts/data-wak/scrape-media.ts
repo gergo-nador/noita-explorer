@@ -18,15 +18,24 @@ export const scrapeMedia = async ({ dataWakResult }: Props) => {
   const spells: StringKeyDictionary<NoitaScrapedMedia[]> = {};
   await appendBase64ImagesToMedia(dataWakResult.spells.data, spells);
 
-  const enemies = convertScrapedMediaToArray(dataWakResult.enemyMedia.data);
+  const enemies = convertScrapedMediaToDict(dataWakResult.enemyMedia.data);
   await appendBase64ImagesToMedia(dataWakResult.enemies.data, enemies);
 
-  const orbs = convertScrapedMediaToArray(dataWakResult.orbGifs.data);
+  const materials: StringKeyDictionary<NoitaScrapedMedia[]> = {};
+  await appendBase64ImagesToMedia(dataWakResult.materials.data, materials);
 
-  return { perks: perks, spells: spells, enemies: enemies, orbs: orbs };
+  const orbs = convertScrapedMediaToDict(dataWakResult.orbGifs.data);
+
+  return {
+    perks: perks,
+    spells: spells,
+    enemies: enemies,
+    orbs: orbs,
+    materials: materials,
+  };
 };
 
-const convertScrapedMediaToArray = (
+const convertScrapedMediaToDict = (
   dict: StringKeyDictionary<NoitaScrapedMedia>,
 ): StringKeyDictionary<NoitaScrapedMedia[]> => {
   const entries = Object.entries(dict).map((entry) => {
@@ -39,7 +48,7 @@ const convertScrapedMediaToArray = (
 
 interface Base64ImageHolder {
   id: string;
-  imageBase64: string;
+  imageBase64?: string;
 }
 const appendBase64ImagesToMedia = async (
   list: Base64ImageHolder[],
@@ -50,6 +59,10 @@ const appendBase64ImagesToMedia = async (
 
     if (!(id in media)) {
       media[id] = [];
+    }
+
+    if (!item.imageBase64) {
+      continue;
     }
 
     const imageSize = await imageHelpers.getImageSizeBase64(item.imageBase64);
@@ -79,9 +92,9 @@ const appendBase64ImagesToMedia = async (
         newHeight = maxSize;
       } else if (imageSize.width < imageSize.height) {
         newWidth = maxSize;
-        newHeight = (maxSize / imageSize.width) * imageSize.height;
+        newHeight = Math.round((maxSize / imageSize.width) * imageSize.height);
       } else {
-        newWidth = (maxSize / imageSize.height) * imageSize.width;
+        newWidth = Math.round((maxSize / imageSize.height) * imageSize.width);
         newHeight = maxSize;
       }
 

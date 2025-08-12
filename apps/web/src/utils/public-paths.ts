@@ -74,5 +74,17 @@ export const publicPaths = {
         };
       },
     },
+    material: {
+      image({
+        materialId,
+        type,
+      }: {
+        materialId: string;
+        type?: NoitaScrapedMediaImage['imageType'];
+      }) {
+        type ??= 'default';
+        return `/g/materials/${materialId}/images/${type}.png`;
+      },
+    },
   },
 };

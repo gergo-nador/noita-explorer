@@ -1,13 +1,10 @@
 import { useNoitaDataWakStore } from '../../stores/noita-data-wak.ts';
 import { useEffect, useMemo, useState } from 'react';
-import {
-  arrayHelpers,
-  colorHelpers,
-  imageHelpers,
-} from '@noita-explorer/tools';
+import { arrayHelpers, colorHelpers } from '@noita-explorer/tools';
 import { NoitaMaterial } from '@noita-explorer/model-noita';
 import { StringKeyDictionary } from '@noita-explorer/model';
 import { Flex } from '@noita-explorer/react-utils';
+import { publicPaths } from '../../utils/public-paths.ts';
 
 interface MaterialTreeNode extends NoitaMaterial {
   children: MaterialTreeNode[];
@@ -91,14 +88,15 @@ const MaterialTreeNodeComponent = ({
   const [textBackgroundColor, setTextBackgroundColor] = useState<string>();
 
   useEffect(() => {
-    if (node.graphicsImageBase64) {
-      imageHelpers
-        .getAverageColorBase64(node.graphicsImageBase64)
-        .then((color) => {
-          setTextBackgroundColor(color);
-          const contrast = colorHelpers.getRgbaContractsColor(color);
-          setTextColor(contrast);
-        });
+    if (Math.random() === 2) {
+      //imageHelpers
+      //  .getAverageColorBase64(node.graphicsImageBase64)
+      //  .then((color) => {
+      //    setTextBackgroundColor(color);
+      //    const contrast = colorHelpers.getRgbaContractsColor(color);
+      //    setTextColor(contrast);
+      //  });
+      setTextBackgroundColor('black');
     } else {
       const color = node.graphicsColor ?? node.wangColorHtml;
       const contrast = colorHelpers.getRgbaContractsColor(color);
@@ -128,7 +126,7 @@ const MaterialTreeNodeComponent = ({
         <div
           style={{
             padding: 10,
-            backgroundImage: `url(${node.graphicsImageBase64})`,
+            backgroundImage: `url(${publicPaths.generated.material.image({ materialId: node.id })})`,
             backgroundColor: node.graphicsColor ?? node.wangColorHtml,
           }}
         >

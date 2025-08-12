@@ -187,12 +187,12 @@ export const SetupDesktopScraper = () => {
               title={'Materials'}
               result={dataWakScrapeResult.materials}
               dataIconMapper={(material) => {
-                if (material.graphicsImageBase64) {
+                if (material.imageBase64) {
                   return (
                     <ProgressIcon
                       key={material.id}
                       type={'regular'}
-                      icon={material.graphicsImageBase64}
+                      icon={material.imageBase64}
                       size={24}
                     />
                   );

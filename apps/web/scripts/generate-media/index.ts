@@ -79,6 +79,10 @@ function generateMedia(
   fs.mkdirSync(fsPath, { recursive: true });
 
   for (const [id, mediaArr] of Object.entries(mediaDict)) {
+    if (mediaArr.length === 0) {
+      continue;
+    }
+
     const mediaPath = path.resolve(fsPath, id);
     fs.mkdirSync(mediaPath, { recursive: true });
 

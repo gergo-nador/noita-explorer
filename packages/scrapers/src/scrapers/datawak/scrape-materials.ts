@@ -3,12 +3,12 @@ import {
   StringKeyDictionary,
 } from '@noita-explorer/model';
 import {
-  NoitaMaterial,
   NoitaMaterialReaction,
   NoitaMaterialReactionComponent,
   NoitaTranslation,
   NoitaMaterialCellType,
   NoitaMaterialCellTypeValidValues,
+  NoitaScrapedMaterial,
 } from '@noita-explorer/model-noita';
 import { noitaPaths } from '../../noita-paths.ts';
 import {
@@ -25,7 +25,7 @@ export const scrapeMaterials = async ({
   dataWakParentDirectoryApi: FileSystemDirectoryAccess;
   translations: StringKeyDictionary<NoitaTranslation>;
 }): Promise<{
-  materials: NoitaMaterial[];
+  materials: NoitaScrapedMaterial[];
   reactions: NoitaMaterialReaction[];
 }> => {
   const materialsPath = await dataWakParentDirectoryApi.path.join(
@@ -46,7 +46,7 @@ export const scrapeMaterials = async ({
   const cellDataChildTags = materialsTag.findTagArray('CellDataChild');
   const reactionTags = materialsTag.findTagArray('Reaction');
 
-  const materials: NoitaMaterial[] = [];
+  const materials: NoitaScrapedMaterial[] = [];
 
   const materialTags = [...cellDataTags, ...cellDataChildTags];
   for (const c of materialTags) {
@@ -74,12 +74,12 @@ const extractCellData = async ({
   xml: XmlWrapperType;
   translations: StringKeyDictionary<NoitaTranslation>;
   dataWakParentDirectoryApi: FileSystemDirectoryAccess;
-}): Promise<NoitaMaterial> => {
+}): Promise<NoitaScrapedMaterial> => {
   const id = xml.getRequiredAttribute('name').asText()!;
   const tags = xml.getAttribute('tags')?.asText();
   const wangColor = xml.getRequiredAttribute('wang_color').asText()!;
 
-  const material: NoitaMaterial = {
+  const material: NoitaScrapedMaterial = {
     id: id,
     name: id,
     cellType: 'liquid',
@@ -98,7 +98,7 @@ const extractCellData = async ({
     gfxGlow: xml.getAttribute('gfx_glow')?.asInt(),
     gfxGlowColor: xml.getAttribute('gfx_glow_color')?.asText(),
     graphicsColor: undefined,
-    graphicsImageBase64: undefined,
+    imageBase64: undefined,
 
     parent: undefined,
     stainEffects: [],
@@ -176,7 +176,7 @@ const extractCellData = async ({
           await dataWakParentDirectoryApi.getFile(textureFilePath);
 
         const image = await textureFile.read.asImageBase64();
-        material.graphicsImageBase64 = image;
+        material.imageBase64 = image;
       }
     }
 

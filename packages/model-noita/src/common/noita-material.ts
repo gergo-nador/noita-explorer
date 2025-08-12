@@ -17,7 +17,7 @@ export interface NoitaMaterial {
   gfxGlow: number | undefined;
   gfxGlowColor: string | undefined;
   graphicsColor: string | undefined;
-  graphicsImageBase64: string | undefined;
+  hasGraphicsImage: boolean;
   // Makes the material conduct electricity. Defaults to 1 when
   // cell_type="liquid" and liquid_sand="0", otherwise it defaults to 0.
   electricalConductivity: boolean;

@@ -5,6 +5,7 @@ import {
   NoitaEnemyImageMedia,
   NoitaEnemyMedia,
   NoitaEnemyVariant,
+  NoitaMaterial,
   NoitaPerk,
   NoitaScrapedMedia,
   NoitaSpell,
@@ -24,7 +25,7 @@ export const convertScrapeResultsToDataWak = (
   const scrapedEnemies = results.enemies.data ?? [];
   const scrapedEnemyMedia = results.enemyMedia.data ?? {};
   const wandConfigs = results.wandConfigs.data ?? [];
-  const materials = results.materials.data ?? [];
+  const scrapedMaterials = results.materials.data ?? [];
   const materialReactions = results.materialReactions.data ?? [];
 
   // handle perks
@@ -70,6 +71,19 @@ export const convertScrapeResultsToDataWak = (
 
     return enemy;
   });
+
+  // handle materials
+  const materials: NoitaMaterial[] = scrapedMaterials.map(
+    (m): NoitaMaterial => {
+      const material = {
+        ...m,
+        hasGraphicsImage: Boolean(m.imageBase64),
+        imageBase64: undefined,
+      };
+
+      return material;
+    },
+  );
 
   // finalize data wak
   const now = new Date();

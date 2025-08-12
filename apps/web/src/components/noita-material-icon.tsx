@@ -65,13 +65,16 @@ export const NoitaMaterialIcon = ({ material }: NoitaMaterialIconProps) => {
     return <InventoryIcon icon={materialIcon} />;
   }
 
-  if (material.graphicsImageBase64) {
+  if (material.hasGraphicsImage) {
+    const path = publicPaths.generated.material.image({
+      materialId: material.id,
+    });
     return (
       <div
         style={{
           width: '100%',
           height: '100%',
-          backgroundImage: `url(${material.graphicsImageBase64})`,
+          backgroundImage: `url(${path})`,
           backgroundRepeat: 'repeat',
         }}
       ></div>
