@@ -2,6 +2,7 @@ import { NoitaEnemy } from '@noita-explorer/model-noita';
 import { useNoitaUnits } from '../../../hooks/use-noita-units.ts';
 import { useSettingsStore } from '../../../stores/settings.ts';
 import {
+  BooleanIcon,
   Header,
   Icon,
   NoitaTooltipWrapper,
@@ -109,7 +110,9 @@ export const EnemyOverview = ({ enemy }: { enemy: NoitaEnemy }) => {
       <br />
       <div>Bleeds: {enemy.bloodMaterial}</div>
       <div>Corpse: {enemy.ragdollMaterial}</div>
-      <div>Predator: {enemy.genomeData?.isPredator ? 'Yes' : 'No'}</div>
+      <div>
+        Predator: <BooleanIcon value={enemy.genomeData?.isPredator} />
+      </div>
       <div>{enemy.knockBackResistance}</div>
 
       <br />
