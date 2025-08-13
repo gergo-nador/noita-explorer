@@ -9,6 +9,7 @@ import { setDataWak } from '../utils/set-data-wak';
 import { generatePathsFromRoutes } from '../utils/generate-paths-from-routes';
 import { renderNoSsgIndexHtml } from './render-no-ssg-index-html';
 import { deployUrls } from '../../src/utils/deploy-urls';
+import { removePreloadLinks } from '../utils/jsdom-helper';
 
 /**
  * Generates static sites of the React app
@@ -29,6 +30,7 @@ async function generateStaticSites() {
   const generatedPaths = generatePathsFromRoutes(routes);
 
   for (const generatedPath of generatedPaths) {
+    console.log('rendering path ' + generatedPath.path);
     let webPath = generatedPath.path;
     if (!generatedPath.path.startsWith('/')) {
       webPath = '/' + webPath;
@@ -39,9 +41,11 @@ async function generateStaticSites() {
     const hasSSG = generatedPath.route.ssg !== false;
 
     try {
-      const html: string = hasSSG
+      const rawhtml: string = hasSSG
         ? await renderRouteSsg(webPath)
         : renderNoSsgIndexHtml(canonicalUrl);
+
+      const html = removePreloadLinks(rawhtml);
 
       const fsPath = createFsPathFromWebPath(generatedPath.path);
 
