@@ -251,6 +251,7 @@ export const routes: NoitaRouteObject[] = [
             children: [
               {
                 path: '',
+                ssg: false,
                 element: (
                   <>
                     <SeoDefaultPage
@@ -264,6 +265,7 @@ export const routes: NoitaRouteObject[] = [
               {
                 path: ':materialId',
                 element: <WikiMaterialDetails />,
+                ssg: false,
                 getAllDynamicParams: () => {
                   const materialIds = noitaDataWakStore
                     .getState()
