@@ -307,14 +307,14 @@ function renderMaterialContainer(
 ): Promise<string> {
   const [r, g, b] = color(options.color).rgb().array();
 
-  const potionColorMain = {
+  const containerColorMain = {
     r: r / 255,
     g: g / 255,
     b: b / 255,
     a: 1,
   };
 
-  const potionFilter = {
+  const containerFilter = {
     r: 0.85,
     g: 0.85,
     b: 0.85,
@@ -336,25 +336,25 @@ function renderMaterialContainer(
 
     for (let i = 0; i < data.length; i += 4) {
       const rowIndex = Math.floor(i / (canvas.width * 4));
-      const isPotionMouthRow =
+      const isContainerMouthRow =
         rowIndex >= options.mouthRowStart && rowIndex <= options.mouthRowEnd;
 
-      data[i] *= potionFilter.r;
-      data[i + 1] *= potionFilter.g;
-      data[i + 2] *= potionFilter.b;
-      data[i + 3] *= potionFilter.a;
+      data[i] *= containerFilter.r;
+      data[i + 1] *= containerFilter.g;
+      data[i + 2] *= containerFilter.b;
+      data[i + 3] *= containerFilter.a;
 
-      if (!isPotionMouthRow) {
-        data[i] *= potionColorMain.r;
-        data[i + 1] *= potionColorMain.g;
-        data[i + 2] *= potionColorMain.b;
-        data[i + 3] *= potionColorMain.a;
+      if (!isContainerMouthRow) {
+        data[i] *= containerColorMain.r;
+        data[i + 1] *= containerColorMain.g;
+        data[i + 2] *= containerColorMain.b;
+        data[i + 3] *= containerColorMain.a;
       }
     }
     return imageData;
   }
 
-  function renderPotion() {
+  function renderContainer() {
     if (ctx == null) {
       throw new Error(
         'Could not retrieve CanvasRenderingContext2D from canvas.',
@@ -375,7 +375,7 @@ function renderMaterialContainer(
       tex.onload = () => {
         canvas.width = tex.width;
         canvas.height = tex.height;
-        const base64 = renderPotion();
+        const base64 = renderContainer();
         resolve(base64);
       };
     } catch (e) {
