@@ -8,11 +8,11 @@ import {
 import { useMemo, useState } from 'react';
 import { arrayHelpers } from '@noita-explorer/tools';
 import { NoitaMaterial } from '@noita-explorer/model-noita';
-import { MaterialOverview } from './material-overview.tsx';
 import { MaterialFilters } from './material-filters.ts';
 import { MaterialFiltersView } from './material-filters-view.tsx';
 import { Flex } from '@noita-explorer/react-utils';
-import { useStateWithQueryParamsString } from '../../../hooks/query-params/use-state-with-query-params-string.ts';
+import { Link, Outlet } from 'react-router-dom';
+import { pages } from '../../../routes/pages.ts';
 
 export const WikiMaterials = () => {
   const { data } = useNoitaDataWakStore();
@@ -30,15 +30,6 @@ export const WikiMaterials = () => {
     uniqueMaterials.sort((a, b) => a.name.localeCompare(b.name));
     return uniqueMaterials;
   }, [data?.materials]);
-
-  const [selectedMaterial, setSelectedMaterial] =
-    useStateWithQueryParamsString<NoitaMaterial>({
-      key: 'material',
-      enabled: Boolean(data?.materials),
-      queryParamValueSelector: (material) => material.id,
-      findValueBasedOnQueryParam: (materialId) =>
-        materialsUnique.find((material) => material.id === materialId),
-    });
 
   const allAvailableTags = useMemo(() => {
     const allTags = materialsUnique.map((m) => m.tags).flat();
@@ -95,18 +86,19 @@ export const WikiMaterials = () => {
               >
                 {!filter && icon}
                 {filter && (
-                  <ActiveIconWrapper
-                    id={'material-' + material.id}
-                    key={'material-' + material.id}
-                    onClick={() => setSelectedMaterial(material)}
-                    tooltip={
-                      <div>
-                        <div style={{ fontSize: 20 }}>{material.name}</div>
-                      </div>
-                    }
-                  >
-                    {icon}
-                  </ActiveIconWrapper>
+                  <Link to={pages.wiki.materialDetail(material.id)}>
+                    <ActiveIconWrapper
+                      id={'material-' + material.id}
+                      key={'material-' + material.id}
+                      tooltip={
+                        <div>
+                          <div style={{ fontSize: 20 }}>{material.name}</div>
+                        </div>
+                      }
+                    >
+                      {icon}
+                    </ActiveIconWrapper>
+                  </Link>
                 )}
               </div>
             );
@@ -123,13 +115,7 @@ export const WikiMaterials = () => {
           top: 0,
         }}
       >
-        {!selectedMaterial && <span>Select a material</span>}
-        {selectedMaterial && (
-          <MaterialOverview
-            key={selectedMaterial.id}
-            material={selectedMaterial}
-          />
-        )}
+        <Outlet />
       </Card>
     </Flex>
   );

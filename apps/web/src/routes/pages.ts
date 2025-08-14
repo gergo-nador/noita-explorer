@@ -18,6 +18,7 @@ export const pages = {
     enemies: '/wiki/enemies',
     enemyDetail: (enemyId: string) => '/wiki/enemies/' + enemyId,
     materials: '/wiki/materials',
+    materialDetail: (materialId: string) => '/wiki/materials/' + materialId,
     materialsTree: '/wiki/materials-tree',
   },
   holidays: '/holidays',

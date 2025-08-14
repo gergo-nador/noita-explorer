@@ -34,6 +34,7 @@ import { NoitaRouteObject } from './router.types.ts';
 import { noitaDataWakStore } from '../stores/noita-data-wak.ts';
 import { WikiSpellDetails } from '../pages/wiki/spells/wiki-spell-details.tsx';
 import { WikiEnemyDetails } from '../pages/wiki/enemies/wiki-enemy-details.tsx';
+import { WikiMaterialDetails } from '../pages/wiki/materials/wiki-material-details.tsx';
 
 export const routes: NoitaRouteObject[] = [
   {
@@ -246,15 +247,36 @@ export const routes: NoitaRouteObject[] = [
           {
             path: 'materials',
             ssg: false,
-            element: (
-              <>
-                <SeoDefaultPage
-                  title='Materials - Wiki'
-                  description='Browse any in-game material.'
-                />
-                <WikiMaterials />
-              </>
-            ),
+            element: <WikiMaterials />,
+            children: [
+              {
+                path: '',
+                element: (
+                  <>
+                    <SeoDefaultPage
+                      title='Materials - Wiki'
+                      description='Browse any in-game material.'
+                    />
+                    <div>Select a material</div>
+                  </>
+                ),
+              },
+              {
+                path: ':materialId',
+                element: <WikiMaterialDetails />,
+                getAllDynamicParams: () => {
+                  const materialIds = noitaDataWakStore
+                    .getState()
+                    .data?.materials?.map((material) => material.id);
+
+                  if (materialIds === undefined) {
+                    return [];
+                  }
+
+                  return materialIds;
+                },
+              },
+            ],
           },
           ...addIf(__ENV__ !== 'production', {
             path: 'materials-tree',
