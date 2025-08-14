@@ -3,6 +3,7 @@ import {
   CropImageBase64Options,
   FlipOptions,
   ImageHelpersType,
+  MaterialContainerOptions,
   OverlayOptions,
   PixelColorOptions,
 } from './images.types.ts';
@@ -75,6 +76,14 @@ async function flipImage(base64: string, options?: FlipOptions) {
   return imageHelper.flipImage(base64, options);
 }
 
+async function renderMaterialContainer(
+  containerImage: string,
+  options: MaterialContainerOptions,
+) {
+  const imageHelper = await getImageHelper();
+  return imageHelper.renderMaterialContainer(containerImage, options);
+}
+
 export const imageHelpers: ImageHelpersType = {
   trimWhitespaceBase64,
   scaleImageBase64,
@@ -85,4 +94,5 @@ export const imageHelpers: ImageHelpersType = {
   pixelRecolor,
   overlayImages,
   flipImage,
+  renderMaterialContainer,
 };

@@ -25,6 +25,12 @@ export interface FlipOptions {
   vertical: boolean;
 }
 
+export interface MaterialContainerOptions {
+  color: string;
+  mouthRowStart: number;
+  mouthRowEnd: number;
+}
+
 export interface ImageHelpersType {
   trimWhitespaceBase64: (base64: string) => Promise<string>;
   scaleImageBase64: (base64: string, scaleFactor: number) => Promise<string>;
@@ -44,4 +50,8 @@ export interface ImageHelpersType {
     options?: OverlayOptions,
   ) => Promise<string>;
   flipImage: (base64: string, options?: FlipOptions) => Promise<string>;
+  renderMaterialContainer: (
+    containerImage: string,
+    options: MaterialContainerOptions,
+  ) => Promise<string>;
 }

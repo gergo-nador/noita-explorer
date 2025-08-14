@@ -5,7 +5,7 @@ import {
   NoitaScrapedMediaImage,
 } from '@noita-explorer/model-noita';
 import { imageHelpers } from '@noita-explorer/tools';
-import { scaleUpImage } from './scale-up-image';
+import { scaleUpImage } from './images/scale-up-image';
 
 interface Props {
   dataWakResult: NoitaDataWakScrapeResult;

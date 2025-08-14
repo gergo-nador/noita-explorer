@@ -146,6 +146,12 @@ async function flipImage(imageBase64: string, options?: FlipOptions) {
   return await jimpToBase64(image);
 }
 
+function renderMaterialContainer(): Promise<string> {
+  return throwHelpers.notImplementedInCurrentEnvironment(
+    renderMaterialContainer,
+  );
+}
+
 export const imageHelpers: ImageHelpersType = {
   trimWhitespaceBase64,
   scaleImageBase64,
@@ -156,4 +162,5 @@ export const imageHelpers: ImageHelpersType = {
   pixelRecolor,
   overlayImages,
   flipImage,
+  renderMaterialContainer,
 };
