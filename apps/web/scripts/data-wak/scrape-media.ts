@@ -22,7 +22,9 @@ export const scrapeMedia = async ({ dataWakResult }: Props) => {
   await appendBase64ImagesToMedia(dataWakResult.enemies.data, enemies);
 
   const materials: StringKeyDictionary<NoitaScrapedMedia[]> = {};
-  await appendBase64ImagesToMedia(dataWakResult.materials.data, materials);
+  await appendBase64ImagesToMedia(dataWakResult.materials.data, materials, {
+    skipHighQuality: true,
+  });
 
   const orbs = convertScrapedMediaToDict(dataWakResult.orbGifs.data);
 
@@ -53,6 +55,7 @@ interface Base64ImageHolder {
 const appendBase64ImagesToMedia = async (
   list: Base64ImageHolder[],
   media: StringKeyDictionary<NoitaScrapedMedia[]>,
+  options?: { skipHighQuality?: boolean },
 ) => {
   for (const item of list) {
     const id = item.id;
@@ -78,6 +81,10 @@ const appendBase64ImagesToMedia = async (
       };
 
       media[id].push(image);
+    }
+
+    if (options?.skipHighQuality) {
+      continue;
     }
 
     // high quality image (around 500 pixels height or width)
