@@ -95,6 +95,7 @@ export const WikiMaterials = () => {
                           <div style={{ fontSize: 20 }}>{material.name}</div>
                         </div>
                       }
+                      style={{ cursor: 'pointer' }}
                     >
                       {icon}
                     </ActiveIconWrapper>
