@@ -4,6 +4,7 @@ import { Flex } from '@noita-explorer/react-utils';
 import {
   Button,
   ButtonDecoration,
+  Icon,
   useToast,
 } from '@noita-explorer/noita-component-library';
 
@@ -53,6 +54,11 @@ export const Link = ({
           }}
         >
           {children}
+          {external && (
+            <span style={{ marginLeft: 8 }}>
+              <Icon src='/images/external/external-link.png' size={15} />
+            </span>
+          )}
         </Button>
       </LinkTag>
     </Flex>

@@ -10,11 +10,10 @@ import {
 import { Flex } from '@noita-explorer/react-utils';
 import { NoitaProtections } from '../../../noita/noita-protections.ts';
 import { DamageMultiplierDisplay } from './damage-multiplier-display.tsx';
-import { CopyLinkText } from '../../../components/copy-link-text.tsx';
 import { publicPaths } from '../../../utils/public-paths.ts';
 import { SpaceCharacter } from '../../../components/space-character.tsx';
 import { EnemyMediaComponent } from './enemy-media-component.tsx';
-import { pages } from '../../../routes/pages.ts';
+import { Link } from '../../../components/link.tsx';
 
 export const EnemyOverview = ({ enemy }: { enemy: NoitaEnemy }) => {
   const noitaUnits = useNoitaUnits();
@@ -42,16 +41,14 @@ export const EnemyOverview = ({ enemy }: { enemy: NoitaEnemy }) => {
             paddingLeft: 10,
           }}
         >
-          <CopyLinkText link={pages.wiki.enemyDetail(enemy.id)} iconSize={24}>
-            <div
-              style={{
-                fontSize: 'clamp(1.4rem, 2vw, 2.2rem)',
-                lineHeight: 1.2,
-              }}
-            >
-              {enemy.name}
-            </div>
-          </CopyLinkText>
+          <div
+            style={{
+              fontSize: 'clamp(1.4rem, 2vw, 2.2rem)',
+              lineHeight: 1.2,
+            }}
+          >
+            {enemy.name}
+          </div>
           {progressDisplayDebugData && (
             <div style={{ marginTop: 5 }}>{enemy.id}</div>
           )}
@@ -269,6 +266,17 @@ export const EnemyOverview = ({ enemy }: { enemy: NoitaEnemy }) => {
             </div>
           ))}
         </div>
+      )}
+
+      {enemy.wikiLink && (
+        <>
+          <hr />
+          <div>
+            <Link to={enemy.wikiLink} external>
+              {enemy.wikiLink}
+            </Link>
+          </div>
+        </>
       )}
     </div>
   );

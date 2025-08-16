@@ -1,5 +1,6 @@
 import { fetchWikiEnemies, fetchWikiPerks, fetchWikiSpells } from './fetchers';
 import { readDataWak, writeDataWak } from '../utils/set-data-wak';
+import { stringHelpers } from '@noita-explorer/tools';
 
 run();
 
@@ -10,7 +11,10 @@ async function run() {
   {
     const perkWikis = await fetchWikiPerks();
     for (const perk of dataWak.perks) {
-      const name = perk.name.toLowerCase();
+      const name = stringHelpers.trim({
+        text: perk.name.toLowerCase(),
+        fromEnd: ' (one-off)',
+      });
       const wiki = perkWikis[name];
 
       if (!wiki) continue;

@@ -28,5 +28,8 @@ npm run scrape-data-wak
 echo Generating media files...
 npm run generate-media
 
+echo Scraping wiki links
+npm run scrape-wiki-gg-links
+
 echo Generate sitemap.txt
 npm run generate-sitemap

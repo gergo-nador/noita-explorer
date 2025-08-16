@@ -6,9 +6,8 @@ import {
 } from '@noita-explorer/noita-component-library';
 import { Flex } from '@noita-explorer/react-utils';
 import { NoitaProtections } from '../../../noita/noita-protections.ts';
-import { CopyLinkText } from '../../../components/copy-link-text.tsx';
-import { pages } from '../../../routes/pages.ts';
 import { publicPaths } from '../../../utils/public-paths.ts';
+import { Link } from '../../../components/link.tsx';
 
 export const PerkOverview = ({ perk }: { perk: NoitaPerk }) => {
   const tableSectionDivider = <td colSpan={3} style={{ height: 20 }}></td>;
@@ -21,6 +20,7 @@ export const PerkOverview = ({ perk }: { perk: NoitaPerk }) => {
           gridTemplateColumns: '15% 1fr',
           width: '100%',
           gap: 5,
+          marginBottom: 20,
         }}
       >
         <Flex height='100%' align='center'>
@@ -30,13 +30,12 @@ export const PerkOverview = ({ perk }: { perk: NoitaPerk }) => {
           />
         </Flex>
         <Flex justify='center' column>
-          <CopyLinkText link={pages.wiki.perkDetail(perk.id)}>
-            <div style={{ fontSize: 20, marginBottom: 10 }}>{perk.name}</div>
-          </CopyLinkText>
+          <div style={{ fontSize: 20, marginBottom: 10 }}>{perk.name}</div>
           <div>{perk.description}</div>
         </Flex>
       </div>
-      <div style={{ marginTop: 20, width: 'max-content' }}>
+
+      <div style={{ width: 'max-content' }}>
         <Flex style={{ width: 'max-content' }}>
           {perk.gameEffects
             .filter((gameEffect) => gameEffect in NoitaProtections)
@@ -132,6 +131,17 @@ export const PerkOverview = ({ perk }: { perk: NoitaPerk }) => {
           </tbody>
         </table>
       </Flex>
+
+      {perk.wikiLink && (
+        <>
+          <hr />
+          <div>
+            <Link to={perk.wikiLink} external>
+              {perk.wikiLink}
+            </Link>
+          </div>
+        </>
+      )}
     </>
   );
 };

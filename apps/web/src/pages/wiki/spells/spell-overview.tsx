@@ -5,9 +5,8 @@ import { useNoitaUnits } from '../../../hooks/use-noita-units.ts';
 import { TooltipRowData } from '../../../components/tooltips/noita-spell-tooltip.tsx';
 import { NoitaNumberModifier } from '../../../components/tooltips/noita-number-modifier.tsx';
 import { Flex } from '@noita-explorer/react-utils';
-import { CopyLinkText } from '../../../components/copy-link-text.tsx';
 import { publicPaths } from '../../../utils/public-paths.ts';
-import { pages } from '../../../routes/pages.ts';
+import { Link } from '../../../components/link.tsx';
 
 export const SpellOverview = ({ spell }: { spell: NoitaSpell }) => {
   const actionType = NoitaSpellTypesDictionary[spell.type];
@@ -406,9 +405,7 @@ export const SpellOverview = ({ spell }: { spell: NoitaSpell }) => {
         </Flex>
 
         <Flex justify='center' column>
-          <CopyLinkText link={pages.wiki.spellDetail(spell.id)}>
-            <div style={{ fontSize: 20, marginBottom: 10 }}>{spell.name}</div>
-          </CopyLinkText>
+          <div style={{ fontSize: 20, marginBottom: 10 }}>{spell.name}</div>
           <div>{spell.description}</div>
         </Flex>
       </div>
@@ -476,6 +473,16 @@ export const SpellOverview = ({ spell }: { spell: NoitaSpell }) => {
           </tbody>
         </table>
       </div>
+      {spell.wikiLink && (
+        <>
+          <hr />
+          <div>
+            <Link to={spell.wikiLink} external>
+              {spell.wikiLink}
+            </Link>
+          </div>
+        </>
+      )}
     </div>
   );
 };

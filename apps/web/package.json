@@ -20,6 +20,7 @@
     "data-wak-download": "npx tsx scripts/data-wak/download.ts -o dist-tmp",
     "scrape-data-wak": "npx tsx scripts/data-wak/scrape.ts -t dist-tmp/common.csv --data-wak dist-tmp/data.wak --o-wak public/noita_wak_data.json --o-media dist-tmp/noita_data_media.json",
     "generate-media": "npx tsx scripts/generate-media/index.ts --media-data dist-tmp/noita_data_media.json -o public",
+    "scrape-wiki-gg-links": "npx tsx scripts/wiki-gg/index.ts",
     "generate-sitemap": "npx tsx scripts/sitemap/index.ts -o public/sitemap.txt",
     "generate-static-site": "npx tsx scripts/ssg/index.ts"
   },

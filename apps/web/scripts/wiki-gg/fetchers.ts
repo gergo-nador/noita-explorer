@@ -1,9 +1,11 @@
 import { JSDOM } from 'jsdom';
 
+const wikiBaseUrl = 'https://noita.wiki.gg';
+
 const wikiLinks = {
-  enemies: 'https://noita.wiki.gg/wiki/Creatures',
-  perks: 'https://noita.wiki.gg/wiki/Perks',
-  spells: 'https://noita.wiki.gg/wiki/Spells',
+  enemies: wikiBaseUrl + '/wiki/Creatures',
+  perks: wikiBaseUrl + '/wiki/Perks',
+  spells: wikiBaseUrl + '/wiki/Spells',
 };
 
 async function fetchHtml(url: string) {
@@ -29,7 +31,7 @@ export async function fetchWikiEnemies() {
     const linkTag = enemyTag.querySelector('.enemy-query-item-name a');
     if (!linkTag) continue;
 
-    const link = linkTag.getAttribute('href');
+    const link = wikiBaseUrl + linkTag.getAttribute('href');
     const name = linkTag.textContent.toLowerCase();
 
     scrapedEnemies[name] = { link };
@@ -49,7 +51,7 @@ export async function fetchWikiPerks() {
     const linkTag = perkTag.querySelector('.perk-query-label a');
     if (!linkTag) continue;
 
-    const link = linkTag.getAttribute('href');
+    const link = wikiBaseUrl + linkTag.getAttribute('href');
     const name = linkTag.textContent.toLowerCase();
 
     scrapedPerks[name] = { link };
@@ -68,7 +70,7 @@ export async function fetchWikiSpells() {
     const linkTag = spellTag.querySelector('a');
     if (!linkTag) continue;
 
-    const link = linkTag.getAttribute('href');
+    const link = wikiBaseUrl + linkTag.getAttribute('href');
     const name = linkTag.getAttribute('title').toLowerCase();
 
     scrapedSpells[name] = { link };

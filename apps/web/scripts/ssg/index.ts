@@ -1,4 +1,5 @@
 import '../utils/fake-browser-apis';
+import '../utils/dotenv-init';
 
 import { stringHelpers } from '@noita-explorer/tools';
 import * as path from 'node:path';
@@ -14,6 +15,11 @@ import { removePreloadLinks } from '../utils/jsdom-helper';
 /**
  * Generates static sites of the React app
  */
+
+if (process.env.CI_SSG_DISABLED === '1') {
+  console.log('SSG disabled as CI_SSG_DISABLED=1');
+  process.exit(0);
+}
 
 setDataWak(noitaDataWakStore);
 
