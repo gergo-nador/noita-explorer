@@ -6,6 +6,8 @@ import { NoitaEnemyMedia } from './noita-enemy-media.ts';
 export interface NoitaEnemy extends NoitaProgressEntity {
   id: string;
   name: string;
+  wikiLink?: string;
+
   hp: number | undefined;
   maxHp: number | undefined;
   airNeeded: boolean | undefined;

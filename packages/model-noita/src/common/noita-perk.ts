@@ -2,6 +2,7 @@ import { NoitaProgressEntity } from './noita-progress-entity.ts';
 
 export interface NoitaPerk extends NoitaProgressEntity {
   description: string;
+  wikiLink?: string;
 
   // perk specific
   stackable: boolean;

@@ -4,6 +4,7 @@ import { NoitaProgressEntity } from '../noita-progress-entity.ts';
 export interface NoitaSpell extends NoitaProgressEntity {
   description: string;
   type: string;
+  wikiLink?: string;
 
   // properties from gun_actions
   price: number;
