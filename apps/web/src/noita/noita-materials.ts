@@ -12,9 +12,13 @@ export const getMaterialIconType = (
   } else return;
 };
 
-export function renderMaterialPotion(material: NoitaMaterial) {
-  const baseImage = publicPaths.static.dataWak.misc('potion');
+export function renderMaterialPotion(
+  material: NoitaMaterial,
+  baseImage?: string,
+) {
+  baseImage ??= publicPaths.static.dataWak.misc('potion');
   const color = material.graphicsColor ?? material.wangColorHtml;
+
   return imageHelpers.renderMaterialContainer(baseImage, {
     color: color,
     mouthRowStart: 2,
@@ -22,9 +26,13 @@ export function renderMaterialPotion(material: NoitaMaterial) {
   });
 }
 
-export function renderMaterialPouch(material: NoitaMaterial) {
-  const baseImage = publicPaths.static.dataWak.misc('material_pouch');
+export function renderMaterialPouch(
+  material: NoitaMaterial,
+  baseImage?: string,
+) {
+  baseImage ??= publicPaths.static.dataWak.misc('material_pouch');
   const color = material.graphicsColor ?? material.wangColorHtml;
+
   return imageHelpers.renderMaterialContainer(baseImage, {
     color: color,
     mouthRowStart: 1,

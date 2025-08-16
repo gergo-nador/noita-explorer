@@ -1,4 +1,4 @@
-import { NoitaScrapedMediaImage } from '@noita-explorer/model-noita';
+type ImageType = 'default' | 'default-high-q';
 
 export const publicPaths = {
   static: {
@@ -21,25 +21,13 @@ export const publicPaths = {
       return { gif: path + 'default.gif', firstFrame: path + 'default-f.png' };
     },
     perk: {
-      image: ({
-        perkId,
-        type,
-      }: {
-        perkId: string;
-        type?: NoitaScrapedMediaImage['imageType'];
-      }) => {
+      image: ({ perkId, type }: { perkId: string; type?: ImageType }) => {
         type ??= 'default';
         return `/g/perks/${perkId}/images/${type}.png`;
       },
     },
     spell: {
-      image({
-        spellId,
-        type,
-      }: {
-        spellId: string;
-        type?: NoitaScrapedMediaImage['imageType'];
-      }) {
+      image({ spellId, type }: { spellId: string; type?: ImageType }) {
         type ??= 'default';
         return `/g/spells/${spellId}/images/${type}.png`;
       },
@@ -50,7 +38,7 @@ export const publicPaths = {
         type,
       }: {
         enemyId: string;
-        type?: NoitaScrapedMediaImage['imageType'];
+        type?: ImageType | 'physics';
       }) => {
         type ??= 'default';
         return `/g/enemies/${enemyId}/images/${type}.png`;
@@ -80,7 +68,7 @@ export const publicPaths = {
         type,
       }: {
         materialId: string;
-        type?: NoitaScrapedMediaImage['imageType'];
+        type?: ImageType | 'potion' | 'pouch';
       }) {
         type ??= 'default';
         return `/g/materials/${materialId}/images/${type}.png`;

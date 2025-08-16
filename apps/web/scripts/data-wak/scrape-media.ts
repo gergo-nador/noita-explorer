@@ -3,15 +3,18 @@ import {
   NoitaDataWakScrapeResult,
   NoitaScrapedMedia,
   NoitaScrapedMediaImage,
+  NoitaWakData,
 } from '@noita-explorer/model-noita';
 import { imageHelpers } from '@noita-explorer/tools';
 import { scaleUpImage } from './images/scale-up-image';
+import { createMaterialContainerImages } from './images/create-material-container-images';
 
 interface Props {
   dataWakResult: NoitaDataWakScrapeResult;
+  dataWak: NoitaWakData;
 }
 
-export const scrapeMedia = async ({ dataWakResult }: Props) => {
+export const scrapeMedia = async ({ dataWakResult, dataWak }: Props) => {
   const perks: StringKeyDictionary<NoitaScrapedMedia[]> = {};
   await appendBase64ImagesToMedia(dataWakResult.perks.data, perks);
 
@@ -25,6 +28,7 @@ export const scrapeMedia = async ({ dataWakResult }: Props) => {
   await appendBase64ImagesToMedia(dataWakResult.materials.data, materials, {
     skipHighQuality: true,
   });
+  await createMaterialContainerImages(dataWak.materials, materials);
 
   const orbs = convertScrapedMediaToDict(dataWakResult.orbGifs.data);
 
@@ -74,7 +78,7 @@ const appendBase64ImagesToMedia = async (
     {
       const image: NoitaScrapedMediaImage = {
         type: 'image',
-        imageType: 'default',
+        name: 'default',
         imageBase64: item.imageBase64,
         width: imageSize.width,
         height: imageSize.height,
@@ -113,7 +117,7 @@ const appendBase64ImagesToMedia = async (
 
       const highQualityImage: NoitaScrapedMediaImage = {
         type: 'image',
-        imageType: 'default-high-q',
+        name: 'default-high-q',
         imageBase64: highQualityImageBase64,
         width: newWidth,
         height: newHeight,

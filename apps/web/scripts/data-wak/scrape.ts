@@ -79,7 +79,7 @@ async function runScrape(args: Record<string, string>) {
   }
 
   // extract media information
-  const media = await scrapeMedia({ dataWakResult });
+  const media = await scrapeMedia({ dataWakResult, dataWak });
 
   // write media to file
   {

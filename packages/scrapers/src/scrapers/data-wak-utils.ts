@@ -130,7 +130,7 @@ const getEnemyMedia = ({
   } else if (media.type === 'image') {
     return {
       type: 'image',
-      imageType: media.imageType as NoitaEnemyImageMedia['imageType'],
+      imageType: media.name as NoitaEnemyImageMedia['imageType'],
       width: media.width,
       height: media.height,
     };

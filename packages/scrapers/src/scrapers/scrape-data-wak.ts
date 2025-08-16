@@ -299,7 +299,7 @@ const scrapeEnemyMedia = async ({
       const { width, height } = await imageHelpers.getImageSizeBase64(base64);
       const imageMedia: NoitaScrapedMediaImage = {
         type: 'image',
-        imageType: 'physics',
+        name: 'physics',
         imageBase64: base64,
         width,
         height,

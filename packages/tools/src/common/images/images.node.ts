@@ -2,11 +2,13 @@ import {
   CropImageBase64Options,
   FlipOptions,
   ImageHelpersType,
+  MaterialContainerOptions,
   OverlayBlendMode,
   OverlayOptions,
   PixelColorOptions,
 } from './images.types.ts';
 import { BlendMode, Jimp, JimpMime } from 'jimp';
+import Color from 'color';
 import { base64Helpers } from '../base64.ts';
 import { colorHelpers } from '../color-util.ts';
 import { throwHelpers } from '../throw.ts';
@@ -146,10 +148,74 @@ async function flipImage(imageBase64: string, options?: FlipOptions) {
   return await jimpToBase64(image);
 }
 
-function renderMaterialContainer(): Promise<string> {
-  return throwHelpers.notImplementedInCurrentEnvironment(
-    renderMaterialContainer,
-  );
+export async function renderMaterialContainer(
+  containerImage: string,
+  options: MaterialContainerOptions,
+): Promise<string> {
+  // parse color
+  const [r, g, b] = Color(options.color).rgb().array();
+
+  const potionColorMain = {
+    r: r / 255,
+    g: g / 255,
+    b: b / 255,
+    a: 1,
+  };
+
+  const potionFilter = {
+    r: 0.85,
+    g: 0.85,
+    b: 0.85,
+    a: 1,
+  };
+
+  const image = await getJimpImage(containerImage);
+
+  // ensure the bitmap is RGBA (Jimp uses RGBA)
+  const { width, height, data } = image.bitmap; // data is a Buffer of length width*height*4
+
+  // per-pixel manipulation
+  for (let y = 0; y < height; y++) {
+    const isPotionMouthRow =
+      y >= options.mouthRowStart && y <= options.mouthRowEnd;
+
+    for (let x = 0; x < width; x++) {
+      const idx = (y * width + x) * 4; // R, G, B, A
+
+      // read original channels (0..255)
+      let nr = data[idx];
+      let ng = data[idx + 1];
+      let nb = data[idx + 2];
+      let na = data[idx + 3];
+
+      // apply potionFilter first
+      nr = nr * potionFilter.r;
+      ng = ng * potionFilter.g;
+      nb = nb * potionFilter.b;
+      na = na * potionFilter.a;
+
+      // if not mouth row, additionally multiply by potionColorMain
+      if (!isPotionMouthRow) {
+        nr = nr * potionColorMain.r;
+        ng = ng * potionColorMain.g;
+        nb = nb * potionColorMain.b;
+        na = na * potionColorMain.a;
+      }
+
+      // write back (clamp 0..255)
+      data[idx] = clamp(Math.round(nr));
+      data[idx + 1] = clamp(Math.round(ng));
+      data[idx + 2] = clamp(Math.round(nb));
+      data[idx + 3] = clamp(Math.round(na));
+    }
+  }
+
+  // Jimp mutates image.bitmap.data in place, so now export to PNG buffer
+  return await jimpToBase64(image);
+}
+
+function clamp(v: number) {
+  return Math.max(0, Math.min(255, v));
 }
 
 export const imageHelpers: ImageHelpersType = {

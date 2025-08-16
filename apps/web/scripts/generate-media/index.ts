@@ -105,7 +105,7 @@ function generateImage({
   const imagesPath = path.resolve(fsPath, 'images');
   fs.mkdirSync(imagesPath, { recursive: true });
 
-  const imageFilePath = path.resolve(imagesPath, media.imageType + '.png');
+  const imageFilePath = path.resolve(imagesPath, media.name + '.png');
   const base64 = base64Helpers.trimMetadata(media.imageBase64);
   const buffer = Buffer.from(base64, 'base64');
   fs.writeFileSync(imageFilePath, buffer);
