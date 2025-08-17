@@ -21,31 +21,33 @@ export const SentryAcceptancePage = () => {
 
   return (
     <Card style={{ maxWidth: '500px' }}>
-      <h2>
-        <span>Anonymous Bug Tracking </span>
+      <h2 data-nosnippet='true'>
+        <span data-nosnippet='true'>Anonymous Bug Tracking </span>
         <Icon type='error' size={25} />
       </h2>
-      <div>As Noita Explorer is a software, it contains bugs.</div>
+      <div data-nosnippet='true'>
+        As Noita Explorer is a software, it contains bugs.
+      </div>
       <br />
-      <div>
+      <div data-nosnippet='true'>
         We are constantly fixing them, and you can help us doing it faster by
         sending us anonymised bug reports. We don't collect data about you, we
         collect about our own application and its errors.
       </div>
       <br />
-      <div>
+      <div data-nosnippet='true'>
         You can opt-in to bug reports by pressing the Accept button below.
       </div>
       <br />
-      <div>
+      <div data-nosnippet='true'>
         Note: Pressing "Yes" will refresh the page to enable our reporting
         system.
       </div>
       <PageBottomComponent>
-        <Button decoration={'right'} onClick={onRejectedClick}>
+        <Button decoration='right' onClick={onRejectedClick}>
           No
         </Button>
-        <Button decoration={'right'} onClick={onOptInClick}>
+        <Button decoration='right' onClick={onOptInClick}>
           Yes, let's help the developers!
         </Button>
       </PageBottomComponent>
