@@ -54,9 +54,12 @@ export const extractEnemyProperties = ({
   }
 
   const luaComponents = entityTag.findAllTags('LuaComponent');
-  for (const luaComponent of luaComponents) {
+  const deathScripts = luaComponents.filter(
+    (comp) => comp.getAttribute('script_death') !== undefined,
+  );
+  if (deathScripts.length === 1) {
     const goldDropScript = 'data/scripts/items/drop_money.lua';
-    const scriptDeath = luaComponent.getAttribute('script_death')?.asText();
+    const scriptDeath = luaComponents[0].getAttribute('script_death')?.asText();
 
     if (scriptDeath !== undefined && scriptDeath === goldDropScript) {
       enemy.hasGoldDrop = true;
