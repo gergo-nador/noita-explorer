@@ -24,10 +24,10 @@ export const WikiSpellDetails = () => {
           type: 'default-high-q',
         })}
       />
-      <div>
+      <main>
         {!spell && <span>Select a spell</span>}
         {spell && <SpellOverview key={spell.id} spell={spell} />}
-      </div>
+      </main>
     </>
   );
 };

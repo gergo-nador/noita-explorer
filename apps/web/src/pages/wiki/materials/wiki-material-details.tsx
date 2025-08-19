@@ -21,10 +21,10 @@ export const WikiMaterialDetails = () => {
         title={material?.name ?? 'Materials - Wiki'}
         description={material?.id ?? 'Browse any in-game material.'}
       />
-      <div>
+      <main>
         {!material && <span>Select a material</span>}
         {material && <MaterialOverview key={material.id} material={material} />}
-      </div>
+      </main>
     </>
   );
 };

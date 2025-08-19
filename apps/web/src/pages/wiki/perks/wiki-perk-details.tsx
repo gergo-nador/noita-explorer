@@ -24,10 +24,10 @@ export const WikiPerkDetails = () => {
           type: 'default-high-q',
         })}
       />
-      <div>
+      <main>
         {!perk && <span>Select a perk</span>}
         {perk && <PerkOverview key={perk.id} perk={perk} />}
-      </div>
+      </main>
     </>
   );
 };

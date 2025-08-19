@@ -28,10 +28,10 @@ export const WikiEnemyDetails = () => {
           type: 'default-high-q',
         })}
       />
-      <div>
+      <main>
         {!enemy && <span>Select an enemy</span>}
         {enemy && <EnemyOverview key={enemy.id} enemy={enemy} />}
-      </div>
+      </main>
     </>
   );
 };
