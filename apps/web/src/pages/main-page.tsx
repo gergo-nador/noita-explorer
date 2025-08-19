@@ -7,10 +7,12 @@ import { useMemo } from 'react';
 import { Flex } from '@noita-explorer/react-utils';
 import { dateHelpers } from '@noita-explorer/tools';
 import { Link } from '../components/link.tsx';
+import { useSettingsStore } from '../stores/settings.ts';
 
 export const MainPage = () => {
   const { loaded: noitaDataWakLoaded, data } = useNoitaDataWakStore();
   const { status: save00Status, currentRun } = useSave00Store();
+  const { settings } = useSettingsStore();
   const toast = useToast();
 
   const newProgress = useMemo(() => {
@@ -122,7 +124,9 @@ export const MainPage = () => {
             Bones Wands
           </Link>
           <Link to={pages.holidays}>Holidays</Link>
-          <Link to={pages.settings.index}>Settings</Link>
+          <Link to={pages.settings.index}>
+            Settings {!settings.sentry.initialPopupSeen && <span>( 1 )</span>}
+          </Link>
           <Link to={pages.credits}>Credits</Link>
           {__ENV__ === 'development' && <Link to={pages.sandbox}>Sandbox</Link>}
         </Flex>

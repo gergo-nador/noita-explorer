@@ -22,7 +22,9 @@ export const SettingsExtras = () => {
   };
 
   return (
-    <Header title={'Extras'}>
+    <Header
+      title={'Extras' + (settings.sentry.initialPopupSeen ? '' : ' ( 1 )')}
+    >
       <Flex style={{ width: 'max-content' }} gap={20}>
         <span>Display Debug Info: </span>
         <MultiSelectionBoolean
@@ -37,7 +39,9 @@ export const SettingsExtras = () => {
         onMouseEnter={makeBugReportSeen}
       >
         <Flex gap={5}>
-          <span>Send anonymous error logs: </span>
+          <span>Send anonymous error logs</span>
+          {!settings.sentry.initialPopupSeen && <span> ( 1 )</span>}
+          <span>: </span>
           <NoitaTooltipWrapper
             content={
               <>
