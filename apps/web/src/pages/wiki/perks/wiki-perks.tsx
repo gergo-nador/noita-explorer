@@ -54,7 +54,7 @@ export const WikiPerks = () => {
         boxSizing: 'border-box',
       }}
     >
-      <div
+      <aside
         style={{
           maxWidth: '500px',
           width: '50%',
@@ -114,7 +114,7 @@ export const WikiPerks = () => {
             );
           })}
         </NoitaProgressIconTable>
-      </div>
+      </aside>
 
       <Card
         style={{

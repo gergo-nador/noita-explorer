@@ -54,7 +54,7 @@ export const WikiMaterials = () => {
         boxSizing: 'border-box',
       }}
     >
-      <div
+      <aside
         style={{
           maxWidth: '500px',
           width: '50%',
@@ -105,7 +105,7 @@ export const WikiMaterials = () => {
             );
           })}
         </NoitaProgressIconTable>
-      </div>
+      </aside>
 
       <Card
         style={{

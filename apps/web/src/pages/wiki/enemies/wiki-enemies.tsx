@@ -62,7 +62,7 @@ export const WikiEnemies = () => {
         boxSizing: 'border-box',
       }}
     >
-      <div
+      <aside
         style={{
           maxWidth: '500px',
           width: '50%',
@@ -84,7 +84,7 @@ export const WikiEnemies = () => {
             <EnemyProgressIcon key={enemy.id} enemy={enemy} filters={filters} />
           ))}
         </NoitaProgressIconTable>
-      </div>
+      </aside>
 
       <Card
         style={{

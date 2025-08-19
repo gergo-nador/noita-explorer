@@ -38,7 +38,7 @@ export const WikiSpells = () => {
         boxSizing: 'border-box',
       }}
     >
-      <div
+      <aside
         style={{
           maxWidth: '700px',
           width: '55%',
@@ -85,7 +85,7 @@ export const WikiSpells = () => {
             );
           })}
         </NoitaProgressIconTable>
-      </div>
+      </aside>
       <Card
         style={{
           width: '45%',
