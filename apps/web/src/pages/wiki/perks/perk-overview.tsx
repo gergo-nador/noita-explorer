@@ -34,7 +34,7 @@ export const PerkOverview = ({ perk }: { perk: NoitaPerk }) => {
           <h1 style={{ fontSize: 20, margin: 0, marginBottom: 10 }}>
             {perk.name}
           </h1>
-          <div>{perk.description}</div>
+          <p style={{ margin: 0 }}>{perk.description}</p>
         </Flex>
       </div>
 

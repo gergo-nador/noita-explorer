@@ -409,7 +409,7 @@ export const SpellOverview = ({ spell }: { spell: NoitaSpell }) => {
           <h1 style={{ fontSize: 20, margin: 0, marginBottom: 10 }}>
             {spell.name}
           </h1>
-          <div>{spell.description}</div>
+          <p style={{ margin: 0 }}>{spell.description}</p>
         </Flex>
       </div>
       <br />
