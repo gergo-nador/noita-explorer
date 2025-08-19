@@ -41,14 +41,16 @@ export const EnemyOverview = ({ enemy }: { enemy: NoitaEnemy }) => {
             paddingLeft: 10,
           }}
         >
-          <div
+          <h1
             style={{
               fontSize: 'clamp(1.4rem, 2vw, 2.2rem)',
               lineHeight: 1.2,
+              margin: 0,
+              marginBottom: 0,
             }}
           >
             {enemy.name}
-          </div>
+          </h1>
           {progressDisplayDebugData && (
             <div style={{ marginTop: 5 }}>{enemy.id}</div>
           )}

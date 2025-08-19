@@ -30,7 +30,9 @@ export const PerkOverview = ({ perk }: { perk: NoitaPerk }) => {
           />
         </Flex>
         <Flex justify='center' column>
-          <div style={{ fontSize: 20, marginBottom: 10 }}>{perk.name}</div>
+          <h1 style={{ fontSize: 20, margin: 0, marginBottom: 10 }}>
+            {perk.name}
+          </h1>
           <div>{perk.description}</div>
         </Flex>
       </div>

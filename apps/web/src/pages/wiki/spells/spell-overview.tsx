@@ -405,7 +405,9 @@ export const SpellOverview = ({ spell }: { spell: NoitaSpell }) => {
         </Flex>
 
         <Flex justify='center' column>
-          <div style={{ fontSize: 20, marginBottom: 10 }}>{spell.name}</div>
+          <h1 style={{ fontSize: 20, margin: 0, marginBottom: 10 }}>
+            {spell.name}
+          </h1>
           <div>{spell.description}</div>
         </Flex>
       </div>
