@@ -1,16 +1,12 @@
 import { useRef } from 'react';
 import { useSettingsStore } from '../../stores/settings.ts';
-import { SpoilerWarningPage } from './spoiler-warning-page.tsx';
 import { SentryAcceptancePage } from './sentry-acceptance-page.tsx';
 import { Flex } from '@noita-explorer/react-utils';
 import { zIndexManager } from '../../utils/z-index-manager.ts';
 
 export const Onboarding = () => {
   const { settings } = useSettingsStore();
-  const steps = [
-    settings.spoilerWarningAccepted,
-    settings.sentry.initialPopupSeen,
-  ];
+  const steps = [settings.sentry.initialPopupSeen];
 
   // using useRef as we don't want this number updated after the first render
   const onboardingStepsCount = useRef(
@@ -18,10 +14,7 @@ export const Onboarding = () => {
   );
   // WARNING: this logic needs to be revisited when adding a third step
 
-  const currentStep =
-    Number(settings.spoilerWarningAccepted) +
-    Number(settings.sentry.initialPopupSeen) +
-    1;
+  const currentStep = Number(settings.sentry.initialPopupSeen) + 1;
 
   return (
     <div
@@ -43,9 +36,7 @@ export const Onboarding = () => {
             Onboarding {currentStep} / {onboardingStepsCount.current}
           </div>
         )}
-        {!settings.spoilerWarningAccepted && <SpoilerWarningPage />}
-        {settings.spoilerWarningAccepted &&
-          !settings.sentry.initialPopupSeen && <SentryAcceptancePage />}
+        {!settings.sentry.initialPopupSeen && <SentryAcceptancePage />}
       </Flex>
     </div>
   );
