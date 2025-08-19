@@ -27,6 +27,7 @@ export const PerkOverview = ({ perk }: { perk: NoitaPerk }) => {
           <Icon
             src={publicPaths.generated.perk.image({ perkId: perk.id })}
             style={{ aspectRatio: 1, width: '100%' }}
+            alt={perk.name}
           />
         </Flex>
         <Flex justify='center' column>

@@ -33,6 +33,7 @@ export const EnemyOverview = ({ enemy }: { enemy: NoitaEnemy }) => {
         <Icon
           src={publicPaths.generated.enemy.image({ enemyId: enemy.id })}
           style={{ aspectRatio: 1, width: '100%' }}
+          alt={enemy.name}
         />
         <Flex
           justify='center'

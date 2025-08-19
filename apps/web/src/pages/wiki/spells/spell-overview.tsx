@@ -401,6 +401,7 @@ export const SpellOverview = ({ spell }: { spell: NoitaSpell }) => {
           <Icon
             src={publicPaths.generated.spell.image({ spellId: spell.id })}
             style={{ aspectRatio: 1, width: '100%' }}
+            alt={spell.name}
           />
         </Flex>
 
