@@ -13,6 +13,14 @@ export const SettingsExtras = () => {
   const { settings, set } = useSettingsStore();
   const { progressDisplayDebugData, sentry: sentrySettings } = settings;
 
+  const makeBugReportSeen = () => {
+    if (settings.sentry.initialPopupSeen) {
+      return;
+    }
+
+    set((settings) => (settings.sentry.initialPopupSeen = true));
+  };
+
   return (
     <Header title={'Extras'}>
       <Flex style={{ width: 'max-content' }} gap={20}>
@@ -23,7 +31,11 @@ export const SettingsExtras = () => {
         />
       </Flex>
       <br />
-      <Flex style={{ width: 'max-content' }} gap={20}>
+      <Flex
+        style={{ width: 'max-content' }}
+        gap={20}
+        onMouseEnter={makeBugReportSeen}
+      >
         <Flex gap={5}>
           <span>Send anonymous error logs: </span>
           <NoitaTooltipWrapper

@@ -1,5 +1,10 @@
 import React, { MouseEventHandler } from 'react';
 
+type DivHtmlProps = React.DetailedHTMLProps<
+  React.HTMLAttributes<HTMLDivElement>,
+  HTMLDivElement
+>;
+
 interface FlexProps {
   style?: React.CSSProperties;
   children: React.ReactNode | React.ReactNode[];
@@ -32,7 +37,8 @@ export const Flex = ({
   title,
   onClick,
   className,
-}: FlexProps) => {
+  ...rest
+}: FlexProps & DivHtmlProps) => {
   const baseStyle: React.CSSProperties = {
     display: 'flex',
     flexWrap: wrap,
@@ -46,6 +52,7 @@ export const Flex = ({
 
   return (
     <div
+      {...rest}
       style={{ ...baseStyle, ...style }}
       className={className}
       title={title}

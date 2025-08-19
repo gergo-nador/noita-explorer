@@ -12,11 +12,9 @@ import { useSave00Store } from './stores/save00.ts';
 import { NoitaWandConfig } from '@noita-explorer/model-noita';
 import { imageHelpers, randomHelpers } from '@noita-explorer/tools';
 import { ActionsPanel } from './components/actions/actions-panel.tsx';
-import { Onboarding } from './pages/onboarding/onboarding.tsx';
 import { initParticlesEngine } from '@tsparticles/react';
 import { loadFull } from 'tsparticles';
 import { loadEmittersPlugin } from '@tsparticles/plugin-emitters';
-import { useOnboarding } from './hooks/use-onboarding.ts';
 import { MobileViewUnsupportedWarning } from './components/mobile-view-unsupported-warning.tsx';
 
 interface Props {
@@ -27,14 +25,11 @@ interface Props {
 }
 
 export const App = ({ children }: Props) => {
-  const { loaded: settingsLoaded } = useSettingsStore();
-  const { isOnboardingDone } = useOnboarding();
   useInitialLoader();
 
   return (
     <>
       {children ?? <RouterProvider router={browserRouter} />}
-      {settingsLoaded && !isOnboardingDone && <Onboarding />}
 
       <DialogWrapper />
       <ContextMenuWrapper />
