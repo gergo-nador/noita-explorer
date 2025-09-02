@@ -24,6 +24,17 @@ export const TabPageTemplate = ({ tabs, returnPath }: TabPageTemplateProps) => {
       fromEnd: '/',
     });
 
+    const exactMatch = tabs.find((t) => {
+      const tabPath = stringHelpers.trim({
+        text: t.href,
+        fromEnd: '/',
+      });
+
+      return path === tabPath;
+    });
+
+    if (exactMatch) return exactMatch;
+
     return tabs.find((t) => {
       const tabPath = stringHelpers.trim({
         text: t.href,
