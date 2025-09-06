@@ -332,7 +332,7 @@ export const routes: NoitaRouteObject[] = [
           </>
         ),
       },
-      addIf(__ENV__ !== 'production', {
+      ...addIf(__ENV__ !== 'production', {
         path: 'current-run',
         element: (
           <>
