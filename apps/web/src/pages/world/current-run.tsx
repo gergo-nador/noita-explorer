@@ -25,23 +25,44 @@ export const CurrentRun = () => {
     <>
       <Flex justify='space-between'>
         <Flex gap={5}>
-          {currentRun.playerState.inventory.wands.map((inventoryWand) => (
-            <NoitaTooltipWrapper
-              content={
-                <NoitaWandCard wand={inventoryWand.wand} withoutCardBorder />
-              }
-            >
-              <InventoryIcon
-                icon={
-                  data.wandConfigs.find(
-                    (w) => w.spriteId === inventoryWand.wand.spriteId,
-                  )?.imageBase64
+          {currentRun.playerState.inventory.wands.map((inventoryWand) => {
+            const usesRemaining: number | undefined =
+              inventoryWand.wand.spells.reduce(
+                (minUses: number | undefined, spell) => {
+                  const usesRemaining = spell.usesRemaining;
+                  if (usesRemaining === undefined || usesRemaining < 0)
+                    return minUses;
+                  if (minUses === undefined) return usesRemaining;
+
+                  if (minUses === 0 && usesRemaining !== 0)
+                    return usesRemaining;
+                  if (usesRemaining < minUses && usesRemaining !== 0)
+                    return usesRemaining;
+
+                  return minUses;
+                },
+                undefined,
+              );
+
+            return (
+              <NoitaTooltipWrapper
+                content={
+                  <NoitaWandCard wand={inventoryWand.wand} withoutCardBorder />
                 }
-                size={50}
-                useOriginalIconSize
-              />
-            </NoitaTooltipWrapper>
-          ))}
+              >
+                <InventoryIcon
+                  icon={
+                    data.wandConfigs.find(
+                      (w) => w.spriteId === inventoryWand.wand.spriteId,
+                    )?.imageBase64
+                  }
+                  size={50}
+                  useOriginalIconSize
+                  usesRemaining={usesRemaining}
+                />
+              </NoitaTooltipWrapper>
+            );
+          })}
         </Flex>
         <Flex column justify='end' gap={10}>
           <CurrentRunPlayerStatus />
