@@ -17,7 +17,9 @@ export const SettingsCursorWandPicker = () => {
 
     const wandConfigs = [...data.wandConfigs];
     wandConfigs.sort((w1, w2) => {
-      return w1.gripY - w2.gripY;
+      const gripY1 = w1?.gripY ?? 0;
+      const gripY2 = w2?.gripY ?? 0;
+      return gripY1 - gripY2;
     });
 
     return wandConfigs;

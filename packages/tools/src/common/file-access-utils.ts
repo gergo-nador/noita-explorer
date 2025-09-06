@@ -46,7 +46,29 @@ const findAllFilesInDirectory = async (
   return arr;
 };
 
+interface FileEnumeratorOptions {
+  recursive?: boolean;
+}
+async function* enumerateFolder(
+  directory: FileSystemDirectoryAccess,
+  options?: FileEnumeratorOptions,
+): AsyncGenerator<FileSystemFileAccess, void, void> {
+  const files = await directory.listFiles();
+
+  for (const file of files) {
+    yield file;
+  }
+
+  if (options?.recursive) {
+    const subDirectories = await directory.listDirectories();
+    for (const subDirectory of subDirectories) {
+      yield* enumerateFolder(subDirectory, options);
+    }
+  }
+}
+
 export const fileSystemAccessHelpers = {
   findAllFilesInDirectory,
   findFileInDirectory,
+  enumerateFolder,
 };

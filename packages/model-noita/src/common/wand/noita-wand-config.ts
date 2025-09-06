@@ -3,8 +3,8 @@ export interface NoitaWandConfig {
   imageBase64: string;
   spriteId: string;
 
-  gripX: number;
-  gripY: number;
-  tipX: number;
-  tipY: number;
+  gripX?: number;
+  gripY?: number;
+  tipX?: number;
+  tipY?: number;
 }

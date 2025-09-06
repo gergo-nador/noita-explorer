@@ -1,9 +1,100 @@
 import { FileSystemDirectoryAccess } from '@noita-explorer/model';
 import { NoitaWandConfig } from '@noita-explorer/model-noita';
+import { fileSystemAccessHelpers, arrayHelpers } from '@noita-explorer/tools';
 import { LuaWrapper } from '@noita-explorer/tools/lua';
 import { noitaPaths } from '../../noita-paths.ts';
+import { parseXml, XmlWrapper } from '@noita-explorer/tools/xml';
+import { splitNoitaEntityTags } from '../common/tags.ts';
+import { mergeXmlBaseFiles } from './scrape-enemies/merge-xml-base-files.ts';
 
 export const scrapeWandConfigs = async ({
+  dataWakParentDirectoryApi,
+}: {
+  dataWakParentDirectoryApi: FileSystemDirectoryAccess;
+}): Promise<NoitaWandConfig[]> => {
+  const luaWands = await scrapeWandConfigsLua({ dataWakParentDirectoryApi });
+  const xmlWands = await scrapeWandConfigsXml({ dataWakParentDirectoryApi });
+
+  const allWands = [...luaWands, ...xmlWands];
+  return arrayHelpers.uniqueBy(allWands, (wand) => wand.spriteId);
+};
+
+const scrapeWandConfigsXml = async ({
+  dataWakParentDirectoryApi,
+}: {
+  dataWakParentDirectoryApi: FileSystemDirectoryAccess;
+}) => {
+  const itemsEntityDirPath = await dataWakParentDirectoryApi.path.join(
+    noitaPaths.noitaDataWak.xmlData.itemEntities,
+  );
+  const itemsEntityDir =
+    await dataWakParentDirectoryApi.getDirectory(itemsEntityDirPath);
+
+  const fileEnumerator = fileSystemAccessHelpers.enumerateFolder(
+    itemsEntityDir,
+    { recursive: true },
+  );
+
+  const wands: NoitaWandConfig[] = [];
+
+  for await (const file of fileEnumerator) {
+    // basic checks to see whether the file is a wand fiel
+    {
+      const isXmlFile = file.getName().endsWith('.xml');
+      if (!isXmlFile) continue;
+
+      const xmlText = await file.read.asText();
+      const parsedXml = await parseXml(xmlText);
+      const xmlObj = XmlWrapper(parsedXml);
+
+      // check if an entity tag exists
+      const entity = xmlObj.findNthTag('Entity');
+      if (!entity) continue;
+
+      // check whether the entity has a "wand" tag
+      const entityTagsString = entity.getAttribute('tags')?.asText();
+      const entityTags = splitNoitaEntityTags(entityTagsString ?? '');
+      if (!entityTags.includes('wand')) continue;
+    }
+
+    // extract wand info
+    const mergeResult = await mergeXmlBaseFiles({
+      dataWakParentDirectoryApi,
+      file: file,
+    });
+
+    const xml = mergeResult.xml;
+
+    const abilityComponent = xml.findNthTag('AbilityComponent');
+    if (!abilityComponent) continue;
+
+    const spriteFilePath = abilityComponent
+      .getRequiredAttribute('sprite_file')
+      .asText();
+
+    const wand: NoitaWandConfig = {
+      name: abilityComponent.getRequiredAttribute('ui_name').asText(),
+      spriteId: spriteFilePath,
+      imageBase64: '',
+      gripX: undefined,
+      gripY: undefined,
+      tipX: undefined,
+      tipY: undefined,
+    };
+
+    if (spriteFilePath.endsWith('.png')) {
+      const imageFile = await dataWakParentDirectoryApi.getFile(spriteFilePath);
+      wand.imageBase64 = await imageFile.read.asImageBase64();
+      wand.spriteId = imageFile.getNameWithoutExtension();
+    }
+
+    wands.push(wand);
+  }
+
+  return wands;
+};
+
+const scrapeWandConfigsLua = async ({
   dataWakParentDirectoryApi,
 }: {
   dataWakParentDirectoryApi: FileSystemDirectoryAccess;

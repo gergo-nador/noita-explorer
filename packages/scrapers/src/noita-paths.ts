@@ -18,6 +18,7 @@ export const noitaPaths = {
       animals: ['data', 'entities', 'animals'],
       entities: ['data', 'entities'],
       materials: ['data', 'materials.xml'],
+      itemEntities: ['data', 'entities', 'items'],
     },
   },
   noitaInstallFolder: {
