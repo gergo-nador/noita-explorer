@@ -88,6 +88,8 @@ const scrapeWandConfigsXml = async ({
       wand.spriteId = imageFile.getNameWithoutExtension();
     }
 
+    // TODO: if sprite file ends with xml
+
     wands.push(wand);
   }
 
