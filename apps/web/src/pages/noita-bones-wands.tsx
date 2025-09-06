@@ -47,7 +47,7 @@ export const NoitaBonesWands = () => {
 
   return (
     <div>
-      <div>
+      <div style={{ marginBottom: 30 }}>
         <Button
           onClick={() => {
             bonesWands?.forEach((wand) =>
