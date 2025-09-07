@@ -11,6 +11,8 @@ export const scrapeAnimationFrames = async ({
   imageBase64: string;
 }) => {
   const animations: AnimationFramesResult[] = [];
+  const imageDimensions = await imageHelpers.getImageSizeBase64(imageBase64);
+
   for (const spriteAnimation of sprite.animations) {
     const framePositions = calculateFramePositions(spriteAnimation);
 
@@ -19,8 +21,14 @@ export const scrapeAnimationFrames = async ({
       const image = await imageHelpers.cropImageBase64(imageBase64, {
         x: framePosition.x,
         y: framePosition.y,
-        width: spriteAnimation.frameActualWidth,
-        height: spriteAnimation.frameActualHeight,
+        width: Math.min(
+          spriteAnimation.frameActualWidth,
+          imageDimensions.width - framePosition.x,
+        ),
+        height: Math.min(
+          spriteAnimation.frameActualHeight,
+          imageDimensions.height - framePosition.y,
+        ),
       });
 
       frameImages.push(image);

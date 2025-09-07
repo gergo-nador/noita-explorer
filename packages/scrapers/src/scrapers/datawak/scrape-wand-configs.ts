@@ -93,18 +93,22 @@ const scrapeWandConfigsXml = async ({
         file: spriteFile,
       };
 
-      const animation = await scrapeAnimation({
-        dataWakParentDirectoryApi,
-        animationInfo,
-      });
+      try {
+        const animation = await scrapeAnimation({
+          dataWakParentDirectoryApi,
+          animationInfo,
+        });
 
-      if (animation.gifs.length > 0) {
-        const firstFrame = animation.gifs[0].firstFrame;
-        wand.imageBase64 = firstFrame;
+        if (animation.gifs.length > 0) {
+          const firstFrame = animation.gifs[0].firstFrame;
+          wand.imageBase64 = firstFrame;
+        }
+      } catch (e) {
+        console.error(`Error while scraping ${wand.spriteId} wand: `, e);
       }
     }
 
-    wands.push(wand);
+    if (wand.imageBase64) wands.push(wand);
   }
 
   return wands;
