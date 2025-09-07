@@ -47,7 +47,7 @@ export const scrapeAnimations = async ({
   return animationsReturnValue;
 };
 
-const scrapeAnimation = async ({
+export const scrapeAnimation = async ({
   animationInfo,
   dataWakParentDirectoryApi,
 }: {

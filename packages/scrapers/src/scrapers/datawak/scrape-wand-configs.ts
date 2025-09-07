@@ -6,6 +6,8 @@ import { noitaPaths } from '../../noita-paths.ts';
 import { parseXml, XmlWrapper } from '@noita-explorer/tools/xml';
 import { splitNoitaEntityTags } from '../common/tags.ts';
 import { mergeXmlBaseFiles } from './scrape-enemies/merge-xml-base-files.ts';
+import { scrapeAnimation } from '../common/scrape-animations/scrape-animations.ts';
+import { AnimationInfo } from '../common/scrape-animations/types.ts';
 
 export const scrapeWandConfigs = async ({
   dataWakParentDirectoryApi,
@@ -85,6 +87,21 @@ const scrapeWandConfigsXml = async ({
 
     if (spriteFilePath.endsWith('.png')) {
       wand.imageBase64 = await spriteFile.read.asImageBase64();
+    } else if (spriteFilePath.endsWith('.xml')) {
+      const animationInfo: AnimationInfo = {
+        id: wand.spriteId,
+        file: spriteFile,
+      };
+
+      const animation = await scrapeAnimation({
+        dataWakParentDirectoryApi,
+        animationInfo,
+      });
+
+      if (animation.gifs.length > 0) {
+        const firstFrame = animation.gifs[0].firstFrame;
+        wand.imageBase64 = firstFrame;
+      }
     }
 
     // TODO: if sprite file ends with xml

@@ -30,7 +30,7 @@ export const SettingsCursorWandPicker = () => {
     cursor.wandSpriteId === undefined || cursor.wandSpriteId === 'random_wand';
   return (
     <div>
-      <Flex gap={10} style={{ alignItems: 'flex-start' }}>
+      <Flex gap={10} align='start' wrap='wrap'>
         <Card
           color={isRandom ? 'gold' : 'gray'}
           style={{
