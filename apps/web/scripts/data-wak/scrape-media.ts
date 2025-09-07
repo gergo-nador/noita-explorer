@@ -30,6 +30,20 @@ export const scrapeMedia = async ({ dataWakResult, dataWak }: Props) => {
   });
   await createMaterialContainerImages(dataWak.materials, materials);
 
+  const wands: StringKeyDictionary<NoitaScrapedMedia[]> = {};
+  await appendBase64ImagesToMedia(
+    dataWakResult.wandConfigs.data.map(
+      (wand): Base64ImageHolder => ({
+        id: wand.spriteId,
+        imageBase64: wand.imageBase64,
+      }),
+    ),
+    wands,
+    {
+      skipHighQuality: true,
+    },
+  );
+
   const orbs = convertScrapedMediaToDict(dataWakResult.orbGifs.data);
 
   return {
@@ -38,6 +52,7 @@ export const scrapeMedia = async ({ dataWakResult, dataWak }: Props) => {
     enemies: enemies,
     orbs: orbs,
     materials: materials,
+    wands: wands,
   };
 };
 

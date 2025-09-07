@@ -47,5 +47,6 @@ export * from "./scraping/noita-scraped-media";
 export * from "./scraping/noita-scraped-perk";
 export * from "./scraping/noita-scraped-spell";
 export * from "./scraping/noita-scraped-sprite";
+export * from "./scraping/noita-scraped-wand-config";
 export * from "./scraping/noita-translation";
 export * from "./scraping/noita-wak-data";

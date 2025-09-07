@@ -48,7 +48,7 @@ export const NoitaWandCard = ({
       return undefined;
     }
 
-    return wandConfig.imageBase64;
+    return publicPaths.generated.wand.image({ wandId: wandConfig.spriteId });
   }, [wand, data?.wandConfigs]);
 
   const spellIcons = useMemo(() => {

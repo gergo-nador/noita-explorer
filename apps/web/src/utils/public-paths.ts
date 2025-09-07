@@ -74,5 +74,10 @@ export const publicPaths = {
         return `/g/materials/${materialId}/images/${type}.png`;
       },
     },
+    wand: {
+      image({ wandId }: { wandId: string }) {
+        return `/g/wands/${wandId}/images/default.png`;
+      },
+    },
   },
 };

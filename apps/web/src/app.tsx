@@ -16,6 +16,7 @@ import { initParticlesEngine } from '@tsparticles/react';
 import { loadFull } from 'tsparticles';
 import { loadEmittersPlugin } from '@tsparticles/plugin-emitters';
 import { MobileViewUnsupportedWarning } from './components/mobile-view-unsupported-warning.tsx';
+import { publicPaths } from './utils/public-paths.ts';
 
 interface Props {
   /**
@@ -122,8 +123,11 @@ const useInitialLoader = () => {
         wandConfig = randomHelpers.randomPick(data.wandConfigs);
       }
 
+      const wandPath = publicPaths.generated.wand.image({
+        wandId: wandConfig.spriteId,
+      });
       imageHelpers
-        .scaleImageBase64(wandConfig.imageBase64, 4)
+        .scaleImageBase64(wandPath, 4)
         .then((cursor) => imageHelpers.rotateImageBase64(cursor, 225))
         .then(imageHelpers.trimWhitespaceBase64)
         .then((cursor) => {

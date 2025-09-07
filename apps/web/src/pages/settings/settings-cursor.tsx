@@ -14,6 +14,7 @@ import { useNoitaDataWakStore } from '../../stores/noita-data-wak.ts';
 import { NoitaWandConfig } from '@noita-explorer/model-noita';
 import { pages } from '../../routes/pages.ts';
 import { Link } from '../../components/link.tsx';
+import { publicPaths } from '../../utils/public-paths.ts';
 
 export const SettingsCursor = () => {
   const { settings, set } = useSettingsStore();
@@ -39,8 +40,12 @@ export const SettingsCursor = () => {
       wandConfig = randomHelpers.randomPick(data.wandConfigs);
     }
 
+    const wandPath = publicPaths.generated.wand.image({
+      wandId: wandConfig.spriteId,
+    });
+
     imageHelpers
-      .scaleImageBase64(wandConfig.imageBase64, 4)
+      .scaleImageBase64(wandPath, 4)
       .then((cursor) => imageHelpers.rotateImageBase64(cursor, 225))
       .then(imageHelpers.trimWhitespaceBase64)
       .then(setCustomCursor);

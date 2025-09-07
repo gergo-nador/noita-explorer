@@ -3,7 +3,6 @@ import {
   NoitaDataWakScrapeResultStatus,
   NoitaMaterialReaction,
   NoitaTranslation,
-  NoitaWandConfig,
   NoitaScrapedEnemy,
   NoitaScrapedMedia,
   NoitaScrapedMediaGif,
@@ -11,6 +10,7 @@ import {
   NoitaScrapedSpell,
   NoitaScrapedPerk,
   NoitaScrapedMaterial,
+  NoitaScrapedWandConfig,
 } from '@noita-explorer/model-noita';
 import {
   FileSystemDirectoryAccess,
@@ -118,7 +118,7 @@ export const scrapeDataWakContent = async ({
     enemyGifErrors = err;
   }
 
-  let wandConfigs: NoitaWandConfig[] = [];
+  let wandConfigs: NoitaScrapedWandConfig[] = [];
   let wandConfigError: unknown | undefined = undefined;
   try {
     wandConfigs = await scrape.wandConfigs({

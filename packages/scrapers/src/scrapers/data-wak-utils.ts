@@ -10,6 +10,7 @@ import {
   NoitaScrapedMedia,
   NoitaSpell,
   NoitaWakData,
+  NoitaWandConfig,
 } from '@noita-explorer/model-noita';
 
 /**
@@ -24,7 +25,7 @@ export const convertScrapeResultsToDataWak = (
   const translations = results.translations.data ?? {};
   const scrapedEnemies = results.enemies.data ?? [];
   const scrapedEnemyMedia = results.enemyMedia.data ?? {};
-  const wandConfigs = results.wandConfigs.data ?? [];
+  const scrapedWandConfigs = results.wandConfigs.data ?? [];
   const scrapedMaterials = results.materials.data ?? [];
   const materialReactions = results.materialReactions.data ?? [];
 
@@ -85,6 +86,18 @@ export const convertScrapeResultsToDataWak = (
     },
   );
 
+  // wands
+  const wands: NoitaWandConfig[] = scrapedWandConfigs.map(
+    (w): NoitaWandConfig => {
+      const wand = {
+        ...w,
+        imageBase64: undefined,
+      };
+
+      return wand;
+    },
+  );
+
   // finalize data wak
   const now = new Date();
 
@@ -97,7 +110,7 @@ export const convertScrapeResultsToDataWak = (
     enemies: enemies,
     perks: perks,
     spells: spells,
-    wandConfigs: wandConfigs,
+    wandConfigs: wands,
     materials: materials,
     materialReactions: materialReactions,
   };

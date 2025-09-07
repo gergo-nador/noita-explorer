@@ -4,6 +4,7 @@ import { Button, Card, Icon } from '@noita-explorer/noita-component-library';
 import { Flex } from '@noita-explorer/react-utils';
 import { useMemo } from 'react';
 import { zIndexManager } from '../../utils/z-index-manager.ts';
+import { publicPaths } from '../../utils/public-paths.ts';
 
 export const SettingsCursorWandPicker = () => {
   const { settings, set } = useSettingsStore();
@@ -63,7 +64,12 @@ export const SettingsCursorWandPicker = () => {
                   : 'initial',
               }}
             >
-              <Icon src={wandConfig.imageBase64} style={{ zoom: 3 }} />
+              <Icon
+                src={publicPaths.generated.wand.image({
+                  wandId: wandConfig.spriteId,
+                })}
+                style={{ zoom: 3 }}
+              />
               <Button
                 onClick={() =>
                   set((s) => (s.cursor.wandSpriteId = wandConfig.spriteId))

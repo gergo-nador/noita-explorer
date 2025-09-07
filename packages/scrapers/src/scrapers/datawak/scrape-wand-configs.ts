@@ -1,5 +1,5 @@
 import { FileSystemDirectoryAccess } from '@noita-explorer/model';
-import { NoitaWandConfig } from '@noita-explorer/model-noita';
+import { NoitaScrapedWandConfig } from '@noita-explorer/model-noita';
 import { fileSystemAccessHelpers, arrayHelpers } from '@noita-explorer/tools';
 import { LuaWrapper } from '@noita-explorer/tools/lua';
 import { noitaPaths } from '../../noita-paths.ts';
@@ -11,7 +11,7 @@ export const scrapeWandConfigs = async ({
   dataWakParentDirectoryApi,
 }: {
   dataWakParentDirectoryApi: FileSystemDirectoryAccess;
-}): Promise<NoitaWandConfig[]> => {
+}): Promise<NoitaScrapedWandConfig[]> => {
   const luaWands = await scrapeWandConfigsLua({ dataWakParentDirectoryApi });
   const xmlWands = await scrapeWandConfigsXml({ dataWakParentDirectoryApi });
 
@@ -35,7 +35,7 @@ const scrapeWandConfigsXml = async ({
     { recursive: true },
   );
 
-  const wands: NoitaWandConfig[] = [];
+  const wands: NoitaScrapedWandConfig[] = [];
 
   for await (const file of fileEnumerator) {
     // basic checks to see whether the file is a wand fiel
@@ -71,10 +71,11 @@ const scrapeWandConfigsXml = async ({
     const spriteFilePath = abilityComponent
       .getRequiredAttribute('sprite_file')
       .asText();
+    const spriteFile = await dataWakParentDirectoryApi.getFile(spriteFilePath);
 
-    const wand: NoitaWandConfig = {
+    const wand: NoitaScrapedWandConfig = {
       name: abilityComponent.getRequiredAttribute('ui_name').asText(),
-      spriteId: spriteFilePath,
+      spriteId: spriteFile.getNameWithoutExtension(),
       imageBase64: '',
       gripX: undefined,
       gripY: undefined,
@@ -83,9 +84,7 @@ const scrapeWandConfigsXml = async ({
     };
 
     if (spriteFilePath.endsWith('.png')) {
-      const imageFile = await dataWakParentDirectoryApi.getFile(spriteFilePath);
-      wand.imageBase64 = await imageFile.read.asImageBase64();
-      wand.spriteId = imageFile.getNameWithoutExtension();
+      wand.imageBase64 = await spriteFile.read.asImageBase64();
     }
 
     // TODO: if sprite file ends with xml
@@ -115,7 +114,7 @@ const scrapeWandConfigsLua = async ({
     .first();
 
   const luaWandsArray = wandListStatement.asArrayObjectDeclarationList();
-  const wandConfigs: NoitaWandConfig[] = [];
+  const wandConfigs: NoitaScrapedWandConfig[] = [];
 
   for (const luaWandConfig of luaWandsArray) {
     const name = luaWandConfig.getRequiredField('name').required.asString();
@@ -130,7 +129,7 @@ const scrapeWandConfigsLua = async ({
     const spriteFileName = spriteSplit[spriteSplit.length - 1];
     const spriteId = spriteFileName.split('.')[0];
 
-    const wandConfig: NoitaWandConfig = {
+    const wandConfig: NoitaScrapedWandConfig = {
       name: name,
       imageBase64: imageBase64,
       spriteId: spriteId,

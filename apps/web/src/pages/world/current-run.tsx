@@ -8,6 +8,7 @@ import { Flex } from '@noita-explorer/react-utils';
 import { useSave00Store } from '../../stores/save00.ts';
 import { NoitaWandCard } from '../../components/noita-wand-card.tsx';
 import { CurrentRunPlayerStatus } from './current-run-player-status.tsx';
+import { publicPaths } from '../../utils/public-paths.ts';
 
 export const CurrentRun = () => {
   const { data } = useNoitaDataWakStore();
@@ -44,6 +45,10 @@ export const CurrentRun = () => {
                 undefined,
               );
 
+            const wandImage = publicPaths.generated.wand.image({
+              wandId: inventoryWand.wand.spriteId,
+            });
+
             return (
               <NoitaTooltipWrapper
                 content={
@@ -51,11 +56,7 @@ export const CurrentRun = () => {
                 }
               >
                 <InventoryIcon
-                  icon={
-                    data.wandConfigs.find(
-                      (w) => w.spriteId === inventoryWand.wand.spriteId,
-                    )?.imageBase64
-                  }
+                  icon={wandImage}
                   size={50}
                   useOriginalIconSize
                   usesRemaining={usesRemaining}
