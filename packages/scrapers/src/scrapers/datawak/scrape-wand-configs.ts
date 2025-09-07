@@ -104,8 +104,6 @@ const scrapeWandConfigsXml = async ({
       }
     }
 
-    // TODO: if sprite file ends with xml
-
     wands.push(wand);
   }
 
