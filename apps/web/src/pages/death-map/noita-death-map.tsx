@@ -1,8 +1,10 @@
-import { useSave00Store } from '../stores/save00.ts';
+import { useSave00Store } from '../../stores/save00.ts';
 import { StringKeyDictionary } from '@noita-explorer/model';
 import { Data, Layout } from 'plotly.js';
 import { arrayHelpers } from '@noita-explorer/tools';
-import ReactPlotly from 'react-plotly.js';
+import { lazy } from 'react';
+
+const NoitaDeathMapPlot = lazy(() => import('./noita-death-map-plot.tsx'));
 
 export const NoitaDeathMap = () => {
   const { sessions } = useSave00Store();
@@ -116,12 +118,7 @@ export const NoitaDeathMap = () => {
 
   return (
     <div>
-      <ReactPlotly
-        data={traces}
-        layout={layout}
-        config={{ responsive: true }}
-        style={{ padding: 0, margin: 0, width: '100%', height: '700px' }}
-      />
+      {!__SSG__ && <NoitaDeathMapPlot traces={traces} layout={layout} />}
     </div>
   );
 };
