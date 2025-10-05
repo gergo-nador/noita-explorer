@@ -17,10 +17,6 @@ export const HtmlDoc = ({ children, canonicalUrl }: Props) => {
         <meta property='og:site_name' content='Noita Explorer' />
         <meta property='application-name' content='Noita Explorer' />
         <meta
-          name='description'
-          content='Noita Explorer helps you unlock your lost in-game progress without mods. Unlock spells, enemies, perks, achievement pillars, crown, amulet, and so on...'
-        />
-        <meta
           name='keywords'
           content='noita,unlock,progress,game progress,unlock progress'
         />
