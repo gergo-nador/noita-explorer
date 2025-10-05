@@ -2,7 +2,7 @@ import { useSave00Store } from '../stores/save00.ts';
 import { StringKeyDictionary } from '@noita-explorer/model';
 import { Data, Layout } from 'plotly.js';
 import { arrayHelpers } from '@noita-explorer/tools';
-import { Suspense, use } from 'react';
+import ReactPlotly from 'react-plotly.js';
 
 export const NoitaDeathMap = () => {
   const { sessions } = useSave00Store();
@@ -116,27 +116,12 @@ export const NoitaDeathMap = () => {
 
   return (
     <div>
-      <Suspense fallback={<div>Loading...</div>}>
-        <Plot traces={traces} layout={layout} />
-      </Suspense>
+      <ReactPlotly
+        data={traces}
+        layout={layout}
+        config={{ responsive: true }}
+        style={{ padding: 0, margin: 0, width: '100%', height: '700px' }}
+      />
     </div>
-  );
-};
-
-const Plot = ({
-  traces,
-  layout,
-}: {
-  traces: Data[];
-  layout: Partial<Layout>;
-}) => {
-  const ReactPlotly = use(import('react-plotly.js'));
-  return (
-    <ReactPlotly.default
-      data={traces}
-      layout={layout}
-      config={{ responsive: true }}
-      style={{ padding: 0, margin: 0, width: '100%', height: '700px' }}
-    />
   );
 };
