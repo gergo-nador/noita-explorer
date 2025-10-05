@@ -18,6 +18,7 @@ export { platformHelpers } from './common/runtime-platform.ts';
 export { promiseHelper } from './common/promises';
 export { randomHelpers } from './common/random';
 export { runtimeEnvironment } from './common/runtime-environment';
+export { sortHelpers } from './common/sort.ts';
 export { stringHelpers } from './common/string';
 export { switchStatement } from './common/switch';
 export { throwHelpers } from './common/throw.ts';

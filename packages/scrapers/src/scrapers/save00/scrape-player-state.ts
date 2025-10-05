@@ -14,11 +14,15 @@ import {
   NoitaDamageModel,
   getDefaultNoitaDamageMultipliers,
   NoitaInventoryWand,
+  NoitaWand,
+  NoitaInventoryPotionItem,
+  NoitaInventoryItem,
 } from '@noita-explorer/model-noita';
 import { extractDamageMultipliers } from '../datawak/scrape-enemies/extract-damage-multipliers.ts';
 import { extractGenomeData } from '../datawak/scrape-enemies/extract-genome-data.ts';
-import { splitNoitaEntityTags } from '../common/tags.ts';
+import { hasEntityTag, splitNoitaEntityTags } from '../common/tags.ts';
 import { scrapeWand } from '../common/scrape-wand.ts';
+import { scrapePotion } from '../common/scrape-potion.ts';
 
 export const scrapePlayerState = async ({
   save00DirectoryApi,
@@ -107,34 +111,15 @@ export const scrapePlayerState = async ({
       })
     : undefined;
 
-  const inventoryWands: NoitaInventoryWand[] = [];
   const playerEntities = playerStateEntity.findTagArray('Entity');
-
-  const quickInventoryComponent = playerEntities.find(
-    (e) => e.getAttribute('name')?.asText() === 'inventory_quick',
-  );
-  if (quickInventoryComponent) {
-    const inventoryEntities = quickInventoryComponent.findTagArray('Entity');
-    const wandEntities = inventoryEntities.filter((e) => {
-      const tagString = e.getAttribute('tags')?.asText() ?? '';
-      const tags = splitNoitaEntityTags(tagString);
-      return tags.includes('wand');
-    });
-
-    wandEntities.forEach((wandEntity) => {
-      const wand = scrapeWand({ wandXml: wandEntity });
-      if (wand) {
-        inventoryWands.push({ wand: wand });
-      }
-    });
-  }
 
   const playerState: NoitaPlayerState = {
     transform: transform,
     damageModel: damageModel,
     genomeData: genomeData,
     inventory: {
-      wands: inventoryWands,
+      wands: [],
+      items: [],
     },
     decorations: {
       player_amulet: getDecoration({
@@ -152,6 +137,52 @@ export const scrapePlayerState = async ({
     },
     wallet: undefined,
   };
+
+  const quickInventoryComponent = playerEntities.find(
+    (e) => e.getAttribute('name')?.asText() === 'inventory_quick',
+  );
+  if (quickInventoryComponent) {
+    const inventoryEntities = quickInventoryComponent.findTagArray('Entity');
+
+    // quick inventory wands
+    {
+      const wandEntities = inventoryEntities.filter((e) =>
+        hasEntityTag(e, 'wand'),
+      );
+      playerState.inventory.wands = wandEntities
+        .map((wandEntity) => scrapeWand({ wandXml: wandEntity }))
+        .filter((wand): wand is NoitaWand => Boolean(wand))
+        .map((wand): NoitaInventoryWand => ({ wand: wand }));
+    }
+
+    // quick inventory other items
+    {
+      const noWandEntities = inventoryEntities.filter(
+        (e) => !hasEntityTag(e, 'wand'),
+      );
+
+      playerState.inventory.items = noWandEntities
+        .map((itemEntity) => {
+          const itemComponent = itemEntity.findNthTag('ItemComponent');
+          const position = itemComponent
+            ?.getRequiredAttribute('inventory_slot.x')
+            .asInt();
+
+          if (hasEntityTag(itemEntity, 'potion')) {
+            const potion = scrapePotion({ xml: itemEntity });
+            if (!potion) return;
+
+            const inventoryPotion: NoitaInventoryPotionItem = {
+              type: 'potion',
+              item: potion,
+              position: position ?? 0,
+            };
+            return inventoryPotion;
+          }
+        })
+        .filter((item): item is NoitaInventoryItem => Boolean(item));
+    }
+  }
 
   const characterDataComponent = playerStateEntity.findNthTag(
     'CharacterDataComponent',
