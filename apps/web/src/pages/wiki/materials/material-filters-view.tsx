@@ -18,7 +18,7 @@ export const MaterialFiltersView = ({
   const MultiSelectString = MultiSelection<string | undefined>();
 
   return (
-    <Card>
+    <Card style={{ maxHeight: 250 }}>
       <Flex gap={10} style={{ maxWidth: 'max-content', marginBottom: 10 }}>
         <span>Tags: </span>
         <MultiSelectString
