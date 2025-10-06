@@ -1,45 +1,23 @@
 import { NoitaMaterial } from '@noita-explorer/model-noita';
 import { NoitaMaterialIcon } from '../../../components/noita-material-icon.tsx';
-import { useNoitaDataWakStore } from '../../../stores/noita-data-wak.ts';
-import { useMemo } from 'react';
 import { Flex } from '@noita-explorer/react-utils';
-import { BooleanIcon } from '@noita-explorer/noita-component-library';
+import { BooleanIcon, Header } from '@noita-explorer/noita-component-library';
+import { useMaterialReactions } from './use-material-reactions.ts';
+import { MaterialReaction } from './material-reaction.tsx';
 
 interface Props {
   material: NoitaMaterial;
 }
 
 export const MaterialOverview = ({ material }: Props) => {
-  const { data } = useNoitaDataWakStore();
-
-  const reactions = useMemo(() => {
-    if (!data) {
-      return [];
-    }
-
-    return data.materialReactions.filter((reaction) => {
-      const isInputReaction = reaction.inputComponents.some(
-        (i) => i.componentId === material.id,
-      );
-
-      if (isInputReaction) {
-        return true;
-      }
-
-      const isOutputReaction = reaction.outputComponents.some(
-        (o) => o.componentId === material.id,
-      );
-
-      return isOutputReaction;
-    });
-  }, [data, material]);
+  const { reactions } = useMaterialReactions({ material });
 
   return (
     <div>
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: '15% 1fr',
+          gridTemplateColumns: 'auto 1fr',
           width: '100%',
           gap: 5,
         }}
@@ -63,7 +41,7 @@ export const MaterialOverview = ({ material }: Props) => {
           {material.name}
         </Flex>
       </div>
-      <table style={{ marginTop: 20 }}>
+      <table style={{ marginTop: 20, marginBottom: 20 }}>
         <thead>
           <tr>
             <th></th>
@@ -81,7 +59,7 @@ export const MaterialOverview = ({ material }: Props) => {
           </tr>
           <tr>
             <td>Durability</td>
-            <td>{material.durability}</td>
+            <td>{material.durability ?? '-'}</td>
           </tr>
           <tr>
             <td>Hardness</td>
@@ -120,7 +98,11 @@ export const MaterialOverview = ({ material }: Props) => {
         </tbody>
       </table>
 
-      <div>Reactions {reactions.length}</div>
+      <Header title={`Reactions (${reactions.length})`}>
+        {reactions.map((reaction, index) => (
+          <MaterialReaction key={index} reaction={reaction} />
+        ))}
+      </Header>
     </div>
   );
 };
