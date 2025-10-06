@@ -28,7 +28,16 @@ function uint8ArrayToBase64(uint8Array: Uint8Array): string {
   return Buffer.from(uint8Array).toString('base64');
 }
 
+function capitalize(str: string): string {
+  if (!str) return '';
+  if (str.length < 1) return '';
+  if (str.length === 1) return str.toUpperCase();
+
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+}
+
 export const stringHelpers = {
   trim: trim,
   uint8ArrayToBase64,
+  capitalize,
 };

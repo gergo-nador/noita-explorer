@@ -111,7 +111,8 @@ const extractCellData = async ({
       text: nameTranslation,
       fromStart: '$',
     });
-    material.name = translations[nameTranslationId]?.en ?? nameTranslationId;
+    const name = translations[nameTranslationId]?.en ?? nameTranslationId;
+    material.name = stringHelpers.capitalize(name);
   }
 
   // parent material
