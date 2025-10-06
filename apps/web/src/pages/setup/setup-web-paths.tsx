@@ -18,13 +18,29 @@ export const SetupWebPaths = () => {
     <Header title={'Paths'}>
       <div>
         <Flex gap={20}>
-          <NoitaTooltipWrapper content={'NollaGamesNoita folder'}>
+          <NoitaTooltipWrapper
+            content={
+              <div>
+                Usually located in:
+                <ul>
+                  <li>
+                    Windows: C:/Users/[Your Windows
+                    Username]/AppData/LocalLow/Nolla_Games_Noita/save00/
+                  </li>
+                  <li>
+                    Linux:
+                    ~/.steam/steam/steamapps/compatdata/881100/pfx/drive_c/users/steamuser/AppData/LocalLow/Nolla_Games_Noita/save00
+                  </li>
+                </ul>
+              </div>
+            }
+          >
             <PathInput
-              type={'directory'}
+              type='directory'
               displayPath={
                 paths.NollaGamesNoita ?? 'Select the NollaGamesNoita folder'
               }
-              dialogTitle={'Select the NollaGamesNoita folder'}
+              dialogTitle='Select the NollaGamesNoita folder'
               path={paths.NollaGamesNoita}
               setPath={(path) => {
                 setPaths(
@@ -37,7 +53,7 @@ export const SetupWebPaths = () => {
                     }),
                 );
               }}
-              fileSystemDialogId={'nolla_games_noita'}
+              fileSystemDialogId='nolla_games_noita'
             />
           </NoitaTooltipWrapper>
 
@@ -56,14 +72,14 @@ export const SetupWebPaths = () => {
             <br />
             <br />
             <Flex align='center'>
-              <Icon type={'warning'} size={20} />
+              <Icon type='warning' size={20} />
               <span>
                 This browser is not fully compatible with certain features of
                 this site (<i>File System API</i>). As a result, you will need
                 to manually set the paths each time you visit. Additionally, you
                 will not be able to modify any of your progress.
               </span>
-              <Icon type={'warning'} size={20} />
+              <Icon type='warning' size={20} />
             </Flex>
           </>
         )}
