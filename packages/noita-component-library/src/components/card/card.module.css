@@ -24,6 +24,8 @@
     padding: 15px;
     background: var(--background);
     color: var(--content);
+
+    overscroll-behavior: contain;
 }
 
 .grid-top-row {
