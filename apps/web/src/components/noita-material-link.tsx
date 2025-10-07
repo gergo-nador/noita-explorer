@@ -7,7 +7,7 @@ import { NoitaMaterialIcon } from './noita-material-icon.tsx';
 
 interface Props {
   materialId: string;
-  name: string;
+  name?: string;
   isInline?: boolean;
   forcePotion?: boolean;
 }
@@ -19,6 +19,8 @@ export const NoitaMaterialLink = ({
   forcePotion,
 }: Props) => {
   const { data } = useNoitaDataWakStore();
+  name ??= materialId;
+
   if (!data) return <span>{name}</span>;
 
   const material = data?.materials?.find(

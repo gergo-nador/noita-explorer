@@ -2,8 +2,8 @@ import { NoitaMaterial } from '@noita-explorer/model-noita';
 import { NoitaMaterialIcon } from '../../../components/noita-material-icon.tsx';
 import { Flex } from '@noita-explorer/react-utils';
 import { BooleanIcon, Header } from '@noita-explorer/noita-component-library';
-import { useMaterialReactions } from './use-material-reactions.ts';
-import { MaterialReaction } from './material-reaction.tsx';
+import { useMaterialReactions } from './material-reaction/use-material-reactions.ts';
+import { MaterialReaction } from './material-reaction/material-reaction.tsx';
 
 interface Props {
   material: NoitaMaterial;

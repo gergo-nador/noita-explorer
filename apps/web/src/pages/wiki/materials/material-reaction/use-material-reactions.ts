@@ -1,9 +1,7 @@
 import { useMemo } from 'react';
-import {
-  NoitaMaterial,
-  NoitaMaterialReactionComponent,
-} from '@noita-explorer/model-noita';
-import { useNoitaDataWakStore } from '../../../stores/noita-data-wak.ts';
+import { NoitaMaterial } from '@noita-explorer/model-noita';
+import { useNoitaDataWakStore } from '../../../../stores/noita-data-wak.ts';
+import { isComponentTheMaterial } from './material-reaction.utils.ts';
 
 interface Props {
   material: NoitaMaterial;
@@ -18,18 +16,6 @@ export const useMaterialReactions = ({ material }: Props) => {
     }
 
     return data.materialReactions.filter((reaction) => {
-      const isComponentTheMaterial = (
-        material: NoitaMaterial,
-        reactionComponent: NoitaMaterialReactionComponent,
-      ): boolean => {
-        if (material.id === reactionComponent.componentId) return true;
-
-        const isTag = /^\[.*\]$/.test(reactionComponent.componentId);
-        if (!isTag) return false;
-
-        return material.tags.includes(reactionComponent.componentId);
-      };
-
       const isInputReaction = reaction.inputComponents.some((component) =>
         isComponentTheMaterial(material, component),
       );
