@@ -42,7 +42,10 @@ export const NoitaMaterialIcon = ({
       <div
         style={{
           width: '100%',
+          minWidth: '15px',
           height: '100%',
+          minHeight: '15px',
+          aspectRatio: 1,
           backgroundImage: `url(${path})`,
           backgroundRepeat: 'repeat',
         }}
@@ -54,7 +57,10 @@ export const NoitaMaterialIcon = ({
     <div
       style={{
         width: '100%',
+        minWidth: '15px',
         height: '100%',
+        minHeight: '15px',
+        aspectRatio: 1,
         backgroundColor: material.graphicsColor ?? material.wangColorHtml,
       }}
     ></div>

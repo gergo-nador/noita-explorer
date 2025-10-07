@@ -40,9 +40,11 @@ export const NoitaMaterialLink = ({
       isInline={isInline}
       buttonDecoration={isInline ? 'none' : 'both'}
     >
-      <Flex>
+      <Flex gap={4}>
         <span>{material.name}</span>
-        <NoitaMaterialIcon material={material} forcePotion={forcePotion} />
+        <div style={{ width: '20px', height: '20px' }}>
+          <NoitaMaterialIcon material={material} forcePotion={forcePotion} />
+        </div>
       </Flex>
     </Link>
   );

@@ -1,8 +1,3 @@
-import {
-  NoitaMaterial,
-  NoitaMaterialReactionComponent,
-} from '@noita-explorer/model-noita';
-
 type ParsedReactionType =
   | { type: 'material-id'; id: string }
   | { type: 'material-tag'; tag: string; extension: string | undefined };
@@ -32,25 +27,3 @@ export function parseReactionMaterial(material: string): ParsedReactionType {
     extension: materialTagExtension,
   };
 }
-
-/**
- * Returns if a matterial matches the reaction component
- * @param material
- * @param reactionComponent
- */
-export const isComponentTheMaterial = (
-  material: NoitaMaterial,
-  reactionComponent: NoitaMaterialReactionComponent,
-): boolean => {
-  const reactionMaterial = parseReactionMaterial(reactionComponent.componentId);
-  if (reactionMaterial.type === 'material-id') {
-    return reactionMaterial.id === material.id;
-  }
-
-  if (reactionMaterial.type === 'material-tag') {
-    if (reactionMaterial.extension) return false;
-    return material.tags.includes(reactionMaterial.tag);
-  }
-
-  return false;
-};

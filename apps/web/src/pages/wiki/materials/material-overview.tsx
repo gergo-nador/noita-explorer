@@ -102,13 +102,37 @@ export const MaterialOverview = ({ material }: Props) => {
         </tbody>
       </table>
 
-      <Header title={`Reactions (${reactions.length})`}>
-        <Flex column gap={8}>
-          {reactions.map((reaction, index) => (
-            <MaterialReaction key={index} reaction={reaction} />
-          ))}
-        </Flex>
-      </Header>
+      {reactions && (
+        <>
+          <Header
+            title={`Source Reactions (${reactions.sourceReactions.length})`}
+          >
+            <Flex column gap={8}>
+              {reactions.sourceReactions.map((reaction, index) => (
+                <MaterialReaction key={index} reaction={reaction} />
+              ))}
+            </Flex>
+          </Header>
+          <Header
+            title={`Product Reactions (${reactions.productReactions.length})`}
+          >
+            <Flex column gap={8}>
+              {reactions.productReactions.map((reaction, index) => (
+                <MaterialReaction key={index} reaction={reaction} />
+              ))}
+            </Flex>
+          </Header>
+          <Header
+            title={`Persistent Reactions (${reactions.persistentReactions.length})`}
+          >
+            <Flex column gap={8}>
+              {reactions.persistentReactions.map((reaction, index) => (
+                <MaterialReaction key={index} reaction={reaction} />
+              ))}
+            </Flex>
+          </Header>
+        </>
+      )}
     </div>
   );
 };
