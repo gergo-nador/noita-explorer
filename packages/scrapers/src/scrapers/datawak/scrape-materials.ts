@@ -258,7 +258,7 @@ const extractReaction = ({
     explosion: undefined,
   };
 
-  const explosionTag = reactionXml.findNthTag('Explosion');
+  const explosionTag = reactionXml.findNthTag('ExplosionConfig');
   if (explosionTag) {
     reaction.explosion = {
       explosionPower:
