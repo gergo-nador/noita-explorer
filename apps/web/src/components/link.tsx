@@ -16,6 +16,7 @@ interface Props {
   disabled?: boolean;
   onDisabledClick?: () => void;
   disabledToast?: string;
+  isInline?: boolean;
 }
 
 export const Link = ({
@@ -26,13 +27,14 @@ export const Link = ({
   disabled,
   onDisabledClick,
   disabledToast,
+  isInline,
 }: Props) => {
   const toast = useToast();
 
   // The <Flex> wrapper is needed for Firefox compatibility, otherwise
   // the links are misaligned
   return (
-    <Flex>
+    <Flex style={{ display: isInline ? 'inline-flex' : 'flex' }}>
       <LinkTag
         to={to}
         external={external ?? false}

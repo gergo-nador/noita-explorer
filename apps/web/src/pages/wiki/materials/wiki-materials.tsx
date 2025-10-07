@@ -75,7 +75,9 @@ export const WikiMaterials = () => {
           {materialsUnique.map((material) => {
             const filter = evaluateFiltersOnMaterials({ material, filters });
 
-            const icon = <NoitaMaterialIcon material={material} />;
+            const icon = (
+              <NoitaMaterialIcon material={material} hasInventoryIcon />
+            );
 
             return (
               <div

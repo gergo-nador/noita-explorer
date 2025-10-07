@@ -1,5 +1,6 @@
 import { Card, Icon } from '@noita-explorer/noita-component-library';
 import { SpaceCharacter } from '../../../components/space-character.tsx';
+import { NoitaMaterialLink } from '../../../components/noita-material-link.tsx';
 
 export const Easter = () => {
   const egg1 = '/images/holidays/egg.png';
@@ -78,7 +79,15 @@ export const Easter = () => {
             <SpaceCharacter />- 7 days before Easter
           </span>
         </div>
-        <div>Mämmi Potion Mämmi will replace 10.9% of potions.</div>
+        <div>
+          <NoitaMaterialLink
+            materialId='mammi'
+            name='Mämmi Potion'
+            forcePotion
+            isInline
+          />
+          <span> will replace 10.9% of potions.</span>
+        </div>
       </Card>
     </div>
   );

@@ -1,7 +1,7 @@
 import { StringKeyDictionary } from '@noita-explorer/model';
 import { NoitaMaterial, NoitaScrapedMedia } from '@noita-explorer/model-noita';
 import {
-  getMaterialIconType,
+  getMaterialAllContainerTypes,
   renderMaterialPotion,
   renderMaterialPouch,
 } from '../../../src/noita/noita-materials';
@@ -20,8 +20,8 @@ export const createMaterialContainerImages = async (
   dict: StringKeyDictionary<NoitaScrapedMedia[]>,
 ) => {
   for (const material of materials) {
-    const type = getMaterialIconType(material);
-    if (!type) {
+    const types = getMaterialAllContainerTypes(material);
+    if (types.length === 0) {
       continue;
     }
 
@@ -31,7 +31,7 @@ export const createMaterialContainerImages = async (
 
     const mediaArray = dict[material.id];
 
-    if (type === 'pouch') {
+    if (types.includes('pouch')) {
       const image = await renderMaterialPouch(material, pouchPng);
       const size = await imageHelpers.getImageSizeBase64(image);
 
@@ -44,7 +44,8 @@ export const createMaterialContainerImages = async (
       };
 
       mediaArray.push(mediaObj);
-    } else if (type === 'potion') {
+    }
+    if (types.includes('pouch')) {
       const image = await renderMaterialPotion(material, potionPng);
       const size = await imageHelpers.getImageSizeBase64(image);
 

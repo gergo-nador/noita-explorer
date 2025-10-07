@@ -1,22 +1,36 @@
 import { NoitaMaterial } from '@noita-explorer/model-noita';
-import { InventoryIcon } from '@noita-explorer/noita-component-library';
+import {
+  InventoryIcon,
+  PixelatedImage,
+} from '@noita-explorer/noita-component-library';
 import { publicPaths } from '../utils/public-paths.ts';
 import { getMaterialIconType } from '../noita/noita-materials.ts';
 
 interface NoitaMaterialIconProps {
   material: NoitaMaterial;
+  hasInventoryIcon?: boolean;
+  forcePotion?: boolean;
 }
 
-export const NoitaMaterialIcon = ({ material }: NoitaMaterialIconProps) => {
-  const materialContainmentType = getMaterialIconType(material);
+export const NoitaMaterialIcon = ({
+  material,
+  hasInventoryIcon,
+  forcePotion,
+}: NoitaMaterialIconProps) => {
+  const materialContainmentType = getMaterialIconType({
+    material,
+    forcePotion,
+  });
   if (materialContainmentType) {
-    return (
-      <InventoryIcon
-        icon={publicPaths.generated.material.image({
-          materialId: material.id,
-          type: materialContainmentType,
-        })}
-      />
+    const imagePath = publicPaths.generated.material.image({
+      materialId: material.id,
+      type: materialContainmentType,
+    });
+
+    return hasInventoryIcon ? (
+      <InventoryIcon icon={imagePath} />
+    ) : (
+      <PixelatedImage src={imagePath} />
     );
   }
 

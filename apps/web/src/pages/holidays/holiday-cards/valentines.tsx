@@ -1,6 +1,7 @@
 import { Card, Icon } from '@noita-explorer/noita-component-library';
 import Particles from '@tsparticles/react';
 import { ISourceOptions } from '@tsparticles/engine';
+import { NoitaMaterialLink } from '../../../components/noita-material-link.tsx';
 
 export const Valentines = () => {
   const heartGif = '/images/holidays/Heart_extrahp_default.gif';
@@ -174,7 +175,15 @@ export const Valentines = () => {
             <span className='text-xl'>Valentine's Day</span>
             <span className='text-secondary text-xl'> - 14 February</span>
           </div>
-          <div>Extra Max Health and Pheromone will spawn more often.</div>
+          <div>
+            <span>Extra Max Health and </span>
+            <NoitaMaterialLink
+              materialId='magic_liquid_charm'
+              name='Pheromone'
+              isInline
+            />
+            <span> will spawn more often.</span>
+          </div>
         </div>
       </Card>
     </div>

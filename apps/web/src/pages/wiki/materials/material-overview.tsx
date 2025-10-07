@@ -28,7 +28,11 @@ export const MaterialOverview = ({ material }: Props) => {
             width: '65px',
           }}
         >
-          <NoitaMaterialIcon key={material.id} material={material} />
+          <NoitaMaterialIcon
+            key={material.id}
+            material={material}
+            hasInventoryIcon
+          />
         </div>
         <Flex
           align='center'
@@ -99,9 +103,11 @@ export const MaterialOverview = ({ material }: Props) => {
       </table>
 
       <Header title={`Reactions (${reactions.length})`}>
-        {reactions.map((reaction, index) => (
-          <MaterialReaction key={index} reaction={reaction} />
-        ))}
+        <Flex column gap={8}>
+          {reactions.map((reaction, index) => (
+            <MaterialReaction key={index} reaction={reaction} />
+          ))}
+        </Flex>
       </Header>
     </div>
   );
