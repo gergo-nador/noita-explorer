@@ -29,7 +29,7 @@
 }
 
 
-.container:focus .grid-main {
+.container:focus-visible .grid-main {
     --background-color: #00000099;
     --border-bottom-color: #00000099;
     --border-bright-color: #A59D8F;

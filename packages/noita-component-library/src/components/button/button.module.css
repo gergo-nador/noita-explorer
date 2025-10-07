@@ -19,7 +19,7 @@ button.button-content{
     appearance: none;
 }
 
-.button-content:hover, .button-content:focus {
+.button-content:hover, .button-content:focus-visible {
     color: #FEFECF;
 }
 
@@ -28,7 +28,7 @@ button.button-content{
     image-rendering: pixelated;
 }
 
-.button-content:hover .icon, .button-content:focus .icon  {
+.button-content:hover .icon, .button-content:focus-visible .icon  {
     display: initial;
 }
 
