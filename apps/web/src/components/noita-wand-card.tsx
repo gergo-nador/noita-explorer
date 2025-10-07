@@ -363,7 +363,7 @@ export const NoitaWandCard = ({
           <>
             <br />
             <Flex
-              wrap='wrap'
+              wrap
               gap={10}
               align='center'
               style={{
@@ -383,7 +383,7 @@ export const NoitaWandCard = ({
         )}
 
         <br />
-        <Flex wrap='wrap' gap={5}>
+        <Flex wrap gap={5}>
           {spellIcons?.map((icon) => (
             <div key={icon.key} style={{ display: 'contents' }}>
               {icon.spellComponent}

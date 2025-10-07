@@ -1,4 +1,4 @@
-import React, { MouseEventHandler } from 'react';
+import React from 'react';
 
 type DivHtmlProps = React.DetailedHTMLProps<
   React.HTMLAttributes<HTMLDivElement>,
@@ -7,9 +7,9 @@ type DivHtmlProps = React.DetailedHTMLProps<
 
 interface FlexProps {
   style?: React.CSSProperties;
-  children: React.ReactNode | React.ReactNode[];
+  children: React.ReactNode;
   gap?: React.CSSProperties['gap'];
-  wrap?: React.CSSProperties['flexWrap'];
+  wrap?: React.CSSProperties['flexWrap'] | boolean;
   justify?: React.CSSProperties['justifyContent'];
   align?: React.CSSProperties['alignItems'];
   width?: React.CSSProperties['width'];
@@ -17,9 +17,6 @@ interface FlexProps {
   direction?: React.CSSProperties['flexDirection'];
   center?: boolean;
   column?: boolean;
-  title?: string;
-  onClick?: MouseEventHandler<HTMLDivElement>;
-  className?: string;
 }
 
 export const Flex = ({
@@ -34,14 +31,11 @@ export const Flex = ({
   direction,
   center,
   column,
-  title,
-  onClick,
-  className,
   ...rest
 }: FlexProps & DivHtmlProps) => {
   const baseStyle: React.CSSProperties = {
     display: 'flex',
-    flexWrap: wrap,
+    flexWrap: typeof wrap === 'boolean' ? 'wrap' : wrap,
     gap: gap,
     alignItems: center ? 'center' : align,
     justifyContent: center ? 'center' : justify,
@@ -51,13 +45,7 @@ export const Flex = ({
   };
 
   return (
-    <div
-      {...rest}
-      style={{ ...baseStyle, ...style }}
-      className={className}
-      title={title}
-      onClick={onClick}
-    >
+    <div {...rest} style={{ ...baseStyle, ...style }}>
       {children}
     </div>
   );

@@ -50,7 +50,7 @@ export const EnemyMediaComponent = ({ enemy }: Props) => {
         </div>
       )}
       {gifs && (
-        <Flex gap={16} wrap='wrap'>
+        <Flex gap={16} wrap>
           {gifs.map((gif) => (
             <NoitaEnemyGifCard
               key={gif.name}

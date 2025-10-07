@@ -289,7 +289,7 @@ function NoitaDataWakScrapeResultDisplay<T>({
           <>
             <div>Count: {result.data.length}</div>
             <Flex
-              wrap='wrap'
+              wrap
               style={{
                 cursor: 'pointer',
               }}
