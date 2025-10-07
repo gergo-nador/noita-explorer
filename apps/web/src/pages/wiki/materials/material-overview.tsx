@@ -104,6 +104,7 @@ export const MaterialOverview = ({ material }: Props) => {
 
       {reactions && (
         <>
+          <br />
           <Header
             title={`Source Reactions (${reactions.sourceReactions.length})`}
           >
@@ -113,6 +114,7 @@ export const MaterialOverview = ({ material }: Props) => {
               ))}
             </Flex>
           </Header>
+          <br />
           <Header
             title={`Product Reactions (${reactions.productReactions.length})`}
           >
@@ -122,6 +124,7 @@ export const MaterialOverview = ({ material }: Props) => {
               ))}
             </Flex>
           </Header>
+          <br />
           <Header
             title={`Persistent Reactions (${reactions.persistentReactions.length})`}
           >
