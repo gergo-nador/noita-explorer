@@ -1,6 +1,4 @@
-type ParsedReactionType =
-  | { type: 'material-id'; id: string }
-  | { type: 'material-tag'; tag: string; extension: string | undefined };
+import { ParsedReactionType } from './material-reaction.types.ts';
 
 export function parseReactionMaterial(material: string): ParsedReactionType {
   const includesSquareBrackets =

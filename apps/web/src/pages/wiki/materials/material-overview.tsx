@@ -110,7 +110,11 @@ export const MaterialOverview = ({ material }: Props) => {
           >
             <Flex column gap={8}>
               {reactions.sourceReactions.map((reaction, index) => (
-                <MaterialReaction key={index} reaction={reaction} />
+                <MaterialReaction
+                  key={index}
+                  reaction={reaction}
+                  currentMaterial={material}
+                />
               ))}
             </Flex>
           </Header>
@@ -120,7 +124,11 @@ export const MaterialOverview = ({ material }: Props) => {
           >
             <Flex column gap={8}>
               {reactions.productReactions.map((reaction, index) => (
-                <MaterialReaction key={index} reaction={reaction} />
+                <MaterialReaction
+                  key={index}
+                  reaction={reaction}
+                  currentMaterial={material}
+                />
               ))}
             </Flex>
           </Header>
@@ -130,7 +138,11 @@ export const MaterialOverview = ({ material }: Props) => {
           >
             <Flex column gap={8}>
               {reactions.persistentReactions.map((reaction, index) => (
-                <MaterialReaction key={index} reaction={reaction} />
+                <MaterialReaction
+                  key={index}
+                  reaction={reaction}
+                  currentMaterial={material}
+                />
               ))}
             </Flex>
           </Header>

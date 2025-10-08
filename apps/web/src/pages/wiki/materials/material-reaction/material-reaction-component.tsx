@@ -1,20 +1,23 @@
-import { parseReactionMaterial } from './material-reaction.utils.ts';
 import { NoitaMaterialLink } from '../../../../components/noita-material-link.tsx';
+import { MaterialReactionProcessed } from './material-reaction.types.ts';
 
 interface Props {
-  reactionComponent: string;
+  reactionComponent: MaterialReactionProcessed;
 }
 
 export const MaterialReactionComponent = ({ reactionComponent }: Props) => {
-  const reactionMaterial = parseReactionMaterial(reactionComponent);
+  const reactionMaterial = reactionComponent.parsed;
+  const materialId =
+    reactionComponent.overrideComponentId ||
+    (reactionMaterial.type === 'material-id' && reactionMaterial.id);
 
-  if (reactionMaterial.type === 'material-id') {
+  if (materialId) {
     return (
       <div>
-        <NoitaMaterialLink materialId={reactionMaterial.id} isInline />
+        <NoitaMaterialLink materialId={materialId} isInline />
       </div>
     );
   }
 
-  return <div>{reactionComponent}</div>;
+  return <div>{reactionComponent.componentId}</div>;
 };
