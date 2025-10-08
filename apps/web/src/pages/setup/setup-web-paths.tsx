@@ -24,12 +24,12 @@ export const SetupWebPaths = () => {
                 Usually located in:
                 <ul>
                   <li>
-                    Windows: C:/Users/[Your Windows
-                    Username]/AppData/LocalLow/Nolla_Games_Noita/save00/
+                    Windows:
+                    C:/Users/[You_Windows_Username]/AppData/LocalLow/Nolla_Games_Noita/
                   </li>
                   <li>
                     Linux:
-                    ~/.steam/steam/steamapps/compatdata/881100/pfx/drive_c/users/steamuser/AppData/LocalLow/Nolla_Games_Noita/save00
+                    ~/.steam/steam/steamapps/compatdata/881100/pfx/drive_c/users/steamuser/AppData/LocalLow/Nolla_Games_Noita/
                   </li>
                 </ul>
               </div>
