@@ -15,7 +15,7 @@ export const SetupWebPaths = () => {
   const { paths } = settings;
 
   return (
-    <Header title={'Paths'}>
+    <Header title='Paths'>
       <div>
         <Flex gap={20}>
           <NoitaTooltipWrapper
@@ -59,11 +59,11 @@ export const SetupWebPaths = () => {
 
           {save00Status !== 'unset' && <div> - </div>}
           {save00Status === 'failed' && (
-            <div className={'text-danger'}>Failed to load</div>
+            <div className='text-danger'>Failed to load</div>
           )}
           {save00Status === 'loading' && <div>Loading...</div>}
           {save00Status === 'loaded' && (
-            <div className={'text-success'}>Loaded</div>
+            <div className='text-success'>Loaded</div>
           )}
         </Flex>
 
