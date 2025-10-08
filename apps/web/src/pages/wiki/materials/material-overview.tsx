@@ -2,7 +2,7 @@ import { NoitaMaterial } from '@noita-explorer/model-noita';
 import { NoitaMaterialIcon } from '../../../components/noita-material-icon.tsx';
 import { Flex } from '@noita-explorer/react-utils';
 import { BooleanIcon, Header } from '@noita-explorer/noita-component-library';
-import { useMaterialReactions } from './material-reaction/use-material-reactions.ts';
+import { useFilterMaterialReactions } from './material-reaction/use-filter-material-reactions.ts';
 import { MaterialReaction } from './material-reaction/material-reaction.tsx';
 
 interface Props {
@@ -10,7 +10,7 @@ interface Props {
 }
 
 export const MaterialOverview = ({ material }: Props) => {
-  const { reactions } = useMaterialReactions({ material });
+  const { reactions } = useFilterMaterialReactions({ material });
 
   return (
     <div>

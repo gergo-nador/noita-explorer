@@ -12,7 +12,7 @@ interface Props {
   material: NoitaMaterial;
 }
 
-export const useMaterialReactions = ({ material }: Props) => {
+export const useFilterMaterialReactions = ({ material }: Props) => {
   const { data } = useNoitaDataWakStore();
   const { materialsLookup } = use(WikiMaterialsContext);
 
