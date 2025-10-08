@@ -1,17 +1,14 @@
 import { NoitaMaterial } from '@noita-explorer/model-noita';
 import { NoitaMaterialIcon } from '../../../components/noita-material-icon.tsx';
 import { Flex } from '@noita-explorer/react-utils';
-import { BooleanIcon, Header } from '@noita-explorer/noita-component-library';
-import { useFilterMaterialReactions } from './material-reaction/use-filter-material-reactions.ts';
-import { MaterialReaction } from './material-reaction/material-reaction.tsx';
+import { BooleanIcon } from '@noita-explorer/noita-component-library';
+import { MaterialOverviewReactions } from './material-overview-reactions.tsx';
 
 interface Props {
   material: NoitaMaterial;
 }
 
 export const MaterialOverview = ({ material }: Props) => {
-  const { reactions } = useFilterMaterialReactions({ material });
-
   return (
     <div>
       <div
@@ -45,7 +42,7 @@ export const MaterialOverview = ({ material }: Props) => {
           {material.name}
         </Flex>
       </div>
-      <table style={{ marginTop: 20, marginBottom: 20 }}>
+      <table style={{ marginTop: 20, marginBottom: 40 }}>
         <thead>
           <tr>
             <th></th>
@@ -101,53 +98,7 @@ export const MaterialOverview = ({ material }: Props) => {
           </tr>
         </tbody>
       </table>
-
-      {reactions && (
-        <>
-          <br />
-          <Header
-            title={`Source Reactions (${reactions.sourceReactions.length})`}
-          >
-            <Flex column gap={8}>
-              {reactions.sourceReactions.map((reaction, index) => (
-                <MaterialReaction
-                  key={index}
-                  reaction={reaction}
-                  currentMaterial={material}
-                />
-              ))}
-            </Flex>
-          </Header>
-          <br />
-          <Header
-            title={`Product Reactions (${reactions.productReactions.length})`}
-          >
-            <Flex column gap={8}>
-              {reactions.productReactions.map((reaction, index) => (
-                <MaterialReaction
-                  key={index}
-                  reaction={reaction}
-                  currentMaterial={material}
-                />
-              ))}
-            </Flex>
-          </Header>
-          <br />
-          <Header
-            title={`Persistent Reactions (${reactions.persistentReactions.length})`}
-          >
-            <Flex column gap={8}>
-              {reactions.persistentReactions.map((reaction, index) => (
-                <MaterialReaction
-                  key={index}
-                  reaction={reaction}
-                  currentMaterial={material}
-                />
-              ))}
-            </Flex>
-          </Header>
-        </>
-      )}
+      <MaterialOverviewReactions material={material} />
     </div>
   );
 };
