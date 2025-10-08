@@ -1,4 +1,5 @@
 export interface NoitaMaterialReaction {
+  id: string;
   inputComponents: NoitaMaterialReactionComponent[];
   outputComponents: NoitaMaterialReactionComponent[];
   probability: number;

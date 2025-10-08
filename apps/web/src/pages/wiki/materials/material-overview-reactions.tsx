@@ -28,9 +28,9 @@ export const MaterialOverviewReactions = ({ material }: Props) => {
         title={`Source Reactions (${reactions.sourceReactions.length})`}
       >
         <Flex column gap={8}>
-          {reactions.sourceReactions.map((reaction, index) => (
+          {reactions.sourceReactions.map((reaction) => (
             <MaterialReaction
-              key={index}
+              key={reaction.id}
               reaction={reaction}
               currentMaterial={material}
             />
@@ -43,9 +43,9 @@ export const MaterialOverviewReactions = ({ material }: Props) => {
         title={`Product Reactions (${reactions.productReactions.length})`}
       >
         <Flex column gap={8}>
-          {reactions.productReactions.map((reaction, index) => (
+          {reactions.productReactions.map((reaction) => (
             <MaterialReaction
-              key={index}
+              key={reaction.id}
               reaction={reaction}
               currentMaterial={material}
             />
@@ -58,9 +58,9 @@ export const MaterialOverviewReactions = ({ material }: Props) => {
         title={`Persistent Reactions (${reactions.persistentReactions.length})`}
       >
         <Flex column gap={8}>
-          {reactions.persistentReactions.map((reaction, index) => (
+          {reactions.persistentReactions.map((reaction) => (
             <MaterialReaction
-              key={index}
+              key={reaction.id}
               reaction={reaction}
               currentMaterial={material}
             />

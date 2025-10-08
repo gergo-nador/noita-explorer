@@ -17,6 +17,7 @@ import {
   XmlWrapperType,
 } from '@noita-explorer/tools/xml';
 import { colorHelpers, stringHelpers } from '@noita-explorer/tools';
+import hash from 'object-hash';
 
 export const scrapeMaterials = async ({
   dataWakParentDirectoryApi,
@@ -248,6 +249,7 @@ const extractReaction = ({
   }
 
   const reaction: NoitaMaterialReaction = {
+    id: '',
     probability: probability,
     inputComponents: inputComponents,
     outputComponents: outputComponents,
@@ -265,6 +267,12 @@ const extractReaction = ({
         explosionTag.getAttribute('cell_explosion_power')?.asInt() ?? 0,
     };
   }
+
+  reaction.id = hash({
+    probability: reaction.probability,
+    inputComponents: reaction.inputComponents,
+    outputComponents: reaction.outputComponents,
+  });
 
   return reaction;
 };

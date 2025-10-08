@@ -6,6 +6,7 @@ import { BooleanIcon, Card } from '@noita-explorer/noita-component-library';
 import { MaterialReactionComponent } from './material-reaction-component.tsx';
 import { Flex } from '@noita-explorer/react-utils';
 import { useProcessMaterialReaction } from './use-process-material-reaction.ts';
+import React from 'react';
 
 interface Props {
   reaction: NoitaMaterialReaction;
@@ -29,7 +30,7 @@ export const MaterialReaction = ({ reaction, currentMaterial }: Props) => {
         }}
       >
         {persistentComponents.map((persistentComponent) => (
-          <>
+          <React.Fragment key={persistentComponent.componentId}>
             <div style={{ justifySelf: 'start' }}>
               <MaterialReactionComponent
                 reactionComponent={persistentComponent}
@@ -41,10 +42,10 @@ export const MaterialReaction = ({ reaction, currentMaterial }: Props) => {
                 reactionComponent={persistentComponent}
               />
             </div>
-          </>
+          </React.Fragment>
         ))}
         {extensionComponents.map((extension) => (
-          <>
+          <React.Fragment key={extension[0].componentId}>
             <div style={{ justifySelf: 'start' }}>
               <MaterialReactionComponent reactionComponent={extension[0]} />
             </div>
@@ -52,19 +53,25 @@ export const MaterialReaction = ({ reaction, currentMaterial }: Props) => {
             <div style={{ justifySelf: 'end' }}>
               <MaterialReactionComponent reactionComponent={extension[1]} />
             </div>
-          </>
+          </React.Fragment>
         ))}
         {(inputComponents.length > 0 || outputComponents.length > 0) && (
           <>
             <div style={{ justifySelf: 'start' }}>
-              {inputComponents.map((component) => (
-                <MaterialReactionComponent reactionComponent={component} />
+              {inputComponents.map((component, index) => (
+                <MaterialReactionComponent
+                  key={component.componentId + index}
+                  reactionComponent={component}
+                />
               ))}
             </div>
             <Flex align='center'>{'-->'}</Flex>
             <div style={{ justifySelf: 'end' }}>
-              {outputComponents.map((component) => (
-                <MaterialReactionComponent reactionComponent={component} />
+              {outputComponents.map((component, index) => (
+                <MaterialReactionComponent
+                  key={component.componentId + index}
+                  reactionComponent={component}
+                />
               ))}
             </div>
           </>
