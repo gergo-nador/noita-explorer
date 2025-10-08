@@ -108,25 +108,56 @@ export const useProcessMaterialReaction = ({
         if (inputComponent.parsed.type !== 'material-tag') continue;
         if (outputComponent.parsed.type !== 'material-tag') continue;
 
-        // if the current material is the source material
-        if (currentMaterial.tags.includes(inputComponent.parsed.tag)) {
+        const inputTag = inputComponent.parsed.tag;
+        const inputExtension = inputComponent.parsed.extension;
+        const outputTag = outputComponent.parsed.tag;
+        const outputExtension = outputComponent.parsed.extension;
+
+        // if the current material is the source material and extension is on the product side
+        // ([current_mat] --> [current_mat]_ext)
+        if (outputExtension && currentMaterial.tags.includes(inputTag)) {
           inputComponent.overrideComponentId = currentMaterial.id;
-          outputComponent.overrideComponentId = `${currentMaterial.id}_${outputComponent.parsed.extension}`;
+          outputComponent.overrideComponentId = `${currentMaterial.id}_${outputExtension}`;
+          continue;
         }
 
-        // if the current material is the product material
-        const outputExtension = outputComponent.parsed.extension;
+        // if the current material is the product material and extension is on the source material
+        // ([current_mat]_ext --> [current_mat])
+        if (inputExtension && currentMaterial.tags.includes(outputTag)) {
+          inputComponent.overrideComponentId = `${currentMaterial.id}_${inputExtension}`;
+          outputComponent.overrideComponentId = currentMaterial.id;
+          continue;
+        }
+
+        // if the current material is the product material with extension
+        // ([parent_mat] --> [parent_mat]_ext where [parent_mat]_ext == current_mat)
         if (outputExtension && currentMaterial.id.endsWith(outputExtension)) {
-          const sourceMaterialId = currentMaterial.id.substring(
+          const parentMaterialId = currentMaterial.id.substring(
             0,
             currentMaterial.id.length - outputExtension.length - 1,
           );
 
-          const sourceMaterialExists = sourceMaterialId in materialsLookup;
+          const parentMaterialExists = parentMaterialId in materialsLookup;
 
-          if (sourceMaterialExists) {
-            inputComponent.overrideComponentId = sourceMaterialId;
+          if (parentMaterialExists) {
+            inputComponent.overrideComponentId = parentMaterialId;
             outputComponent.overrideComponentId = currentMaterial.id;
+          }
+        }
+
+        // if the current material is the product material with extension
+        // ([parent_mat]_ext --> [parent_mat] where [parent_mat]_ext == current_mat)
+        if (inputExtension && currentMaterial.id.endsWith(inputExtension)) {
+          const parentMaterialId = currentMaterial.id.substring(
+            0,
+            currentMaterial.id.length - inputExtension.length - 1,
+          );
+
+          const parentMaterialExists = parentMaterialId in materialsLookup;
+
+          if (parentMaterialExists) {
+            inputComponent.overrideComponentId = currentMaterial.id;
+            outputComponent.overrideComponentId = parentMaterialId;
           }
         }
       }
