@@ -136,7 +136,10 @@ const SessionCard = ({ session }: { session: NoitaSession }) => {
             {session.seed}
           </div>
           <div>
-            <Icon src='images/data-wak/spells/lifetime.webp' size={20} />
+            <Icon
+              src={publicPaths.static.dataWak.spellProperties('lifetime')}
+              size={20}
+            />
             {timeHelpers.secondsToTimeString(session.playTime)}
           </div>
           <div>
