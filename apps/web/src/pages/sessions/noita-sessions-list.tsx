@@ -12,10 +12,11 @@ import {
   NoitaTooltipWrapper,
 } from '@noita-explorer/noita-component-library';
 import { Flex } from '@noita-explorer/react-utils';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { HoveredStyle } from '@noita-explorer/react-utils';
 import { publicPaths } from '../../utils/public-paths.ts';
 import { SpaceCharacter } from '../../components/space-character.tsx';
+import { useInfiniteScroll } from './useInfiniteScroll.ts';
 
 interface NoitaSessionsListProps {
   sessionsGrouped: StringKeyDictionary<NoitaSession[]>;
@@ -84,8 +85,11 @@ export const NoitaSessionsList = ({
 
   const hasMoreItems = loadedSessionsCount < itemsCount;
 
+  const ref = useRef<HTMLDivElement>(null);
+  useInfiniteScroll({ ref, bottomThreshold: 400, onBottomReached: loadNext });
+
   return (
-    <Flex gap={20} style={{ flexDirection: 'column' }}>
+    <Flex gap={20} ref={ref} style={{ flexDirection: 'column' }}>
       {loadedItems.map((item) => {
         const hasNoSession = item.val.length === 0;
 
