@@ -7,6 +7,7 @@ import { HoveredStyle } from '@noita-explorer/react-utils';
 import { useInfiniteScroll } from './use-infinite-scroll.ts';
 import { useSessionPagination } from './use-session-pagination.ts';
 import { NoitaSessionCard } from './noita-session-card.tsx';
+import React from 'react';
 
 interface NoitaSessionsListProps {
   sessionsGrouped: StringKeyDictionary<NoitaSession[]>;
@@ -28,14 +29,17 @@ export const NoitaSessionsList = ({
         const hasNoSession = item.val.length === 0;
 
         if (hasNoSession) {
-          return <></>;
+          return <React.Fragment key={item.key}></React.Fragment>;
         }
 
         return (
           <Header title={item.key} key={item.key}>
             <Flex gap={20} style={{ flexDirection: 'column' }}>
               {item.val.map((session) => (
-                <NoitaSessionCard session={session} />
+                <NoitaSessionCard
+                  key={session.startedAt.getTime()}
+                  session={session}
+                />
               ))}
             </Flex>
           </Header>

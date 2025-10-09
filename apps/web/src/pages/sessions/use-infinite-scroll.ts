@@ -15,6 +15,46 @@ export const useInfiniteScroll = ({
     if (!ref.current) return;
     const scrollableParent = getScrollableParent(ref.current);
 
+    const intersectionObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const target = entry.target;
+          if (!('style' in target)) return;
+          const htmlElement = target as HTMLDivElement;
+
+          htmlElement.style.visibility =
+            entry.intersectionRatio > 0 ? 'visible' : 'hidden';
+        });
+      },
+      {
+        root: scrollableParent,
+        threshold: [0, 0.5, 1.0],
+      },
+    );
+
+    ref.current.childNodes.forEach(
+      (node) => node instanceof Element && intersectionObserver.observe(node),
+    );
+
+    const mutationObserver = new MutationObserver((mutations) => {
+      for (const entry of mutations) {
+        if (entry.type !== 'childList') return;
+        // remove unused observers
+        entry.removedNodes.forEach(
+          (node) =>
+            node instanceof Element && intersectionObserver.unobserve(node),
+        );
+        // add new observers
+        entry.addedNodes.forEach(
+          (node) =>
+            node instanceof Element && intersectionObserver.observe(node),
+        );
+      }
+    });
+    mutationObserver.observe(scrollableParent, {
+      childList: true,
+    });
+
     const onScroll = () => {
       const bottom =
         scrollableParent.scrollHeight -
@@ -27,7 +67,11 @@ export const useInfiniteScroll = ({
     };
 
     scrollableParent.addEventListener('scroll', onScroll, true);
-    return () => scrollableParent.removeEventListener('scroll', onScroll);
+    return () => {
+      intersectionObserver.disconnect();
+      mutationObserver.disconnect();
+      scrollableParent.removeEventListener('scroll', onScroll);
+    };
   }, [bottomThreshold, onBottomReached, ref]);
 };
 
