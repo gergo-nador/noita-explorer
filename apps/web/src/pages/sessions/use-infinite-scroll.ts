@@ -26,7 +26,7 @@ export const useInfiniteScroll = ({
       }
     };
 
-    scrollableParent.addEventListener('scroll', onScroll);
+    scrollableParent.addEventListener('scroll', onScroll, true);
     return () => scrollableParent.removeEventListener('scroll', onScroll);
   }, [bottomThreshold, onBottomReached, ref]);
 };

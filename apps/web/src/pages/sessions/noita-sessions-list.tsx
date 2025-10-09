@@ -33,12 +33,7 @@ export const NoitaSessionsList = ({
 
         return (
           <Header title={item.key} key={item.key}>
-            <Flex
-              gap={20}
-              style={{
-                flexDirection: 'column',
-              }}
-            >
+            <Flex gap={20} style={{ flexDirection: 'column' }}>
               {item.val.map((session) => (
                 <NoitaSessionCard session={session} />
               ))}
