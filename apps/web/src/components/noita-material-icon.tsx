@@ -17,23 +17,6 @@ export const NoitaMaterialIcon = ({
   hasInventoryIcon,
   forcePotion,
 }: NoitaMaterialIconProps) => {
-  const materialContainmentType = getMaterialIconType({
-    material,
-    forcePotion,
-  });
-  if (materialContainmentType) {
-    const imagePath = publicPaths.generated.material.image({
-      materialId: material.id,
-      type: materialContainmentType,
-    });
-
-    return hasInventoryIcon ? (
-      <InventoryIcon icon={imagePath} />
-    ) : (
-      <PixelatedImage src={imagePath} />
-    );
-  }
-
   if (material.hasGraphicsImage) {
     const path = publicPaths.generated.material.image({
       materialId: material.id,
@@ -50,6 +33,23 @@ export const NoitaMaterialIcon = ({
           backgroundRepeat: 'repeat',
         }}
       ></div>
+    );
+  }
+
+  const materialContainmentType = getMaterialIconType({
+    material,
+    forcePotion,
+  });
+  if (materialContainmentType) {
+    const imagePath = publicPaths.generated.material.image({
+      materialId: material.id,
+      type: materialContainmentType,
+    });
+
+    return hasInventoryIcon ? (
+      <InventoryIcon icon={imagePath} />
+    ) : (
+      <PixelatedImage src={imagePath} />
     );
   }
 
