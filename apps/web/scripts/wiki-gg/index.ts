@@ -7,6 +7,13 @@ import {
 import { readDataWak, writeDataWak } from '../utils/set-data-wak';
 import { stringHelpers } from '@noita-explorer/tools';
 
+if (process.env.CI_INTERNET_DISABLED === '1') {
+  console.log(
+    'Skipping wiki links scraping as internet access is disabled disabled CI_INTERNET_DISABLED=1',
+  );
+  process.exit(0);
+}
+
 run();
 
 async function run() {
