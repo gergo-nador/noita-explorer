@@ -67,12 +67,14 @@ export const MaterialReaction = ({ reaction, currentMaterial }: Props) => {
             </div>
             <Flex align='center'>{'-->'}</Flex>
             <div style={{ justifySelf: 'end' }}>
-              {outputComponents.map((component, index) => (
-                <MaterialReactionComponent
-                  key={component.componentId + index}
-                  reactionComponent={component}
-                />
-              ))}
+              <Flex column align='end'>
+                {outputComponents.map((component, index) => (
+                  <MaterialReactionComponent
+                    key={component.componentId + index}
+                    reactionComponent={component}
+                  />
+                ))}
+              </Flex>
             </div>
           </>
         )}
