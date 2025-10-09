@@ -24,7 +24,7 @@ export const NoitaSessionsList = ({
   useInfiniteScroll({ ref, bottomThreshold: 400, onBottomReached: loadNext });
 
   return (
-    <Flex gap={20} ref={ref} style={{ flexDirection: 'column' }}>
+    <Flex gap={20} ref={ref} column>
       {loadedItems.map((item) => {
         const hasNoSession = item.val.length === 0;
 
@@ -34,7 +34,7 @@ export const NoitaSessionsList = ({
 
         return (
           <Header title={item.key} key={item.key}>
-            <Flex gap={20} style={{ flexDirection: 'column' }}>
+            <Flex gap={20} column>
               {item.val.map((session) => (
                 <NoitaSessionCard
                   key={session.startedAt.getTime()}
