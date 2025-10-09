@@ -1,4 +1,9 @@
-import { fetchWikiEnemies, fetchWikiPerks, fetchWikiSpells } from './fetchers';
+import {
+  fetchWikiEnemies,
+  fetchWikiMaterials,
+  fetchWikiPerks,
+  fetchWikiSpells,
+} from './fetchers';
 import { readDataWak, writeDataWak } from '../utils/set-data-wak';
 import { stringHelpers } from '@noita-explorer/tools';
 
@@ -46,6 +51,19 @@ async function run() {
       if (!wiki) continue;
 
       enemy.wikiLink = wiki.link;
+    }
+  }
+
+  // materials
+  {
+    const materialWikis = await fetchWikiMaterials();
+    for (const material of dataWak.materials) {
+      const id = material.id;
+      const wiki = materialWikis[id];
+
+      if (!wiki) continue;
+
+      material.wikiLink = wiki.link;
     }
   }
 

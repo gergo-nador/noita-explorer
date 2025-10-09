@@ -3,6 +3,7 @@ import { NoitaMaterialIcon } from '../../../components/noita-material-icon.tsx';
 import { Flex } from '@noita-explorer/react-utils';
 import { BooleanIcon } from '@noita-explorer/noita-component-library';
 import { MaterialOverviewReactions } from './material-overview-reactions.tsx';
+import { Link } from '../../../components/link.tsx';
 
 interface Props {
   material: NoitaMaterial;
@@ -103,6 +104,16 @@ export const MaterialOverview = ({ material }: Props) => {
             </tr>
           </tbody>
         </table>
+        {material.wikiLink && (
+          <>
+            <hr />
+            <Link to={material.wikiLink} external>
+              {material.wikiLink}
+            </Link>
+            <hr />
+            <br />
+          </>
+        )}
         <MaterialOverviewReactions material={material} />
       </div>
     </>

@@ -30,6 +30,7 @@ export interface NoitaMaterial {
   density: number | undefined;
   burnable: boolean;
   liquidSand: boolean;
+  wikiLink?: string;
 
   parent:
     | {
