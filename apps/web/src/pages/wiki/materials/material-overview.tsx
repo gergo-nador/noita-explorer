@@ -65,6 +65,12 @@ export const MaterialOverview = ({ material }: Props) => {
               <td>{material.cellType}</td>
             </tr>
             <tr>
+              <td>Liquid sand</td>
+              <td>
+                <BooleanIcon value={material.liquidSand} />
+              </td>
+            </tr>
+            <tr>
               <td>Durability</td>
               <td>{material.durability ?? '-'}</td>
             </tr>
