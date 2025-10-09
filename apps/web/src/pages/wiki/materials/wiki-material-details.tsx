@@ -22,7 +22,7 @@ export const WikiMaterialDetails = () => {
         description={material?.id ?? 'Browse any in-game material.'}
       />
       <main>
-        {!material && <span>Select a material</span>}
+        {!material && <div style={{ padding: 8 }}>Select a material</div>}
         {material && <MaterialOverview key={material.id} material={material} />}
       </main>
     </>

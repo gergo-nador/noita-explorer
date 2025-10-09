@@ -11,12 +11,13 @@ import { NoitaMaterial } from '@noita-explorer/model-noita';
 import { MaterialFilters } from './material-filters.ts';
 import { MaterialFiltersView } from './material-filters-view.tsx';
 import { Flex } from '@noita-explorer/react-utils';
-import { Link, Outlet } from 'react-router-dom';
+import { Link, Outlet, useParams } from 'react-router-dom';
 import { pages } from '../../../routes/pages.ts';
 import { WikiMaterialsContext } from './wiki-materials.context.ts';
 
 export const WikiMaterials = () => {
   const { data } = useNoitaDataWakStore();
+  const { materialId } = useParams();
 
   const [filters, setFilters] = useState<MaterialFilters>({
     tag: undefined,
@@ -123,6 +124,7 @@ export const WikiMaterials = () => {
             position: 'sticky',
             top: 0,
           }}
+          styleContent={materialId ? { padding: 0 } : undefined}
         >
           <Outlet />
         </Card>
