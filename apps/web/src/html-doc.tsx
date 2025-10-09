@@ -25,6 +25,7 @@ export const HtmlDoc = ({ children, canonicalUrl }: Props) => {
           name='google-site-verification'
           content='pC4tL9YCkPCuXtbGTraiIcDlsFQntUuwn17pNtr01Ek'
         />
+        <meta name='msvalidate.01' content='A9098BE58396A7ABF8DCE6BEC276D738' />
         <link rel='manifest' href='/manifest.json' />
         <link
           rel='apple-touch-icon'
