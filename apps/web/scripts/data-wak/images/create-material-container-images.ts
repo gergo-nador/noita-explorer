@@ -45,7 +45,7 @@ export const createMaterialContainerImages = async (
 
       mediaArray.push(mediaObj);
     }
-    if (types.includes('pouch')) {
+    if (types.includes('potion')) {
       const image = await renderMaterialPotion(material, potionPng);
       const size = await imageHelpers.getImageSizeBase64(image);
 
