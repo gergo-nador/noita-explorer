@@ -115,7 +115,9 @@ VITE_ENV=development
 
 ### Running the Website development server
 
-0. If you are running the website for the first time, run the build script with the `CI_DISABLED=0`
+#### Build
+
+If you are running the website for the first time, run the build script with the `CI_DISABLED=0`
 
 Important: running the build script with `CI_DISABLED` not equal to `1` will download the `data.wak` and `common.csv` 
 files from the noita-explorer's hosted storage. More about this in the CI section.
@@ -124,15 +126,15 @@ files from the noita-explorer's hosted storage. More about this in the CI sectio
 npm run build
 ```
 
-(later you can set the `CI_DISABLED` to back to `1`)
+Note for Windows devs: the build pipeline includes `.sh` files, which cannot be executed natively on Windows. To run the build command, please use a unix based command line, such as Git Bash.
 
-1. Run development server
+#### Run the development server
 
 ```shell
 npm run dev:web
 ```
 
-2. Visit https://localhost:4000 in your preferred browser
+Visit https://localhost:4000 in your preferred browser
 
 
 ## Branches and Environments
