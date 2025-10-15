@@ -106,8 +106,12 @@ npm install
 ```dotenv
 CI_DATA_WAK_URL=https://storage.noita-explorer.com/data.wak
 CI_TRANSLATIONS_URL=https://storage.noita-explorer.com/common.csv
-# If set to "1", it skips generating static assets for the website
+# skips generating static assets for the website
 CI_DISABLED=0
+# skips generating static pages (not needed for development)
+CI_SSG_DISABLED=1
+# skips any CI task that requires internet access (scraping the noita.wiki.gg links)
+CI_INTERNET_DISABLED=1
 # VITE_ENV is set to "production" in the deployed main branch
 # and is set to "preview" in the deployed non-main branches
 VITE_ENV=development
