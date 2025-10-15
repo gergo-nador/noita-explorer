@@ -34,6 +34,7 @@ export const ActiveIconWrapper = ({
           offset={10}
           anchorSelect={`#${id}`}
           isOpen={true}
+          opacity={0.97}
           style={{
             zIndex: ZIndexManager.tooltip,
             backgroundColor: 'transparent',
