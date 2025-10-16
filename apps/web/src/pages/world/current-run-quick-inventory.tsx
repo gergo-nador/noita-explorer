@@ -12,9 +12,17 @@ export const CurrentRunQuickInventory = () => {
 
   return (
     <Flex gap={5}>
-      {currentRun.playerState.inventory.wands.map((inventoryWand, index) => (
-        <InventoryWand key={index} inventoryWand={inventoryWand} />
-      ))}
+      {enumerateHelpers.range(0, 4).map((i) => {
+        const wand = currentRun.playerState.inventory.wands.find(
+          (wand) => wand.position === i,
+        );
+
+        if (wand) {
+          return <InventoryWand key={wand.position} inventoryWand={wand} />;
+        }
+
+        return <InventoryIcon size={50} key={i} />;
+      })}
       {enumerateHelpers.range(0, 4).map((i) => {
         const item = currentRun.playerState.inventory.items.find(
           (item) => item.position === i,
@@ -23,7 +31,7 @@ export const CurrentRunQuickInventory = () => {
           return <InventoryPotion item={item} key={item.position} />;
         }
 
-        return <InventoryIcon size={50} />;
+        return <InventoryIcon size={50} key={i} />;
       })}
     </Flex>
   );

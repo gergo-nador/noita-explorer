@@ -14,7 +14,6 @@ import {
   NoitaDamageModel,
   getDefaultNoitaDamageMultipliers,
   NoitaInventoryWand,
-  NoitaWand,
   NoitaInventoryPotionItem,
   NoitaInventoryItem,
 } from '@noita-explorer/model-noita';
@@ -150,9 +149,19 @@ export const scrapePlayerState = async ({
         hasEntityTag(e, 'wand'),
       );
       playerState.inventory.wands = wandEntities
-        .map((wandEntity) => scrapeWand({ wandXml: wandEntity }))
-        .filter((wand): wand is NoitaWand => Boolean(wand))
-        .map((wand): NoitaInventoryWand => ({ wand: wand }));
+        .map((wandEntity) => {
+          const wand = scrapeWand({ wandXml: wandEntity });
+
+          const itemComponent = wandEntity.findNthTag('ItemComponent');
+          const position = itemComponent
+            ?.getRequiredAttribute('inventory_slot.x')
+            ?.asInt();
+
+          return { wand, position };
+        })
+        .filter((inventoryWand): inventoryWand is NoitaInventoryWand =>
+          Boolean(inventoryWand.wand),
+        );
     }
 
     // quick inventory other items
@@ -166,7 +175,7 @@ export const scrapePlayerState = async ({
           const itemComponent = itemEntity.findNthTag('ItemComponent');
           const position = itemComponent
             ?.getRequiredAttribute('inventory_slot.x')
-            .asInt();
+            ?.asInt();
 
           if (hasEntityTag(itemEntity, 'potion')) {
             const potion = scrapePotion({ xml: itemEntity });
