@@ -16,12 +16,14 @@ import {
   NoitaInventoryWand,
   NoitaInventoryPotionItem,
   NoitaInventoryItem,
+  NoitaConstants,
 } from '@noita-explorer/model-noita';
 import { extractDamageMultipliers } from '../datawak/scrape-enemies/extract-damage-multipliers.ts';
 import { extractGenomeData } from '../datawak/scrape-enemies/extract-genome-data.ts';
 import { hasEntityTag, splitNoitaEntityTags } from '../common/tags.ts';
 import { scrapeWand } from '../common/scrape-wand.ts';
 import { scrapePotion } from '../common/scrape-potion.ts';
+import { mathHelpers } from '@noita-explorer/tools';
 
 export const scrapePlayerState = async ({
   save00DirectoryApi,
@@ -89,6 +91,15 @@ export const scrapePlayerState = async ({
     maxHp: damageModelComponent.getRequiredAttribute('max_hp').asFloat(),
     damageMultipliers: getDefaultNoitaDamageMultipliers(),
   };
+
+  damageModel.hp = mathHelpers.round(
+    damageModel.hp * NoitaConstants.hpMultiplier,
+    2,
+  );
+  damageModel.maxHp = mathHelpers.round(
+    damageModel.maxHp * NoitaConstants.hpMultiplier,
+    2,
+  );
 
   const damageMultipliersComponent =
     damageModelComponent.findNthTag('damage_multipliers');
