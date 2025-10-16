@@ -8,9 +8,6 @@
     "types": ["node", "jest"],
     "skipLibCheck": true,
     "esModuleInterop": true,
-    "composite": true,
-    "declaration": true,
-    "declarationMap": true,
 
     /* Bundler mode */
     "moduleResolution": "bundler",
