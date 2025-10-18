@@ -1,0 +1,26 @@
+{
+  "name": "@noita-explorer/fastlz",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "gypfile": true,
+  "main": "dist/main.cjs.js",
+  "module": "dist/main.es.js",
+  "types": "dist/main.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/main.d.ts",
+      "import": "./dist/main.es.js",
+      "require": "./dist/main.cjs.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc && vite build"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "typescript": "~5.6.2",
+    "vite": "^6.0.1",
+    "vite-plugin-dts": "^4.3.0"
+  }
+}
