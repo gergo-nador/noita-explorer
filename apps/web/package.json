@@ -25,6 +25,7 @@
     "generate-static-site": "npx tsx scripts/ssg/index.ts"
   },
   "dependencies": {
+    "@noita-explorer/fastlz": "*",
     "@noita-explorer/file-systems": "*",
     "@noita-explorer/model": "*",
     "@noita-explorer/model-noita": "*",

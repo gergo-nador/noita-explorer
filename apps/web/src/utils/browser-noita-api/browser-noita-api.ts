@@ -202,7 +202,7 @@ const openFolderDialogFallback = async (id: string | undefined) => {
   return name;
 };
 
-const getSave00FolderHandle = async () => {
+export const getSave00FolderHandle = async () => {
   const db = await noitaDb;
   const config = db.config;
 
