@@ -4,8 +4,10 @@ export async function createFastLzCompressor() {
   const module = await createModule();
 
   return {
-    decompress: (input: Uint8Array, maxOutputSize?: number) =>
+    decompressUint8Array: (input: Uint8Array, maxOutputSize?: number) =>
       decompress({ module, input, maxOutputSize }),
+    decompressBuffer: (input: Buffer, maxOutputSize?: number) =>
+      decompressBuffer({ module, input, maxOutputSize }),
   };
 }
 
@@ -38,7 +40,6 @@ function decompress({
     // copy input data to WASM memory
     module.HEAPU8.set(input, inputPtr);
 
-    // Call decompression function
     const decompressedSize = fastlzDecompress(
       inputPtr,
       input.length,
@@ -64,8 +65,17 @@ function decompress({
   }
 }
 
-createFastLzCompressor().then((fastLzCompressor) => {
-  const inputData = new Uint8Array([0, 1, 2]);
-  const outputData = fastLzCompressor.decompress(inputData);
-  console.log(outputData);
-});
+function decompressBuffer({
+  module,
+  input,
+  maxOutputSize,
+}: {
+  module: ImportModule;
+  input: Buffer;
+  maxOutputSize?: number;
+}): Buffer {
+  const uintArray = new Uint8Array(input);
+  const output = decompress({ module, input: uintArray, maxOutputSize });
+
+  return Buffer.from(output);
+}
