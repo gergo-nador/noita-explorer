@@ -1,25 +1,27 @@
-import fs from 'fs';
 import { NoitaCompressedFile } from './noita-compressed-file.ts';
-import { createFastLzCompressor } from '@noita-explorer/fastlz';
+import { uncompressNoitaFile } from './uncompress-noita-file.ts';
+import { parseRawChunk } from './chunks/parse-raw-chunk.ts';
+import { FileSystemFileAccess } from '@noita-explorer/model';
+import { Buffer } from 'buffer';
 
-async function main() {
-  const filePath =
-    'C:\\Users\\enbi8\\coding\\noita\\noita-explorer\\packages\\map\\example-files\\world_1024_-512.png_petri';
-  const file = fs.readFileSync(filePath);
+export async function testParseChunk(file: FileSystemFileAccess) {
+  let fileBuffer = await file.read.asBuffer();
+  // ensure file buffer is an actual buffer
+  if (!Buffer.isBuffer(fileBuffer)) {
+    fileBuffer = Buffer.from(fileBuffer);
+  }
 
   const compressedFile: NoitaCompressedFile = {
-    compressedDataSize: file.readInt32LE(0),
-    uncompressedDataSize: file.readInt32LE(4),
-    data: file.subarray(8),
+    compressedDataSize: fileBuffer.readInt32LE(0),
+    uncompressedDataSize: fileBuffer.readInt32LE(4),
+    data: fileBuffer.subarray(8),
   };
 
   console.log('compressed expected size', compressedFile.compressedDataSize);
   console.log('compressed file size', compressedFile.data.length);
   console.log();
 
-  const fastLzCompressor = await createFastLzCompressor();
-
-  const output = fastLzCompressor.decompressBuffer(compressedFile.data);
+  const output = await uncompressNoitaFile(compressedFile);
 
   console.log(
     'uncompressed expected size',
@@ -28,9 +30,6 @@ async function main() {
   console.log('uncompressed file size', output.length);
   console.log();
 
-  console.log('version', output.readInt32LE(0));
-  console.log('width', output.readInt32LE(4));
-  console.log('height', output.readInt32LE(8));
+  const chunk = parseRawChunk(output);
+  console.log('chunk', chunk);
 }
-
-main();

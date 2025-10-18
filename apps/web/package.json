@@ -27,6 +27,7 @@
   "dependencies": {
     "@noita-explorer/fastlz": "*",
     "@noita-explorer/file-systems": "*",
+    "@noita-explorer/map": "*",
     "@noita-explorer/model": "*",
     "@noita-explorer/model-noita": "*",
     "@noita-explorer/noita-component-library": "*",

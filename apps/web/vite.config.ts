@@ -23,13 +23,6 @@ export default defineConfig(({ mode }): UserConfig => {
             src: '../../node_modules/@noita-explorer/noita-component-library/dist/media/*',
             dest: 'noita-component-library',
           },
-          {
-            src: [
-              '../../node_modules/@noita-explorer/fastlz/dist/fastlz.wasm',
-              '../../node_modules/@noita-explorer/fastlz/dist/main.es.js',
-            ],
-            dest: 'fastlz',
-          },
         ],
       }),
     ],

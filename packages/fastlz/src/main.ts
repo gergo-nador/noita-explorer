@@ -1,4 +1,5 @@
-import createModule, { ImportModule } from './wrapper/fastlz';
+import createModule, { ImportModule } from './wrapper/fastlz-single';
+import { Buffer } from 'buffer';
 
 export async function createFastLzCompressor() {
   const module = await createModule();
@@ -20,7 +21,7 @@ function decompress({
   input: Uint8Array;
   maxOutputSize?: number;
 }): Uint8Array {
-  const fastlzDecompress = module.cwrap('_fastlz_decompress', 'number', [
+  const fastlzDecompress = module.cwrap('fastlz_decompress', 'number', [
     'number',
     'number',
     'number',
@@ -29,7 +30,7 @@ function decompress({
 
   if (maxOutputSize === undefined) {
     // this should be enough for fastlz
-    maxOutputSize = input.length * 10;
+    maxOutputSize = input.length * 30;
   }
 
   // allocate memory
