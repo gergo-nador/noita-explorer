@@ -24,6 +24,10 @@ Run the following command in the root of the `fastlz` package:
 docker run --rm -v %cd%\src:/src emscripten/emsdk emcc fastlz/fastlz.c -o wrapper/fastlz.js -s EXPORT_ES6=1 -s EXPORT_NAME="createModule" -s EXPORTED_FUNCTIONS="[\"_fastlz_decompress\",\"_malloc\",\"_free\"]" -s EXPORTED_RUNTIME_METHODS="[\"HEAPU8\",\"cwrap\"]"
 ```
 
+```
+docker run --rm -v %cd%\src:/src emscripten/emsdk emcc fastlz/fastlz.c -o wrapper/fastlz-single.js -s EXPORT_ES6=1 -s EXPORT_NAME="createModule" -s EXPORTED_FUNCTIONS="[\"_fastlz_decompress\",\"_malloc\",\"_free\"]" -s EXPORTED_RUNTIME_METHODS="[\"HEAPU8\",\"cwrap\"]" -s SINGLE_FILE=1
+```
+
 Read more about EMScripten here: https://emscripten.org/docs/getting_started/index.html
 
 Explanation:
