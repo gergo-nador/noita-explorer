@@ -16,8 +16,8 @@ export function renderPixelatedImage(
   const imageData = ctx.createImageData(width, height);
   const data = imageData.data;
 
-  for (let y = 0; y < height; y++) {
-    for (let x = 0; x < width; x++) {
+  for (let x = 0; x < width; x++) {
+    for (let y = 0; y < height; y++) {
       const color = calculatePixel(x, y, width, height);
 
       const index = (y * width + x) * 4;

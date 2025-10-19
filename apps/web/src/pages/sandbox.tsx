@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { getSave00FolderHandle } from '../utils/browser-noita-api/browser-noita-api.ts';
 import { FileSystemFileAccess } from '@noita-explorer/model';
 import { useSave00Store } from '../stores/save00.ts';
@@ -8,10 +8,11 @@ import { NoitaMap } from './sandbox-map.tsx';
 
 export const Sandbox = () => {
   const { status } = useSave00Store();
-  const { data } = useNoitaDataWakStore();
+  const { data, lookup } = useNoitaDataWakStore();
   const [petriFiles, setFiles] = useState<FileSystemFileAccess[]>([]);
   const [materialImageCache, setMaterialImageCache] =
     useState<Record<string, CanvasRenderingContext2D>>();
+  const materialColorCache = useRef({});
 
   useEffect(() => {
     async function collectImages() {
@@ -76,7 +77,14 @@ export const Sandbox = () => {
   return (
     <div style={{ width: '100%', height: '90vh', zIndex: 1 }}>
       <div>{status}</div>
-      <NoitaMap />
+      {petriFiles.length > 0 && lookup?.materials && materialImageCache && (
+        <NoitaMap
+          petriFiles={petriFiles}
+          materials={lookup.materials}
+          materialImageCache={materialImageCache}
+          materialColorCache={materialColorCache.current}
+        />
+      )}
     </div>
   );
 };

@@ -2,6 +2,12 @@
 import { MapContainer, Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
 
+import {
+  uncompressNoitaFile,
+  readRawChunk,
+  renderChunk,
+} from '@noita-explorer/map';
+
 // Fix for default icon issue with webpack/vite
 // This ensures the marker icons are loaded correctly.
 import icon from 'leaflet/dist/images/marker-icon.png';
@@ -15,7 +21,17 @@ const DefaultIcon = L.icon({
 
 L.Marker.prototype.options.icon = DefaultIcon;
 
-export function NoitaMap() {
+export function NoitaMap({
+  petriFiles,
+  materials,
+  materialImageCache,
+  materialColorCache,
+}: {
+  petriFiles: FileSystemFileAccess[];
+  materials: StringKeyDictionary<NoitaMaterial>;
+  materialImageCache: StringKeyDictionary<CanvasRenderingContext2D>;
+  materialColorCache: StringKeyDictionary<RgbaColor>;
+}) {
   // The Noita world is huge, so you'll adjust this center point later.
   // Using [0, 0] as a starting default.
   const mapCenter: L.LatLngExpression = [0, 0];
@@ -30,10 +46,15 @@ export function NoitaMap() {
     >
       {/* HERE is the change! We use our custom layer now.
        */}
-      <CustomNoitaLayer />
+      <CustomNoitaLayer
+        petriFiles={petriFiles}
+        materials={materials}
+        materialColorCache={materialColorCache}
+        materialImageCache={materialImageCache}
+      />
 
       {/* You can still have other layers like markers on top */}
-      <Marker position={[0, 0]}>
+      <Marker position={[2, 0]}>
         <Popup>Test Marker</Popup>
       </Marker>
 
@@ -48,34 +69,36 @@ export function NoitaMap() {
 }
 
 /**
- * MOCK FUNCTION: Simulates decompressing a Noita chunk.
- * * @param coords - The {x, y, z} coordinates of the chunk from Leaflet.
- * @returns A Promise that resolves with a Uint8ClampedArray of RGBA pixel data.
+ * Extracts two numbers from a string with the format 'world_NUM1_NUM2.png_petri'.
+ * Can handle positive and negative numbers.
+ *
+ * @param {string} inputString The string to extract numbers from.
+ * @returns {object|null} An object with the two numbers { num1, num2 } or null if no match is found.
  */
-export async function decompressChunk(coords: {
-  x: number;
-  y: number;
-  z: number;
-}): Promise<Uint8ClampedArray> {
-  const chunkSize = 512;
-  const pixelData = new Uint8ClampedArray(chunkSize * chunkSize * 4); // RGBA
+function extractNumbers(inputString: string) {
+  // This regular expression looks for the pattern:
+  // _(-?\d+)_(-?\d+)
+  // - An underscore
+  // - (-?\d+): Captures an optional hyphen and one or more digits (the first number)
+  // - Another underscore
+  // - (-?\d+): Captures an optional hyphen and one or more digits (the second number)
+  const regex = /_(-?\d+)_(-?\d+)/;
 
-  // Generate a unique color based on chunk coordinates to see that it's working
-  const r = (coords.x * 3000) % 255;
-  const g = (coords.y * 3000) % 255;
-  const b = (coords.x * coords.y * 500) % 255;
+  // Execute the regex on the input string
+  const match = inputString.match(regex);
 
-  for (let i = 0; i < pixelData.length; i += 4) {
-    pixelData[i + 0] = r; // R
-    pixelData[i + 1] = g; // G
-    pixelData[i + 2] = b; // B
-    pixelData[i + 3] = 255; // A (fully opaque)
+  // If a match is found, the result is an array.
+  // match[0] is the full matched string (e.g., '_-12800_512')
+  // match[1] is the first captured group (the first number)
+  // match[2] is the second captured group (the second number)
+  if (match) {
+    const num1 = parseInt(match[1], 10); // Convert string to integer
+    const num2 = parseInt(match[2], 10); // Convert string to integer
+    return { num1, num2 };
   }
 
-  // Simulate a network/processing delay
-  await new Promise((resolve) => setTimeout(resolve, Math.random() * 1000));
-
-  return pixelData;
+  // If the pattern is not found, return null
+  return null;
 }
 
 export const NoitaGridLayer = L.GridLayer.extend({
@@ -90,23 +113,44 @@ export const NoitaGridLayer = L.GridLayer.extend({
     // This is a simple div we will style with CSS.
     const loader = L.DomUtil.create('div', 'loader', tile);
 
-    // 3. Start the asynchronous decompression.
-    decompressChunk(coords)
-      .then((pixelData) => {
-        // 4. Once decompression is complete, render the data to a canvas.
-        const canvas = document.createElement('canvas');
-        canvas.width = canvas.height = this.options.tileSize as number;
-        const ctx = canvas.getContext('2d');
+    const files: FileSystemFileAccess[] = this.options.petriFiles;
+    const currentFile = files.find((file) => {
+      const name = file.getName();
+      const output = extractNumbers(name);
 
-        if (ctx) {
-          const imageData = ctx.createImageData(canvas.width, canvas.height);
-          imageData.data.set(pixelData);
-          ctx.putImageData(imageData, 0, 0);
+      if (!output) return;
+
+      const tileX = output.num1 / 512;
+      const tileY = output.num2 / 512;
+
+      return tileX === coords.x && tileY === coords.y;
+    });
+
+    if (!currentFile) {
+      console.error('Couldnt find file for chunk', coords);
+      tile.innerHTML = '<div>Error</div>';
+      done(new Error('no file for this tile'), tile);
+      return;
+    }
+
+    uncompressNoitaFile(currentFile)
+      .then((uncompressed) => readRawChunk(uncompressed))
+      .then((chunk) => {
+        const renderedChunk = renderChunk({
+          chunk,
+          materials: this.options.materials,
+          materialImageCache: this.options.materialImageCache,
+          materialColorCache: this.options.materialColorCache,
+        });
+
+        if (!renderedChunk) {
+          done(null, tile);
+          tile.appendChild(document.createElement('div'));
+          return;
         }
 
-        // 5. Replace the loading spinner with the rendered canvas.
         tile.innerHTML = ''; // Clear the loader
-        tile.appendChild(canvas);
+        tile.appendChild(renderedChunk.canvas);
 
         // 6. Signal to Leaflet that the tile is ready.
         done(null, tile);
@@ -127,8 +171,25 @@ export const NoitaGridLayer = L.GridLayer.extend({
 // src/components/CustomNoitaLayer.tsx
 import { useEffect, useRef } from 'react';
 import { useMap } from 'react-leaflet';
+import {
+  FileSystemFileAccess,
+  RgbaColor,
+  StringKeyDictionary,
+} from '@noita-explorer/model';
+import { NoitaMaterial } from '@noita-explorer/model-noita';
+import { randomHelpers } from '@noita-explorer/tools';
 
-export function CustomNoitaLayer() {
+export function CustomNoitaLayer({
+  petriFiles,
+  materials,
+  materialImageCache,
+  materialColorCache,
+}: {
+  petriFiles: FileSystemFileAccess[];
+  materials: StringKeyDictionary<NoitaMaterial>;
+  materialImageCache: StringKeyDictionary<CanvasRenderingContext2D>;
+  materialColorCache: StringKeyDictionary<RgbaColor>;
+}) {
   const map = useMap();
   const layerRef = useRef<L.GridLayer | null>(null);
 
@@ -146,6 +207,12 @@ export function CustomNoitaLayer() {
         // Tell Leaflet that our chunks only exist at zoom level 0.
         minNativeZoom: 0,
         maxNativeZoom: 0,
+
+        // Custom properties
+        petriFiles,
+        materials,
+        materialImageCache,
+        materialColorCache,
       });
 
       // Add the layer to the map
@@ -159,7 +226,7 @@ export function CustomNoitaLayer() {
         layerRef.current = null;
       }
     };
-  }, [map]); // Re-run effect if the map instance changes
+  }, [map, petriFiles, materials, materialImageCache, materialColorCache]); // Re-run effect if the map instance changes
 
   // This component does not render any JSX itself.
   return null;

@@ -26,10 +26,10 @@ export function renderChunkPixel({
   materialImageCache,
   materialColorCache,
 }: Props): RgbaColor {
-  const i = y * 512 + x;
+  const i = y * chunk.width + x;
   const cellData = chunk.cellData[i];
 
-  const isCustomColor = cellData > 128;
+  const isCustomColor = cellData >= 128;
   if (isCustomColor) {
     const customColor = chunk.customColors[customColorIndexRef.value];
     customColorIndexRef.value++;

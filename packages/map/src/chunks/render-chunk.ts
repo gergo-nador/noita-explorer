@@ -23,6 +23,9 @@ export function renderChunk({
   materialColorCache,
 }: Props) {
   const canvas = document.createElement('canvas');
+  canvas.width = chunk.width;
+  canvas.height = chunk.height;
+
   const ctx = canvas.getContext('2d', { alpha: true });
   if (!ctx) {
     console.error('2D context not available!');
@@ -44,5 +47,5 @@ export function renderChunk({
 
   renderPixelatedImage(ctx, chunk.width, chunk.height, pixelCalculator);
 
-  return { ctx, asImageUrl: () => canvas.toDataURL('image/png') };
+  return { canvas };
 }
