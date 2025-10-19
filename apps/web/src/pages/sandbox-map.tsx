@@ -177,7 +177,6 @@ import {
   StringKeyDictionary,
 } from '@noita-explorer/model';
 import { NoitaMaterial } from '@noita-explorer/model-noita';
-import { randomHelpers } from '@noita-explorer/tools';
 
 export function CustomNoitaLayer({
   petriFiles,
