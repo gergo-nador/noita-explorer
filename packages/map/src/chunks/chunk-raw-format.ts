@@ -5,4 +5,5 @@ export interface ChunkRawFormat {
 
   cellData: number[];
   materialIds: string[];
+  customColors: number[];
 }

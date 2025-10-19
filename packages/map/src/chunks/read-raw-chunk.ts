@@ -3,7 +3,7 @@ import { Buffer } from 'buffer';
 import { readBufferArray } from '../utils/read-buffer-array.ts';
 import { readBufferString } from '../utils/read-buffer-string.ts';
 
-export function parseRawChunk(chunkBuffer: Buffer): ChunkRawFormat {
+export function readRawChunk(chunkBuffer: Buffer): ChunkRawFormat {
   let bufferOffset = 0;
 
   const version = chunkBuffer.readInt32BE(0);
@@ -32,14 +32,22 @@ export function parseRawChunk(chunkBuffer: Buffer): ChunkRawFormat {
   bufferOffset += cellDataOutput.offset;
 
   const materialsDataBuffer = chunkBuffer.subarray(bufferOffset);
-  const materials = readBufferArray(materialsDataBuffer).iterate((buffer) => {
-    const text = readBufferString(buffer, { encoding: 'ascii' });
+  const materialsOutput = readBufferArray(materialsDataBuffer).iterate(
+    (buffer) => {
+      const output = readBufferString(buffer, { encoding: 'ascii' });
 
-    return {
-      item: text,
-      offset: text.length + 4,
-    };
-  });
+      return {
+        item: output.text,
+        offset: output.offset,
+      };
+    },
+  );
+  bufferOffset += materialsOutput.offset;
+
+  const customColorsBuffer = chunkBuffer.subarray(bufferOffset);
+  const customColorsOutput = readBufferArray(customColorsBuffer).iterate(
+    (buffer) => ({ item: buffer.readInt32BE(0), offset: 4 }),
+  );
 
   const chunk: ChunkRawFormat = {
     version: version,
@@ -47,7 +55,8 @@ export function parseRawChunk(chunkBuffer: Buffer): ChunkRawFormat {
     height: height,
 
     cellData: cellDataOutput.items,
-    materialIds: materials.items,
+    materialIds: materialsOutput.items,
+    customColors: customColorsOutput.items,
   };
   return chunk;
 }

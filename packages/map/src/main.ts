@@ -1,6 +1,6 @@
 import { NoitaCompressedFile } from './noita-compressed-file.ts';
 import { uncompressNoitaFile } from './uncompress-noita-file.ts';
-import { parseRawChunk } from './chunks/parse-raw-chunk.ts';
+import { readRawChunk } from './chunks/read-raw-chunk.ts';
 import { FileSystemFileAccess } from '@noita-explorer/model';
 import { Buffer } from 'buffer';
 
@@ -30,6 +30,6 @@ export async function testParseChunk(file: FileSystemFileAccess) {
   console.log('uncompressed file size', output.length);
   console.log();
 
-  const chunk = parseRawChunk(output);
+  const chunk = readRawChunk(output);
   console.log('chunk', chunk);
 }
