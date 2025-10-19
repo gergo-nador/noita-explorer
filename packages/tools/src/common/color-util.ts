@@ -68,7 +68,7 @@ function fromRgbaNumber(rgba: number) {
 function fromArgbNumber(argb: number) {
   const alpha = (argb & 0xff000000) >>> 24;
   const rgb = argb & 0xffffff;
-  const rgba = (alpha << 24) | rgb;
+  const rgba = (rgb << 8) | alpha;
 
   return internalColor(rgba);
 }

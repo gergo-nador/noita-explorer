@@ -5,10 +5,60 @@ import { useSave00Store } from '../stores/save00.ts';
 import { testParseChunk, ChunkRawFormat } from '@noita-explorer/map';
 import { useNoitaDataWakStore } from '../stores/noita-data-wak.ts';
 import { colorHelpers } from '@noita-explorer/tools';
+import { publicPaths } from '../utils/public-paths.ts';
 
 export const Sandbox = () => {
   const { status } = useSave00Store();
+  const { data } = useNoitaDataWakStore();
   const [petriFiles, setFiles] = useState<FileSystemFileAccess[]>([]);
+  const [materialImageCache, setMaterialImageCache] =
+    useState<Record<string, CanvasRenderingContext2D>>();
+
+  useEffect(() => {
+    async function collectImages() {
+      if (!data?.materials) return;
+
+      const cache: Record<string, CanvasRenderingContext2D> = {};
+
+      for (const material of data.materials) {
+        if (!material.hasGraphicsImage) continue;
+        const imagePath = publicPaths.generated.material.image({
+          materialId: material.id,
+        });
+        await new Promise((resolve, reject) => {
+          const img = new Image();
+          // This is crucial for images from other domains (CORS)
+          img.crossOrigin = 'Anonymous';
+          img.src = imagePath;
+
+          img.onload = () => {
+            // Create an invisible canvas
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+
+            if (!ctx) return;
+
+            // Set canvas dimensions to match the image
+            canvas.width = img.width;
+            canvas.height = img.height;
+
+            // Draw the image onto the canvas
+            ctx.drawImage(img, 0, 0);
+            cache[material.id] = ctx;
+
+            resolve(1);
+          };
+
+          img.onerror = () => {
+            reject(`Failed to load the image from: ${imagePath}`);
+          };
+        });
+      }
+
+      setMaterialImageCache(cache);
+    }
+    collectImages();
+  }, [data?.materials]);
 
   useEffect(() => {
     if (status !== 'loaded') return;
@@ -27,14 +77,21 @@ export const Sandbox = () => {
   return (
     <div style={{ width: '100%', height: '90vh', zIndex: 1 }}>
       <div>{status}</div>
-      {petriFiles?.map((file) => (
-        <Chunk file={file} />
-      ))}
+      {materialImageCache &&
+        petriFiles?.map((file) => (
+          <Chunk file={file} materialImageCache={materialImageCache} />
+        ))}
     </div>
   );
 };
 
-const Chunk = ({ file }: { file: FileSystemFileAccess }) => {
+const Chunk = ({
+  file,
+  materialImageCache,
+}: {
+  file: FileSystemFileAccess;
+  materialImageCache: Record<string, CanvasRenderingContext2D>;
+}) => {
   const [chunk, setChunk] = useState<ChunkRawFormat>();
   const [imageUrl, setImageUrl] = useState<string>();
   const { lookup } = useNoitaDataWakStore();
@@ -50,7 +107,10 @@ const Chunk = ({ file }: { file: FileSystemFileAccess }) => {
       return;
     }
 
-    const materialColorCache: Record<string, any> = {};
+    const materialColorCache: Record<
+      string,
+      { r: number; g: number; b: number; a: number }
+    > = {};
 
     let customColorIndex = 0;
     const chunkCalculator: PixelCalculator = (x, y) => {
@@ -65,6 +125,11 @@ const Chunk = ({ file }: { file: FileSystemFileAccess }) => {
         const color = colorHelpers.conversion
           .fromArgbNumber(customColor)
           .toRgbaObj();
+
+        if (Math.random() < 0.01) {
+          console.log({ color, customColor });
+        }
+
         return color;
       }
 
@@ -82,18 +147,32 @@ const Chunk = ({ file }: { file: FileSystemFileAccess }) => {
         return { r: 0, g: 0, b: 0, a: 0 } satisfies Color;
       }
 
+      if (material.hasGraphicsImage) {
+        const ctx: CanvasRenderingContext2D = materialImageCache[materialId];
+
+        const wx = (x + chunk.width) * 6;
+        const wy = (y + chunk.height) * 6;
+
+        const colorX = wx % ctx.canvas.width;
+        const colorY = wy % ctx.canvas.height;
+
+        const pixelData = ctx.getImageData(colorX, colorY, 1, 1).data;
+
+        const color = {
+          r: pixelData[0],
+          g: pixelData[1],
+          b: pixelData[2],
+          a: pixelData[3],
+        };
+
+        return color;
+      }
+
       const matColor = colorHelpers.conversion
         .fromArgbString(material.graphicsColor ?? material.wangColor)
         .toRgbaObj();
 
       materialColorCache[materialId] = matColor;
-
-      if (matColor.a > 0)
-        console.log({
-          ...matColor,
-          materialId,
-          originalColor: material.graphicsColor ?? material.wangColor,
-        });
 
       matColor.a = 255;
 
