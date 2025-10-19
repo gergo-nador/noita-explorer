@@ -17,19 +17,9 @@ export async function testParseChunk(file: FileSystemFileAccess) {
     data: fileBuffer.subarray(8),
   };
 
-  console.log('compressed expected size', compressedFile.compressedDataSize);
-  console.log('compressed file size', compressedFile.data.length);
-  console.log();
-
   const output = await uncompressNoitaFile(compressedFile);
-
-  console.log(
-    'uncompressed expected size',
-    compressedFile.uncompressedDataSize,
-  );
-  console.log('uncompressed file size', output.length);
-  console.log();
-
   const chunk = readRawChunk(output);
-  console.log('chunk', chunk);
+
+  return chunk;
 }
+export type { ChunkRawFormat } from './chunks/chunk-raw-format.ts';
