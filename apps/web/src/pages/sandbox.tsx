@@ -126,10 +126,6 @@ const Chunk = ({
           .fromArgbNumber(customColor)
           .toRgbaObj();
 
-        if (Math.random() < 0.01) {
-          console.log({ color, customColor });
-        }
-
         return color;
       }
 
