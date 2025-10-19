@@ -1,4 +1,5 @@
 import color from 'color';
+import { RgbaColor } from '@noita-explorer/model';
 
 /*
  * Conversions
@@ -157,6 +158,8 @@ function convertTextRgbColorToNumber(rgb: string): number {
   return (c.red() << 16) | (c.green() << 8) | c.blue();
 }
 
+const emptyColor: RgbaColor = { r: 0, g: 0, b: 0, a: 0 };
+
 export const colorHelpers = {
   conversion: {
     fromArgbString,
@@ -168,6 +171,8 @@ export const colorHelpers = {
     rgbaToNumber: convertTextRgbaColorToNumber,
     rgbToNumber: convertTextRgbColorToNumber,
   },
+  emptyColor,
+
   getRgbaContractsColor: getContrastColor,
   manipulation: {
     lighten: lightenColor,

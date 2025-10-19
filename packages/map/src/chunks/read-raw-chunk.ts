@@ -1,4 +1,4 @@
-import { ChunkRawFormat } from './chunk-raw-format.ts';
+import { ChunkRawFormat } from '../interfaces/chunk-raw-format.ts';
 import { Buffer } from 'buffer';
 import { readBufferArray } from '../utils/read-buffer-array.ts';
 import { readBufferString } from '../utils/read-buffer-string.ts';

@@ -6,16 +6,12 @@
   "scripts": {
     "predev": "npm run generate-index-html",
     "dev": "vite",
-
     "prebuild": "sh scripts/ci.sh",
     "build": "tsc -b && vite build",
     "postbuild": "sh scripts/ci-post.sh",
-
     "lint": "eslint .",
     "preview": "vite preview",
-
     "production-server-local": "cd dist && python3 ../scripts/http-server.py",
-
     "generate-index-html": "npx tsx scripts/index-html/index.ts -o index.html",
     "data-wak-download": "npx tsx scripts/data-wak/download.ts -o dist-tmp",
     "scrape-data-wak": "npx tsx scripts/data-wak/scrape.ts -t dist-tmp/common.csv --data-wak dist-tmp/data.wak --o-wak public/noita_wak_data.json --o-media dist-tmp/noita_data_media.json",
@@ -38,12 +34,15 @@
     "@tsparticles/plugin-emitters": "^3.8.1",
     "@tsparticles/react": "^3.0.0",
     "@tsparticles/slim": "^3.8.1",
+    "@types/leaflet": "^1.9.21",
     "buffer": "^6.0.3",
     "diff": "^8.0.2",
     "idb": "^8.0.1",
+    "leaflet": "^1.9.4",
     "plotly.js": "^2.35.3",
     "react": "19.1.0",
     "react-dom": "19.1.0",
+    "react-leaflet": "^5.0.0",
     "react-plotly.js": "^2.6.0",
     "react-router-dom": "^7.0.2",
     "react-use": "^17.6.0",
