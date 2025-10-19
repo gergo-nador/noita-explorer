@@ -1,3 +1,5 @@
+import { getKeySelectorValue, KeySelector } from '../internal/key-selector.ts';
+
 /**
  * Returns a sorter function that ranks the items based on the selected property
  *
@@ -13,12 +15,12 @@
  * ```
  */
 export function getPropertySorter<T>(
-  by: ((item: T) => string) | keyof T,
+  by: KeySelector<T>,
   direction?: 'asc' | 'desc',
 ) {
   const sorter = (a: T, b: T): number => {
-    const valueA = typeof by === 'function' ? by(a) : a[by];
-    const valueB = typeof by === 'function' ? by(b) : b[by];
+    const valueA = getKeySelectorValue(a, by);
+    const valueB = getKeySelectorValue(b, by);
 
     if (typeof valueA === 'string' && typeof valueB === 'string') {
       return valueA.localeCompare(valueB);
