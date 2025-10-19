@@ -74,6 +74,16 @@ function fromArgbNumber(argb: number) {
   return internalColor(rgba);
 }
 
+function fromBgraNumber(bgra: number) {
+  const bb = (bgra >>> 24) & 0xff;
+  const gg = (bgra >>> 16) & 0xff;
+  const rr = (bgra >>> 8) & 0xff;
+  const aa = bgra & 0xff;
+
+  const rgba = (rr << 24) | (gg << 16) | (bb << 8) | aa;
+  return internalColor(rgba);
+}
+
 /*
  * Conversions to
  */
@@ -166,6 +176,7 @@ export const colorHelpers = {
     fromRgbaNumber,
     fromArgbNumber,
     fromRgbaString,
+    fromBgraNumber,
 
     argbToRgba: convertARGBToRGBA,
     rgbaToNumber: convertTextRgbaColorToNumber,

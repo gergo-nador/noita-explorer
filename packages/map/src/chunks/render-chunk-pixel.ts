@@ -34,9 +34,17 @@ export function renderChunkPixel({
     const customColor = chunk.customColors[customColorIndexRef.value];
     customColorIndexRef.value++;
 
-    const color = colorHelpers.conversion
-      .fromArgbNumber(customColor)
-      .toRgbaObj();
+    const o1 = (customColor & 0xff000000) >>> 24;
+    const o2 = (customColor & 0x00ff0000) >>> 16;
+    const o3 = (customColor & 0x0000ff00) >>> 8;
+    const o4 = (customColor & 0x000000ff) >>> 0;
+
+    const color: RgbaColor = {
+      r: o4,
+      g: o3,
+      b: o2,
+      a: o1,
+    };
 
     return color;
   }
