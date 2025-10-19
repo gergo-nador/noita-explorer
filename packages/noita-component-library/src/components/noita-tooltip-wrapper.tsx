@@ -16,6 +16,7 @@ export const NoitaTooltipWrapper = ({
   placement,
   isDisabled,
 }: NoitaTooltipProps) => {
+  const isEnabled = content !== undefined;
   const [isMouseHovered, setMouseHovered] = useState(false);
 
   const id = useMemo(() => {
@@ -24,7 +25,7 @@ export const NoitaTooltipWrapper = ({
 
   return (
     <>
-      {content !== undefined && isMouseHovered && (
+      {isEnabled && isMouseHovered && (
         <Tooltip
           id={id}
           style={{
@@ -50,8 +51,8 @@ export const NoitaTooltipWrapper = ({
 
       <div
         id={id}
-        onMouseEnter={() => setMouseHovered(true)}
-        onMouseLeave={() => setMouseHovered(false)}
+        onMouseEnter={() => isEnabled && setMouseHovered(true)}
+        onMouseLeave={() => isEnabled && setMouseHovered(false)}
         style={{ width: 'fit-content', height: 'fit-content' }}
       >
         {children}
