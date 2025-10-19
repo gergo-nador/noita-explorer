@@ -1,11 +1,11 @@
-import { use, useMemo } from 'react';
+import { useMemo } from 'react';
 import { MaterialReactionProcessed } from './material-reaction.types.ts';
 import { parseReactionMaterial } from './material-reaction.utils.ts';
-import { WikiMaterialsContext } from '../wiki-materials.context.ts';
 import {
   NoitaMaterial,
   NoitaMaterialReaction,
 } from '@noita-explorer/model-noita';
+import { useNoitaDataWakStore } from '../../../../stores/noita-data-wak.ts';
 
 interface Props {
   reaction: NoitaMaterialReaction;
@@ -16,9 +16,27 @@ export const useProcessMaterialReaction = ({
   reaction,
   currentMaterial,
 }: Props) => {
-  const { materialsLookup } = use(WikiMaterialsContext);
+  const { lookup } = useNoitaDataWakStore();
 
-  const components = useMemo(() => {
+  type MaterialReactionComponent = {
+    persistentComponents: MaterialReactionProcessed[];
+    extensionComponents: [
+      MaterialReactionProcessed,
+      MaterialReactionProcessed,
+    ][];
+    inputComponents: MaterialReactionProcessed[];
+    outputComponents: MaterialReactionProcessed[];
+  };
+
+  const components: MaterialReactionComponent = useMemo(() => {
+    if (!lookup?.materials)
+      return {
+        persistentComponents: [],
+        extensionComponents: [],
+        inputComponents: [],
+        outputComponents: [],
+      } satisfies MaterialReactionComponent;
+
     // materials that are both the source and the product of the reaction
     const persistentComponents: MaterialReactionProcessed[] = [];
     // components that are converted with an extension (e.g. steel --> steel_molten)
@@ -137,7 +155,7 @@ export const useProcessMaterialReaction = ({
             currentMaterial.id.length - outputExtension.length - 1,
           );
 
-          const parentMaterialExists = parentMaterialId in materialsLookup;
+          const parentMaterialExists = parentMaterialId in lookup.materials;
 
           if (parentMaterialExists) {
             inputComponent.overrideComponentId = parentMaterialId;
@@ -153,7 +171,7 @@ export const useProcessMaterialReaction = ({
             currentMaterial.id.length - inputExtension.length - 1,
           );
 
-          const parentMaterialExists = parentMaterialId in materialsLookup;
+          const parentMaterialExists = parentMaterialId in lookup.materials;
 
           if (parentMaterialExists) {
             inputComponent.overrideComponentId = currentMaterial.id;
@@ -168,8 +186,8 @@ export const useProcessMaterialReaction = ({
       extensionComponents,
       inputComponents,
       outputComponents,
-    };
-  }, [reaction, materialsLookup, currentMaterial]);
+    } satisfies MaterialReactionComponent;
+  }, [reaction, lookup?.materials, currentMaterial]);
 
   return components;
 };

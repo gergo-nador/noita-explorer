@@ -153,3 +153,7 @@ export const arrayHelpers = {
   toggleItemInList: toggleItemInList,
   zip: zip,
 };
+
+const arr: string[] = ['', '', ''];
+
+arrayHelpers.sumBy(arr, 'length');

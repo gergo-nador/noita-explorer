@@ -42,10 +42,7 @@ export const scrapePotion = ({
     }),
   );
 
-  potion.usedCapacity = arrayHelpers.sumBy(
-    potion.materials,
-    (material) => material.usage,
-  );
+  potion.usedCapacity = arrayHelpers.sumBy(potion.materials, 'usage');
 
   return potion;
 };
