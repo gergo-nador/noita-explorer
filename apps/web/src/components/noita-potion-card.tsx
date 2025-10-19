@@ -11,8 +11,10 @@ interface Props {
 }
 
 export const NoitaPotionCard = ({ potion, withoutCardBorder }: Props) => {
-  const { data } = useNoitaDataWakStore();
+  const { lookup } = useNoitaDataWakStore();
   const materials = useMemo(() => {
+    if (!lookup?.materials) return [];
+
     const materials = [...potion.materials];
     materials.sort(
       sortHelpers.getPropertySorter<NoitaPotionMaterial>('usage', 'desc'),
@@ -20,11 +22,9 @@ export const NoitaPotionCard = ({ potion, withoutCardBorder }: Props) => {
 
     return materials.map((potionMaterial) => ({
       potionMaterial,
-      material: data?.materials?.find(
-        (m) => m.id === potionMaterial.materialId,
-      ),
+      material: lookup.materials[potionMaterial.materialId],
     }));
-  }, [potion.materials, data?.materials]);
+  }, [potion.materials, lookup?.materials]);
 
   const mainMaterial = materials[0];
 

@@ -6,13 +6,24 @@ import { publicPaths } from '../../../utils/public-paths.ts';
 
 export const WikiPerkDetails = () => {
   const { perkId } = useParams();
-  const { data } = useNoitaDataWakStore();
+  const { lookup } = useNoitaDataWakStore();
 
-  if (!data?.perks) {
+  if (!lookup?.perks) {
     return <div>Data wak is loading</div>;
   }
 
-  const perk = data.perks.find((perk) => perk.id === perkId);
+  if (!perkId) {
+    return <div>Perk Id empty</div>;
+  }
+
+  const perk = lookup.perks[perkId];
+  if (!perk) {
+    return (
+      <div>
+        Perk was not found with id <i>{perkId}</i>
+      </div>
+    );
+  }
 
   return (
     <>

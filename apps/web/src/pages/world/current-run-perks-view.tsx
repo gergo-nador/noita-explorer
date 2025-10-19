@@ -9,10 +9,10 @@ import { Flex } from '@noita-explorer/react-utils';
 import { publicPaths } from '../../utils/public-paths.ts';
 
 export const CurrentRunPerksView = () => {
-  const { data } = useNoitaDataWakStore();
+  const { lookup } = useNoitaDataWakStore();
   const { currentRun } = useSave00Store();
 
-  if (!data || !currentRun) {
+  if (!lookup || !currentRun) {
     return <div></div>;
   }
 
@@ -22,7 +22,7 @@ export const CurrentRunPerksView = () => {
     <div style={{ paddingRight: '45px' }}>
       <Flex gap={4} column align='end'>
         {previewPerks.map((pickedPerk) => {
-          const perk = data.perks.find((p) => p.id === pickedPerk.perkId);
+          const perk = lookup.perks[pickedPerk.perkId];
 
           if (!perk) {
             return (

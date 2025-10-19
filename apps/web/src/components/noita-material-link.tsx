@@ -18,14 +18,12 @@ export const NoitaMaterialLink = ({
   isInline,
   forcePotion,
 }: Props) => {
-  const { data } = useNoitaDataWakStore();
+  const { lookup } = useNoitaDataWakStore();
   name ??= materialId;
 
-  if (!data) return <span>{name}</span>;
+  if (!lookup) return <span>{name}</span>;
 
-  const material = data?.materials?.find(
-    (material) => material.id === materialId,
-  );
+  const material = lookup.materials[materialId];
   if (!material) {
     return (
       <span>

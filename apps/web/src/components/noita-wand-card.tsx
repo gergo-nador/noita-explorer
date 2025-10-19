@@ -30,7 +30,7 @@ export const NoitaWandCard = ({
   withoutCardBorder,
 }: NoitaWandCardProps) => {
   const noitaUnits = useNoitaUnits();
-  const { data } = useNoitaDataWakStore();
+  const { data, lookup } = useNoitaDataWakStore();
   const { actionUtils } = useNoitaActionsStore();
 
   const wandTooltipId = useMemo(() => randomHelpers.randomInt(0, 1000000), []);
@@ -52,7 +52,7 @@ export const NoitaWandCard = ({
   }, [wand, data?.wandConfigs]);
 
   const spellIcons = useMemo(() => {
-    if (data?.spells === undefined) {
+    if (data?.spells === undefined || lookup?.spells === undefined) {
       return undefined;
     }
 
@@ -73,7 +73,7 @@ export const NoitaWandCard = ({
       }
 
       const key = `spell-${wandSpell.spellId}-${wandSpell.inventorySlot}-${wandTooltipId}`;
-      const spell = data.spells.find((s) => s.id === wandSpell.spellId);
+      const spell = lookup.spells[wandSpell.spellId];
       if (spell === undefined) {
         const spellNotFoundIcon = <Icon type={'error'} size={iconSize} />;
         displaySpells.push({ key, spellComponent: spellNotFoundIcon });
@@ -109,10 +109,10 @@ export const NoitaWandCard = ({
     }
 
     return displaySpells;
-  }, [wand, data?.spells, wandTooltipId]);
+  }, [wand, data?.spells, lookup?.spells, wandTooltipId]);
 
   const spellIconsAlwaysCast = useMemo(() => {
-    if (data?.spells === undefined) {
+    if (lookup?.spells === undefined) {
       return undefined;
     }
 
@@ -122,7 +122,7 @@ export const NoitaWandCard = ({
     for (let i = 0; i < wand.alwaysCastSpells.length; i++) {
       const wandSpell = wand.alwaysCastSpells[i];
 
-      const spell = data.spells.find((s) => s.id === wandSpell.spellId);
+      const spell = lookup.spells[wandSpell.spellId];
       if (spell === undefined) {
         const spellNotFoundIcon = <Icon type={'error'} size={iconSize} />;
         displaySpells.push(spellNotFoundIcon);
@@ -147,7 +147,7 @@ export const NoitaWandCard = ({
     }
 
     return displaySpells;
-  }, [wand, data?.spells, wandTooltipId]);
+  }, [wand, lookup?.spells, wandTooltipId]);
 
   const rows: RowData[] = [
     {

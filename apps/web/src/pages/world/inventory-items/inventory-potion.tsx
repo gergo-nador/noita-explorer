@@ -18,27 +18,30 @@ interface Props {
 }
 
 export const InventoryPotion = ({ item }: Props) => {
-  const { data } = useNoitaDataWakStore();
+  const { lookup } = useNoitaDataWakStore();
   const [potionIcon, setPotionIcon] = useState(
     publicPaths.static.dataWak.misc('potion'),
   );
 
   useEffect(() => {
+    if (!lookup?.materials) return;
+
     const potionMaterial = arrayHelpers.maxBy(
       item.item.materials,
       (material: NoitaPotionMaterial) => material.usage,
     );
-    const material = data?.materials.find(
-      (m) => m.id === potionMaterial.item?.materialId,
-    );
 
+    const materialId = potionMaterial.item?.materialId;
+    if (!materialId) return;
+
+    const material = lookup.materials[materialId];
     if (!material) return;
 
     renderMaterialPouch(
       material,
       publicPaths.static.dataWak.misc('potion'),
     ).then((image) => setPotionIcon(image));
-  }, [data?.materials, item.item.materials]);
+  }, [lookup?.materials, item.item.materials]);
 
   return (
     <NoitaTooltipWrapper

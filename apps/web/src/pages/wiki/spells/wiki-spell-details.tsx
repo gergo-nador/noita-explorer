@@ -6,13 +6,24 @@ import { publicPaths } from '../../../utils/public-paths.ts';
 
 export const WikiSpellDetails = () => {
   const { spellId } = useParams();
-  const { data } = useNoitaDataWakStore();
+  const { lookup } = useNoitaDataWakStore();
 
-  if (!data?.spells) {
+  if (!lookup?.spells) {
     return <div>Data wak is loading</div>;
   }
 
-  const spell = data.spells.find((spell) => spell.id === spellId);
+  if (!spellId) {
+    return <div>Spell Id empty</div>;
+  }
+
+  const spell = lookup.spells[spellId];
+  if (!spell) {
+    return (
+      <div>
+        Spell was not found with id <i>{spellId}</i>
+      </div>
+    );
+  }
 
   return (
     <>

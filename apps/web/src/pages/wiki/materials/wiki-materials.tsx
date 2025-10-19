@@ -13,7 +13,6 @@ import { MaterialFiltersView } from './material-filters-view.tsx';
 import { Flex } from '@noita-explorer/react-utils';
 import { Link, Outlet, useParams } from 'react-router-dom';
 import { pages } from '../../../routes/pages.ts';
-import { WikiMaterialsContext } from './wiki-materials.context.ts';
 
 export const WikiMaterials = () => {
   const { data } = useNoitaDataWakStore();
@@ -33,10 +32,6 @@ export const WikiMaterials = () => {
     return uniqueMaterials;
   }, [data?.materials]);
 
-  const materialsLookup = useMemo(() => {
-    return arrayHelpers.asDict(materialsUnique, (material) => material.id);
-  }, [materialsUnique]);
-
   const allAvailableTags = useMemo(() => {
     const allTags = materialsUnique.map((m) => m.tags).flat();
     const allUniqueTags = arrayHelpers.unique(allTags);
@@ -49,87 +44,85 @@ export const WikiMaterials = () => {
   }
 
   return (
-    <WikiMaterialsContext value={{ materialsLookup: materialsLookup }}>
-      <Flex
-        justify='center'
-        gap={20}
+    <Flex
+      justify='center'
+      gap={20}
+      style={{
+        margin: 'auto',
+        maxHeight: '100%',
+        overflowY: 'auto',
+        padding: 15,
+        boxSizing: 'border-box',
+      }}
+    >
+      <aside
         style={{
-          margin: 'auto',
-          maxHeight: '100%',
-          overflowY: 'auto',
-          padding: 15,
-          boxSizing: 'border-box',
+          maxWidth: '500px',
+          width: '50%',
         }}
       >
-        <aside
-          style={{
-            maxWidth: '500px',
-            width: '50%',
-          }}
+        <MaterialFiltersView
+          setFilters={setFilters}
+          filters={filters}
+          allAvailableTags={allAvailableTags}
+        />
+        <br />
+        <NoitaProgressIconTable
+          count={materialsUnique.length}
+          name={'Materials'}
+          columnCount={9}
+          iconGap={4}
         >
-          <MaterialFiltersView
-            setFilters={setFilters}
-            filters={filters}
-            allAvailableTags={allAvailableTags}
-          />
-          <br />
-          <NoitaProgressIconTable
-            count={materialsUnique.length}
-            name={'Materials'}
-            columnCount={9}
-            iconGap={4}
-          >
-            {materialsUnique.map((material) => {
-              const filter = evaluateFiltersOnMaterials({ material, filters });
+          {materialsUnique.map((material) => {
+            const filter = evaluateFiltersOnMaterials({ material, filters });
 
-              const icon = (
-                <NoitaMaterialIcon material={material} hasInventoryIcon />
-              );
+            const icon = (
+              <NoitaMaterialIcon material={material} hasInventoryIcon />
+            );
 
-              return (
-                <div
-                  key={material.id}
-                  style={{
-                    opacity: filter ? 1 : 0.35,
-                  }}
-                >
-                  {!filter && icon}
-                  {filter && (
-                    <Link to={pages.wiki.materialDetail(material.id)}>
-                      <ActiveIconWrapper
-                        id={'material-' + material.id}
-                        key={'material-' + material.id}
-                        tooltip={
-                          <div>
-                            <div style={{ fontSize: 20 }}>{material.name}</div>
-                          </div>
-                        }
-                        style={{ cursor: 'pointer' }}
-                      >
-                        {icon}
-                      </ActiveIconWrapper>
-                    </Link>
-                  )}
-                </div>
-              );
-            })}
-          </NoitaProgressIconTable>
-        </aside>
+            return (
+              <div
+                key={material.id}
+                style={{
+                  opacity: filter ? 1 : 0.35,
+                }}
+              >
+                {!filter && icon}
+                {filter && (
+                  <Link to={pages.wiki.materialDetail(material.id)}>
+                    <ActiveIconWrapper
+                      id={'material-' + material.id}
+                      key={'material-' + material.id}
+                      tooltip={
+                        <div>
+                          <div style={{ fontSize: 20 }}>{material.name}</div>
+                        </div>
+                      }
+                      style={{ cursor: 'pointer' }}
+                    >
+                      {icon}
+                    </ActiveIconWrapper>
+                  </Link>
+                )}
+              </div>
+            );
+          })}
+        </NoitaProgressIconTable>
+      </aside>
 
-        <Card
-          style={{
-            width: '50%',
-            maxWidth: '600px',
-            maxHeight: '100%',
-            position: 'sticky',
-            top: 0,
-          }}
-          styleContent={materialId ? { padding: 0 } : undefined}
-        >
-          <Outlet />
-        </Card>
-      </Flex>
-    </WikiMaterialsContext>
+      <Card
+        style={{
+          width: '50%',
+          maxWidth: '600px',
+          maxHeight: '100%',
+          position: 'sticky',
+          top: 0,
+        }}
+        styleContent={materialId ? { padding: 0 } : undefined}
+      >
+        <Outlet />
+      </Card>
+    </Flex>
   );
 };
 

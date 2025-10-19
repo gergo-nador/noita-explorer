@@ -5,15 +5,24 @@ import { MaterialOverview } from './material-overview.tsx';
 
 export const WikiMaterialDetails = () => {
   const { materialId } = useParams();
-  const { data } = useNoitaDataWakStore();
+  const { lookup } = useNoitaDataWakStore();
 
-  if (!data?.materials) {
+  if (!lookup?.materials) {
     return <div>Data wak is loading</div>;
   }
 
-  const material = data.materials.find(
-    (material) => material.id === materialId,
-  );
+  if (!materialId) {
+    return <div>Material Id empty</div>;
+  }
+
+  const material = lookup.materials[materialId];
+  if (!material) {
+    return (
+      <div>
+        Material was not found with id <i>{materialId}</i>
+      </div>
+    );
+  }
 
   return (
     <>

@@ -23,3 +23,10 @@ export { stringHelpers } from './common/string';
 export { switchStatement } from './common/switch';
 export { throwHelpers } from './common/throw.ts';
 export { timeHelpers } from './common/time';
+
+// internal types
+export type {
+  KeyNumberSelector,
+  KeyStringSelector,
+  KeySelector,
+} from './internal/key-selector.ts';

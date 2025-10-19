@@ -6,13 +6,24 @@ import { publicPaths } from '../../../utils/public-paths.ts';
 
 export const WikiEnemyDetails = () => {
   const { enemyId } = useParams();
-  const { data } = useNoitaDataWakStore();
+  const { lookup } = useNoitaDataWakStore();
 
-  if (!data?.enemies) {
+  if (!lookup?.enemies) {
     return <div>Data wak is loading</div>;
   }
 
-  const enemy = data.enemies.find((enemy) => enemy.id === enemyId);
+  if (!enemyId) {
+    return <div>Enemy Id empty</div>;
+  }
+
+  const enemy = lookup.enemies[enemyId];
+  if (!enemy) {
+    return (
+      <div>
+        Enemy was not found with id <i>{enemyId}</i>
+      </div>
+    );
+  }
 
   return (
     <>
