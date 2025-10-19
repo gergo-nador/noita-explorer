@@ -1,4 +1,4 @@
-import { NoitaCompressedFile } from './noita-compressed-file.ts';
+import { NoitaCompressedFile } from '../interfaces/noita-compressed-file.ts';
 import { createFastLzCompressor } from '@noita-explorer/fastlz';
 
 const fastLzCompressorPromise = createFastLzCompressor();

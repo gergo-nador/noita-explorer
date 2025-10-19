@@ -19,6 +19,7 @@ export function readRawChunk(chunkBuffer: Buffer): ChunkRawFormat {
   bufferOffset = 12;
   const cellDataLength = width * height;
 
+  // contains pointers to either materials or custom colors
   const cellDataBuffer = chunkBuffer.subarray(
     bufferOffset,
     bufferOffset + cellDataLength,
@@ -26,11 +27,12 @@ export function readRawChunk(chunkBuffer: Buffer): ChunkRawFormat {
   const cellDataOutput = readBufferArray(cellDataBuffer, {
     length: cellDataLength,
   }).iterate((buffer) => ({
-    item: buffer.readInt8(0),
+    item: buffer.readUint8(0),
     offset: 1,
   }));
   bufferOffset += cellDataOutput.offset;
 
+  // materials that are in the current chunk (max 128 materials)
   const materialsDataBuffer = chunkBuffer.subarray(bufferOffset);
   const materialsOutput = readBufferArray(materialsDataBuffer).iterate(
     (buffer) => {
@@ -44,9 +46,10 @@ export function readRawChunk(chunkBuffer: Buffer): ChunkRawFormat {
   );
   bufferOffset += materialsOutput.offset;
 
+  // custom colors in the chunk
   const customColorsBuffer = chunkBuffer.subarray(bufferOffset);
   const customColorsOutput = readBufferArray(customColorsBuffer).iterate(
-    (buffer) => ({ item: buffer.readInt32BE(0), offset: 4 }),
+    (buffer) => ({ item: buffer.readUInt32BE(0), offset: 4 }),
   );
 
   const chunk: ChunkRawFormat = {

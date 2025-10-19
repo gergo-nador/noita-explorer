@@ -1,5 +1,5 @@
-import { NoitaCompressedFile } from './noita-compressed-file.ts';
-import { uncompressNoitaFile } from './uncompress-noita-file.ts';
+import { NoitaCompressedFile } from './interfaces/noita-compressed-file.ts';
+import { uncompressNoitaFile } from './utils/uncompress-noita-file.ts';
 import { readRawChunk } from './chunks/read-raw-chunk.ts';
 import { FileSystemFileAccess } from '@noita-explorer/model';
 import { Buffer } from 'buffer';
