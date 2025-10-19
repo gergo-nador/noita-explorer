@@ -1,7 +1,15 @@
 import createModule, { ImportModule } from './wrapper/fastlz-single';
 import { Buffer } from 'buffer';
 
-export async function createFastLzCompressor() {
+export interface FastLZCompressor {
+  decompressUint8Array: (
+    input: Uint8Array,
+    maxOutputSize?: number,
+  ) => Uint8Array;
+  decompressBuffer: (input: Buffer, maxOutputSize?: number) => Buffer;
+}
+
+export async function createFastLzCompressor(): Promise<FastLZCompressor> {
   const module = await createModule();
 
   return {
