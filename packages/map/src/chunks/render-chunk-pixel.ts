@@ -13,7 +13,7 @@ interface Props {
   chunk: ChunkRawFormat;
   customColorIndexRef: ValueRef<number>;
   materials: StringKeyDictionary<NoitaMaterial>;
-  materialImageCache: StringKeyDictionary<CanvasRenderingContext2D>;
+  materialImageCache: StringKeyDictionary<ImageData>;
   materialColorCache: StringKeyDictionary<RgbaColor>;
 }
 
@@ -64,21 +64,22 @@ export function renderChunkPixel({
   }
 
   if (material.hasGraphicsImage) {
-    const ctx: CanvasRenderingContext2D = materialImageCache[materialId];
+    const materialImageData = materialImageCache[materialId];
 
     const wx = (x + chunk.width) * 6;
     const wy = (y + chunk.height) * 6;
 
-    const colorX = wx % ctx.canvas.width;
-    const colorY = wy % ctx.canvas.height;
+    const colorX = wx % materialImageData.width;
+    const colorY = wy % materialImageData.height;
 
-    const pixelData = ctx.getImageData(colorX, colorY, 1, 1).data;
+    const pixelData = materialImageData.data;
+    const index = (colorY * materialImageData.width + colorX) * 4;
 
     const color = {
-      r: pixelData[0],
-      g: pixelData[1],
-      b: pixelData[2],
-      a: pixelData[3],
+      r: pixelData[index],
+      g: pixelData[index + 1],
+      b: pixelData[index + 2],
+      a: pixelData[index + 3],
     };
 
     materialColorCache[materialId] = color;

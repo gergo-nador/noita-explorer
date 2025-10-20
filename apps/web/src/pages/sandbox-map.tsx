@@ -33,7 +33,7 @@ export function NoitaMap({
 }: {
   petriFiles: FileSystemFileAccess[];
   materials: StringKeyDictionary<NoitaMaterial>;
-  materialImageCache: StringKeyDictionary<CanvasRenderingContext2D>;
+  materialImageCache: StringKeyDictionary<ImageData>;
   materialColorCache: StringKeyDictionary<RgbaColor>;
 }) {
   // The Noita world is huge, so you'll adjust this center point later.
@@ -199,7 +199,7 @@ export function CustomNoitaLayer({
 }: {
   petriFiles: FileSystemFileAccess[];
   materials: StringKeyDictionary<NoitaMaterial>;
-  materialImageCache: StringKeyDictionary<CanvasRenderingContext2D>;
+  materialImageCache: StringKeyDictionary<ImageData>;
   materialColorCache: StringKeyDictionary<RgbaColor>;
 }) {
   const map = useMap();
@@ -211,7 +211,7 @@ export function CustomNoitaLayer({
       // Instantiate our custom layer class
       layerRef.current = new NoitaGridLayer({
         tileSize: 512, // Match your chunk size
-        minZoom: -2,
+        minZoom: -4,
         maxZoom: 5, // Adjust as needed
 
         noWrap: true, // Prevents the map from repeating horizontally

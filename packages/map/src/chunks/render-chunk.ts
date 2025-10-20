@@ -15,7 +15,7 @@ interface Props {
   chunk: ChunkRawFormat;
   chunkCoordinates: Vector2d;
   materials: StringKeyDictionary<NoitaMaterial>;
-  materialImageCache: StringKeyDictionary<CanvasRenderingContext2D>;
+  materialImageCache: StringKeyDictionary<ImageData>;
   materialColorCache: StringKeyDictionary<RgbaColor>;
 }
 

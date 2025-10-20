@@ -11,48 +11,47 @@ export const Sandbox = () => {
   const { data, lookup } = useNoitaDataWakStore();
   const [petriFiles, setFiles] = useState<FileSystemFileAccess[]>([]);
   const [materialImageCache, setMaterialImageCache] =
-    useState<Record<string, CanvasRenderingContext2D>>();
+    useState<Record<string, ImageData>>();
   const materialColorCache = useRef({});
 
   useEffect(() => {
     async function collectImages() {
       if (!data?.materials) return;
 
-      const cache: Record<string, CanvasRenderingContext2D> = {};
+      const cache: Record<string, ImageData> = {};
 
       for (const material of data.materials) {
         if (!material.hasGraphicsImage) continue;
         const imagePath = publicPaths.generated.material.image({
           materialId: material.id,
         });
-        await new Promise((resolve, reject) => {
+        const imageData: ImageData = await new Promise((resolve, reject) => {
           const img = new Image();
           // This is crucial for images from other domains (CORS)
           img.crossOrigin = 'Anonymous';
           img.src = imagePath;
 
           img.onload = () => {
-            // Create an invisible canvas
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d');
 
             if (!ctx) return;
 
-            // Set canvas dimensions to match the image
             canvas.width = img.width;
             canvas.height = img.height;
 
-            // Draw the image onto the canvas
             ctx.drawImage(img, 0, 0);
-            cache[material.id] = ctx;
+            const imageData = ctx.getImageData(0, 0, img.width, img.height);
 
-            resolve(1);
+            resolve(imageData);
           };
 
           img.onerror = () => {
             reject(`Failed to load the image from: ${imagePath}`);
           };
         });
+
+        cache[material.id] = imageData;
       }
 
       setMaterialImageCache(cache);
