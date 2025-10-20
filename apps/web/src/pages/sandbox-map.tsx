@@ -130,9 +130,12 @@ export const NoitaGridLayer = L.GridLayer.extend({
 
     if (!currentFile) {
       console.error('Couldnt find file for chunk', coords);
-      tile.innerHTML = '<div>Error</div>';
-      done(new Error('no file for this tile'), tile);
-      return;
+      tile.innerHTML = '';
+      const div = document.createElement('div');
+      div.textContent = 'No tile';
+      tile.appendChild(div);
+      done(null, tile);
+      return tile;
     }
 
     const fastLzCompressorPromise: Promise<FastLZCompressor> =
@@ -164,7 +167,11 @@ export const NoitaGridLayer = L.GridLayer.extend({
       .catch((error) => {
         // Optional: Handle errors, e.g., show an error tile.
         console.error('Failed to decompress and render chunk:', error);
-        tile.innerHTML = 'Error';
+        tile.innerHTML = '';
+        const div = document.createElement('div');
+        div.textContent = 'Error';
+        tile.appendChild(div);
+
         done(error, tile);
       });
 
