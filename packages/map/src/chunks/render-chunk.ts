@@ -25,12 +25,14 @@ export function renderChunk({
   const canvas = document.createElement('canvas');
   canvas.width = chunk.width;
   canvas.height = chunk.height;
+  canvas.style.imageRendering = 'pixelated';
 
   const ctx = canvas.getContext('2d', { alpha: true });
   if (!ctx) {
     console.error('2D context not available!');
     return;
   }
+  ctx.imageSmoothingEnabled = false;
 
   const customColorIndexRef: ValueRef<number> = { value: 0 };
 
