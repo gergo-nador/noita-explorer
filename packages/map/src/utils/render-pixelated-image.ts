@@ -1,19 +1,25 @@
 import { PixelCalculator } from '../interfaces/pixel-calculator.ts';
 
+interface Props {
+  imageData: ImageData;
+  width: number;
+  height: number;
+  calculatePixel: PixelCalculator;
+}
+
 /**
  * Renders an image on the canvas pixel by pixel using a calculator function.
- * @param ctx The 2D rendering context of the canvas.
+ * @param imageData The imageData from the 2D rendering context of the canvas.
  * @param width The width of the area to render.
  * @param height The height of the area to render.
  * @param calculatePixel Your function that defines the color of each pixel.
  */
-export function renderPixelatedImage(
-  ctx: CanvasRenderingContext2D,
-  width: number,
-  height: number,
-  calculatePixel: PixelCalculator,
-) {
-  const imageData = ctx.createImageData(width, height);
+export function renderPixelatedImage({
+  imageData,
+  width,
+  height,
+  calculatePixel,
+}: Props) {
   const data = imageData.data;
 
   for (let y = 0; y < height; y++) {
@@ -28,6 +34,4 @@ export function renderPixelatedImage(
       data[index + 3] = color.a;
     }
   }
-
-  ctx.putImageData(imageData, 0, 0);
 }

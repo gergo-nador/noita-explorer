@@ -6,14 +6,14 @@ interface Props {
   physicsObjects: ChunkPhysicsObject[];
   chunk: ChunkRawFormat;
   chunkCoordinates: Vector2d;
-  ctx: CanvasRenderingContext2D;
+  imageData: ImageData;
 }
 
 export function renderPhysicsObjects({
   physicsObjects,
   chunk,
   chunkCoordinates,
-  ctx,
+  imageData,
 }: Props) {
   for (const physicsObject of physicsObjects) {
     let lx = Math.round(physicsObject.posX) - chunk.width * chunkCoordinates.x;
@@ -46,7 +46,6 @@ export function renderPhysicsObjects({
     ux = Math.min(Math.max(ux, 0), 511);
     uy = Math.min(Math.max(uy, 0), 511);
 
-    const imageData = ctx.getImageData(0, 0, chunk.width, chunk.height);
     const data = imageData.data;
 
     for (let pixY = ly; pixY < uy; pixY++) {
@@ -90,7 +89,5 @@ export function renderPhysicsObjects({
         data[index + 3] = a;
       }
     }
-
-    ctx.putImageData(imageData, 0, 0);
   }
 }

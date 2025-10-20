@@ -51,13 +51,22 @@ export function renderChunk({
       materialColorCache,
     });
 
-  renderPixelatedImage(ctx, chunk.width, chunk.height, pixelCalculator);
+  const imageData = ctx.createImageData(chunk.width, chunk.height);
+
+  renderPixelatedImage({
+    imageData,
+    width: chunk.width,
+    height: chunk.height,
+    calculatePixel: pixelCalculator,
+  });
   renderPhysicsObjects({
     physicsObjects: chunk.physicsObjects,
     chunkCoordinates: chunkCoordinates,
     chunk: chunk,
-    ctx: ctx,
+    imageData,
   });
+
+  ctx.putImageData(imageData, 0, 0);
 
   return { canvas };
 }
