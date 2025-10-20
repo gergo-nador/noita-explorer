@@ -129,7 +129,6 @@ export const NoitaGridLayer = L.GridLayer.extend({
     });
 
     if (!currentFile) {
-      console.error('Couldnt find file for chunk', coords);
       tile.innerHTML = '';
       const div = document.createElement('div');
       div.textContent = 'No tile';
