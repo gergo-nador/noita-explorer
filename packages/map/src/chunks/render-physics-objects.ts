@@ -26,19 +26,19 @@ export function renderPhysicsObjects({
     const sine = Math.sin(physicsObject.rotation);
 
     if (cosine > 0) {
-      ux += physicsObject.width * cosine;
-      uy += physicsObject.height * cosine;
+      ux = Math.trunc(ux + physicsObject.width * cosine);
+      uy = Math.trunc(uy + physicsObject.height * cosine);
     } else {
-      lx += physicsObject.width * cosine;
-      ly += physicsObject.height * cosine;
+      lx = Math.trunc(lx + physicsObject.width * cosine);
+      ly = Math.trunc(ly + physicsObject.height * cosine);
     }
 
     if (sine > 0) {
-      lx -= physicsObject.height * sine;
-      uy += physicsObject.width * sine;
+      lx = Math.trunc(lx - physicsObject.height * sine);
+      uy = Math.trunc(uy + physicsObject.width * sine);
     } else {
-      ux -= physicsObject.height * sine;
-      ly += physicsObject.width * sine;
+      ux = Math.trunc(ux - physicsObject.height * sine);
+      ly = Math.trunc(ly + physicsObject.width * sine);
     }
 
     lx = Math.min(Math.max(lx, 0), 511);
@@ -78,14 +78,11 @@ export function renderPhysicsObjects({
         }
 
         const a = (color & 0xff000000) >>> 24;
-        const r = (color & 0x00ff0000) >>> 16;
+        const b = (color & 0x00ff0000) >>> 16;
         const g = (color & 0x0000ff00) >>> 8;
-        const b = (color & 0x000000ff) >>> 0;
+        const r = (color & 0x000000ff) >>> 0;
 
-        const pixXRound = Math.round(pixX);
-        const pixYRound = Math.round(pixY);
-
-        const index = (pixYRound * chunk.width + pixXRound) * 4;
+        const index = (pixY * chunk.width + pixX) * 4;
 
         data[index] = r;
         data[index + 1] = g;

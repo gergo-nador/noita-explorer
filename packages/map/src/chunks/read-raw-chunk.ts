@@ -69,7 +69,7 @@ export function readRawChunk(chunkBuffer: Buffer): ChunkRawFormat {
       const width = buffer.readUInt32BE(73);
       const height = buffer.readUInt32BE(77);
 
-      const pixelDataBuffer = chunkBuffer.subarray(81);
+      const pixelDataBuffer = buffer.subarray(81);
       const pixelData = readBufferArray(pixelDataBuffer, {
         length: width * height,
       }).iterate((buffer) => ({
@@ -81,9 +81,6 @@ export function readRawChunk(chunkBuffer: Buffer): ChunkRawFormat {
         posX: posX,
         posY: posY,
         rotation: rotation,
-        // 5 unknown long: 40 bytes
-        // 5 unknown bools: 5 bytes
-        // 1 unknown float: 4 bytes
         width: width,
         height: height,
 
