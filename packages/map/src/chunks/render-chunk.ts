@@ -2,15 +2,18 @@ import {
   RgbaColor,
   StringKeyDictionary,
   ValueRef,
+  Vector2d,
 } from '@noita-explorer/model';
 import { NoitaMaterial } from '@noita-explorer/model-noita';
 import { ChunkRawFormat } from '../interfaces/chunk-raw-format.ts';
 import { renderPixelatedImage } from '../utils/render-pixelated-image.ts';
 import { renderChunkPixel } from './render-chunk-pixel.ts';
 import { PixelCalculator } from '../interfaces/pixel-calculator.ts';
+import { renderPhysicsObjects } from './render-physics-objects.ts';
 
 interface Props {
   chunk: ChunkRawFormat;
+  chunkCoordinates: Vector2d;
   materials: StringKeyDictionary<NoitaMaterial>;
   materialImageCache: StringKeyDictionary<CanvasRenderingContext2D>;
   materialColorCache: StringKeyDictionary<RgbaColor>;
@@ -18,6 +21,7 @@ interface Props {
 
 export function renderChunk({
   chunk,
+  chunkCoordinates,
   materials,
   materialImageCache,
   materialColorCache,
@@ -48,6 +52,12 @@ export function renderChunk({
     });
 
   renderPixelatedImage(ctx, chunk.width, chunk.height, pixelCalculator);
+  renderPhysicsObjects({
+    physicsObjects: chunk.physicsObjects,
+    chunkCoordinates: chunkCoordinates,
+    chunk: chunk,
+    ctx: ctx,
+  });
 
   return { canvas };
 }

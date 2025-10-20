@@ -2,6 +2,7 @@ import { ChunkRawFormat } from '../interfaces/chunk-raw-format.ts';
 import { Buffer } from 'buffer';
 import { readBufferArray } from '../utils/read-buffer-array.ts';
 import { readBufferString } from '../utils/read-buffer-string.ts';
+import { ChunkPhysicsObject } from '../interfaces/chunk-physics-object.ts';
 
 export function readRawChunk(chunkBuffer: Buffer): ChunkRawFormat {
   let bufferOffset = 0;
@@ -51,6 +52,50 @@ export function readRawChunk(chunkBuffer: Buffer): ChunkRawFormat {
   const customColorsOutput = readBufferArray(customColorsBuffer).iterate(
     (buffer) => ({ item: buffer.readUInt32BE(0), offset: 4 }),
   );
+  bufferOffset += customColorsOutput.offset;
+
+  // physics objects in the chunk
+  const physicsObjectsBuffer = chunkBuffer.subarray(bufferOffset);
+  const physicsObjectsOutput = readBufferArray(physicsObjectsBuffer).iterate(
+    (buffer) => {
+      // ulong id
+      // uint material
+      const posX = buffer.readFloatBE(12);
+      const posY = buffer.readFloatBE(16);
+      const rotation = buffer.readFloatBE(20);
+      // 5 unknown long: 40 bytes
+      // 5 unknown bools: 5 bytes
+      // 1 unknown float: 4 bytes
+      const width = buffer.readUInt32BE(73);
+      const height = buffer.readUInt32BE(77);
+
+      const pixelDataBuffer = chunkBuffer.subarray(81);
+      const pixelData = readBufferArray(pixelDataBuffer, {
+        length: width * height,
+      }).iterate((buffer) => ({
+        item: buffer.readUInt32BE(0),
+        offset: 4,
+      }));
+
+      const physicsObject = {
+        posX: posX,
+        posY: posY,
+        rotation: rotation,
+        // 5 unknown long: 40 bytes
+        // 5 unknown bools: 5 bytes
+        // 1 unknown float: 4 bytes
+        width: width,
+        height: height,
+
+        pixelData: pixelData.items,
+      } satisfies ChunkPhysicsObject;
+
+      return {
+        item: physicsObject,
+        offset: 81 + pixelData.offset,
+      };
+    },
+  );
 
   const chunk: ChunkRawFormat = {
     version: version,
@@ -60,6 +105,8 @@ export function readRawChunk(chunkBuffer: Buffer): ChunkRawFormat {
     cellData: cellDataOutput.items,
     materialIds: materialsOutput.items,
     customColors: customColorsOutput.items,
+
+    physicsObjects: physicsObjectsOutput.items,
   };
   return chunk;
 }

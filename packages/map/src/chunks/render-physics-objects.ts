@@ -1,0 +1,99 @@
+import { ChunkPhysicsObject } from '../interfaces/chunk-physics-object.ts';
+import { ChunkRawFormat } from '../interfaces/chunk-raw-format.ts';
+import { Vector2d } from '@noita-explorer/model';
+
+interface Props {
+  physicsObjects: ChunkPhysicsObject[];
+  chunk: ChunkRawFormat;
+  chunkCoordinates: Vector2d;
+  ctx: CanvasRenderingContext2D;
+}
+
+export function renderPhysicsObjects({
+  physicsObjects,
+  chunk,
+  chunkCoordinates,
+  ctx,
+}: Props) {
+  for (const physicsObject of physicsObjects) {
+    let lx = Math.round(physicsObject.posX) - chunk.width * chunkCoordinates.x;
+    let ly = Math.round(physicsObject.posY) - chunk.height * chunkCoordinates.y;
+
+    let ux = lx;
+    let uy = ly;
+
+    const cosine = Math.cos(physicsObject.rotation);
+    const sine = Math.sin(physicsObject.rotation);
+
+    if (cosine > 0) {
+      ux += physicsObject.width * cosine;
+      uy += physicsObject.height * cosine;
+    } else {
+      lx += physicsObject.width * cosine;
+      ly += physicsObject.height * cosine;
+    }
+
+    if (sine > 0) {
+      lx -= physicsObject.height * sine;
+      uy += physicsObject.width * sine;
+    } else {
+      ux -= physicsObject.height * sine;
+      ly += physicsObject.width * sine;
+    }
+
+    lx = Math.min(Math.max(lx, 0), 511);
+    ly = Math.min(Math.max(ly, 0), 511);
+    ux = Math.min(Math.max(ux, 0), 511);
+    uy = Math.min(Math.max(uy, 0), 511);
+
+    const imageData = ctx.getImageData(0, 0, chunk.width, chunk.height);
+    const data = imageData.data;
+
+    for (let pixY = ly; pixY < uy; pixY++) {
+      for (let pixX = lx; pixX < ux; pixX++) {
+        const offsetPixX =
+          pixX -
+          (Math.round(physicsObject.posX) - chunk.width * chunkCoordinates.x);
+        const offsetPixY =
+          pixY -
+          (Math.round(physicsObject.posY) - chunk.height * chunkCoordinates.y);
+
+        const texX = Math.round(offsetPixX * cosine + offsetPixY * sine);
+        const texY = Math.round(-offsetPixX * sine + offsetPixY * cosine);
+
+        if (
+          texX < 0 ||
+          physicsObject.width <= texX ||
+          texY < 0 ||
+          physicsObject.height <= texY
+        ) {
+          continue;
+        }
+
+        const colorIndex = physicsObject.width * texY + texX;
+        const color = physicsObject.pixelData[colorIndex];
+
+        if (color >> 24 === 0) {
+          continue;
+        }
+
+        const a = (color & 0xff000000) >>> 24;
+        const r = (color & 0x00ff0000) >>> 16;
+        const g = (color & 0x0000ff00) >>> 8;
+        const b = (color & 0x000000ff) >>> 0;
+
+        const pixXRound = Math.round(pixX);
+        const pixYRound = Math.round(pixY);
+
+        const index = (pixYRound * chunk.width + pixXRound) * 4;
+
+        data[index] = r;
+        data[index + 1] = g;
+        data[index + 2] = b;
+        data[index + 3] = a;
+      }
+    }
+
+    ctx.putImageData(imageData, 0, 0);
+  }
+}

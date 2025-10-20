@@ -146,6 +146,7 @@ export const NoitaGridLayer = L.GridLayer.extend({
       .then((chunk) => {
         const renderedChunk = renderChunk({
           chunk,
+          chunkCoordinates: { x: coords.x, y: coords.y },
           materials: this.options.materials,
           materialImageCache: this.options.materialImageCache,
           materialColorCache: this.options.materialColorCache,
