@@ -19,6 +19,13 @@ export async function uncompressNoitaFile(
     data: fileBuffer.subarray(8),
   };
 
+  // if the compressed and uncompressed size is the same, the file is not compressed
+  if (
+    compressedFile.compressedDataSize === compressedFile.uncompressedDataSize
+  ) {
+    return compressedFile.data;
+  }
+
   return fastLzCompressor.decompressBuffer(
     compressedFile.data,
     compressedFile.uncompressedDataSize,

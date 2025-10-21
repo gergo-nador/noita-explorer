@@ -16,8 +16,14 @@ export function renderPhysicsObjects({
   imageData,
 }: Props) {
   for (const physicsObject of physicsObjects) {
-    let lx = Math.round(physicsObject.posX) - chunk.width * chunkCoordinates.x;
-    let ly = Math.round(physicsObject.posY) - chunk.height * chunkCoordinates.y;
+    const localX =
+      Math.round(physicsObject.position.x) - chunk.width * chunkCoordinates.x;
+    const localY =
+      Math.round(physicsObject.position.y) - chunk.height * chunkCoordinates.y;
+
+    // smart optimization trick from @pudy248
+    let lx = localX;
+    let ly = localY;
 
     let ux = lx;
     let uy = ly;
@@ -50,12 +56,8 @@ export function renderPhysicsObjects({
 
     for (let pixY = ly; pixY < uy; pixY++) {
       for (let pixX = lx; pixX < ux; pixX++) {
-        const offsetPixX =
-          pixX -
-          (Math.round(physicsObject.posX) - chunk.width * chunkCoordinates.x);
-        const offsetPixY =
-          pixY -
-          (Math.round(physicsObject.posY) - chunk.height * chunkCoordinates.y);
+        const offsetPixX = pixX - localX;
+        const offsetPixY = pixY - localY;
 
         const texX = Math.round(offsetPixX * cosine + offsetPixY * sine);
         const texY = Math.round(-offsetPixX * sine + offsetPixY * cosine);
