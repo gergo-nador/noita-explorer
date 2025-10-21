@@ -90,18 +90,18 @@ export const Sandbox = () => {
   return (
     <div style={{ width: '100%', height: '90vh', zIndex: 1 }}>
       <div>{status}</div>
-      {/*entityFiles.map((file: FileSystemFileAccess) => (
+      {entityFiles.map((file: FileSystemFileAccess) => (
         <EntityFileExtract file={file} />
-      ))*/}
+      ))}
 
-      {petriFiles.length > 0 && lookup?.materials && materialImageCache && (
+      {/*petriFiles.length > 0 && lookup?.materials && materialImageCache && (
         <NoitaMap
           petriFiles={petriFiles}
           materials={lookup.materials}
           materialImageCache={materialImageCache}
           materialColorCache={materialColorCache.current}
         />
-      )}
+      )*/}
     </div>
   );
 };

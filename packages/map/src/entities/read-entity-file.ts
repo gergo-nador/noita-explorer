@@ -23,6 +23,26 @@ export function readEntityFile(entityBuffer: Buffer) {
 const readEntityArray: BufferReaderIteratorCallback<ChunkEntity> = (
   bufferReader,
 ) => {
-  const offset = bufferReader.readInt32BE();
-  return { offset } as unknown as ChunkEntity;
+  const name = readBufferString(bufferReader);
+  const lifetimePhase = bufferReader.readUint8();
+  const fileName = readBufferString(bufferReader);
+  const tags = readBufferString(bufferReader);
+
+  const posX = bufferReader.readFloatBE();
+  const posY = bufferReader.readFloatBE();
+  const scaleX = bufferReader.readFloatBE();
+  const scaleY = bufferReader.readFloatBE();
+  const rotation = bufferReader.readFloatBE();
+
+  const entity: ChunkEntity = {
+    name,
+    fileName,
+    lifetimePhase,
+    tags,
+    rotation,
+    position: { x: posX, y: posY },
+    scale: { x: scaleX, y: scaleY },
+  };
+
+  return entity;
 };
