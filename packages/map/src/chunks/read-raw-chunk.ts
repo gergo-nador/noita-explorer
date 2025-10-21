@@ -4,13 +4,14 @@ import { readBufferArray } from '../utils/read-buffer-array.ts';
 import { readBufferString } from '../utils/read-buffer-string.ts';
 import { ChunkPhysicsObject } from '../interfaces/chunk-physics-object.ts';
 import { BufferReaderIteratorCallback } from '../interfaces/buffer-reader-iterator-callback.ts';
+import { BufferReader, createBufferReader } from '../utils/buffer-reader.ts';
 
 export function readRawChunk(chunkBuffer: Buffer): ChunkRawFormat {
-  let bufferOffset = 0;
+  const bufferReader = createBufferReader(chunkBuffer);
 
-  const version = chunkBuffer.readInt32BE(0);
-  const width = chunkBuffer.readInt32BE(4);
-  const height = chunkBuffer.readInt32BE(8);
+  const version = bufferReader.readInt32BE();
+  const width = bufferReader.readInt32BE();
+  const height = bufferReader.readInt32BE();
 
   if (version !== 24) {
     throw new Error(
@@ -18,47 +19,26 @@ export function readRawChunk(chunkBuffer: Buffer): ChunkRawFormat {
     );
   }
 
-  bufferOffset = 12;
   const cellDataLength = width * height;
 
   // contains pointers to either materials or custom colors
-  const cellDataBuffer = chunkBuffer.subarray(
-    bufferOffset,
-    bufferOffset + cellDataLength,
-  );
-  const cellDataOutput = readBufferArray(cellDataBuffer, {
+  const cellDataOutput = readBufferArray(bufferReader, {
     length: cellDataLength,
-  }).iterate((buffer) => ({
-    item: buffer.readUint8(0),
-    offset: 1,
-  }));
-  bufferOffset += cellDataOutput.offset;
+  }).iterate((bufferReader) => bufferReader.readUint8());
 
   // materials that are in the current chunk (max 128 materials)
-  const materialsDataBuffer = chunkBuffer.subarray(bufferOffset);
-  const materialsOutput = readBufferArray(materialsDataBuffer).iterate(
-    (buffer) => {
-      const output = readBufferString(buffer, { encoding: 'ascii' });
-
-      return {
-        item: output.text,
-        offset: output.offset,
-      };
-    },
+  const materialsOutput = readBufferArray(bufferReader).iterate(
+    (bufferReader) => readBufferString(bufferReader, { encoding: 'ascii' }),
   );
-  bufferOffset += materialsOutput.offset;
 
   // custom colors in the chunk
-  const customColorsBuffer = chunkBuffer.subarray(bufferOffset);
-  const customColorsOutput = readBufferArray(customColorsBuffer).iterate(
-    (buffer) => ({ item: buffer.readUInt32BE(0), offset: 4 }),
+  const customColorsOutput = readBufferArray(bufferReader).iterate(
+    (bufferReader) => bufferReader.readUInt32BE(),
   );
-  bufferOffset += customColorsOutput.offset;
 
   // physics objects in the chunk
-  const physicsObjectsBuffer = chunkBuffer.subarray(bufferOffset);
   const physicsObjectsOutput =
-    readBufferArray(physicsObjectsBuffer).iterate(readPhysicsObject);
+    readBufferArray(bufferReader).iterate(readPhysicsObject);
 
   const chunk: ChunkRawFormat = {
     version: version,
@@ -75,26 +55,24 @@ export function readRawChunk(chunkBuffer: Buffer): ChunkRawFormat {
 }
 
 const readPhysicsObject: BufferReaderIteratorCallback<ChunkPhysicsObject> = (
-  buffer: Buffer,
+  bufferReader: BufferReader,
 ) => {
+  bufferReader.jumpBytes(12);
   // ulong id
   // uint material
-  const posX = buffer.readFloatBE(12);
-  const posY = buffer.readFloatBE(16);
-  const rotation = buffer.readFloatBE(20);
+  const posX = bufferReader.readFloatBE();
+  const posY = bufferReader.readFloatBE();
+  const rotation = bufferReader.readFloatBE();
+  bufferReader.jumpBytes(49);
   // 5 unknown long: 40 bytes
   // 5 unknown bools: 5 bytes
   // 1 unknown float: 4 bytes
-  const width = buffer.readUInt32BE(73);
-  const height = buffer.readUInt32BE(77);
+  const width = bufferReader.readUInt32BE();
+  const height = bufferReader.readUInt32BE();
 
-  const pixelDataBuffer = buffer.subarray(81);
-  const pixelData = readBufferArray(pixelDataBuffer, {
+  const pixelData = readBufferArray(bufferReader, {
     length: width * height,
-  }).iterate((buffer) => ({
-    item: buffer.readUInt32BE(0),
-    offset: 4,
-  }));
+  }).iterate((bufferReader) => bufferReader.readUInt32BE());
 
   const physicsObject = {
     position: { x: posX, y: posY },
@@ -105,8 +83,5 @@ const readPhysicsObject: BufferReaderIteratorCallback<ChunkPhysicsObject> = (
     pixelData: pixelData.items,
   } satisfies ChunkPhysicsObject;
 
-  return {
-    item: physicsObject,
-    offset: 81 + pixelData.offset,
-  };
+  return physicsObject;
 };

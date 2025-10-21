@@ -1,4 +1,4 @@
-import { Buffer } from 'buffer';
+import { BufferReader } from '../utils/buffer-reader.ts';
 
 /**
  * Process an item of the array from a buffer.
@@ -6,6 +6,6 @@ import { Buffer } from 'buffer';
  * Returns the size of the used array to calculate the offset for the next item.
  */
 export type BufferReaderIteratorCallback<T> = (
-  buffer: Buffer,
+  bufferReader: BufferReader,
   i: number,
-) => { offset: number; item: T };
+) => T;

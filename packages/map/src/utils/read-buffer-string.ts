@@ -1,18 +1,19 @@
-import { Buffer } from 'buffer';
+import { BufferReader } from './buffer-reader.ts';
 
 export function readBufferString(
-  buffer: Buffer,
+  bufferReader: BufferReader,
   options?: {
     encoding?: BufferEncoding;
   },
-): { text: string; offset: number } {
-  const length = buffer.readInt32BE(0);
+): string {
+  const length = bufferReader.readInt32BE();
   if (length < 0) throw new Error('String length below zero: ' + length);
   if (length > 10_000_000)
     throw new Error('String length over limit: ' + length);
 
-  const stringBuff = buffer.subarray(4, length + 4);
+  const stringBuff = bufferReader.subarray(length);
   const text = stringBuff.toString(options?.encoding ?? 'utf-8');
+  bufferReader.jumpBytes(length);
 
-  return { text, offset: text.length + 4 };
+  return text;
 }

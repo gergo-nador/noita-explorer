@@ -1,39 +1,36 @@
-import { Buffer } from 'buffer';
 import { BufferReaderIteratorCallback } from '../interfaces/buffer-reader-iterator-callback.ts';
+import { BufferReader } from './buffer-reader.ts';
 
 export function readBufferArray(
-  buffer: Buffer,
+  bufferReader: BufferReader,
   options?: {
     // Defaults to `big`
     endian?: 'little' | 'big';
     length?: number;
   },
 ) {
-  let baseOffset = 0;
   const endian = options?.endian ?? 'big';
   let length = options?.length;
 
   // if the length is unknown, it's going to be the first int
   if (length === undefined) {
     length =
-      endian === 'little' ? buffer.readInt32LE(0) : buffer.readInt32BE(0);
-    baseOffset = 4;
+      endian === 'little'
+        ? bufferReader.readInt32LE()
+        : bufferReader.readInt32BE();
   }
 
   return {
     iterate: <T>(callback: BufferReaderIteratorCallback<T>) => {
       // items count
-      let offset = baseOffset;
       const items: T[] = [];
 
       for (let i = 0; i < length; i++) {
-        const itemBuffer = buffer.subarray(offset);
-        const output = callback(itemBuffer, i);
-        offset += output.offset;
-        items.push(output.item);
+        const output = callback(bufferReader, i);
+        items.push(output);
       }
 
-      return { items, offset };
+      return { items };
     },
   };
 }
