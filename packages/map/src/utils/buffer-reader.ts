@@ -1,20 +1,6 @@
 import { Buffer } from 'buffer';
+import { BufferReader } from './buffer-reader.types.ts';
 
-type ReturnFunction<T> = () => T;
-
-export interface BufferReader {
-  jumpBytes: (bytes: number) => void;
-  subarray: (start?: number, end?: number) => BufferReader;
-  getOffset: () => number;
-  toString: Buffer['toString'];
-
-  readInt32BE: ReturnFunction<number>;
-  readInt32LE: ReturnFunction<number>;
-  readUInt32BE: ReturnFunction<number>;
-  readUInt32LE: ReturnFunction<number>;
-  readFloatBE: ReturnFunction<number>;
-  readUint8: ReturnFunction<number>;
-}
 export function createBufferReader(buffer: Buffer): BufferReader {
   let offset = 0;
 
@@ -27,10 +13,17 @@ export function createBufferReader(buffer: Buffer): BufferReader {
     const subBuffer = buffer.subarray(offset, end);
     return createBufferReader(subBuffer);
   }
+
   function toString(
     ...args: Parameters<Buffer['toString']>
   ): ReturnType<Buffer['toString']> {
     return buffer.toString(...args);
+  }
+
+  function readString(length: number, encoding?: BufferEncoding) {
+    const value = buffer.toString(encoding, offset, offset + length);
+    offset += length;
+    return value;
   }
 
   function readInt32BE() {
@@ -74,6 +67,7 @@ export function createBufferReader(buffer: Buffer): BufferReader {
     jumpBytes,
     subarray,
     toString,
+    readString,
     readInt32BE,
     readInt32LE,
     readUInt32BE,

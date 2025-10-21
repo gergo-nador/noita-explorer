@@ -1,5 +1,5 @@
 import { BufferReaderIteratorCallback } from '../interfaces/buffer-reader-iterator-callback.ts';
-import { BufferReader } from './buffer-reader.ts';
+import { BufferReader } from './buffer-reader.types.ts';
 
 export function readBufferArray(
   bufferReader: BufferReader,

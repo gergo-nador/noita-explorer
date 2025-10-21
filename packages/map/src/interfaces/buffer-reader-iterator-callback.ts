@@ -1,4 +1,4 @@
-import { BufferReader } from '../utils/buffer-reader.ts';
+import { BufferReader } from '../utils/buffer-reader.types.ts';
 
 /**
  * Process an item of the array from a buffer.

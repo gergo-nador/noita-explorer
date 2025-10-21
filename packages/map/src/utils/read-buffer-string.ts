@@ -1,4 +1,4 @@
-import { BufferReader } from './buffer-reader.ts';
+import { BufferReader } from './buffer-reader.types.ts';
 
 export function readBufferString(
   bufferReader: BufferReader,
@@ -7,13 +7,12 @@ export function readBufferString(
   },
 ): string {
   const length = bufferReader.readInt32BE();
+
   if (length < 0) throw new Error('String length below zero: ' + length);
   if (length > 10_000_000)
     throw new Error('String length over limit: ' + length);
 
-  const stringBuff = bufferReader.subarray(length);
-  const text = stringBuff.toString(options?.encoding ?? 'utf-8');
-  bufferReader.jumpBytes(length);
+  const text = bufferReader.readString(length, options?.encoding ?? 'utf-8');
 
   return text;
 }

@@ -4,7 +4,8 @@ import { readBufferArray } from '../utils/read-buffer-array.ts';
 import { readBufferString } from '../utils/read-buffer-string.ts';
 import { ChunkPhysicsObject } from '../interfaces/chunk-physics-object.ts';
 import { BufferReaderIteratorCallback } from '../interfaces/buffer-reader-iterator-callback.ts';
-import { BufferReader, createBufferReader } from '../utils/buffer-reader.ts';
+import { createBufferReader } from '../utils/buffer-reader.ts';
+import { BufferReader } from '../utils/buffer-reader.types.ts';
 
 export function readRawChunk(chunkBuffer: Buffer): ChunkRawFormat {
   const bufferReader = createBufferReader(chunkBuffer);
