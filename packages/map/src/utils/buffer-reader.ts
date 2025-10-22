@@ -62,6 +62,12 @@ export function createBufferReader(buffer: Buffer): BufferReader {
     return value;
   }
 
+  function readBool() {
+    const value = buffer.readUint8(offset);
+    offset += 1;
+    return Boolean(value);
+  }
+
   return {
     getOffset: () => offset,
     jumpBytes,
@@ -74,5 +80,6 @@ export function createBufferReader(buffer: Buffer): BufferReader {
     readUInt32LE,
     readFloatBE,
     readUint8,
+    readBool,
   };
 }

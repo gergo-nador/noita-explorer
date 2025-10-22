@@ -14,4 +14,5 @@ export interface BufferReader {
   readUInt32LE: ReturnFunction<number>;
   readFloatBE: ReturnFunction<number>;
   readUint8: ReturnFunction<number>;
+  readBool: ReturnFunction<boolean>;
 }
