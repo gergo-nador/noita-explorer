@@ -5,8 +5,13 @@ import { useSave00Store } from '../stores/save00.ts';
 import { useNoitaDataWakStore } from '../stores/noita-data-wak.ts';
 import { publicPaths } from '../utils/public-paths.ts';
 import { NoitaMap } from './sandbox-map.tsx';
-import { uncompressNoitaFile, readEntityFile } from '@noita-explorer/map';
+import {
+  uncompressNoitaFile,
+  readEntityFile,
+  parseEntitySchema,
+} from '@noita-explorer/map';
 import { createFastLzCompressor } from '@noita-explorer/fastlz';
+import { EntitySchema } from '@noita-explorer/map';
 
 const compressorPromise = createFastLzCompressor();
 
@@ -93,6 +98,11 @@ export const Sandbox = () => {
       {entityFiles.map((file: FileSystemFileAccess) => (
         <EntityFileExtract file={file} />
       ))}
+      {/*entityFiles.length > 0 &&
+        entityFiles
+          .filter((file, i) => i > 1600 && i < 2000)
+          .map((file) => <EntityFileExtract file={file} />)*/}
+      {/*entityFiles.length > 0 && <EntityFileExtract file={entityFiles[1670]} />*/}
 
       {/*petriFiles.length > 0 && lookup?.materials && materialImageCache && (
         <NoitaMap
@@ -106,15 +116,35 @@ export const Sandbox = () => {
   );
 };
 
+const schemaCache: Record<string, Promise<EntitySchema>> = {};
+
 const EntityFileExtract = ({ file }: { file: FileSystemFileAccess }) => {
   const [fileContent, setFileContent] = useState<any>();
 
   useEffect(() => {
+    async function parseSchema(hash: string) {
+      if (!(hash in schemaCache)) {
+        schemaCache[hash] = fetch(`/schemas/${hash}.xml`)
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error('Could not find schema ' + hash);
+            }
+            return response.text();
+          })
+          .then((schema) => parseEntitySchema(schema));
+      }
+      const schema = await schemaCache[hash];
+      return schema;
+    }
+
     const load = async () => {
       const compressor = await compressorPromise;
       const buff = await uncompressNoitaFile(file, compressor);
 
-      const entities = readEntityFile(buff);
+      const entities = await readEntityFile({
+        entityBuffer: buff,
+        parseSchema: parseSchema,
+      });
       setFileContent(entities);
     };
 
@@ -123,6 +153,10 @@ const EntityFileExtract = ({ file }: { file: FileSystemFileAccess }) => {
 
   if (!fileContent) {
     return <div>Loading {file.getName()} ...</div>;
+  }
+
+  if (fileContent?.entities?.length === 0) {
+    return <></>;
   }
 
   return <div>{JSON.stringify(fileContent)}</div>;

@@ -5,7 +5,7 @@ import {
 } from '@noita-explorer/model';
 import { NoitaMaterial } from '@noita-explorer/model-noita';
 import { colorHelpers } from '@noita-explorer/tools';
-import { ChunkRawFormat } from '../interfaces/chunk-raw-format.ts';
+import { ChunkRawFormat } from './chunk-raw-format.ts';
 
 interface Props {
   x: number;

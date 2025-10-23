@@ -1,11 +1,11 @@
-import { ChunkRawFormat } from '../interfaces/chunk-raw-format.ts';
+import { ChunkRawFormat } from './chunk-raw-format.ts';
 import { Buffer } from 'buffer';
 import { readBufferArray } from '../utils/read-buffer-array.ts';
 import { readBufferString } from '../utils/read-buffer-string.ts';
-import { ChunkPhysicsObject } from '../interfaces/chunk-physics-object.ts';
-import { BufferReaderIteratorCallback } from '../interfaces/buffer-reader-iterator-callback.ts';
-import { createBufferReader } from '../utils/buffer-reader.ts';
-import { BufferReader } from '../utils/buffer-reader.types.ts';
+import { ChunkPhysicsObject } from './chunk-physics-object.ts';
+import { BufferReaderIteratorCallback } from '../buffer-reader/buffer-reader-iterator-callback.ts';
+import { createBufferReader } from '../buffer-reader/buffer-reader.ts';
+import { BufferReader } from '../buffer-reader/buffer-reader.types.ts';
 
 export function readRawChunk(chunkBuffer: Buffer): ChunkRawFormat {
   const bufferReader = createBufferReader(chunkBuffer);

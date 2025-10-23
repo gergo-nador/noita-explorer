@@ -26,39 +26,14 @@ export function createBufferReader(buffer: Buffer): BufferReader {
     return value;
   }
 
-  function readInt32BE() {
-    const value = buffer.readInt32BE(offset);
-    offset += 4;
-    return value;
-  }
-
-  function readInt32LE() {
-    const value = buffer.readInt32LE(offset);
-    offset += 4;
-    return value;
-  }
-
-  function readUInt32BE() {
-    const value = buffer.readUInt32BE(offset);
-    offset += 4;
-    return value;
-  }
-
-  function readUInt32LE() {
-    const value = buffer.readUInt32LE(offset);
-    offset += 4;
-    return value;
-  }
-
   function readFloatBE() {
     const value = buffer.readFloatBE(offset);
     offset += 4;
     return value;
   }
-
-  function readUint8() {
-    const value = buffer.readUint8(offset);
-    offset += 1;
+  function readDoubleBE() {
+    const value = buffer.readDoubleBE(offset);
+    offset += 8;
     return value;
   }
 
@@ -68,18 +43,89 @@ export function createBufferReader(buffer: Buffer): BufferReader {
     return Boolean(value);
   }
 
+  function readUint8() {
+    const value = buffer.readUint8(offset);
+    offset += 1;
+    return value;
+  }
+
+  function readUint16BE() {
+    const value = buffer.readUint16BE(offset);
+    offset += 2;
+    return value;
+  }
+
+  function readInt32BE() {
+    const value = buffer.readInt32BE(offset);
+    offset += 4;
+    return value;
+  }
+  function readInt32LE() {
+    const value = buffer.readInt32LE(offset);
+    offset += 4;
+    return value;
+  }
+  function readUInt32BE() {
+    const value = buffer.readUInt32BE(offset);
+    offset += 4;
+    return value;
+  }
+  function readUInt32LE() {
+    const value = buffer.readUInt32LE(offset);
+    offset += 4;
+    return value;
+  }
+
+  function readInt64BE() {
+    let value: bigint;
+
+    if (typeof buffer['readBigInt64BE'] === 'function') {
+      value = buffer.readBigInt64BE(offset);
+      return value;
+    } else {
+      const dataView = new DataView(buffer.buffer, offset, 8);
+      value = dataView.getBigInt64(0, false);
+    }
+
+    offset += 8;
+    return value;
+  }
+  function readUInt64BE() {
+    let value: bigint;
+
+    if (typeof buffer['readBigUInt64BE'] === 'function') {
+      value = buffer.readBigUInt64BE(offset);
+    } else {
+      const dataView = new DataView(buffer.buffer, offset, 8);
+      value = dataView.getBigUint64(0, false);
+    }
+    offset += 8;
+    return value;
+  }
+
   return {
     getOffset: () => offset,
     jumpBytes,
     subarray,
     toString,
+
     readString,
+
+    readFloatBE,
+    readDoubleBE,
+
+    readBool,
+
+    readUint8,
+
+    readUint16BE,
+
     readInt32BE,
     readInt32LE,
     readUInt32BE,
     readUInt32LE,
-    readFloatBE,
-    readUint8,
-    readBool,
+
+    readInt64BE,
+    readUInt64BE,
   };
 }

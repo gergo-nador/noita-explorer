@@ -5,7 +5,7 @@ import {
   Vector2d,
 } from '@noita-explorer/model';
 import { NoitaMaterial } from '@noita-explorer/model-noita';
-import { ChunkRawFormat } from '../interfaces/chunk-raw-format.ts';
+import { ChunkRawFormat } from './chunk-raw-format.ts';
 import { renderPixelatedImage } from '../utils/render-pixelated-image.ts';
 import { renderChunkPixel } from './render-chunk-pixel.ts';
 import { PixelCalculator } from '../interfaces/pixel-calculator.ts';

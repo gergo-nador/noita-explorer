@@ -8,11 +8,27 @@ export interface BufferReader {
   toString: Buffer['toString'];
 
   readString: (length: number, encoding?: BufferEncoding) => string;
+
+  // floating point
+  readFloatBE: ReturnFunction<number>;
+  readDoubleBE: ReturnFunction<number>;
+
+  // bool
+  readBool: ReturnFunction<boolean>;
+
+  // int 8
+  readUint8: ReturnFunction<number>;
+
+  // int 16
+  readUint16BE: ReturnFunction<number>;
+
+  // int 32
   readInt32BE: ReturnFunction<number>;
   readInt32LE: ReturnFunction<number>;
   readUInt32BE: ReturnFunction<number>;
   readUInt32LE: ReturnFunction<number>;
-  readFloatBE: ReturnFunction<number>;
-  readUint8: ReturnFunction<number>;
-  readBool: ReturnFunction<boolean>;
+
+  // int64
+  readInt64BE: ReturnFunction<bigint>;
+  readUInt64BE: ReturnFunction<bigint>;
 }

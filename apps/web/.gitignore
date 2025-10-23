@@ -1,6 +1,7 @@
 # generated static sites
 public/g
 public/sitemap.txt
+public/schemas
 
 dist-lib
 dist-tmp

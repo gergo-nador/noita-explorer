@@ -1,5 +1,5 @@
-import { ChunkPhysicsObject } from '../interfaces/chunk-physics-object.ts';
-import { ChunkRawFormat } from '../interfaces/chunk-raw-format.ts';
+import { ChunkPhysicsObject } from './chunk-physics-object.ts';
+import { ChunkRawFormat } from './chunk-raw-format.ts';
 import { Vector2d } from '@noita-explorer/model';
 
 interface Props {
