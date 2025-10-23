@@ -35,6 +35,7 @@ import { noitaDataWakStore } from '../stores/noita-data-wak.ts';
 import { WikiSpellDetails } from '../pages/wiki/spells/wiki-spell-details.tsx';
 import { WikiEnemyDetails } from '../pages/wiki/enemies/wiki-enemy-details.tsx';
 import { WikiMaterialDetails } from '../pages/wiki/materials/wiki-material-details.tsx';
+import { NoitaMapPage } from '../pages/map/noita-map-page.tsx';
 
 export const routes: NoitaRouteObject[] = [
   {
@@ -384,6 +385,20 @@ export const routes: NoitaRouteObject[] = [
             />
             <CardPageTemplate returnPath={pages.main}>
               <NoitaBonesWands />
+            </CardPageTemplate>
+          </>
+        ),
+      },
+      {
+        path: 'map',
+        element: (
+          <>
+            <SeoDefaultPage
+              title='Map'
+              description='View your world in the browser'
+            />
+            <CardPageTemplate returnPath={pages.main}>
+              <NoitaMapPage />
             </CardPageTemplate>
           </>
         ),

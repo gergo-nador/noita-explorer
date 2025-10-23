@@ -110,6 +110,13 @@ export const MainPage = () => {
             Sessions
           </Link>
           <Link
+            to={pages.map}
+            disabled={save00Status !== 'loaded'}
+            disabledToast='To view map you need to set up reading from save00 folder.'
+          >
+            Map
+          </Link>
+          <Link
             to={pages.deathMap}
             disabled={save00Status !== 'loaded'}
             disabledToast='To view death map you need to set up reading from save00 folder.'
