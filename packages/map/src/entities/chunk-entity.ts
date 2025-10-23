@@ -1,4 +1,5 @@
 import { Vector2d } from '@noita-explorer/model';
+import { ChunkEntityComponent } from './chunk-entity-component.ts';
 
 export interface ChunkEntity {
   name: string;
@@ -8,4 +9,6 @@ export interface ChunkEntity {
   position: Vector2d;
   rotation: number; // float
   scale: Vector2d;
+
+  components: ChunkEntityComponent[];
 }

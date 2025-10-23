@@ -22,7 +22,7 @@ export const readEntityArray = ({ bufferReader, entitySchema }: Props) => {
   const scaleY = bufferReader.readFloatBE();
   const rotation = bufferReader.readFloatBE();
 
-  readBufferArray(bufferReader).iterate((bufferReader) =>
+  const components = readBufferArray(bufferReader).iterate((bufferReader) =>
     readEntityComponent({ bufferReader, entitySchema }),
   );
   bufferReader.jumpBytes(4);
@@ -35,6 +35,7 @@ export const readEntityArray = ({ bufferReader, entitySchema }: Props) => {
     rotation,
     position: { x: posX, y: posY },
     scale: { x: scaleX, y: scaleY },
+    components: components.items,
   };
 
   return entity;
