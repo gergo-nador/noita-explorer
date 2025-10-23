@@ -1,5 +1,7 @@
-import { BufferReaderIteratorCallback } from '../buffer-reader/buffer-reader-iterator-callback.ts';
-import { BufferReader } from '../buffer-reader/buffer-reader.types.ts';
+import {
+  BufferReader,
+  BufferReaderIteratorCallback,
+} from '@noita-explorer/tools';
 
 export function readBufferArray(
   bufferReader: BufferReader,

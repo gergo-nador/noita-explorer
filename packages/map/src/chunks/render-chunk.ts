@@ -10,6 +10,8 @@ import { renderPixelatedImage } from '../utils/render-pixelated-image.ts';
 import { renderChunkPixel } from './render-chunk-pixel.ts';
 import { PixelCalculator } from '../interfaces/pixel-calculator.ts';
 import { renderPhysicsObjects } from './render-physics-objects.ts';
+import { renderChunkEntities } from './render-chunk-entities.ts';
+import { ChunkRenderableEntity } from './chunk-renderable-entity.ts';
 
 interface Props {
   chunk: ChunkRawFormat;
@@ -17,6 +19,7 @@ interface Props {
   materials: StringKeyDictionary<NoitaMaterial>;
   materialImageCache: StringKeyDictionary<ImageData>;
   materialColorCache: StringKeyDictionary<RgbaColor>;
+  entities: ChunkRenderableEntity[];
 }
 
 export function renderChunk({
@@ -25,6 +28,7 @@ export function renderChunk({
   materials,
   materialImageCache,
   materialColorCache,
+  entities,
 }: Props) {
   const canvas = document.createElement('canvas');
   canvas.width = chunk.width;
@@ -63,7 +67,13 @@ export function renderChunk({
     physicsObjects: chunk.physicsObjects,
     chunkCoordinates: chunkCoordinates,
     chunk: chunk,
-    imageData,
+    chunkImageData: imageData,
+  });
+  renderChunkEntities({
+    entities,
+    chunk,
+    chunkCoordinates,
+    chunkImageData: imageData,
   });
 
   ctx.putImageData(imageData, 0, 0);

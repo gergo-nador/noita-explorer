@@ -1,25 +1,44 @@
 import { useEffect, useRef, useState } from 'react';
 import { getSave00FolderHandle } from '../utils/browser-noita-api/browser-noita-api.ts';
-import { FileSystemFileAccess } from '@noita-explorer/model';
+import {
+  FileSystemDirectoryAccess,
+  FileSystemFileAccess,
+} from '@noita-explorer/model';
 import { useSave00Store } from '../stores/save00.ts';
 import { useNoitaDataWakStore } from '../stores/noita-data-wak.ts';
 import { publicPaths } from '../utils/public-paths.ts';
 import { NoitaMap } from './sandbox-map.tsx';
+import { Buffer } from 'buffer';
 import {
-  uncompressNoitaFile,
-  readEntityFile,
+  createFastLzCompressor,
+  FastLZCompressor,
+} from '@noita-explorer/fastlz';
+import {
+  ChunkEntity,
+  ChunkRenderableEntity,
+  EntitySchema,
   parseEntitySchema,
+  readEntityFile,
+  readEntitySchema,
+  uncompressNoitaBuffer,
 } from '@noita-explorer/map';
-import { createFastLzCompressor } from '@noita-explorer/fastlz';
-import { EntitySchema } from '@noita-explorer/map';
+import { base64Helpers } from '@noita-explorer/tools';
+import { FileSystemDirectoryAccessDataWakMemory } from '@noita-explorer/file-systems/data-wak-memory-fs';
 
-const compressorPromise = createFastLzCompressor();
+const schemaCache: Record<string, Promise<EntitySchema>> = {};
+const dataWakPromise = fetch('/data.wak').then(async (res) => {
+  const arrayBuffer = await res.arrayBuffer();
+  const buffer = Buffer.from(arrayBuffer);
+  return FileSystemDirectoryAccessDataWakMemory(buffer);
+});
 
 export const Sandbox = () => {
   const { status } = useSave00Store();
   const { data, lookup } = useNoitaDataWakStore();
   const [petriFiles, setPetriFiles] = useState<FileSystemFileAccess[]>([]);
-  const [entityFiles, setEntityFiles] = useState<FileSystemFileAccess[]>([]);
+  const [entityFiles, setEntityFiles] = useState<
+    Record<string, ChunkRenderableEntity[] | undefined>
+  >({});
   const [materialImageCache, setMaterialImageCache] =
     useState<Record<string, ImageData>>();
   const materialColorCache = useRef({});
@@ -75,7 +94,7 @@ export const Sandbox = () => {
     getSave00FolderHandle()
       .then((folder) => folder.getDirectory('world'))
       .then((folder) => folder.listFiles())
-      .then((files) => {
+      .then(async (files) => {
         const petriFiles = files
           .filter((file) => file.getName().endsWith('.png_petri'))
           .sort((a, b) => a.getName().localeCompare(b.getName()));
@@ -88,76 +107,168 @@ export const Sandbox = () => {
               file.getName().endsWith('.bin'),
           )
           .sort((a, b) => a.getName().localeCompare(b.getName()));
-        setEntityFiles(entityFiles);
+
+        const fastLzCompressor = await createFastLzCompressor();
+        const entityFileBuffers: Record<string, Buffer> = {};
+        for (const entityFile of entityFiles) {
+          const uint8Array = await entityFile.read.asBuffer();
+          const entityBuffer = Buffer.from(uint8Array.buffer);
+
+          const entityFileLoaded = await loadEntityFile({
+            buffer: entityBuffer,
+            compressor: fastLzCompressor,
+          });
+
+          const entities =
+            entityFileLoaded &&
+            (await prepareEntities({
+              entities: entityFileLoaded.entities,
+              dataWak: await dataWakPromise,
+            }));
+
+          debugger;
+          entityFileBuffers[entityFile.getName()] = entities;
+        }
+
+        setEntityFiles(entityFileBuffers);
       });
   }, [status]);
 
   return (
     <div style={{ width: '100%', height: '90vh', zIndex: 1 }}>
       <div>{status}</div>
-      {entityFiles.map((file: FileSystemFileAccess) => (
-        <EntityFileExtract file={file} />
-      ))}
-      {/*entityFiles.length > 0 &&
-        entityFiles
-          .filter((file, i) => i > 1600 && i < 2000)
-          .map((file) => <EntityFileExtract file={file} />)*/}
-      {/*entityFiles.length > 0 && <EntityFileExtract file={entityFiles[1670]} />*/}
 
-      {/*petriFiles.length > 0 && lookup?.materials && materialImageCache && (
-        <NoitaMap
-          petriFiles={petriFiles}
-          materials={lookup.materials}
-          materialImageCache={materialImageCache}
-          materialColorCache={materialColorCache.current}
-        />
-      )*/}
+      {petriFiles.length > 0 &&
+        Object.keys(entityFiles).length > 0 &&
+        lookup?.materials &&
+        materialImageCache && (
+          <NoitaMap
+            petriFiles={petriFiles}
+            entityFiles={entityFiles}
+            materials={lookup.materials}
+            materialImageCache={materialImageCache}
+            materialColorCache={materialColorCache.current}
+          />
+        )}
     </div>
   );
 };
 
-const schemaCache: Record<string, Promise<EntitySchema>> = {};
+const loadEntityFile = async ({
+  compressor,
+  buffer,
+}: {
+  compressor: FastLZCompressor;
+  buffer: Buffer;
+}) => {
+  try {
+    const buff = await uncompressNoitaBuffer(buffer, compressor);
 
-const EntityFileExtract = ({ file }: { file: FileSystemFileAccess }) => {
-  const [fileContent, setFileContent] = useState<any>();
+    const schemaHash = await readEntitySchema({ entityBuffer: buff });
+    const schema = await parseSchema(schemaHash.schemaFile);
 
-  useEffect(() => {
-    async function parseSchema(hash: string) {
-      if (!(hash in schemaCache)) {
-        schemaCache[hash] = fetch(`/schemas/${hash}.xml`)
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error('Could not find schema ' + hash);
-            }
-            return response.text();
-          })
-          .then((schema) => parseEntitySchema(schema));
-      }
-      const schema = await schemaCache[hash];
-      return schema;
-    }
+    const entities = await readEntityFile({
+      entityBuffer: buff,
+      schema: schema,
+    });
 
-    const load = async () => {
-      const compressor = await compressorPromise;
-      const buff = await uncompressNoitaFile(file, compressor);
+    return entities;
+  } catch (e) {
+    console.error(e);
+  }
+};
+async function parseSchema(hash: string) {
+  if (!(hash in schemaCache)) {
+    // @ts-expect-error svsrvvtsrv rsvsrtb
+    schemaCache[hash] = fetch(`/schemas/${hash}.xml`)
+      .then((response) => {
+        if (!response.ok) {
+          console.log('schema not ok', response);
+          throw new Error('Could not find schema ' + hash);
+        }
+        return response.text();
+      })
+      .then((schema) => {
+        return parseEntitySchema(schema);
+      })
+      .catch((error) => console.log('schema parse not ok', error));
+  }
+  const promise = schemaCache[hash];
+  const schema = await promise;
+  return schema;
+}
 
-      const entities = await readEntityFile({
-        entityBuffer: buff,
-        parseSchema: parseSchema,
-      });
-      setFileContent(entities);
+async function prepareEntities({
+  entities,
+  dataWak,
+}: {
+  entities: ChunkEntity[];
+  dataWak: FileSystemDirectoryAccess;
+}): Promise<ChunkRenderableEntity[]> {
+  const renderableEntities: ChunkRenderableEntity[] = [];
+
+  for (const entity of entities) {
+    const imgFile = await dataWak.getFile(entity.fileName);
+    const imageBase64 = await imgFile.read.asImageBase64();
+    const imageData = await base64ToImageData(imageBase64);
+
+    const renderableEntity: ChunkRenderableEntity = {
+      name: entity.name,
+      lifetimePhase: entity.lifetimePhase,
+      scale: entity.scale,
+      position: entity.position,
+      rotation: entity.rotation,
+      tags: entity.tags,
+      imageData: imageData,
     };
 
-    void load();
-  }, []);
-
-  if (!fileContent) {
-    return <div>Loading {file.getName()} ...</div>;
+    renderableEntities.push(renderableEntity);
   }
 
-  if (fileContent?.entities?.length === 0) {
-    return <></>;
-  }
+  return renderableEntities;
+}
 
-  return <div>{JSON.stringify(fileContent)}</div>;
-};
+/**
+ * Converts a Base64 string to an ImageData object.
+ * @param {string} base64String The Base64 string (including the data URI scheme).
+ * @returns {Promise<ImageData>} A promise that resolves with the ImageData object.
+ */
+function base64ToImageData(base64String: string): Promise<ImageData> {
+  return new Promise((resolve, reject) => {
+    debugger;
+    // 1. Create a new Image object
+    const img = new Image();
+
+    // 2. Set up event listeners for loading and errors
+    img.onload = () => {
+      // 3. Create a canvas element
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+
+      if (ctx == null) {
+        reject('No Canvas2dContext available');
+        return;
+      }
+
+      // 4. Set canvas dimensions to match the image
+      canvas.width = img.width;
+      canvas.height = img.height;
+
+      // 5. Draw the image onto the canvas
+      ctx.drawImage(img, 0, 0);
+
+      // 6. Get the ImageData from the canvas
+      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+      // Resolve the promise with the ImageData
+      resolve(imageData);
+    };
+
+    img.onerror = (error) => {
+      reject(error);
+    };
+
+    // 7. Set the image source to the Base64 string to trigger loading
+    img.src = base64String;
+  });
+}

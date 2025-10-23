@@ -6,6 +6,7 @@ export interface BufferReader {
   subarray: (start?: number, end?: number) => BufferReader;
   getOffset: () => number;
   toString: Buffer['toString'];
+  getBuffer: () => Buffer;
 
   readString: (length: number, encoding?: BufferEncoding) => string;
 

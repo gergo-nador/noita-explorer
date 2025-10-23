@@ -105,6 +105,7 @@ export function createBufferReader(buffer: Buffer): BufferReader {
 
   return {
     getOffset: () => offset,
+    getBuffer: () => buffer,
     jumpBytes,
     subarray,
     toString,

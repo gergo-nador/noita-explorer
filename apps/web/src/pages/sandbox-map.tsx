@@ -1,6 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
-
 import { MapContainer, Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
 
@@ -8,6 +5,9 @@ import {
   uncompressNoitaFile,
   readRawChunk,
   renderChunk,
+  parseEntitySchema,
+  readEntityFile,
+  EntitySchema,
 } from '@noita-explorer/map';
 
 // Fix for default icon issue with webpack/vite
@@ -15,7 +15,31 @@ import {
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 
-import { createFastLzCompressor } from '@noita-explorer/fastlz';
+import {
+  createFastLzCompressor,
+  FastLZCompressor,
+} from '@noita-explorer/fastlz';
+// src/components/CustomNoitaLayer.tsx
+import { useEffect, useRef } from 'react';
+import { useMap } from 'react-leaflet';
+import {
+  FileSystemDirectoryAccess,
+  FileSystemFileAccess,
+  RgbaColor,
+  StringKeyDictionary,
+  Vector2d,
+} from '@noita-explorer/model';
+import { NoitaMaterial } from '@noita-explorer/model-noita';
+import {
+  ChunkEntity,
+  ChunkRenderableEntity,
+  uncompressNoitaBuffer,
+  readEntitySchema,
+} from '@noita-explorer/map';
+import { FileSystemDirectoryAccessDataWakMemory } from '@noita-explorer/file-systems/data-wak-memory-fs';
+import { Buffer } from 'buffer';
+
+const schemaCache: Record<string, Promise<EntitySchema>> = {};
 
 const DefaultIcon = L.icon({
   iconUrl: icon,
@@ -25,13 +49,23 @@ const DefaultIcon = L.icon({
 
 L.Marker.prototype.options.icon = DefaultIcon;
 
+const dataWakPromise =
+  Promise.resolve() ??
+  fetch('/data.wak').then(async (res) => {
+    const arrayBuffer = await res.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+    return FileSystemDirectoryAccessDataWakMemory(buffer);
+  });
+
 export function NoitaMap({
   petriFiles,
+  entityFiles,
   materials,
   materialImageCache,
   materialColorCache,
 }: {
   petriFiles: FileSystemFileAccess[];
+  entityFiles: Record<string, ChunkRenderableEntity[] | undefined>;
   materials: StringKeyDictionary<NoitaMaterial>;
   materialImageCache: StringKeyDictionary<ImageData>;
   materialColorCache: StringKeyDictionary<RgbaColor>;
@@ -53,6 +87,7 @@ export function NoitaMap({
       {!__SSG__ && (
         <CustomNoitaLayer
           petriFiles={petriFiles}
+          entityFiles={entityFiles}
           materials={materials}
           materialColorCache={materialColorCache}
           materialImageCache={materialImageCache}
@@ -137,19 +172,48 @@ export const NoitaGridLayer = L.GridLayer.extend({
       return tile;
     }
 
+    const output = extractNumbers(currentFile.getName()) ?? {
+      num1: 1,
+      num2: 2,
+    };
+
     const fastLzCompressorPromise: Promise<FastLZCompressor> =
       this.options.fastLzCompressorPromise;
 
     fastLzCompressorPromise
       .then((compressor) => uncompressNoitaFile(currentFile, compressor))
       .then((uncompressed) => readRawChunk(uncompressed))
-      .then((chunk) => {
+      .then(async (chunk) => {
+        /*
+        const entityBuffer = findEntityFileForChunk({
+          chunkCoords: { x: output.num1 / 512, y: output.num2 / 512 },
+          files: this.options.entityFiles,
+        });
+        const compressor = await fastLzCompressorPromise;
+        const entityFileLoaded =
+          entityBuffer &&
+          (await loadEntityFile({
+            buffer: entityBuffer,
+            compressor: compressor,
+          }));
+
+        const entities =
+          entityFileLoaded &&
+          (await prepareEntities({
+            entities: entityFileLoaded.entities,
+            dataWak: await dataWakPromise,
+          }));*/
+        const fileName = `entities_${2000 * output.num1 + output.num2}.bin`;
+        const entities = this.options.entityFiles[fileName];
+        console.log('entities', entities);
+
         const renderedChunk = renderChunk({
           chunk,
           chunkCoordinates: { x: coords.x, y: coords.y },
           materials: this.options.materials,
           materialImageCache: this.options.materialImageCache,
           materialColorCache: this.options.materialColorCache,
+          entities: entities || [],
         });
 
         if (!renderedChunk) {
@@ -181,23 +245,45 @@ export const NoitaGridLayer = L.GridLayer.extend({
   },
 });
 
-// src/components/CustomNoitaLayer.tsx
-import { useEffect, useRef } from 'react';
-import { useMap } from 'react-leaflet';
-import {
-  FileSystemFileAccess,
-  RgbaColor,
-  StringKeyDictionary,
-} from '@noita-explorer/model';
-import { NoitaMaterial } from '@noita-explorer/model-noita';
+async function prepareEntities({
+  entities,
+  dataWak,
+}: {
+  entities: ChunkEntity[];
+  dataWak: FileSystemDirectoryAccess;
+}): Promise<ChunkRenderableEntity[]> {
+  const renderableEntities: ChunkRenderableEntity[] = [];
+
+  for (const entity of entities) {
+    const imgFile = await dataWak.getFile(entity.fileName);
+    const imageBase64 = await imgFile.read.asImageBase64();
+    const imageData = await base64ToImageData(imageBase64);
+
+    const renderableEntity: ChunkRenderableEntity = {
+      name: entity.name,
+      lifetimePhase: entity.lifetimePhase,
+      scale: entity.scale,
+      position: entity.position,
+      rotation: entity.rotation,
+      tags: entity.tags,
+      imageData: imageData,
+    };
+
+    renderableEntities.push(renderableEntity);
+  }
+
+  return renderableEntities;
+}
 
 export function CustomNoitaLayer({
   petriFiles,
+  entityFiles,
   materials,
   materialImageCache,
   materialColorCache,
 }: {
   petriFiles: FileSystemFileAccess[];
+  entityFiles: Record<string, ChunkRenderableEntity[] | undefined>;
   materials: StringKeyDictionary<NoitaMaterial>;
   materialImageCache: StringKeyDictionary<ImageData>;
   materialColorCache: StringKeyDictionary<RgbaColor>;
@@ -223,6 +309,7 @@ export function CustomNoitaLayer({
 
         // Custom properties
         petriFiles,
+        entityFiles,
         materials,
         materialImageCache,
         materialColorCache,
@@ -245,3 +332,103 @@ export function CustomNoitaLayer({
   // This component does not render any JSX itself.
   return null;
 }
+
+/**
+ * Converts a Base64 string to an ImageData object.
+ * @param {string} base64String The Base64 string (including the data URI scheme).
+ * @returns {Promise<ImageData>} A promise that resolves with the ImageData object.
+ */
+function base64ToImageData(base64String: string): Promise<ImageData> {
+  return new Promise((resolve, reject) => {
+    // 1. Create a new Image object
+    const img = new Image();
+
+    // 2. Set up event listeners for loading and errors
+    img.onload = () => {
+      // 3. Create a canvas element
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+
+      if (ctx == null) {
+        reject('No Canvas2dContext available');
+        return;
+      }
+
+      // 4. Set canvas dimensions to match the image
+      canvas.width = img.width;
+      canvas.height = img.height;
+
+      // 5. Draw the image onto the canvas
+      ctx.drawImage(img, 0, 0);
+
+      // 6. Get the ImageData from the canvas
+      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+      // Resolve the promise with the ImageData
+      resolve(imageData);
+    };
+
+    img.onerror = (error) => {
+      reject(error);
+    };
+
+    // 7. Set the image source to the Base64 string to trigger loading
+    img.src = base64String;
+  });
+}
+
+function findEntityFileForChunk({
+  chunkCoords,
+  files,
+}: {
+  chunkCoords: Vector2d;
+  files: Record<string, Buffer>;
+}) {
+  const fileName = `entities_${2000 * chunkCoords.y + chunkCoords.x}.bin`;
+  return files[fileName];
+}
+
+async function parseSchema(hash: string) {
+  if (!(hash in schemaCache)) {
+    // @ts-expect-error svsrvvtsrv rsvsrtb
+    schemaCache[hash] = fetch(`/schemas/${hash}.xml`)
+      .then((response) => {
+        if (!response.ok) {
+          console.log('schema not ok', response);
+          throw new Error('Could not find schema ' + hash);
+        }
+        return response.text();
+      })
+      .then((schema) => {
+        return parseEntitySchema(schema);
+      })
+      .catch((error) => console.log('schema parse not ok', error));
+  }
+  const promise = schemaCache[hash];
+  const schema = await promise;
+  return schema;
+}
+
+const loadEntityFile = async ({
+  compressor,
+  buffer,
+}: {
+  compressor: FastLZCompressor;
+  buffer: Buffer;
+}) => {
+  try {
+    const buff = await uncompressNoitaBuffer(buffer, compressor);
+
+    const schemaHash = await readEntitySchema({ entityBuffer: buff });
+    const schema = await parseSchema(schemaHash.schemaFile);
+
+    const entities = await readEntityFile({
+      entityBuffer: buff,
+      schema: schema,
+    });
+
+    return entities;
+  } catch (e) {
+    console.error(e);
+  }
+};

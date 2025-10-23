@@ -3,9 +3,11 @@ import { Buffer } from 'buffer';
 import { readBufferArray } from '../utils/read-buffer-array.ts';
 import { readBufferString } from '../utils/read-buffer-string.ts';
 import { ChunkPhysicsObject } from './chunk-physics-object.ts';
-import { BufferReaderIteratorCallback } from '../buffer-reader/buffer-reader-iterator-callback.ts';
-import { createBufferReader } from '../buffer-reader/buffer-reader.ts';
-import { BufferReader } from '../buffer-reader/buffer-reader.types.ts';
+import {
+  BufferReader,
+  BufferReaderIteratorCallback,
+  createBufferReader,
+} from '@noita-explorer/tools';
 
 export function readRawChunk(chunkBuffer: Buffer): ChunkRawFormat {
   const bufferReader = createBufferReader(chunkBuffer);

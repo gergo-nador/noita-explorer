@@ -2,8 +2,8 @@ import { ChunkEntity } from './chunk-entity.ts';
 import { readBufferString } from '../utils/read-buffer-string.ts';
 import { readBufferArray } from '../utils/read-buffer-array.ts';
 import { readEntityComponent } from './read-entity-component.ts';
-import { BufferReader } from '../buffer-reader/buffer-reader.types.ts';
 import { EntitySchema } from '../schema/entity-schema.ts';
+import { BufferReader } from '@noita-explorer/tools';
 
 interface Props {
   bufferReader: BufferReader;

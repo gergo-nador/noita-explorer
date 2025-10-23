@@ -2,6 +2,7 @@
 public/g
 public/sitemap.txt
 public/schemas
+data.wak
 
 dist-lib
 dist-tmp

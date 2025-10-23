@@ -1,5 +1,8 @@
 export { arrayHelpers } from './common/array';
 export { base64Helpers } from './common/base64.ts';
+export { createBufferReader } from './common/buffer-reader/buffer-reader.ts';
+export type { BufferReader } from './common/buffer-reader/buffer-reader.types.ts';
+export type { BufferReaderIteratorCallback } from './common/buffer-reader/buffer-reader-iterator-callback.ts';
 export { colorHelpers } from './common/color-util';
 export { cryptographyHelpers } from './common/cryptography';
 export { dateHelpers } from './common/date';

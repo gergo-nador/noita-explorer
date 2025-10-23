@@ -1,16 +1,16 @@
 import { Buffer } from 'buffer';
 import { readBufferString } from '../utils/read-buffer-string.ts';
 import { readBufferArray } from '../utils/read-buffer-array.ts';
-import { createBufferReader } from '../buffer-reader/buffer-reader.ts';
 import { readEntityArray } from './read-entity-array.ts';
 import { EntitySchema } from '../schema/entity-schema.ts';
+import { createBufferReader } from '@noita-explorer/tools';
 
 interface Props {
   entityBuffer: Buffer;
-  parseSchema: (hash: string) => Promise<EntitySchema>;
+  schema: EntitySchema;
 }
 
-export async function readEntityFile({ entityBuffer, parseSchema }: Props) {
+export async function readEntityFile({ entityBuffer, schema }: Props) {
   const bufferReader = createBufferReader(entityBuffer);
 
   const version = bufferReader.readInt32BE();
@@ -22,7 +22,6 @@ export async function readEntityFile({ entityBuffer, parseSchema }: Props) {
   }
 
   const schemaFileName = readBufferString(bufferReader);
-  const schema = await parseSchema(schemaFileName);
 
   const entitiesOut = readBufferArray(bufferReader).iterate((bufferReader) =>
     readEntityArray({ bufferReader, entitySchema: schema }),

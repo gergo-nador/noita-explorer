@@ -1,9 +1,8 @@
-import { BufferReader } from '../buffer-reader/buffer-reader.types.ts';
 import { EntitySchemaComponentVariable } from '../schema/entity-schema.ts';
 import { readBufferString } from '../utils/read-buffer-string.ts';
 import { readBufferArray } from '../utils/read-buffer-array.ts';
 import { entityObjectMap } from './entity-object-map.ts';
-import { arrayHelpers } from '@noita-explorer/tools';
+import { arrayHelpers, BufferReader } from '@noita-explorer/tools';
 
 interface Props {
   bufferReader: BufferReader;

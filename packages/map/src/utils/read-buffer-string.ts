@@ -1,4 +1,4 @@
-import { BufferReader } from '../buffer-reader/buffer-reader.types.ts';
+import { BufferReader } from '@noita-explorer/tools';
 
 export function readBufferString(
   bufferReader: BufferReader,
