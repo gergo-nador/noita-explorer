@@ -13,4 +13,5 @@ export interface ChunkRenderableEntitySprite {
   rotation: number; // float
   imageData: ImageData;
   isBackgroundComponent: boolean;
+  isAdditive: boolean;
 }

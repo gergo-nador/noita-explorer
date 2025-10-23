@@ -11,4 +11,6 @@ export interface ChunkEntity {
   scale: Vector2d;
 
   components: ChunkEntityComponent[];
+  childrenCount: number;
+  children: ChunkEntity[];
 }

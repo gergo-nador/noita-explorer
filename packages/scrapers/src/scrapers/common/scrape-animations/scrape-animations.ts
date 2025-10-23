@@ -90,6 +90,21 @@ export const scrapeAnimation = async ({
   return animations;
 };
 
+export const scrapeAnimationInfoFrames = async ({
+  animationInfo,
+  dataWakParentDirectoryApi,
+}: {
+  animationInfo: AnimationInfo;
+  dataWakParentDirectoryApi: FileSystemDirectoryAccess;
+}) => {
+  const { framesResults } = await assembleAnimationFrames({
+    info: animationInfo,
+    dataWakParentDirectoryApi: dataWakParentDirectoryApi,
+  });
+
+  return framesResults;
+};
+
 const assembleAnimationFrames = async ({
   info,
   dataWakParentDirectoryApi,

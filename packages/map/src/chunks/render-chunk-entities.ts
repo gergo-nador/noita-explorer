@@ -31,6 +31,7 @@ export function renderChunkEntities({
         height: sprite.imageData.height,
         width: sprite.imageData.width,
         rotation: sprite.rotation,
+        isAdditive: sprite.isAdditive,
         getPixel: (coords) => {
           const index = (sprite.imageData.width * coords.y + coords.x) * 4;
 

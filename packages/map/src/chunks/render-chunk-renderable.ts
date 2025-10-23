@@ -72,10 +72,37 @@ export function renderChunkRenderable({
       const index = (pixY * chunk.width + pixX) * 4;
 
       const data = chunkImageData.data;
-      data[index] = color.r;
-      data[index + 1] = color.g;
-      data[index + 2] = color.b;
-      data[index + 3] = color.a;
+
+      if (chunkRenderable.isAdditive) {
+        const destR = data[index];
+        if (destR < 128) {
+          data[index] = (2 * destR * color.r) / 255;
+        } else {
+          data[index] = 255 - (2 * (255 - destR) * (255 - color.r)) / 255;
+        }
+
+        const destG = data[index + 1];
+        if (destG < 128) {
+          data[index + 1] = (2 * destG * color.g) / 255;
+        } else {
+          data[index + 1] = 255 - (2 * (255 - destG) * (255 - color.g)) / 255;
+        }
+
+        const destB = data[index + 2];
+        if (destB < 128) {
+          data[index + 2] = (2 * destB * color.b) / 255;
+        } else {
+          data[index + 2] = 255 - (2 * (255 - destB) * (255 - color.b)) / 255;
+        }
+
+        const a = data[index + 3];
+        data[index + 3] = Math.max(a, color.a);
+      } else {
+        data[index] += color.r;
+        data[index + 1] += color.g;
+        data[index + 2] += color.b;
+        data[index + 3] = color.a;
+      }
     }
   }
 }

@@ -25,7 +25,7 @@ export const readEntityArray = ({ bufferReader, entitySchema }: Props) => {
   const components = readBufferArray(bufferReader).iterate((bufferReader) =>
     readEntityComponent({ bufferReader, entitySchema }),
   );
-  bufferReader.jumpBytes(4);
+  const childrenCount = bufferReader.readInt32BE();
 
   const entity: ChunkEntity = {
     name,
@@ -36,6 +36,8 @@ export const readEntityArray = ({ bufferReader, entitySchema }: Props) => {
     position: { x: posX, y: posY },
     scale: { x: scaleX, y: scaleY },
     components: components.items,
+    childrenCount,
+    children: [],
   };
 
   return entity;
