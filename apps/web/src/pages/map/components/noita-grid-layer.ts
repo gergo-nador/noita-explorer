@@ -1,20 +1,21 @@
 import L from 'leaflet';
 import { FastLZCompressor } from '@noita-explorer/fastlz';
+import { renderChunk } from '@noita-explorer/map';
 import {
-  readRawChunk,
-  renderChunk,
-  uncompressNoitaFile,
-} from '@noita-explorer/map';
-import { NoitaPetriFileCollection } from '../noita-map.types.ts';
+  NoitaEntityFileCollection,
+  NoitaPetriFileCollection,
+} from '../noita-map.types.ts';
+import { processPetriFile } from '../utils/process-petri-file.ts';
+import { processEntityFile } from '../utils/process-entity-file.ts';
 
 export const NoitaGridLayer = L.GridLayer.extend({
   createTile: function (coords: L.Coords, done: L.DoneCallback): HTMLElement {
     const tile = L.DomUtil.create('div', 'leaflet-tile');
 
-    const files: NoitaPetriFileCollection = this.options.petriFiles;
-    const currentFile = files?.[coords.x]?.[coords.y];
+    const petriFiles: NoitaPetriFileCollection = this.options.petriFiles;
+    const petriFile = petriFiles?.[coords.x]?.[coords.y];
 
-    if (!currentFile) {
+    if (!petriFile) {
       const div = document.createElement('div');
       div.textContent = 'No tile';
 
@@ -25,42 +26,33 @@ export const NoitaGridLayer = L.GridLayer.extend({
       return tile;
     }
 
+    const entityFiles: NoitaEntityFileCollection = this.options.entityFiles;
+
+    const entityFileNum = 2000 * coords.y + coords.x;
+    const entityFile = entityFiles[entityFileNum];
+
     const fastLzCompressorPromise: Promise<FastLZCompressor> =
       this.options.fastLzCompressorPromise;
 
     fastLzCompressorPromise
-      .then((compressor) => uncompressNoitaFile(currentFile, compressor))
-      .then((uncompressed) => readRawChunk(uncompressed))
-      .then(async (chunk) => {
-        /*
-        const entityBuffer = findEntityFileForChunk({
-          chunkCoords: { x: output.num1 / 512, y: output.num2 / 512 },
-          files: this.options.entityFiles,
-        });
-        const compressor = await fastLzCompressorPromise;
-        const entityFileLoaded =
-          entityBuffer &&
-          (await loadEntityFile({
-            buffer: entityBuffer,
-            compressor: compressor,
-          }));
-
-        const entities =
-          entityFileLoaded &&
-          (await prepareEntities({
-            entities: entityFileLoaded.entities,
-            dataWak: await dataWakPromise,
-          }));*/
-        //const fileName = `entities_${2000 * output.num1 + output.num2}.bin`;
-        //const entities = this.options.entityFiles[fileName];
-
+      .then(async (compressor) => ({
+        chunk: await processPetriFile({ petriFile, compressor }),
+        entities: entityFile
+          ? await processEntityFile({
+              entityFile,
+              compressor,
+              chunkCoords: coords,
+            })
+          : undefined,
+      }))
+      .then(async (processedData) => {
         const renderedChunk = renderChunk({
-          chunk,
+          chunk: processedData.chunk,
           chunkCoordinates: { x: coords.x, y: coords.y },
           materials: this.options.materials,
           materialImageCache: this.options.materialImageCache,
           materialColorCache: this.options.materialColorCache,
-          entities: [],
+          entities: processedData.entities ?? [],
         });
 
         if (!renderedChunk) {

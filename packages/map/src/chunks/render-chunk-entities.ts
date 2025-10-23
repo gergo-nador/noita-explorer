@@ -9,6 +9,7 @@ interface Props {
   chunk: ChunkRawFormat;
   chunkCoordinates: Vector2d;
   chunkImageData: ImageData;
+  renderMode: 'regular' | 'background';
 }
 
 export function renderChunkEntities({
@@ -16,31 +17,38 @@ export function renderChunkEntities({
   chunkCoordinates,
   chunk,
   chunkImageData,
+  renderMode,
 }: Props) {
   for (const entity of entities) {
-    const chunkRenderable: ChunkRenderable = {
-      scale: entity.scale,
-      position: entity.position,
-      height: entity.imageData.height,
-      width: entity.imageData.width,
-      rotation: entity.rotation,
-      getPixel: (coords) => {
-        const index = entity.imageData.width * coords.y + coords.x;
+    for (const sprite of entity.sprites) {
+      if (renderMode === 'background' && !sprite.isBackgroundComponent)
+        continue;
+      if (renderMode === 'regular' && sprite.isBackgroundComponent) continue;
 
-        const r = entity.imageData.data[index];
-        const g = entity.imageData.data[index + 1];
-        const b = entity.imageData.data[index + 2];
-        const a = entity.imageData.data[index + 3];
+      const chunkRenderable: ChunkRenderable = {
+        scale: sprite.scale,
+        position: sprite.position,
+        height: sprite.imageData.height,
+        width: sprite.imageData.width,
+        rotation: sprite.rotation,
+        getPixel: (coords) => {
+          const index = (sprite.imageData.width * coords.y + coords.x) * 4;
 
-        return { r, g, b, a };
-      },
-    };
+          const r = sprite.imageData.data[index];
+          const g = sprite.imageData.data[index + 1];
+          const b = sprite.imageData.data[index + 2];
+          const a = sprite.imageData.data[index + 3];
 
-    renderChunkRenderable({
-      chunkImageData,
-      chunk,
-      chunkCoordinates,
-      chunkRenderable,
-    });
+          return { r, g, b, a };
+        },
+      };
+
+      renderChunkRenderable({
+        chunkImageData,
+        chunk,
+        chunkCoordinates,
+        chunkRenderable,
+      });
+    }
   }
 }

@@ -25,6 +25,7 @@ export function renderPixelatedImage({
   for (let y = 0; y < height; y++) {
     for (let x = 0; x < width; x++) {
       const color = calculatePixel(x, y, width, height);
+      if (color.a === 0) continue;
 
       const index = (y * width + x) * 4;
 

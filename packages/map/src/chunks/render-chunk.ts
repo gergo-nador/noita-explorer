@@ -57,23 +57,35 @@ export function renderChunk({
 
   const imageData = ctx.createImageData(chunk.width, chunk.height);
 
+  // first render the background entities
+  renderChunkEntities({
+    entities,
+    chunk,
+    chunkCoordinates,
+    chunkImageData: imageData,
+    renderMode: 'background',
+  });
+  // render terrain on top
   renderPixelatedImage({
     imageData,
     width: chunk.width,
     height: chunk.height,
     calculatePixel: pixelCalculator,
   });
+  // render physics objects on top
   renderPhysicsObjects({
     physicsObjects: chunk.physicsObjects,
     chunkCoordinates: chunkCoordinates,
     chunk: chunk,
     chunkImageData: imageData,
   });
+  // render other entities
   renderChunkEntities({
     entities,
     chunk,
     chunkCoordinates,
     chunkImageData: imageData,
+    renderMode: 'regular',
   });
 
   ctx.putImageData(imageData, 0, 0);
