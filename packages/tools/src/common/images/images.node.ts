@@ -12,6 +12,7 @@ import Color from 'color';
 import { base64Helpers } from '../base64.ts';
 import { colorHelpers } from '../color-util.ts';
 import { throwHelpers } from '../throw.ts';
+import { ImageData } from 'canvas';
 
 function trimWhitespaceBase64(): Promise<string> {
   return throwHelpers.notImplementedInCurrentEnvironment(trimWhitespaceBase64);
@@ -23,6 +24,9 @@ function rotateImageBase64(): Promise<string> {
   return throwHelpers.notImplementedInCurrentEnvironment(rotateImageBase64);
 }
 function getAverageColorBase64(): Promise<string> {
+  return throwHelpers.notImplementedInCurrentEnvironment(getAverageColorBase64);
+}
+function base64ToImageData(): Promise<ImageData> {
   return throwHelpers.notImplementedInCurrentEnvironment(getAverageColorBase64);
 }
 
@@ -229,4 +233,5 @@ export const imageHelpers: ImageHelpersType = {
   overlayImages,
   flipImage,
   renderMaterialContainer,
+  base64ToImageData,
 };

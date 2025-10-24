@@ -5,6 +5,7 @@ import {
   MaterialContainerOptions,
 } from './images.types.ts';
 import { throwHelpers } from '../throw.ts';
+import { base64Helpers } from '../base64.ts';
 
 function rotateImageBase64(base64: string, degrees: number): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -384,6 +385,35 @@ function renderMaterialContainer(
   });
 }
 
+function base64ToImageData(base64: string): Promise<ImageData> {
+  base64 = base64Helpers.appendMetadata(base64);
+
+  return new Promise((resolve, reject) => {
+    const image = new Image();
+    image.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = image.width;
+      canvas.height = image.height;
+
+      const ctx = canvas.getContext('2d');
+      if (!ctx) {
+        return reject(new Error('Could not get canvas context.'));
+      }
+
+      ctx.drawImage(image, 0, 0);
+
+      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      resolve(imageData);
+    };
+
+    image.onerror = () => {
+      reject(new Error('Failed to load the image from Base64 string.'));
+    };
+
+    image.src = base64;
+  });
+}
+
 export const imageHelpers: ImageHelpersType = {
   trimWhitespaceBase64,
   scaleImageBase64,
@@ -395,4 +425,5 @@ export const imageHelpers: ImageHelpersType = {
   overlayImages,
   flipImage,
   renderMaterialContainer,
+  base64ToImageData,
 };

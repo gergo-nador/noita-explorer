@@ -1,4 +1,4 @@
-import { NoitaMap } from './components/noita-map.tsx';
+import { NoitaMapContainer } from './noita-map-container.tsx';
 import { useCollectMaterialImages } from './hooks/use-collect-material-images.ts';
 import { useRef } from 'react';
 import { MaterialColorCache } from './noita-map.types.ts';
@@ -12,7 +12,7 @@ export const NoitaMapPage = () => {
   const materialColorCacheRef = useRef<MaterialColorCache>({});
 
   return (
-    <NoitaMap
+    <NoitaMapContainer
       petriFiles={petriFileCollection}
       entityFiles={entityFileCollection}
       materials={lookup?.materials ?? {}}

@@ -14,9 +14,8 @@ import {
   ChunkRenderableEntitySprite,
 } from '@noita-explorer/map';
 import { noitaSchemaManager } from './noita-schema-manager.ts';
-import { arrayHelpers } from '@noita-explorer/tools';
+import { arrayHelpers, imageHelpers } from '@noita-explorer/tools';
 import { noitaDataWakManager } from './noita-data-wak-manager.ts';
-import { base64ToImageData } from './base64-to-image-data.ts';
 import { mapConstants } from '@noita-explorer/map';
 import { scrape, AnimationInfo } from '@noita-explorer/scrapers';
 
@@ -199,7 +198,7 @@ async function readImageFile({
 
   if (imageFile.endsWith('.png')) {
     const image = await spriteFile.read.asImageBase64();
-    return await base64ToImageData(image);
+    return await imageHelpers.base64ToImageData(image);
   }
 
   const animationInfo: AnimationInfo = { id: imageFile, file: spriteFile };
@@ -211,5 +210,5 @@ async function readImageFile({
   const firstFrame = animation[0]?.frameImages[0];
   if (!firstFrame) return;
 
-  return await base64ToImageData(firstFrame);
+  return await imageHelpers.base64ToImageData(firstFrame);
 }

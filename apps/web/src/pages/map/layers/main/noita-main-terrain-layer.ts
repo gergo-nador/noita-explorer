@@ -4,11 +4,11 @@ import { renderChunk } from '@noita-explorer/map';
 import {
   NoitaEntityFileCollection,
   NoitaPetriFileCollection,
-} from '../noita-map.types.ts';
-import { processPetriFile } from '../utils/process-petri-file.ts';
-import { processEntityFile } from '../utils/process-entity-file.ts';
+} from '../../noita-map.types.ts';
+import { processPetriFile } from '../../utils/process-petri-file.ts';
+import { processEntityFile } from '../../utils/process-entity-file.ts';
 
-export const NoitaGridLayer = L.GridLayer.extend({
+export const NoitaMainTerrainLayer = L.GridLayer.extend({
   createTile: function (coords: L.Coords, done: L.DoneCallback): HTMLElement {
     const tile = L.DomUtil.create('div', 'leaflet-tile');
 

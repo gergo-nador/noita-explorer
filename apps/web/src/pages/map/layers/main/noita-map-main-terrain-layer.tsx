@@ -4,13 +4,13 @@ import { useMap } from 'react-leaflet';
 import { useEffect, useRef } from 'react';
 import L from 'leaflet';
 import { createFastLzCompressor } from '@noita-explorer/fastlz';
-import { NoitaGridLayer } from './noita-grid-layer.ts';
+import { NoitaMainTerrainLayer } from './noita-main-terrain-layer.ts';
 import {
   NoitaEntityFileCollection,
   NoitaPetriFileCollection,
-} from '../noita-map.types.ts';
+} from '../../noita-map.types.ts';
 
-export function CustomNoitaLayer({
+export function NoitaMapMainTerrainLayer({
   petriFiles,
   entityFiles,
   materials,
@@ -30,15 +30,14 @@ export function CustomNoitaLayer({
   useEffect(() => {
     if (!layerRef.current) {
       // @ts-expect-error typescript doesn't know we can pass parameters
-      const gridLayer = new NoitaGridLayer({
-        tileSize: 512, // Match your chunk size
+      const gridLayer = new NoitaMainTerrainLayer({
+        tileSize: 512,
         minZoom: -4,
-        maxZoom: 5, // Adjust as needed
+        maxZoom: 5,
 
-        noWrap: true, // Prevents the map from repeating horizontally
+        noWrap: true,
 
         // --- THE KEY CHANGE IS HERE ---
-        // Tell Leaflet that our chunks only exist at zoom level 0.
         minNativeZoom: 0,
         maxNativeZoom: 0,
 

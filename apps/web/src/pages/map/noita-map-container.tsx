@@ -2,16 +2,18 @@ import { StringKeyDictionary } from '@noita-explorer/model';
 import { NoitaMaterial } from '@noita-explorer/model-noita';
 import L from 'leaflet';
 import { MapContainer, Marker, Popup, useMapEvents } from 'react-leaflet';
-import { CustomNoitaLayer } from './noita-map-custom-layer.tsx';
 import {
   MaterialColorCache,
   MaterialImageCache,
   NoitaEntityFileCollection,
   NoitaPetriFileCollection,
-} from '../noita-map.types.ts';
+} from './noita-map.types.ts';
 import { CSSProperties, useState } from 'react';
+import { NoitaMapMainTerrainLayer } from './layers/main/noita-map-main-terrain-layer.tsx';
+import { NoitaBiomeLayer } from './layers/biome/noita-biome-layer.ts';
+import { NoitaMapBiomeLayer } from './layers/biome/noita-map-biome-layer.tsx';
 
-export function NoitaMap({
+export function NoitaMapContainer({
   petriFiles,
   entityFiles,
   materials,
@@ -39,13 +41,16 @@ export function NoitaMap({
       {/* HERE is the change! We use our custom layer now.
        */}
       {!__SSG__ && (
-        <CustomNoitaLayer
-          petriFiles={petriFiles}
-          entityFiles={entityFiles}
-          materials={materials}
-          materialColorCache={materialColorCache}
-          materialImageCache={materialImageCache}
-        />
+        <>
+          <NoitaMapBiomeLayer />
+          <NoitaMapMainTerrainLayer
+            petriFiles={petriFiles}
+            entityFiles={entityFiles}
+            materials={materials}
+            materialColorCache={materialColorCache}
+            materialImageCache={materialImageCache}
+          />
+        </>
       )}
 
       {/* You can still have other layers like markers on top */}
