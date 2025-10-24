@@ -51,16 +51,12 @@ export const getRequiredAttribute = (
   name: string,
 ): XmlRequiredAttributeReadOptions => {
   if (!xmlObject.$) {
-    throw new Error(
-      `Could not find attribute ${name} in ${JSON.stringify(xmlObject)}`,
-    );
+    throw new Error(`Could not find attribute ${name}`);
   }
 
   const attr = getAttribute(xmlObject as XmlTagDeclaration, name);
   if (attr === undefined) {
-    throw new Error(
-      `Could not find attribute ${name} in ${JSON.stringify(xmlObject)}`,
-    );
+    throw new Error(`Could not find attribute ${name}`);
   }
 
   return {

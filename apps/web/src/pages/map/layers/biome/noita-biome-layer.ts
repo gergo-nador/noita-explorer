@@ -6,7 +6,6 @@ import {
   FileSystemDirectoryAccess,
   FileSystemFileAccess,
 } from '@noita-explorer/model';
-import { CSSProperties } from 'react';
 
 const dataPromise = noitaDataWakManager.getDataWak().then(async (dataWak) => {
   const biomesAllFile = await dataWak.getFile('data/biome/_biomes_all.xml');
@@ -22,27 +21,35 @@ export const NoitaBiomeLayer = L.GridLayer.extend({
   createTile: function (coords: L.Coords, done: L.DoneCallback): HTMLElement {
     const tile = L.DomUtil.create('div', 'leaflet-tile');
 
+    if (coords.y < 0) {
+      //sky
+      done(undefined, tile);
+      return tile;
+    }
+
     dataPromise.then(async ({ biomeImageMap, biomes, dataWak }) => {
-      const color = biomeImageMap.colors[coords.x + 35]?.[coords.y + 14];
+      const color = biomeImageMap.colors[coords.y + 14]?.[coords.x + 35];
       if (color === undefined) {
         console.log('biome color not found', coords);
+        tile.innerHTML = '';
         done(new Error('nope'), tile);
         return;
       }
 
-      const unsignedColor = color >>> 0;
       const biome = biomes.biomes.find(
-        (b) => parseInt(b.color, 16) === unsignedColor,
+        (b) => b.color.toUpperCase() === color.toUpperCase(),
       );
 
       if (!biome) {
         console.log('biome not found', coords);
+        tile.innerHTML = '';
         done(new Error('nope'), tile);
         return;
       }
 
       if (!biome.bgImagePath) {
         console.log('biome no bg image', biome);
+        tile.innerHTML = '';
         done(new Error('nope'), tile);
         return;
       }
@@ -50,12 +57,14 @@ export const NoitaBiomeLayer = L.GridLayer.extend({
       const bgImageFile = await dataWak.getFile(biome.bgImagePath);
       const base64 = await bgImageFile.read.asImageBase64();
       const imageData = await imageHelpers.base64ToImageData(base64);
+      // @ts-expect-error afaerfa
       const imageBitmap = await window.createImageBitmap(imageData);
 
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
       if (!ctx) {
         console.log('no ctx', biome);
+        tile.innerHTML = '';
         done(new Error('nope'), tile);
         return;
       }
@@ -133,14 +142,13 @@ async function readBiomeImageMapRaw({
   const base64Image = await biomeMapFile.read.asImageBase64();
   const imageData = await imageHelpers.base64ToImageData(base64Image);
 
-  const colors: number[][] = [];
-  let currentRow: number[] = [];
+  const colors: string[][] = [];
+  let currentRow: string[] = [];
 
   for (let j = 0; j < imageData.height; j++) {
     currentRow = [];
-
     for (let i = 0; i < imageData.width; i++) {
-      const offset = (i * imageData.width + j) * 4;
+      const offset = (j * imageData.width + i) * 4;
 
       const r = imageData.data[offset];
       const g = imageData.data[offset + 1];
@@ -148,7 +156,14 @@ async function readBiomeImageMapRaw({
       const a = imageData.data[offset + 3];
 
       const argb = (a << 24) | (r << 16) | (g << 8) | b;
-      currentRow.push(argb);
+      const unsignedArgb = argb >>> 0;
+
+      const colorString = unsignedArgb.toString(16);
+
+      if (j === 15 && i === 43) debugger;
+      //if (j - 14 === 2 && i - 35 === 9) debugger;
+
+      currentRow.push(colorString);
     }
 
     colors.push(currentRow);
