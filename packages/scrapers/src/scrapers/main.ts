@@ -18,6 +18,7 @@ import { convertScrapeResultsToDataWak } from './convert-scrape-results-to-data-
 import { scrapeDataWak } from './scrape-data-wak.ts';
 import { scrapeStreamInfo } from './save00/world/stream-info/scrape-stream-info.ts';
 import { scrapeEntitySchema } from './common/entity-schema/scrape-entity-schema.ts';
+import { scrapeWorldPixelScenes } from './save00/world/world-pixel-scenes/scrape-world-pixel-scenes.ts';
 
 export const scrape = {
   dataWak: {
@@ -40,6 +41,7 @@ export const scrape = {
     sessions: scrapeSessions,
     worldState: scrapeWorldState,
     streamInfo: scrapeStreamInfo,
+    worldPixelScenes: scrapeWorldPixelScenes,
   },
   entitySchema: scrapeEntitySchema,
   translations: readTranslations,

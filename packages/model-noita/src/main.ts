@@ -58,3 +58,7 @@ export * from "./scraping/data-wak-scrape-result/noita-data-wak-scrape-result";
 export * from "./scraping/world/stream-info/stream-info-background";
 export * from "./scraping/world/stream-info/stream-info-chunk-info";
 export * from "./scraping/world/stream-info/stream-info-raw";
+export * from "./scraping/world/world-pixel-scenes/world-pixel-scene-background-image";
+export * from "./scraping/world/world-pixel-scenes/world-pixel-scene-color-material";
+export * from "./scraping/world/world-pixel-scenes/world-pixel-scene-file-format";
+export * from "./scraping/world/world-pixel-scenes/world-pixel-scene";

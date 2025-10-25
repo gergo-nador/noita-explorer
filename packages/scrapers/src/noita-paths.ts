@@ -37,6 +37,7 @@ export const noitaPaths = {
     orbs_new: ['persistent', 'orbs_new'],
     world: {
       stream_info: ['world', '.stream_info'],
+      world_pixel_scenes: ['world', 'world_pixel_scenes.bin'],
     },
   },
 };
