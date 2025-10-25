@@ -1,18 +1,19 @@
-import { Buffer } from 'buffer';
-import { readBufferString } from '../utils/read-buffer-string.ts';
-import { readBufferArray } from '../utils/read-buffer-array.ts';
-import { readEntityArray } from './read-entity-array.ts';
-import { EntitySchema } from '../schema/entity-schema.ts';
+import { scrapeEntityArray } from './scrape-entity-array.ts';
 import { createBufferReader } from '@noita-explorer/tools';
-import { ChunkEntity } from './chunk-entity.ts';
+import { readBufferString } from '../../../../utils/buffer-reader-utils/read-buffer-string.ts';
+import { ChunkEntity, NoitaEntitySchema } from '@noita-explorer/model-noita';
+import { readBufferArray } from '../../../../utils/buffer-reader-utils/read-buffer-array.ts';
+import { FileSystemFileAccess } from '@noita-explorer/model';
+import { uncompressNoitaFile } from '../../../../utils/noita-file-uncompress/uncompress-noita-file.ts';
 
 interface Props {
-  entityBuffer: Buffer;
-  schema: EntitySchema;
+  entityFile: FileSystemFileAccess;
+  schema: NoitaEntitySchema;
 }
 
-export async function readEntityFile({ entityBuffer, schema }: Props) {
-  const bufferReader = createBufferReader(entityBuffer);
+export async function scrapeEntityFile({ entityFile, schema }: Props) {
+  const uncompressedEntityBuffer = await uncompressNoitaFile(entityFile);
+  const bufferReader = createBufferReader(uncompressedEntityBuffer);
 
   const version = bufferReader.readInt32BE();
   /*
@@ -22,10 +23,11 @@ export async function readEntityFile({ entityBuffer, schema }: Props) {
     throw new Error(`Invalid entity version. Expected 2; received ${version}`);
   }
 
-  const schemaFileName = readBufferString(bufferReader);
+  // schema hash, not used
+  readBufferString(bufferReader);
 
   const entitiesOut = readBufferArray(bufferReader).iterate((bufferReader) =>
-    readEntityArray({ bufferReader, entitySchema: schema }),
+    scrapeEntityArray({ bufferReader, entitySchema: schema }),
   );
 
   const entities = [...entitiesOut.items];
@@ -35,7 +37,7 @@ export async function readEntityFile({ entityBuffer, schema }: Props) {
     length: entities.length,
   }).children;
 
-  return { schemaFile: schemaFileName, entities: entitiesWithChildrenSorted };
+  return { entities: entitiesWithChildrenSorted };
 }
 
 function lookForChildren({

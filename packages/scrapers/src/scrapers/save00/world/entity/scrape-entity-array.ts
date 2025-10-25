@@ -1,16 +1,15 @@
-import { ChunkEntity } from './chunk-entity.ts';
-import { readBufferString } from '../utils/read-buffer-string.ts';
-import { readBufferArray } from '../utils/read-buffer-array.ts';
-import { readEntityComponent } from './read-entity-component.ts';
-import { EntitySchema } from '../schema/entity-schema.ts';
+import { scrapeEntityComponent } from './scrape-entity-component.ts';
 import { BufferReader } from '@noita-explorer/tools';
+import { NoitaEntitySchema, ChunkEntity } from '@noita-explorer/model-noita';
+import { readBufferString } from '../../../../utils/buffer-reader-utils/read-buffer-string.ts';
+import { readBufferArray } from '../../../../utils/buffer-reader-utils/read-buffer-array.ts';
 
 interface Props {
   bufferReader: BufferReader;
-  entitySchema: EntitySchema;
+  entitySchema: NoitaEntitySchema;
 }
 
-export const readEntityArray = ({ bufferReader, entitySchema }: Props) => {
+export const scrapeEntityArray = ({ bufferReader, entitySchema }: Props) => {
   const name = readBufferString(bufferReader);
   const lifetimePhase = bufferReader.readUint8();
   const fileName = readBufferString(bufferReader);
@@ -23,7 +22,7 @@ export const readEntityArray = ({ bufferReader, entitySchema }: Props) => {
   const rotation = bufferReader.readFloatBE();
 
   const components = readBufferArray(bufferReader).iterate((bufferReader) =>
-    readEntityComponent({ bufferReader, entitySchema }),
+    scrapeEntityComponent({ bufferReader, entitySchema }),
   );
   const childrenCount = bufferReader.readInt32BE();
 

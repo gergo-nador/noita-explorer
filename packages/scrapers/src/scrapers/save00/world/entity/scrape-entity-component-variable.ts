@@ -1,15 +1,18 @@
-import { EntitySchemaComponentVariable } from '../schema/entity-schema.ts';
-import { readBufferString } from '../utils/read-buffer-string.ts';
-import { readBufferArray } from '../utils/read-buffer-array.ts';
-import { entityObjectMap } from './entity-object-map.ts';
 import { arrayHelpers, BufferReader } from '@noita-explorer/tools';
+import { readBufferString } from '../../../../utils/buffer-reader-utils/read-buffer-string.ts';
+import { readBufferArray } from '../../../../utils/buffer-reader-utils/read-buffer-array.ts';
+import { NoitaEntitySchemaComponentVariable } from '@noita-explorer/model-noita';
+import { entityObjectMap } from './entity-object-map.ts';
 
 interface Props {
   bufferReader: BufferReader;
-  variable: EntitySchemaComponentVariable;
+  variable: NoitaEntitySchemaComponentVariable;
 }
 
-export function readEntityComponentVariable({ bufferReader, variable }: Props) {
+export function scrapeEntityComponentVariable({
+  bufferReader,
+  variable,
+}: Props) {
   const type = variable.type;
   return resolveType({ bufferReader, type });
 }

@@ -1,16 +1,18 @@
-import { ChunkEntityComponent } from './chunk-entity-component.ts';
-import { readBufferString } from '../utils/read-buffer-string.ts';
-import { EntitySchema } from '../schema/entity-schema.ts';
-import { readEntityComponentVariable } from './read-entity-component-variable.ts';
+import { scrapeEntityComponentVariable } from './scrape-entity-component-variable.ts';
 import { StringKeyDictionary } from '@noita-explorer/model';
 import { BufferReader } from '@noita-explorer/tools';
+import {
+  ChunkEntityComponent,
+  NoitaEntitySchema,
+} from '@noita-explorer/model-noita';
+import { readBufferString } from '../../../../utils/buffer-reader-utils/read-buffer-string.ts';
 
 interface Props {
   bufferReader: BufferReader;
-  entitySchema: EntitySchema;
+  entitySchema: NoitaEntitySchema;
 }
 
-export function readEntityComponent({ bufferReader, entitySchema }: Props) {
+export function scrapeEntityComponent({ bufferReader, entitySchema }: Props) {
   const name = readBufferString(bufferReader);
   const deleted = bufferReader.readBool();
   const enabled = bufferReader.readBool();
@@ -26,7 +28,7 @@ export function readEntityComponent({ bufferReader, entitySchema }: Props) {
   const variables = component.variables;
   const data: StringKeyDictionary<unknown> = {};
   for (const variable of variables) {
-    data[variable.name] = readEntityComponentVariable({
+    data[variable.name] = scrapeEntityComponentVariable({
       bufferReader,
       variable,
     });

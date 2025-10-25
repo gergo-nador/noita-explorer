@@ -55,6 +55,8 @@ export * from "./scraping/noita-wak-data";
 export * from "./scraping/data-wak-scrape-result/noita-data-wak-scrape-result-part";
 export * from "./scraping/data-wak-scrape-result/noita-data-wak-scrape-result-status";
 export * from "./scraping/data-wak-scrape-result/noita-data-wak-scrape-result";
+export * from "./scraping/world/entity/chunk-entity-component";
+export * from "./scraping/world/entity/chunk-entity";
 export * from "./scraping/world/stream-info/stream-info-background";
 export * from "./scraping/world/stream-info/stream-info-chunk-info";
 export * from "./scraping/world/stream-info/stream-info-raw";
