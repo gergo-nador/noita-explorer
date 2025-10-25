@@ -20,6 +20,7 @@ import { scrapeStreamInfo } from './save00/world/stream-info/scrape-stream-info.
 import { scrapeEntitySchema } from './common/entity-schema/scrape-entity-schema.ts';
 import { scrapeWorldPixelScenes } from './save00/world/world-pixel-scenes/scrape-world-pixel-scenes.ts';
 import { scrapeEntityFile } from './save00/world/entity/scrape-entity-file.ts';
+import { scrapePngPetriFile } from './save00/world/png-petri/scrape-png-petri-file.ts';
 
 export const scrape = {
   dataWak: {
@@ -44,6 +45,7 @@ export const scrape = {
     streamInfo: scrapeStreamInfo,
     worldPixelScenes: scrapeWorldPixelScenes,
     entityFile: scrapeEntityFile,
+    pngPetriFile: scrapePngPetriFile,
   },
   entitySchema: scrapeEntitySchema,
   translations: readTranslations,
