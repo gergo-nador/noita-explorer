@@ -52,3 +52,6 @@ export * from "./scraping/noita-scraped-sprite";
 export * from "./scraping/noita-scraped-wand-config";
 export * from "./scraping/noita-translation";
 export * from "./scraping/noita-wak-data";
+export * from "./scraping/world/stream-info/stream-info-background";
+export * from "./scraping/world/stream-info/stream-info-chunk-info";
+export * from "./scraping/world/stream-info/stream-info-raw";

@@ -21,6 +21,7 @@ export interface BufferReader {
   readUint8: ReturnFunction<number>;
 
   // int 16
+  readInt16BE: ReturnFunction<number>;
   readUint16BE: ReturnFunction<number>;
 
   // int 32

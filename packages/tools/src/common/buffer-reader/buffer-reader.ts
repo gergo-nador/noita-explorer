@@ -49,6 +49,11 @@ export function createBufferReader(buffer: Buffer): BufferReader {
     return value;
   }
 
+  function readInt16BE() {
+    const value = buffer.readInt16BE(offset);
+    offset += 2;
+    return value;
+  }
   function readUint16BE() {
     const value = buffer.readUint16BE(offset);
     offset += 2;
@@ -119,6 +124,7 @@ export function createBufferReader(buffer: Buffer): BufferReader {
 
     readUint8,
 
+    readInt16BE,
     readUint16BE,
 
     readInt32BE,

@@ -35,5 +35,8 @@ export const noitaPaths = {
     worldState: ['world_state.xml'],
     player: ['player.xml'],
     orbs_new: ['persistent', 'orbs_new'],
+    world: {
+      stream_info: ['world', '.stream_info'],
+    },
   },
 };

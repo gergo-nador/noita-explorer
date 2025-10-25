@@ -1,12 +1,9 @@
-import { FastLZCompressor } from '@noita-explorer/fastlz';
 import { Buffer } from 'buffer';
-import { NoitaCompressedFile } from '../interfaces/noita-compressed-file.ts';
 import { createBufferReader } from '@noita-explorer/tools';
+import { fastLzCompressorService } from '../fast-lz-compressor-service.ts';
+import { NoitaCompressedFile } from './noita-compressed-file.ts';
 
-export async function uncompressNoitaBuffer(
-  buffer: Buffer,
-  fastLzCompressor: FastLZCompressor,
-) {
+export async function uncompressNoitaBuffer(buffer: Buffer) {
   // ensure file buffer is an actual buffer
   if (!Buffer.isBuffer(buffer)) {
     buffer = Buffer.from(buffer);
@@ -26,6 +23,8 @@ export async function uncompressNoitaBuffer(
   ) {
     return compressedFile.data;
   }
+
+  const fastLzCompressor = await fastLzCompressorService.get();
 
   return fastLzCompressor.decompressBuffer(
     compressedFile.data,

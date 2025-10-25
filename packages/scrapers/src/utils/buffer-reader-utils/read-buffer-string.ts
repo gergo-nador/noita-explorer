@@ -9,8 +9,7 @@ export function readBufferString(
   const length = bufferReader.readInt32BE();
 
   if (length < 0) throw new Error('String length below zero: ' + length);
-  if (length > 10_000_000)
-    throw new Error('String length over limit: ' + length);
+  if (length > 10_000) throw new Error('String length over limit: ' + length);
 
   const text = bufferReader.readString(length, options?.encoding ?? 'utf-8');
 
