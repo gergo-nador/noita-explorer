@@ -4,19 +4,10 @@ import {
   Vector2d,
 } from '@noita-explorer/model';
 import { FastLZCompressor } from '@noita-explorer/fastlz';
-import {
-  ChunkRenderableEntity,
-  readEntityFile,
-  readEntitySchema,
-  uncompressNoitaFile,
-  ChunkEntityComponent,
-  ChunkEntity,
-  ChunkRenderableEntitySprite,
-} from '@noita-explorer/map';
 import { noitaSchemaManager } from './noita-schema-manager.ts';
 import { arrayHelpers, imageHelpers } from '@noita-explorer/tools';
 import { noitaDataWakManager } from './noita-data-wak-manager.ts';
-import { mapConstants } from '@noita-explorer/map';
+import { mapConstants, ChunkRenderableEntity } from '@noita-explorer/map';
 import { scrape } from '@noita-explorer/scrapers';
 
 export async function processEntityFile({
@@ -28,11 +19,12 @@ export async function processEntityFile({
   compressor: FastLZCompressor;
   chunkCoords: Vector2d;
 }): Promise<ChunkRenderableEntity[]> {
+  const schema = await noitaSchemaManager.getSchema(schemaHash.schemaFile);
+  scrape.save00.entityFile({ entityFile: entityFile });
   const uncompressed = await uncompressNoitaFile(entityFile, compressor);
 
   // get schema
   const schemaHash = await readEntitySchema({ entityBuffer: uncompressed });
-  const schema = await noitaSchemaManager.getSchema(schemaHash.schemaFile);
 
   const entityFileProcessed = await readEntityFile({
     entityBuffer: uncompressed,

@@ -6,7 +6,7 @@ import { createBufferReader } from '@noita-explorer/tools';
 import {
   StreamInfoBackground,
   StreamInfoChunkInfo,
-  StreamInfoRaw,
+  StreamInfoFileFormat,
 } from '@noita-explorer/model-noita';
 import { uncompressNoitaFile } from '../../../../utils/noita-file-uncompress/uncompress-noita-file.ts';
 import { readBufferArray } from '../../../../utils/buffer-reader-utils/read-buffer-array.ts';
@@ -17,7 +17,7 @@ export const scrapeStreamInfo = async ({
   save00DirectoryApi,
 }: {
   save00DirectoryApi: FileSystemDirectoryAccess;
-}): Promise<StreamInfoRaw | undefined> => {
+}): Promise<StreamInfoFileFormat | undefined> => {
   const streamInfoPath = await save00DirectoryApi.path.join(
     noitaPaths.save00.world.stream_info,
   );
@@ -119,5 +119,5 @@ export const scrapeStreamInfo = async ({
     ),
     newGamePlusName,
     chunkInfo: chunkInfos.items,
-  } satisfies StreamInfoRaw;
+  } satisfies StreamInfoFileFormat;
 };

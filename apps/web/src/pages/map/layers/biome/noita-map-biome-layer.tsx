@@ -2,8 +2,23 @@ import { useMap } from 'react-leaflet';
 import { useEffect, useRef } from 'react';
 import L from 'leaflet';
 import { NoitaBiomeLayer } from './noita-biome-layer.ts';
+import {
+  NoitaWakBiomes,
+  StreamInfoFileFormat,
+  WorldPixelSceneFileFormat,
+} from '@noita-explorer/model-noita';
 
-export const NoitaMapBiomeLayer = () => {
+interface Props {
+  worldPixelScenes: WorldPixelSceneFileFormat;
+  streamInfo: StreamInfoFileFormat;
+  biomes: NoitaWakBiomes;
+}
+
+export const NoitaMapBiomeLayer = ({
+  worldPixelScenes,
+  streamInfo,
+  biomes,
+}: Props) => {
   const map = useMap();
   const layerRef = useRef<L.GridLayer | null>(null);
 
@@ -19,6 +34,11 @@ export const NoitaMapBiomeLayer = () => {
 
         minNativeZoom: 0,
         maxNativeZoom: 0,
+
+        // custom props
+        worldPixelScenes,
+        streamInfo,
+        biomes,
       });
 
       // Add the layer to the map

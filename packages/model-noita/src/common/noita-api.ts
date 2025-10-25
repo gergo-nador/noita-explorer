@@ -10,6 +10,8 @@ import { NoitaPlayerState } from './player/noita-player-state.ts';
 import { NoitaAction } from './actions/noita-action.ts';
 import { NoitaActionProgress } from './actions/noita-action-progress.ts';
 import { NoitaActionResult } from './actions/noita-action-result.ts';
+import { WorldPixelSceneFileFormat } from '../scraping/save00/world/world-pixel-scenes/world-pixel-scene-file-format.ts';
+import { StreamInfoFileFormat } from '../scraping/save00/world/stream-info/stream-info-file-format.ts';
 
 export interface NoitaAPI {
   config: {
@@ -35,6 +37,10 @@ export interface NoitaAPI {
       scrapeWorldState: () => Promise<NoitaWorldState | undefined>;
       scrapePlayerState: () => Promise<NoitaPlayerState | undefined>;
       scrapeOrbsUnlocked: () => Promise<string[]>;
+      scrapeStreamInfo: () => Promise<StreamInfoFileFormat | undefined>;
+      scrapeWorldPixelScenes: () => Promise<
+        WorldPixelSceneFileFormat | undefined
+      >;
     };
     launch: {
       master: (params?: string[]) => Promise<void>;

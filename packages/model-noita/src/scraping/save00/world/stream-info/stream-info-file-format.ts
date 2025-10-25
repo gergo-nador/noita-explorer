@@ -1,7 +1,7 @@
 import { StreamInfoBackground } from './stream-info-background.ts';
 import { StreamInfoChunkInfo } from './stream-info-chunk-info.ts';
 
-export interface StreamInfoRaw {
+export interface StreamInfoFileFormat {
   seed: number;
   framesPlayed: number;
   secondsPlayed: number;

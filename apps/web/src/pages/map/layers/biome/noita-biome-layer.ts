@@ -1,16 +1,6 @@
 import L from 'leaflet';
+import { NoitaWakBiomes } from '@noita-explorer/model-noita';
 import { noitaDataWakManager } from '../../utils/noita-data-wak-manager.ts';
-import { imageHelpers } from '@noita-explorer/tools';
-
-const dataPromise = noitaDataWakManager.getDataWak().then(async (dataWak) => {
-  const biomesAllFile = await dataWak.getFile('data/biome/_biomes_all.xml');
-  const biomes = await readBiomes({ biomesAllFile, dataWak });
-
-  const biomeMapFile = await dataWak.getFile(biomes.biomeImageMapPath);
-  const biomeImageMap = await readBiomeImageMapRaw({ biomeMapFile });
-
-  return { biomeImageMap, biomes, dataWak };
-});
 
 export const NoitaBiomeLayer = L.GridLayer.extend({
   createTile: function (coords: L.Coords, done: L.DoneCallback): HTMLElement {
@@ -22,62 +12,61 @@ export const NoitaBiomeLayer = L.GridLayer.extend({
       return tile;
     }
 
-    dataPromise.then(async ({ biomeImageMap, biomes, dataWak }) => {
-      const color = biomeImageMap.colors[coords.y + 14]?.[coords.x + 35];
-      if (color === undefined) {
-        console.log('biome color not found', coords);
-        tile.innerHTML = '';
-        done(new Error('nope'), tile);
-        return;
-      }
+    const wakBiomes: NoitaWakBiomes = this.options.biomes;
+    const biomeIndex =
+      wakBiomes.biomeMap.biomeIndices[
+        coords.y + wakBiomes.biomeMap.biomeOffset.y
+      ]?.[coords.x + wakBiomes.biomeMap.biomeOffset.x];
 
-      const biome = biomes.biomes.find(
-        (b) => b.color.toUpperCase() === color.toUpperCase(),
-      );
+    if (!biomeIndex) {
+      return tile;
+    }
 
-      if (!biome) {
-        console.log('biome not found', coords);
-        tile.innerHTML = '';
-        done(new Error('nope'), tile);
-        return;
-      }
+    const biome = wakBiomes.biomes[biomeIndex];
 
-      if (!biome.bgImagePath) {
-        console.log('biome no bg image', biome);
-        tile.innerHTML = '';
-        done(new Error('nope'), tile);
-        return;
-      }
+    if (!biome) {
+      console.error('biome not found', coords);
+      tile.innerHTML = '';
+      done(new Error('nope'), tile);
+      return tile;
+    }
 
-      const bgImageFile = await dataWak.getFile(biome.bgImagePath);
-      const base64 = await bgImageFile.read.asImageBase64();
-      const imageData = await imageHelpers.base64ToImageData(base64);
-      // @ts-expect-error afaerfa
-      const imageBitmap = await window.createImageBitmap(imageData);
+    const canvas = document.createElement('canvas');
+    canvas.width = 512;
+    canvas.height = 512;
 
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
-      if (!ctx) {
-        console.log('no ctx', biome);
-        tile.innerHTML = '';
-        done(new Error('nope'), tile);
-        return;
-      }
+    const ctx = canvas.getContext('2d');
+    if (!ctx) {
+      tile.innerHTML = '';
+      done(new Error('nope'), tile);
+      return tile;
+    }
 
-      canvas.width = 512;
-      canvas.height = 512;
+    const promises: Promise<unknown>[] = [];
 
-      const { width, height } = await imageHelpers.getImageSizeBase64(base64);
+    const bgImagePath = biome.bgImagePath;
+    if (bgImagePath && biome.loadBgImage) {
+      const promise = noitaDataWakManager.getDataWak().then(async (dataWak) => {
+        const bgImageFile = await dataWak.getFile(bgImagePath);
+        const base64 = await bgImageFile.read.asImageBase64();
 
-      for (let i = 0; i < 512; i += width) {
-        for (let j = 0; j < 512; j += height) {
-          ctx.drawImage(imageBitmap, i, j);
-        }
-      }
-      tile.style.backgroundImage = `url("${base64}")`;
-      tile.style.backgroundRepeat = 'repeat';
+        const bgImageDivElement = document.createElement('div');
+        bgImageDivElement.style.width = '100%';
+        bgImageDivElement.style.height = '100%';
+        bgImageDivElement.style.backgroundImage = `url("${base64}")`;
+        bgImageDivElement.style.backgroundRepeat = 'repeat';
+
+        tile.appendChild(bgImageDivElement);
+      });
+
+      promises.push(promise);
+    }
+
+    if (promises.length === 0) {
       done(undefined, tile);
-    });
+    }
+
+    Promise.all(promises).then(() => done(undefined, tile));
 
     return tile;
   },

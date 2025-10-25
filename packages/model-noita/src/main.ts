@@ -64,7 +64,7 @@ export * from "./scraping/save00/world/png-petri/chunk-file-format";
 export * from "./scraping/save00/world/png-petri/chunk-physics-object";
 export * from "./scraping/save00/world/stream-info/stream-info-background";
 export * from "./scraping/save00/world/stream-info/stream-info-chunk-info";
-export * from "./scraping/save00/world/stream-info/stream-info-raw";
+export * from "./scraping/save00/world/stream-info/stream-info-file-format";
 export * from "./scraping/save00/world/world-pixel-scenes/world-pixel-scene-background-image";
 export * from "./scraping/save00/world/world-pixel-scenes/world-pixel-scene-color-material";
 export * from "./scraping/save00/world/world-pixel-scenes/world-pixel-scene-file-format";

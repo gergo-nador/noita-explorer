@@ -1,5 +1,10 @@
 import { StringKeyDictionary } from '@noita-explorer/model';
-import { NoitaMaterial } from '@noita-explorer/model-noita';
+import {
+  NoitaMaterial,
+  NoitaWakBiomes,
+  StreamInfoFileFormat,
+  WorldPixelSceneFileFormat,
+} from '@noita-explorer/model-noita';
 import L from 'leaflet';
 import { MapContainer, Marker, Popup, useMapEvents } from 'react-leaflet';
 import {
@@ -18,12 +23,18 @@ export function NoitaMapContainer({
   materials,
   materialImageCache,
   materialColorCache,
+  worldPixelScenes,
+  streamInfo,
+  biomes,
 }: {
   petriFiles: NoitaPetriFileCollection;
   entityFiles: NoitaEntityFileCollection;
   materials: StringKeyDictionary<NoitaMaterial>;
   materialImageCache: MaterialImageCache;
   materialColorCache: MaterialColorCache;
+  worldPixelScenes: WorldPixelSceneFileFormat;
+  streamInfo: StreamInfoFileFormat;
+  biomes: NoitaWakBiomes;
 }) {
   // The Noita world is huge, so you'll adjust this center point later.
   // Using [0, 0] as a starting default.
@@ -41,7 +52,11 @@ export function NoitaMapContainer({
        */}
       {!__SSG__ && (
         <>
-          <NoitaMapBiomeLayer />
+          <NoitaMapBiomeLayer
+            worldPixelScenes={worldPixelScenes}
+            streamInfo={streamInfo}
+            biomes={biomes}
+          />
           <NoitaMapMainTerrainLayer
             petriFiles={petriFiles}
             entityFiles={entityFiles}

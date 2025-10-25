@@ -7,6 +7,8 @@ import {
   NoitaSession,
   NoitaWandBonesFile,
   NoitaWorldState,
+  StreamInfoFileFormat,
+  WorldPixelSceneFileFormat,
 } from '@noita-explorer/model-noita';
 import { noiToast } from '@noita-explorer/noita-component-library';
 import { Dispatch, SetStateAction } from 'react';
@@ -28,6 +30,8 @@ interface Save00StoreState {
   currentRun: Save00CurrentRun | undefined;
   unlockedOrbs: string[] | undefined;
   flags: Set<string> | undefined;
+  streamInfo: StreamInfoFileFormat | undefined;
+  worldPixelScenes: WorldPixelSceneFileFormat | undefined;
 
   status: Save00Status;
   reload: () => Promise<void>;
@@ -43,8 +47,10 @@ export const useSave00Store = create<Save00StoreState>((set, get) => ({
   currentRun: undefined,
   unlockedOrbs: undefined,
   flags: undefined,
+  streamInfo: undefined,
+  worldPixelScenes: undefined,
 
-  status: 'unset',
+  status: 'unset' as Save00Status,
   reload: async () => {
     set({
       ...get(),
@@ -62,6 +68,10 @@ export const useSave00Store = create<Save00StoreState>((set, get) => ({
       const playerState = await noitaAPI.noita.save00.scrapePlayerState();
       const orbsUnlocked = await noitaAPI.noita.save00.scrapeOrbsUnlocked();
 
+      const streamInfo = await noitaAPI.noita.save00.scrapeStreamInfo();
+      const worldPixelScenes =
+        await noitaAPI.noita.save00.scrapeWorldPixelScenes();
+
       set({
         enemyStatistics: enemyStatistics,
         unlockedPerks: flags.perks.length > 0 ? flags.perks : undefined,
@@ -70,6 +80,8 @@ export const useSave00Store = create<Save00StoreState>((set, get) => ({
         bonesWands: bonesWands,
         unlockedOrbs: orbsUnlocked,
         flags: new Set(flags.all),
+        streamInfo: streamInfo,
+        worldPixelScenes: worldPixelScenes,
 
         currentRun:
           worldState !== undefined && playerState !== undefined

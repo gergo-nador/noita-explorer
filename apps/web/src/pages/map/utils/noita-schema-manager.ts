@@ -1,7 +1,8 @@
-import { EntitySchema, parseEntitySchema } from '@noita-explorer/map';
+import { NoitaEntitySchema } from '@noita-explorer/model-noita';
+import { scrape } from '@noita-explorer/scrapers';
 
 export const noitaSchemaManager = (() => {
-  const schemas: Record<string, Promise<EntitySchema>> = {};
+  const schemas: Record<string, Promise<NoitaEntitySchema>> = {};
 
   function hasSchema(hash: string) {
     return hash in schemas;
@@ -18,7 +19,7 @@ export const noitaSchemaManager = (() => {
         }
         return response.text();
       })
-      .then((text) => parseEntitySchema(text));
+      .then((text) => scrape.entitySchema({ xmlText: text }));
 
     schemas[hash] = schemaResponsePromise;
   }
