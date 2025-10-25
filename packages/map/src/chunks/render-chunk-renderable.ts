@@ -1,10 +1,10 @@
 import { ChunkRenderable } from './chunk-renderable.ts';
-import { ChunkRawFormat } from './chunk-raw-format.ts';
 import { Vector2d } from '@noita-explorer/model';
+import { ChunkFileFormat } from '@noita-explorer/model-noita';
 
 interface Props {
   chunkRenderable: ChunkRenderable;
-  chunk: ChunkRawFormat;
+  chunk: ChunkFileFormat;
   chunkCoordinates: Vector2d;
   chunkImageData: ImageData;
 }

@@ -29,7 +29,12 @@ export const scrapePerks = async ({
 
   const perkListStatement = parsed
     .findTopLevelAssignmentStatement('perk_list')
-    .first();
+    ?.first();
+
+  if (!perkListStatement) {
+    throw new Error('Could not find perk_list');
+  }
+
   const luaPerkArray = perkListStatement.asArrayObjectDeclarationList();
 
   const perks: NoitaScrapedPerk[] = [];

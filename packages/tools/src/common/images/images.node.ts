@@ -12,7 +12,7 @@ import Color from 'color';
 import { base64Helpers } from '../base64.ts';
 import { colorHelpers } from '../color-util.ts';
 import { throwHelpers } from '../throw.ts';
-import { ImageData } from 'canvas';
+import { ImageData, createImageData } from 'canvas';
 
 function trimWhitespaceBase64(): Promise<string> {
   return throwHelpers.notImplementedInCurrentEnvironment(trimWhitespaceBase64);
@@ -26,8 +26,11 @@ function rotateImageBase64(): Promise<string> {
 function getAverageColorBase64(): Promise<string> {
   return throwHelpers.notImplementedInCurrentEnvironment(getAverageColorBase64);
 }
-function base64ToImageData(): Promise<ImageData> {
-  return throwHelpers.notImplementedInCurrentEnvironment(getAverageColorBase64);
+async function base64ToImageData(base64: string): Promise<ImageData> {
+  const uintArray = new TextEncoder().encode(base64);
+  const { width, height } = await getImageSizeBase64(base64);
+  const uint8Clamped = Uint8ClampedArray.from(uintArray);
+  return createImageData(uint8Clamped, width, height);
 }
 
 async function getJimpImage(base64: string) {

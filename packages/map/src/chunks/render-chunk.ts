@@ -4,8 +4,7 @@ import {
   ValueRef,
   Vector2d,
 } from '@noita-explorer/model';
-import { NoitaMaterial } from '@noita-explorer/model-noita';
-import { ChunkRawFormat } from './chunk-raw-format.ts';
+import { NoitaMaterial, ChunkFileFormat } from '@noita-explorer/model-noita';
 import { renderPixelatedImage } from '../utils/render-pixelated-image.ts';
 import { renderChunkPixel } from './render-chunk-pixel.ts';
 import { PixelCalculator } from '../interfaces/pixel-calculator.ts';
@@ -14,7 +13,7 @@ import { renderChunkEntities } from './render-chunk-entities.ts';
 import { ChunkRenderableEntity } from './chunk-renderable-entity.ts';
 
 interface Props {
-  chunk: ChunkRawFormat;
+  chunk: ChunkFileFormat;
   chunkCoordinates: Vector2d;
   materials: StringKeyDictionary<NoitaMaterial>;
   materialImageCache: StringKeyDictionary<ImageData>;

@@ -1,4 +1,6 @@
 import { BufferReader } from '@noita-explorer/tools';
+import { ChunkPhysicsObject } from '@noita-explorer/model-noita';
+import { readBufferArray } from '../../../../utils/buffer-reader-utils/read-buffer-array.ts';
 
 export const scrapePhysicsObject = ({
   bufferReader,

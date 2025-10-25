@@ -35,7 +35,11 @@ export const scrapeSpells = async ({
 
   const actionListStatement = luaWrapper
     .findTopLevelAssignmentStatement('actions')
-    .first();
+    ?.first();
+
+  if (!actionListStatement) {
+    throw new Error('Could not find actions');
+  }
 
   const luaActionsArray = actionListStatement.asArrayObjectDeclarationList();
 

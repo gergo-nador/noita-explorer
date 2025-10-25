@@ -1,4 +1,4 @@
-import { SpriteAnimation } from '../common/noita-sprite-animation.ts';
+import { SpriteAnimation } from '../../common/noita-sprite-animation.ts';
 
 export interface NoitaScrapedGif {
   animationId: string;

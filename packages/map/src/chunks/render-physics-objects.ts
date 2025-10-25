@@ -1,13 +1,15 @@
-import { ChunkPhysicsObject } from './chunk-physics-object.ts';
-import { ChunkRawFormat } from './chunk-raw-format.ts';
 import { Vector2d } from '@noita-explorer/model';
 import { renderChunkRenderable } from './render-chunk-renderable.ts';
 import { ChunkRenderable } from './chunk-renderable.ts';
 import { colorHelpers } from '@noita-explorer/tools';
+import {
+  ChunkFileFormat,
+  ChunkPhysicsObject,
+} from '@noita-explorer/model-noita';
 
 interface Props {
   physicsObjects: ChunkPhysicsObject[];
-  chunk: ChunkRawFormat;
+  chunk: ChunkFileFormat;
   chunkCoordinates: Vector2d;
   chunkImageData: ImageData;
 }

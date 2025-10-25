@@ -98,6 +98,12 @@ export const convertScrapeResultsToDataWak = (
     },
   );
 
+  // biomes
+  const biomes = results.biomes.data;
+  if (biomes === undefined) {
+    throw new Error('Biomes are undefined');
+  }
+
   // finalize data wak
   const now = new Date();
 
@@ -113,6 +119,7 @@ export const convertScrapeResultsToDataWak = (
     wandConfigs: wands,
     materials: materials,
     materialReactions: materialReactions,
+    biomes: biomes,
   };
 };
 

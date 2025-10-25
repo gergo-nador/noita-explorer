@@ -130,7 +130,11 @@ const scrapeWandConfigsLua = async ({
 
   const wandListStatement = luaWrapper
     .findTopLevelAssignmentStatement('wands')
-    .first();
+    ?.first();
+
+  if (!wandListStatement) {
+    throw new Error('Could not find wands list');
+  }
 
   const luaWandsArray = wandListStatement.asArrayObjectDeclarationList();
   const wandConfigs: NoitaScrapedWandConfig[] = [];

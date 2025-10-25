@@ -21,6 +21,7 @@ import { scrapeEntitySchema } from './common/entity-schema/scrape-entity-schema.
 import { scrapeWorldPixelScenes } from './save00/world/world-pixel-scenes/scrape-world-pixel-scenes.ts';
 import { scrapeEntityFile } from './save00/world/entity/scrape-entity-file.ts';
 import { scrapePngPetriFile } from './save00/world/png-petri/scrape-png-petri-file.ts';
+import { scrapeBiomes } from './datawak/biomes/scrape-biomes.ts';
 
 export const scrape = {
   dataWak: {
@@ -32,6 +33,7 @@ export const scrape = {
     enemyAnimations: scrapeEnemyAnimation,
     scrapeAnimationFrames: scrapeAnimationInfoFrames,
     orbAnimations: scrapeOrbAnimations,
+    biomes: scrapeBiomes,
   },
   save00: {
     bonesWands: scrapeBonesWands,

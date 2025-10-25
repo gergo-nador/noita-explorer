@@ -2,15 +2,16 @@ import {
   NoitaDataWakScrapeResult,
   NoitaDataWakScrapeResultStatus,
   NoitaMaterialReaction,
-  NoitaTranslation,
   NoitaScrapedEnemy,
+  NoitaScrapedMaterial,
   NoitaScrapedMedia,
   NoitaScrapedMediaGif,
   NoitaScrapedMediaImage,
-  NoitaScrapedSpell,
   NoitaScrapedPerk,
-  NoitaScrapedMaterial,
+  NoitaScrapedSpell,
   NoitaScrapedWandConfig,
+  NoitaTranslation,
+  NoitaWakBiomes,
 } from '@noita-explorer/model-noita';
 import {
   FileSystemDirectoryAccess,
@@ -58,6 +59,7 @@ export const scrapeDataWak = async ({
       wandConfigs: statusSkipped,
       materials: statusSkipped,
       materialReactions: statusSkipped,
+      biomes: statusSkipped,
     };
   }
 
@@ -152,6 +154,19 @@ export const scrapeDataWakContent = async ({
     orbsError = err;
   }
 
+  let biomes: NoitaWakBiomes = {
+    biomeMap: { biomeOffset: { x: 0, y: 0 }, biomeIndices: [] },
+    biomes: [],
+  };
+  let biomesError: unknown | undefined = undefined;
+  try {
+    biomes = await scrape.dataWak.biomes({
+      dataWakParentDirectoryApi: dataWakParentDirectory,
+    });
+  } catch (err) {
+    biomesError = err;
+  }
+
   return {
     translations: {
       status: NoitaDataWakScrapeResultStatus.SUCCESS,
@@ -222,6 +237,14 @@ export const scrapeDataWakContent = async ({
           : NoitaDataWakScrapeResultStatus.FAILED,
       data: orbs,
       error: orbsError,
+    },
+    biomes: {
+      status:
+        biomesError === undefined && biomes.biomes.length !== 0
+          ? NoitaDataWakScrapeResultStatus.SUCCESS
+          : NoitaDataWakScrapeResultStatus.FAILED,
+      data: biomes,
+      error: biomesError,
     },
   };
 };

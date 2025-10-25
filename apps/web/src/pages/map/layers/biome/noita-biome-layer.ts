@@ -1,11 +1,6 @@
 import L from 'leaflet';
 import { noitaDataWakManager } from '../../utils/noita-data-wak-manager.ts';
-import { parseXml, XmlWrapper } from '@noita-explorer/tools/xml';
 import { imageHelpers } from '@noita-explorer/tools';
-import {
-  FileSystemDirectoryAccess,
-  FileSystemFileAccess,
-} from '@noita-explorer/model';
 
 const dataPromise = noitaDataWakManager.getDataWak().then(async (dataWak) => {
   const biomesAllFile = await dataWak.getFile('data/biome/_biomes_all.xml');
@@ -87,87 +82,3 @@ export const NoitaBiomeLayer = L.GridLayer.extend({
     return tile;
   },
 });
-
-async function readBiomes({
-  biomesAllFile,
-  dataWak,
-}: {
-  biomesAllFile: FileSystemFileAccess;
-  dataWak: FileSystemDirectoryAccess;
-}) {
-  const allBiomesText = await biomesAllFile.read.asText();
-  const xmlObj = await parseXml(allBiomesText);
-  const xml = XmlWrapper(xmlObj);
-
-  const biomesToLoadTag = xml.findNthTag('BiomesToLoad');
-  if (!biomesToLoadTag) {
-    throw new Error('Expected BiomesToLoad tag to be found.');
-  }
-
-  const biomeImageMapPath = biomesToLoadTag
-    .getRequiredAttribute('biome_image_map')
-    .asText();
-
-  const biomeTags = biomesToLoadTag.findTagArray('Biome');
-  const biomes = [];
-
-  for (const biomeTag of biomeTags) {
-    const color = biomeTag.getRequiredAttribute('color').asText();
-
-    const biomeFileName = biomeTag
-      .getRequiredAttribute('biome_filename')
-      .asText();
-
-    const biomeFile = await dataWak.getFile(biomeFileName);
-    const biomeText = await biomeFile.read.asText();
-    const biomeXmlObj = await parseXml(biomeText);
-    const biomeXml = XmlWrapper(biomeXmlObj);
-
-    const topologyTag = biomeXml.findNthTag('Topology');
-    if (!topologyTag) continue;
-
-    const bgImagePath = topologyTag.getAttribute('background_image')?.asText();
-
-    biomes.push({ color, bgImagePath, biomeFileName });
-  }
-
-  return { biomeImageMapPath, biomes };
-}
-
-async function readBiomeImageMapRaw({
-  biomeMapFile,
-}: {
-  biomeMapFile: FileSystemFileAccess;
-}) {
-  const base64Image = await biomeMapFile.read.asImageBase64();
-  const imageData = await imageHelpers.base64ToImageData(base64Image);
-
-  const colors: string[][] = [];
-  let currentRow: string[] = [];
-
-  for (let j = 0; j < imageData.height; j++) {
-    currentRow = [];
-    for (let i = 0; i < imageData.width; i++) {
-      const offset = (j * imageData.width + i) * 4;
-
-      const r = imageData.data[offset];
-      const g = imageData.data[offset + 1];
-      const b = imageData.data[offset + 2];
-      const a = imageData.data[offset + 3];
-
-      const argb = (a << 24) | (r << 16) | (g << 8) | b;
-      const unsignedArgb = argb >>> 0;
-
-      const colorString = unsignedArgb.toString(16);
-
-      if (j === 15 && i === 43) debugger;
-      //if (j - 14 === 2 && i - 35 === 9) debugger;
-
-      currentRow.push(colorString);
-    }
-
-    colors.push(currentRow);
-  }
-
-  return { colors };
-}

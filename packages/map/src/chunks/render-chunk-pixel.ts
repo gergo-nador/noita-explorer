@@ -3,14 +3,13 @@ import {
   StringKeyDictionary,
   ValueRef,
 } from '@noita-explorer/model';
-import { NoitaMaterial } from '@noita-explorer/model-noita';
+import { ChunkFileFormat, NoitaMaterial } from '@noita-explorer/model-noita';
 import { colorHelpers } from '@noita-explorer/tools';
-import { ChunkRawFormat } from './chunk-raw-format.ts';
 
 interface Props {
   x: number;
   y: number;
-  chunk: ChunkRawFormat;
+  chunk: ChunkFileFormat;
   customColorIndexRef: ValueRef<number>;
   materials: StringKeyDictionary<NoitaMaterial>;
   materialImageCache: StringKeyDictionary<ImageData>;
