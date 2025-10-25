@@ -1,6 +1,6 @@
 import { NoitaPotion, NoitaPotionMaterial } from '@noita-explorer/model-noita';
 import { XmlWrapperType } from '@noita-explorer/tools/xml';
-import { hasEntityTag } from './tags.ts';
+import { hasEntityTag } from '../tags.ts';
 import { arrayHelpers } from '@noita-explorer/tools';
 
 export const scrapePotion = ({

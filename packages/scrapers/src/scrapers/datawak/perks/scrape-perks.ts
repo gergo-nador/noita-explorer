@@ -8,7 +8,7 @@ import {
 } from '@noita-explorer/model-noita';
 import { stringHelpers } from '@noita-explorer/tools';
 import { LuaWrapper } from '@noita-explorer/tools/lua';
-import { noitaPaths } from '../../noita-paths.ts';
+import { noitaPaths } from '../../../noita-paths.ts';
 
 export const scrapePerks = async ({
   dataWakParentDirectoryApi,

@@ -10,7 +10,6 @@ import {
 } from './noita-map.types.ts';
 import { CSSProperties, useState } from 'react';
 import { NoitaMapMainTerrainLayer } from './layers/main/noita-map-main-terrain-layer.tsx';
-import { NoitaBiomeLayer } from './layers/biome/noita-biome-layer.ts';
 import { NoitaMapBiomeLayer } from './layers/biome/noita-map-biome-layer.tsx';
 
 export function NoitaMapContainer({

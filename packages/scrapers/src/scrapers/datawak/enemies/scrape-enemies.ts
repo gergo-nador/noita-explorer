@@ -24,7 +24,7 @@ import {
 import { noitaPaths } from '../../../noita-paths.ts';
 import { extractEnemyProperties } from './extract-enemy-properties.ts';
 import { calculateEnemyGold } from './calculate-enemy-gold.ts';
-import { mergeXmlBaseFiles } from './merge-xml-base-files.ts';
+import { mergeXmlBaseFiles } from '../../common/merge-xml-base-files.ts';
 import { splitNoitaEntityTags } from '../../common/tags.ts';
 
 /**

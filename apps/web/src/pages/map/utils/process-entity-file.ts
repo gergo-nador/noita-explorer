@@ -17,7 +17,7 @@ import { noitaSchemaManager } from './noita-schema-manager.ts';
 import { arrayHelpers, imageHelpers } from '@noita-explorer/tools';
 import { noitaDataWakManager } from './noita-data-wak-manager.ts';
 import { mapConstants } from '@noita-explorer/map';
-import { scrape, AnimationInfo } from '@noita-explorer/scrapers';
+import { scrape } from '@noita-explorer/scrapers';
 
 export async function processEntityFile({
   entityFile,
@@ -122,7 +122,7 @@ async function processPixelSprites({
         position: entity.position,
         rotation: entity.rotation,
         scale: entity.scale,
-        imageData: imageData,
+        imageData: imageData as ImageData,
         isAdditive: Boolean(pixelSprite.data?.additive),
         isBackgroundComponent: Boolean(
           pixelSprite.data?.clean_overlapping_pixels,
@@ -155,7 +155,7 @@ async function processSprites({
         position: entity.position,
         rotation: entity.rotation,
         scale: entity.scale,
-        imageData: imageData,
+        imageData: imageData as ImageData,
         isAdditive: Boolean(sprite.data?.additive),
         isBackgroundComponent: false,
       };
@@ -201,7 +201,7 @@ async function readImageFile({
     return await imageHelpers.base64ToImageData(image);
   }
 
-  const animationInfo: AnimationInfo = { id: imageFile, file: spriteFile };
+  const animationInfo = { id: imageFile, file: spriteFile };
   const animation = await scrape.scrapeAnimationFrames({
     animationInfo,
     dataWakParentDirectoryApi: dataWak,

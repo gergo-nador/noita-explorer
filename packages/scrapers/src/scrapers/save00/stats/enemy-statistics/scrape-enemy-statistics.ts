@@ -5,9 +5,9 @@ import {
 import { EnemyStatistic } from '@noita-explorer/model-noita';
 
 import { parseXml, XmlWrapper } from '@noita-explorer/tools/xml';
-import { cryptoSalakieli } from '../../cryptography/salakieli.ts';
-import { encryptedFileKeys } from '../../cryptography/encrypted-file-keys.ts';
-import { noitaPaths } from '../../../noita-paths.ts';
+import { cryptoSalakieli } from '../../../common/cryptography/salakieli.ts';
+import { encryptedFileKeys } from '../../../common/cryptography/encrypted-file-keys.ts';
+import { noitaPaths } from '../../../../noita-paths.ts';
 
 export const scrapeEnemyStatistics = async ({
   save00DirectoryApi,

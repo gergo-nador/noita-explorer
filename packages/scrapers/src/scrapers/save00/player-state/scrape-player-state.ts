@@ -2,7 +2,7 @@ import {
   FileSystemDirectoryAccess,
   FileSystemFileAccess,
 } from '@noita-explorer/model';
-import { noitaPaths } from '../../noita-paths.ts';
+import { noitaPaths } from '../../../noita-paths.ts';
 import {
   parseXml,
   XmlWrapper,
@@ -18,11 +18,11 @@ import {
   NoitaInventoryItem,
   NoitaConstants,
 } from '@noita-explorer/model-noita';
-import { extractDamageMultipliers } from '../datawak/scrape-enemies/extract-damage-multipliers.ts';
-import { extractGenomeData } from '../datawak/scrape-enemies/extract-genome-data.ts';
-import { hasEntityTag, splitNoitaEntityTags } from '../common/tags.ts';
-import { scrapeWand } from '../common/scrape-wand.ts';
-import { scrapePotion } from '../common/scrape-potion.ts';
+import { extractDamageMultipliers } from '../../datawak/enemies/extract-damage-multipliers.ts';
+import { extractGenomeData } from '../../datawak/enemies/extract-genome-data.ts';
+import { hasEntityTag, splitNoitaEntityTags } from '../../common/tags.ts';
+import { scrapeWand } from '../../common/wand/scrape-wand.ts';
+import { scrapePotion } from '../../common/potions/scrape-potion.ts';
 import { mathHelpers } from '@noita-explorer/tools';
 
 export const scrapePlayerState = async ({

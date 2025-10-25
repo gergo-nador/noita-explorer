@@ -2,12 +2,12 @@ import { FileSystemDirectoryAccess } from '@noita-explorer/model';
 import { NoitaScrapedWandConfig } from '@noita-explorer/model-noita';
 import { fileSystemAccessHelpers, arrayHelpers } from '@noita-explorer/tools';
 import { LuaWrapper } from '@noita-explorer/tools/lua';
-import { noitaPaths } from '../../noita-paths.ts';
+import { noitaPaths } from '../../../noita-paths.ts';
 import { parseXml, XmlWrapper } from '@noita-explorer/tools/xml';
-import { splitNoitaEntityTags } from '../common/tags.ts';
-import { mergeXmlBaseFiles } from './scrape-enemies/merge-xml-base-files.ts';
-import { scrapeAnimation } from '../common/scrape-animations/scrape-animations.ts';
-import { AnimationInfo } from '../common/scrape-animations/types.ts';
+import { splitNoitaEntityTags } from '../../common/tags.ts';
+import { mergeXmlBaseFiles } from '../../common/merge-xml-base-files.ts';
+import { scrapeAnimation } from '../../common/scrape-animations/scrape-animations.ts';
+import { AnimationInfo } from '../../common/scrape-animations/types.ts';
 
 export const scrapeWandConfigs = async ({
   dataWakParentDirectoryApi,

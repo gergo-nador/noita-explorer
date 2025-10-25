@@ -1,5 +1,5 @@
 import { FileSystemDirectoryAccess } from '@noita-explorer/model';
-import { noitaPaths } from '../../noita-paths.ts';
+import { noitaPaths } from '../../../../noita-paths.ts';
 
 export const scrapeUnlockedOrbs = async ({
   save00DirectoryApi,

@@ -7,10 +7,7 @@ import {
   XmlWrapper,
   XmlWrapperType,
 } from '@noita-explorer/tools/xml';
-import {
-  joinNoitaEntityTags,
-  splitNoitaEntityTags,
-} from '../../common/tags.ts';
+import { joinNoitaEntityTags, splitNoitaEntityTags } from './tags.ts';
 
 interface Props {
   file: FileSystemFileAccess;

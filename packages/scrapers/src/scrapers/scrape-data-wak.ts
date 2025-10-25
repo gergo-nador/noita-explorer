@@ -17,7 +17,7 @@ import {
   FileSystemFileAccess,
   StringKeyDictionary,
 } from '@noita-explorer/model';
-import { scrape } from './scrape';
+import { scrape } from './main.ts';
 import {
   AnimationInfo,
   AnimationInfoLayer,

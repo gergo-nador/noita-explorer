@@ -1,8 +1,8 @@
-import { scrapeAnimations } from '../common/scrape-animations/scrape-animations.ts';
+import { scrapeAnimations } from '../../common/scrape-animations/scrape-animations.ts';
 import { FileSystemDirectoryAccess } from '@noita-explorer/model';
 import { enumerateHelpers } from '@noita-explorer/tools';
-import { AnimationInfo } from '../common/scrape-animations/types.ts';
-import { noitaPaths } from '../../noita-paths.ts';
+import { AnimationInfo } from '../../common/scrape-animations/types.ts';
+import { noitaPaths } from '../../../noita-paths.ts';
 
 export const scrapeOrbAnimations = async ({
   dataWakParentDirectoryApi,
