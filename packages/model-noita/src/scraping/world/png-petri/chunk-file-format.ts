@@ -1,7 +1,6 @@
 import { ChunkPhysicsObject } from './chunk-physics-object.ts';
 
-export interface ChunkRawFormat {
-  version: number;
+export interface ChunkFileFormat {
   width: number;
   height: number;
 
