@@ -16,6 +16,8 @@ import { scrapeOrbAnimations } from './datawak/orbs/scrape-orb-animations.ts';
 import { scrapeAnimationInfoFrames } from './common/scrape-animations/scrape-animations.ts';
 import { convertScrapeResultsToDataWak } from './convert-scrape-results-to-data-wak.ts';
 import { scrapeDataWak } from './scrape-data-wak.ts';
+import { scrapeStreamInfo } from './save00/world/stream-info/scrape-stream-info.ts';
+import { scrapeEntitySchema } from './common/entity-schema/scrape-entity-schema.ts';
 
 export const scrape = {
   dataWak: {
@@ -37,7 +39,9 @@ export const scrape = {
     progressFlags: scrapeProgressFlags,
     sessions: scrapeSessions,
     worldState: scrapeWorldState,
+    streamInfo: scrapeStreamInfo,
   },
+  entitySchema: scrapeEntitySchema,
   translations: readTranslations,
 };
 

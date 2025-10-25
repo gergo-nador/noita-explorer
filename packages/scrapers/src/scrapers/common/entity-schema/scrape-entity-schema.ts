@@ -1,13 +1,17 @@
 import { parseXml, XmlWrapper } from '@noita-explorer/tools/xml';
-import {
-  EntitySchema,
-  EntitySchemaComponent,
-  EntitySchemaComponentVariable,
-} from './entity-schema.ts';
 import { arrayHelpers } from '@noita-explorer/tools';
+import {
+  NoitaEntitySchema,
+  NoitaEntitySchemaComponent,
+  NoitaEntitySchemaComponentVariable,
+} from '@noita-explorer/model-noita';
 
-export async function parseEntitySchema(text: string): Promise<EntitySchema> {
-  const xmlRoot = await parseXml(text);
+export async function scrapeEntitySchema({
+  xmlText,
+}: {
+  xmlText: string;
+}): Promise<NoitaEntitySchema> {
+  const xmlRoot = await parseXml(xmlText);
   const xml = XmlWrapper(xmlRoot);
 
   const schemaTag = xml.findNthTag('Schema');
@@ -19,11 +23,11 @@ export async function parseEntitySchema(text: string): Promise<EntitySchema> {
 
   const componentTags = schemaTag.findTagArray('Component');
   const componentsArray = componentTags.map(
-    (componentTag): EntitySchemaComponent => {
+    (componentTag): NoitaEntitySchemaComponent => {
       const name = componentTag.getRequiredAttribute('component_name').asText();
 
       const varTags = componentTag.findTagArray('Var');
-      const vars = varTags.map((varTag): EntitySchemaComponentVariable => {
+      const vars = varTags.map((varTag): NoitaEntitySchemaComponentVariable => {
         const name = varTag.getRequiredAttribute('name').asText();
         const size = varTag.getRequiredAttribute('size').asInt();
         const type = varTag.getRequiredAttribute('type').asText();

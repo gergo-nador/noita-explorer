@@ -1,16 +1,16 @@
 import { NoitaDataWakScrapeResultPart } from './noita-data-wak-scrape-result-part.ts';
 import { StringKeyDictionary } from '@noita-explorer/model';
-import { NoitaTranslation } from './noita-translation.ts';
-import { NoitaMaterialReaction } from '../common/noita-material-reaction.ts';
-import { NoitaScrapedEnemy } from './noita-scraped-enemy.ts';
+import { NoitaTranslation } from '../noita-translation.ts';
+import { NoitaMaterialReaction } from '../../common/noita-material-reaction.ts';
+import { NoitaScrapedEnemy } from '../noita-scraped-enemy.ts';
 import {
   NoitaScrapedMedia,
   NoitaScrapedMediaGif,
-} from './noita-scraped-media.ts';
-import { NoitaScrapedSpell } from './noita-scraped-spell.ts';
-import { NoitaScrapedPerk } from './noita-scraped-perk.ts';
-import { NoitaScrapedMaterial } from './noita-scraped-material.ts';
-import { NoitaScrapedWandConfig } from './noita-scraped-wand-config.ts';
+} from '../noita-scraped-media.ts';
+import { NoitaScrapedSpell } from '../noita-scraped-spell.ts';
+import { NoitaScrapedPerk } from '../noita-scraped-perk.ts';
+import { NoitaScrapedMaterial } from '../noita-scraped-material.ts';
+import { NoitaScrapedWandConfig } from '../noita-scraped-wand-config.ts';
 
 export interface NoitaDataWakScrapeResult {
   translations: NoitaDataWakScrapeResultPart<

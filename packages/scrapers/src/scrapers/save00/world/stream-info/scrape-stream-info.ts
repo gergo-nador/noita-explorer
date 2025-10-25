@@ -2,19 +2,16 @@ import {
   FileSystemDirectoryAccess,
   FileSystemFileAccess,
 } from '@noita-explorer/model';
-
 import { createBufferReader } from '@noita-explorer/tools';
 import {
   StreamInfoBackground,
   StreamInfoChunkInfo,
   StreamInfoRaw,
 } from '@noita-explorer/model-noita';
-import { uncompressNoitaFile } from '../../../utils/noita-file-uncompress/uncompress-noita-file.ts';
-import { readBufferArray } from '../../../utils/buffer-reader-utils/read-buffer-array.ts';
-import { readBufferString } from '../../../utils/buffer-reader-utils/read-buffer-string.ts';
-import { noitaPaths } from '../../../main.ts';
-
-const STREAMINFO_VERSION = 24;
+import { uncompressNoitaFile } from '../../../../utils/noita-file-uncompress/uncompress-noita-file.ts';
+import { readBufferArray } from '../../../../utils/buffer-reader-utils/read-buffer-array.ts';
+import { readBufferString } from '../../../../utils/buffer-reader-utils/read-buffer-string.ts';
+import { noitaPaths } from '../../../../main.ts';
 
 export const scrapeStreamInfo = async ({
   save00DirectoryApi,
@@ -25,20 +22,22 @@ export const scrapeStreamInfo = async ({
     noitaPaths.save00.world.stream_info,
   );
 
-  const pathExist =
-    await save00DirectoryApi.checkRelativePathExists(streamInfoPath);
-  if (!pathExist) return undefined;
-
-  const streamInfoFile = await save00DirectoryApi.getFile(streamInfoPath);
+  let streamInfoFile: FileSystemFileAccess;
+  try {
+    streamInfoFile = await save00DirectoryApi.getFile(streamInfoPath);
+  } catch {
+    return undefined;
+  }
 
   const uncompressedStreamInfoBuffer =
     await uncompressNoitaFile(streamInfoFile);
   const bufferReader = createBufferReader(uncompressedStreamInfoBuffer);
 
   const version = bufferReader.readInt32BE();
-  if (version !== STREAMINFO_VERSION) {
+  const STREAM_INFO_VERSION = 24;
+  if (version !== STREAM_INFO_VERSION) {
     throw new Error(
-      `Invalid streaminfo buffer version. Expected ${STREAMINFO_VERSION}, received ${version}`,
+      `Invalid streaminfo buffer version. Expected ${STREAM_INFO_VERSION}, received ${version}`,
     );
   }
 

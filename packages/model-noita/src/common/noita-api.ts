@@ -1,5 +1,5 @@
 import { NoitaWakData } from '../scraping/noita-wak-data.ts';
-import { NoitaDataWakScrapeResult } from '../scraping/noita-data-wak-scrape-result.ts';
+import { NoitaDataWakScrapeResult } from '../scraping/data-wak-scrape-result/noita-data-wak-scrape-result.ts';
 import { StringKeyDictionary } from '@noita-explorer/model';
 import { EnemyStatistic } from './enemy/enemy-statistics.ts';
 import { NoitaProgressFlags } from './noita-progress-flags.ts';
