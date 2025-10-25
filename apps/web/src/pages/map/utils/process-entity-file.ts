@@ -202,7 +202,7 @@ async function readImageFile({
   }
 
   const animationInfo = { id: imageFile, file: spriteFile };
-  const animation = await scrape.scrapeAnimationFrames({
+  const animation = await scrape.dataWak.scrapeAnimationFrames({
     animationInfo,
     dataWakParentDirectoryApi: dataWak,
   });

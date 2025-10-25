@@ -51,31 +51,33 @@ export function browserNoitaApi(): NoitaAPI {
       save00: {
         scrapeProgressFlags: async () => {
           const api = await getSave00FolderHandle();
-          return scrape.progressFlags({ save00DirectoryApi: api });
+          return scrape.save00.progressFlags({ save00DirectoryApi: api });
         },
         scrapeEnemyStatistics: async () => {
           const api = await getSave00FolderHandle();
-          return await scrape.enemyStatistics({ save00DirectoryApi: api });
+          return await scrape.save00.enemyStatistics({
+            save00DirectoryApi: api,
+          });
         },
         scrapeSessions: async () => {
           const api = await getSave00FolderHandle();
-          return await scrape.sessions({ save00DirectoryApi: api });
+          return await scrape.save00.sessions({ save00DirectoryApi: api });
         },
         scrapeBonesWands: async () => {
           const api = await getSave00FolderHandle();
-          return await scrape.bonesWands({ save00DirectoryApi: api });
+          return await scrape.save00.bonesWands({ save00DirectoryApi: api });
         },
         scrapeWorldState: async () => {
           const api = await getSave00FolderHandle();
-          return await scrape.worldState({ save00DirectoryApi: api });
+          return await scrape.save00.worldState({ save00DirectoryApi: api });
         },
         scrapePlayerState: async () => {
           const api = await getSave00FolderHandle();
-          return await scrape.playerState({ save00DirectoryApi: api });
+          return await scrape.save00.playerState({ save00DirectoryApi: api });
         },
         scrapeOrbsUnlocked: async () => {
           const api = await getSave00FolderHandle();
-          return await scrape.orbsUnlocked({ save00DirectoryApi: api });
+          return await scrape.save00.orbsUnlocked({ save00DirectoryApi: api });
         },
       },
       launch: {

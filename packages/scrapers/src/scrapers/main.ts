@@ -18,22 +18,27 @@ import { convertScrapeResultsToDataWak } from './convert-scrape-results-to-data-
 import { scrapeDataWak } from './scrape-data-wak.ts';
 
 export const scrape = {
-  bonesWands: scrapeBonesWands,
-  enemies: scrapeEnemies,
-  enemyStatistics: scrapeEnemyStatistics,
-  materials: scrapeMaterials,
-  orbsUnlocked: scrapeUnlockedOrbs,
-  perks: scrapePerks,
-  playerState: scrapePlayerState,
-  progressFlags: scrapeProgressFlags,
-  sessions: scrapeSessions,
-  spells: scrapeSpells,
+  dataWak: {
+    materials: scrapeMaterials,
+    enemies: scrapeEnemies,
+    perks: scrapePerks,
+    spells: scrapeSpells,
+    wandConfigs: scrapeWandConfigs,
+    enemyAnimations: scrapeEnemyAnimation,
+    scrapeAnimationFrames: scrapeAnimationInfoFrames,
+    orbAnimations: scrapeOrbAnimations,
+  },
+  save00: {
+    bonesWands: scrapeBonesWands,
+    enemyStatistics: scrapeEnemyStatistics,
+    orbsUnlocked: scrapeUnlockedOrbs,
+    playerState: scrapePlayerState,
+
+    progressFlags: scrapeProgressFlags,
+    sessions: scrapeSessions,
+    worldState: scrapeWorldState,
+  },
   translations: readTranslations,
-  wandConfigs: scrapeWandConfigs,
-  worldState: scrapeWorldState,
-  enemyAnimations: scrapeEnemyAnimation,
-  scrapeAnimationFrames: scrapeAnimationInfoFrames,
-  orbAnimations: scrapeOrbAnimations,
 };
 
 export const scrapeUtils = {
