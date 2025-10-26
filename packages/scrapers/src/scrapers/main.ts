@@ -13,7 +13,10 @@ import { scrapePlayerState } from './save00/player-state/scrape-player-state.ts'
 import { scrapeUnlockedOrbs } from './save00/persistent/orbs/scrape-orbs.ts';
 import { scrapeEnemyAnimation } from './datawak/enemies/scrape-enemy-animation.ts';
 import { scrapeOrbAnimations } from './datawak/orbs/scrape-orb-animations.ts';
-import { scrapeAnimationInfoFrames } from './common/scrape-animations/scrape-animations.ts';
+import {
+  scrapeAnimation,
+  scrapeAnimationInfoFrames,
+} from './common/scrape-animations/scrape-animations.ts';
 import { convertScrapeResultsToDataWak } from './convert-scrape-results-to-data-wak.ts';
 import { scrapeDataWak } from './scrape-data-wak.ts';
 import { scrapeStreamInfo } from './save00/world/stream-info/scrape-stream-info.ts';
@@ -22,6 +25,12 @@ import { scrapeWorldPixelScenes } from './save00/world/world-pixel-scenes/scrape
 import { scrapeEntityFile } from './save00/world/entity/scrape-entity-file.ts';
 import { scrapePngPetriFile } from './save00/world/png-petri/scrape-png-petri-file.ts';
 import { scrapeBiomes } from './datawak/biomes/scrape-biomes.ts';
+
+export type {
+  AnimationInfo,
+  AnimationInfoLayer,
+  AnimationFramesResult,
+} from './common/scrape-animations/types.ts';
 
 export const scrape = {
   dataWak: {
@@ -32,6 +41,7 @@ export const scrape = {
     wandConfigs: scrapeWandConfigs,
     enemyAnimations: scrapeEnemyAnimation,
     scrapeAnimationFrames: scrapeAnimationInfoFrames,
+    scrapeAnimation: scrapeAnimation,
     orbAnimations: scrapeOrbAnimations,
     biomes: scrapeBiomes,
   },

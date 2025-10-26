@@ -3,7 +3,6 @@ import {
   NoitaWakBiomes,
   StreamInfoFileFormat,
 } from '@noita-explorer/model-noita';
-import { noitaDataWakManager } from '../../../../data-wak-mock/noita-data-wak-manager.ts';
 import { Vector2d } from '@noita-explorer/model';
 
 export const NoitaBiomeLayer = L.GridLayer.extend({
@@ -67,51 +66,42 @@ export const NoitaBiomeLayer = L.GridLayer.extend({
       return true;
     });
 
-    noitaDataWakManager
-      .getDataWak()
-      .then(async (dataWak) => {
-        const bgImagePath = biome.bgImagePath;
+    const bgImagePath = biome.bgImagePath;
 
-        if (bgImagePath && biome.loadBgImage) {
-          const bgImageFile = await dataWak.getFile(bgImagePath);
-          const base64 = await bgImageFile.read.asImageBase64();
+    async function render(ctx: CanvasRenderingContext2D) {
+      if (bgImagePath && biome.loadBgImage) {
+        const img = new Image();
+        img.src = bgImagePath;
 
+        await new Promise((resolve) => {
+          img.onload = () => {
+            for (let i = 0; i < 512; i += img.width) {
+              for (let j = 0; j < 512; j += img.height) {
+                ctx.drawImage(img, i, j);
+                resolve(img);
+              }
+            }
+          };
+        });
+      }
+
+      if (backgrounds.length > 0) {
+        for (const background of backgrounds) {
           const img = new Image();
-          img.src = base64;
+          img.src = background.fileName;
 
           await new Promise((resolve) => {
             img.onload = () => {
-              for (let i = 0; i < 512; i += img.width) {
-                for (let j = 0; j < 512; j += img.height) {
-                  ctx.drawImage(img, i, j);
-                }
-              }
-
+              const relativeX = background.position.x % 512;
+              const relativeY = background.position.y % 512;
+              ctx.drawImage(img, relativeX, relativeY);
               resolve(img);
             };
           });
         }
-
-        if (backgrounds.length > 0) {
-          for (const background of backgrounds) {
-            const bgImageFile = await dataWak.getFile(background.fileName);
-            const base64 = await bgImageFile.read.asImageBase64();
-
-            const img = new Image();
-            img.src = base64;
-
-            await new Promise((resolve) => {
-              img.onload = () => {
-                const relativeX = background.position.x % 512;
-                const relativeY = background.position.y % 512;
-                ctx.drawImage(img, relativeX, relativeY);
-                resolve(img);
-              };
-            });
-          }
-        }
-      })
-      .then(() => done(undefined, tile));
+      }
+    }
+    render(ctx).then(() => done(undefined, tile));
 
     tile.appendChild(canvas);
     return tile;
