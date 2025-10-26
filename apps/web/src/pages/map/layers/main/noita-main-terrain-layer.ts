@@ -1,5 +1,4 @@
 import L from 'leaflet';
-import { FastLZCompressor } from '@noita-explorer/fastlz';
 import { renderChunk } from '@noita-explorer/map';
 import {
   NoitaEntityFileCollection,
@@ -7,11 +6,14 @@ import {
 } from '../../noita-map.types.ts';
 import { processPetriFile } from '../../utils/process-petri-file.ts';
 import { processEntityFile } from '../../utils/process-entity-file.ts';
+import { fastLzCompressorService } from '../../../../utils/fast-lz-compressor-service.ts';
+import { StreamInfoFileFormat } from '@noita-explorer/model-noita';
 
 export const NoitaMainTerrainLayer = L.GridLayer.extend({
   createTile: function (coords: L.Coords, done: L.DoneCallback): HTMLElement {
     const tile = L.DomUtil.create('div', 'leaflet-tile');
 
+    const streamInfo: StreamInfoFileFormat = this.options.streamInfo;
     const petriFiles: NoitaPetriFileCollection = this.options.petriFiles;
     const petriFile = petriFiles?.[coords.x]?.[coords.y];
 
@@ -31,17 +33,16 @@ export const NoitaMainTerrainLayer = L.GridLayer.extend({
     const entityFileNum = 2000 * coords.y + coords.x;
     const entityFile = entityFiles[entityFileNum];
 
-    const fastLzCompressorPromise: Promise<FastLZCompressor> =
-      this.options.fastLzCompressorPromise;
-
-    fastLzCompressorPromise
+    fastLzCompressorService
+      .get()
       .then(async (compressor) => ({
         chunk: await processPetriFile({ petriFile, compressor }),
         entities: entityFile
           ? await processEntityFile({
               entityFile,
-              compressor,
               chunkCoords: coords,
+              fastLzCompressor: compressor,
+              schemaHash: streamInfo.entitySchemaHash,
             })
           : undefined,
       }))

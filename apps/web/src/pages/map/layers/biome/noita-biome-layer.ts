@@ -9,11 +9,11 @@ export const NoitaBiomeLayer = L.GridLayer.extend({
   createTile: function (coords: L.Coords, done: L.DoneCallback): HTMLElement {
     const tile = L.DomUtil.create('div', 'leaflet-tile');
 
-    if (coords.y < 0) {
-      //sky
-      done(undefined, tile);
-      return tile;
-    }
+    //if (coords.y < 0) {
+    //  //sky
+    //  done(undefined, tile);
+    //  return tile;
+    //}
 
     const wakBiomes: NoitaWakBiomes = this.options.biomes;
     const biomeIndex =
@@ -65,7 +65,7 @@ export const NoitaBiomeLayer = L.GridLayer.extend({
       .then(async (dataWak) => {
         const bgImagePath = biome.bgImagePath;
 
-        if (bgImagePath) {
+        if (bgImagePath && biome.loadBgImage) {
           const bgImageFile = await dataWak.getFile(bgImagePath);
           const base64 = await bgImageFile.read.asImageBase64();
 

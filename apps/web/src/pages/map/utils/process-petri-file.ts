@@ -1,6 +1,6 @@
 import { FileSystemFileAccess } from '@noita-explorer/model';
 import { FastLZCompressor } from '@noita-explorer/fastlz';
-import { uncompressNoitaFile } from '@noita-explorer/map';
+import { scrape } from '@noita-explorer/scrapers';
 
 export async function processPetriFile({
   petriFile,
@@ -9,8 +9,9 @@ export async function processPetriFile({
   petriFile: FileSystemFileAccess;
   compressor: FastLZCompressor;
 }) {
-  const uncompressed = await uncompressNoitaFile(petriFile, compressor);
-
-  const chunk = readRawChunk(uncompressed);
-  return chunk;
+  const petriContent = await scrape.save00.pngPetriFile({
+    pngPetriFile: petriFile,
+    fastLzCompressor: compressor,
+  });
+  return petriContent;
 }

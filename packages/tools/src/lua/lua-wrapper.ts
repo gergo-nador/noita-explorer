@@ -1,11 +1,6 @@
-import {
-  AssignmentStatement,
-  Chunk,
-  FunctionDeclaration,
-  parse,
-} from 'luaparse';
+import { AssignmentStatement, Chunk, parse } from 'luaparse';
 import { LuaAssignmentStatementWrapper } from './lua-assignment-statement-wrapper.ts';
-import { LuaFunctionDeclarationWrapper } from './lua-function-declaration-wrapper.ts';
+import { stringHelpers } from '../main.ts';
 
 /**
  * The main entry point for the Lua tools. It parses the text and returns a wrapper object around it.
@@ -14,6 +9,7 @@ import { LuaFunctionDeclarationWrapper } from './lua-function-declaration-wrappe
  */
 export const LuaWrapper = (text: string) => {
   const parsed = parse(text);
+
   return {
     findTopLevelAssignmentStatement: (variableName: string) => {
       const assignmentStatement = lookForTopLevelAssignmentStatement(
@@ -25,15 +21,15 @@ export const LuaWrapper = (text: string) => {
 
       return LuaAssignmentStatementWrapper(assignmentStatement);
     },
-    findTopLevelFunctionDeclaration: (functionName: string) => {
-      const functionDeclaration = lookForTopLevelFunctionDeclaration(
+    findTopLevelFunctionCallWithStringArgument: (
+      functionName: string,
+      stringArgument: string,
+    ) => {
+      return lookForTopLevelFunctionWithArgument(
         parsed,
         functionName,
+        stringArgument,
       );
-
-      if (!functionDeclaration) return;
-
-      return LuaFunctionDeclarationWrapper(functionDeclaration);
     },
   };
 };
@@ -59,22 +55,39 @@ function lookForTopLevelAssignmentStatement(
   return assignment;
 }
 
-function lookForTopLevelFunctionDeclaration(
+function lookForTopLevelFunctionWithArgument(
   parsed: Chunk,
   functionName: string,
+  stringArgument: string,
 ) {
-  let functionToLookFor: FunctionDeclaration | undefined = undefined;
+  for (const call of parsed.body) {
+    if (call.type !== 'CallStatement') continue;
 
-  for (const func of parsed.body) {
-    if (func.type === 'FunctionDeclaration') {
-      const identifier = func.identifier;
-      if (identifier?.type !== 'Identifier') continue;
-      if (identifier.name !== functionName) continue;
+    const expression = call.expression;
+    if (expression.type !== 'CallExpression') continue;
 
-      functionToLookFor = func;
-      break;
+    if (
+      expression.base.type !== 'Identifier' ||
+      expression.base.name !== functionName
+    ) {
+      continue;
     }
-  }
 
-  return functionToLookFor;
+    if (expression.arguments.length !== 1) {
+      continue;
+    }
+
+    const argument = expression.arguments[0];
+    if (argument.type !== 'StringLiteral') continue;
+
+    const argumentValue = stringHelpers.trim({
+      text: argument.raw,
+      fromStart: '\\"',
+      fromEnd: '\\"',
+    });
+
+    if (argumentValue !== stringArgument) continue;
+
+    return call;
+  }
 }

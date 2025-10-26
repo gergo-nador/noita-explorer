@@ -6,28 +6,31 @@ import {
 import { noitaSchemaManager } from './noita-schema-manager.ts';
 import { arrayHelpers, imageHelpers } from '@noita-explorer/tools';
 import { noitaDataWakManager } from './noita-data-wak-manager.ts';
-import { mapConstants, ChunkRenderableEntity } from '@noita-explorer/map';
+import {
+  mapConstants,
+  ChunkRenderableEntity,
+  ChunkRenderableEntitySprite,
+} from '@noita-explorer/map';
 import { scrape } from '@noita-explorer/scrapers';
+import { ChunkEntity, ChunkEntityComponent } from '@noita-explorer/model-noita';
+import { FastLZCompressor } from '@noita-explorer/fastlz';
 
 export async function processEntityFile({
   entityFile,
-  compressor,
   chunkCoords,
+  fastLzCompressor,
+  schemaHash,
 }: {
   entityFile: FileSystemFileAccess;
-  compressor: FastLZCompressor;
   chunkCoords: Vector2d;
+  fastLzCompressor: FastLZCompressor;
+  schemaHash: string;
 }): Promise<ChunkRenderableEntity[]> {
-  const schema = await noitaSchemaManager.getSchema(schemaHash.schemaFile);
-  scrape.save00.entityFile({ entityFile: entityFile });
-  const uncompressed = await uncompressNoitaFile(entityFile, compressor);
-
-  // get schema
-  const schemaHash = await readEntitySchema({ entityBuffer: uncompressed });
-
-  const entityFileProcessed = await readEntityFile({
-    entityBuffer: uncompressed,
+  const schema = await noitaSchemaManager.getSchema(schemaHash);
+  const entityFileContent = await scrape.save00.entityFile({
+    entityFile: entityFile,
     schema: schema,
+    fastLzCompressor,
   });
 
   const chunkMinX = chunkCoords.x * mapConstants.chunkWidth;
@@ -36,7 +39,7 @@ export async function processEntityFile({
   const chunkMaxY = (chunkCoords.y + 1) * mapConstants.chunkHeight;
 
   const renderableEntities: ChunkRenderableEntity[] = [];
-  for (const entity of entityFileProcessed.entities) {
+  for (const entity of entityFileContent.entities) {
     // filter out entities that are not in the current chunk
     if (entity.position.x < chunkMinX || entity.position.x > chunkMaxX)
       continue;
@@ -162,7 +165,7 @@ async function processSprites({
       renderableEntity.sprites.push(renderableSprite);
     }
   }
-  // @ts-expect-error faefaerff aef aer
+  // @ts-expect-error jn ljnk
   const imageFile: string = sprites[0]?.data?.image_file ?? '';
   if (
     !imageFile.includes('vines') &&

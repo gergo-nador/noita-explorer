@@ -3,11 +3,9 @@ import {
   FileSystemFileAccess,
 } from '@noita-explorer/model';
 import { parseXml, XmlWrapper } from '@noita-explorer/tools/xml';
-import { LuaWrapper } from '@noita-explorer/tools/lua';
 import { NoitaBiome } from '@noita-explorer/model-noita';
 
 export const scrapeBiome = async ({
-  dataWakParentDirectoryApi,
   biomeFile,
 }: {
   dataWakParentDirectoryApi: FileSystemDirectoryAccess;
@@ -38,20 +36,7 @@ export const scrapeBiome = async ({
     .getAttribute('background_edge_priority')
     ?.asInt();
 
-  let loadBgImage = true;
-
-  const luaScriptPath = topologyTag.getAttribute('lua_script')?.asText();
-  if (luaScriptPath) {
-    const luaScriptFile =
-      await dataWakParentDirectoryApi.getFile(luaScriptPath);
-    const luaScriptText = await luaScriptFile.read.asText();
-    const lua = LuaWrapper(luaScriptText);
-    const initFunction = lua.findTopLevelFunctionDeclaration('init');
-
-    if (initFunction) {
-      loadBgImage = false;
-    }
-  }
+  const loadBgImage = true;
 
   return {
     bgImagePath,

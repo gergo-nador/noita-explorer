@@ -1,9 +1,11 @@
 import { RgbaColor, StringKeyDictionary } from '@noita-explorer/model';
-import { NoitaMaterial } from '@noita-explorer/model-noita';
+import {
+  NoitaMaterial,
+  StreamInfoFileFormat,
+} from '@noita-explorer/model-noita';
 import { useMap } from 'react-leaflet';
 import { useEffect, useRef } from 'react';
 import L from 'leaflet';
-import { createFastLzCompressor } from '@noita-explorer/fastlz';
 import { NoitaMainTerrainLayer } from './noita-main-terrain-layer.ts';
 import {
   NoitaEntityFileCollection,
@@ -16,16 +18,17 @@ export function NoitaMapMainTerrainLayer({
   materials,
   materialImageCache,
   materialColorCache,
+  streamInfo,
 }: {
   petriFiles: NoitaPetriFileCollection;
   entityFiles: NoitaEntityFileCollection;
   materials: StringKeyDictionary<NoitaMaterial>;
   materialImageCache: StringKeyDictionary<ImageData>;
   materialColorCache: StringKeyDictionary<RgbaColor>;
+  streamInfo: StreamInfoFileFormat;
 }) {
   const map = useMap();
   const layerRef = useRef<L.GridLayer | null>(null);
-  const fastLzCompressor = useRef(createFastLzCompressor());
 
   useEffect(() => {
     if (!layerRef.current) {
@@ -47,7 +50,7 @@ export function NoitaMapMainTerrainLayer({
         materials,
         materialImageCache,
         materialColorCache,
-        fastLzCompressorPromise: fastLzCompressor.current,
+        streamInfo,
       });
 
       // Add the layer to the map
@@ -69,6 +72,7 @@ export function NoitaMapMainTerrainLayer({
     materials,
     materialImageCache,
     materialColorCache,
+    streamInfo,
   ]); // Re-run effect if the map instance changes
 
   // This component does not render any JSX itself.
