@@ -73,10 +73,11 @@ export function renderChunkRenderable({
 
       const data = chunkImageData.data;
 
-      data[index] += color.r;
-      data[index + 1] += color.g;
-      data[index + 2] += color.b;
-      data[index + 3] = color.a;
+      const alpha = color.a / 255;
+      data[index] += color.r * alpha;
+      data[index + 1] += color.g * alpha;
+      data[index + 2] += color.b * alpha;
+      data[index + 3] = color.a * alpha;
     }
   }
 }

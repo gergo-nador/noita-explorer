@@ -10,11 +10,16 @@ export const NoitaBiomeLayer = L.GridLayer.extend({
   createTile: function (coords: L.Coords, done: L.DoneCallback): HTMLElement {
     const tile = L.DomUtil.create('div', 'leaflet-tile');
 
-    //if (coords.y < 0) {
-    //  //sky
-    //  done(undefined, tile);
-    //  return tile;
-    //}
+    const streamInfo: StreamInfoFileFormat = this.options.streamInfo;
+    const chunkInfo = streamInfo.chunkInfo.find(
+      (chunk) => chunk.position.x === coords.x && chunk.position.y === coords.y,
+    );
+
+    if (!chunkInfo?.loaded) {
+      tile.innerHTML = '';
+      done(undefined, tile);
+      return tile;
+    }
 
     const wakBiomes: NoitaWakBiomes = this.options.biomes;
     function getBiome({ x, y }: Vector2d) {
@@ -47,8 +52,6 @@ export const NoitaBiomeLayer = L.GridLayer.extend({
       done(new Error('nope'), tile);
       return tile;
     }
-
-    const streamInfo: StreamInfoFileFormat = this.options.streamInfo;
 
     const chunkMinX = coords.x * 512;
     const chunkMaxX = (coords.x + 1) * 512;
