@@ -81,7 +81,7 @@ if (sentry.isSentryEnabled && sentryDsn) {
 }
 
 async function enableMocking() {
-  const { worker } = await import('./workers/data-wak-mock/mocks.ts');
+  const { worker } = await import('./workers/msw/mocks.ts');
   return worker.start({
     serviceWorker: {
       url: '/mockServiceWorker.js',
