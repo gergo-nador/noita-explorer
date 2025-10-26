@@ -3,7 +3,6 @@ import {
   FileSystemFileAccess,
   Vector2d,
 } from '@noita-explorer/model';
-import { FastLZCompressor } from '@noita-explorer/fastlz';
 import { noitaSchemaManager } from './noita-schema-manager.ts';
 import { arrayHelpers, imageHelpers } from '@noita-explorer/tools';
 import { noitaDataWakManager } from './noita-data-wak-manager.ts';

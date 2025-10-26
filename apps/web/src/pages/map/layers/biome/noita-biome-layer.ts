@@ -1,5 +1,8 @@
 import L from 'leaflet';
-import { NoitaWakBiomes } from '@noita-explorer/model-noita';
+import {
+  NoitaWakBiomes,
+  StreamInfoFileFormat,
+} from '@noita-explorer/model-noita';
 import { noitaDataWakManager } from '../../utils/noita-data-wak-manager.ts';
 
 export const NoitaBiomeLayer = L.GridLayer.extend({
@@ -18,12 +21,11 @@ export const NoitaBiomeLayer = L.GridLayer.extend({
         coords.y + wakBiomes.biomeMap.biomeOffset.y
       ]?.[coords.x + wakBiomes.biomeMap.biomeOffset.x];
 
-    if (!biomeIndex) {
+    if (biomeIndex === undefined) {
       return tile;
     }
 
     const biome = wakBiomes.biomes[biomeIndex];
-
     if (!biome) {
       console.error('biome not found', coords);
       tile.innerHTML = '';
@@ -42,32 +44,69 @@ export const NoitaBiomeLayer = L.GridLayer.extend({
       return tile;
     }
 
-    const promises: Promise<unknown>[] = [];
+    const streamInfo: StreamInfoFileFormat = this.options.streamInfo;
 
-    const bgImagePath = biome.bgImagePath;
-    if (bgImagePath && biome.loadBgImage) {
-      const promise = noitaDataWakManager.getDataWak().then(async (dataWak) => {
-        const bgImageFile = await dataWak.getFile(bgImagePath);
-        const base64 = await bgImageFile.read.asImageBase64();
+    const chunkMinX = coords.x * 512;
+    const chunkMaxX = (coords.x + 1) * 512;
+    const chunkMinY = coords.y * 512;
+    const chunkMaxY = (coords.y + 1) * 512;
 
-        const bgImageDivElement = document.createElement('div');
-        bgImageDivElement.style.width = '100%';
-        bgImageDivElement.style.height = '100%';
-        bgImageDivElement.style.backgroundImage = `url("${base64}")`;
-        bgImageDivElement.style.backgroundRepeat = 'repeat';
+    const backgrounds = streamInfo.backgrounds.filter((bg) => {
+      if (bg.position.x < chunkMinX) return false;
+      if (bg.position.x >= chunkMaxX) return false;
+      if (bg.position.y < chunkMinY) return false;
+      if (bg.position.y >= chunkMaxY) return false;
 
-        tile.appendChild(bgImageDivElement);
-      });
+      return true;
+    });
 
-      promises.push(promise);
-    }
+    noitaDataWakManager
+      .getDataWak()
+      .then(async (dataWak) => {
+        const bgImagePath = biome.bgImagePath;
 
-    if (promises.length === 0) {
-      done(undefined, tile);
-    }
+        if (bgImagePath) {
+          const bgImageFile = await dataWak.getFile(bgImagePath);
+          const base64 = await bgImageFile.read.asImageBase64();
 
-    Promise.all(promises).then(() => done(undefined, tile));
+          const img = new Image();
+          img.src = base64;
 
+          await new Promise((resolve) => {
+            img.onload = () => {
+              for (let i = 0; i < 512; i += img.width) {
+                for (let j = 0; j < 512; j += img.height) {
+                  ctx.drawImage(img, i, j);
+                }
+              }
+
+              resolve(img);
+            };
+          });
+        }
+
+        if (backgrounds.length > 0) {
+          for (const background of backgrounds) {
+            const bgImageFile = await dataWak.getFile(background.fileName);
+            const base64 = await bgImageFile.read.asImageBase64();
+
+            const img = new Image();
+            img.src = base64;
+
+            await new Promise((resolve) => {
+              img.onload = () => {
+                const relativeX = background.position.x % 512;
+                const relativeY = background.position.y % 512;
+                ctx.drawImage(img, relativeX, relativeY);
+                resolve(img);
+              };
+            });
+          }
+        }
+      })
+      .then(() => done(undefined, tile));
+
+    tile.appendChild(canvas);
     return tile;
   },
 });

@@ -57,13 +57,15 @@ export function NoitaMapContainer({
             streamInfo={streamInfo}
             biomes={biomes}
           />
+          {/*
+
           <NoitaMapMainTerrainLayer
             petriFiles={petriFiles}
             entityFiles={entityFiles}
             materials={materials}
             materialColorCache={materialColorCache}
             materialImageCache={materialImageCache}
-          />
+          />*/}
         </>
       )}
 

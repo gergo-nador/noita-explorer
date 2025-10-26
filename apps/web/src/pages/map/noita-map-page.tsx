@@ -17,6 +17,8 @@ export const NoitaMapPage = () => {
     return <div>Data wak is loading</div>;
   }
 
+  console.log(worldPixelScenes, streamInfo);
+
   if (!worldPixelScenes || !streamInfo || !currentRun) {
     return <div>No current run detected</div>;
   }

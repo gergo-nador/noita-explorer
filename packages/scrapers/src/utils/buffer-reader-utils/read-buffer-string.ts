@@ -11,7 +11,8 @@ export function readBufferString(
   if (length < 0) throw new Error('String length below zero: ' + length);
   if (length > 10_000) throw new Error('String length over limit: ' + length);
 
-  const text = bufferReader.readString(length, options?.encoding ?? 'utf-8');
+  if (length === 0) return '';
 
+  const text = bufferReader.readString(length, options?.encoding ?? 'utf-8');
   return text;
 }

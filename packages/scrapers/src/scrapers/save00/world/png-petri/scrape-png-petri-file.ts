@@ -5,13 +5,19 @@ import { readBufferArray } from '../../../../utils/buffer-reader-utils/read-buff
 import { readBufferString } from '../../../../utils/buffer-reader-utils/read-buffer-string.ts';
 import { ChunkFileFormat } from '@noita-explorer/model-noita';
 import { scrapePhysicsObject } from './scrape-physics-object.ts';
+import { FastLZCompressor } from '@noita-explorer/fastlz';
 
 export const scrapePngPetriFile = async ({
   pngPetriFile,
+  fastLzCompressor,
 }: {
   pngPetriFile: FileSystemFileAccess;
+  fastLzCompressor: FastLZCompressor;
 }) => {
-  const uncompressedPngPetriBuffer = await uncompressNoitaFile(pngPetriFile);
+  const uncompressedPngPetriBuffer = await uncompressNoitaFile(
+    pngPetriFile,
+    fastLzCompressor,
+  );
   const bufferReader = createBufferReader(uncompressedPngPetriBuffer);
 
   const version = bufferReader.readInt32BE();

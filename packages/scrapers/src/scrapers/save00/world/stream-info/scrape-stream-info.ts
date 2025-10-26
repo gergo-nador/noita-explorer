@@ -12,11 +12,14 @@ import { uncompressNoitaFile } from '../../../../utils/noita-file-uncompress/unc
 import { readBufferArray } from '../../../../utils/buffer-reader-utils/read-buffer-array.ts';
 import { readBufferString } from '../../../../utils/buffer-reader-utils/read-buffer-string.ts';
 import { noitaPaths } from '../../../../main.ts';
+import { FastLZCompressor } from '@noita-explorer/fastlz';
 
 export const scrapeStreamInfo = async ({
   save00DirectoryApi,
+  fastLzCompressor,
 }: {
   save00DirectoryApi: FileSystemDirectoryAccess;
+  fastLzCompressor: FastLZCompressor;
 }): Promise<StreamInfoFileFormat | undefined> => {
   const streamInfoPath = await save00DirectoryApi.path.join(
     noitaPaths.save00.world.stream_info,
@@ -29,8 +32,10 @@ export const scrapeStreamInfo = async ({
     return undefined;
   }
 
-  const uncompressedStreamInfoBuffer =
-    await uncompressNoitaFile(streamInfoFile);
+  const uncompressedStreamInfoBuffer = await uncompressNoitaFile(
+    streamInfoFile,
+    fastLzCompressor,
+  );
   const bufferReader = createBufferReader(uncompressedStreamInfoBuffer);
 
   const version = bufferReader.readInt32BE();

@@ -15,6 +15,7 @@ import {
 } from 'browser-fs-access';
 import { noiToast } from '@noita-explorer/noita-component-library';
 import { runActions } from './run-actions.ts';
+import { fastLzCompressorService } from '../fast-lz-compressor-service.ts';
 
 export function browserNoitaApi(): NoitaAPI {
   return {
@@ -81,12 +82,20 @@ export function browserNoitaApi(): NoitaAPI {
         },
         scrapeStreamInfo: async () => {
           const api = await getSave00FolderHandle();
-          return await scrape.save00.streamInfo({ save00DirectoryApi: api });
+          const fastLzCompressor = await fastLzCompressorService.get();
+
+          return await scrape.save00.streamInfo({
+            save00DirectoryApi: api,
+            fastLzCompressor,
+          });
         },
         scrapeWorldPixelScenes: async () => {
           const api = await getSave00FolderHandle();
+          const fastLzCompressor = await fastLzCompressorService.get();
+
           return await scrape.save00.worldPixelScenes({
             save00DirectoryApi: api,
+            fastLzCompressor,
           });
         },
       },

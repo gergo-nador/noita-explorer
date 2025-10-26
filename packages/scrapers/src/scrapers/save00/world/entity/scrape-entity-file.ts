@@ -5,14 +5,23 @@ import { ChunkEntity, NoitaEntitySchema } from '@noita-explorer/model-noita';
 import { readBufferArray } from '../../../../utils/buffer-reader-utils/read-buffer-array.ts';
 import { FileSystemFileAccess } from '@noita-explorer/model';
 import { uncompressNoitaFile } from '../../../../utils/noita-file-uncompress/uncompress-noita-file.ts';
+import { FastLZCompressor } from '@noita-explorer/fastlz';
 
 interface Props {
   entityFile: FileSystemFileAccess;
   schema: NoitaEntitySchema;
+  fastLzCompressor: FastLZCompressor;
 }
 
-export async function scrapeEntityFile({ entityFile, schema }: Props) {
-  const uncompressedEntityBuffer = await uncompressNoitaFile(entityFile);
+export async function scrapeEntityFile({
+  entityFile,
+  schema,
+  fastLzCompressor,
+}: Props) {
+  const uncompressedEntityBuffer = await uncompressNoitaFile(
+    entityFile,
+    fastLzCompressor,
+  );
   const bufferReader = createBufferReader(uncompressedEntityBuffer);
 
   const version = bufferReader.readInt32BE();

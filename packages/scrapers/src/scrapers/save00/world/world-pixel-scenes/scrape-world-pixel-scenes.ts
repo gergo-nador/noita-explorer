@@ -9,11 +9,14 @@ import { createBufferReader } from '@noita-explorer/tools';
 import { readBufferArray } from '../../../../utils/buffer-reader-utils/read-buffer-array.ts';
 import { scrapePixelScene } from './scrape-pixel-scene.ts';
 import { scrapePixelSceneBackgroundImage } from './scrape-pixel-scene-background-image.ts';
+import { FastLZCompressor } from '@noita-explorer/fastlz';
 
 export const scrapeWorldPixelScenes = async ({
   save00DirectoryApi,
+  fastLzCompressor,
 }: {
   save00DirectoryApi: FileSystemDirectoryAccess;
+  fastLzCompressor: FastLZCompressor;
 }): Promise<WorldPixelSceneFileFormat | undefined> => {
   const worldPixelScenesPath = await save00DirectoryApi.path.join(
     noitaPaths.save00.world.world_pixel_scenes,
@@ -27,8 +30,10 @@ export const scrapeWorldPixelScenes = async ({
     return undefined;
   }
 
-  const uncompressedPixelScenesBuffer =
-    await uncompressNoitaFile(worldPixelScenesFile);
+  const uncompressedPixelScenesBuffer = await uncompressNoitaFile(
+    worldPixelScenesFile,
+    fastLzCompressor,
+  );
   const bufferReader = createBufferReader(uncompressedPixelScenesBuffer);
 
   const version = bufferReader.readInt32BE();

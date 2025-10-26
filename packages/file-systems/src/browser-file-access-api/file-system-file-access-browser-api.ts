@@ -15,7 +15,7 @@ export const FileSystemFileAccessBrowserApi = (
     return fileHandle.getFile().then((f) => f.text());
   };
 
-  return {
+  const file = {
     getFullPath: () => path,
     getName: () => fileHandle.name,
     getNameWithoutExtension: () =>
@@ -54,5 +54,10 @@ export const FileSystemFileAccessBrowserApi = (
         await writable.close();
       },
     },
-  };
+  } satisfies FileSystemFileAccess;
+
+  return {
+    _path: path,
+    ...file,
+  } as FileSystemFileAccess;
 };

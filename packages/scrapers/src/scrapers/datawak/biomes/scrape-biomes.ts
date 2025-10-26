@@ -11,7 +11,7 @@ export const scrapeBiomes = async ({
   dataWakParentDirectoryApi: FileSystemDirectoryAccess;
 }): Promise<NoitaWakBiomes> => {
   const biomesAllPath = await dataWakParentDirectoryApi.path.join(
-    noitaPaths.noitaDataWak.xmlData.materials,
+    noitaPaths.noitaDataWak.xmlData.biomes_all,
   );
   const biomesAllFile = await dataWakParentDirectoryApi.getFile(biomesAllPath);
 
@@ -70,7 +70,9 @@ export const scrapeBiomes = async ({
     for (let j = 0; j < biomeMapRaw.width; j++) {
       const color = biomeMapRaw.colors[i][j];
 
-      const biomeIndex = biomesWithColor.findIndex((b) => b.color === color);
+      const biomeIndex = biomesWithColor.findIndex(
+        (b) => b.color.toLowerCase() === color.toLowerCase(),
+      );
       if (biomeIndex === -1) {
         throw new Error(`Could not find biome with color "${color}"`);
       }

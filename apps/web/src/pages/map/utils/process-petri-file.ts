@@ -1,6 +1,6 @@
 import { FileSystemFileAccess } from '@noita-explorer/model';
 import { FastLZCompressor } from '@noita-explorer/fastlz';
-import { readRawChunk, uncompressNoitaFile } from '@noita-explorer/map';
+import { uncompressNoitaFile } from '@noita-explorer/map';
 
 export async function processPetriFile({
   petriFile,

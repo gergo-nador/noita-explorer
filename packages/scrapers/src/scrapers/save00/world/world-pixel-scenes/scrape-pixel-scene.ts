@@ -25,6 +25,9 @@ export const scrapePixelScene = ({
   const loadEntity = readBufferString(bufferReader);
   const cleanAreaBefore = bufferReader.readBool();
 
+  // there is an extra `DebugReloadMe` flag which we don't care about
+  bufferReader.jumpBytes(1);
+
   const colorMaterials = readBufferArray(bufferReader).iterate(
     (bufferReader): WorldPixelSceneColorMaterial => {
       const color = bufferReader.readInt32BE();
