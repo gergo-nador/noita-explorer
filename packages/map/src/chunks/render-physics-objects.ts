@@ -27,7 +27,6 @@ export function renderPhysicsObjects({
       scale: { x: 1, y: 1 },
       width: physicsObject.width,
       height: physicsObject.height,
-      isAdditive: false,
       getPixel: (coords: Vector2d) => {
         const colorIndex = physicsObject.width * coords.y + coords.x;
         const color = physicsObject.pixelData[colorIndex];

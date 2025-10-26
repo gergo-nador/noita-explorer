@@ -62,7 +62,6 @@ export function renderChunk({
     chunk,
     chunkCoordinates,
     chunkImageData: imageData,
-    renderMode: 'background',
   });
   // render terrain on top
   renderPixelatedImage({
@@ -77,14 +76,6 @@ export function renderChunk({
     chunkCoordinates: chunkCoordinates,
     chunk: chunk,
     chunkImageData: imageData,
-  });
-  // render other entities
-  renderChunkEntities({
-    entities,
-    chunk,
-    chunkCoordinates,
-    chunkImageData: imageData,
-    renderMode: 'regular',
   });
 
   ctx.putImageData(imageData, 0, 0);

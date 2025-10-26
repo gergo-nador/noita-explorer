@@ -6,6 +6,5 @@ export interface ChunkRenderable {
   rotation: number;
   width: number;
   height: number;
-  isAdditive: boolean;
   getPixel: (coords: Vector2d) => RgbaColor;
 }

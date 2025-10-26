@@ -115,10 +115,10 @@ async function processPixelSprites({
       const sprite: ChunkRenderableEntitySprite = {
         position: entity.position,
         rotation: entity.rotation,
+        offset: { x: 0, y: 0 },
         scale: entity.scale,
-        imageData: imageData as ImageData,
+        imageData: imageData.imageData as ImageData,
         base64: imageData.base64,
-        isAdditive: Boolean(pixelSprite.data?.additive),
         isBackgroundComponent: Boolean(
           pixelSprite.data?.clean_overlapping_pixels,
         ),
@@ -149,20 +149,23 @@ async function processSprites({
       const renderableSprite: ChunkRenderableEntitySprite = {
         position: entity.position,
         rotation: entity.rotation,
+        offset: {
+          x: (sprite.data.offset_x ?? 0) as number,
+          y: (sprite.data.offset_y ?? 0) as number,
+        },
         scale: entity.scale,
         imageData: imageData.imageData as ImageData,
         base64: imageData.base64,
-        isAdditive: Boolean(sprite.data?.additive),
         isBackgroundComponent: false,
       };
 
-      const offset_x = sprite.data.offset_x;
-      const offset_y = sprite.data.offset_y;
-      if (typeof offset_x === 'number') renderableSprite.position.x -= offset_x;
-      if (typeof offset_y === 'number') renderableSprite.position.y -= offset_y;
+      //const offset_x = sprite.data.offset_x;
+      //const offset_y = sprite.data.offset_y;
+      //if (typeof offset_x === 'number') renderableSprite.position.x -= offset_x;
+      //if (typeof offset_y === 'number') renderableSprite.position.y -= offset_y;
 
-      //renderableSprite.position.x -= Math.trunc(imageData.width / 2);
-      //renderableSprite.position.y -= Math.trunc(imageData.height / 2);
+      //renderableSprite.position.x -= Math.trunc(imageData.imageData.width / 2);
+      //renderableSprite.position.y += Math.trunc(imageData.imageData.height / 2);
 
       renderableEntity.sprites.push(renderableSprite);
     }
@@ -171,10 +174,10 @@ async function processSprites({
   const imageFile: string = sprites[0]?.data?.image_file ?? '';
   if (
     !imageFile.includes('vines') &&
-    !imageFile.includes('lantern_small_flame.xml') &&
+    imageFile.includes('lantern_small_flame.xml') &&
     !imageFile.includes('data/particles/smoke_orange.xml')
   ) {
-    //debugger;
+    debugger;
   }
 }
 

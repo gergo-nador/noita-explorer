@@ -20,9 +20,6 @@ export const NoitaMapEntityLazyLoadingLayer = ({
   streamInfo,
 }: Props) => {
   const [allEntities, setAllEntities] = useState<EntityStorageType>({});
-  const [visibleEntities, setVisibleEntities] = useState<
-    ChunkRenderableEntity[]
-  >([]);
 
   const map = useMapEvents({
     moveend: () => setBounds(map.getBounds()),
@@ -47,7 +44,6 @@ export const NoitaMapEntityLazyLoadingLayer = ({
       coords: Vector2d;
       array: ChunkRenderableEntity[];
     }[] = [];
-    let visibleEntities: ChunkRenderableEntity[] = [];
 
     for (let i = minChunkX; i <= maxChunkX; i++) {
       for (let j = minChunkY; j >= maxChunkY; j--) {
@@ -81,16 +77,7 @@ export const NoitaMapEntityLazyLoadingLayer = ({
                 return prev;
               });
             });
-
-          continue;
         }
-
-        if (chunkEntities.state === 'loading') continue;
-
-        const visibleEntitiesInChunk = chunkEntities.entities.filter(
-          (e) => e.sprites.length > 0,
-        );
-        visibleEntities = visibleEntities.concat(visibleEntitiesInChunk);
       }
     }
 
@@ -110,8 +97,6 @@ export const NoitaMapEntityLazyLoadingLayer = ({
         return prev;
       });
     }
-
-    setVisibleEntities(visibleEntities);
   }, [bounds, allEntities, entityFiles, streamInfo.entitySchemaHash]);
 
   const visibleEntities1 = Object.values(allEntities)

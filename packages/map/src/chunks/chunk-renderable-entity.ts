@@ -10,9 +10,9 @@ export interface ChunkRenderableEntity {
 export interface ChunkRenderableEntitySprite {
   position: Vector2d;
   scale: Vector2d;
+  offset: Vector2d;
   rotation: number; // float
   imageData: ImageData;
   base64: string;
   isBackgroundComponent: boolean;
-  isAdditive: boolean;
 }

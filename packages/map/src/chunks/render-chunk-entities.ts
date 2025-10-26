@@ -9,7 +9,6 @@ interface Props {
   chunk: ChunkFileFormat;
   chunkCoordinates: Vector2d;
   chunkImageData: ImageData;
-  renderMode: 'regular' | 'background';
 }
 
 export function renderChunkEntities({
@@ -17,13 +16,10 @@ export function renderChunkEntities({
   chunkCoordinates,
   chunk,
   chunkImageData,
-  renderMode,
 }: Props) {
   for (const entity of entities) {
     for (const sprite of entity.sprites) {
-      if (renderMode === 'background' && !sprite.isBackgroundComponent)
-        continue;
-      if (renderMode === 'regular' && sprite.isBackgroundComponent) continue;
+      if (!sprite.isBackgroundComponent) continue;
 
       const chunkRenderable: ChunkRenderable = {
         scale: sprite.scale,
@@ -31,7 +27,6 @@ export function renderChunkEntities({
         height: sprite.imageData.height,
         width: sprite.imageData.width,
         rotation: sprite.rotation,
-        isAdditive: sprite.isAdditive,
         getPixel: (coords) => {
           const index = (sprite.imageData.width * coords.y + coords.x) * 4;
 

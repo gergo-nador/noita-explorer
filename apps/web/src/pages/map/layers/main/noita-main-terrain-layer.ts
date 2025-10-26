@@ -53,7 +53,7 @@ export const NoitaMainTerrainLayer = L.GridLayer.extend({
           materials: this.options.materials,
           materialImageCache: this.options.materialImageCache,
           materialColorCache: this.options.materialColorCache,
-          entities: [],
+          entities: processedData.entities ?? [],
         });
 
         if (!renderedChunk) {
