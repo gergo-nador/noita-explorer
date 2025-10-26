@@ -1,4 +1,5 @@
 export interface NoitaBiome {
+  group: string;
   bgImagePath?: string;
   bgImageEdgeLeft?: string;
   bgImageEdgeRight?: string;

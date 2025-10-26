@@ -3,7 +3,8 @@ import {
   NoitaWakBiomes,
   StreamInfoFileFormat,
 } from '@noita-explorer/model-noita';
-import { noitaDataWakManager } from '../../utils/noita-data-wak-manager.ts';
+import { noitaDataWakManager } from '../../../../utils/noita-data-wak-manager.ts';
+import { Vector2d } from '@noita-explorer/model';
 
 export const NoitaBiomeLayer = L.GridLayer.extend({
   createTile: function (coords: L.Coords, done: L.DoneCallback): HTMLElement {
@@ -16,16 +17,18 @@ export const NoitaBiomeLayer = L.GridLayer.extend({
     //}
 
     const wakBiomes: NoitaWakBiomes = this.options.biomes;
-    const biomeIndex =
-      wakBiomes.biomeMap.biomeIndices[
-        coords.y + wakBiomes.biomeMap.biomeOffset.y
-      ]?.[coords.x + wakBiomes.biomeMap.biomeOffset.x];
+    function getBiome({ x, y }: Vector2d) {
+      y = Math.max(y, -wakBiomes.biomeMap.biomeOffset.y);
 
-    if (biomeIndex === undefined) {
-      return tile;
+      const biomeIndex =
+        wakBiomes.biomeMap.biomeIndices[y + wakBiomes.biomeMap.biomeOffset.y]?.[
+          x + wakBiomes.biomeMap.biomeOffset.x
+        ];
+
+      return wakBiomes.biomes[biomeIndex];
     }
 
-    const biome = wakBiomes.biomes[biomeIndex];
+    const biome = getBiome(coords);
     if (!biome) {
       console.error('biome not found', coords);
       tile.innerHTML = '';
@@ -34,6 +37,7 @@ export const NoitaBiomeLayer = L.GridLayer.extend({
     }
 
     const canvas = document.createElement('canvas');
+    canvas.style.imageRendering = 'pixelated';
     canvas.width = 512;
     canvas.height = 512;
 

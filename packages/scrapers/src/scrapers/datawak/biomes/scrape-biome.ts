@@ -7,9 +7,11 @@ import { NoitaBiome } from '@noita-explorer/model-noita';
 
 export const scrapeBiome = async ({
   biomeFile,
+  color,
 }: {
   dataWakParentDirectoryApi: FileSystemDirectoryAccess;
   biomeFile: FileSystemFileAccess;
+  color: string;
 }): Promise<NoitaBiome | undefined> => {
   const biomeText = await biomeFile.read.asText();
   const biomeXmlObj = await parseXml(biomeText);
@@ -39,6 +41,7 @@ export const scrapeBiome = async ({
   const loadBgImage = true;
 
   return {
+    group: color,
     bgImagePath,
     bgImageEdgeLeft,
     bgImageEdgeRight,

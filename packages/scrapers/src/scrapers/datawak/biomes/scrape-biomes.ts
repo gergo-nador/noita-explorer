@@ -36,7 +36,11 @@ export const scrapeBiomes = async ({
       .asText();
 
     const biomeFile = await dataWakParentDirectoryApi.getFile(biomeFileName);
-    const biome = await scrapeBiome({ biomeFile, dataWakParentDirectoryApi });
+    const biome = await scrapeBiome({
+      biomeFile,
+      dataWakParentDirectoryApi,
+      color,
+    });
 
     if (!biome) continue;
 

@@ -16,6 +16,7 @@ import {
 import { CSSProperties, useState } from 'react';
 import { NoitaMapMainTerrainLayer } from './layers/main/noita-map-main-terrain-layer.tsx';
 import { NoitaMapBiomeLayer } from './layers/biome/noita-map-biome-layer.tsx';
+import { NoitaMapEntityLazyLoadingLayer } from './layers/entity/noita-map-entity-lazy-loading-layer.tsx';
 
 export function NoitaMapContainer({
   petriFiles,
@@ -63,6 +64,10 @@ export function NoitaMapContainer({
             materials={materials}
             materialColorCache={materialColorCache}
             materialImageCache={materialImageCache}
+            streamInfo={streamInfo}
+          />
+          <NoitaMapEntityLazyLoadingLayer
+            entityFiles={entityFiles}
             streamInfo={streamInfo}
           />
         </>

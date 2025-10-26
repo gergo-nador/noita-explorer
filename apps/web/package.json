@@ -35,6 +35,7 @@
     "@tsparticles/react": "^3.0.0",
     "@tsparticles/slim": "^3.8.1",
     "@types/leaflet": "^1.9.21",
+    "@uidotdev/usehooks": "^2.4.1",
     "buffer": "^6.0.3",
     "diff": "^8.0.2",
     "idb": "^8.0.1",

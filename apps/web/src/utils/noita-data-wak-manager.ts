@@ -11,11 +11,19 @@ export const noitaDataWakManager = (() => {
     };
   }
 
-  const dataWak = fetch('/data.wak').then(async (res) => {
-    const arrayBuffer = await res.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
-    return FileSystemDirectoryAccessDataWakMemory(buffer);
-  });
+  let dataWakPromise: Promise<FileSystemDirectoryAccess>;
 
-  return { getDataWak: () => dataWak };
+  function dataWak() {
+    if (dataWakPromise !== undefined) return dataWakPromise;
+
+    dataWakPromise = fetch('/data.wak').then(async (res) => {
+      const arrayBuffer = await res.arrayBuffer();
+      const buffer = Buffer.from(arrayBuffer);
+      return FileSystemDirectoryAccessDataWakMemory(buffer);
+    });
+
+    return dataWakPromise;
+  }
+
+  return { getDataWak: () => dataWak() };
 })();

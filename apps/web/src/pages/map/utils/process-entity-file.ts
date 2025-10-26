@@ -5,7 +5,7 @@ import {
 } from '@noita-explorer/model';
 import { noitaSchemaManager } from './noita-schema-manager.ts';
 import { arrayHelpers, imageHelpers } from '@noita-explorer/tools';
-import { noitaDataWakManager } from './noita-data-wak-manager.ts';
+import { noitaDataWakManager } from '../../../utils/noita-data-wak-manager.ts';
 import {
   mapConstants,
   ChunkRenderableEntity,
@@ -117,6 +117,7 @@ async function processPixelSprites({
         rotation: entity.rotation,
         scale: entity.scale,
         imageData: imageData as ImageData,
+        base64: imageData.base64,
         isAdditive: Boolean(pixelSprite.data?.additive),
         isBackgroundComponent: Boolean(
           pixelSprite.data?.clean_overlapping_pixels,
@@ -149,7 +150,8 @@ async function processSprites({
         position: entity.position,
         rotation: entity.rotation,
         scale: entity.scale,
-        imageData: imageData as ImageData,
+        imageData: imageData.imageData as ImageData,
+        base64: imageData.base64,
         isAdditive: Boolean(sprite.data?.additive),
         isBackgroundComponent: false,
       };
@@ -192,7 +194,10 @@ async function readImageFile({
 
   if (imageFile.endsWith('.png')) {
     const image = await spriteFile.read.asImageBase64();
-    return await imageHelpers.base64ToImageData(image);
+    return {
+      imageData: await imageHelpers.base64ToImageData(image),
+      base64: image,
+    };
   }
 
   const animationInfo = { id: imageFile, file: spriteFile };
@@ -204,5 +209,8 @@ async function readImageFile({
   const firstFrame = animation[0]?.frameImages[0];
   if (!firstFrame) return;
 
-  return await imageHelpers.base64ToImageData(firstFrame);
+  return {
+    imageData: await imageHelpers.base64ToImageData(firstFrame),
+    base64: firstFrame,
+  };
 }
