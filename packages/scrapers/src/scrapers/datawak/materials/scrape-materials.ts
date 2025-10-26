@@ -99,6 +99,7 @@ const extractCellData = async ({
     gfxGlow: xml.getAttribute('gfx_glow')?.asInt(),
     gfxGlowColor: xml.getAttribute('gfx_glow_color')?.asText(),
     graphicsColor: undefined,
+    graphicsImagePath: undefined,
     imageBase64: undefined,
 
     parent: undefined,
@@ -168,6 +169,7 @@ const extractCellData = async ({
 
     const textureFilePath = graphics.getAttribute('texture_file')?.asText();
     if (textureFilePath) {
+      material.graphicsImagePath = textureFilePath;
       const pathExists =
         await dataWakParentDirectoryApi.checkRelativePathExists(
           textureFilePath,

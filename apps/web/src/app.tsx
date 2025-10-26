@@ -19,6 +19,7 @@ import { initParticlesEngine } from '@tsparticles/react';
 import { loadEmittersPlugin } from '@tsparticles/plugin-emitters';
 import { MobileViewUnsupportedWarning } from './components/mobile-view-unsupported-warning.tsx';
 import { publicPaths } from './utils/public-paths.ts';
+import { WorkerDemo } from './worker-demo.tsx';
 
 interface Props {
   /**
@@ -32,6 +33,7 @@ export const App = ({ children }: Props) => {
 
   return (
     <>
+      <WorkerDemo />
       {children ?? <RouterProvider router={browserRouter} />}
 
       <DialogWrapper />

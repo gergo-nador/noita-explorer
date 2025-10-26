@@ -1,5 +1,5 @@
 import { http, HttpResponse } from 'msw';
-import { noitaDataWakManager } from './noita-data-wak-manager.ts';
+import { noitaDataWakManager } from '../noita-data-wak-manager.ts';
 import {
   FileSystemDirectoryAccess,
   FileSystemFileAccess,

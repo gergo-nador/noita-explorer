@@ -50,6 +50,7 @@
     "react-plotly.js": "^2.6.0",
     "react-router-dom": "^7.0.2",
     "react-use": "^17.6.0",
+    "threads": "^1.7.0",
     "tsparticles": "^3.8.1"
   },
   "devDependencies": {
