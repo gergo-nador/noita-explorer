@@ -3,7 +3,7 @@ import {
   NoitaWakBiomes,
   StreamInfoFileFormat,
 } from '@noita-explorer/model-noita';
-import { noitaDataWakManager } from '../../../../utils/noita-data-wak-manager.ts';
+import { noitaDataWakManager } from '../../../../data-wak-mock/noita-data-wak-manager.ts';
 import { Vector2d } from '@noita-explorer/model';
 
 export const NoitaBiomeLayer = L.GridLayer.extend({

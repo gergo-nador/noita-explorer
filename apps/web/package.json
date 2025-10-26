@@ -42,6 +42,7 @@
     "idb": "^8.0.1",
     "leaflet": "^1.9.4",
     "leaflet-imageoverlay-rotated": "^0.2.1",
+    "msw": "^2.11.6",
     "plotly.js": "^2.35.3",
     "react": "19.1.0",
     "react-dom": "19.1.0",
@@ -74,5 +75,10 @@
     "typescript-eslint": "^8.15.0",
     "vite": "^6.1.0",
     "vite-plugin-mkcert": "^1.17.6"
+  },
+  "msw": {
+    "workerDirectory": [
+      "public"
+    ]
   }
 }

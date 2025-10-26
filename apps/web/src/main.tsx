@@ -6,7 +6,7 @@ import { sentry } from './utils/sentry.ts';
 import { noitaAPI } from './utils/noita-api.ts';
 import { noitaDataWakStore } from './stores/noita-data-wak.ts';
 
-const loadDataWakPromise = noitaAPI.noita.dataFile.get().then((data) => {
+const loadDataFilePromise = noitaAPI.noita.dataFile.get().then((data) => {
   noitaDataWakStore.getState().load(data);
 });
 
@@ -80,8 +80,19 @@ if (sentry.isSentryEnabled && sentryDsn) {
   startApp();
 }
 
+async function enableMocking() {
+  const { worker } = await import('./data-wak-mock/mocks.ts');
+  return worker.start({
+    serviceWorker: {
+      url: '/mockServiceWorker.js',
+    },
+    onUnhandledRequest: 'bypass',
+  });
+}
+
 async function startApp() {
-  await loadDataWakPromise;
+  await loadDataFilePromise;
+  await enableMocking();
 
   const container = document.getElementById('root')!;
   if (container.hasChildNodes()) {
