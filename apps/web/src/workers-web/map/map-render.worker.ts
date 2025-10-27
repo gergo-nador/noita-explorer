@@ -1,35 +1,33 @@
 // @ts-expect-error for some reason threads types are not recognized
 import { expose } from 'threads/worker';
+import { renderBiomeTile, mapConstants } from '@noita-explorer/map';
+import { MapRenderType } from './map-render.types.ts';
 
-// Define the functions to be exposed to the main thread
-const heavyTask = {
-  /**
-   * A simple but slow function to simulate a heavy calculation.
-   */
-  sum(n: number): number {
-    let result = 0;
-    for (let i = 0; i < n; i++) {
-      result += i;
-    }
-    return result;
-  },
-
-  /**
-   * An example of an async function in a worker.
-   */
-  async getMessage(): Promise<string> {
-    // Simulate a delay
-    const text = await fetch('/data/global/test_weather.xml').then((res) =>
-      res.text(),
+const mapRenderer: MapRenderType = {
+  async renderBiomeTile(props) {
+    const offScreenCanvas = new OffscreenCanvas(
+      mapConstants.chunkWidth,
+      mapConstants.chunkHeight,
     );
-    console.log('worker text', text);
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    return 'Hello from the worker thread! 👋';
+    const ctx = offScreenCanvas.getContext('2d');
+    if (!ctx) {
+      return;
+    }
+
+    await renderBiomeTile({
+      ctx,
+      chunkBorders: props.chunkBorders,
+      backgroundItems: [],
+      biome: props.biome,
+    });
+
+    return ctx.getImageData(
+      0,
+      0,
+      offScreenCanvas.width,
+      offScreenCanvas.height,
+    );
   },
 };
 
-// Export the type of the worker for type safety on the main thread
-export type HeavyTaskWorker = typeof heavyTask;
-
-// Expose the functions
-expose(heavyTask);
+expose(mapRenderer);

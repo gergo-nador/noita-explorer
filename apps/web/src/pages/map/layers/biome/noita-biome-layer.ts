@@ -4,6 +4,9 @@ import {
   StreamInfoFileFormat,
 } from '@noita-explorer/model-noita';
 import { Vector2d } from '@noita-explorer/model';
+import { MapRenderType } from '../../../../workers-web/map/map-render.types.ts';
+// @ts-expect-error threads module is installed
+import { Pool } from 'threads';
 
 export const NoitaBiomeLayer = L.GridLayer.extend({
   createTile: function (coords: L.Coords, done: L.DoneCallback): HTMLElement {
@@ -66,43 +69,23 @@ export const NoitaBiomeLayer = L.GridLayer.extend({
       return true;
     });
 
-    const bgImagePath = biome.bgImagePath;
-
-    async function render(ctx: CanvasRenderingContext2D) {
-      if (Math.random() > 1 && bgImagePath && biome.loadBgImage) {
-        const img = new Image();
-        img.src = bgImagePath;
-
-        await new Promise((resolve) => {
-          img.onload = () => {
-            for (let i = 0; i < 512; i += img.width) {
-              for (let j = 0; j < 512; j += img.height) {
-                ctx.drawImage(img, i, j);
-                resolve(img);
-              }
-            }
-          };
-        });
-      }
-
-      if (backgrounds.length > 0) {
-        for (const background of backgrounds) {
-          const img = new Image();
-          img.src = background.fileName;
-
-          await new Promise((resolve) => {
-            img.onload = () => {
-              const relativeX = background.position.x - chunkLeftBorderX;
-              const relativeY = background.position.y - chunkTopBorderY;
-              debugger;
-              ctx.drawImage(img, relativeX, relativeY);
-              resolve(img);
-            };
-          });
-        }
-      }
-    }
-    render(ctx).then(() => done(undefined, tile));
+    const renderPool: Pool<MapRenderType> = this.options.renderPool;
+    renderPool.queue((worker) => {
+      worker
+        .renderBiomeTile({
+          biome,
+          chunkBorders: {
+            leftX: chunkLeftBorderX,
+            rightX: chunkRightBorderX,
+            topY: chunkTopBorderY,
+            bottomY: chunkBottomBorderY,
+          },
+        })
+        .then((imageData: ImageData) => {
+          ctx.putImageData(imageData, 0, 0);
+        })
+        .then(() => done(undefined, tile));
+    });
 
     tile.appendChild(canvas);
     return tile;

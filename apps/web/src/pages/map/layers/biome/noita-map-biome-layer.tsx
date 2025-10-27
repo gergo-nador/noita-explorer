@@ -7,17 +7,22 @@ import {
   StreamInfoFileFormat,
   WorldPixelSceneFileFormat,
 } from '@noita-explorer/model-noita';
+// @ts-expect-error threads module is installed
+import { Pool } from 'threads';
+import { MapRenderType } from '../../../../workers-web/map/map-render.types.ts';
 
 interface Props {
   worldPixelScenes: WorldPixelSceneFileFormat;
   streamInfo: StreamInfoFileFormat;
   biomes: NoitaWakBiomes;
+  pool: Pool<MapRenderType>;
 }
 
 export const NoitaMapBiomeLayer = ({
   worldPixelScenes,
   streamInfo,
   biomes,
+  pool,
 }: Props) => {
   const map = useMap();
   const layerRef = useRef<L.GridLayer | null>(null);
@@ -39,6 +44,7 @@ export const NoitaMapBiomeLayer = ({
         worldPixelScenes,
         streamInfo,
         biomes,
+        renderPool: pool,
       });
 
       // Add the layer to the map

@@ -13,10 +13,14 @@ import {
   NoitaEntityFileCollection,
   NoitaPetriFileCollection,
 } from './noita-map.types.ts';
-import { CSSProperties, useState } from 'react';
+import { CSSProperties, useEffect, useState } from 'react';
 import { NoitaMapMainTerrainLayer } from './layers/main/noita-map-main-terrain-layer.tsx';
 import { NoitaMapBiomeLayer } from './layers/biome/noita-map-biome-layer.tsx';
 import { NoitaMapEntityLazyLoadingLayer } from './layers/entity/noita-map-entity-lazy-loading-layer.tsx';
+import { MapRenderType } from '../../workers-web/map/map-render.types.ts';
+// @ts-expect-error threads module is installed
+import { spawn, Pool } from 'threads';
+import MapWorkerUrl from '../../workers-web/map/map-render.worker.ts?worker';
 
 export function NoitaMapContainer({
   petriFiles,
@@ -37,14 +41,29 @@ export function NoitaMapContainer({
   streamInfo: StreamInfoFileFormat;
   biomes: NoitaWakBiomes;
 }) {
-  // The Noita world is huge, so you'll adjust this center point later.
-  // Using [0, 0] as a starting default.
   const mapCenter: L.LatLngExpression = [0, 0];
+  const [pool, setPool] = useState<Pool>();
+
+  useEffect(() => {
+    // Create a pool with multiple workers
+    const pool = Pool<MapRenderType>(() => spawn(new MapWorkerUrl()), {
+      size: 1,
+      concurrency: 1,
+    });
+
+    setPool(pool);
+
+    return () => {
+      pool.terminate(true);
+    };
+  }, []);
+
+  if (!pool) return;
 
   return (
     <MapContainer
       center={mapCenter}
-      zoom={3} // Start with a zoom level that shows a good area
+      zoom={2} // Start with a zoom level that shows a good area
       scrollWheelZoom={true}
       style={{ height: '80vh', width: '100%' }} // Important: Map needs a defined size
       crs={L.CRS.Simple} // Use a simple coordinate system for a game map
@@ -57,6 +76,7 @@ export function NoitaMapContainer({
             worldPixelScenes={worldPixelScenes}
             streamInfo={streamInfo}
             biomes={biomes}
+            pool={pool}
           />
           <NoitaMapMainTerrainLayer
             petriFiles={petriFiles}
