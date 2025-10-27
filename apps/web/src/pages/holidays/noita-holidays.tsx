@@ -2,8 +2,8 @@ import { Separator } from '@noita-explorer/react-utils';
 import { getNoitaHolidays } from './get-noita-holidays.tsx';
 import { Flex } from '@noita-explorer/react-utils';
 import { HolidayCard } from './holiday-card.tsx';
-import { NoitaHolidayContext } from '../../contexts/noita-holiday-context.ts';
-import { useFireworkComponent } from '../../hooks/use-firework-component.tsx';
+import { NoitaHolidayContext } from './contexts/noita-holiday-context.ts';
+import { useFireworkComponent } from './hooks/use-firework-component.tsx';
 import { zIndexManager } from '../../utils/z-index-manager.ts';
 
 export const NoitaHolidays = () => {

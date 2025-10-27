@@ -1,6 +1,6 @@
 import { Card } from '@noita-explorer/noita-component-library';
 import { useContext } from 'react';
-import { NoitaHolidayContext } from '../../../contexts/noita-holiday-context.ts';
+import { NoitaHolidayContext } from '../contexts/noita-holiday-context.ts';
 import { SpaceCharacter } from '../../../components/space-character.tsx';
 
 export const NewYears = () => {

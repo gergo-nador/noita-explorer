@@ -17,7 +17,7 @@ const mapRenderer: MapRenderType = {
     await renderBiomeTile({
       ctx,
       chunkBorders: props.chunkBorders,
-      backgroundItems: [],
+      backgroundItems: props.backgrounds,
       biome: props.biome,
     });
 

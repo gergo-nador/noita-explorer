@@ -7,27 +7,29 @@ import {
   StreamInfoFileFormat,
   WorldPixelSceneFileFormat,
 } from '@noita-explorer/model-noita';
-// @ts-expect-error threads module is installed
-import { Pool } from 'threads';
-import { MapRenderType } from '../../../../workers-web/map/map-render.types.ts';
+import { useThreadsPool } from '../../map-renderer-threads/use-threads-pool.ts';
+import { useOrganizeBackgroundImages } from '../../hooks/use-organize-background-images.ts';
 
 interface Props {
   worldPixelScenes: WorldPixelSceneFileFormat;
   streamInfo: StreamInfoFileFormat;
   biomes: NoitaWakBiomes;
-  pool: Pool<MapRenderType>;
 }
 
 export const NoitaMapBiomeLayer = ({
   worldPixelScenes,
   streamInfo,
   biomes,
-  pool,
 }: Props) => {
   const map = useMap();
+  const threadsPool = useThreadsPool();
   const layerRef = useRef<L.GridLayer | null>(null);
+  const { backgrounds, isLoaded: isBackgroundsLoaded } =
+    useOrganizeBackgroundImages({ streamInfo });
 
   useEffect(() => {
+    if (!isBackgroundsLoaded) return;
+
     if (!layerRef.current) {
       // @ts-expect-error typescript doesn't know we can pass parameters
       const gridLayer = new NoitaBiomeLayer({
@@ -44,7 +46,8 @@ export const NoitaMapBiomeLayer = ({
         worldPixelScenes,
         streamInfo,
         biomes,
-        renderPool: pool,
+        renderPool: threadsPool?.pool,
+        backgrounds,
       });
 
       // Add the layer to the map
@@ -59,7 +62,15 @@ export const NoitaMapBiomeLayer = ({
         layerRef.current = null;
       }
     };
-  }, [map]); // Re-run effect if the map instance changes
+  }, [
+    biomes,
+    map,
+    streamInfo,
+    threadsPool?.pool,
+    worldPixelScenes,
+    backgrounds,
+    isBackgroundsLoaded,
+  ]); // Re-run effect if the map instance changes
 
   // This component does not render any JSX itself.
   return null;

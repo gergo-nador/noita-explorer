@@ -1,6 +1,7 @@
 import L from 'leaflet';
 import {
   NoitaWakBiomes,
+  StreamInfoBackground,
   StreamInfoFileFormat,
 } from '@noita-explorer/model-noita';
 import { Vector2d } from '@noita-explorer/model';
@@ -60,20 +61,19 @@ export const NoitaBiomeLayer = L.GridLayer.extend({
     const chunkTopBorderY = coords.y * 512;
     const chunkBottomBorderY = (coords.y + 1) * 512;
 
-    const backgrounds = streamInfo.backgrounds.filter((bg) => {
-      if (bg.position.x < chunkLeftBorderX) return false;
-      if (bg.position.x >= chunkRightBorderX) return false;
-      if (bg.position.y < chunkTopBorderY) return false;
-      if (bg.position.y >= chunkBottomBorderY) return false;
+    const allBackgrounds: Record<
+      number,
+      Record<number, StreamInfoBackground[]>
+    > = this.options.backgrounds;
 
-      return true;
-    });
+    const currentBackgrounds = allBackgrounds[coords.x]?.[coords.y] ?? [];
 
     const renderPool: Pool<MapRenderType> = this.options.renderPool;
     renderPool.queue((worker) => {
       worker
         .renderBiomeTile({
           biome,
+          backgrounds: currentBackgrounds,
           chunkBorders: {
             leftX: chunkLeftBorderX,
             rightX: chunkRightBorderX,

@@ -1,14 +1,14 @@
 import { http, HttpResponse } from 'msw';
 import { ImagePngDimension } from '@noita-explorer/model';
 import { noitaDataWakManager } from '../noita-data-wak-manager.ts';
-import { createBufferReader } from '@noita-explorer/tools';
+import { createBufferReader, stringHelpers } from '@noita-explorer/tools';
 
 let imageDimensions: Record<string, ImagePngDimension> | undefined = undefined;
 
 export const dataWakImageDimensionsHandlers = [
   http.get('/data-wak-image-dimensions', async () => {
     if (typeof imageDimensions === 'object') {
-      return new HttpResponse(imageDimensions, { status: 200 });
+      return HttpResponse.json(imageDimensions, { status: 200 });
     }
 
     const dataWak = await noitaDataWakManager.getDataWak();
@@ -31,13 +31,20 @@ export const dataWakImageDimensionsHandlers = [
         const buffer = await pngFile.read.asBuffer();
         const bufferReader = createBufferReader(buffer);
 
-        const path = pngFile.getFullPath();
-        const pngHeader = bufferReader.readPngHeader();
-        imgDimensionsTemp[path] = pngHeader;
+        const path = stringHelpers.trim({
+          text: pngFile.getFullPath(),
+          fromStart: dataWak.getFullPath() + '/',
+        });
+        try {
+          const pngHeader = bufferReader.readPngHeader();
+          imgDimensionsTemp[path] = pngHeader;
+        } catch {
+          // do nothing
+        }
       }
     }
 
     imageDimensions = imgDimensionsTemp;
-    return new HttpResponse(imageDimensions, { status: 200 });
+    return HttpResponse.json(imageDimensions, { status: 200 });
   }),
 ];
