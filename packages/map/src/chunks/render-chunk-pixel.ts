@@ -65,8 +65,8 @@ export function renderChunkPixel({
   if (material.hasGraphicsImage) {
     const materialImageData = materialImageCache[materialId];
 
-    const wx = (x + chunk.width) * 6;
-    const wy = (y + chunk.height) * 6;
+    const wx = x + chunk.width;
+    const wy = y + chunk.height;
 
     const colorX = wx % materialImageData.width;
     const colorY = wy % materialImageData.height;
@@ -80,8 +80,6 @@ export function renderChunkPixel({
       b: pixelData[index + 2],
       a: pixelData[index + 3],
     };
-
-    materialColorCache[materialId] = color;
 
     return color;
   }
