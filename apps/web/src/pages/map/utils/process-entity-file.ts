@@ -5,7 +5,7 @@ import {
 } from '@noita-explorer/model';
 import { noitaSchemaManager } from './noita-schema-manager.ts';
 import { arrayHelpers, imageHelpers } from '@noita-explorer/tools';
-import { noitaDataWakManager } from '../../../workers/msw/noita-data-wak-manager.ts';
+import { noitaDataWakManager } from '../../../workers-service/noita-data-wak-manager.ts';
 import {
   mapConstants,
   ChunkRenderableEntity,

@@ -1,12 +1,13 @@
 // src/components/WorkerDemo.tsx
 import { useState } from 'react';
+// @ts-expect-error for some reason threads types are not recognized
 import { spawn, Thread } from 'threads';
 
 // Import the worker file using Vite's special `?worker` syntax
-import HeavyTaskWorker from './workers/threads/map/map-render.worker.ts?worker';
+import HeavyTaskWorker from './workers-web/map/map-render.worker.ts?worker';
 
 // Import the worker's type for type-safe communication
-import type { HeavyTaskWorker as HeavyTaskWorkerType } from './workers/threads/map/map-render.worker.ts';
+import type { HeavyTaskWorker as HeavyTaskWorkerType } from './workers-web/map/map-render.worker.ts';
 
 export function WorkerDemo() {
   const [sumResult, setSumResult] = useState<number | null>(null);

@@ -5,7 +5,7 @@ import {
 import { useEffect } from 'react';
 import L from 'leaflet';
 import { useMap } from 'react-leaflet';
-import 'leaflet-imageoverlay-rotated';
+import { rotatedImageOverlay } from '../../utils/leaflet-image-overlay-rotated';
 
 interface Props {
   entities: ChunkRenderableEntity[];
@@ -89,7 +89,7 @@ export const EntitySprite = ({
     const offsetY = sprite.offset.y;
     const offsetX = sprite.offset.x;
 
-    const overlay = L.imageOverlay.rotated(
+    const overlay = rotatedImageOverlay(
       sprite.base64,
       L.latLng(rotTopLeft.y - offsetY, rotTopLeft.x - offsetX),
       L.latLng(rotTopRight.y - offsetY, rotTopRight.x - offsetX),
@@ -101,7 +101,6 @@ export const EntitySprite = ({
     );
 
     overlay.addTo(map);
-    // @ts-expect-error _image is a private property and it's not in the official types packages
     overlay._image.style.imageRendering = 'pixelated';
 
     return () => {

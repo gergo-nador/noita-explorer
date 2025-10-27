@@ -1,4 +1,4 @@
-// src/workers/heavy-task.worker.ts
+// @ts-expect-error for some reason threads types are not recognized
 import { expose } from 'threads/worker';
 
 // Define the functions to be exposed to the main thread
