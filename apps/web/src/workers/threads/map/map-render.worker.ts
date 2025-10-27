@@ -19,6 +19,10 @@ const heavyTask = {
    */
   async getMessage(): Promise<string> {
     // Simulate a delay
+    const text = await fetch('/data/global/test_weather.xml').then((res) =>
+      res.text(),
+    );
+    console.log('worker text', text);
     await new Promise((resolve) => setTimeout(resolve, 500));
     return 'Hello from the worker thread! 👋';
   },
