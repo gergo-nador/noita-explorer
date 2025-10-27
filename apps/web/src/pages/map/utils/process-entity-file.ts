@@ -177,7 +177,7 @@ async function processSprites({
     imageFile.includes('lantern_small_flame.xml') &&
     !imageFile.includes('data/particles/smoke_orange.xml')
   ) {
-    debugger;
+    // debugger;
   }
 }
 

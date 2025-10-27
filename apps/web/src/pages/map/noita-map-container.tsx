@@ -120,7 +120,7 @@ const MouseCoordinates = () => {
 
   return position ? (
     <div style={positionStyle}>
-      X: {position.lng.toFixed(2)}, Y: {position.lat.toFixed(2)}
+      X: {position.lng.toFixed(2)}, Y: {-position.lat.toFixed(2)}
     </div>
   ) : null; // Don't render anything if the mouse is off the map
 };

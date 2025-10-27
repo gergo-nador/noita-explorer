@@ -1,5 +1,6 @@
 import { Buffer } from 'buffer';
 import { BufferReader } from './buffer-reader.types.ts';
+import { ImagePngDimension } from '@noita-explorer/model';
 
 export function createBufferReader(buffer: Buffer): BufferReader {
   let offset = 0;
@@ -18,6 +19,29 @@ export function createBufferReader(buffer: Buffer): BufferReader {
     ...args: Parameters<Buffer['toString']>
   ): ReturnType<Buffer['toString']> {
     return buffer.toString(...args);
+  }
+
+  function readPngHeader(): ImagePngDimension {
+    const magicNumbers1 = buffer.readUint32BE(0);
+    const magicNumbers2 = buffer.readUint32BE(4);
+
+    const PNG_MAGIC_NUMBER_1 = 0x89504e47;
+    const PNG_MAGIC_NUMBER_2 = 0x0d0a1a0a;
+
+    if (
+      magicNumbers1 !== PNG_MAGIC_NUMBER_1 ||
+      magicNumbers2 !== PNG_MAGIC_NUMBER_2
+    ) {
+      throw new Error('Invalid PNG header bytes');
+    }
+
+    const width = buffer.readInt32BE(16);
+    const height = buffer.readInt32BE(20);
+
+    return {
+      width,
+      height,
+    };
   }
 
   function readString(length: number, encoding?: BufferEncoding) {
@@ -116,6 +140,7 @@ export function createBufferReader(buffer: Buffer): BufferReader {
     toString,
 
     readString,
+    readPngHeader,
 
     readFloatBE,
     readDoubleBE,

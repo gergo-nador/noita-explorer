@@ -1,5 +1,5 @@
 import { Buffer } from 'buffer';
-import { ReturnFunction } from '@noita-explorer/model';
+import { ReturnFunction, ImagePngDimension } from '@noita-explorer/model';
 
 export interface BufferReader {
   jumpBytes: (bytes: number) => void;
@@ -8,6 +8,7 @@ export interface BufferReader {
   toString: Buffer['toString'];
   getBuffer: () => Buffer;
 
+  readPngHeader: () => ImagePngDimension;
   readString: (length: number, encoding?: BufferEncoding) => string;
 
   // floating point

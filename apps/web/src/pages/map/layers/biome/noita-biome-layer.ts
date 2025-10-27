@@ -52,16 +52,16 @@ export const NoitaBiomeLayer = L.GridLayer.extend({
       return tile;
     }
 
-    const chunkMinX = coords.x * 512;
-    const chunkMaxX = (coords.x + 1) * 512;
-    const chunkMinY = coords.y * 512;
-    const chunkMaxY = (coords.y + 1) * 512;
+    const chunkLeftBorderX = coords.x * 512;
+    const chunkRightBorderX = (coords.x + 1) * 512;
+    const chunkTopBorderY = coords.y * 512;
+    const chunkBottomBorderY = (coords.y + 1) * 512;
 
     const backgrounds = streamInfo.backgrounds.filter((bg) => {
-      if (bg.position.x < chunkMinX) return false;
-      if (bg.position.x >= chunkMaxX) return false;
-      if (bg.position.y < chunkMinY) return false;
-      if (bg.position.y >= chunkMaxY) return false;
+      if (bg.position.x < chunkLeftBorderX) return false;
+      if (bg.position.x >= chunkRightBorderX) return false;
+      if (bg.position.y < chunkTopBorderY) return false;
+      if (bg.position.y >= chunkBottomBorderY) return false;
 
       return true;
     });
@@ -69,7 +69,7 @@ export const NoitaBiomeLayer = L.GridLayer.extend({
     const bgImagePath = biome.bgImagePath;
 
     async function render(ctx: CanvasRenderingContext2D) {
-      if (bgImagePath && biome.loadBgImage) {
+      if (Math.random() > 1 && bgImagePath && biome.loadBgImage) {
         const img = new Image();
         img.src = bgImagePath;
 
@@ -92,8 +92,9 @@ export const NoitaBiomeLayer = L.GridLayer.extend({
 
           await new Promise((resolve) => {
             img.onload = () => {
-              const relativeX = background.position.x % 512;
-              const relativeY = background.position.y % 512;
+              const relativeX = background.position.x - chunkLeftBorderX;
+              const relativeY = background.position.y - chunkTopBorderY;
+              debugger;
               ctx.drawImage(img, relativeX, relativeY);
               resolve(img);
             };
