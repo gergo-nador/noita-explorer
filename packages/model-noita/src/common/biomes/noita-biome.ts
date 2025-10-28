@@ -1,3 +1,5 @@
+import { Vector2d } from '@noita-explorer/model';
+
 export interface NoitaBiome {
   group: string;
   bgImagePath?: string;
@@ -7,6 +9,10 @@ export interface NoitaBiome {
   bgImageEdgeBottom?: string;
   bgImageEdgePriority?: number;
   limitBackgroundImage: boolean;
-  backgroundImageHeight: number | undefined;
-  staticTileBgMask: string | undefined;
+  backgroundImageHeight?: number;
+  staticTile?: {
+    bgMask: string;
+    position: Vector2d;
+    size: Vector2d;
+  };
 }

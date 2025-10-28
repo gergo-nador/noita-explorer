@@ -21,6 +21,7 @@ export function createNoitaWakBiomesHelper({ biomes }: Props) {
 
     return biomes.biomes[biomeIndex];
   }
+
   return {
     getBiome,
   };

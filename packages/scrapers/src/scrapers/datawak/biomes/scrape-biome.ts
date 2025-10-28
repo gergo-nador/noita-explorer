@@ -59,6 +59,12 @@ export const scrapeBiome = async ({
     bgImageEdgePriority,
     limitBackgroundImage,
     backgroundImageHeight,
-    staticTileBgMask,
+    staticTile: staticTileBgMask
+      ? {
+          bgMask: staticTileBgMask,
+          position: { x: 0, y: 0 },
+          size: { x: 0, y: 0 },
+        }
+      : undefined,
   };
 };

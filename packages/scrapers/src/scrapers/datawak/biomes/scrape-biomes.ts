@@ -4,6 +4,7 @@ import { noitaPaths } from '../../../noita-paths.ts';
 import { scrapeBiome } from './scrape-biome.ts';
 import { scrapeBiomeImageMap } from './scrape-biome-image-map.ts';
 import { NoitaBiomeMap, NoitaWakBiomes } from '@noita-explorer/model-noita';
+import { processStaticBiomes } from './process-static-biomes.ts';
 
 export const scrapeBiomes = async ({
   dataWakParentDirectoryApi,
@@ -87,7 +88,7 @@ export const scrapeBiomes = async ({
     biomeIndices.push(row);
   }
 
-  // 5. Step: final touches
+  // 5. find the dimensions of the static dimensions
   const biomeMap: NoitaBiomeMap = {
     biomeOffset: { x: biomeOffsetX, y: biomeOffsetY },
     biomeSize: { x: biomeMapRaw.width, y: biomeMapRaw.height },
@@ -95,6 +96,7 @@ export const scrapeBiomes = async ({
   };
 
   const biomes = biomesWithColor.map((biome) => biome.biome);
+  processStaticBiomes({ biomes, map: biomeMap });
 
   return { biomeMap, biomes };
 };
