@@ -11,6 +11,7 @@ import {
   NoitaEntityFileCollection,
   NoitaPetriFileCollection,
 } from '../../noita-map.types.ts';
+import { useThreadsPool } from '../../map-renderer-threads/use-threads-pool.ts';
 
 export function NoitaMapMainTerrainLayer({
   petriFiles,
@@ -29,6 +30,7 @@ export function NoitaMapMainTerrainLayer({
 }) {
   const map = useMap();
   const layerRef = useRef<L.GridLayer | null>(null);
+  const threadsPool = useThreadsPool();
 
   useEffect(() => {
     if (!layerRef.current) {
@@ -51,6 +53,7 @@ export function NoitaMapMainTerrainLayer({
         materialImageCache,
         materialColorCache,
         streamInfo,
+        renderPool: threadsPool?.pool,
       });
 
       // Add the layer to the map

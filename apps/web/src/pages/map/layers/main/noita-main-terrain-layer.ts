@@ -1,13 +1,15 @@
 import L from 'leaflet';
-import { renderChunk } from '@noita-explorer/map';
 import {
   NoitaEntityFileCollection,
   NoitaPetriFileCollection,
 } from '../../noita-map.types.ts';
 import { processPetriFile } from '../../utils/process-petri-file.ts';
-import { processEntityFile } from '../../utils/process-entity-file.ts';
 import { fastLzCompressorService } from '../../../../utils/fast-lz-compressor-service.ts';
 import { StreamInfoFileFormat } from '@noita-explorer/model-noita';
+import {
+  MapRendererPool,
+  MapRendererWorker,
+} from '../../map-renderer-threads/threads-pool.types.ts';
 
 export const NoitaMainTerrainLayer = L.GridLayer.extend({
   createTile: function (coords: L.Coords, done: L.DoneCallback): HTMLElement {
@@ -33,6 +35,40 @@ export const NoitaMainTerrainLayer = L.GridLayer.extend({
     const entityFileNum = 2000 * coords.y + coords.x;
     const entityFile = entityFiles[entityFileNum];
 
+    const renderPool: MapRendererPool = this.options.renderPool;
+
+    const canvas = document.createElement('canvas');
+    canvas.style.imageRendering = 'pixelated';
+    canvas.width = 512;
+    canvas.height = 512;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) {
+      tile.innerHTML = '';
+      done(new Error('nope'), tile);
+      return tile;
+    }
+
+    fastLzCompressorService
+      .get()
+      .then(async (compressor) => ({
+        chunk: await processPetriFile({ petriFile, compressor }),
+      }))
+      .then(async (processedData) => {
+        renderPool
+          .queue((worker: MapRendererWorker) =>
+            worker.renderTerrainTile({ chunk: processedData.chunk }),
+          )
+          .then((imageData: ImageData | undefined) => {
+            if (imageData) {
+              ctx.putImageData(imageData, 0, 0);
+              tile.appendChild(canvas);
+            }
+          })
+          .then(() => done(undefined, tile));
+      });
+
+    /*
     fastLzCompressorService
       .get()
       .then(async (compressor) => ({
@@ -76,7 +112,7 @@ export const NoitaMainTerrainLayer = L.GridLayer.extend({
         tile.appendChild(div);
 
         done(error, tile);
-      });
+      });*/
 
     return tile;
   },

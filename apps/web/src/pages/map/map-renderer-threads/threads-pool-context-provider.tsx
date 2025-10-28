@@ -4,13 +4,14 @@ import { Pool, spawn } from 'threads';
 import { MapRenderType } from '../../../workers-web/map/map-render.types.ts';
 import MapWorkerUrl from '../../../workers-web/map/map-render.worker.ts?worker';
 import { ThreadsPoolContext } from './threads-pool-context.ts';
+import { MapRendererPool } from './threads-pool.types.ts';
 
 interface Props {
   children: React.ReactNode;
 }
 
 export const ThreadsPoolContextProvider = ({ children }: Props) => {
-  const [pool, setPool] = useState<Pool<MapRenderType>>();
+  const [pool, setPool] = useState<MapRendererPool>();
 
   useEffect(() => {
     // Create a pool with multiple workers

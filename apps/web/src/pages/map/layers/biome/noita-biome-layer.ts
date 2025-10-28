@@ -5,9 +5,10 @@ import {
   StreamInfoFileFormat,
 } from '@noita-explorer/model-noita';
 import { Vector2d } from '@noita-explorer/model';
-import { MapRenderType } from '../../../../workers-web/map/map-render.types.ts';
-// @ts-expect-error threads module is installed
-import { Pool } from 'threads';
+import {
+  MapRendererPool,
+  MapRendererWorker,
+} from '../../map-renderer-threads/threads-pool.types.ts';
 
 export const NoitaBiomeLayer = L.GridLayer.extend({
   createTile: function (coords: L.Coords, done: L.DoneCallback): HTMLElement {
@@ -68,8 +69,9 @@ export const NoitaBiomeLayer = L.GridLayer.extend({
 
     const currentBackgrounds = allBackgrounds[coords.x]?.[coords.y] ?? [];
 
-    const renderPool: Pool<MapRenderType> = this.options.renderPool;
-    renderPool.queue((worker) => {
+    const renderPool: MapRendererPool = this.options.renderPool;
+
+    renderPool.queue((worker: MapRendererWorker) => {
       worker
         .renderBiomeTile({
           biome,
@@ -81,8 +83,8 @@ export const NoitaBiomeLayer = L.GridLayer.extend({
             bottomY: chunkBottomBorderY,
           },
         })
-        .then((imageData: ImageData) => {
-          ctx.putImageData(imageData, 0, 0);
+        .then((imageData: ImageData | undefined) => {
+          if (imageData) ctx.putImageData(imageData, 0, 0);
         })
         .then(() => done(undefined, tile));
     });

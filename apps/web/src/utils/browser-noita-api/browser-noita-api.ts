@@ -16,6 +16,7 @@ import {
 import { noiToast } from '@noita-explorer/noita-component-library';
 import { runActions } from './run-actions.ts';
 import { fastLzCompressorService } from '../fast-lz-compressor-service.ts';
+import { fetchDataWak } from './fetch-data-wak.ts';
 
 export function browserNoitaApi(): NoitaAPI {
   return {
@@ -40,10 +41,7 @@ export function browserNoitaApi(): NoitaAPI {
       },
       dataFile: {
         get: () => {
-          // in case the data structure of the json file changes between deploys,
-          // then it force re-fetches the file
-          const url = `/noita_wak_data.json?id=${__DEPLOY_ID__}`;
-          return fetch(url).then((r) => r.json());
+          return fetchDataWak();
         },
         exists: () => promiseHelper.fromValue(true),
         write: throwNotAllowedInThisModeError,

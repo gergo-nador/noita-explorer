@@ -10,3 +10,4 @@ export type {
 export type { ChunkBorders } from './interfaces/chunk-borders.ts';
 export { mapConstants } from './map-constants.ts';
 export { renderBiomeTile } from './render/biomes/render-biome-tile.ts';
+export { renderTerrainTile } from './render/terrain/render-terrain-tile.ts';
