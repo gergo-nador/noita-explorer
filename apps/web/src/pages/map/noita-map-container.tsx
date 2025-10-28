@@ -58,16 +58,14 @@ export function NoitaMapContainer({
               streamInfo={streamInfo}
               biomes={biomes}
             />
-            {Math.random() > 1 && (
-              <NoitaMapMainTerrainLayer
-                petriFiles={petriFiles}
-                entityFiles={entityFiles}
-                materials={materials}
-                materialColorCache={materialColorCache}
-                materialImageCache={materialImageCache}
-                streamInfo={streamInfo}
-              />
-            )}
+            <NoitaMapMainTerrainLayer
+              petriFiles={petriFiles}
+              entityFiles={entityFiles}
+              materials={materials}
+              materialColorCache={materialColorCache}
+              materialImageCache={materialImageCache}
+              streamInfo={streamInfo}
+            />
             <NoitaMapEntityLazyLoadingLayer
               entityFiles={entityFiles}
               streamInfo={streamInfo}

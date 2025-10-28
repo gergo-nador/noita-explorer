@@ -16,15 +16,52 @@ export async function renderBiomeTile({
   backgroundItems,
   chunkBorders,
 }: Props) {
+  const CAVE_LIMIT_Y = 225;
   try {
     const bgImagePath = biome.bgImagePath;
 
-    if (bgImagePath && Math.random() > 1) {
+    if (bgImagePath) {
       const { img, close } = await fetchImageBitmap(bgImagePath);
 
       for (let i = 0; i < mapConstants.chunkWidth; i += img.width) {
         for (let j = 0; j < mapConstants.chunkHeight; j += img.height) {
-          ctx.drawImage(img, i, j);
+          // if there is no limitation or the limitation not applies for this chunk
+          if (!biome.limitBackgroundImage || chunkBorders.topY > CAVE_LIMIT_Y) {
+            ctx.drawImage(img, i, j);
+            continue;
+          }
+
+          // skip rendering if we are way past the limit
+          const bgLimit = biome.backgroundImageHeight ?? CAVE_LIMIT_Y;
+          if (biome.limitBackgroundImage && chunkBorders.bottomY < bgLimit)
+            continue;
+
+          // bg limit in the current chunk
+          const currentImageTop = j;
+          const currentImageBottom = j + img.height;
+
+          // if the current image is above limit, skip
+          if (chunkBorders.topY + currentImageBottom < bgLimit) continue;
+          // if the current image is below limit, render
+          if (chunkBorders.topY + currentImageTop > bgLimit) {
+            ctx.drawImage(img, i, j);
+            continue;
+          }
+
+          // bg limit in the current chunk
+          const sy = bgLimit - j;
+          const height = img.height - sy;
+          ctx.drawImage(
+            img,
+            0,
+            sy,
+            img.width,
+            height,
+            i,
+            j + sy,
+            img.width,
+            height,
+          );
         }
       }
 
@@ -77,7 +114,6 @@ export async function renderBiomeTile({
       destWidth > mapConstants.chunkWidth ||
       destHeight > mapConstants.chunkHeight
     ) {
-      debugger;
       return;
     }
 

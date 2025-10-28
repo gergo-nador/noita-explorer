@@ -39,6 +39,7 @@ export const NoitaMainTerrainLayer = L.GridLayer.extend({
     canvas.style.imageRendering = 'pixelated';
     canvas.width = 512;
     canvas.height = 512;
+    canvas.style.opacity = '0.3';
 
     const ctx = canvas.getContext('2d');
     if (!ctx) {
