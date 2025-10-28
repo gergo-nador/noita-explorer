@@ -44,6 +44,7 @@ export function renderChunk({
   const customColorIndexRef: ValueRef<number> = { value: 0 };
 
   const pixelCalculator: PixelCalculator = (x, y) =>
+    // @ts-expect-error not used anymore
     renderChunkPixel({
       x,
       y,

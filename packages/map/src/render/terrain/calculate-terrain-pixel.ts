@@ -1,8 +1,4 @@
-import {
-  RgbaColor,
-  StringKeyDictionary,
-  ValueRef,
-} from '@noita-explorer/model';
+import { StringKeyDictionary, ValueRef } from '@noita-explorer/model';
 import { colorHelpers } from '@noita-explorer/tools';
 import { ChunkFileFormat, NoitaMaterial } from '@noita-explorer/model-noita';
 
@@ -13,7 +9,7 @@ interface Props {
   customColorIndexRef: ValueRef<number>;
   materials: StringKeyDictionary<NoitaMaterial>;
   materialImageCache: StringKeyDictionary<ImageData>;
-  materialColorCache: StringKeyDictionary<RgbaColor>;
+  materialColorCache: StringKeyDictionary<number>;
 }
 
 export function calculateTerrainPixel({
@@ -24,7 +20,7 @@ export function calculateTerrainPixel({
   materials,
   materialColorCache,
   materialImageCache,
-}: Props) {
+}: Props): number {
   const i = y * chunk.width + x;
   const cellData = chunk.cellData[i];
 
@@ -38,19 +34,13 @@ export function calculateTerrainPixel({
     const o3 = (customColor & 0x0000ff00) >>> 8;
     const o4 = (customColor & 0x000000ff) >>> 0;
 
-    const color: RgbaColor = {
-      r: o4,
-      g: o3,
-      b: o2,
-      a: o1,
-    };
-
-    return color;
+    const rgba = (o4 << 24) | (o3 << 16) | (o2 << 8) | o1;
+    return rgba;
   }
 
   const materialId = chunk.materialIds[cellData];
   if (materialId === 'air') {
-    return colorHelpers.emptyColor;
+    return 0;
   }
 
   if (materialId in materialColorCache) {
@@ -59,7 +49,7 @@ export function calculateTerrainPixel({
 
   const material = materials[materialId];
   if (!material) {
-    return colorHelpers.emptyColor;
+    return 0;
   }
 
   if (material.hasGraphicsImage) {
@@ -74,19 +64,20 @@ export function calculateTerrainPixel({
     const pixelData = materialImageData.data;
     const index = (colorY * materialImageData.width + colorX) * 4;
 
-    const color = {
-      r: pixelData[index],
-      g: pixelData[index + 1],
-      b: pixelData[index + 2],
-      a: pixelData[index + 3],
-    };
+    const r = pixelData[index];
+    const g = pixelData[index + 1];
+    const b = pixelData[index + 2];
+    const a = pixelData[index + 3];
 
-    return color;
+    const color = (r << 24) | (g << 16) | (b << 8) | a;
+    const unsignedColor = color >>> 0;
+
+    return unsignedColor;
   }
 
   const matColor = colorHelpers.conversion
     .fromArgbString(material.graphicsColor ?? material.wangColor)
-    .toRgbaObj();
+    .toRgbaNum();
 
   materialColorCache[materialId] = matColor;
 

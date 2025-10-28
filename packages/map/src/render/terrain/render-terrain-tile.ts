@@ -1,8 +1,4 @@
-import {
-  RgbaColor,
-  StringKeyDictionary,
-  ValueRef,
-} from '@noita-explorer/model';
+import { StringKeyDictionary, ValueRef } from '@noita-explorer/model';
 import { ChunkFileFormat, NoitaMaterial } from '@noita-explorer/model-noita';
 import { renderPixelatedImage } from '../../utils/render-pixelated-image.ts';
 import { calculateTerrainPixel } from './calculate-terrain-pixel.ts';
@@ -12,7 +8,7 @@ interface Props {
   chunk: ChunkFileFormat;
   materials: StringKeyDictionary<NoitaMaterial>;
   materialImageCache: StringKeyDictionary<ImageData>;
-  materialColorCache: StringKeyDictionary<RgbaColor>;
+  materialColorCache: StringKeyDictionary<number>;
 }
 
 export function renderTerrainTile({

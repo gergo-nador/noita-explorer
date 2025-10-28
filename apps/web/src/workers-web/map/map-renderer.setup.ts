@@ -20,7 +20,7 @@ export async function mapRendererSetup() {
     materialColorCache[material.id] = imgData;
   }
 
-  return { materials: materialsDict, materialColorCache };
+  return { materials: materialsDict, materialColorCache, fastLzCompressor };
 }
 
 async function fetchAndDecodeImage(url: string) {

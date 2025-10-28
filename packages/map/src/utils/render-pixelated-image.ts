@@ -21,18 +21,18 @@ export function renderPixelatedImage({
   calculatePixel,
 }: Props) {
   const data = imageData.data;
+  const dataView = new DataView(data.buffer);
 
   for (let y = 0; y < height; y++) {
     for (let x = 0; x < width; x++) {
       const color = calculatePixel(x, y, width, height);
-      if (color.a === 0) continue;
+
+      const isTransparent = (color & 0xff) === 0;
+      if (isTransparent) continue;
 
       const index = (y * width + x) * 4;
 
-      data[index] = color.r;
-      data[index + 1] = color.g;
-      data[index + 2] = color.b;
-      data[index + 3] = color.a;
+      dataView.setInt32(index, color);
     }
   }
 }
