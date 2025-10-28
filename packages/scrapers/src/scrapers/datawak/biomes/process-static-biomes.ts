@@ -17,14 +17,14 @@ export function processStaticBiomes({ biomes, map }: Props) {
 
     for (let i = 0; i < map.biomeSize.x; i++) {
       for (let j = 0; j < map.biomeSize.y; j++) {
-        const currentBiomeIndex = map.biomeIndices[i][j];
+        const currentBiomeIndex = map.biomeIndices[j][i];
         if (currentBiomeIndex !== biomeIndex) continue;
 
         if (firstBiomeLocation === undefined) {
           firstBiomeLocation = { x: i, y: j };
         }
 
-        lastBiomeLocation = { x: j, y: j };
+        lastBiomeLocation = { x: i, y: j };
       }
     }
 
@@ -32,10 +32,13 @@ export function processStaticBiomes({ biomes, map }: Props) {
       continue;
     }
 
-    staticTile.position = firstBiomeLocation;
+    staticTile.position = {
+      x: firstBiomeLocation.x - map.biomeOffset.x,
+      y: firstBiomeLocation.y - map.biomeOffset.y,
+    };
     staticTile.size = {
-      x: lastBiomeLocation.x - firstBiomeLocation.x,
-      y: lastBiomeLocation.y - firstBiomeLocation.y,
+      x: lastBiomeLocation.x - firstBiomeLocation.x + 1,
+      y: lastBiomeLocation.y - firstBiomeLocation.y + 1,
     };
   }
 }

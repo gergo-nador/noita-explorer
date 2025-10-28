@@ -19,13 +19,14 @@ const mapRenderer: MapRenderType = {
       mapConstants.chunkWidth,
       mapConstants.chunkHeight,
     );
-    const ctx = offScreenCanvas.getContext('2d');
+    const ctx = offScreenCanvas.getContext('2d', { alpha: true });
     if (!ctx) {
       return;
     }
 
     const setupData = await setupDataPromise;
 
+    ctx.clearRect(0, 0, mapConstants.chunkWidth, mapConstants.chunkHeight);
     await renderBiomeTile({
       ctx,
       chunkBorders: props.chunkBorders,
