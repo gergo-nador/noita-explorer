@@ -66,10 +66,12 @@ export function NoitaMapContainer({
               materialImageCache={materialImageCache}
               streamInfo={streamInfo}
             />
-            <NoitaMapEntityLazyLoadingLayer
-              entityFiles={entityFiles}
-              streamInfo={streamInfo}
-            />
+            {Math.random() > 1 && (
+              <NoitaMapEntityLazyLoadingLayer
+                entityFiles={entityFiles}
+                streamInfo={streamInfo}
+              />
+            )}
           </>
         )}
 
