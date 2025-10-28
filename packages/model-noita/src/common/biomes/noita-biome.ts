@@ -6,5 +6,6 @@ export interface NoitaBiome {
   bgImageEdgeTop?: string;
   bgImageEdgeBottom?: string;
   bgImageEdgePriority?: number;
-  loadBgImage: boolean;
+  limitBackgroundImage: boolean;
+  backgroundImageHeight: number | undefined;
 }

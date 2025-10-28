@@ -18,9 +18,8 @@ export async function renderBiomeTile({
 }: Props) {
   try {
     const bgImagePath = biome.bgImagePath;
-    const shouldSkip = !bgImagePath || !biome.loadBgImage;
 
-    if (!shouldSkip) {
+    if (bgImagePath && Math.random() > 1) {
       const { img, close } = await fetchImageBitmap(bgImagePath);
 
       for (let i = 0; i < mapConstants.chunkWidth; i += img.width) {
@@ -39,19 +38,29 @@ export async function renderBiomeTile({
   for (const background of backgroundItems) {
     const { img, close } = await fetchImageBitmap(background.fileName);
 
-    const sourceX = Math.max(chunkBorders.leftX - background.position.x, 0);
-    const sourceY = Math.max(chunkBorders.topY - background.position.y, 0);
-    const sourceWidth = Math.min(
-      chunkBorders.rightX - background.position.x,
-      img.width,
-    );
-    const sourceHeight = Math.min(
-      chunkBorders.bottomY - background.position.y,
-      img.height,
-    );
+    // source X
+    const bgAbsLeftX = background.position.x;
+    const bgAbsRightX = background.position.x + img.width;
 
-    const destX = Math.max(background.position.x - chunkBorders.leftX, 0);
-    const destY = Math.max(background.position.y - chunkBorders.topY, 0);
+    const sourceAbsLeftX = Math.max(chunkBorders.leftX, bgAbsLeftX);
+    const sourceAbsRightX = Math.min(chunkBorders.rightX, bgAbsRightX);
+
+    const sourceX = sourceAbsLeftX - bgAbsLeftX;
+    const sourceWidth = sourceAbsRightX - sourceAbsLeftX;
+
+    // source Y
+    const bgAbsTopY = background.position.y;
+    const bgAbsBottomY = background.position.y + img.height;
+
+    const sourceAbsTopY = Math.max(chunkBorders.topY, bgAbsTopY);
+    const sourceAbsBottomY = Math.min(chunkBorders.bottomY, bgAbsBottomY);
+
+    const sourceY = sourceAbsTopY - bgAbsTopY;
+    const sourceHeight = sourceAbsBottomY - sourceAbsTopY;
+
+    // destination
+    const destX = sourceAbsLeftX - chunkBorders.leftX;
+    const destY = sourceAbsTopY - chunkBorders.topY;
     const destWidth = sourceWidth;
     const destHeight = sourceHeight;
 
@@ -68,6 +77,7 @@ export async function renderBiomeTile({
       destWidth > mapConstants.chunkWidth ||
       destHeight > mapConstants.chunkHeight
     ) {
+      debugger;
       return;
     }
 

@@ -38,7 +38,12 @@ export const scrapeBiome = async ({
     .getAttribute('background_edge_priority')
     ?.asInt();
 
-  const loadBgImage = true;
+  const limitBackgroundImage =
+    topologyTag.getAttribute('limit_background_image')?.asBoolean() ?? true;
+
+  const backgroundImageHeight = topologyTag
+    .getAttribute('background_image_height')
+    ?.asInt();
 
   return {
     group: color,
@@ -48,6 +53,7 @@ export const scrapeBiome = async ({
     bgImageEdgeTop,
     bgImageEdgeBottom,
     bgImageEdgePriority,
-    loadBgImage,
+    limitBackgroundImage,
+    backgroundImageHeight,
   };
 };
