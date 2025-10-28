@@ -155,7 +155,11 @@ export const scrapeDataWakContent = async ({
   }
 
   let biomes: NoitaWakBiomes = {
-    biomeMap: { biomeOffset: { x: 0, y: 0 }, biomeIndices: [] },
+    biomeMap: {
+      biomeOffset: { x: 0, y: 0 },
+      biomeSize: { x: 0, y: 0 },
+      biomeIndices: [],
+    },
     biomes: [],
   };
   let biomesError: unknown | undefined = undefined;

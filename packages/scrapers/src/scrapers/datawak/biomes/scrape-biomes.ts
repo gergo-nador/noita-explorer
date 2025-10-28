@@ -90,6 +90,7 @@ export const scrapeBiomes = async ({
   // 5. Step: final touches
   const biomeMap: NoitaBiomeMap = {
     biomeOffset: { x: biomeOffsetX, y: biomeOffsetY },
+    biomeSize: { x: biomeMapRaw.width, y: biomeMapRaw.height },
     biomeIndices,
   };
 

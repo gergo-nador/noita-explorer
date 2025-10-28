@@ -49,7 +49,10 @@ export async function cacheMiddleWare(
     },
   );
 
-  await cache.put(request.request, realResponse.clone());
+  // don't cache in dev
+  if (__ENV__ !== 'development') {
+    await cache.put(request.request, realResponse.clone());
+  }
 
   return new HttpResponse(realResponse.body, {
     status: realResponse.status,

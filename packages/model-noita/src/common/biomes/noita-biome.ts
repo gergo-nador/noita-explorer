@@ -8,4 +8,5 @@ export interface NoitaBiome {
   bgImageEdgePriority?: number;
   limitBackgroundImage: boolean;
   backgroundImageHeight: number | undefined;
+  staticTileBgMask: string | undefined;
 }

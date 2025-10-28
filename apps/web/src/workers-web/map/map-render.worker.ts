@@ -24,11 +24,14 @@ const mapRenderer: MapRenderType = {
       return;
     }
 
+    const setupData = await setupDataPromise;
+
     await renderBiomeTile({
       ctx,
       chunkBorders: props.chunkBorders,
       backgroundItems: props.backgrounds,
-      biome: props.biome,
+      biomeCoords: props.biomeCoords,
+      biomes: setupData.biomes,
     });
 
     return ctx.getImageData(

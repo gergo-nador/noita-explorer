@@ -16,7 +16,7 @@ export const ThreadsPoolContextProvider = ({ children }: Props) => {
   useEffect(() => {
     // Create a pool with multiple workers
     const pool = Pool<MapRenderType>(() => spawn(new MapWorkerUrl()), {
-      size: 1,
+      size: 4,
       concurrency: 1,
     });
 

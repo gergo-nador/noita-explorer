@@ -23,7 +23,12 @@ export async function mapRendererSetup() {
 
   const fastLzCompressor = await createFastLzCompressor();
 
-  return { materials: materialsDict, materialColorCache, fastLzCompressor };
+  return {
+    materials: materialsDict,
+    materialColorCache,
+    fastLzCompressor,
+    biomes: noitaDataWak.biomes,
+  };
 }
 
 async function fetchAndDecodeImage(url: string) {

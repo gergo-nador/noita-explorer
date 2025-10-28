@@ -1,10 +1,8 @@
 import L from 'leaflet';
 import {
-  NoitaWakBiomes,
   StreamInfoBackground,
   StreamInfoFileFormat,
 } from '@noita-explorer/model-noita';
-import { Vector2d } from '@noita-explorer/model';
 import {
   MapRendererPool,
   MapRendererWorker,
@@ -24,26 +22,6 @@ export const NoitaBiomeLayer = L.GridLayer.extend({
     if (!chunkInfo?.loaded) {
       tile.innerHTML = '';
       done(undefined, tile);
-      return tile;
-    }
-
-    const wakBiomes: NoitaWakBiomes = this.options.biomes;
-    function getBiome({ x, y }: Vector2d) {
-      y = Math.max(y, -wakBiomes.biomeMap.biomeOffset.y);
-
-      const biomeIndex =
-        wakBiomes.biomeMap.biomeIndices[y + wakBiomes.biomeMap.biomeOffset.y]?.[
-          x + wakBiomes.biomeMap.biomeOffset.x
-        ];
-
-      return wakBiomes.biomes[biomeIndex];
-    }
-
-    const biome = getBiome(coords);
-    if (!biome) {
-      console.error('biome not found', coords);
-      tile.innerHTML = '';
-      done(new Error('nope'), tile);
       return tile;
     }
 
@@ -76,7 +54,7 @@ export const NoitaBiomeLayer = L.GridLayer.extend({
     renderPool.queue((worker: MapRendererWorker) => {
       worker
         .renderBiomeTile({
-          biome,
+          biomeCoords: coords,
           backgrounds: currentBackgrounds,
           chunkBorders: {
             leftX: chunkLeftBorderX,

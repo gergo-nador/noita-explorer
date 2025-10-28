@@ -45,6 +45,10 @@ export const scrapeBiome = async ({
     .getAttribute('background_image_height')
     ?.asInt();
 
+  const staticTileBgMask = topologyTag
+    .getAttribute('static_tile_bg_mask')
+    ?.asText();
+
   return {
     group: color,
     bgImagePath,
@@ -55,5 +59,6 @@ export const scrapeBiome = async ({
     bgImageEdgePriority,
     limitBackgroundImage,
     backgroundImageHeight,
+    staticTileBgMask,
   };
 };

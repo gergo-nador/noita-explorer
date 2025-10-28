@@ -1,21 +1,31 @@
-import { NoitaBiome, StreamInfoBackground } from '@noita-explorer/model-noita';
+import {
+  NoitaWakBiomes,
+  StreamInfoBackground,
+} from '@noita-explorer/model-noita';
 import { mapConstants } from '../../map-constants.ts';
 import { ChunkBorders } from '../../interfaces/chunk-borders.ts';
 import { fetchImageBitmap } from '../../utils/fetch-image-bitmap.ts';
+import { Vector2d } from '@noita-explorer/model';
+import { createNoitaWakBiomesHelper } from './noita-wak-biomes-helper.ts';
 
 interface Props {
   backgroundItems: StreamInfoBackground[];
-  biome: NoitaBiome;
+  biomeCoords: Vector2d;
   ctx: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D;
   chunkBorders: ChunkBorders;
+  biomes: NoitaWakBiomes;
 }
 
 export async function renderBiomeTile({
   ctx,
-  biome,
+  biomeCoords,
   backgroundItems,
   chunkBorders,
+  biomes,
 }: Props) {
+  const biomeHelpers = createNoitaWakBiomesHelper({ biomes });
+  const biome = biomeHelpers.getBiome(biomeCoords);
+
   const CAVE_LIMIT_Y = 225;
   try {
     const bgImagePath = biome.bgImagePath;
