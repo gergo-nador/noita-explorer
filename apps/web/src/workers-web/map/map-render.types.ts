@@ -1,9 +1,6 @@
 import { ChunkBorders } from '@noita-explorer/map';
-import {
-  ChunkFileFormat,
-  NoitaBiome,
-  StreamInfoBackground,
-} from '@noita-explorer/model-noita';
+import { NoitaBiome, StreamInfoBackground } from '@noita-explorer/model-noita';
+import { Buffer } from 'buffer';
 
 export interface MapRenderType {
   renderBiomeTile: (props: {
@@ -12,6 +9,6 @@ export interface MapRenderType {
     biome: NoitaBiome;
   }) => Promise<ImageData | undefined>;
   renderTerrainTile: (props: {
-    chunk: ChunkFileFormat;
+    petriFileBuffer: Buffer;
   }) => Promise<ImageData | undefined>;
 }

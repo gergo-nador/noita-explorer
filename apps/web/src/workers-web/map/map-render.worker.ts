@@ -7,10 +7,11 @@ import {
 } from '@noita-explorer/map';
 import { MapRenderType } from './map-render.types.ts';
 import { mapRendererSetup } from './map-renderer.setup.ts';
-import { RgbaColor, StringKeyDictionary } from '@noita-explorer/model';
+import { StringKeyDictionary } from '@noita-explorer/model';
+import { scrape } from '@noita-explorer/scrapers';
 
 const setupDataPromise = mapRendererSetup();
-const materialColorCache: StringKeyDictionary<RgbaColor> = {};
+const materialColorCache: StringKeyDictionary<number> = {};
 
 const mapRenderer: MapRenderType = {
   async renderBiomeTile(props) {
@@ -55,9 +56,14 @@ const mapRenderer: MapRenderType = {
     );
     const setupData = await setupDataPromise;
 
+    const petriContent = await scrape.save00.pngPetriFile({
+      pngPetriFile: props.petriFileBuffer,
+      fastLzCompressor: setupData.fastLzCompressor,
+    });
+
     renderTerrainTile({
       imageData,
-      chunk: props.chunk,
+      chunk: petriContent,
       materials: setupData.materials,
       materialColorCache,
       materialImageCache: setupData.materialColorCache,

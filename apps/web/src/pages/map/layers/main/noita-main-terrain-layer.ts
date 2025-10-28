@@ -3,8 +3,6 @@ import {
   NoitaEntityFileCollection,
   NoitaPetriFileCollection,
 } from '../../noita-map.types.ts';
-import { processPetriFile } from '../../utils/process-petri-file.ts';
-import { fastLzCompressorService } from '../../../../utils/fast-lz-compressor-service.ts';
 import { StreamInfoFileFormat } from '@noita-explorer/model-noita';
 import {
   MapRendererPool,
@@ -49,24 +47,19 @@ export const NoitaMainTerrainLayer = L.GridLayer.extend({
       return tile;
     }
 
-    fastLzCompressorService
-      .get()
-      .then(async (compressor) => ({
-        chunk: await processPetriFile({ petriFile, compressor }),
-      }))
-      .then(async (processedData) => {
-        renderPool
-          .queue((worker: MapRendererWorker) =>
-            worker.renderTerrainTile({ chunk: processedData.chunk }),
-          )
-          .then((imageData: ImageData | undefined) => {
-            if (imageData) {
-              ctx.putImageData(imageData, 0, 0);
-              tile.appendChild(canvas);
-            }
-          })
-          .then(() => done(undefined, tile));
-      });
+    renderPool
+      .queue(async (worker: MapRendererWorker) =>
+        worker.renderTerrainTile({
+          petriFileBuffer: await petriFile.read.asBuffer(),
+        }),
+      )
+      .then((imageData: ImageData | undefined) => {
+        if (imageData) {
+          ctx.putImageData(imageData, 0, 0);
+          tile.appendChild(canvas);
+        }
+      })
+      .then(() => done(undefined, tile));
 
     /*
     fastLzCompressorService

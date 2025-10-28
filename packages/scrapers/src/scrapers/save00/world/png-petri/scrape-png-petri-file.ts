@@ -1,24 +1,37 @@
 import { FileSystemFileAccess } from '@noita-explorer/model';
 import { uncompressNoitaFile } from '../../../../utils/noita-file-uncompress/uncompress-noita-file.ts';
-import { createBufferReader } from '@noita-explorer/tools';
+import { BufferReader, createBufferReader } from '@noita-explorer/tools';
 import { readBufferArray } from '../../../../utils/buffer-reader-utils/read-buffer-array.ts';
 import { readBufferString } from '../../../../utils/buffer-reader-utils/read-buffer-string.ts';
 import { ChunkFileFormat } from '@noita-explorer/model-noita';
 import { scrapePhysicsObject } from './scrape-physics-object.ts';
 import { FastLZCompressor } from '@noita-explorer/fastlz';
+import { uncompressNoitaBuffer } from '../../../../utils/noita-file-uncompress/uncompress-noita-buffer.ts';
+import { Buffer } from 'buffer';
 
 export const scrapePngPetriFile = async ({
   pngPetriFile,
   fastLzCompressor,
 }: {
-  pngPetriFile: FileSystemFileAccess;
+  pngPetriFile: FileSystemFileAccess | Buffer;
   fastLzCompressor: FastLZCompressor;
 }) => {
-  const uncompressedPngPetriBuffer = await uncompressNoitaFile(
-    pngPetriFile,
-    fastLzCompressor,
-  );
-  const bufferReader = createBufferReader(uncompressedPngPetriBuffer);
+  let bufferReader: BufferReader;
+
+  const isFile = 'read' in pngPetriFile;
+  if (!isFile) {
+    const uncompressedPetriBuffer = await uncompressNoitaBuffer(
+      pngPetriFile,
+      fastLzCompressor,
+    );
+    bufferReader = createBufferReader(uncompressedPetriBuffer);
+  } else {
+    const uncompressedPngPetriBuffer = await uncompressNoitaFile(
+      pngPetriFile,
+      fastLzCompressor,
+    );
+    bufferReader = createBufferReader(uncompressedPngPetriBuffer);
+  }
 
   const version = bufferReader.readInt32BE();
   const width = bufferReader.readInt32BE();

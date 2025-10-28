@@ -1,6 +1,7 @@
 import { arrayHelpers } from '@noita-explorer/tools';
 import { StringKeyDictionary } from '@noita-explorer/model';
 import { fetchDataWak } from '../../utils/browser-noita-api/fetch-data-wak.ts';
+import { createFastLzCompressor } from '@noita-explorer/fastlz';
 
 export async function mapRendererSetup() {
   const noitaDataWak = await fetchDataWak();
@@ -19,6 +20,8 @@ export async function mapRendererSetup() {
 
     materialColorCache[material.id] = imgData;
   }
+
+  const fastLzCompressor = await createFastLzCompressor();
 
   return { materials: materialsDict, materialColorCache, fastLzCompressor };
 }
