@@ -1,4 +1,4 @@
-import { Vector2d, RgbaColor } from '@noita-explorer/model';
+import { Vector2d } from '@noita-explorer/model';
 
 export interface ChunkRenderable {
   position: Vector2d;
@@ -6,5 +6,5 @@ export interface ChunkRenderable {
   rotation: number;
   width: number;
   height: number;
-  getPixel: (coords: Vector2d) => RgbaColor;
+  getPixel: (coords: Vector2d) => number;
 }

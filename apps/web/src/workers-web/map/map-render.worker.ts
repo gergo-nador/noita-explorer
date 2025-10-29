@@ -68,6 +68,7 @@ const mapRenderer: MapRenderType = {
     renderTerrainTile({
       imageData,
       chunk: petriContent,
+      chunkCoordinates: props.chunkCoordinates,
       materials: setupData.materials,
       materialColorCache,
       materialImageCache: setupData.materialColorCache,

@@ -51,6 +51,7 @@ export const NoitaMainTerrainLayer = L.GridLayer.extend({
       .queue(async (worker: MapRendererWorker) =>
         worker.renderTerrainTile({
           petriFileBuffer: await petriFile.read.asBuffer(),
+          chunkCoordinates: coords,
         }),
       )
       .then((imageData: ImageData | undefined) => {

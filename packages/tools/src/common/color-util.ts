@@ -71,7 +71,8 @@ function fromArgbNumber(argb: number) {
   const rgb = argb & 0xffffff;
   const rgba = (rgb << 8) | alpha;
 
-  return internalColor(rgba);
+  const unsigned = rgba >>> 0;
+  return internalColor(unsigned);
 }
 
 function fromBgraNumber(bgra: number) {
@@ -81,7 +82,8 @@ function fromBgraNumber(bgra: number) {
   const aa = bgra & 0xff;
 
   const rgba = (rr << 24) | (gg << 16) | (bb << 8) | aa;
-  return internalColor(rgba);
+  const unsigned = rgba >>> 0;
+  return internalColor(unsigned);
 }
 
 function fromAbgrNumber(bgra: number) {
@@ -91,7 +93,14 @@ function fromAbgrNumber(bgra: number) {
   const rr = bgra & 0xff;
 
   const rgba = (rr << 24) | (gg << 16) | (bb << 8) | aa;
-  return internalColor(rgba);
+  const unsigned = rgba >>> 0;
+  return internalColor(unsigned);
+}
+
+function fromRgbaVariables(r: number, g: number, b: number, a: number) {
+  const rgba = (r << 24) | (g << 16) | (b << 8) | a;
+  const unsigned = rgba >>> 0;
+  return internalColor(unsigned);
 }
 
 /*
@@ -188,6 +197,7 @@ export const colorHelpers = {
     fromRgbaString,
     fromBgraNumber,
     fromAbgrNumber,
+    fromRgbaVariables,
 
     argbToRgba: convertARGBToRGBA,
     rgbaToNumber: convertTextRgbaColorToNumber,

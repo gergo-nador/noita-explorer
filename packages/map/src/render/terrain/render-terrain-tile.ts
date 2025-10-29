@@ -1,11 +1,13 @@
-import { StringKeyDictionary, ValueRef } from '@noita-explorer/model';
+import { StringKeyDictionary, ValueRef, Vector2d } from '@noita-explorer/model';
 import { ChunkFileFormat, NoitaMaterial } from '@noita-explorer/model-noita';
 import { renderPixelatedImage } from '../../utils/render-pixelated-image.ts';
 import { calculateTerrainPixel } from './calculate-terrain-pixel.ts';
+import { renderPhysicsObjects } from './render-physics-objects.ts';
 
 interface Props {
   imageData: ImageData;
   chunk: ChunkFileFormat;
+  chunkCoordinates: Vector2d;
   materials: StringKeyDictionary<NoitaMaterial>;
   materialImageCache: StringKeyDictionary<ImageData>;
   materialColorCache: StringKeyDictionary<number>;
@@ -14,6 +16,7 @@ interface Props {
 export function renderTerrainTile({
   imageData,
   chunk,
+  chunkCoordinates,
   materials,
   materialImageCache,
   materialColorCache,
@@ -34,5 +37,11 @@ export function renderTerrainTile({
         materialImageCache,
         materialColorCache,
       }),
+  });
+
+  renderPhysicsObjects({
+    physicsObjects: chunk.physicsObjects,
+    chunkCoordinates: chunkCoordinates,
+    chunkImageData: imageData,
   });
 }

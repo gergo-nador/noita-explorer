@@ -1,12 +1,10 @@
 import { Vector2d } from '@noita-explorer/model';
-import { renderChunkRenderable } from './render-chunk-renderable.ts';
-import { ChunkRenderable } from './chunk-renderable.ts';
+import { renderTileRenderable } from '../utils/render-tile-renderable.ts';
+import { ChunkRenderable } from '../interfaces/chunk-renderable.ts';
 import { ChunkRenderableEntity } from './chunk-renderable-entity.ts';
-import { ChunkFileFormat } from '@noita-explorer/model-noita';
 
 interface Props {
   entities: ChunkRenderableEntity[];
-  chunk: ChunkFileFormat;
   chunkCoordinates: Vector2d;
   chunkImageData: ImageData;
 }
@@ -14,7 +12,6 @@ interface Props {
 export function renderChunkEntities({
   entities,
   chunkCoordinates,
-  chunk,
   chunkImageData,
 }: Props) {
   for (const entity of entities) {
@@ -35,13 +32,13 @@ export function renderChunkEntities({
           const b = sprite.imageData.data[index + 2];
           const a = sprite.imageData.data[index + 3];
 
-          return { r, g, b, a };
+          const rgba = (r << 24) | (g << 16) | (b << 8) | a;
+          return rgba;
         },
       };
 
-      renderChunkRenderable({
+      renderTileRenderable({
         chunkImageData,
-        chunk,
         chunkCoordinates,
         chunkRenderable,
       });

@@ -8,7 +8,6 @@ import { NoitaMaterial, ChunkFileFormat } from '@noita-explorer/model-noita';
 import { renderPixelatedImage } from '../utils/render-pixelated-image.ts';
 import { renderChunkPixel } from './render-chunk-pixel.ts';
 import { PixelCalculator } from '../interfaces/pixel-calculator.ts';
-import { renderPhysicsObjects } from './render-physics-objects.ts';
 import { renderChunkEntities } from './render-chunk-entities.ts';
 import { ChunkRenderableEntity } from './chunk-renderable-entity.ts';
 
@@ -56,11 +55,9 @@ export function renderChunk({
     });
 
   const imageData = ctx.createImageData(chunk.width, chunk.height);
-
   // first render the background entities
   renderChunkEntities({
     entities,
-    chunk,
     chunkCoordinates,
     chunkImageData: imageData,
   });
@@ -70,13 +67,6 @@ export function renderChunk({
     width: chunk.width,
     height: chunk.height,
     calculatePixel: pixelCalculator,
-  });
-  // render physics objects on top
-  renderPhysicsObjects({
-    physicsObjects: chunk.physicsObjects,
-    chunkCoordinates: chunkCoordinates,
-    chunk: chunk,
-    chunkImageData: imageData,
   });
 
   ctx.putImageData(imageData, 0, 0);

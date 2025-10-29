@@ -11,5 +11,6 @@ export interface MapRenderType {
   }) => Promise<ImageData | undefined>;
   renderTerrainTile: (props: {
     petriFileBuffer: Buffer;
+    chunkCoordinates: Vector2d;
   }) => Promise<ImageData | undefined>;
 }

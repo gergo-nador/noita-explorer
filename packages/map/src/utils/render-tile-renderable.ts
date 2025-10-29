@@ -1,16 +1,14 @@
-import { ChunkRenderable } from './chunk-renderable.ts';
+import { ChunkRenderable } from '../interfaces/chunk-renderable.ts';
 import { Vector2d } from '@noita-explorer/model';
-import { ChunkFileFormat } from '@noita-explorer/model-noita';
+import { mapConstants } from '../map-constants.ts';
 
 interface Props {
   chunkRenderable: ChunkRenderable;
-  chunk: ChunkFileFormat;
   chunkCoordinates: Vector2d;
   chunkImageData: ImageData;
 }
-export function renderChunkRenderable({
+export function renderTileRenderable({
   chunkRenderable,
-  chunk,
   chunkCoordinates,
   chunkImageData,
 }: Props) {
@@ -20,8 +18,10 @@ export function renderChunkRenderable({
   const width = chunkRenderable.width;
   const height = chunkRenderable.height;
 
-  const localX = Math.round(position.x) - chunk.width * chunkCoordinates.x;
-  const localY = Math.round(position.y) - chunk.height * chunkCoordinates.y;
+  const localX =
+    Math.round(position.x) - mapConstants.chunkWidth * chunkCoordinates.x;
+  const localY =
+    Math.round(position.y) - mapConstants.chunkHeight * chunkCoordinates.y;
 
   // smart optimization trick from @pudy248
   let lx = localX;
@@ -67,17 +67,28 @@ export function renderChunkRenderable({
       }
 
       const color = chunkRenderable.getPixel({ x: texX, y: texY });
-      if (color.a === 0) continue;
 
-      const index = (pixY * chunk.width + pixX) * 4;
+      const alpha = color & 0xff;
+      const isTransparent = alpha === 0;
+      if (isTransparent) continue;
+
+      const index = (pixY * mapConstants.chunkWidth + pixX) * 4;
 
       const data = chunkImageData.data;
 
-      const alpha = color.a / 255;
-      data[index] += color.r * alpha;
-      data[index + 1] += color.g * alpha;
-      data[index + 2] += color.b * alpha;
-      data[index + 3] = color.a * alpha;
+      const r = (color >>> 24) & 0xff;
+      const g = (color >>> 16) & 0xff;
+      const b = (color >>> 8) & 0xff;
+      const alphaMultiplier = alpha / 255;
+
+      const oldR = data[index] * (1 - alphaMultiplier);
+      const oldG = data[index + 1] * (1 - alphaMultiplier);
+      const oldB = data[index + 2] * (1 - alphaMultiplier);
+
+      data[index] = Math.min(oldR + r * alphaMultiplier, 255);
+      data[index + 1] = Math.min(oldG + g * alphaMultiplier, 255);
+      data[index + 2] = Math.min(oldB + b * alphaMultiplier, 255);
+      data[index + 3] = Math.min(data[index + 3] + alpha, 255);
     }
   }
 }

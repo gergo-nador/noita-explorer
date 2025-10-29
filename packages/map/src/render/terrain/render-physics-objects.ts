@@ -1,22 +1,17 @@
+import { ChunkRenderable } from '../../interfaces/chunk-renderable.ts';
 import { Vector2d } from '@noita-explorer/model';
-import { renderChunkRenderable } from './render-chunk-renderable.ts';
-import { ChunkRenderable } from './chunk-renderable.ts';
 import { colorHelpers } from '@noita-explorer/tools';
-import {
-  ChunkFileFormat,
-  ChunkPhysicsObject,
-} from '@noita-explorer/model-noita';
+import { renderTileRenderable } from '../../utils/render-tile-renderable.ts';
+import { ChunkPhysicsObject } from '@noita-explorer/model-noita';
 
 interface Props {
   physicsObjects: ChunkPhysicsObject[];
-  chunk: ChunkFileFormat;
   chunkCoordinates: Vector2d;
   chunkImageData: ImageData;
 }
 
 export function renderPhysicsObjects({
   physicsObjects,
-  chunk,
   chunkCoordinates,
   chunkImageData,
 }: Props) {
@@ -31,13 +26,12 @@ export function renderPhysicsObjects({
         const colorIndex = physicsObject.width * coords.y + coords.x;
         const color = physicsObject.pixelData[colorIndex];
 
-        return colorHelpers.conversion.fromAbgrNumber(color).toRgbaObj();
+        return colorHelpers.conversion.fromAbgrNumber(color).toRgbaNum();
       },
     };
 
-    renderChunkRenderable({
+    renderTileRenderable({
       chunkCoordinates,
-      chunk,
       chunkImageData,
       chunkRenderable,
     });
