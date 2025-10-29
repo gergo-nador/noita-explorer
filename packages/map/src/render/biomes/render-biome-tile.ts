@@ -2,7 +2,7 @@ import {
   NoitaWakBiomes,
   StreamInfoBackground,
 } from '@noita-explorer/model-noita';
-import { mapConstants } from '../../map-constants.ts';
+import { CAVE_LIMIT_Y, mapConstants } from '../../map-constants.ts';
 import { ChunkBorders } from '../../interfaces/chunk-borders.ts';
 import { fetchImageBitmap } from '../../utils/fetch-image-bitmap.ts';
 import { Vector2d } from '@noita-explorer/model';
@@ -27,7 +27,6 @@ export async function renderBiomeTile({
   const biomeHelpers = createNoitaWakBiomesHelper({ biomes });
   const biome = biomeHelpers.getBiome(biomeCoords);
 
-  const CAVE_LIMIT_Y = 225;
   const bgImagePath = biome.bgImagePath;
 
   if (bgImagePath) {
@@ -41,8 +40,12 @@ export async function renderBiomeTile({
           continue;
         }
 
+        const chunkRelativeCaveLimit =
+          mapConstants.chunkHeight -
+          Math.abs(CAVE_LIMIT_Y % mapConstants.chunkHeight);
+
         // skip rendering if we are way past the limit
-        const bgLimit = biome.backgroundImageHeight ?? CAVE_LIMIT_Y;
+        const bgLimit = biome.backgroundImageHeight ?? chunkRelativeCaveLimit;
         if (biome.limitBackgroundImage && chunkBorders.bottomY < bgLimit)
           continue;
 

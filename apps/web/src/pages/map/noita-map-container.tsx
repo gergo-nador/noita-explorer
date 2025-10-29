@@ -18,6 +18,7 @@ import { NoitaMapMainTerrainLayer } from './layers/main/noita-map-main-terrain-l
 import { NoitaMapBiomeLayer } from './layers/biome/noita-map-biome-layer.tsx';
 import { NoitaMapEntityLazyLoadingLayer } from './layers/entity/noita-map-entity-lazy-loading-layer.tsx';
 import { ThreadsPoolContextProvider } from './map-renderer-threads/threads-pool-context-provider.tsx';
+import { NoitaMapBackgroundLayer } from './layers/background/noita-map-background-layer.tsx';
 
 export function NoitaMapContainer({
   petriFiles,
@@ -44,15 +45,16 @@ export function NoitaMapContainer({
     <ThreadsPoolContextProvider>
       <MapContainer
         center={mapCenter}
-        zoom={2} // Start with a zoom level that shows a good area
+        zoom={2}
         scrollWheelZoom={true}
-        style={{ height: '80vh', width: '100%' }} // Important: Map needs a defined size
-        crs={L.CRS.Simple} // Use a simple coordinate system for a game map
+        style={{ height: '80vh', width: '100%' }}
+        crs={L.CRS.Simple}
       >
         {/* HERE is the change! We use our custom layer now.
          */}
         {!__SSG__ && (
           <>
+            <NoitaMapBackgroundLayer />
             <NoitaMapBiomeLayer
               worldPixelScenes={worldPixelScenes}
               streamInfo={streamInfo}

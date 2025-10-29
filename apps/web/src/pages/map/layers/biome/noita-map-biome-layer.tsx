@@ -9,6 +9,7 @@ import {
 } from '@noita-explorer/model-noita';
 import { useThreadsPool } from '../../map-renderer-threads/use-threads-pool.ts';
 import { useOrganizeBackgroundImages } from '../../hooks/use-organize-background-images.ts';
+import { useMapPane } from '../../hooks/use-map-pane.ts';
 
 interface Props {
   worldPixelScenes: WorldPixelSceneFileFormat;
@@ -22,6 +23,7 @@ export const NoitaMapBiomeLayer = ({
   biomes,
 }: Props) => {
   const map = useMap();
+  const pane = useMapPane({ name: 'noita-biome', zIndex: 1 });
   const threadsPool = useThreadsPool();
   const layerRef = useRef<L.GridLayer | null>(null);
   const { backgrounds, isLoaded: isBackgroundsLoaded } =
@@ -33,6 +35,7 @@ export const NoitaMapBiomeLayer = ({
     if (!layerRef.current) {
       // @ts-expect-error typescript doesn't know we can pass parameters
       const gridLayer = new NoitaBiomeLayer({
+        pane: pane.name,
         tileSize: 512,
         minZoom: -4,
         maxZoom: 5,
@@ -70,6 +73,7 @@ export const NoitaMapBiomeLayer = ({
     worldPixelScenes,
     backgrounds,
     isBackgroundsLoaded,
+    pane.name,
   ]); // Re-run effect if the map instance changes
 
   // This component does not render any JSX itself.

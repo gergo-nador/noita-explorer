@@ -12,6 +12,7 @@ import {
   NoitaPetriFileCollection,
 } from '../../noita-map.types.ts';
 import { useThreadsPool } from '../../map-renderer-threads/use-threads-pool.ts';
+import { useMapPane } from '../../hooks/use-map-pane.ts';
 
 export function NoitaMapMainTerrainLayer({
   petriFiles,
@@ -29,6 +30,7 @@ export function NoitaMapMainTerrainLayer({
   streamInfo: StreamInfoFileFormat;
 }) {
   const map = useMap();
+  const pane = useMapPane({ name: 'noita-terrain', zIndex: 2 });
   const layerRef = useRef<L.GridLayer | null>(null);
   const threadsPool = useThreadsPool();
 
@@ -36,6 +38,7 @@ export function NoitaMapMainTerrainLayer({
     if (!layerRef.current) {
       // @ts-expect-error typescript doesn't know we can pass parameters
       const gridLayer = new NoitaMainTerrainLayer({
+        pane: pane.name,
         tileSize: 512,
         minZoom: -4,
         maxZoom: 5,
@@ -76,6 +79,8 @@ export function NoitaMapMainTerrainLayer({
     materialImageCache,
     materialColorCache,
     streamInfo,
+    pane.name,
+    threadsPool?.pool,
   ]); // Re-run effect if the map instance changes
 
   // This component does not render any JSX itself.

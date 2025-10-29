@@ -1,0 +1,47 @@
+import { useEffect, useRef } from 'react';
+import { NoitaBackgroundLayer } from './noita-background-layer.ts';
+import L from 'leaflet';
+import { useMap } from 'react-leaflet';
+import { useMapPane } from '../../hooks/use-map-pane.ts';
+
+export const NoitaMapBackgroundLayer = () => {
+  const map = useMap();
+  const pane = useMapPane({
+    name: 'noita-background',
+    zIndex: 0,
+  });
+  const layerRef = useRef<L.GridLayer | null>(null);
+
+  useEffect(() => {
+    if (!layerRef.current) {
+      // @ts-expect-error typescript doesn't know we can pass parameters
+      const gridLayer = new NoitaBackgroundLayer({
+        pane: pane.name,
+        tileSize: L.point(512 * 4, 512 * 2),
+        minZoom: -4,
+        maxZoom: 5,
+
+        noWrap: true,
+
+        minNativeZoom: 0,
+        maxNativeZoom: 0,
+      });
+
+      console.log('grid', gridLayer);
+
+      // Add the layer to the map
+      map.addLayer(gridLayer);
+      layerRef.current = gridLayer;
+    }
+
+    // The cleanup function for when the component unmounts
+    return () => {
+      if (layerRef.current) {
+        map.removeLayer(layerRef.current);
+        layerRef.current = null;
+      }
+    };
+  }, [map, pane.name]); // Re-run effect if the map instance changes
+
+  return null;
+};
