@@ -3,8 +3,11 @@ import { CAVE_LIMIT_Y } from '@noita-explorer/map';
 
 export const NoitaBackgroundLayer = L.GridLayer.extend({
   _getTilePos: function (coords: L.Coords) {
+    const generousCaveLimitY = CAVE_LIMIT_Y + 50;
     // move background bottom to the cave limit for a smooth transition
-    return coords.scaleBy(this.getTileSize()).add(L.point(0, CAVE_LIMIT_Y));
+    return coords
+      .scaleBy(this.getTileSize())
+      .add(L.point(0, generousCaveLimitY));
   },
   createTile: function (coords: L.Coords, done: L.DoneCallback): HTMLElement {
     const tile = L.DomUtil.create('div', 'leaflet-tile');
