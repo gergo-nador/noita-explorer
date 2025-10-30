@@ -3,8 +3,8 @@ import { CAVE_LIMIT_Y } from '@noita-explorer/map';
 import { CSSProperties } from 'react';
 import { noitaBgThemes } from './background-themes.ts';
 
-const tileWidth = 512 * 8;
-const tileHeight = 512 * 4;
+const tileWidth = 512 * 12;
+const tileHeight = 512 * 6;
 
 export const NoitaBackgroundLayer = L.GridLayer.extend({
   _getTilePos: function (coords: L.Coords) {
@@ -17,7 +17,7 @@ export const NoitaBackgroundLayer = L.GridLayer.extend({
   createTile: function (coords: L.Coords, done: L.DoneCallback): HTMLElement {
     const tile = L.DomUtil.create('div', 'leaflet-tile');
 
-    if (coords.y !== -1) {
+    if (coords.y > -1) {
       done(undefined, tile);
       return tile;
     }
@@ -26,6 +26,8 @@ export const NoitaBackgroundLayer = L.GridLayer.extend({
     canvas.style.imageRendering = 'pixelated';
     canvas.width = tileWidth;
     canvas.height = tileHeight;
+
+    tile.appendChild(canvas);
 
     const ctx = canvas.getContext('2d');
     if (!ctx) {
@@ -36,50 +38,68 @@ export const NoitaBackgroundLayer = L.GridLayer.extend({
 
     const bgColors = noitaBgThemes['day'];
 
-    ctx.fillStyle = bgColors.background;
-    ctx.fillRect(coords.x, coords.y, canvas.width, canvas.height);
+    if (coords.y === -1) {
+      const gradient = ctx.createLinearGradient(0, canvas.height, 0, 0);
 
-    renderBackgroundImage({
-      src: '/data/weather_gfx/parallax_clounds_01.png',
-      color: bgColors.cloud1,
-      colorRenderMode: 'clouds',
-    })
-      .then((canvas) => ctx.drawImage(canvas, 0, 0))
-      .then(() =>
-        renderBackgroundImage({
-          src: '/data/weather_gfx/parallax_mountains_02.png',
-          color: bgColors.mountain2,
-          colorRenderMode: 'mountain',
-        }),
-      )
-      .then((canvas) => ctx.drawImage(canvas, 0, 0))
-      .then(() =>
-        renderBackgroundImage({
-          src: '/data/weather_gfx/parallax_clounds_02.png',
-          color: bgColors.cloud2,
-          colorRenderMode: 'clouds',
-        }),
-      )
-      .then((canvas) => ctx.drawImage(canvas, 0, 0))
-      .then(() =>
-        renderBackgroundImage({
-          src: '/data/weather_gfx/parallax_mountains_layer_02.png',
-          color: bgColors.mountain1Back,
-          colorRenderMode: 'mountain',
-        }),
-      )
-      .then((canvas) => ctx.drawImage(canvas, 0, 0))
-      .then(() =>
-        renderBackgroundImage({
-          src: '/data/weather_gfx/parallax_mountains_layer_01.png',
-          color: bgColors.mountain1Highlight,
-          colorRenderMode: 'mountain',
-        }),
-      )
-      .then((canvas) => ctx.drawImage(canvas, 0, 0))
-      .then(() => done(undefined, tile));
+      gradient.addColorStop(0, bgColors.phases.center);
+      gradient.addColorStop(0.5, bgColors.phases.center);
+      gradient.addColorStop(1, bgColors.background);
 
-    tile.appendChild(canvas);
+      ctx.fillStyle = gradient;
+      ctx.fillRect(coords.x, coords.y, canvas.width, canvas.height);
+
+      renderBackgroundImage({
+        src: '/data/weather_gfx/parallax_clounds_01.png',
+        color: bgColors.cloud1,
+        colorRenderMode: 'clouds',
+      })
+        .then((canvas) => {
+          ctx.globalAlpha = 0.5;
+          ctx.drawImage(canvas, 0, 0);
+          ctx.globalAlpha = 1;
+        })
+        .then(() =>
+          renderBackgroundImage({
+            src: '/data/weather_gfx/parallax_mountains_02.png',
+            color: bgColors.mountain2,
+            colorRenderMode: 'mountain',
+          }),
+        )
+        .then((canvas) => ctx.drawImage(canvas, 0, 0))
+        .then(() =>
+          renderBackgroundImage({
+            src: '/data/weather_gfx/parallax_clounds_02.png',
+            color: bgColors.cloud2,
+            colorRenderMode: 'clouds',
+            offsetY: 150,
+          }),
+        )
+        .then((canvas) => ctx.drawImage(canvas, 0, 0))
+        .then(() =>
+          renderBackgroundImage({
+            src: '/data/weather_gfx/parallax_mountains_layer_02.png',
+            color: bgColors.mountain1Back,
+            colorRenderMode: 'mountain',
+            offsetY: 200,
+          }),
+        )
+        .then((canvas) => ctx.drawImage(canvas, 0, 0))
+        .then(() =>
+          renderBackgroundImage({
+            src: '/data/weather_gfx/parallax_mountains_layer_01.png',
+            color: bgColors.mountain1Highlight,
+            colorRenderMode: 'mountain',
+            offsetY: 200,
+          }),
+        )
+        .then((canvas) => ctx.drawImage(canvas, 0, 0))
+        .then(() => done(undefined, tile));
+    } else {
+      ctx.fillStyle = bgColors.background;
+      ctx.fillRect(coords.x, coords.y, canvas.width, canvas.height);
+
+      setTimeout(() => done(undefined, tile), 0);
+    }
 
     return tile;
   },
@@ -89,11 +109,15 @@ async function renderBackgroundImage({
   src,
   color,
   colorRenderMode,
+  offsetY,
 }: {
   src: string;
   color: NonNullable<CSSProperties['color']>;
   colorRenderMode: 'clouds' | 'mountain';
+  offsetY?: number;
 }) {
+  offsetY ??= 0;
+
   const canvas = document.createElement('canvas');
   canvas.style.imageRendering = 'pixelated';
   canvas.width = tileWidth;
@@ -123,11 +147,11 @@ async function renderBackgroundImage({
           0,
           0,
           img.width,
-          img.height,
+          img.height - offsetY,
           0,
-          0,
+          offsetY,
           tileWidth,
-          tileHeight,
+          tileHeight - offsetY,
         );
       }
 
@@ -138,11 +162,11 @@ async function renderBackgroundImage({
         0,
         0,
         img.width,
-        img.height,
+        img.height - offsetY,
         0,
-        0,
+        offsetY,
         tileWidth,
-        tileHeight,
+        tileHeight - offsetY,
       );
 
       resolve(1);

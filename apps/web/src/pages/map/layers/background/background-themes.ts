@@ -12,6 +12,10 @@ export const noitaBgThemes: Record<
     mountain1Highlight: '#d6e4e9',
     mountain1Back: '#445b89',
     mountain2: '#7499b8',
+    phases: {
+      start: '#91c3ec',
+      center: '#ffffff',
+    },
   },
   sunset: {
     background: '#e1974c',
@@ -20,6 +24,10 @@ export const noitaBgThemes: Record<
     mountain1Highlight: '#96785b',
     mountain1Back: '#836757',
     mountain2: '#926b45',
+    phases: {
+      start: '#f5dbc3',
+      center: '#e1974d',
+    },
   },
   night: {
     background: '#31253a',
@@ -29,6 +37,10 @@ export const noitaBgThemes: Record<
     mountain1Back: '#242534',
     mountain2: '#1a1926',
     hasStars: true,
+    phases: {
+      start: '#cd2806',
+      center: '#5f566f',
+    },
   },
   sunrise: {
     background: '#e290a8',
@@ -37,6 +49,10 @@ export const noitaBgThemes: Record<
     mountain1Highlight: '#d88282',
     mountain1Back: '#ba6d8f',
     mountain2: '#dc957f',
+    phases: {
+      start: '#d691a7',
+      center: '#ffffff',
+    },
   },
 };
 
@@ -48,4 +64,5 @@ export interface NoitaBackgroundTheme {
   cloud2: string;
   mountain2: string;
   hasStars?: boolean;
+  phases: Record<'start' | 'center', string>;
 }

@@ -17,7 +17,7 @@ export const NoitaMapBackgroundLayer = () => {
       // @ts-expect-error typescript doesn't know we can pass parameters
       const gridLayer = new NoitaBackgroundLayer({
         pane: pane.name,
-        tileSize: L.point(512 * 8, 512 * 4),
+        tileSize: L.point(512 * 12, 512 * 6),
         minZoom: -4,
         maxZoom: 5,
 
