@@ -16,90 +16,105 @@ const materialColorCache: StringKeyDictionary<number> = {};
 
 const mapRenderer: MapRenderType = {
   async renderBiomeTile(props) {
-    const offScreenCanvas = new OffscreenCanvas(
-      mapConstants.chunkWidth,
-      mapConstants.chunkHeight,
-    );
-    const ctx = offScreenCanvas.getContext('2d', {
-      alpha: true,
-      willReadFrequently: true,
-    });
-    if (!ctx) {
-      throw new Error('OffscreenCanvasRenderingContext2D not supported');
+    try {
+      const offScreenCanvas = new OffscreenCanvas(
+        mapConstants.chunkWidth,
+        mapConstants.chunkHeight,
+      );
+      const ctx = offScreenCanvas.getContext('2d', {
+        alpha: true,
+        willReadFrequently: true,
+      });
+      if (!ctx) {
+        throw new Error('OffscreenCanvasRenderingContext2D not supported');
+      }
+
+      const setupData = await setupDataPromise;
+
+      ctx.clearRect(0, 0, mapConstants.chunkWidth, mapConstants.chunkHeight);
+      await renderBiomeTile({
+        ctx,
+        chunkBorders: props.chunkBorders,
+        backgroundItems: props.backgrounds,
+        biomeCoords: props.biomeCoords,
+        biomes: setupData.biomes,
+      });
+
+      return ctx.getImageData(
+        0,
+        0,
+        offScreenCanvas.width,
+        offScreenCanvas.height,
+      );
+    } catch (error) {
+      console.error('Error during rendering biome tile', props, error);
+      throw error;
     }
-
-    const setupData = await setupDataPromise;
-
-    ctx.clearRect(0, 0, mapConstants.chunkWidth, mapConstants.chunkHeight);
-    await renderBiomeTile({
-      ctx,
-      chunkBorders: props.chunkBorders,
-      backgroundItems: props.backgrounds,
-      biomeCoords: props.biomeCoords,
-      biomes: setupData.biomes,
-    });
-
-    return ctx.getImageData(
-      0,
-      0,
-      offScreenCanvas.width,
-      offScreenCanvas.height,
-    );
   },
   async renderTerrainTile(props) {
-    const offScreenCanvas = new OffscreenCanvas(
-      mapConstants.chunkWidth,
-      mapConstants.chunkHeight,
-    );
-    const ctx = offScreenCanvas.getContext('2d');
-    if (!ctx) {
-      throw new Error('OffscreenCanvasRenderingContext2D not supported');
+    try {
+      const offScreenCanvas = new OffscreenCanvas(
+        mapConstants.chunkWidth,
+        mapConstants.chunkHeight,
+      );
+      const ctx = offScreenCanvas.getContext('2d');
+      if (!ctx) {
+        throw new Error('OffscreenCanvasRenderingContext2D not supported');
+      }
+
+      const imageData = ctx.getImageData(
+        0,
+        0,
+        offScreenCanvas.width,
+        offScreenCanvas.height,
+      );
+      const setupData = await setupDataPromise;
+
+      const petriContent = await scrape.save00.pngPetriFile({
+        pngPetriFile: props.petriFileBuffer,
+        fastLzCompressor: setupData.fastLzCompressor,
+      });
+
+      renderTerrainTile({
+        imageData,
+        chunk: petriContent,
+        chunkCoordinates: props.chunkCoordinates,
+        materials: setupData.materials,
+        materialColorCache,
+        materialImageCache: setupData.materialColorCache,
+      });
+
+      return imageData;
+    } catch (error) {
+      console.error('Error during rendering terrain tile', props, error);
+      throw error;
     }
-
-    const imageData = ctx.getImageData(
-      0,
-      0,
-      offScreenCanvas.width,
-      offScreenCanvas.height,
-    );
-    const setupData = await setupDataPromise;
-
-    const petriContent = await scrape.save00.pngPetriFile({
-      pngPetriFile: props.petriFileBuffer,
-      fastLzCompressor: setupData.fastLzCompressor,
-    });
-
-    renderTerrainTile({
-      imageData,
-      chunk: petriContent,
-      chunkCoordinates: props.chunkCoordinates,
-      materials: setupData.materials,
-      materialColorCache,
-      materialImageCache: setupData.materialColorCache,
-    });
-
-    return imageData;
   },
   async renderBackgroundTile(props) {
-    const offScreenCanvas = new OffscreenCanvas(props.size.x, props.size.y);
+    try {
+      const offScreenCanvas = new OffscreenCanvas(props.size.x, props.size.y);
 
-    const ctx = offScreenCanvas.getContext('2d');
-    if (!ctx) {
-      throw new Error('OffscreenCanvasRenderingContext2D not supported');
+      const ctx = offScreenCanvas.getContext('2d');
+      if (!ctx) {
+        throw new Error('OffscreenCanvasRenderingContext2D not supported');
+      }
+
+      await renderBackgroundTile({
+        coords: props.coords,
+        theme: props.theme,
+        ctx,
+      });
+
+      return ctx.getImageData(
+        0,
+        0,
+        offScreenCanvas.width,
+        offScreenCanvas.height,
+      );
+    } catch (error) {
+      console.error('Error during rendering background tile', props, error);
+      throw error;
     }
-
-    await renderBackgroundTile({
-      coords: props.coords,
-      theme: props.theme,
-      ctx,
-    });
-
-    return ctx.getImageData(
-      0,
-      0,
-      offScreenCanvas.width,
-      offScreenCanvas.height,
-    );
   },
 };
 
