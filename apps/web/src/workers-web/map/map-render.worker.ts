@@ -3,6 +3,7 @@ import { expose } from 'threads/worker';
 import {
   renderBiomeTile,
   renderTerrainTile,
+  renderBackgroundTile,
   mapConstants,
 } from '@noita-explorer/map';
 import { MapRenderType } from './map-render.types.ts';
@@ -19,9 +20,12 @@ const mapRenderer: MapRenderType = {
       mapConstants.chunkWidth,
       mapConstants.chunkHeight,
     );
-    const ctx = offScreenCanvas.getContext('2d', { alpha: true });
+    const ctx = offScreenCanvas.getContext('2d', {
+      alpha: true,
+      willReadFrequently: true,
+    });
     if (!ctx) {
-      return;
+      throw new Error('OffscreenCanvasRenderingContext2D not supported');
     }
 
     const setupData = await setupDataPromise;
@@ -49,7 +53,7 @@ const mapRenderer: MapRenderType = {
     );
     const ctx = offScreenCanvas.getContext('2d');
     if (!ctx) {
-      return;
+      throw new Error('OffscreenCanvasRenderingContext2D not supported');
     }
 
     const imageData = ctx.getImageData(
@@ -75,6 +79,27 @@ const mapRenderer: MapRenderType = {
     });
 
     return imageData;
+  },
+  async renderBackgroundTile(props) {
+    const offScreenCanvas = new OffscreenCanvas(props.size.x, props.size.y);
+
+    const ctx = offScreenCanvas.getContext('2d');
+    if (!ctx) {
+      throw new Error('OffscreenCanvasRenderingContext2D not supported');
+    }
+
+    await renderBackgroundTile({
+      coords: props.coords,
+      theme: props.theme,
+      ctx,
+    });
+
+    return ctx.getImageData(
+      0,
+      0,
+      offScreenCanvas.width,
+      offScreenCanvas.height,
+    );
   },
 };
 

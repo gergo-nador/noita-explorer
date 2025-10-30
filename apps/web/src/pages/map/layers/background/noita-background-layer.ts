@@ -1,7 +1,10 @@
 import L from 'leaflet';
 import { CAVE_LIMIT_Y } from '@noita-explorer/map';
-import { CSSProperties } from 'react';
 import { noitaBgThemes } from './background-themes.ts';
+import {
+  MapRendererPool,
+  MapRendererWorker,
+} from '../../map-renderer-threads/threads-pool.types.ts';
 
 const tileWidth = 512 * 12;
 const tileHeight = 512 * 6;
@@ -36,142 +39,23 @@ export const NoitaBackgroundLayer = L.GridLayer.extend({
 
     ctx.imageSmoothingEnabled = false;
 
-    const bgColors = noitaBgThemes['day'];
+    const bgColors = noitaBgThemes['dayStart'];
 
-    if (coords.y === -1) {
-      const gradient = ctx.createLinearGradient(0, canvas.height, 0, 0);
-
-      gradient.addColorStop(0, bgColors.phases.center);
-      gradient.addColorStop(0.5, bgColors.phases.center);
-      gradient.addColorStop(1, bgColors.background);
-
-      ctx.fillStyle = gradient;
-      ctx.fillRect(coords.x, coords.y, canvas.width, canvas.height);
-
-      renderBackgroundImage({
-        src: '/data/weather_gfx/parallax_clounds_01.png',
-        color: bgColors.cloud1,
-        colorRenderMode: 'clouds',
-      })
-        .then((canvas) => {
-          ctx.globalAlpha = 0.5;
-          ctx.drawImage(canvas, 0, 0);
-          ctx.globalAlpha = 1;
+    const renderPool: MapRendererPool = this.options.renderPool;
+    console.log('renderPool', renderPool);
+    renderPool.queue((worker: MapRendererWorker) => {
+      worker
+        .renderBackgroundTile({
+          coords,
+          size: { x: canvas.width, y: canvas.height },
+          theme: bgColors,
         })
-        .then(() =>
-          renderBackgroundImage({
-            src: '/data/weather_gfx/parallax_mountains_02.png',
-            color: bgColors.mountain2,
-            colorRenderMode: 'mountain',
-          }),
-        )
-        .then((canvas) => ctx.drawImage(canvas, 0, 0))
-        .then(() =>
-          renderBackgroundImage({
-            src: '/data/weather_gfx/parallax_clounds_02.png',
-            color: bgColors.cloud2,
-            colorRenderMode: 'clouds',
-            offsetY: 150,
-          }),
-        )
-        .then((canvas) => ctx.drawImage(canvas, 0, 0))
-        .then(() =>
-          renderBackgroundImage({
-            src: '/data/weather_gfx/parallax_mountains_layer_02.png',
-            color: bgColors.mountain1Back,
-            colorRenderMode: 'mountain',
-            offsetY: 200,
-          }),
-        )
-        .then((canvas) => ctx.drawImage(canvas, 0, 0))
-        .then(() =>
-          renderBackgroundImage({
-            src: '/data/weather_gfx/parallax_mountains_layer_01.png',
-            color: bgColors.mountain1Highlight,
-            colorRenderMode: 'mountain',
-            offsetY: 200,
-          }),
-        )
-        .then((canvas) => ctx.drawImage(canvas, 0, 0))
+        .then((imageData: ImageData | undefined) => {
+          if (imageData) ctx.putImageData(imageData, 0, 0);
+        })
         .then(() => done(undefined, tile));
-    } else {
-      ctx.fillStyle = bgColors.background;
-      ctx.fillRect(coords.x, coords.y, canvas.width, canvas.height);
-
-      setTimeout(() => done(undefined, tile), 0);
-    }
+    });
 
     return tile;
   },
 });
-
-async function renderBackgroundImage({
-  src,
-  color,
-  colorRenderMode,
-  offsetY,
-}: {
-  src: string;
-  color: NonNullable<CSSProperties['color']>;
-  colorRenderMode: 'clouds' | 'mountain';
-  offsetY?: number;
-}) {
-  offsetY ??= 0;
-
-  const canvas = document.createElement('canvas');
-  canvas.style.imageRendering = 'pixelated';
-  canvas.width = tileWidth;
-  canvas.height = tileHeight;
-
-  const ctx = canvas.getContext('2d');
-  if (!ctx) {
-    throw new Error('CanvasRenderingContext2D is not supported');
-  }
-
-  ctx.imageSmoothingEnabled = false;
-
-  // 1. fill the whole canvas with the color the image should have
-  ctx.fillStyle = color;
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-  await new Promise((resolve) => {
-    const img = new Image();
-    img.src = src;
-
-    img.onload = () => {
-      if (colorRenderMode === 'clouds') {
-        // 2. mix the img and the chosen color
-        ctx.globalCompositeOperation = 'lighter';
-        ctx.drawImage(
-          img,
-          0,
-          0,
-          img.width,
-          img.height - offsetY,
-          0,
-          offsetY,
-          tileWidth,
-          tileHeight - offsetY,
-        );
-      }
-
-      // 3. mask the canvas
-      ctx.globalCompositeOperation = 'destination-in';
-      ctx.drawImage(
-        img,
-        0,
-        0,
-        img.width,
-        img.height - offsetY,
-        0,
-        offsetY,
-        tileWidth,
-        tileHeight - offsetY,
-      );
-
-      resolve(1);
-    };
-  });
-
-  return canvas;
-}

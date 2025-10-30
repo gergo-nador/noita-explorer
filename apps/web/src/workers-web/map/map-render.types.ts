@@ -1,4 +1,4 @@
-import { ChunkBorders } from '@noita-explorer/map';
+import { ChunkBorders, NoitaBackgroundTheme } from '@noita-explorer/map';
 import { StreamInfoBackground } from '@noita-explorer/model-noita';
 import { Buffer } from 'buffer';
 import { Vector2d } from '@noita-explorer/model';
@@ -12,5 +12,10 @@ export interface MapRenderType {
   renderTerrainTile: (props: {
     petriFileBuffer: Buffer;
     chunkCoordinates: Vector2d;
+  }) => Promise<ImageData | undefined>;
+  renderBackgroundTile: (props: {
+    coords: Vector2d;
+    theme: NoitaBackgroundTheme;
+    size: Vector2d;
   }) => Promise<ImageData | undefined>;
 }

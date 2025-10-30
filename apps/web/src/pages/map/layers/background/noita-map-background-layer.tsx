@@ -3,6 +3,7 @@ import { NoitaBackgroundLayer } from './noita-background-layer.ts';
 import L from 'leaflet';
 import { useMap } from 'react-leaflet';
 import { useMapPane } from '../../hooks/use-map-pane.ts';
+import { useThreadsPool } from '../../map-renderer-threads/use-threads-pool.ts';
 
 export const NoitaMapBackgroundLayer = () => {
   const map = useMap();
@@ -10,6 +11,7 @@ export const NoitaMapBackgroundLayer = () => {
     name: 'noita-background',
     zIndex: 0,
   });
+  const threadsPool = useThreadsPool();
   const layerRef = useRef<L.GridLayer | null>(null);
 
   useEffect(() => {
@@ -25,6 +27,9 @@ export const NoitaMapBackgroundLayer = () => {
 
         minNativeZoom: 0,
         maxNativeZoom: 0,
+
+        // custom props
+        renderPool: threadsPool?.pool,
       });
 
       // Add the layer to the map
@@ -39,7 +44,7 @@ export const NoitaMapBackgroundLayer = () => {
         layerRef.current = null;
       }
     };
-  }, [map, pane.name]); // Re-run effect if the map instance changes
+  }, [map, pane.name, threadsPool]); // Re-run effect if the map instance changes
 
   return null;
 };

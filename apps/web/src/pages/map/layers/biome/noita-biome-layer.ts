@@ -17,8 +17,6 @@ export const NoitaBiomeLayer = L.GridLayer.extend({
       (chunk) => chunk.position.x === coords.x && chunk.position.y === coords.y,
     );
 
-    // todo world pixel scenes
-
     if (!chunkInfo?.loaded) {
       tile.innerHTML = '';
       done(undefined, tile);
