@@ -41,6 +41,36 @@ export async function renderBackgroundImage({
   if (colorRenderMode === 'clouds') {
     // 2. mix the img and the chosen color
     ctx.globalCompositeOperation = 'lighter';
+    if (offsetY >= 0) {
+      ctx.drawImage(
+        img,
+        0,
+        0,
+        img.width,
+        img.height - offsetY,
+        0,
+        offsetY,
+        width,
+        height - offsetY,
+      );
+    } else {
+      ctx.drawImage(
+        img,
+        0,
+        -offsetY,
+        img.width,
+        img.height + offsetY,
+        0,
+        0,
+        width,
+        height + offsetY,
+      );
+    }
+  }
+
+  // 3. mask the canvas
+  ctx.globalCompositeOperation = 'destination-in';
+  if (offsetY >= 0) {
     ctx.drawImage(
       img,
       0,
@@ -52,21 +82,19 @@ export async function renderBackgroundImage({
       width,
       height - offsetY,
     );
+  } else {
+    ctx.drawImage(
+      img,
+      0,
+      -offsetY,
+      img.width,
+      img.height + offsetY,
+      0,
+      0,
+      width,
+      height + offsetY,
+    );
   }
-
-  // 3. mask the canvas
-  ctx.globalCompositeOperation = 'destination-in';
-  ctx.drawImage(
-    img,
-    0,
-    0,
-    img.width,
-    img.height - offsetY,
-    0,
-    offsetY,
-    width,
-    height - offsetY,
-  );
 
   close();
 

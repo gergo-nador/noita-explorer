@@ -32,6 +32,7 @@ export async function renderBackgroundTile({ coords, ctx, theme }: Props) {
         color: theme.cloud1,
         colorRenderMode: 'clouds',
         size: size,
+        offsetY: -100,
       });
 
       ctx.globalAlpha = 0.5;
@@ -76,8 +77,8 @@ export async function renderBackgroundTile({ coords, ctx, theme }: Props) {
 
     {
       const mountain1HighlightCanvas = await renderBackgroundImage({
-        src: '/data/weather_gfx/parallax_mountains_layer_02.png',
-        color: theme.mountain1Back,
+        src: '/data/weather_gfx/parallax_mountains_layer_01.png',
+        color: theme.mountain1Highlight,
         colorRenderMode: 'mountain',
         offsetY: 200,
         size: size,
