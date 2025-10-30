@@ -27,8 +27,6 @@ export const NoitaMapBackgroundLayer = () => {
         maxNativeZoom: 0,
       });
 
-      console.log('grid', gridLayer);
-
       // Add the layer to the map
       map.addLayer(gridLayer);
       layerRef.current = gridLayer;
