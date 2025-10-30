@@ -76,7 +76,7 @@ export function calculateTerrainPixel({
   }
 
   const matColor = colorHelpers.conversion
-    .fromArgbString(material.graphicsColor ?? material.wangColor)
+    .fromRgbaString(material.graphicsColor ?? material.wangColorHtml)
     .toRgbaNum();
 
   materialColorCache[materialId] = matColor;

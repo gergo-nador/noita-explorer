@@ -30,13 +30,14 @@ function fromArgbString(color: string) {
   }
 
   // Extract the alpha, red, green, and blue components
-  const alpha = parseInt(color.slice(0, 2));
-  const red = parseInt(color.slice(2, 4));
-  const green = parseInt(color.slice(4, 6));
-  const blue = parseInt(color.slice(6, 8));
+  const alpha = parseInt(color.slice(0, 2), 16);
+  const red = parseInt(color.slice(2, 4), 16);
+  const green = parseInt(color.slice(4, 6), 16);
+  const blue = parseInt(color.slice(6, 8), 16);
 
   const colorRgba = (red << 24) | (blue << 16) | (green << 8) | alpha;
-  return internalColor(colorRgba);
+  const unsigned = colorRgba >>> 0;
+  return internalColor(unsigned);
 }
 
 function fromRgbaString(color: string) {
@@ -53,13 +54,14 @@ function fromRgbaString(color: string) {
   }
 
   // Extract the alpha, red, green, and blue components
-  const red = parseInt(color.slice(0, 2));
-  const green = parseInt(color.slice(2, 4));
-  const blue = parseInt(color.slice(4, 6));
-  const alpha = parseInt(color.slice(6, 8));
+  const red = parseInt(color.slice(0, 2), 16);
+  const green = parseInt(color.slice(2, 4), 16);
+  const blue = parseInt(color.slice(4, 6), 16);
+  const alpha = parseInt(color.slice(6, 8), 16);
 
-  const colorRgba = (red << 24) | (blue << 16) | (green << 8) | alpha;
-  return internalColor(colorRgba);
+  const colorRgba = (red << 24) | (green << 16) | (blue << 8) | alpha;
+  const unsigned = colorRgba >>> 0;
+  return internalColor(unsigned);
 }
 
 function fromRgbaNumber(rgba: number) {
