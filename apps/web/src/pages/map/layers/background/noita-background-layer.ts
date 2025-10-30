@@ -1,5 +1,10 @@
 import L from 'leaflet';
 import { CAVE_LIMIT_Y } from '@noita-explorer/map';
+import { CSSProperties } from 'react';
+import { noitaBgThemes } from './background-themes.ts';
+
+const tileWidth = 512 * 8;
+const tileHeight = 512 * 4;
 
 export const NoitaBackgroundLayer = L.GridLayer.extend({
   _getTilePos: function (coords: L.Coords) {
@@ -17,127 +22,132 @@ export const NoitaBackgroundLayer = L.GridLayer.extend({
       return tile;
     }
 
-    const tileWidth = 512 * 4;
-    const tileHeight = 512 * 2;
-
     const canvas = document.createElement('canvas');
+    canvas.style.imageRendering = 'pixelated';
     canvas.width = tileWidth;
     canvas.height = tileHeight;
 
-    async function render() {
-      const ctx = canvas.getContext('2d');
-      if (!ctx) {
-        throw new Error('NoitaBackgroundLayer is not supported');
-      }
-
-      await new Promise((resolve) => {
-        const imgClouds1 = new Image();
-        imgClouds1.src = '/data/weather_gfx/parallax_clounds_01.png';
-
-        imgClouds1.onload = () => {
-          ctx.drawImage(
-            imgClouds1,
-            0,
-            0,
-            imgClouds1.width,
-            imgClouds1.height,
-            0,
-            0,
-            tileWidth,
-            tileHeight,
-          );
-          resolve(1);
-        };
-      });
-
-      const imgMountains1 = new Image();
-      imgMountains1.src = '/data/weather_gfx/parallax_mountains_layer_01.png';
-
-      const imgMountains2 = new Image();
-      imgMountains2.src = '/data/weather_gfx/parallax_mountains_layer_02.png';
-
-      const imgMountains3 = new Image();
-      imgMountains3.src = '/data/weather_gfx/parallax_mountains_02.png';
-
-      const imgClouds2 = new Image();
-      imgClouds2.src = '/data/weather_gfx/parallax_clounds_02.png';
-      /*
-      await new Promise((resolve) => {
-        imgMountains3.onload = () => {
-          ctx.drawImage(
-            imgMountains3,
-            0,
-            0,
-            imgMountains3.width,
-            imgMountains3.height,
-            0,
-            0,
-            tileWidth,
-            tileHeight,
-          );
-          resolve(1);
-        };
-      });
-
-      await new Promise((resolve) => {
-        imgClouds2.onload = () => {
-          ctx.drawImage(
-            imgClouds2,
-            0,
-            0,
-            imgClouds2.width,
-            imgClouds2.height,
-            0,
-            0,
-            tileWidth,
-            tileHeight,
-          );
-          resolve(1);
-        };
-      });
-      */
-
-      /*
-      await new Promise((resolve) => {
-        imgMountains1.onload = () => {
-          ctx.drawImage(
-            imgMountains1,
-            0,
-            0,
-            imgMountains1.width,
-            imgMountains1.height,
-            0,
-            0,
-            tileWidth,
-            tileHeight,
-          );
-          resolve(1);
-        };
-      });*/
-      /*
-      await new Promise((resolve) => {
-        imgMountains2.onload = () => {
-          ctx.drawImage(
-            imgMountains2,
-            0,
-            0,
-            imgMountains2.width,
-            imgMountains2.height,
-            0,
-            0,
-            tileWidth,
-            tileHeight,
-          );
-          resolve(1);
-        };
-      });
-
-       */
+    const ctx = canvas.getContext('2d');
+    if (!ctx) {
+      throw new Error('NoitaBackgroundLayer is not supported');
     }
 
-    render().then(() => done(undefined, tile));
+    ctx.imageSmoothingEnabled = false;
+
+    const bgColors = noitaBgThemes['day'];
+
+    ctx.fillStyle = bgColors.background;
+    ctx.fillRect(coords.x, coords.y, canvas.width, canvas.height);
+
+    renderBackgroundImage({
+      src: '/data/weather_gfx/parallax_clounds_01.png',
+      color: bgColors.cloud1,
+      colorRenderMode: 'clouds',
+    })
+      .then((canvas) => ctx.drawImage(canvas, 0, 0))
+      .then(() =>
+        renderBackgroundImage({
+          src: '/data/weather_gfx/parallax_mountains_02.png',
+          color: bgColors.mountain2,
+          colorRenderMode: 'mountain',
+        }),
+      )
+      .then((canvas) => ctx.drawImage(canvas, 0, 0))
+      .then(() =>
+        renderBackgroundImage({
+          src: '/data/weather_gfx/parallax_clounds_02.png',
+          color: bgColors.cloud2,
+          colorRenderMode: 'clouds',
+        }),
+      )
+      .then((canvas) => ctx.drawImage(canvas, 0, 0))
+      .then(() =>
+        renderBackgroundImage({
+          src: '/data/weather_gfx/parallax_mountains_layer_02.png',
+          color: bgColors.mountain1Back,
+          colorRenderMode: 'mountain',
+        }),
+      )
+      .then((canvas) => ctx.drawImage(canvas, 0, 0))
+      .then(() =>
+        renderBackgroundImage({
+          src: '/data/weather_gfx/parallax_mountains_layer_01.png',
+          color: bgColors.mountain1Highlight,
+          colorRenderMode: 'mountain',
+        }),
+      )
+      .then((canvas) => ctx.drawImage(canvas, 0, 0))
+      .then(() => done(undefined, tile));
+
     tile.appendChild(canvas);
 
     return tile;
   },
 });
+
+async function renderBackgroundImage({
+  src,
+  color,
+  colorRenderMode,
+}: {
+  src: string;
+  color: NonNullable<CSSProperties['color']>;
+  colorRenderMode: 'clouds' | 'mountain';
+}) {
+  const canvas = document.createElement('canvas');
+  canvas.style.imageRendering = 'pixelated';
+  canvas.width = tileWidth;
+  canvas.height = tileHeight;
+
+  const ctx = canvas.getContext('2d');
+  if (!ctx) {
+    throw new Error('CanvasRenderingContext2D is not supported');
+  }
+
+  ctx.imageSmoothingEnabled = false;
+
+  // 1. fill the whole canvas with the color the image should have
+  ctx.fillStyle = color;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  await new Promise((resolve) => {
+    const img = new Image();
+    img.src = src;
+
+    img.onload = () => {
+      if (colorRenderMode === 'clouds') {
+        // 2. mix the img and the chosen color
+        ctx.globalCompositeOperation = 'lighter';
+        ctx.drawImage(
+          img,
+          0,
+          0,
+          img.width,
+          img.height,
+          0,
+          0,
+          tileWidth,
+          tileHeight,
+        );
+      }
+
+      // 3. mask the canvas
+      ctx.globalCompositeOperation = 'destination-in';
+      ctx.drawImage(
+        img,
+        0,
+        0,
+        img.width,
+        img.height,
+        0,
+        0,
+        tileWidth,
+        tileHeight,
+      );
+
+      resolve(1);
+    };
+  });
+
+  return canvas;
+}
