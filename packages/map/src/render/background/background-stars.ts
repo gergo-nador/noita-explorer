@@ -2,12 +2,12 @@ export const backgroundStars = [
   {
     src: '/data/weather_gfx/star_001.png',
     minCountPerTile: 10,
-    maxCountPerTile: 15,
+    maxCountPerTile: 25,
   },
   {
     src: '/data/weather_gfx/star_002.png',
     minCountPerTile: 10,
-    maxCountPerTile: 15,
+    maxCountPerTile: 25,
   },
   {
     src: '/data/weather_gfx/star_003.png',
