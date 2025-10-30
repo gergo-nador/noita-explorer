@@ -1,6 +1,7 @@
 import { Vector2d } from '@noita-explorer/model';
 import { renderBackgroundImage } from './render-background-image.ts';
 import { NoitaBackgroundTheme } from '../../interfaces/noita-background-theme.ts';
+import { renderBackgroundStars } from './render-background-stars.ts';
 
 interface Props {
   coords: Vector2d;
@@ -14,6 +15,9 @@ export async function renderBackgroundTile({ coords, ctx, theme }: Props) {
 
   ctx.imageSmoothingEnabled = false;
 
+  // the mountain images has around 1024 pixel width
+  const starSizeMultiplier = ctx.canvas.width / 1024;
+
   if (coords.y === -1) {
     const gradient = ctx.createLinearGradient(0, height, 0, 0);
 
@@ -23,6 +27,10 @@ export async function renderBackgroundTile({ coords, ctx, theme }: Props) {
 
     ctx.fillStyle = gradient;
     ctx.fillRect(coords.x, coords.y, width, height);
+
+    if (theme.hasStars) {
+      await renderBackgroundStars({ ctx, starSizeMultiplier });
+    }
 
     const size = { x: width, y: height };
 
@@ -89,5 +97,9 @@ export async function renderBackgroundTile({ coords, ctx, theme }: Props) {
   } else {
     ctx.fillStyle = theme.background;
     ctx.fillRect(coords.x, coords.y, width, height);
+
+    if (theme.hasStars) {
+      await renderBackgroundStars({ ctx, starSizeMultiplier });
+    }
   }
 }

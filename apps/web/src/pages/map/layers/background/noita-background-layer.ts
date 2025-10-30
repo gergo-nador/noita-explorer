@@ -39,7 +39,7 @@ export const NoitaBackgroundLayer = L.GridLayer.extend({
 
     ctx.imageSmoothingEnabled = false;
 
-    const bgColors = noitaBgThemes['nightStart'];
+    const bgColors = noitaBgThemes['nightMid'];
 
     const renderPool: MapRendererPool = this.options.renderPool;
     console.log('renderPool', renderPool);
