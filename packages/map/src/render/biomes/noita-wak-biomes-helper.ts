@@ -11,7 +11,7 @@ export function createNoitaWakBiomesHelper({ biomes }: Props) {
     // boundary from top
     yShifted = Math.max(yShifted, 0);
     // boundary from bottom
-    yShifted = Math.min(yShifted, biomes.biomeMap.biomeSize.y);
+    yShifted = Math.min(yShifted, biomes.biomeMap.biomeSize.y - 1);
 
     // x coordinate just overlaps
     let xShifted = x + biomes.biomeMap.biomeOffset.x;
