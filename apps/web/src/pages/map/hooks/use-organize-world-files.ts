@@ -6,6 +6,13 @@ import {
   NoitaPetriFileCollection,
 } from '../noita-map.types.ts';
 
+interface MapBounds {
+  minY: number;
+  maxY: number;
+  minX: number;
+  maxX: number;
+}
+
 export const useOrganizeWorldFiles = () => {
   const { status } = useSave00Store();
 
@@ -13,6 +20,7 @@ export const useOrganizeWorldFiles = () => {
     useState<NoitaPetriFileCollection>({});
   const [entityFileCollection, setEntityFileCollection] =
     useState<NoitaEntityFileCollection>({});
+  const [mapBounds, setMapBounds] = useState<MapBounds | undefined>();
 
   useEffect(() => {
     if (status !== 'loaded') return;
@@ -33,9 +41,25 @@ export const useOrganizeWorldFiles = () => {
             };
           });
 
+        const bounds: MapBounds = { minX: 0, maxY: 0, minY: 0, maxX: 0 };
+
         const petriFileCollection: NoitaPetriFileCollection = {};
         for (const file of petriFiles) {
           if (!file) continue;
+
+          // save the map bounds
+          if (bounds.minX > file.chunkCoordinate.num1) {
+            bounds.minX = file.chunkCoordinate.num1;
+          }
+          if (bounds.maxX < file.chunkCoordinate.num1) {
+            bounds.maxX = file.chunkCoordinate.num1;
+          }
+          if (bounds.minY > file.chunkCoordinate.num2) {
+            bounds.minY = file.chunkCoordinate.num2;
+          }
+          if (bounds.maxY < file.chunkCoordinate.num2) {
+            bounds.maxY = file.chunkCoordinate.num2;
+          }
 
           const x = file.chunkCoordinate.num1 / 512;
           const y = file.chunkCoordinate.num2 / 512;
@@ -47,6 +71,7 @@ export const useOrganizeWorldFiles = () => {
           petriFileCollection[x][y] = file.file;
         }
         setPetriFileCollection(petriFileCollection);
+        setMapBounds(bounds);
 
         const entityFiles = files
           .filter(
@@ -77,6 +102,7 @@ export const useOrganizeWorldFiles = () => {
   return {
     petriFileCollection,
     entityFileCollection,
+    mapBounds,
   };
 };
 

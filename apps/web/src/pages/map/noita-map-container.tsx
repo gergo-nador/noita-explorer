@@ -23,11 +23,18 @@ export function NoitaMapContainer({
   biomes: NoitaWakBiomes;
 }) {
   const mapCenter: L.LatLngExpression = [0, 0];
-  const { petriFileCollection, entityFileCollection } = useOrganizeWorldFiles();
+  const { petriFileCollection, entityFileCollection, mapBounds } =
+    useOrganizeWorldFiles();
 
   if (!worldPixelScenes || !streamInfo) {
     return <div>No current run detected</div>;
   }
+
+  if (!mapBounds) {
+    return <div>Calculating map bounds...</div>;
+  }
+
+  const mapBoundsPadding = 4 * 512;
 
   return (
     <ThreadsPoolContextProvider>
@@ -37,6 +44,17 @@ export function NoitaMapContainer({
         scrollWheelZoom={true}
         style={{ height: '80vh', width: '100%' }}
         crs={L.CRS.Simple}
+        maxBounds={[
+          [
+            -mapBounds.maxY - mapBoundsPadding,
+            mapBounds.minX - mapBoundsPadding,
+          ],
+          [
+            -mapBounds.minY + mapBoundsPadding,
+            mapBounds.maxX + mapBoundsPadding,
+          ],
+        ]}
+        maxBoundsViscosity={0.5}
       >
         {/* HERE is the change! We use our custom layer now.
          */}
