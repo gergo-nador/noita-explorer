@@ -4,6 +4,7 @@ import L from 'leaflet';
 import { useMap } from 'react-leaflet';
 import { useMapPane } from '../../hooks/use-map-pane.ts';
 import { useThreadsPool } from '../../map-renderer-threads/use-threads-pool.ts';
+import { mapConstants } from '@noita-explorer/map';
 
 export const NoitaMapBackgroundLayer = () => {
   const map = useMap();
@@ -19,7 +20,10 @@ export const NoitaMapBackgroundLayer = () => {
       // @ts-expect-error typescript doesn't know we can pass parameters
       const gridLayer = new NoitaBackgroundLayer({
         pane: pane.name,
-        tileSize: L.point(512 * 12, 512 * 6),
+        tileSize: L.point(
+          mapConstants.chunkWidth * 12,
+          mapConstants.chunkHeight * 6,
+        ),
         minZoom: -4,
         maxZoom: 5,
 

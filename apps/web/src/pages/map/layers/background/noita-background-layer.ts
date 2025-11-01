@@ -1,13 +1,13 @@
 import L from 'leaflet';
-import { CAVE_LIMIT_Y } from '@noita-explorer/map';
+import { CAVE_LIMIT_Y, mapConstants } from '@noita-explorer/map';
 import { noitaBgThemes } from './background-themes.ts';
 import {
   MapRendererPool,
   MapRendererWorker,
 } from '../../map-renderer-threads/threads-pool.types.ts';
 
-const tileWidth = 512 * 12;
-const tileHeight = 512 * 6;
+const tileWidth = mapConstants.chunkWidth * 12;
+const tileHeight = mapConstants.chunkHeight * 6;
 
 export const NoitaBackgroundLayer = L.GridLayer.extend({
   _getTilePos: function (coords: L.Coords) {

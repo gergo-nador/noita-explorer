@@ -7,6 +7,8 @@ import {
   MapRendererPool,
   MapRendererWorker,
 } from '../../map-renderer-threads/threads-pool.types.ts';
+import { mapConstants } from '@noita-explorer/map';
+import { publicPaths } from '../../../../utils/public-paths.ts';
 
 export const NoitaBiomeLayer = L.GridLayer.extend({
   createTile: function (coords: L.Coords, done: L.DoneCallback): HTMLElement {
@@ -18,27 +20,37 @@ export const NoitaBiomeLayer = L.GridLayer.extend({
     );
 
     if (!chunkInfo?.loaded) {
-      tile.innerHTML = '';
-      done(undefined, tile);
+      if (coords.y >= 0) {
+        const imageElement = document.createElement('img');
+        imageElement.src = publicPaths.static.map.unexplored();
+        imageElement.width = mapConstants.chunkWidth;
+        imageElement.height = mapConstants.chunkHeight;
+        imageElement.style.filter = 'brightness(0.5)';
+
+        tile.appendChild(imageElement);
+      }
+
+      // `done` needs to be called after returning
+      setTimeout(() => done(undefined, tile), 0);
+
       return tile;
     }
 
     const canvas = document.createElement('canvas');
     canvas.style.imageRendering = 'pixelated';
-    canvas.width = 512;
-    canvas.height = 512;
+    canvas.width = mapConstants.chunkWidth;
+    canvas.height = mapConstants.chunkHeight;
 
     const ctx = canvas.getContext('2d');
     if (!ctx) {
       tile.innerHTML = '';
-      done(new Error('nope'), tile);
       return tile;
     }
 
-    const chunkLeftBorderX = coords.x * 512;
-    const chunkRightBorderX = (coords.x + 1) * 512;
-    const chunkTopBorderY = coords.y * 512;
-    const chunkBottomBorderY = (coords.y + 1) * 512;
+    const chunkLeftBorderX = coords.x * mapConstants.chunkWidth;
+    const chunkRightBorderX = (coords.x + 1) * mapConstants.chunkWidth;
+    const chunkTopBorderY = coords.y * mapConstants.chunkHeight;
+    const chunkBottomBorderY = (coords.y + 1) * mapConstants.chunkHeight;
 
     const allBackgrounds: Record<
       number,

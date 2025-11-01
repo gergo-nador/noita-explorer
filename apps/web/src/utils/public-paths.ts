@@ -14,6 +14,9 @@ export const publicPaths = {
       icons: (fileName: string) => `/images/data-wak/icons/${fileName}.png`,
       misc: (fileName: string) => `/images/data-wak/misc/${fileName}.png`,
     },
+    map: {
+      unexplored: () => '/images/map/unexplored.png',
+    },
   },
   generated: {
     orbs: ({ orbId }: { orbId: string }) => {
