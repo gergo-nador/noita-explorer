@@ -27,7 +27,7 @@ export const NoitaMapPage = () => {
   if (!isDataWakLoaded) {
     return (
       <div>
-        Loading... {dataWakProgress.loaded}/{dataWakProgress.total}
+        Loading assets {(100 * dataWakProgress.loaded) / dataWakProgress.total}%
       </div>
     );
   }
