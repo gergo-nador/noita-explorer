@@ -29,8 +29,11 @@ export async function renderBackgroundStars({
     const { img, close } = await fetchImageBitmap(star.src);
 
     for (let i = 0; i < amount; i++) {
-      const x = randomHelpers.randomInt(0, width);
-      const y = randomHelpers.randomInt(0, height);
+      const imgWidth = img.width * starSizeMultiplier;
+      const imgHeight = img.height * starSizeMultiplier;
+
+      const x = randomHelpers.randomInt(0, width - imgWidth);
+      const y = randomHelpers.randomInt(0, height - imgHeight);
 
       ctx.drawImage(
         img,
@@ -40,8 +43,8 @@ export async function renderBackgroundStars({
         img.height,
         x,
         y,
-        img.width * starSizeMultiplier,
-        img.height * starSizeMultiplier,
+        imgWidth,
+        imgHeight,
       );
     }
 
