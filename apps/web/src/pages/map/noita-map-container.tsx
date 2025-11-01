@@ -4,7 +4,7 @@ import {
   WorldPixelSceneFileFormat,
 } from '@noita-explorer/model-noita';
 import L from 'leaflet';
-import { MapContainer, Marker, Popup, useMapEvents } from 'react-leaflet';
+import { MapContainer, useMapEvents } from 'react-leaflet';
 import { CSSProperties, useState } from 'react';
 import { NoitaMapMainTerrainLayer } from './layers/main/noita-map-main-terrain-layer.tsx';
 import { NoitaMapBiomeLayer } from './layers/biome/noita-map-biome-layer.tsx';
@@ -79,19 +79,6 @@ export function NoitaMapContainer({
             )}
           </>
         )}
-
-        {/* You can still have other layers like markers on top */}
-        <Marker position={[2, 0]}>
-          <Popup>Test Marker</Popup>
-        </Marker>
-
-        {/* Example marker */}
-        <Marker position={[0, 0]}>
-          <Popup>
-            The Holy Mountain <br /> (This is a test marker)
-          </Popup>
-        </Marker>
-
         <MouseCoordinates />
       </MapContainer>
     </ThreadsPoolContextProvider>
