@@ -2,28 +2,65 @@ import { Buffer } from 'buffer';
 import { FileSystemDirectoryAccessDataWakMemory } from '@noita-explorer/file-systems/data-wak-memory-fs';
 import { FileSystemDirectoryAccess } from '@noita-explorer/model';
 
-export const noitaDataWakManager = (() => {
+type DataWakManagerType = {
+  isFailed: () => boolean;
+  wait: () => Promise<FileSystemDirectoryAccess | undefined>;
+  get: () => FileSystemDirectoryAccess | undefined;
+};
+
+export const noitaDataWakManager = ((): DataWakManagerType => {
   // we don't want to trigger an actual fetch when rendering SSG pages
   if (__SSG__) {
     return {
-      getDataWak: () =>
-        Promise.resolve() as unknown as Promise<FileSystemDirectoryAccess>,
+      isFailed: () => false,
+      wait: () => Promise.resolve(undefined),
+      get: () => undefined,
     };
   }
 
-  let dataWakPromise: Promise<FileSystemDirectoryAccess>;
+  const dataWakBroadcastChannel = new BroadcastChannel(
+    __BROADCAST_CHANNELS__.data_wak,
+  );
 
-  function dataWak() {
-    if (dataWakPromise !== undefined) return dataWakPromise;
+  let error = false;
+  let isSent = false;
+  let dataWakDir: FileSystemDirectoryAccess | undefined = undefined;
 
-    dataWakPromise = fetch('/data.wak').then(async (res) => {
-      const arrayBuffer = await res.arrayBuffer();
-      const buffer = Buffer.from(arrayBuffer);
-      return FileSystemDirectoryAccessDataWakMemory(buffer);
+  const xmlHttpRequest = new XMLHttpRequest();
+  xmlHttpRequest.open('GET', import.meta.env.VITE_DATA_WAK_URL);
+  xmlHttpRequest.responseType = 'arraybuffer';
+
+  xmlHttpRequest.onload = () => {
+    const buffer = Buffer.from(xmlHttpRequest.response);
+    dataWakDir = FileSystemDirectoryAccessDataWakMemory(buffer);
+  };
+  xmlHttpRequest.onerror = () => (error = true);
+  xmlHttpRequest.onprogress = (progress) => {
+    if (progress.type !== 'progress') return;
+    dataWakBroadcastChannel.postMessage({ type: 'progress' });
+    console.log('progress', progress);
+  };
+
+  xmlHttpRequest.send();
+
+  function wait() {
+    return new Promise((resolve, reject) => {
+      if (!isSent) {
+        xmlHttpRequest.send();
+        isSent = true;
+      }
+
+      xmlHttpRequest.onload = () => resolve(1);
+      xmlHttpRequest.onerror = () => reject(1);
     });
-
-    return dataWakPromise;
   }
 
-  return { getDataWak: () => dataWak() };
+  return {
+    wait: async () => {
+      await wait();
+      return dataWakDir;
+    },
+    get: () => dataWakDir,
+    isFailed: () => error,
+  };
 })();

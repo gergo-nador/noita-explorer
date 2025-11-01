@@ -11,7 +11,15 @@ export const dataWakImageDimensionsHandlers = [
       return HttpResponse.json(imageDimensions, { status: 200 });
     }
 
-    const dataWak = await noitaDataWakManager.getDataWak();
+    let dataWak = noitaDataWakManager.get();
+    if (!dataWak) {
+      dataWak = await noitaDataWakManager.wait();
+
+      if (!dataWak) {
+        throw new Error('Data wak not found');
+      }
+    }
+
     let dirQueue = [dataWak];
     const imgDimensionsTemp: Record<string, ImagePngDimension> = {};
 

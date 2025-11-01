@@ -43,7 +43,6 @@ const mapRenderer: MapRenderType = {
       return Transfer(offScreenCanvas.transferToImageBitmap());
     } catch (error) {
       console.error('Error during rendering biome tile', props, error);
-      throw error;
     }
   },
   async renderTerrainTile(props) {
@@ -84,7 +83,6 @@ const mapRenderer: MapRenderType = {
       return Transfer(offScreenCanvas.transferToImageBitmap());
     } catch (error) {
       console.error('Error during rendering terrain tile', props, error);
-      throw error;
     }
   },
   async renderBackgroundTile(props) {
@@ -105,7 +103,6 @@ const mapRenderer: MapRenderType = {
       return Transfer(offScreenCanvas.transferToImageBitmap());
     } catch (error) {
       console.error('Error during rendering background tile', props, error);
-      throw error;
     }
   },
 };

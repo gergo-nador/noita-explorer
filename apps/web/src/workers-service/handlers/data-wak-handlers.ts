@@ -9,11 +9,23 @@ import { scrape, AnimationInfo } from '@noita-explorer/scrapers';
 
 export const dataWakHandlers = [
   http.get('/data-initiate', async () => {
-    await noitaDataWakManager.getDataWak();
+    await noitaDataWakManager.wait();
     return HttpResponse.json({ result: 'done' });
   }),
+
+  /**
+   * Masking the /data/* endpoints, return the files from the data wak directory
+   */
   http.get('/data/*', async (request) => {
-    const dataWak = await noitaDataWakManager.getDataWak();
+    let dataWak = noitaDataWakManager.get();
+    if (!dataWak) {
+      dataWak = await noitaDataWakManager.wait();
+
+      if (!dataWak) {
+        throw new Error('Data wak not found');
+      }
+    }
+
     const urlText = request.request.url;
     const url = new URL(urlText);
     const urlPath = stringHelpers.trim({ text: url.pathname, fromStart: '/' });
