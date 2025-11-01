@@ -1,5 +1,5 @@
 // @ts-expect-error for some reason threads types are not recognized
-import { expose } from 'threads/worker';
+import { expose, Transfer } from 'threads/worker';
 import {
   renderBiomeTile,
   renderTerrainTile,
@@ -40,12 +40,7 @@ const mapRenderer: MapRenderType = {
         biomes: setupData.biomes,
       });
 
-      return ctx.getImageData(
-        0,
-        0,
-        offScreenCanvas.width,
-        offScreenCanvas.height,
-      );
+      return Transfer(offScreenCanvas.transferToImageBitmap());
     } catch (error) {
       console.error('Error during rendering biome tile', props, error);
       throw error;
@@ -84,7 +79,9 @@ const mapRenderer: MapRenderType = {
         materialImageCache: setupData.materialColorCache,
       });
 
-      return imageData;
+      ctx.putImageData(imageData, 0, 0);
+
+      return Transfer(offScreenCanvas.transferToImageBitmap());
     } catch (error) {
       console.error('Error during rendering terrain tile', props, error);
       throw error;
@@ -105,12 +102,7 @@ const mapRenderer: MapRenderType = {
         ctx,
       });
 
-      return ctx.getImageData(
-        0,
-        0,
-        offScreenCanvas.width,
-        offScreenCanvas.height,
-      );
+      return Transfer(offScreenCanvas.transferToImageBitmap());
     } catch (error) {
       console.error('Error during rendering background tile', props, error);
       throw error;

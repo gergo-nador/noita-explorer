@@ -8,14 +8,14 @@ export interface MapRenderType {
     chunkBorders: ChunkBorders;
     backgrounds: StreamInfoBackground[];
     biomeCoords: Vector2d;
-  }) => Promise<ImageData | undefined>;
+  }) => Promise<ImageBitmap | undefined>;
   renderTerrainTile: (props: {
     petriFileBuffer: Buffer;
     chunkCoordinates: Vector2d;
-  }) => Promise<ImageData | undefined>;
+  }) => Promise<ImageBitmap | undefined>;
   renderBackgroundTile: (props: {
     coords: Vector2d;
     theme: NoitaBackgroundTheme;
     size: Vector2d;
-  }) => Promise<ImageData | undefined>;
+  }) => Promise<ImageBitmap | undefined>;
 }

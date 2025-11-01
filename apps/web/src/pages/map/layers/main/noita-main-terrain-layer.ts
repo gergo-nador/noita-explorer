@@ -54,9 +54,9 @@ export const NoitaMainTerrainLayer = L.GridLayer.extend({
           chunkCoordinates: coords,
         }),
       )
-      .then((imageData: ImageData | undefined) => {
-        if (imageData) {
-          ctx.putImageData(imageData, 0, 0);
+      .then((image: ImageBitmap | undefined) => {
+        if (image) {
+          ctx.drawImage(image, 0, 0);
           tile.appendChild(canvas);
         }
       })

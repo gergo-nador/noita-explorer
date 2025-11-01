@@ -50,8 +50,8 @@ export const NoitaBackgroundLayer = L.GridLayer.extend({
           size: { x: canvas.width, y: canvas.height },
           theme: bgColors,
         })
-        .then((imageData: ImageData | undefined) => {
-          if (imageData) ctx.putImageData(imageData, 0, 0);
+        .then((image: ImageBitmap | undefined) => {
+          if (image) ctx.drawImage(image, 0, 0);
         })
         .then(() => done(undefined, tile));
     });

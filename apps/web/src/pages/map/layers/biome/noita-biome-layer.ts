@@ -61,8 +61,8 @@ export const NoitaBiomeLayer = L.GridLayer.extend({
             bottomY: chunkBottomBorderY,
           },
         })
-        .then((imageData: ImageData | undefined) => {
-          if (imageData) ctx.putImageData(imageData, 0, 0);
+        .then((image: ImageBitmap | undefined) => {
+          if (image) ctx.drawImage(image, 0, 0);
         })
         .then(() => done(undefined, tile));
     });
