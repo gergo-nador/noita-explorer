@@ -13,6 +13,7 @@ async function enableMocking() {
       url: '/mockServiceWorker.js',
     },
     onUnhandledRequest: 'bypass',
+    quiet: true,
   });
 }
 
