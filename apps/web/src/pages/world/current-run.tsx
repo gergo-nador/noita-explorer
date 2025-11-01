@@ -17,7 +17,6 @@ export const CurrentRun = () => {
     return <div>No current run detected.</div>;
   }
 
-  console.log(currentRun);
   return (
     <>
       <Flex justify='space-between'>
