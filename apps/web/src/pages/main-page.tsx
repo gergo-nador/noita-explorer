@@ -83,15 +83,9 @@ export const MainPage = () => {
           </Link>
           <Link
             to={pages.currentRun}
-            disabled={
-              !noitaDataWakLoaded || !currentRun || __ENV__ === 'production'
-            }
+            disabled={!noitaDataWakLoaded || !currentRun}
             onDisabledClick={() => {
-              if (__ENV__ === 'production') {
-                toast.info(
-                  "This page is still in development. If you want to view it's current state, check out the dev page",
-                );
-              } else if (!noitaDataWakLoaded) {
+              if (!noitaDataWakLoaded) {
                 toast.error(
                   'Noita Data is not set up. Please click on the Setup menu.',
                 );
@@ -105,21 +99,21 @@ export const MainPage = () => {
           <Link
             to={pages.sessions}
             disabled={save00Status !== 'loaded'}
-            disabledToast='To view sessions you need to set up reading from save00 folder.'
+            disabledToast='To view sessions you need to set up read permission for the save00 folder.'
           >
             Sessions
           </Link>
           <Link
             to={pages.map}
             disabled={save00Status !== 'loaded'}
-            disabledToast='To view map you need to set up reading from save00 folder.'
+            disabledToast='To view map you need to set up read permission for the save00 folder..'
           >
             Map
           </Link>
           <Link
             to={pages.deathMap}
             disabled={save00Status !== 'loaded'}
-            disabledToast='To view death map you need to set up reading from save00 folder.'
+            disabledToast='To view death map you need to set up read permission for the save00 folder..'
           >
             Death Map
           </Link>

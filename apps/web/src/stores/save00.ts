@@ -96,10 +96,9 @@ export const useSave00Store = create<Save00StoreState>((set, get) => ({
       console.error(ex);
       sentry.captureError(ex);
 
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error
-      const message = ex?.message ?? 'unknown reason';
-      noiToast.error('Failed to load game data from save00 folder: ' + message);
+      noiToast.error(
+        'Failed to load NollaGamesNoita folder. Please check your chosen folder again. Remember, that you should choose the parent of the save00 folder: NollaGamesNoita.',
+      );
     }
   },
   modify: (action) => set(action),
