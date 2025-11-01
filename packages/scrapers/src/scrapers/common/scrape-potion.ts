@@ -1,6 +1,7 @@
 import { NoitaPotion, NoitaPotionMaterial } from '@noita-explorer/model-noita';
 import { XmlWrapperType } from '@noita-explorer/tools/xml';
 import { hasEntityTag } from './tags.ts';
+import { arrayHelpers } from '@noita-explorer/tools';
 
 export const scrapePotion = ({
   xml,
@@ -18,9 +19,7 @@ export const scrapePotion = ({
     maxCapacity: materialSuckerComponent
       .getRequiredAttribute('barrel_size')
       .asInt(),
-    usedCapacity: materialSuckerComponent
-      .getRequiredAttribute('mAmountUsed')
-      .asInt(),
+    usedCapacity: 0,
   };
 
   const materialInventoryComponent = xml.findNthTag(
@@ -41,6 +40,11 @@ export const scrapePotion = ({
       materialId: materialEntity.getRequiredAttribute('material').asText(),
       usage: materialEntity.getRequiredAttribute('count').asInt(),
     }),
+  );
+
+  potion.usedCapacity = arrayHelpers.sumBy(
+    potion.materials,
+    (material) => material.usage,
   );
 
   return potion;

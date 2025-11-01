@@ -33,7 +33,7 @@
     "@types/omggif": "^1.0.5",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
-    "electron": "33.2.1",
+    "electron": "^38.3.0",
     "eslint": "^8.57.1",
     "eslint-plugin-import": "^2.31.0",
     "ts-node": "^10.9.2",
