@@ -2,6 +2,7 @@ import { Header, Icon } from '@noita-explorer/noita-component-library';
 import { Flex } from '@noita-explorer/react-utils';
 import { deployUrls } from '../utils/deploy-urls.ts';
 import { Link } from '../components/link.tsx';
+import { publicPaths } from '../utils/public-paths.ts';
 
 export const Credits = () => {
   return (
@@ -125,6 +126,33 @@ export const Credits = () => {
           inspired Noita Explorer:
         </p>
         <ul>
+          <li>
+            <Link
+              to='https://github.com/pudy248/NoitaMapViewer'
+              external
+              buttonDecoration='right'
+            >
+              [Github] pudy248 / NoitaMapViewer
+            </Link>
+            <div>
+              Thanks Pudy248 for all the help you provided during the
+              development of the map viewer
+              <Icon
+                src={publicPaths.static.dataWak.misc('heart')}
+                size={20}
+                style={{ marginLeft: '8px' }}
+              />
+            </div>
+          </li>
+          <li>
+            <Link
+              to='https://github.com/NathanSnail/entity_bin'
+              external
+              buttonDecoration='right'
+            >
+              [Github] NathanSnail / entity_bin
+            </Link>
+          </li>
           <li>
             <Link
               to='https://github.com/TwoAbove/noita-tools'
