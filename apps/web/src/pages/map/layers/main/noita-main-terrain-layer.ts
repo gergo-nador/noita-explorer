@@ -1,9 +1,5 @@
 import L from 'leaflet';
-import {
-  NoitaEntityFileCollection,
-  NoitaPetriFileCollection,
-} from '../../noita-map.types.ts';
-import { StreamInfoFileFormat } from '@noita-explorer/model-noita';
+import { NoitaPetriFileCollection } from '../../noita-map.types.ts';
 import {
   MapRendererPool,
   MapRendererWorker,
@@ -15,7 +11,7 @@ export const NoitaMainTerrainLayer = L.GridLayer.extend({
   createTile: function (coords: L.Coords, done: L.DoneCallback): HTMLElement {
     const tile = L.DomUtil.create('div', 'leaflet-tile');
 
-    const streamInfo: StreamInfoFileFormat = this.options.streamInfo;
+    //const streamInfo: StreamInfoFileFormat = this.options.streamInfo;
     const petriFiles: NoitaPetriFileCollection = this.options.petriFiles;
     const petriFile = petriFiles?.[coords.x]?.[coords.y];
 
@@ -30,10 +26,10 @@ export const NoitaMainTerrainLayer = L.GridLayer.extend({
       return tile;
     }
 
-    const entityFiles: NoitaEntityFileCollection = this.options.entityFiles;
+    //const entityFiles: NoitaEntityFileCollection = this.options.entityFiles;
 
-    const entityFileNum = 2000 * coords.y + coords.x;
-    const entityFile = entityFiles[entityFileNum];
+    //const entityFileNum = 2000 * coords.y + coords.x;
+    //const entityFile = entityFiles[entityFileNum];
 
     const renderPool: MapRendererPool = this.options.renderPool;
 

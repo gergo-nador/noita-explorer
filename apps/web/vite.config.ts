@@ -58,6 +58,9 @@ export default defineConfig(({ mode }): UserConfig => {
         external: ['jimp', 'omggif', 'canvas', /images\.node-/, /gif\.node-/],
       },
     },
+    worker: {
+      format: 'es',
+    },
   };
 });
 
