@@ -10,6 +10,7 @@ import { MapRenderType } from './map-render.types.ts';
 import { mapRendererSetup } from './map-renderer.setup.ts';
 import { StringKeyDictionary } from '@noita-explorer/model';
 import { scrape } from '@noita-explorer/scrapers';
+import { Buffer } from 'buffer';
 
 const setupDataPromise = mapRendererSetup();
 const materialColorCache: StringKeyDictionary<number> = {};
@@ -64,8 +65,16 @@ const mapRenderer: MapRenderType = {
       );
       const setupData = await setupDataPromise;
 
+      let petriBuffer = props.petriFileBuffer;
+      // unpack transferable object
+      if ('send' in props.petriFileBuffer) {
+        const arrayBuffer = props.petriFileBuffer.send as ArrayBuffer;
+
+        petriBuffer = new Uint8Array(arrayBuffer) as Buffer;
+      }
+
       const petriContent = await scrape.save00.pngPetriFile({
-        pngPetriFile: props.petriFileBuffer,
+        pngPetriFile: petriBuffer,
         fastLzCompressor: setupData.fastLzCompressor,
       });
 

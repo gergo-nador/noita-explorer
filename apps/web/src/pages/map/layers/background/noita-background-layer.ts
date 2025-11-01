@@ -42,7 +42,6 @@ export const NoitaBackgroundLayer = L.GridLayer.extend({
     const bgColors = noitaBgThemes['nightMid'];
 
     const renderPool: MapRendererPool = this.options.renderPool;
-    console.log('renderPool', renderPool);
     renderPool.queue((worker: MapRendererWorker) => {
       worker
         .renderBackgroundTile({

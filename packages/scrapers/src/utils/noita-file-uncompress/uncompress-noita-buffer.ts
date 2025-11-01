@@ -4,13 +4,15 @@ import { NoitaCompressedFile } from './noita-compressed-file.ts';
 import { FastLZCompressor } from '@noita-explorer/fastlz';
 
 export async function uncompressNoitaBuffer(
-  buffer: Buffer,
+  data: Buffer | ArrayBuffer | Uint8Array,
   fastLzCompressor: FastLZCompressor,
 ) {
   // ensure file buffer is an actual buffer
-  if (!Buffer.isBuffer(buffer)) {
-    buffer = Buffer.from(buffer);
+  if (data instanceof ArrayBuffer) {
+    data = new Uint8Array(data);
   }
+
+  const buffer = Buffer.isBuffer(data) ? data : Buffer.from(data);
 
   const bufferReader = createBufferReader(buffer);
 

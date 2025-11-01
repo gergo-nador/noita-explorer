@@ -8,6 +8,9 @@ import {
   MapRendererPool,
   MapRendererWorker,
 } from '../../map-renderer-threads/threads-pool.types.ts';
+import { Buffer } from 'buffer';
+// @ts-expect-error for some reason threads types are not recognized
+import { Transfer } from 'threads/worker';
 
 export const NoitaMainTerrainLayer = L.GridLayer.extend({
   createTile: function (coords: L.Coords, done: L.DoneCallback): HTMLElement {
@@ -48,12 +51,14 @@ export const NoitaMainTerrainLayer = L.GridLayer.extend({
     }
 
     renderPool
-      .queue(async (worker: MapRendererWorker) =>
-        worker.renderTerrainTile({
-          petriFileBuffer: await petriFile.read.asBuffer(),
+      .queue(async (worker: MapRendererWorker) => {
+        const array: Uint8Array = await petriFile.read.asBuffer();
+
+        return worker.renderTerrainTile({
+          petriFileBuffer: Transfer(array.buffer),
           chunkCoordinates: coords,
-        }),
-      )
+        });
+      })
       .then((image: ImageBitmap | undefined) => {
         if (image) {
           ctx.drawImage(image, 0, 0);
