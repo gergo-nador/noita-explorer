@@ -5,31 +5,29 @@ import {
 } from '@noita-explorer/model-noita';
 import L from 'leaflet';
 import { MapContainer, Marker, Popup, useMapEvents } from 'react-leaflet';
-import {
-  NoitaEntityFileCollection,
-  NoitaPetriFileCollection,
-} from './noita-map.types.ts';
 import { CSSProperties, useState } from 'react';
 import { NoitaMapMainTerrainLayer } from './layers/main/noita-map-main-terrain-layer.tsx';
 import { NoitaMapBiomeLayer } from './layers/biome/noita-map-biome-layer.tsx';
 import { NoitaMapEntityLazyLoadingLayer } from './layers/entity/noita-map-entity-lazy-loading-layer.tsx';
 import { ThreadsPoolContextProvider } from './map-renderer-threads/threads-pool-context-provider.tsx';
 import { NoitaMapBackgroundLayer } from './layers/background/noita-map-background-layer.tsx';
+import { useOrganizeWorldFiles } from './hooks/use-organize-world-files.ts';
 
 export function NoitaMapContainer({
-  petriFiles,
-  entityFiles,
   worldPixelScenes,
   streamInfo,
   biomes,
 }: {
-  petriFiles: NoitaPetriFileCollection;
-  entityFiles: NoitaEntityFileCollection;
   worldPixelScenes: WorldPixelSceneFileFormat;
   streamInfo: StreamInfoFileFormat;
   biomes: NoitaWakBiomes;
 }) {
   const mapCenter: L.LatLngExpression = [0, 0];
+  const { petriFileCollection, entityFileCollection } = useOrganizeWorldFiles();
+
+  if (!worldPixelScenes || !streamInfo) {
+    return <div>No current run detected</div>;
+  }
 
   return (
     <ThreadsPoolContextProvider>
@@ -51,13 +49,13 @@ export function NoitaMapContainer({
               biomes={biomes}
             />
             <NoitaMapMainTerrainLayer
-              petriFiles={petriFiles}
-              entityFiles={entityFiles}
+              petriFiles={petriFileCollection}
+              entityFiles={entityFileCollection}
               streamInfo={streamInfo}
             />
             {Math.random() > 1 && (
               <NoitaMapEntityLazyLoadingLayer
-                entityFiles={entityFiles}
+                entityFiles={entityFileCollection}
                 streamInfo={streamInfo}
               />
             )}

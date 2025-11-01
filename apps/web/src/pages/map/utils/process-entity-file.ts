@@ -5,7 +5,6 @@ import {
 } from '@noita-explorer/model';
 import { noitaSchemaManager } from './noita-schema-manager.ts';
 import { arrayHelpers, imageHelpers } from '@noita-explorer/tools';
-import { noitaDataWakManager } from '../../../workers-service/noita-data-wak-manager.ts';
 import {
   mapConstants,
   ChunkRenderableEntity,
@@ -60,7 +59,9 @@ async function processEntity({
 }: {
   entity: ChunkEntity;
 }): Promise<ChunkRenderableEntity | undefined> {
-  const dataWak = await noitaDataWakManager.getDataWak();
+  // const dataWak = await noitaDataWakManager.getDataWak();
+  const dataWak: FileSystemDirectoryAccess =
+    undefined as unknown as FileSystemDirectoryAccess;
   const renderableEntity: ChunkRenderableEntity = {
     name: entity.name,
     tags: entity.tags,

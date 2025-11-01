@@ -5,7 +5,7 @@ import { createDataWakBroadcastChannel } from '../utils/channels/data-wak-broadc
 
 type DataWakManagerType = {
   isFailed: () => boolean;
-  wait: () => Promise<FileSystemDirectoryAccess | undefined>;
+  init: () => Promise<void>;
   get: () => FileSystemDirectoryAccess | undefined;
 };
 
@@ -14,7 +14,7 @@ export const noitaDataWakManager = ((): DataWakManagerType => {
   if (__SSG__) {
     return {
       isFailed: () => false,
-      wait: () => Promise.resolve(undefined),
+      init: () => Promise.resolve(),
       get: () => undefined,
     };
   }
@@ -26,13 +26,12 @@ export const noitaDataWakManager = ((): DataWakManagerType => {
   let dataWakDir: FileSystemDirectoryAccess | undefined = undefined;
 
   const xmlHttpRequest = new XMLHttpRequest();
-  xmlHttpRequest.open('GET', import.meta.env.VITE_DATA_WAK_URL);
   xmlHttpRequest.responseType = 'arraybuffer';
 
-  xmlHttpRequest.onload = () => {
+  xmlHttpRequest.addEventListener('load', () => {
     const buffer = Buffer.from(xmlHttpRequest.response);
     dataWakDir = FileSystemDirectoryAccessDataWakMemory(buffer);
-  };
+  });
   xmlHttpRequest.onerror = () => (error = true);
   xmlHttpRequest.onprogress = (progress) => {
     if (progress.type !== 'progress') return;
@@ -43,24 +42,19 @@ export const noitaDataWakManager = ((): DataWakManagerType => {
     });
   };
 
-  xmlHttpRequest.send();
+  xmlHttpRequest.open('GET', import.meta.env.VITE_DATA_WAK_URL);
 
-  function wait() {
-    return new Promise((resolve, reject) => {
+  return {
+    init: () => {
       if (!isSent) {
         xmlHttpRequest.send();
         isSent = true;
       }
 
-      xmlHttpRequest.onload = () => resolve(1);
-      xmlHttpRequest.onerror = () => reject(1);
-    });
-  }
-
-  return {
-    wait: async () => {
-      await wait();
-      return dataWakDir;
+      return new Promise((resolve, reject) => {
+        xmlHttpRequest.addEventListener('load', () => resolve());
+        xmlHttpRequest.addEventListener('error', () => reject());
+      });
     },
     get: () => dataWakDir,
     isFailed: () => error,

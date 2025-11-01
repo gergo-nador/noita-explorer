@@ -1,5 +1,10 @@
+export interface DataWakBroadcastChannelProgressPayload {
+  total: number;
+  loaded: number;
+}
+
 interface Props {
-  onProgress?: () => void;
+  onProgress?: (props: DataWakBroadcastChannelProgressPayload) => void;
 }
 
 export function createDataWakBroadcastChannel(props?: Props) {
@@ -11,17 +16,21 @@ export function createDataWakBroadcastChannel(props?: Props) {
     if (!('type' in data)) return;
 
     if (data.type === 'progress') {
-      props?.onProgress?.();
+      props?.onProgress?.({ total: data.total, loaded: data.loaded });
       return;
     }
   };
 
-  function postProgress({ total, loaded }: { total: number; loaded: number }) {
+  function postProgress({
+    total,
+    loaded,
+  }: DataWakBroadcastChannelProgressPayload) {
     channel.postMessage({ type: 'progress', total, loaded });
   }
 
   return {
     close: () => channel.close(),
     postProgress,
+    getIsLoaded: () => fetch('/data-initiate').then(({ ok }) => ok),
   };
 }

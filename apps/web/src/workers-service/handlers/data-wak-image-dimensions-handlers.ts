@@ -11,13 +11,10 @@ export const dataWakImageDimensionsHandlers = [
       return HttpResponse.json(imageDimensions, { status: 200 });
     }
 
-    let dataWak = noitaDataWakManager.get();
+    const dataWak = noitaDataWakManager.get();
     if (!dataWak) {
-      dataWak = await noitaDataWakManager.wait();
-
-      if (!dataWak) {
-        throw new Error('Data wak not found');
-      }
+      console.error('Data.wak is not initialized in the service worker');
+      return new HttpResponse(null, { status: 404 });
     }
 
     let dirQueue = [dataWak];
