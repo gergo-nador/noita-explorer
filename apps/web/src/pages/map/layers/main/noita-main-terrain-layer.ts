@@ -8,7 +8,6 @@ import {
   MapRendererPool,
   MapRendererWorker,
 } from '../../map-renderer-threads/threads-pool.types.ts';
-import { Buffer } from 'buffer';
 // @ts-expect-error for some reason threads types are not recognized
 import { Transfer } from 'threads/worker';
 

@@ -1,6 +1,4 @@
-import { StringKeyDictionary } from '@noita-explorer/model';
 import {
-  NoitaMaterial,
   NoitaWakBiomes,
   StreamInfoFileFormat,
   WorldPixelSceneFileFormat,
@@ -8,8 +6,6 @@ import {
 import L from 'leaflet';
 import { MapContainer, Marker, Popup, useMapEvents } from 'react-leaflet';
 import {
-  MaterialColorCache,
-  MaterialImageCache,
   NoitaEntityFileCollection,
   NoitaPetriFileCollection,
 } from './noita-map.types.ts';
@@ -23,18 +19,12 @@ import { NoitaMapBackgroundLayer } from './layers/background/noita-map-backgroun
 export function NoitaMapContainer({
   petriFiles,
   entityFiles,
-  materials,
-  materialImageCache,
-  materialColorCache,
   worldPixelScenes,
   streamInfo,
   biomes,
 }: {
   petriFiles: NoitaPetriFileCollection;
   entityFiles: NoitaEntityFileCollection;
-  materials: StringKeyDictionary<NoitaMaterial>;
-  materialImageCache: MaterialImageCache;
-  materialColorCache: MaterialColorCache;
   worldPixelScenes: WorldPixelSceneFileFormat;
   streamInfo: StreamInfoFileFormat;
   biomes: NoitaWakBiomes;
@@ -63,9 +53,6 @@ export function NoitaMapContainer({
             <NoitaMapMainTerrainLayer
               petriFiles={petriFiles}
               entityFiles={entityFiles}
-              materials={materials}
-              materialColorCache={materialColorCache}
-              materialImageCache={materialImageCache}
               streamInfo={streamInfo}
             />
             {Math.random() > 1 && (

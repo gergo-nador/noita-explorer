@@ -1,8 +1,4 @@
-import {
-  FileSystemFileAccess,
-  RgbaColor,
-  StringKeyDictionary,
-} from '@noita-explorer/model';
+import { FileSystemFileAccess } from '@noita-explorer/model';
 
 export type NoitaPetriFileCollection = Record<
   // x coordinate
@@ -16,6 +12,3 @@ export type NoitaPetriFileCollection = Record<
 >;
 
 export type NoitaEntityFileCollection = Record<number, FileSystemFileAccess>;
-
-export type MaterialImageCache = StringKeyDictionary<ImageData>;
-export type MaterialColorCache = StringKeyDictionary<RgbaColor>;

@@ -35,7 +35,6 @@ export default defineConfig(({ mode }): UserConfig => {
       __DEPLOY_TIME__: JSON.stringify(deployInfo.time),
       __ENV__: JSON.stringify(environment),
       __SSG__: JSON.stringify(isLibMode),
-      __BROADCAST_CHANNELS__: JSON.stringify({ data_wak: 'data_wak' }),
     },
 
     build: {

@@ -1,6 +1,7 @@
 import { Buffer } from 'buffer';
 import { FileSystemDirectoryAccessDataWakMemory } from '@noita-explorer/file-systems/data-wak-memory-fs';
 import { FileSystemDirectoryAccess } from '@noita-explorer/model';
+import { createDataWakBroadcastChannel } from '../utils/channels/data-wak-broadcast-channel.ts';
 
 type DataWakManagerType = {
   isFailed: () => boolean;
@@ -18,9 +19,7 @@ export const noitaDataWakManager = ((): DataWakManagerType => {
     };
   }
 
-  const dataWakBroadcastChannel = new BroadcastChannel(
-    __BROADCAST_CHANNELS__.data_wak,
-  );
+  const dataWakBroadcastChannel = createDataWakBroadcastChannel();
 
   let error = false;
   let isSent = false;
@@ -37,8 +36,11 @@ export const noitaDataWakManager = ((): DataWakManagerType => {
   xmlHttpRequest.onerror = () => (error = true);
   xmlHttpRequest.onprogress = (progress) => {
     if (progress.type !== 'progress') return;
-    dataWakBroadcastChannel.postMessage({ type: 'progress' });
-    console.log('progress', progress);
+
+    dataWakBroadcastChannel.postProgress({
+      total: progress.total,
+      loaded: progress.loaded,
+    });
   };
 
   xmlHttpRequest.send();

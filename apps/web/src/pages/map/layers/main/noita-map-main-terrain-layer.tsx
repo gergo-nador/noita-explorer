@@ -1,8 +1,4 @@
-import { RgbaColor, StringKeyDictionary } from '@noita-explorer/model';
-import {
-  NoitaMaterial,
-  StreamInfoFileFormat,
-} from '@noita-explorer/model-noita';
+import { StreamInfoFileFormat } from '@noita-explorer/model-noita';
 import { useMap } from 'react-leaflet';
 import { useEffect, useRef } from 'react';
 import L from 'leaflet';
@@ -17,16 +13,10 @@ import { useMapPane } from '../../hooks/use-map-pane.ts';
 export function NoitaMapMainTerrainLayer({
   petriFiles,
   entityFiles,
-  materials,
-  materialImageCache,
-  materialColorCache,
   streamInfo,
 }: {
   petriFiles: NoitaPetriFileCollection;
   entityFiles: NoitaEntityFileCollection;
-  materials: StringKeyDictionary<NoitaMaterial>;
-  materialImageCache: StringKeyDictionary<ImageData>;
-  materialColorCache: StringKeyDictionary<RgbaColor>;
   streamInfo: StreamInfoFileFormat;
 }) {
   const map = useMap();
@@ -52,9 +42,6 @@ export function NoitaMapMainTerrainLayer({
         // Custom properties
         petriFiles,
         entityFiles,
-        materials,
-        materialImageCache,
-        materialColorCache,
         streamInfo,
         renderPool: threadsPool?.pool,
       });
@@ -71,17 +58,7 @@ export function NoitaMapMainTerrainLayer({
         layerRef.current = null;
       }
     };
-  }, [
-    map,
-    petriFiles,
-    entityFiles,
-    materials,
-    materialImageCache,
-    materialColorCache,
-    streamInfo,
-    pane.name,
-    threadsPool?.pool,
-  ]); // Re-run effect if the map instance changes
+  }, [map, petriFiles, entityFiles, streamInfo, pane.name, threadsPool?.pool]); // Re-run effect if the map instance changes
 
   // This component does not render any JSX itself.
   return null;
