@@ -36,19 +36,17 @@ export const NoitaMapBackgroundLayer = () => {
         renderPool: threadsPool?.pool,
       });
 
-      // Add the layer to the map
       map.addLayer(gridLayer);
       layerRef.current = gridLayer;
     }
 
-    // The cleanup function for when the component unmounts
     return () => {
       if (layerRef.current) {
         map.removeLayer(layerRef.current);
         layerRef.current = null;
       }
     };
-  }, [map, pane.name, threadsPool]); // Re-run effect if the map instance changes
+  }, [map, pane.name, threadsPool]);
 
   return null;
 };

@@ -53,12 +53,10 @@ export const NoitaMapBiomeLayer = ({
         backgrounds,
       });
 
-      // Add the layer to the map
       map.addLayer(gridLayer);
       layerRef.current = gridLayer;
     }
 
-    // The cleanup function for when the component unmounts
     return () => {
       if (layerRef.current) {
         map.removeLayer(layerRef.current);
@@ -74,8 +72,7 @@ export const NoitaMapBiomeLayer = ({
     backgrounds,
     isBackgroundsLoaded,
     pane.name,
-  ]); // Re-run effect if the map instance changes
+  ]);
 
-  // This component does not render any JSX itself.
   return null;
 };

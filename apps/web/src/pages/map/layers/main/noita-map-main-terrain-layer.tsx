@@ -35,11 +35,9 @@ export function NoitaMapMainTerrainLayer({
 
         noWrap: true,
 
-        // --- THE KEY CHANGE IS HERE ---
         minNativeZoom: 0,
         maxNativeZoom: 0,
 
-        // Custom properties
         petriFiles,
         entityFiles,
         streamInfo,
@@ -51,15 +49,13 @@ export function NoitaMapMainTerrainLayer({
       layerRef.current = gridLayer;
     }
 
-    // The cleanup function for when the component unmounts
     return () => {
       if (layerRef.current) {
         map.removeLayer(layerRef.current);
         layerRef.current = null;
       }
     };
-  }, [map, petriFiles, entityFiles, streamInfo, pane.name, threadsPool?.pool]); // Re-run effect if the map instance changes
+  }, [map, petriFiles, entityFiles, streamInfo, pane.name, threadsPool?.pool]);
 
-  // This component does not render any JSX itself.
   return null;
 }
