@@ -6,6 +6,8 @@ import {
 } from '../../map-renderer-threads/threads-pool.types.ts';
 // @ts-expect-error for some reason threads types are not recognized
 import { Transfer } from 'threads/worker';
+import { publicPaths } from '../../../../utils/public-paths.ts';
+import { mapConstants } from '@noita-explorer/map';
 
 export const NoitaMainTerrainLayer = L.GridLayer.extend({
   createTile: function (coords: L.Coords, done: L.DoneCallback): HTMLElement {
@@ -40,8 +42,16 @@ export const NoitaMainTerrainLayer = L.GridLayer.extend({
 
     const ctx = canvas.getContext('2d');
     if (!ctx) {
-      tile.innerHTML = '';
-      done(new Error('nope'), tile);
+      console.error('CanvasRenderingContext2D not available');
+      const imageElement = document.createElement('img');
+      imageElement.src = publicPaths.static.map.tileError();
+      imageElement.width = mapConstants.chunkWidth;
+      imageElement.height = mapConstants.chunkHeight;
+
+      tile.appendChild(imageElement);
+      // `done` needs to be called after returning
+      setTimeout(() => done(undefined, tile), 0);
+
       return tile;
     }
 
@@ -59,6 +69,15 @@ export const NoitaMainTerrainLayer = L.GridLayer.extend({
           ctx.drawImage(image, 0, 0);
           tile.appendChild(canvas);
         }
+      })
+      .catch((err: unknown) => {
+        console.log('error during biome tile render', err);
+        const imageElement = document.createElement('img');
+        imageElement.src = publicPaths.static.map.tileError();
+        imageElement.width = mapConstants.chunkWidth;
+        imageElement.height = mapConstants.chunkHeight;
+
+        tile.appendChild(imageElement);
       })
       .then(() => done(undefined, tile));
 

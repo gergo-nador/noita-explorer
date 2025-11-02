@@ -43,7 +43,16 @@ export const NoitaBiomeLayer = L.GridLayer.extend({
 
     const ctx = canvas.getContext('2d');
     if (!ctx) {
-      tile.innerHTML = '';
+      console.error('CanvasRenderingContext2D not available');
+      const imageElement = document.createElement('img');
+      imageElement.src = publicPaths.static.map.tileError();
+      imageElement.width = mapConstants.chunkWidth;
+      imageElement.height = mapConstants.chunkHeight;
+
+      tile.appendChild(imageElement);
+      // `done` needs to be called after returning
+      setTimeout(() => done(undefined, tile), 0);
+
       return tile;
     }
 
@@ -74,12 +83,23 @@ export const NoitaBiomeLayer = L.GridLayer.extend({
           },
         })
         .then((image: ImageBitmap | undefined) => {
-          if (image) ctx.drawImage(image, 0, 0);
+          if (image) {
+            ctx.drawImage(image, 0, 0);
+            tile.appendChild(canvas);
+          }
+        })
+        .catch((err: unknown) => {
+          console.log('error during biome tile render', err);
+          const imageElement = document.createElement('img');
+          imageElement.src = publicPaths.static.map.tileError();
+          imageElement.width = mapConstants.chunkWidth;
+          imageElement.height = mapConstants.chunkHeight;
+
+          tile.appendChild(imageElement);
         })
         .then(() => done(undefined, tile));
     });
 
-    tile.appendChild(canvas);
     return tile;
   },
 });

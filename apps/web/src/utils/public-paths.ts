@@ -16,6 +16,7 @@ export const publicPaths = {
     },
     map: {
       unexplored: () => '/images/map/unexplored.png',
+      tileError: () => '/images/map/tile-render-error-image.png',
     },
   },
   generated: {

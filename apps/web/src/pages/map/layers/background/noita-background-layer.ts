@@ -5,6 +5,7 @@ import {
   MapRendererPool,
   MapRendererWorker,
 } from '../../map-renderer-threads/threads-pool.types.ts';
+import { publicPaths } from '../../../../utils/public-paths.ts';
 
 const tileWidth = mapConstants.chunkWidth * 12;
 const tileHeight = mapConstants.chunkHeight * 6;
@@ -30,8 +31,6 @@ export const NoitaBackgroundLayer = L.GridLayer.extend({
     canvas.width = tileWidth;
     canvas.height = tileHeight;
 
-    tile.appendChild(canvas);
-
     const ctx = canvas.getContext('2d');
     if (!ctx) {
       throw new Error('NoitaBackgroundLayer is not supported');
@@ -50,7 +49,19 @@ export const NoitaBackgroundLayer = L.GridLayer.extend({
           theme: bgColors,
         })
         .then((image: ImageBitmap | undefined) => {
-          if (image) ctx.drawImage(image, 0, 0);
+          if (image) {
+            ctx.drawImage(image, 0, 0);
+            tile.appendChild(canvas);
+          }
+        })
+        .catch((err: unknown) => {
+          console.log('error during biome tile render', err);
+          const imageElement = document.createElement('img');
+          imageElement.src = publicPaths.static.map.tileError();
+          imageElement.width = mapConstants.chunkWidth;
+          imageElement.height = mapConstants.chunkHeight;
+
+          tile.appendChild(imageElement);
         })
         .then(() => done(undefined, tile));
     });
