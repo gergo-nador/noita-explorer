@@ -29,6 +29,10 @@ export default defineConfig(({ mode }): UserConfig => {
 
     server: {
       port: 4000,
+      headers: {
+        'Cross-Origin-Opener-Policy': 'same-origin',
+        'Cross-Origin-Embedder-Policy': 'require-corp',
+      },
     },
     define: {
       __DEPLOY_ID__: JSON.stringify(deployInfo.id),
