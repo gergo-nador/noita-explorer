@@ -41,6 +41,7 @@
     "diff": "^8.0.2",
     "idb": "^8.0.1",
     "leaflet": "^1.9.4",
+    "leaflet-edgebuffer": "^1.0.7",
     "msw": "^2.11.6",
     "plotly.js": "^2.35.3",
     "react": "19.1.0",

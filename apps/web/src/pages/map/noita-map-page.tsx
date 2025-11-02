@@ -2,6 +2,7 @@ import { NoitaMapContainer } from './noita-map-container.tsx';
 import { useNoitaDataWakStore } from '../../stores/noita-data-wak.ts';
 import { useSave00Store } from '../../stores/save00.ts';
 import { useDataWakLoader } from './hooks/use-data-wak-loader.ts';
+import 'leaflet-edgebuffer';
 
 export const NoitaMapPage = () => {
   const { data } = useNoitaDataWakStore();

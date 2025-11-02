@@ -39,7 +39,8 @@ export const NoitaMapBiomeLayer = ({
         tileSize: 512,
         minZoom: -4,
         maxZoom: 5,
-        keepBuffer: 4,
+        keepBuffer: 3,
+        edgeBufferTiles: 1,
 
         noWrap: true,
 
