@@ -29,8 +29,6 @@ export const ProgressOrbs = () => {
       >
         {enumerateHelpers.range(0, 12).map((orbId) => {
           const orbIdString = String(orbId).padStart(2, '0');
-          const hasEast = orbId < 11;
-          const hasWest = orbId < 11;
 
           const progressFlagUnlocked = flags?.has(
             'progress_orb_pickup_' + orbIdString,
@@ -42,16 +40,12 @@ export const ProgressOrbs = () => {
           return (
             <>
               <Flex center column>
-                {hasWest && (
-                  <>
-                    {isOrbWestPickedUp ? (
-                      <OrbGif orbId='orb_picked' />
-                    ) : (
-                      <OrbGif orbId='orb_red_evil' />
-                    )}
-                    <div>Orb {orbId} West</div>
-                  </>
+                {isOrbWestPickedUp ? (
+                  <OrbGif orbId='orb_picked' />
+                ) : (
+                  <OrbGif orbId='orb_red_evil' />
                 )}
+                <div>Orb {orbId} West</div>
               </Flex>
               <Flex center column>
                 {isOrbPickedUp ? (
@@ -64,16 +58,12 @@ export const ProgressOrbs = () => {
                 <div>Orb {orbId}</div>
               </Flex>
               <Flex center column>
-                {hasEast && (
-                  <>
-                    {isOrbEastPickedUp ? (
-                      <OrbGif orbId='orb_picked' />
-                    ) : (
-                      <OrbGif orbId='orb_red_evil' />
-                    )}
-                    <div>Orb {orbId} East</div>
-                  </>
+                {isOrbEastPickedUp ? (
+                  <OrbGif orbId='orb_picked' />
+                ) : (
+                  <OrbGif orbId='orb_red_evil' />
                 )}
+                <div>Orb {orbId} East</div>
               </Flex>
             </>
           );
