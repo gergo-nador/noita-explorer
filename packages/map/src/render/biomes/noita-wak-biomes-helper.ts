@@ -15,7 +15,8 @@ export function createNoitaWakBiomesHelper({ biomes }: Props) {
 
     // x coordinate just overlaps
     let xShifted = x + biomes.biomeMap.biomeOffset.x;
-    xShifted = xShifted % biomes.biomeMap.biomeSize.x;
+    const width = biomes.biomeMap.biomeSize.x;
+    xShifted = ((xShifted % width) + width) % width;
 
     const biomeIndex = biomes.biomeMap.biomeIndices[yShifted]?.[xShifted];
 
