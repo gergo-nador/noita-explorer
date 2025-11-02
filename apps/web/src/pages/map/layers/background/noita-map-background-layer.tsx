@@ -26,6 +26,7 @@ export const NoitaMapBackgroundLayer = () => {
         ),
         minZoom: -4,
         maxZoom: 5,
+        keepBuffer: 4,
 
         noWrap: true,
 
