@@ -41,7 +41,7 @@ export const NoitaSessionsStatistics = ({
           <SpaceCharacter />
           {statsFirstDayPlayed?.toLocaleDateString()}
         </li>
-        <li>Most played on one day: {statsMostPlayedOneDay}</li>
+        <li>Most played on a single day: {statsMostPlayedOneDay}</li>
         <li>
           average game per game day:
           <SpaceCharacter />
