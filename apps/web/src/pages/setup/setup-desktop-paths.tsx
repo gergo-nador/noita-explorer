@@ -21,22 +21,22 @@ export const SetupDesktopPaths = () => {
 
   const [defaultPaths, setDefaultPaths] = useState<{
     install: string | undefined;
-    NollaGamesNoita: string | undefined;
+    save00: string | undefined;
   }>({
     install: undefined,
-    NollaGamesNoita: undefined,
+    save00: undefined,
   });
 
   useEffect(() => {
     Promise.all([
       noitaAPI.noita.defaultPaths.installPathDefault(),
-      noitaAPI.noita.defaultPaths.nollaGamesNoitaDefault(),
+      noitaAPI.noita.defaultPaths.save00Default(),
     ])
       .then((result) => {
         setDefaultPaths({
           ...defaultPaths,
           install: result[0],
-          NollaGamesNoita: result[1],
+          save00: result[1],
         });
       })
       .catch((err) =>
@@ -48,7 +48,7 @@ export const SetupDesktopPaths = () => {
     const newPaths = {
       ...paths,
       install: paths.install ?? defaultPaths.install,
-      NollaGamesNoita: paths.NollaGamesNoita ?? defaultPaths.NollaGamesNoita,
+      NollaGamesNoita: paths.save00 ?? defaultPaths.save00,
     };
 
     toast.info('Autofill completed');
@@ -58,7 +58,7 @@ export const SetupDesktopPaths = () => {
 
   useEffect(() => {
     if (!paths.install) setNextEnabled(false);
-    else if (!paths.NollaGamesNoita) setNextEnabled(false);
+    else if (!paths.save00) setNextEnabled(false);
     else setNextEnabled(true);
   }, [paths]);
 
@@ -82,20 +82,15 @@ export const SetupDesktopPaths = () => {
           </NoitaTooltipWrapper>
         </Flex>
         <Flex>
-          <NoitaTooltipWrapper content={'NollaGamesNoita folder'}>
+          <NoitaTooltipWrapper content='save00 folder'>
             <PathInput
               type={'directory'}
-              displayPath={
-                paths.NollaGamesNoita ?? 'Select the NollaGamesNoita folder'
-              }
-              startInIfPathEmpty={defaultPaths.NollaGamesNoita}
+              displayPath={paths.save00 ?? 'Select the NollaGamesNoita folder'}
+              startInIfPathEmpty={defaultPaths.save00}
               dialogTitle={'Select the NollaGamesNoita folder'}
-              path={paths.NollaGamesNoita}
+              path={paths.save00}
               setPath={(path) => {
-                setPaths(
-                  (state) =>
-                    (state.paths = { ...paths, NollaGamesNoita: path }),
-                );
+                setPaths((state) => (state.paths = { ...paths, save00: path }));
               }}
             />
           </NoitaTooltipWrapper>

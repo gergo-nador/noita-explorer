@@ -37,7 +37,7 @@ export function browserNoitaApi(): NoitaAPI {
     noita: {
       defaultPaths: {
         installPathDefault: throwNotAllowedInThisModeError,
-        nollaGamesNoitaDefault: throwNotAllowedInThisModeError,
+        save00Default: throwNotAllowedInThisModeError,
       },
       dataFile: {
         get: () => {
@@ -225,33 +225,26 @@ export const getSave00FolderHandle = async () => {
   const db = await noitaDb;
   const config = db.config;
 
-  const nollaGamesNoitaFolder = await config.get(
-    'settings.paths.NollaGamesNoita',
-  );
+  const save00Folder = await config.get('settings.paths.save00');
 
-  if (nollaGamesNoitaFolder === undefined) {
-    throw new Error('NollaGamesNoita folder is not set');
+  if (save00Folder === undefined) {
+    throw new Error('save00 folder is not set');
   }
 
   if (!hasFileSystemApi) {
-    const handle = fallbackFolderStorage[nollaGamesNoitaFolder];
+    const handle = fallbackFolderStorage[save00Folder];
     if (handle === undefined) {
-      throw new Error('NollaGamesNoita folder is not set');
+      throw new Error('save00 folder is not set');
     }
 
-    return handle.getDirectory('save00');
+    return handle;
   }
 
   const fileAccessConfig = db.fileAccess;
-  const nollaGamesNoitaBrowserHandle = await fileAccessConfig.get(
-    nollaGamesNoitaFolder,
-  );
-  if (nollaGamesNoitaBrowserHandle?.kind !== 'directory') {
-    throw new Error('NollaGamesNoita folder is not a directory');
+  const save00BrowserHandle = await fileAccessConfig.get(save00Folder);
+  if (save00BrowserHandle?.kind !== 'directory') {
+    throw new Error('save00 folder is not a directory');
   }
-
-  const save00BrowserHandle =
-    await nollaGamesNoitaBrowserHandle.getDirectoryHandle('save00');
 
   return FileSystemDirectoryAccessBrowserApi(save00BrowserHandle);
 };

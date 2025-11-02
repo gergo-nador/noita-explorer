@@ -27,7 +27,7 @@ export interface NoitaAPI {
     };
     defaultPaths: {
       installPathDefault: () => Promise<string | undefined>;
-      nollaGamesNoitaDefault: () => Promise<string | undefined>;
+      save00Default: () => Promise<string | undefined>;
     };
     save00: {
       scrapeEnemyStatistics: () => Promise<StringKeyDictionary<EnemyStatistic>>;

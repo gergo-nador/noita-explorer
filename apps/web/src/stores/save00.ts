@@ -97,7 +97,7 @@ export const useSave00Store = create<Save00StoreState>((set, get) => ({
       sentry.captureError(ex);
 
       noiToast.error(
-        'Failed to load NollaGamesNoita folder. Please check your chosen folder again. Remember, that you should choose the parent of the save00 folder: NollaGamesNoita.',
+        'Failed to load save00 folder. Please visit the setup page for more details.',
       );
     }
   },

@@ -61,18 +61,14 @@ const useInitialLoader = () => {
   const { reload } = useSave00Store();
 
   useEffect(() => {
-    if (!settings.paths.NollaGamesNoita) {
+    if (!settings.paths.save00) {
       return;
     }
 
     reload()
       .then(() => console.log('save00 loaded'))
       .catch((err) => console.error(err));
-  }, [
-    reload,
-    settings.paths.NollaGamesNoita,
-    settings.paths.forceReloadNollaGamesNoitaCounter,
-  ]);
+  }, [reload, settings.paths.save00, settings.paths.forceReloadSave00Counter]);
 
   const { cursor } = settings;
   const { data } = useNoitaDataWakStore();
