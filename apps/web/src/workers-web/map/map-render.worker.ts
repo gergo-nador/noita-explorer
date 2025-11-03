@@ -4,7 +4,6 @@ import {
   renderBiomeTile,
   renderTerrainTile,
   renderBackgroundTile,
-  mapConstants,
 } from '@noita-explorer/map';
 import { MapRenderType } from './map-render.types.ts';
 import {
@@ -53,7 +52,6 @@ const mapRenderer: MapRenderType = {
         throw new Error('OffscreenCanvasRenderingContext2D not supported');
       }
 
-      ctx.clearRect(0, 0, mapConstants.chunkWidth, mapConstants.chunkHeight);
       await renderBiomeTile({
         ctx,
         chunkBorders: props.chunkBorders,

@@ -25,7 +25,6 @@ export interface MapRenderType {
     props: {
       coords: Vector2d;
       theme: NoitaBackgroundTheme;
-      size: Vector2d;
     },
     // has to be top level argument for transferable
     canvas: OffscreenCanvas,

@@ -20,7 +20,7 @@ export const BackgroundLayer = L.GridLayer.extend({
   createTile: function (coords: L.Coords, done: L.DoneCallback): HTMLElement {
     const tile = L.DomUtil.create('div', 'leaflet-tile');
 
-    if (coords.y > -1) {
+    if (coords.y >= 0) {
       setTimeout(() => done(undefined, tile), 0);
       return tile;
     }
@@ -44,7 +44,6 @@ export const BackgroundLayer = L.GridLayer.extend({
         .renderBackgroundTile(
           {
             coords,
-            size: { x: canvas.width, y: canvas.height },
             theme: bgColors,
           },
           Transfer(offscreenCanvas),
