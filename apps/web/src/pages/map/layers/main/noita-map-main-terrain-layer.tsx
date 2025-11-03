@@ -25,6 +25,8 @@ export function NoitaMapMainTerrainLayer({
   const threadsPool = useThreadsPool();
 
   useEffect(() => {
+    if (!threadsPool?.isLoaded) return;
+
     if (!layerRef.current) {
       // @ts-expect-error typescript doesn't know we can pass parameters
       const gridLayer = new NoitaMainTerrainLayer({
@@ -57,7 +59,15 @@ export function NoitaMapMainTerrainLayer({
         layerRef.current = null;
       }
     };
-  }, [map, petriFiles, entityFiles, streamInfo, pane.name, threadsPool?.pool]);
+  }, [
+    map,
+    petriFiles,
+    entityFiles,
+    streamInfo,
+    pane.name,
+    threadsPool?.pool,
+    threadsPool?.isLoaded,
+  ]);
 
   return null;
 }

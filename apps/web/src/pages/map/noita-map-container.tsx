@@ -1,5 +1,6 @@
 import {
   NoitaWakBiomes,
+  StreamInfoBackground,
   StreamInfoFileFormat,
   WorldPixelSceneFileFormat,
 } from '@noita-explorer/model-noita';
@@ -12,15 +13,20 @@ import { NoitaMapEntityLazyLoadingLayer } from './layers/entity/noita-map-entity
 import { ThreadsPoolContextProvider } from './map-renderer-threads/threads-pool-context-provider.tsx';
 import { NoitaMapBackgroundLayer } from './layers/background/noita-map-background-layer.tsx';
 import { useOrganizeWorldFiles } from './hooks/use-organize-world-files.ts';
+import { Buffer } from 'buffer';
 
 export function NoitaMapContainer({
   worldPixelScenes,
   streamInfo,
   biomes,
+  backgrounds,
+  dataWakBuffer,
 }: {
   worldPixelScenes: WorldPixelSceneFileFormat;
   streamInfo: StreamInfoFileFormat;
   biomes: NoitaWakBiomes;
+  backgrounds: Record<number, Record<number, StreamInfoBackground[]>>;
+  dataWakBuffer: Buffer;
 }) {
   const mapCenter: L.LatLngExpression = [0, 0];
   const { petriFileCollection, entityFileCollection, mapBounds } =
@@ -37,7 +43,7 @@ export function NoitaMapContainer({
   const mapBoundsPadding = 4 * 512;
 
   return (
-    <ThreadsPoolContextProvider>
+    <ThreadsPoolContextProvider dataWakBuffer={dataWakBuffer}>
       <MapContainer
         center={mapCenter}
         zoom={2}
@@ -56,8 +62,6 @@ export function NoitaMapContainer({
         ]}
         maxBoundsViscosity={0.5}
       >
-        {/* HERE is the change! We use our custom layer now.
-         */}
         {!__SSG__ && (
           <>
             <NoitaMapBackgroundLayer />
@@ -65,6 +69,7 @@ export function NoitaMapContainer({
               worldPixelScenes={worldPixelScenes}
               streamInfo={streamInfo}
               biomes={biomes}
+              backgrounds={backgrounds}
             />
             <NoitaMapMainTerrainLayer
               petriFiles={petriFileCollection}

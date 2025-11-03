@@ -20,9 +20,11 @@ caches.keys().then(async (cacheNames) => {
 
 /**
  * Gets the response from the cache. If not stored in cache, it will download the response from internet and store it.
+ *
+ * Important: Cache is tied to Deploy id. If the Deploy id changes, the cache is reset.
  * @param request
  */
-export async function cacheMiddleWare(
+export async function cacheLocalMiddleware(
   request: ResponseResolverInfo<
     HttpRequestResolverExtras<PathParams>,
     DefaultBodyType

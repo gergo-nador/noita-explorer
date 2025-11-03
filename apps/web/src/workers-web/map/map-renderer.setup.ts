@@ -1,9 +1,29 @@
 import { arrayHelpers } from '@noita-explorer/tools';
-import { StringKeyDictionary } from '@noita-explorer/model';
+import {
+  FileSystemDirectoryAccess,
+  StringKeyDictionary,
+} from '@noita-explorer/model';
 import { fetchDataWak } from '../../utils/browser-noita-api/fetch-data-wak.ts';
-import { createFastLzCompressor } from '@noita-explorer/fastlz';
+import {
+  createFastLzCompressor,
+  FastLZCompressor,
+} from '@noita-explorer/fastlz';
+import { NoitaMaterial, NoitaWakBiomes } from '@noita-explorer/model-noita';
 
-export async function mapRendererSetup() {
+interface Props {
+  dataWakDirectory: FileSystemDirectoryAccess;
+}
+
+export interface MapRendererSetupData {
+  materials: StringKeyDictionary<NoitaMaterial>;
+  materialColorCache: StringKeyDictionary<ImageData>;
+  fastLzCompressor: FastLZCompressor;
+  biomes: NoitaWakBiomes;
+}
+
+export async function mapRendererSetup({
+  dataWakDirectory,
+}: Props): Promise<MapRendererSetupData> {
   const noitaDataWak = await fetchDataWak();
   const materialsDict = arrayHelpers.asDict(noitaDataWak.materials, 'id');
 
@@ -13,12 +33,16 @@ export async function mapRendererSetup() {
       continue;
     }
 
-    const imgData = await fetchAndDecodeImage(material.graphicsImagePath);
-    if (!imgData) {
+    const imageBitmap = await decodeImage(
+      dataWakDirectory,
+      material.graphicsImagePath,
+    );
+
+    if (!imageBitmap) {
       continue;
     }
 
-    materialColorCache[material.id] = imgData;
+    materialColorCache[material.id] = imageBitmap;
   }
 
   const fastLzCompressor = await createFastLzCompressor();
@@ -31,10 +55,15 @@ export async function mapRendererSetup() {
   };
 }
 
-async function fetchAndDecodeImage(url: string) {
-  const response = await fetch('/' + url);
-  const blob = await response.blob();
+async function decodeImage(
+  dataWakDirectory: FileSystemDirectoryAccess,
+  path: string,
+) {
+  const file = await dataWakDirectory.getFile(path);
+  const fileBuffer = await file.read.asBuffer();
+  const arrayBuffer = fileBuffer.buffer as ArrayBuffer;
 
+  const blob = new Blob([arrayBuffer], { type: 'image/png' });
   const imageBitmap = await createImageBitmap(blob);
 
   const canvas = new OffscreenCanvas(imageBitmap.width, imageBitmap.height);
@@ -47,5 +76,6 @@ async function fetchAndDecodeImage(url: string) {
   const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
 
   imageBitmap.close();
+
   return imageData;
 }

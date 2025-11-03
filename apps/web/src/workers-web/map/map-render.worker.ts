@@ -7,16 +7,43 @@ import {
   mapConstants,
 } from '@noita-explorer/map';
 import { MapRenderType } from './map-render.types.ts';
-import { mapRendererSetup } from './map-renderer.setup.ts';
-import { StringKeyDictionary } from '@noita-explorer/model';
+import {
+  mapRendererSetup,
+  MapRendererSetupData,
+} from './map-renderer.setup.ts';
+import {
+  FileSystemDirectoryAccess,
+  StringKeyDictionary,
+} from '@noita-explorer/model';
 import { scrape } from '@noita-explorer/scrapers';
 import { Buffer } from 'buffer';
+import { FileSystemDirectoryAccessDataWakMemory } from '@noita-explorer/file-systems/data-wak-memory-fs';
 
-const setupDataPromise = mapRendererSetup();
+let dataWakDirectory: FileSystemDirectoryAccess | undefined = undefined;
+let setupData: MapRendererSetupData | undefined = undefined;
 const materialColorCache: StringKeyDictionary<number> = {};
+
+self.onmessage = (event: MessageEvent) => {
+  if (event.data.type !== 'WORKER_INIT') {
+    return;
+  }
+
+  const dataWakBufferArray = event.data.dataWakBuffer;
+  const dataWakBuffer = Buffer.from(dataWakBufferArray);
+  dataWakDirectory = FileSystemDirectoryAccessDataWakMemory(dataWakBuffer);
+
+  mapRendererSetup({ dataWakDirectory }).then((setup) => {
+    setupData = setup;
+    self.postMessage({ type: 'WORKER_INIT_DONE' });
+  });
+};
 
 const mapRenderer: MapRenderType = {
   async renderBiomeTile(props) {
+    if (!dataWakDirectory || !setupData) {
+      throw new Error('[Worker] data wak not set');
+    }
+
     try {
       const offScreenCanvas = new OffscreenCanvas(
         mapConstants.chunkWidth,
@@ -30,8 +57,6 @@ const mapRenderer: MapRenderType = {
         throw new Error('OffscreenCanvasRenderingContext2D not supported');
       }
 
-      const setupData = await setupDataPromise;
-
       ctx.clearRect(0, 0, mapConstants.chunkWidth, mapConstants.chunkHeight);
       await renderBiomeTile({
         ctx,
@@ -39,6 +64,7 @@ const mapRenderer: MapRenderType = {
         backgroundItems: props.backgrounds,
         biomeCoords: props.biomeCoords,
         biomes: setupData.biomes,
+        dataWakDirectory,
       });
 
       return Transfer(offScreenCanvas.transferToImageBitmap());
@@ -48,6 +74,10 @@ const mapRenderer: MapRenderType = {
     }
   },
   async renderTerrainTile(props) {
+    if (!dataWakDirectory || !setupData) {
+      throw new Error('[Worker] data wak not set');
+    }
+
     try {
       const offScreenCanvas = new OffscreenCanvas(
         mapConstants.chunkWidth,
@@ -64,7 +94,6 @@ const mapRenderer: MapRenderType = {
         offScreenCanvas.width,
         offScreenCanvas.height,
       );
-      const setupData = await setupDataPromise;
 
       let petriBuffer = props.petriFileBuffer;
       // unpack transferable object
@@ -97,6 +126,10 @@ const mapRenderer: MapRenderType = {
     }
   },
   async renderBackgroundTile(props) {
+    if (!dataWakDirectory) {
+      throw new Error('[Worker] data wak not set');
+    }
+
     try {
       const offScreenCanvas = new OffscreenCanvas(props.size.x, props.size.y);
 
@@ -109,6 +142,7 @@ const mapRenderer: MapRenderType = {
         coords: props.coords,
         theme: props.theme,
         ctx,
+        dataWakDirectory,
       });
 
       return Transfer(offScreenCanvas.transferToImageBitmap());

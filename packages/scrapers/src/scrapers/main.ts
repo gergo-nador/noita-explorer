@@ -25,6 +25,7 @@ import { scrapeWorldPixelScenes } from './save00/world/world-pixel-scenes/scrape
 import { scrapeEntityFile } from './save00/world/entity/scrape-entity-file.ts';
 import { scrapePngPetriFile } from './save00/world/png-petri/scrape-png-petri-file.ts';
 import { scrapeBiomes } from './datawak/biomes/scrape-biomes.ts';
+import { scrapeDataWakImageDimensions } from './datawak/scrape-data-wak-image-dimensions.ts';
 
 export type {
   AnimationInfo,
@@ -44,6 +45,7 @@ export const scrape = {
     scrapeAnimation: scrapeAnimation,
     orbAnimations: scrapeOrbAnimations,
     biomes: scrapeBiomes,
+    imageDimensions: scrapeDataWakImageDimensions,
   },
   save00: {
     bonesWands: scrapeBonesWands,

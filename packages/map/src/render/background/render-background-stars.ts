@@ -1,15 +1,18 @@
 import { backgroundStars } from './background-stars.ts';
 import { randomHelpers } from '@noita-explorer/tools';
-import { fetchImageBitmap } from '../../utils/fetch-image-bitmap.ts';
+import { FileSystemDirectoryAccess } from '@noita-explorer/model';
+import { getDataWakImage } from '../../utils/get-data-wak-image.ts';
 
 interface Props {
   ctx: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D;
   starSizeMultiplier: number;
+  dataWakDirectory: FileSystemDirectoryAccess;
 }
 
 export async function renderBackgroundStars({
   ctx,
   starSizeMultiplier,
+  dataWakDirectory,
 }: Props) {
   const width = ctx.canvas.width;
   const height = ctx.canvas.height;
@@ -26,7 +29,7 @@ export async function renderBackgroundStars({
 
     if (amount === 0) continue;
 
-    const { img, close } = await fetchImageBitmap(star.src);
+    const img = await getDataWakImage({ path: star.src, dataWakDirectory });
 
     for (let i = 0; i < amount; i++) {
       const imgWidth = img.width * starSizeMultiplier;
@@ -48,6 +51,6 @@ export async function renderBackgroundStars({
       );
     }
 
-    close();
+    img.close();
   }
 }

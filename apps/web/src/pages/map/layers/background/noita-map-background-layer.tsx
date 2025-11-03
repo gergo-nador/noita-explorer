@@ -16,6 +16,8 @@ export const NoitaMapBackgroundLayer = () => {
   const layerRef = useRef<L.GridLayer | null>(null);
 
   useEffect(() => {
+    if (!threadsPool?.isLoaded) return;
+
     if (!layerRef.current) {
       // @ts-expect-error typescript doesn't know we can pass parameters
       const gridLayer = new NoitaBackgroundLayer({
@@ -48,7 +50,7 @@ export const NoitaMapBackgroundLayer = () => {
         layerRef.current = null;
       }
     };
-  }, [map, pane.name, threadsPool]);
+  }, [map, pane.name, threadsPool?.pool, threadsPool?.isLoaded]);
 
   return null;
 };

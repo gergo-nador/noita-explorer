@@ -4,33 +4,33 @@ import L from 'leaflet';
 import { NoitaBiomeLayer } from './noita-biome-layer.ts';
 import {
   NoitaWakBiomes,
+  StreamInfoBackground,
   StreamInfoFileFormat,
   WorldPixelSceneFileFormat,
 } from '@noita-explorer/model-noita';
 import { useThreadsPool } from '../../map-renderer-threads/use-threads-pool.ts';
-import { useOrganizeBackgroundImages } from '../../hooks/use-organize-background-images.ts';
 import { useMapPane } from '../../hooks/use-map-pane.ts';
 
 interface Props {
   worldPixelScenes: WorldPixelSceneFileFormat;
   streamInfo: StreamInfoFileFormat;
   biomes: NoitaWakBiomes;
+  backgrounds: Record<number, Record<number, StreamInfoBackground[]>>;
 }
 
 export const NoitaMapBiomeLayer = ({
   worldPixelScenes,
   streamInfo,
   biomes,
+  backgrounds,
 }: Props) => {
   const map = useMap();
   const pane = useMapPane({ name: 'noita-biome', zIndex: 1 });
   const threadsPool = useThreadsPool();
   const layerRef = useRef<L.GridLayer | null>(null);
-  const { backgrounds, isLoaded: isBackgroundsLoaded } =
-    useOrganizeBackgroundImages({ streamInfo });
 
   useEffect(() => {
-    if (!isBackgroundsLoaded) return;
+    if (!threadsPool?.isLoaded) return;
 
     if (!layerRef.current) {
       // @ts-expect-error typescript doesn't know we can pass parameters
@@ -70,9 +70,9 @@ export const NoitaMapBiomeLayer = ({
     map,
     streamInfo,
     threadsPool?.pool,
+    threadsPool?.isLoaded,
     worldPixelScenes,
     backgrounds,
-    isBackgroundsLoaded,
     pane.name,
   ]);
 

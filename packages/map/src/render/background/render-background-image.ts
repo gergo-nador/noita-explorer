@@ -1,6 +1,6 @@
 import { CSSProperties } from 'react';
-import { Vector2d } from '@noita-explorer/model';
-import { fetchImageBitmap } from '../../utils/fetch-image-bitmap.ts';
+import { FileSystemDirectoryAccess, Vector2d } from '@noita-explorer/model';
+import { getDataWakImage } from '../../utils/get-data-wak-image.ts';
 
 interface Props {
   src: string;
@@ -8,6 +8,7 @@ interface Props {
   colorRenderMode: 'clouds' | 'mountain';
   offsetY?: number;
   size: Vector2d;
+  dataWakDirectory: FileSystemDirectoryAccess;
 }
 
 export async function renderBackgroundImage({
@@ -16,6 +17,7 @@ export async function renderBackgroundImage({
   colorRenderMode,
   offsetY,
   size,
+  dataWakDirectory,
 }: Props) {
   offsetY ??= 0;
   const width = size.x;
@@ -37,7 +39,7 @@ export async function renderBackgroundImage({
   ctx.fillStyle = color;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  const { img, close } = await fetchImageBitmap(src);
+  const img = await getDataWakImage({ path: src, dataWakDirectory });
   if (colorRenderMode === 'clouds') {
     // 2. mix the img and the chosen color
     ctx.globalCompositeOperation = 'lighter';
@@ -96,7 +98,7 @@ export async function renderBackgroundImage({
     );
   }
 
-  close();
+  img.close();
 
   return canvas;
 }

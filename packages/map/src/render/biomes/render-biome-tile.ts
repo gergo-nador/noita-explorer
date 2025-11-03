@@ -4,10 +4,10 @@ import {
 } from '@noita-explorer/model-noita';
 import { CAVE_LIMIT_Y, mapConstants } from '../../map-constants.ts';
 import { ChunkBorders } from '../../interfaces/chunk-borders.ts';
-import { fetchImageBitmap } from '../../utils/fetch-image-bitmap.ts';
-import { Vector2d } from '@noita-explorer/model';
+import { FileSystemDirectoryAccess, Vector2d } from '@noita-explorer/model';
 import { createNoitaWakBiomesHelper } from './noita-wak-biomes-helper.ts';
 import { renderObjectOntoTile } from '../../utils/render-object-onto-tile.ts';
+import { getDataWakImage } from '../../utils/get-data-wak-image.ts';
 
 interface Props {
   backgroundItems: StreamInfoBackground[];
@@ -15,6 +15,7 @@ interface Props {
   ctx: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D;
   chunkBorders: ChunkBorders;
   biomes: NoitaWakBiomes;
+  dataWakDirectory: FileSystemDirectoryAccess;
 }
 
 export async function renderBiomeTile({
@@ -23,6 +24,7 @@ export async function renderBiomeTile({
   backgroundItems,
   chunkBorders,
   biomes,
+  dataWakDirectory,
 }: Props) {
   const biomeHelpers = createNoitaWakBiomesHelper({ biomes });
   const biome = biomeHelpers.getBiome(biomeCoords);
@@ -30,7 +32,10 @@ export async function renderBiomeTile({
   const bgImagePath = biome.bgImagePath;
 
   if (bgImagePath) {
-    const { img, close } = await fetchImageBitmap(bgImagePath);
+    const img = await getDataWakImage({
+      dataWakDirectory,
+      path: bgImagePath,
+    });
 
     for (let i = 0; i < mapConstants.chunkWidth; i += img.width) {
       for (let j = 0; j < mapConstants.chunkHeight; j += img.height) {
@@ -78,7 +83,7 @@ export async function renderBiomeTile({
       }
     }
 
-    close();
+    img.close();
   }
 
   // mask
@@ -92,7 +97,10 @@ export async function renderBiomeTile({
 
     const staticTile = biome.staticTile;
 
-    const { img: bgMask, close } = await fetchImageBitmap(staticTile.bgMask);
+    const bgMask = await getDataWakImage({
+      dataWakDirectory,
+      path: staticTile.bgMask,
+    });
 
     const relX = biomeCoords.x - staticTile.position.x;
     const relY = biomeCoords.y - staticTile.position.y;
@@ -141,11 +149,14 @@ export async function renderBiomeTile({
 
     ctx.putImageData(originalImageData, 0, 0);
 
-    close();
+    bgMask.close();
   }
 
   for (const background of backgroundItems) {
-    const { img, close } = await fetchImageBitmap(background.fileName);
+    const img = await getDataWakImage({
+      path: background.fileName,
+      dataWakDirectory,
+    });
 
     renderObjectOntoTile({
       ctx,
@@ -154,6 +165,6 @@ export async function renderBiomeTile({
       chunkBorders,
     });
 
-    close();
+    img.close();
   }
 }
