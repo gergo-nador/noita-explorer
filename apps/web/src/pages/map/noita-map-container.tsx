@@ -7,11 +7,11 @@ import {
 import L from 'leaflet';
 import { MapContainer, useMapEvents } from 'react-leaflet';
 import { CSSProperties, useState } from 'react';
-import { NoitaMapMainTerrainLayer } from './layers/main/noita-map-main-terrain-layer.tsx';
-import { NoitaMapBiomeLayer } from './layers/biome/noita-map-biome-layer.tsx';
+import { NoitaMapTerrainLayerWrapper } from './layers/main/noita-map-terrain-layer-wrapper.tsx';
+import { NoitaMapBiomeLayerWrapper } from './layers/biome/noita-map-biome-layer-wrapper.tsx';
 import { NoitaMapEntityLazyLoadingLayer } from './layers/entity/noita-map-entity-lazy-loading-layer.tsx';
 import { ThreadsPoolContextProvider } from './map-renderer-threads/threads-pool-context-provider.tsx';
-import { NoitaMapBackgroundLayer } from './layers/background/noita-map-background-layer.tsx';
+import { NoitaMapBackgroundLayerWrapper } from './layers/background/noita-map-background-layer-wrapper.tsx';
 import { useOrganizeWorldFiles } from './hooks/use-organize-world-files.ts';
 import { Buffer } from 'buffer';
 
@@ -64,14 +64,14 @@ export function NoitaMapContainer({
       >
         {!__SSG__ && (
           <>
-            <NoitaMapBackgroundLayer />
-            <NoitaMapBiomeLayer
+            <NoitaMapBackgroundLayerWrapper />
+            <NoitaMapBiomeLayerWrapper
               worldPixelScenes={worldPixelScenes}
               streamInfo={streamInfo}
               biomes={biomes}
               backgrounds={backgrounds}
             />
-            <NoitaMapMainTerrainLayer
+            <NoitaMapTerrainLayerWrapper
               petriFiles={petriFileCollection}
               entityFiles={entityFileCollection}
               streamInfo={streamInfo}

@@ -1,7 +1,7 @@
 import { useMap } from 'react-leaflet';
 import { useEffect, useRef } from 'react';
 import L from 'leaflet';
-import { NoitaBiomeLayer } from './noita-biome-layer.ts';
+import { BiomeLayer } from './biome-layer.ts';
 import {
   NoitaWakBiomes,
   StreamInfoBackground,
@@ -10,6 +10,12 @@ import {
 } from '@noita-explorer/model-noita';
 import { useThreadsPool } from '../../map-renderer-threads/use-threads-pool.ts';
 import { useMapPane } from '../../hooks/use-map-pane.ts';
+import {
+  defaultLayerBufferSettings,
+  defaultLayerMiscSettings,
+  defaultLayerSize,
+  defaultLayerZoomSettings,
+} from '../default-layer-settings.ts';
 
 interface Props {
   worldPixelScenes: WorldPixelSceneFileFormat;
@@ -18,7 +24,7 @@ interface Props {
   backgrounds: Record<number, Record<number, StreamInfoBackground[]>>;
 }
 
-export const NoitaMapBiomeLayer = ({
+export const NoitaMapBiomeLayerWrapper = ({
   worldPixelScenes,
   streamInfo,
   biomes,
@@ -34,18 +40,12 @@ export const NoitaMapBiomeLayer = ({
 
     if (!layerRef.current) {
       // @ts-expect-error typescript doesn't know we can pass parameters
-      const gridLayer = new NoitaBiomeLayer({
+      const gridLayer = new BiomeLayer({
         pane: pane.name,
-        tileSize: 512,
-        minZoom: -5,
-        maxZoom: 5,
-        keepBuffer: 3,
-        edgeBufferTiles: 1,
-
-        noWrap: true,
-
-        minNativeZoom: 0,
-        maxNativeZoom: 0,
+        ...defaultLayerSize,
+        ...defaultLayerZoomSettings,
+        ...defaultLayerBufferSettings,
+        ...defaultLayerMiscSettings,
 
         // custom props
         worldPixelScenes,

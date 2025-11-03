@@ -6,13 +6,12 @@ import {
 import {
   MapRendererPool,
   MapRendererWorker,
+  Transfer,
 } from '../../map-renderer-threads/threads-pool.types.ts';
 import { mapConstants } from '@noita-explorer/map';
 import { publicPaths } from '../../../../utils/public-paths.ts';
-// @ts-expect-error for some reason threads types are not recognized
-import { Transfer } from 'threads';
 
-export const NoitaBiomeLayer = L.GridLayer.extend({
+export const BiomeLayer = L.GridLayer.extend({
   createTile: function (coords: L.Coords, done: L.DoneCallback): HTMLElement {
     const tile = L.DomUtil.create('div', 'leaflet-tile');
 

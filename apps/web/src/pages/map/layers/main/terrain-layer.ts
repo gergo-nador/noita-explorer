@@ -3,13 +3,12 @@ import { NoitaPetriFileCollection } from '../../noita-map.types.ts';
 import {
   MapRendererPool,
   MapRendererWorker,
+  Transfer,
 } from '../../map-renderer-threads/threads-pool.types.ts';
-// @ts-expect-error for some reason threads types are not recognized
-import { Transfer } from 'threads';
 import { publicPaths } from '../../../../utils/public-paths.ts';
 import { mapConstants } from '@noita-explorer/map';
 
-export const NoitaMainTerrainLayer = L.GridLayer.extend({
+export const TerrainLayer = L.GridLayer.extend({
   createTile: function (coords: L.Coords, done: L.DoneCallback): HTMLElement {
     const tile = L.DomUtil.create('div', 'leaflet-tile');
 

@@ -4,15 +4,12 @@ import { noitaBgThemes } from './background-themes.ts';
 import {
   MapRendererPool,
   MapRendererWorker,
+  Transfer,
 } from '../../map-renderer-threads/threads-pool.types.ts';
 import { publicPaths } from '../../../../utils/public-paths.ts';
-// @ts-expect-error for some reason threads types are not recognized
-import { Transfer } from 'threads';
+import { backgroundLayerSize } from './background-layer-size.ts';
 
-const tileWidth = mapConstants.chunkWidth * 12;
-const tileHeight = mapConstants.chunkHeight * 6;
-
-export const NoitaBackgroundLayer = L.GridLayer.extend({
+export const BackgroundLayer = L.GridLayer.extend({
   _getTilePos: function (coords: L.Coords) {
     const generousCaveLimitY = CAVE_LIMIT_Y + 50;
     // move background bottom to the cave limit for a smooth transition
@@ -30,8 +27,8 @@ export const NoitaBackgroundLayer = L.GridLayer.extend({
 
     const canvas = document.createElement('canvas');
     canvas.style.imageRendering = 'pixelated';
-    canvas.width = tileWidth;
-    canvas.height = tileHeight;
+    canvas.width = backgroundLayerSize.width;
+    canvas.height = backgroundLayerSize.height;
 
     const bgColors = noitaBgThemes['nightMid'];
 

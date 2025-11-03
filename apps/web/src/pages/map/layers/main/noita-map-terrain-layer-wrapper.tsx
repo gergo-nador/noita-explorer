@@ -2,15 +2,21 @@ import { StreamInfoFileFormat } from '@noita-explorer/model-noita';
 import { useMap } from 'react-leaflet';
 import { useEffect, useRef } from 'react';
 import L from 'leaflet';
-import { NoitaMainTerrainLayer } from './noita-main-terrain-layer.ts';
+import { TerrainLayer } from './terrain-layer.ts';
 import {
   NoitaEntityFileCollection,
   NoitaPetriFileCollection,
 } from '../../noita-map.types.ts';
 import { useThreadsPool } from '../../map-renderer-threads/use-threads-pool.ts';
 import { useMapPane } from '../../hooks/use-map-pane.ts';
+import {
+  defaultLayerBufferSettings,
+  defaultLayerMiscSettings,
+  defaultLayerSize,
+  defaultLayerZoomSettings,
+} from '../default-layer-settings.ts';
 
-export function NoitaMapMainTerrainLayer({
+export function NoitaMapTerrainLayerWrapper({
   petriFiles,
   entityFiles,
   streamInfo,
@@ -29,18 +35,12 @@ export function NoitaMapMainTerrainLayer({
 
     if (!layerRef.current) {
       // @ts-expect-error typescript doesn't know we can pass parameters
-      const gridLayer = new NoitaMainTerrainLayer({
+      const gridLayer = new TerrainLayer({
         pane: pane.name,
-        tileSize: 512,
-        minZoom: -5,
-        maxZoom: 5,
-        keepBuffer: 3,
-        edgeBufferTiles: 1,
-
-        noWrap: true,
-
-        minNativeZoom: 0,
-        maxNativeZoom: 0,
+        ...defaultLayerSize,
+        ...defaultLayerZoomSettings,
+        ...defaultLayerBufferSettings,
+        ...defaultLayerMiscSettings,
 
         petriFiles,
         entityFiles,
