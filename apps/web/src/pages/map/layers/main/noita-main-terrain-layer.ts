@@ -5,7 +5,7 @@ import {
   MapRendererWorker,
 } from '../../map-renderer-threads/threads-pool.types.ts';
 // @ts-expect-error for some reason threads types are not recognized
-import { Transfer } from 'threads/worker';
+import { Transfer } from 'threads';
 import { publicPaths } from '../../../../utils/public-paths.ts';
 import { mapConstants } from '@noita-explorer/map';
 
@@ -71,7 +71,7 @@ export const NoitaMainTerrainLayer = L.GridLayer.extend({
         }
       })
       .catch((err: unknown) => {
-        console.log('error during biome tile render', err);
+        console.error('error during biome tile render', err);
         const imageElement = document.createElement('img');
         imageElement.src = publicPaths.static.map.tileError();
         imageElement.width = mapConstants.chunkWidth;

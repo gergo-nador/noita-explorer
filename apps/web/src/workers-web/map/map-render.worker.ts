@@ -125,14 +125,12 @@ const mapRenderer: MapRenderType = {
       throw error;
     }
   },
-  async renderBackgroundTile(props) {
+  async renderBackgroundTile(props, offScreenCanvas) {
     if (!dataWakDirectory) {
       throw new Error('[Worker] data wak not set');
     }
 
     try {
-      const offScreenCanvas = new OffscreenCanvas(props.size.x, props.size.y);
-
       const ctx = offScreenCanvas.getContext('2d');
       if (!ctx) {
         throw new Error('OffscreenCanvasRenderingContext2D not supported');
@@ -144,8 +142,6 @@ const mapRenderer: MapRenderType = {
         ctx,
         dataWakDirectory,
       });
-
-      return Transfer(offScreenCanvas.transferToImageBitmap());
     } catch (error) {
       console.error('Error during rendering background tile', props, error);
       throw error;

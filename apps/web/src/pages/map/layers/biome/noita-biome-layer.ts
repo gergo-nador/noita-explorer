@@ -89,7 +89,7 @@ export const NoitaBiomeLayer = L.GridLayer.extend({
           }
         })
         .catch((err: unknown) => {
-          console.log('error during biome tile render', err);
+          console.error('error during biome tile render', err);
           const imageElement = document.createElement('img');
           imageElement.src = publicPaths.static.map.tileError();
           imageElement.width = mapConstants.chunkWidth;

@@ -6,6 +6,8 @@ import {
   MapRendererWorker,
 } from '../../map-renderer-threads/threads-pool.types.ts';
 import { publicPaths } from '../../../../utils/public-paths.ts';
+// @ts-expect-error for some reason threads types are not recognized
+import { Transfer } from 'threads';
 
 const tileWidth = mapConstants.chunkWidth * 12;
 const tileHeight = mapConstants.chunkHeight * 6;
@@ -31,31 +33,24 @@ export const NoitaBackgroundLayer = L.GridLayer.extend({
     canvas.width = tileWidth;
     canvas.height = tileHeight;
 
-    const ctx = canvas.getContext('2d');
-    if (!ctx) {
-      throw new Error('NoitaBackgroundLayer is not supported');
-    }
-
-    ctx.imageSmoothingEnabled = false;
-
     const bgColors = noitaBgThemes['nightMid'];
 
     const renderPool: MapRendererPool = this.options.renderPool;
     renderPool.queue((worker: MapRendererWorker) => {
+      const offscreenCanvas = canvas.transferControlToOffscreen();
+
       worker
-        .renderBackgroundTile({
-          coords,
-          size: { x: canvas.width, y: canvas.height },
-          theme: bgColors,
-        })
-        .then((image: ImageBitmap | undefined) => {
-          if (image) {
-            ctx.drawImage(image, 0, 0);
-            tile.appendChild(canvas);
-          }
-        })
+        .renderBackgroundTile(
+          {
+            coords,
+            size: { x: canvas.width, y: canvas.height },
+            theme: bgColors,
+          },
+          Transfer(offscreenCanvas),
+        )
+        .then(() => tile.appendChild(canvas))
         .catch((err: unknown) => {
-          console.log('error during biome tile render', err);
+          console.error('error during biome tile render', err);
           const imageElement = document.createElement('img');
           imageElement.src = publicPaths.static.map.tileError();
           imageElement.width = mapConstants.chunkWidth;

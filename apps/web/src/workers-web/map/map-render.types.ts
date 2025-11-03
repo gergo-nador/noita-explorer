@@ -13,9 +13,13 @@ export interface MapRenderType {
     petriFileBuffer: Buffer;
     chunkCoordinates: Vector2d;
   }) => Promise<ImageBitmap | undefined>;
-  renderBackgroundTile: (props: {
-    coords: Vector2d;
-    theme: NoitaBackgroundTheme;
-    size: Vector2d;
-  }) => Promise<ImageBitmap | undefined>;
+  renderBackgroundTile: (
+    props: {
+      coords: Vector2d;
+      theme: NoitaBackgroundTheme;
+      size: Vector2d;
+    },
+    // has to be top level argument for transferable
+    canvas: OffscreenCanvas,
+  ) => Promise<void>;
 }
