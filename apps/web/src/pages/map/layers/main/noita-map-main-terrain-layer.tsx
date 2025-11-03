@@ -32,7 +32,7 @@ export function NoitaMapMainTerrainLayer({
       const gridLayer = new NoitaMainTerrainLayer({
         pane: pane.name,
         tileSize: 512,
-        minZoom: -4,
+        minZoom: -5,
         maxZoom: 5,
         keepBuffer: 3,
         edgeBufferTiles: 1,

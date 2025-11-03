@@ -26,7 +26,7 @@ export const NoitaMapBackgroundLayer = () => {
           mapConstants.chunkWidth * 12,
           mapConstants.chunkHeight * 6,
         ),
-        minZoom: -4,
+        minZoom: -5,
         maxZoom: 5,
         keepBuffer: 3,
         edgeBufferTiles: 1,

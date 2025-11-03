@@ -37,7 +37,7 @@ export const NoitaMapBiomeLayer = ({
       const gridLayer = new NoitaBiomeLayer({
         pane: pane.name,
         tileSize: 512,
-        minZoom: -4,
+        minZoom: -5,
         maxZoom: 5,
         keepBuffer: 3,
         edgeBufferTiles: 1,
