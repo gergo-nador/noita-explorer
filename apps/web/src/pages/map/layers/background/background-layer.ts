@@ -21,7 +21,7 @@ export const BackgroundLayer = L.GridLayer.extend({
     const tile = L.DomUtil.create('div', 'leaflet-tile');
 
     if (coords.y > -1) {
-      done(undefined, tile);
+      setTimeout(() => done(undefined, tile), 0);
       return tile;
     }
 
@@ -49,12 +49,15 @@ export const BackgroundLayer = L.GridLayer.extend({
           },
           Transfer(offscreenCanvas),
         )
-        .then(() => tile.appendChild(canvas))
-        .catch((err: unknown) => {
+        .then(() => {
+          tile.appendChild(canvas);
+          done(undefined, tile);
+        })
+        .catch((err: Error) => {
           console.error('error during biome tile render', err);
           setErrorTile(tile);
-        })
-        .then(() => done(undefined, tile));
+          done(err, tile);
+        });
     });
 
     return tile;

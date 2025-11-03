@@ -31,7 +31,7 @@ export const NoitaMapBiomeLayerWrapper = ({
   backgrounds,
 }: Props) => {
   const map = useMap();
-  const pane = useMapPane({ name: 'noita-biome', zIndex: 1 });
+  const pane = useMapPane({ name: 'noita-biome', zIndex: 6 });
   const threadsPool = useThreadsPool();
   const layerRef = useRef<L.GridLayer | null>(null);
 

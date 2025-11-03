@@ -26,7 +26,7 @@ export function NoitaMapTerrainLayerWrapper({
   streamInfo: StreamInfoFileFormat;
 }) {
   const map = useMap();
-  const pane = useMapPane({ name: 'noita-terrain', zIndex: 2 });
+  const pane = useMapPane({ name: 'noita-terrain', zIndex: 7 });
   const layerRef = useRef<L.GridLayer | null>(null);
   const threadsPool = useThreadsPool();
 

@@ -20,7 +20,7 @@ export const NoitaMapBackgroundLayerWrapper = ({ backgroundTheme }: Props) => {
   const map = useMap();
   const pane = useMapPane({
     name: 'noita-background',
-    zIndex: 0,
+    zIndex: 5,
   });
   const threadsPool = useThreadsPool();
   const layerRef = useRef<L.GridLayer | null>(null);
