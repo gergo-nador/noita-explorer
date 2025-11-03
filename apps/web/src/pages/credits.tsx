@@ -146,6 +146,15 @@ export const Credits = () => {
           </li>
           <li>
             <Link
+              to='https://github.com/chairclr/NoitaMap'
+              external
+              buttonDecoration='right'
+            >
+              [Github] chairclr / NoitaMap
+            </Link>
+          </li>
+          <li>
+            <Link
               to='https://github.com/NathanSnail/entity_bin'
               external
               buttonDecoration='right'
