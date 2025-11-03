@@ -5,8 +5,7 @@ import {
   MapRendererWorker,
   Transfer,
 } from '../../map-renderer-threads/threads-pool.types.ts';
-import { publicPaths } from '../../../../utils/public-paths.ts';
-import { mapConstants } from '@noita-explorer/map';
+import { setErrorTile } from '../_shared/set-error-tile.ts';
 
 export const TerrainLayer = L.GridLayer.extend({
   createTile: function (coords: L.Coords, done: L.DoneCallback): HTMLElement {
@@ -17,12 +16,7 @@ export const TerrainLayer = L.GridLayer.extend({
     const petriFile = petriFiles?.[coords.x]?.[coords.y];
 
     if (!petriFile) {
-      const div = document.createElement('div');
-      div.textContent = 'No tile';
-
       tile.innerHTML = '';
-      tile.appendChild(div);
-
       done(undefined, tile);
       return tile;
     }
@@ -55,12 +49,7 @@ export const TerrainLayer = L.GridLayer.extend({
       .then(() => tile.appendChild(canvas))
       .catch((err: unknown) => {
         console.error('error during biome tile render', err);
-        const imageElement = document.createElement('img');
-        imageElement.src = publicPaths.static.map.tileError();
-        imageElement.width = mapConstants.chunkWidth;
-        imageElement.height = mapConstants.chunkHeight;
-
-        tile.appendChild(imageElement);
+        setErrorTile(tile);
       })
       .then(() => done(undefined, tile));
 

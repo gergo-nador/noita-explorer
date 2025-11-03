@@ -1,13 +1,13 @@
 import L from 'leaflet';
-import { CAVE_LIMIT_Y, mapConstants } from '@noita-explorer/map';
+import { CAVE_LIMIT_Y } from '@noita-explorer/map';
 import { noitaBgThemes } from './background-themes.ts';
 import {
   MapRendererPool,
   MapRendererWorker,
   Transfer,
 } from '../../map-renderer-threads/threads-pool.types.ts';
-import { publicPaths } from '../../../../utils/public-paths.ts';
 import { backgroundLayerSize } from './background-layer-size.ts';
+import { setErrorTile } from '../_shared/set-error-tile.ts';
 
 export const BackgroundLayer = L.GridLayer.extend({
   _getTilePos: function (coords: L.Coords) {
@@ -48,12 +48,7 @@ export const BackgroundLayer = L.GridLayer.extend({
         .then(() => tile.appendChild(canvas))
         .catch((err: unknown) => {
           console.error('error during biome tile render', err);
-          const imageElement = document.createElement('img');
-          imageElement.src = publicPaths.static.map.tileError();
-          imageElement.width = mapConstants.chunkWidth;
-          imageElement.height = mapConstants.chunkHeight;
-
-          tile.appendChild(imageElement);
+          setErrorTile(tile);
         })
         .then(() => done(undefined, tile));
     });

@@ -10,6 +10,7 @@ import {
 } from '../../map-renderer-threads/threads-pool.types.ts';
 import { mapConstants } from '@noita-explorer/map';
 import { publicPaths } from '../../../../utils/public-paths.ts';
+import { setErrorTile } from '../_shared/set-error-tile.ts';
 
 export const BiomeLayer = L.GridLayer.extend({
   createTile: function (coords: L.Coords, done: L.DoneCallback): HTMLElement {
@@ -76,12 +77,7 @@ export const BiomeLayer = L.GridLayer.extend({
         .then(() => tile.appendChild(canvas))
         .catch((err: unknown) => {
           console.error('error during biome tile render', err);
-          const imageElement = document.createElement('img');
-          imageElement.src = publicPaths.static.map.tileError();
-          imageElement.width = mapConstants.chunkWidth;
-          imageElement.height = mapConstants.chunkHeight;
-
-          tile.appendChild(imageElement);
+          setErrorTile(tile);
         })
         .then(() => done(undefined, tile));
     });

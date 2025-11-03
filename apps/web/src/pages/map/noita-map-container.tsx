@@ -7,7 +7,7 @@ import {
 import L from 'leaflet';
 import { MapContainer, useMapEvents } from 'react-leaflet';
 import { CSSProperties, useState } from 'react';
-import { NoitaMapTerrainLayerWrapper } from './layers/main/noita-map-terrain-layer-wrapper.tsx';
+import { NoitaMapTerrainLayerWrapper } from './layers/terrain/noita-map-terrain-layer-wrapper.tsx';
 import { NoitaMapBiomeLayerWrapper } from './layers/biome/noita-map-biome-layer-wrapper.tsx';
 import { NoitaMapEntityLazyLoadingLayer } from './layers/entity/noita-map-entity-lazy-loading-layer.tsx';
 import { ThreadsPoolContextProvider } from './map-renderer-threads/threads-pool-context-provider.tsx';
