@@ -40,36 +40,20 @@ export const NoitaMainTerrainLayer = L.GridLayer.extend({
     canvas.width = 512;
     canvas.height = 512;
 
-    const ctx = canvas.getContext('2d');
-    if (!ctx) {
-      console.error('CanvasRenderingContext2D not available');
-      const imageElement = document.createElement('img');
-      imageElement.src = publicPaths.static.map.tileError();
-      imageElement.width = mapConstants.chunkWidth;
-      imageElement.height = mapConstants.chunkHeight;
-
-      tile.appendChild(imageElement);
-      // `done` needs to be called after returning
-      setTimeout(() => done(undefined, tile), 0);
-
-      return tile;
-    }
-
     renderPool
       .queue(async (worker: MapRendererWorker) => {
         const array: Uint8Array = await petriFile.read.asBuffer();
+        const offscreenCanvas = canvas.transferControlToOffscreen();
 
-        return worker.renderTerrainTile({
-          petriFileBuffer: Transfer(array.buffer),
-          chunkCoordinates: coords,
-        });
+        return worker.renderTerrainTile(
+          {
+            chunkCoordinates: coords,
+          },
+          Transfer(offscreenCanvas),
+          Transfer(array.buffer),
+        );
       })
-      .then((image: ImageBitmap | undefined) => {
-        if (image) {
-          ctx.drawImage(image, 0, 0);
-          tile.appendChild(canvas);
-        }
-      })
+      .then(() => tile.appendChild(canvas))
       .catch((err: unknown) => {
         console.error('error during biome tile render', err);
         const imageElement = document.createElement('img');

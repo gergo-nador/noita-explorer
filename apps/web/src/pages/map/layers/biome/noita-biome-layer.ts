@@ -9,6 +9,8 @@ import {
 } from '../../map-renderer-threads/threads-pool.types.ts';
 import { mapConstants } from '@noita-explorer/map';
 import { publicPaths } from '../../../../utils/public-paths.ts';
+// @ts-expect-error for some reason threads types are not recognized
+import { Transfer } from 'threads';
 
 export const NoitaBiomeLayer = L.GridLayer.extend({
   createTile: function (coords: L.Coords, done: L.DoneCallback): HTMLElement {
@@ -41,21 +43,6 @@ export const NoitaBiomeLayer = L.GridLayer.extend({
     canvas.width = mapConstants.chunkWidth;
     canvas.height = mapConstants.chunkHeight;
 
-    const ctx = canvas.getContext('2d');
-    if (!ctx) {
-      console.error('CanvasRenderingContext2D not available');
-      const imageElement = document.createElement('img');
-      imageElement.src = publicPaths.static.map.tileError();
-      imageElement.width = mapConstants.chunkWidth;
-      imageElement.height = mapConstants.chunkHeight;
-
-      tile.appendChild(imageElement);
-      // `done` needs to be called after returning
-      setTimeout(() => done(undefined, tile), 0);
-
-      return tile;
-    }
-
     const chunkLeftBorderX = coords.x * mapConstants.chunkWidth;
     const chunkRightBorderX = (coords.x + 1) * mapConstants.chunkWidth;
     const chunkTopBorderY = coords.y * mapConstants.chunkHeight;
@@ -71,23 +58,23 @@ export const NoitaBiomeLayer = L.GridLayer.extend({
     const renderPool: MapRendererPool = this.options.renderPool;
 
     renderPool.queue((worker: MapRendererWorker) => {
+      const offscreenCanvas = canvas.transferControlToOffscreen();
+
       worker
-        .renderBiomeTile({
-          biomeCoords: coords,
-          backgrounds: currentBackgrounds,
-          chunkBorders: {
-            leftX: chunkLeftBorderX,
-            rightX: chunkRightBorderX,
-            topY: chunkTopBorderY,
-            bottomY: chunkBottomBorderY,
+        .renderBiomeTile(
+          {
+            biomeCoords: coords,
+            backgrounds: currentBackgrounds,
+            chunkBorders: {
+              leftX: chunkLeftBorderX,
+              rightX: chunkRightBorderX,
+              topY: chunkTopBorderY,
+              bottomY: chunkBottomBorderY,
+            },
           },
-        })
-        .then((image: ImageBitmap | undefined) => {
-          if (image) {
-            ctx.drawImage(image, 0, 0);
-            tile.appendChild(canvas);
-          }
-        })
+          Transfer(offscreenCanvas),
+        )
+        .then(() => tile.appendChild(canvas))
         .catch((err: unknown) => {
           console.error('error during biome tile render', err);
           const imageElement = document.createElement('img');

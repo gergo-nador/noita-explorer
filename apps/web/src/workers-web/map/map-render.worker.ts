@@ -1,5 +1,5 @@
 // @ts-expect-error for some reason threads types are not recognized
-import { expose, Transfer } from 'threads/worker';
+import { expose } from 'threads/worker';
 import {
   renderBiomeTile,
   renderTerrainTile,
@@ -39,16 +39,12 @@ self.onmessage = (event: MessageEvent) => {
 };
 
 const mapRenderer: MapRenderType = {
-  async renderBiomeTile(props) {
+  async renderBiomeTile(props, offScreenCanvas) {
     if (!dataWakDirectory || !setupData) {
       throw new Error('[Worker] data wak not set');
     }
 
     try {
-      const offScreenCanvas = new OffscreenCanvas(
-        mapConstants.chunkWidth,
-        mapConstants.chunkHeight,
-      );
       const ctx = offScreenCanvas.getContext('2d', {
         alpha: true,
         willReadFrequently: true,
@@ -66,23 +62,17 @@ const mapRenderer: MapRenderType = {
         biomes: setupData.biomes,
         dataWakDirectory,
       });
-
-      return Transfer(offScreenCanvas.transferToImageBitmap());
     } catch (error) {
       console.error('Error during rendering biome tile', props, error);
       throw error;
     }
   },
-  async renderTerrainTile(props) {
+  async renderTerrainTile(props, offScreenCanvas, petriBuffer) {
     if (!dataWakDirectory || !setupData) {
       throw new Error('[Worker] data wak not set');
     }
 
     try {
-      const offScreenCanvas = new OffscreenCanvas(
-        mapConstants.chunkWidth,
-        mapConstants.chunkHeight,
-      );
       const ctx = offScreenCanvas.getContext('2d');
       if (!ctx) {
         throw new Error('OffscreenCanvasRenderingContext2D not supported');
@@ -94,14 +84,6 @@ const mapRenderer: MapRenderType = {
         offScreenCanvas.width,
         offScreenCanvas.height,
       );
-
-      let petriBuffer = props.petriFileBuffer;
-      // unpack transferable object
-      if ('send' in props.petriFileBuffer) {
-        const arrayBuffer = props.petriFileBuffer.send as ArrayBuffer;
-
-        petriBuffer = new Uint8Array(arrayBuffer) as Buffer;
-      }
 
       const petriContent = await scrape.save00.pngPetriFile({
         pngPetriFile: petriBuffer,
@@ -118,8 +100,6 @@ const mapRenderer: MapRenderType = {
       });
 
       ctx.putImageData(imageData, 0, 0);
-
-      return Transfer(offScreenCanvas.transferToImageBitmap());
     } catch (error) {
       console.error('Error during rendering terrain tile', props, error);
       throw error;

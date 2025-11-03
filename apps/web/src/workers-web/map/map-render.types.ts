@@ -4,15 +4,23 @@ import { Buffer } from 'buffer';
 import { Vector2d } from '@noita-explorer/model';
 
 export interface MapRenderType {
-  renderBiomeTile: (props: {
-    chunkBorders: ChunkBorders;
-    backgrounds: StreamInfoBackground[];
-    biomeCoords: Vector2d;
-  }) => Promise<ImageBitmap | undefined>;
-  renderTerrainTile: (props: {
-    petriFileBuffer: Buffer;
-    chunkCoordinates: Vector2d;
-  }) => Promise<ImageBitmap | undefined>;
+  renderBiomeTile: (
+    props: {
+      chunkBorders: ChunkBorders;
+      backgrounds: StreamInfoBackground[];
+      biomeCoords: Vector2d;
+    },
+    // has to be top level argument for transferable
+    canvas: OffscreenCanvas,
+  ) => Promise<void>;
+  renderTerrainTile: (
+    props: {
+      chunkCoordinates: Vector2d;
+    },
+    // has to be top level argument for transferable
+    canvas: OffscreenCanvas,
+    petriFileBuffer: Buffer,
+  ) => Promise<void>;
   renderBackgroundTile: (
     props: {
       coords: Vector2d;
