@@ -3,7 +3,7 @@ import { NoitaBackgroundTheme } from '@noita-explorer/map';
 /**
  * from data/weather_gfx/parallax_colors_main_menu.bmp
  */
-export const noitaBgThemes: Record<string, NoitaBackgroundTheme> = {
+export const noitaBgThemes = {
   dayStart: {
     background: '#58a8d4',
     secondaryBackground: '#91c3ec',
@@ -78,4 +78,6 @@ export const noitaBgThemes: Record<string, NoitaBackgroundTheme> = {
     mountain1Back: '#ba6d8f',
     mountain2: '#dc957f',
   },
-};
+} satisfies Record<string, NoitaBackgroundTheme>;
+
+export type BackgroundThemes = keyof typeof noitaBgThemes;

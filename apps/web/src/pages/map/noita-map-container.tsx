@@ -5,8 +5,7 @@ import {
   WorldPixelSceneFileFormat,
 } from '@noita-explorer/model-noita';
 import L from 'leaflet';
-import { MapContainer, useMapEvents } from 'react-leaflet';
-import { CSSProperties, useState } from 'react';
+import { MapContainer } from 'react-leaflet';
 import { NoitaMapTerrainLayerWrapper } from './layers/terrain/noita-map-terrain-layer-wrapper.tsx';
 import { NoitaMapBiomeLayerWrapper } from './layers/biome/noita-map-biome-layer-wrapper.tsx';
 import { NoitaMapEntityLazyLoadingLayer } from './layers/entity/noita-map-entity-lazy-loading-layer.tsx';
@@ -14,6 +13,10 @@ import { ThreadsPoolContextProvider } from './map-renderer-threads/threads-pool-
 import { NoitaMapBackgroundLayerWrapper } from './layers/background/noita-map-background-layer-wrapper.tsx';
 import { useOrganizeWorldFiles } from './hooks/use-organize-world-files.ts';
 import { Buffer } from 'buffer';
+import { MapUtilityPanel } from './components/map-utility-panel.tsx';
+import { useRef, useState } from 'react';
+import { MapRef } from 'react-leaflet/MapContainer';
+import { BackgroundThemes } from './layers/background/background-themes.ts';
 
 export function NoitaMapContainer({
   worldPixelScenes,
@@ -28,9 +31,12 @@ export function NoitaMapContainer({
   backgrounds: Record<number, Record<number, StreamInfoBackground[]>>;
   dataWakBuffer: Buffer;
 }) {
+  const mapRef = useRef<MapRef>(null);
   const mapCenter: L.LatLngExpression = [0, 0];
   const { petriFileCollection, entityFileCollection, mapBounds } =
     useOrganizeWorldFiles();
+  const [backgroundTheme, setBackgroundTheme] =
+    useState<BackgroundThemes>('dayMid');
 
   if (!worldPixelScenes || !streamInfo) {
     return <div>No current run detected</div>;
@@ -61,10 +67,11 @@ export function NoitaMapContainer({
           ],
         ]}
         maxBoundsViscosity={0.5}
+        ref={mapRef}
       >
         {!__SSG__ && (
           <>
-            <NoitaMapBackgroundLayerWrapper />
+            <NoitaMapBackgroundLayerWrapper backgroundTheme={backgroundTheme} />
             <NoitaMapBiomeLayerWrapper
               worldPixelScenes={worldPixelScenes}
               streamInfo={streamInfo}
@@ -84,43 +91,12 @@ export function NoitaMapContainer({
             )}
           </>
         )}
-        <MouseCoordinates />
+        <MapUtilityPanel
+          mapRef={mapRef}
+          backgroundThemes={backgroundTheme}
+          setBackgroundThemes={setBackgroundTheme}
+        />
       </MapContainer>
     </ThreadsPoolContextProvider>
   );
 }
-
-const MouseCoordinates = () => {
-  const [position, setPosition] = useState<L.LatLng | null>(null);
-
-  useMapEvents({
-    mousemove(e) {
-      // The 'e.latlng' object contains the coordinates in the map's CRS.
-      // For L.CRS.Simple, 'lat' is the y-coordinate and 'lng' is the x-coordinate.
-      setPosition(e.latlng);
-    },
-    // Hide coordinates when mouse leaves the map
-    mouseout() {
-      setPosition(null);
-    },
-  });
-
-  // Style for the coordinate display box
-  const positionStyle: CSSProperties = {
-    position: 'absolute',
-    bottom: '10px',
-    right: '10px',
-    backgroundColor: 'rgba(255, 255, 255, 1)',
-    padding: '5px 10px',
-    borderRadius: '5px',
-    zIndex: 1000, // Ensure it's on top
-    fontFamily: 'monospace',
-    color: 'black',
-  };
-
-  return position ? (
-    <div style={positionStyle}>
-      X: {position.lng.toFixed(2)}, Y: {-position.lat.toFixed(2)}
-    </div>
-  ) : null; // Don't render anything if the mouse is off the map
-};

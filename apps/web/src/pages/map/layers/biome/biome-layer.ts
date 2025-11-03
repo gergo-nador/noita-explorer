@@ -14,29 +14,27 @@ import { setErrorTile } from '../_shared/set-error-tile.ts';
 
 export const BiomeLayer = L.GridLayer.extend({
   createTile: function (coords: L.Coords, done: L.DoneCallback): HTMLElement {
-    const tile = L.DomUtil.create('div', 'leaflet-tile');
-
     const streamInfo: StreamInfoFileFormat = this.options.streamInfo;
     const chunkInfo = streamInfo.chunkInfo.find(
       (chunk) => chunk.position.x === coords.x && chunk.position.y === coords.y,
     );
 
     if (!chunkInfo?.loaded) {
+      const imgTile = L.DomUtil.create('img', 'leaflet-tile');
       if (coords.y >= 0) {
-        const imageElement = document.createElement('img');
-        imageElement.src = publicPaths.static.map.unexplored();
-        imageElement.width = mapConstants.chunkWidth;
-        imageElement.height = mapConstants.chunkHeight;
-        imageElement.style.filter = 'brightness(0.5)';
-
-        tile.appendChild(imageElement);
+        imgTile.src = publicPaths.static.map.unexplored();
+        imgTile.width = mapConstants.chunkWidth;
+        imgTile.height = mapConstants.chunkHeight;
+        imgTile.style.filter = 'brightness(0.5)';
       }
 
       // `done` needs to be called after returning
-      setTimeout(() => done(undefined, tile), 0);
+      setTimeout(() => done(undefined, imgTile), 0);
 
-      return tile;
+      return imgTile;
     }
+
+    const tile = L.DomUtil.create('div', 'leaflet-tile');
 
     const canvas = document.createElement('canvas');
     canvas.style.imageRendering = 'pixelated';

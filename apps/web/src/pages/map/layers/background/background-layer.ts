@@ -1,6 +1,6 @@
 import L from 'leaflet';
 import { CAVE_LIMIT_Y } from '@noita-explorer/map';
-import { noitaBgThemes } from './background-themes.ts';
+import { BackgroundThemes, noitaBgThemes } from './background-themes.ts';
 import {
   MapRendererPool,
   MapRendererWorker,
@@ -30,7 +30,11 @@ export const BackgroundLayer = L.GridLayer.extend({
     canvas.width = backgroundLayerSize.width;
     canvas.height = backgroundLayerSize.height;
 
-    const bgColors = noitaBgThemes['nightMid'];
+    const userChosenBackgroundTheme = this.options
+      .backgroundTheme as BackgroundThemes;
+
+    const bgColors =
+      noitaBgThemes[userChosenBackgroundTheme] ?? noitaBgThemes['dayStart'];
 
     const renderPool: MapRendererPool = this.options.renderPool;
     renderPool.queue((worker: MapRendererWorker) => {

@@ -10,8 +10,13 @@ import {
   defaultLayerZoomSettings,
 } from '../default-layer-settings.ts';
 import { backgroundLayerSize } from './background-layer-size.ts';
+import { BackgroundThemes } from './background-themes.ts';
 
-export const NoitaMapBackgroundLayerWrapper = () => {
+interface Props {
+  backgroundTheme: BackgroundThemes;
+}
+
+export const NoitaMapBackgroundLayerWrapper = ({ backgroundTheme }: Props) => {
   const map = useMap();
   const pane = useMapPane({
     name: 'noita-background',
@@ -37,6 +42,7 @@ export const NoitaMapBackgroundLayerWrapper = () => {
 
         // custom props
         renderPool: threadsPool?.pool,
+        backgroundTheme,
       });
 
       map.addLayer(gridLayer);
@@ -50,6 +56,14 @@ export const NoitaMapBackgroundLayerWrapper = () => {
       }
     };
   }, [map, pane.name, threadsPool?.pool, threadsPool?.isLoaded]);
+
+  useEffect(() => {
+    if (!layerRef.current) return;
+
+    // @ts-expect-error custom option
+    layerRef.current.options.backgroundTheme = backgroundTheme;
+    layerRef.current.redraw();
+  }, [backgroundTheme]);
 
   return null;
 };
