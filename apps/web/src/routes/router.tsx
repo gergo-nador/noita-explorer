@@ -16,7 +16,6 @@ import { WikiEnemies } from '../pages/wiki/enemies/wiki-enemies.tsx';
 import { SetupWebPaths } from '../pages/setup/setup-web-paths.tsx';
 import { NoitaSessions } from '../pages/sessions/noita-sessions.tsx';
 import { EmptyPageTemplate } from '../pages/_templates/empty-page-template.tsx';
-import { NoitaDeathMap } from '../pages/death-map/noita-death-map.tsx';
 import { Settings } from '../pages/settings/settings.tsx';
 import { NoitaBonesWands } from '../pages/noita-bones-wands.tsx';
 import { SettingsCursorWandPicker } from '../pages/settings/settings-cursor-wand-picker.tsx';
@@ -39,6 +38,7 @@ import { NoitaMapPage } from '../pages/map/noita-map-page.tsx';
 import { DataWakServiceProvider } from '../services/data-wak/data-wak-service.provider.tsx';
 import { CurrentRunServiceProvider } from '../services/current-run/current-run-service.provider.tsx';
 import { Save00ServiceProvider } from '../services/save00/save00-service.provider.tsx';
+import { NoitaDeathMap } from '../pages/death-map/noita-death-map.tsx';
 
 export const routes: NoitaRouteObject[] = [
   {
