@@ -9,8 +9,8 @@ import {
   Transfer,
 } from '../../map-renderer-threads/threads-pool.types.ts';
 import { mapConstants } from '@noita-explorer/map';
-import { publicPaths } from '../../../../utils/public-paths.ts';
 import { setErrorTile } from '../_shared/set-error-tile.ts';
+import { createUnexploredTile } from '../_shared/create-unexplored-tile.ts';
 
 export const BiomeLayer = L.GridLayer.extend({
   createTile: function (coords: L.Coords, done: L.DoneCallback): HTMLElement {
@@ -20,18 +20,12 @@ export const BiomeLayer = L.GridLayer.extend({
     );
 
     if (!chunkInfo?.loaded) {
-      const imgTile = L.DomUtil.create('img', 'leaflet-tile');
-      if (coords.y >= 0) {
-        imgTile.src = publicPaths.static.map.unexplored();
-        imgTile.width = mapConstants.chunkWidth;
-        imgTile.height = mapConstants.chunkHeight;
-        imgTile.style.filter = 'brightness(0.5)';
-      }
+      const tile = createUnexploredTile({ coords, streamInfo });
 
       // `done` needs to be called after returning
-      setTimeout(() => done(undefined, imgTile), 0);
+      setTimeout(() => done(undefined, tile), 0);
 
-      return imgTile;
+      return tile;
     }
 
     const tile = L.DomUtil.create('div', 'leaflet-tile');
