@@ -27,7 +27,7 @@ export const createUnexploredTile = ({ coords, streamInfo }: Props) => {
     imgTile.src = publicPaths.static.map.unexplored();
     imgTile.width = mapConstants.chunkWidth;
     imgTile.height = mapConstants.chunkHeight;
-    imgTile.style.filter = 'brightness(0.5)';
+    imgTile.style.filter = 'brightness(0.65)';
 
     return imgTile;
   }
