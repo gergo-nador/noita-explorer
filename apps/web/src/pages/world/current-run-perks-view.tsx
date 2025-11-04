@@ -1,4 +1,3 @@
-import { useNoitaDataWakStore } from '../../stores/noita-data-wak.ts';
 import { useSave00Store } from '../../stores/save00.ts';
 import {
   Icon,
@@ -7,9 +6,10 @@ import {
 } from '@noita-explorer/noita-component-library';
 import { Flex } from '@noita-explorer/react-utils';
 import { publicPaths } from '../../utils/public-paths.ts';
+import { useDataWakService } from '../../services/data-wak/use-data-wak-service.ts';
 
 export const CurrentRunPerksView = () => {
-  const { lookup } = useNoitaDataWakStore();
+  const { lookup } = useDataWakService();
   const { currentRun } = useSave00Store();
 
   if (!lookup || !currentRun) {

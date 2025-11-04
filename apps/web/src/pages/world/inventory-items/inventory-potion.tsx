@@ -11,21 +11,19 @@ import { useEffect, useState } from 'react';
 import { renderMaterialPouch } from '../../../noita/noita-materials.ts';
 import { publicPaths } from '../../../utils/public-paths.ts';
 import { arrayHelpers } from '@noita-explorer/tools';
-import { useNoitaDataWakStore } from '../../../stores/noita-data-wak.ts';
+import { useDataWakService } from '../../../services/data-wak/use-data-wak-service.ts';
 
 interface Props {
   item: NoitaInventoryPotionItem;
 }
 
 export const InventoryPotion = ({ item }: Props) => {
-  const { lookup } = useNoitaDataWakStore();
+  const { lookup } = useDataWakService();
   const [potionIcon, setPotionIcon] = useState(
     publicPaths.static.dataWak.misc('potion'),
   );
 
   useEffect(() => {
-    if (!lookup?.materials) return;
-
     const potionMaterial = arrayHelpers.maxBy(
       item.item.materials,
       (material: NoitaPotionMaterial) => material.usage,
@@ -41,7 +39,7 @@ export const InventoryPotion = ({ item }: Props) => {
       material,
       publicPaths.static.dataWak.misc('potion'),
     ).then((image) => setPotionIcon(image));
-  }, [lookup?.materials, item.item.materials]);
+  }, [lookup.materials, item.item.materials]);
 
   return (
     <NoitaTooltipWrapper

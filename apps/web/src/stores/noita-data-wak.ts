@@ -9,7 +9,7 @@ import {
 } from '@noita-explorer/model-noita';
 import { arrayHelpers } from '@noita-explorer/tools';
 
-interface NoitaLookupData {
+export interface NoitaLookupData {
   enemies: Record<string, NoitaEnemy>;
   perks: Record<string, NoitaPerk>;
   spells: Record<string, NoitaSpell>;

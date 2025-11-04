@@ -10,22 +10,22 @@ import {
 } from '../../stores/settings.ts';
 import { imageHelpers, randomHelpers } from '@noita-explorer/tools';
 import { useEffect, useState } from 'react';
-import { useNoitaDataWakStore } from '../../stores/noita-data-wak.ts';
 import { NoitaWandConfig } from '@noita-explorer/model-noita';
 import { pages } from '../../routes/pages.ts';
 import { Link } from '../../components/link.tsx';
 import { publicPaths } from '../../utils/public-paths.ts';
+import { useDataWakService } from '../../services/data-wak/use-data-wak-service.ts';
 
 export const SettingsCursor = () => {
   const { settings, set } = useSettingsStore();
   const { cursor } = settings;
-  const { data } = useNoitaDataWakStore();
+  const { data } = useDataWakService();
 
   const [customCursor, setCustomCursor] = useState<string>();
   const [counter, setCounter] = useState(0);
 
   useEffect(() => {
-    if (data?.wandConfigs === undefined || data.wandConfigs.length === 0) {
+    if (data.wandConfigs === undefined || data.wandConfigs.length === 0) {
       return;
     }
 
@@ -49,7 +49,7 @@ export const SettingsCursor = () => {
       .then((cursor) => imageHelpers.rotateImageBase64(cursor, 225))
       .then(imageHelpers.trimWhitespaceBase64)
       .then(setCustomCursor);
-  }, [data?.wandConfigs, cursor.wandSpriteId, counter]);
+  }, [data.wandConfigs, cursor.wandSpriteId, counter]);
 
   const MultiSelectionCursor = MultiSelection<SettingsCursorType>();
   const MultiSelectionNoitaCursor = MultiSelection<SettingsNoitaCursorType>();

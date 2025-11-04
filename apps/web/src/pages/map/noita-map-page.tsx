@@ -1,5 +1,4 @@
 import { NoitaMapContainer } from './noita-map-container.tsx';
-import { useNoitaDataWakStore } from '../../stores/noita-data-wak.ts';
 import { useSave00Store } from '../../stores/save00.ts';
 import { useDataWakLoader } from './hooks/use-data-wak-loader.ts';
 import 'leaflet-edgebuffer';
@@ -9,9 +8,10 @@ import {
 } from '@noita-explorer/noita-component-library';
 import { Flex } from '@noita-explorer/react-utils';
 import { useOrganizeBackgroundImages } from './hooks/use-organize-background-images.ts';
+import { useDataWakService } from '../../services/data-wak/use-data-wak-service.ts';
 
 export const NoitaMapPage = () => {
-  const { data } = useNoitaDataWakStore();
+  const { data } = useDataWakService();
   const {
     worldPixelScenes,
     streamInfo,
@@ -28,10 +28,6 @@ export const NoitaMapPage = () => {
 
   const { backgrounds, isLoaded: isBackgroundsLoaded } =
     useOrganizeBackgroundImages({ streamInfo, dataWakBuffer });
-
-  if (!data) {
-    return <div>Loading...</div>;
-  }
 
   if (save00Status === 'unset') {
     return <div>No save00 folder is set</div>;

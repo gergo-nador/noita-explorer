@@ -1,16 +1,12 @@
 import { useParams } from 'react-router-dom';
-import { useNoitaDataWakStore } from '../../../stores/noita-data-wak.ts';
 import { EnemyOverview } from './enemy-overview.tsx';
 import { SeoDefaultPage } from '@noita-explorer/react-utils';
 import { publicPaths } from '../../../utils/public-paths.ts';
+import { useDataWakService } from '../../../services/data-wak/use-data-wak-service.ts';
 
 export const WikiEnemyDetails = () => {
   const { enemyId } = useParams();
-  const { lookup } = useNoitaDataWakStore();
-
-  if (!lookup?.enemies) {
-    return <div>Data wak is loading</div>;
-  }
+  const { lookup } = useDataWakService();
 
   if (!enemyId) {
     return <div>Enemy Id empty</div>;

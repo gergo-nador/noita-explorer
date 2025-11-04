@@ -5,7 +5,7 @@ import {
   NoitaMaterial,
   NoitaMaterialReaction,
 } from '@noita-explorer/model-noita';
-import { useNoitaDataWakStore } from '../../../../stores/noita-data-wak.ts';
+import { useDataWakService } from '../../../../services/data-wak/use-data-wak-service.ts';
 
 interface Props {
   reaction: NoitaMaterialReaction;
@@ -16,7 +16,7 @@ export const useProcessMaterialReaction = ({
   reaction,
   currentMaterial,
 }: Props) => {
-  const { lookup } = useNoitaDataWakStore();
+  const { lookup } = useDataWakService();
 
   type MaterialReactionComponent = {
     persistentComponents: MaterialReactionProcessed[];
@@ -29,14 +29,6 @@ export const useProcessMaterialReaction = ({
   };
 
   const components: MaterialReactionComponent = useMemo(() => {
-    if (!lookup?.materials)
-      return {
-        persistentComponents: [],
-        extensionComponents: [],
-        inputComponents: [],
-        outputComponents: [],
-      } satisfies MaterialReactionComponent;
-
     // materials that are both the source and the product of the reaction
     const persistentComponents: MaterialReactionProcessed[] = [];
     // components that are converted with an extension (e.g. steel --> steel_molten)
@@ -187,7 +179,7 @@ export const useProcessMaterialReaction = ({
       inputComponents,
       outputComponents,
     } satisfies MaterialReactionComponent;
-  }, [reaction, lookup?.materials, currentMaterial]);
+  }, [reaction, lookup.materials, currentMaterial]);
 
   return components;
 };

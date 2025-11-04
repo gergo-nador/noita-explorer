@@ -8,7 +8,6 @@ import {
 import { randomHelpers, mathHelpers } from '@noita-explorer/tools';
 import { useNoitaUnits } from '../hooks/use-noita-units.ts';
 import React, { useMemo } from 'react';
-import { useNoitaDataWakStore } from '../stores/noita-data-wak.ts';
 import { NoitaSpellTooltip } from './tooltips/noita-spell-tooltip.tsx';
 import { NoitaSpellTypesDictionary } from '../noita/noita-spell-type-dictionary.ts';
 import css from './noita-wand-card.module.css';
@@ -17,6 +16,7 @@ import { useNoitaActionsStore } from '../stores/actions.ts';
 import { Flex } from '@noita-explorer/react-utils';
 import { ConditionalWrapper } from '@noita-explorer/react-utils';
 import { publicPaths } from '../utils/public-paths.ts';
+import { useDataWakService } from '../services/data-wak/use-data-wak-service.ts';
 
 interface NoitaWandCardProps {
   wand: NoitaWand;
@@ -30,18 +30,13 @@ export const NoitaWandCard = ({
   withoutCardBorder,
 }: NoitaWandCardProps) => {
   const noitaUnits = useNoitaUnits();
-  const { data, lookup } = useNoitaDataWakStore();
+  const { data, lookup } = useDataWakService();
   const { actionUtils } = useNoitaActionsStore();
 
   const wandTooltipId = useMemo(() => randomHelpers.randomInt(0, 1000000), []);
 
   const wandImage = useMemo(() => {
-    const wandConfigs = data?.wandConfigs;
-    if (wandConfigs === undefined) {
-      return undefined;
-    }
-
-    const wandConfig = wandConfigs.find(
+    const wandConfig = data.wandConfigs.find(
       (config) => config.spriteId === wand.spriteId,
     );
     if (wandConfig === undefined) {
@@ -52,10 +47,6 @@ export const NoitaWandCard = ({
   }, [wand, data?.wandConfigs]);
 
   const spellIcons = useMemo(() => {
-    if (data?.spells === undefined || lookup?.spells === undefined) {
-      return undefined;
-    }
-
     const displaySpells: { key: string; spellComponent: React.ReactNode }[] =
       [];
 
@@ -109,13 +100,9 @@ export const NoitaWandCard = ({
     }
 
     return displaySpells;
-  }, [wand, data?.spells, lookup?.spells, wandTooltipId]);
+  }, [wand, lookup.spells, wandTooltipId]);
 
   const spellIconsAlwaysCast = useMemo(() => {
-    if (lookup?.spells === undefined) {
-      return undefined;
-    }
-
     const iconSize = 35;
     const displaySpells: React.ReactNode[] = [];
 
@@ -147,7 +134,7 @@ export const NoitaWandCard = ({
     }
 
     return displaySpells;
-  }, [wand, lookup?.spells, wandTooltipId]);
+  }, [wand, lookup.spells, wandTooltipId]);
 
   const rows: RowData[] = [
     {

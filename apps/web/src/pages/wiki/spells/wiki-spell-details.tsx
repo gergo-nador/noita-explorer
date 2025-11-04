@@ -1,16 +1,12 @@
 import { useParams } from 'react-router-dom';
-import { useNoitaDataWakStore } from '../../../stores/noita-data-wak.ts';
 import { SpellOverview } from './spell-overview.tsx';
 import { SeoDefaultPage } from '@noita-explorer/react-utils';
 import { publicPaths } from '../../../utils/public-paths.ts';
+import { useDataWakService } from '../../../services/data-wak/use-data-wak-service.ts';
 
 export const WikiSpellDetails = () => {
   const { spellId } = useParams();
-  const { lookup } = useNoitaDataWakStore();
-
-  if (!lookup?.spells) {
-    return <div>Data wak is loading</div>;
-  }
+  const { lookup } = useDataWakService();
 
   if (!spellId) {
     return <div>Spell Id empty</div>;

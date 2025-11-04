@@ -5,7 +5,6 @@ import {
 } from '@noita-explorer/noita-component-library';
 import { NoitaSpellTypesDictionary } from '../../../noita/noita-spell-type-dictionary.ts';
 import { NoitaProgressIconTable } from '../../../components/noita-progress-icon-table.tsx';
-import { useNoitaDataWakStore } from '../../../stores/noita-data-wak.ts';
 import { NoitaSpell } from '@noita-explorer/model-noita';
 import { SpellFiltersView } from './spell-filters-view.tsx';
 import { useState } from 'react';
@@ -14,17 +13,14 @@ import { Flex } from '@noita-explorer/react-utils';
 import { Link, Outlet } from 'react-router-dom';
 import { pages } from '../../../routes/pages.ts';
 import { publicPaths } from '../../../utils/public-paths.ts';
+import { useDataWakService } from '../../../services/data-wak/use-data-wak-service.ts';
 
 export const WikiSpells = () => {
-  const { data } = useNoitaDataWakStore();
+  const { data } = useDataWakService();
 
   const [filters, setFilters] = useState<SpellFilters>({
     friendlyFire: undefined,
   });
-
-  if (!data) {
-    return <div>Noita Data Wak is not loaded.</div>;
-  }
 
   return (
     <Flex

@@ -1,9 +1,9 @@
 import { Link } from './link.tsx';
 import { pages } from '../routes/pages.ts';
 import { Flex } from '@noita-explorer/react-utils';
-import { useNoitaDataWakStore } from '../stores/noita-data-wak.ts';
 import { Icon } from '@noita-explorer/noita-component-library';
 import { NoitaMaterialIcon } from './noita-material-icon.tsx';
+import { useDataWakService } from '../services/data-wak/use-data-wak-service.ts';
 
 interface Props {
   materialId: string;
@@ -18,10 +18,8 @@ export const NoitaMaterialLink = ({
   isInline,
   forcePotion,
 }: Props) => {
-  const { lookup } = useNoitaDataWakStore();
+  const { lookup } = useDataWakService();
   name ??= materialId;
-
-  if (!lookup) return <span>{name}</span>;
 
   const material = lookup.materials[materialId];
   if (!material) {

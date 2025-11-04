@@ -1,25 +1,21 @@
-import { useNoitaDataWakStore } from '../../stores/noita-data-wak.ts';
 import { useEffect, useMemo, useState } from 'react';
 import { arrayHelpers, colorHelpers } from '@noita-explorer/tools';
 import { NoitaMaterial } from '@noita-explorer/model-noita';
 import { StringKeyDictionary } from '@noita-explorer/model';
 import { Flex } from '@noita-explorer/react-utils';
 import { publicPaths } from '../../utils/public-paths.ts';
+import { useDataWakService } from '../../services/data-wak/use-data-wak-service.ts';
 
 interface MaterialTreeNode extends NoitaMaterial {
   children: MaterialTreeNode[];
 }
 
 export const WikiMaterialsTree = () => {
-  const { data } = useNoitaDataWakStore();
+  const { data } = useDataWakService();
 
   const materialsUnique = useMemo(() => {
-    if (!data?.materials) {
-      return [];
-    }
-
     return arrayHelpers.uniqueBy(data.materials, (m) => m.id);
-  }, [data?.materials]);
+  }, [data.materials]);
 
   const materialHierarchy = useMemo(() => {
     const materialMap: StringKeyDictionary<MaterialTreeNode> = {};
@@ -43,10 +39,6 @@ export const WikiMaterialsTree = () => {
 
     return rootNodes;
   }, [materialsUnique]);
-
-  if (!data?.materials) {
-    return <div>Noita Data Wak is not loaded.</div>;
-  }
 
   return (
     <div

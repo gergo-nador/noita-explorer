@@ -36,6 +36,7 @@ import { WikiSpellDetails } from '../pages/wiki/spells/wiki-spell-details.tsx';
 import { WikiEnemyDetails } from '../pages/wiki/enemies/wiki-enemy-details.tsx';
 import { WikiMaterialDetails } from '../pages/wiki/materials/wiki-material-details.tsx';
 import { NoitaMapPage } from '../pages/map/noita-map-page.tsx';
+import { DataWakServiceProvider } from '../services/data-wak/data-wak-service.provider.tsx';
 
 export const routes: NoitaRouteObject[] = [
   {
@@ -67,7 +68,11 @@ export const routes: NoitaRouteObject[] = [
       },
       {
         path: 'progress-tracker',
-        element: <Outlet />,
+        element: (
+          <DataWakServiceProvider>
+            <Outlet />
+          </DataWakServiceProvider>
+        ),
         children: [
           {
             path: '',
@@ -131,19 +136,21 @@ export const routes: NoitaRouteObject[] = [
         ssg: false,
         sitemap: false,
         element: (
-          <TabPageTemplate
-            returnPath={pages.main}
-            tabs={[
-              { title: 'Perks', href: pages.wiki.perks },
-              { title: 'Spells', href: pages.wiki.spells },
-              { title: 'Enemies', href: pages.wiki.enemies },
-              { title: 'Materials', href: pages.wiki.materials },
-              ...addIf(__ENV__ !== 'production', {
-                title: 'Materials Tree',
-                href: pages.wiki.materialsTree,
-              }),
-            ]}
-          />
+          <DataWakServiceProvider>
+            <TabPageTemplate
+              returnPath={pages.main}
+              tabs={[
+                { title: 'Perks', href: pages.wiki.perks },
+                { title: 'Spells', href: pages.wiki.spells },
+                { title: 'Enemies', href: pages.wiki.enemies },
+                { title: 'Materials', href: pages.wiki.materials },
+                ...addIf(__ENV__ !== 'production', {
+                  title: 'Materials Tree',
+                  href: pages.wiki.materialsTree,
+                }),
+              ]}
+            />
+          </DataWakServiceProvider>
         ),
         children: [
           {
@@ -328,12 +335,14 @@ export const routes: NoitaRouteObject[] = [
               description='View upcoming in-game holidays in the Noita Holiday Calendar.'
             />
             <CardPageTemplate returnPath={pages.main}>
-              <NoitaHolidays />
+              <DataWakServiceProvider>
+                <NoitaHolidays />
+              </DataWakServiceProvider>
             </CardPageTemplate>
           </>
         ),
       },
-      ...addIf(__ENV__ !== 'production', {
+      {
         path: 'current-run',
         element: (
           <>
@@ -342,11 +351,13 @@ export const routes: NoitaRouteObject[] = [
               description='Check your current run'
             />
             <CardPageTemplate returnPath={pages.main}>
-              <CurrentRun />
+              <DataWakServiceProvider>
+                <CurrentRun />
+              </DataWakServiceProvider>
             </CardPageTemplate>
           </>
         ),
-      }),
+      },
       {
         path: 'sessions',
         element: (
@@ -384,7 +395,9 @@ export const routes: NoitaRouteObject[] = [
               description="Scared of your old wand builds haunting you? Don't worry no more!"
             />
             <CardPageTemplate returnPath={pages.main}>
-              <NoitaBonesWands />
+              <DataWakServiceProvider>
+                <NoitaBonesWands />
+              </DataWakServiceProvider>
             </CardPageTemplate>
           </>
         ),
@@ -398,7 +411,9 @@ export const routes: NoitaRouteObject[] = [
               description='View your world in the browser'
             />
             <CardPageTemplate returnPath={pages.main}>
-              <NoitaMapPage />
+              <DataWakServiceProvider>
+                <NoitaMapPage />
+              </DataWakServiceProvider>
             </CardPageTemplate>
           </>
         ),
@@ -416,7 +431,9 @@ export const routes: NoitaRouteObject[] = [
                   description="This is a settings page. Not a lot, but it's honest work."
                 />
                 <CardPageTemplate returnPath={pages.main}>
-                  <Settings />
+                  <DataWakServiceProvider>
+                    <Settings />
+                  </DataWakServiceProvider>
                 </CardPageTemplate>
               </>
             ),

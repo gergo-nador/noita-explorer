@@ -4,15 +4,15 @@ import {
   NoitaMaterialReaction,
   NoitaMaterialReactionComponent,
 } from '@noita-explorer/model-noita';
-import { useNoitaDataWakStore } from '../../../../stores/noita-data-wak.ts';
 import { parseReactionMaterial } from './material-reaction.utils.ts';
+import { useDataWakService } from '../../../../services/data-wak/use-data-wak-service.ts';
 
 interface Props {
   material: NoitaMaterial;
 }
 
 export const useFilterMaterialReactions = ({ material }: Props) => {
-  const { data, lookup } = useNoitaDataWakStore();
+  const { data, lookup } = useDataWakService();
 
   /**
    * Returns if a matterial matches the reaction component
@@ -58,10 +58,6 @@ export const useFilterMaterialReactions = ({ material }: Props) => {
   );
 
   const reactions = useMemo(() => {
-    if (!data) {
-      return;
-    }
-
     const sourceReactions: NoitaMaterialReaction[] = [];
     const productReactions: NoitaMaterialReaction[] = [];
     const persistentReactions: NoitaMaterialReaction[] = [];

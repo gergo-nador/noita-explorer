@@ -1,4 +1,3 @@
-import { useNoitaDataWakStore } from '../../../stores/noita-data-wak.ts';
 import { NoitaMaterialIcon } from '../../../components/noita-material-icon.tsx';
 import { NoitaProgressIconTable } from '../../../components/noita-progress-icon-table.tsx';
 import {
@@ -13,9 +12,10 @@ import { MaterialFiltersView } from './material-filters-view.tsx';
 import { Flex } from '@noita-explorer/react-utils';
 import { Link, Outlet, useParams } from 'react-router-dom';
 import { pages } from '../../../routes/pages.ts';
+import { useDataWakService } from '../../../services/data-wak/use-data-wak-service.ts';
 
 export const WikiMaterials = () => {
-  const { data } = useNoitaDataWakStore();
+  const { data } = useDataWakService();
   const { materialId } = useParams();
 
   const [filters, setFilters] = useState<MaterialFilters>({
@@ -23,14 +23,10 @@ export const WikiMaterials = () => {
   });
 
   const materialsUnique = useMemo(() => {
-    if (!data?.materials) {
-      return [];
-    }
-
     const uniqueMaterials = arrayHelpers.uniqueBy(data.materials, (m) => m.id);
     uniqueMaterials.sort((a, b) => a.name.localeCompare(b.name));
     return uniqueMaterials;
-  }, [data?.materials]);
+  }, [data.materials]);
 
   const allAvailableTags = useMemo(() => {
     const allTags = materialsUnique.map((m) => m.tags).flat();
@@ -38,10 +34,6 @@ export const WikiMaterials = () => {
     allUniqueTags.sort((t1, t2) => t1.localeCompare(t2));
     return allUniqueTags;
   }, [materialsUnique]);
-
-  if (!data?.materials) {
-    return <div>Noita Data Wak is not loaded.</div>;
-  }
 
   return (
     <Flex

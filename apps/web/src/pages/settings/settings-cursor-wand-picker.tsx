@@ -1,21 +1,17 @@
 import { useSettingsStore } from '../../stores/settings.ts';
-import { useNoitaDataWakStore } from '../../stores/noita-data-wak.ts';
 import { Button, Card, Icon } from '@noita-explorer/noita-component-library';
 import { Flex } from '@noita-explorer/react-utils';
 import { useMemo } from 'react';
 import { zIndexManager } from '../../utils/z-index-manager.ts';
 import { publicPaths } from '../../utils/public-paths.ts';
+import { useDataWakService } from '../../services/data-wak/use-data-wak-service.ts';
 
 export const SettingsCursorWandPicker = () => {
   const { settings, set } = useSettingsStore();
   const { cursor } = settings;
-  const { data } = useNoitaDataWakStore();
+  const { data } = useDataWakService();
 
   const wandConfigs = useMemo(() => {
-    if (data?.wandConfigs === undefined || data.wandConfigs.length === 0) {
-      return undefined;
-    }
-
     const wandConfigs = [...data.wandConfigs];
     wandConfigs.sort((w1, w2) => {
       const gripY1 = w1?.gripY ?? 0;
