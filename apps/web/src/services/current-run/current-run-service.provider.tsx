@@ -3,6 +3,7 @@ import { Link } from '../../components/link.tsx';
 import { pages } from '../../routes/pages.ts';
 import { CurrentRunServiceContext } from './current-run-service.context.ts';
 import React from 'react';
+import { SpaceCharacter } from '../../components/space-character.tsx';
 
 interface Props {
   children: React.ReactNode;
@@ -17,7 +18,11 @@ export const CurrentRunServiceProvider = ({ children }: Props) => {
         <div>It looks like you skipped setup ;)</div>
         <div>
           Don't worry, we got you. Please visit
-          <Link to={pages.setup.webPaths}> Setup </Link>
+          <SpaceCharacter />
+          <Link to={pages.setup.webPaths} isInline showUnderline>
+            Setup
+          </Link>
+          <SpaceCharacter />
           and select your save00 folder.
         </div>
       </div>
