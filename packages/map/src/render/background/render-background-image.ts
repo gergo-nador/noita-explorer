@@ -29,6 +29,8 @@ export async function renderBackgroundImage({
 
   canvas.width = width;
   canvas.height = height;
+  ctx.imageSmoothingQuality = 'low';
+  ctx.imageSmoothingEnabled = false;
 
   // 1. fill the whole canvas with the color the image should have
   ctx.fillStyle = color;
@@ -92,6 +94,9 @@ export async function renderBackgroundImage({
       height + offsetY,
     );
   }
+
+  // 4. reset globalCompositeOperation
+  ctx.globalCompositeOperation = 'source-over';
 
   img.close();
 

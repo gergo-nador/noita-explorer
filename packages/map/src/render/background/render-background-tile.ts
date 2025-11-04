@@ -25,6 +25,7 @@ export async function renderBackgroundTile({
   const starSizeMultiplier = ctx.canvas.width / 1024;
 
   const tempCanvas = new OffscreenCanvas(width, height);
+
   const tempCtx = tempCanvas.getContext('2d');
   if (!tempCtx) {
     throw new Error(' OffscreenCanvasRenderingContext2D is not supported');

@@ -114,6 +114,8 @@ const mapRenderer: MapRenderType = {
         throw new Error('OffscreenCanvasRenderingContext2D not supported');
       }
 
+      ctx.imageSmoothingEnabled = false;
+
       await renderBackgroundTile({
         coords: props.coords,
         theme: props.theme,
