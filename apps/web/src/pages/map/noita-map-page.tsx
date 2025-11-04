@@ -16,7 +16,6 @@ export const NoitaMapPage = () => {
   const {
     isError: isDataWakError,
     progress: dataWakProgress,
-    fromCache,
     dataWakBuffer,
   } = useDataWakLoader();
 
@@ -47,7 +46,7 @@ export const NoitaMapPage = () => {
             </>
           ) : (
             <>
-              <span>Assets loaded {fromCache && 'from cache'} </span>
+              <span>Assets loaded</span>
               <BooleanIcon value={true} />
             </>
           )}
