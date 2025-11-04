@@ -1,0 +1,17 @@
+.panel{
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  background-color: rgba(69, 69, 69, 0.5);
+  padding: 5px 10px;
+  border-radius: 5px;
+  z-index: 1000;
+  font-family: monospace;
+  color: white;
+  max-height: 80%;
+  overflow-y: auto;
+}
+
+.panel:hover{
+background-color: rgba(69, 69, 69, 1);
+}

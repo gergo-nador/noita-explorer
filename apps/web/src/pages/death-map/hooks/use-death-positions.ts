@@ -1,5 +1,5 @@
 import { arrayHelpers } from '@noita-explorer/tools';
-import { useSave00Service } from '../../services/save00/use-save00-service.ts';
+import { useSave00Service } from '../../../services/save00/use-save00-service.ts';
 import { useMemo } from 'react';
 
 export const useDeathPositions = () => {
@@ -17,7 +17,7 @@ export const useDeathPositions = () => {
     [sessions],
   );
 
-  const uniqueProperties: string[] = useMemo(
+  const uniqueKilledByReasons: string[] = useMemo(
     () =>
       arrayHelpers.unique(
         sessionsFiltered
@@ -27,5 +27,5 @@ export const useDeathPositions = () => {
     [sessionsFiltered],
   );
 
-  return { sessionsFiltered, uniqueProperties };
+  return { sessionsFiltered, uniqueKilledByReasons };
 };

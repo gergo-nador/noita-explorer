@@ -1,8 +1,9 @@
 import { ImageOverlay, MapContainer, Marker, Popup } from 'react-leaflet';
 import L, { LatLngBoundsExpression } from 'leaflet';
-import { useDeathPositions } from './use-death-positions.ts';
+import { useDeathPositions } from './hooks/use-death-positions.ts';
 import { StringKeyDictionary } from '@noita-explorer/model';
 import css from './noita-death-map.module.css';
+import { NoitaDeathMapUtilityPanel } from './components/noita-death-map-utility-panel.tsx';
 
 export const NoitaDeathMap = () => {
   const mapCenter: L.LatLngExpression = [0, 0];
@@ -17,16 +18,16 @@ export const NoitaDeathMap = () => {
     [-bottomY, rightX],
   ] as LatLngBoundsExpression;
 
-  const { sessionsFiltered, uniqueProperties } = useDeathPositions();
+  const { sessionsFiltered, uniqueKilledByReasons } = useDeathPositions();
 
   const generateColor = (index: number, total: number) => {
     const hue = (index / total) * 360; // Spread hues across 360 degrees
     return `hsl(${hue}, 70%, 50%)`; // HSL color (70% saturation, 50% lightness)
   };
 
-  const colorMap: StringKeyDictionary<string> = uniqueProperties.reduce(
+  const colorMap: StringKeyDictionary<string> = uniqueKilledByReasons.reduce(
     (acc, prop, index) => {
-      acc[prop] = generateColor(index, uniqueProperties.length);
+      acc[prop] = generateColor(index, uniqueKilledByReasons.length);
       return acc;
     },
     {} as StringKeyDictionary<string>,
@@ -68,6 +69,11 @@ export const NoitaDeathMap = () => {
           </Marker>
         );
       })}
+      <NoitaDeathMapUtilityPanel
+        sessionsFiltered={sessionsFiltered}
+        uniqueKilledByReasons={uniqueKilledByReasons}
+        colorMap={colorMap}
+      />
     </MapContainer>
   );
 };

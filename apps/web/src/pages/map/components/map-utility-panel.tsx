@@ -41,8 +41,8 @@ export const MapUtilityPanel = ({
     <div
       style={{
         position: 'absolute',
-        bottom: '10px',
-        right: '10px',
+        bottom: '15px',
+        right: '15px',
         backgroundColor: 'rgb(69,69,69)',
         padding: '5px 10px',
         borderRadius: '5px',
