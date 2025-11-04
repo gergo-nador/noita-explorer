@@ -73,8 +73,8 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
     },
     map: {
       initialPopupSeen: false,
-      workerAmountType: 'auto',
-      customWorkerCount: 1,
+      workerAmountType: 'custom',
+      customWorkerCount: Math.min(4, navigator.hardwareConcurrency),
     },
     progressDisplayDebugData: false,
     sentry: {
