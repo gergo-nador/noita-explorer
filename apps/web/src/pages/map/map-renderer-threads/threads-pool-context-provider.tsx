@@ -6,6 +6,7 @@ import { MapRenderType } from '../../../workers-web/map/map-render.types.ts';
 import MapWorkerUrl from '../../../workers-web/map/map-render.worker.ts?worker';
 import { ThreadsPoolContext, WorkerStatus } from './threads-pool-context.ts';
 import { MapRendererPool } from './threads-pool.types.ts';
+import { useSettingsStore } from '../../../stores/settings.ts';
 
 interface Props {
   children: React.ReactNode;
@@ -16,16 +17,21 @@ export const ThreadsPoolContextProvider = ({
   children,
   dataWakBuffer,
 }: Props) => {
+  const { settings } = useSettingsStore();
   const [pool, setPool] = useState<MapRendererPool>();
   const [status, setStatus] = useState<Record<number, WorkerStatus>>({});
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    // Create a pool with multiple workers
+    const numberOfWorkersToInitialize =
+      settings.map.workerAmountType === 'auto'
+        ? navigator.hardwareConcurrency
+        : Math.max(settings.map.customWorkerCount, 1);
+
     const pool: MapRendererPool = Pool<MapRenderType>(
       () => spawn(new MapWorkerUrl()),
       {
-        size: 4,
+        size: numberOfWorkersToInitialize,
         concurrency: 2,
       },
     );

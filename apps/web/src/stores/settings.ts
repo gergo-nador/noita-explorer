@@ -7,6 +7,7 @@ export type SettingsCursorType = 'default' | 'noita-cursor' | 'wand';
 export type SettingsNoitaCursorType =
   | 'mouse_cursor_big'
   | 'mouse_cursor_big_system';
+export type SettingsMapWorkerAmountType = 'auto' | 'custom';
 
 export interface Settings {
   paths: {
@@ -23,6 +24,11 @@ export interface Settings {
     type: SettingsCursorType;
     noitaCursor: SettingsNoitaCursorType;
     wandSpriteId: string | undefined;
+  };
+  map: {
+    initialPopupSeen: boolean;
+    customWorkerCount: number;
+    workerAmountType: SettingsMapWorkerAmountType;
   };
   progressDisplayDebugData: boolean;
   sentry: {
@@ -64,6 +70,11 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
       type: 'default',
       noitaCursor: 'mouse_cursor_big',
       wandSpriteId: undefined,
+    },
+    map: {
+      initialPopupSeen: false,
+      workerAmountType: 'auto',
+      customWorkerCount: 1,
     },
     progressDisplayDebugData: false,
     sentry: {
