@@ -27,16 +27,27 @@ export async function mapRendererSetup({
   const noitaDataWak = await fetchDataWak();
   const materialsDict = arrayHelpers.asDict(noitaDataWak.materials, 'id');
 
+  const offscreenCanvas = new OffscreenCanvas(1, 1);
+  const ctx = offscreenCanvas.getContext('2d', { willReadFrequently: true });
+
+  if (!ctx) {
+    throw new Error(
+      'OffscreenCanvasRenderingContext2d not supported in web worker',
+    );
+  }
+
   const materialColorCache: StringKeyDictionary<ImageData> = {};
   for (const material of noitaDataWak.materials) {
     if (!material.graphicsImagePath) {
       continue;
     }
 
-    const imageBitmap = await decodeImage(
+    const imageBitmap = await decodeImage({
       dataWakDirectory,
-      material.graphicsImagePath,
-    );
+      path: material.graphicsImagePath,
+      offscreenCanvas,
+      ctx,
+    });
 
     if (!imageBitmap) {
       continue;
@@ -55,10 +66,17 @@ export async function mapRendererSetup({
   };
 }
 
-async function decodeImage(
-  dataWakDirectory: FileSystemDirectoryAccess,
-  path: string,
-) {
+async function decodeImage({
+  dataWakDirectory,
+  path,
+  offscreenCanvas,
+  ctx,
+}: {
+  dataWakDirectory: FileSystemDirectoryAccess;
+  path: string;
+  offscreenCanvas: OffscreenCanvas;
+  ctx: OffscreenCanvasRenderingContext2D;
+}) {
   const file = await dataWakDirectory.getFile(path);
   const fileBuffer = await file.read.asBuffer();
   const arrayBuffer = fileBuffer.buffer as ArrayBuffer;
@@ -66,14 +84,19 @@ async function decodeImage(
   const blob = new Blob([arrayBuffer], { type: 'image/png' });
   const imageBitmap = await createImageBitmap(blob);
 
-  const canvas = new OffscreenCanvas(imageBitmap.width, imageBitmap.height);
-  const ctx = canvas.getContext('2d');
+  offscreenCanvas.width = imageBitmap.width;
+  offscreenCanvas.height = imageBitmap.height;
 
-  if (!ctx) return;
+  ctx.clearRect(0, 0, offscreenCanvas.width, offscreenCanvas.height);
 
   ctx.drawImage(imageBitmap, 0, 0);
 
-  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  const imageData = ctx.getImageData(
+    0,
+    0,
+    offscreenCanvas.width,
+    offscreenCanvas.height,
+  );
 
   imageBitmap.close();
 

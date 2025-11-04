@@ -24,6 +24,14 @@ export async function renderBackgroundTile({
   // the mountain images has around 1024 pixel width
   const starSizeMultiplier = ctx.canvas.width / 1024;
 
+  const tempCanvas = new OffscreenCanvas(width, height);
+  const tempCtx = tempCanvas.getContext('2d');
+  if (!tempCtx) {
+    throw new Error(' OffscreenCanvasRenderingContext2D is not supported');
+  }
+
+  tempCtx.imageSmoothingEnabled = false;
+
   if (coords.y === -1) {
     const gradient = ctx.createLinearGradient(0, height, 0, 0);
 
@@ -52,6 +60,8 @@ export async function renderBackgroundTile({
         size: size,
         offsetY: -100,
         dataWakDirectory,
+        canvas: tempCanvas,
+        ctx: tempCtx,
       });
 
       ctx.globalAlpha = 0.5;
@@ -66,6 +76,8 @@ export async function renderBackgroundTile({
         colorRenderMode: 'mountain',
         size: size,
         dataWakDirectory,
+        canvas: tempCanvas,
+        ctx: tempCtx,
       });
 
       ctx.drawImage(mountain2Canvas, 0, 0);
@@ -79,6 +91,8 @@ export async function renderBackgroundTile({
         offsetY: 150,
         size: size,
         dataWakDirectory,
+        canvas: tempCanvas,
+        ctx: tempCtx,
       });
 
       ctx.drawImage(cloud2Canvas, 0, 0);
@@ -92,6 +106,8 @@ export async function renderBackgroundTile({
         offsetY: 200,
         size: size,
         dataWakDirectory,
+        canvas: tempCanvas,
+        ctx: tempCtx,
       });
 
       ctx.drawImage(mountain1BackCanvas, 0, 0);
@@ -105,6 +121,8 @@ export async function renderBackgroundTile({
         offsetY: 200,
         size: size,
         dataWakDirectory,
+        canvas: tempCanvas,
+        ctx: tempCtx,
       });
 
       ctx.drawImage(mountain1HighlightCanvas, 0, 0);

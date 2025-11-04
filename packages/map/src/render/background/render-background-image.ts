@@ -9,6 +9,8 @@ interface Props {
   offsetY?: number;
   size: Vector2d;
   dataWakDirectory: FileSystemDirectoryAccess;
+  canvas: OffscreenCanvas;
+  ctx: OffscreenCanvasRenderingContext2D;
 }
 
 export async function renderBackgroundImage({
@@ -18,22 +20,15 @@ export async function renderBackgroundImage({
   offsetY,
   size,
   dataWakDirectory,
+  canvas,
+  ctx,
 }: Props) {
   offsetY ??= 0;
   const width = size.x;
   const height = size.y;
 
-  const canvas = new OffscreenCanvas(width, height);
-
   canvas.width = width;
   canvas.height = height;
-
-  const ctx = canvas.getContext('2d');
-  if (!ctx) {
-    throw new Error('CanvasRenderingContext2D is not supported');
-  }
-
-  ctx.imageSmoothingEnabled = false;
 
   // 1. fill the whole canvas with the color the image should have
   ctx.fillStyle = color;
