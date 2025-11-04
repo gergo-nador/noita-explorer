@@ -8,11 +8,10 @@ import {
 import { Flex } from '@noita-explorer/react-utils';
 import { useOrganizeBackgroundImages } from './hooks/use-organize-background-images.ts';
 import { useDataWakService } from '../../services/data-wak/use-data-wak-service.ts';
-import { useCurrentRunService } from '../../services/current-run/use-current-run-service.ts';
+import { useOrganizeWorldFiles } from './hooks/use-organize-world-files.ts';
 
 export const NoitaMapPage = () => {
   const { data } = useDataWakService();
-  const { worldPixelScenes, streamInfo } = useCurrentRunService();
 
   const {
     isError: isDataWakError,
@@ -22,42 +21,53 @@ export const NoitaMapPage = () => {
   } = useDataWakLoader();
 
   const { backgrounds, isLoaded: isBackgroundsLoaded } =
-    useOrganizeBackgroundImages({ streamInfo, dataWakBuffer });
+    useOrganizeBackgroundImages({ dataWakBuffer });
+
+  const { petriFileCollection, entityFileCollection, mapBounds } =
+    useOrganizeWorldFiles();
 
   if (isDataWakError) {
     return <div className='text-danger'>Failed to load assets</div>;
   }
 
-  if (!dataWakBuffer || !isBackgroundsLoaded) {
+  if (!dataWakBuffer || !isBackgroundsLoaded || !mapBounds) {
     return (
       <div>
-        {!dataWakBuffer && (
-          <Flex>
-            <span>Loading assets</span>
-            <ProgressBar
-              progress={Math.round(
-                (100 * dataWakProgress.loaded) / dataWakProgress.total,
-              )}
-              barColor='healthBar'
-            />
-          </Flex>
-        )}
+        <Flex>
+          {dataWakBuffer ? (
+            <>
+              <span>Loading game assets...</span>
+              <ProgressBar
+                progress={Math.round(
+                  (100 * dataWakProgress.loaded) / dataWakProgress.total,
+                )}
+                barColor='healthBar'
+                width={250}
+              />
+            </>
+          ) : (
+            <>
+              <span>Assets loaded {fromCache && 'from cache'} </span>
+              <BooleanIcon value={true} />
+            </>
+          )}
+        </Flex>
 
-        {dataWakBuffer && (
-          <>
-            <Flex>
-              <span>
-                Assets loaded {fromCache ? 'from cache' : ''}
-                <BooleanIcon value={true} />
-              </span>
-            </Flex>
-            <div>
-              {isBackgroundsLoaded
-                ? 'Backgrounds loaded'
-                : 'Loading backgrounds...'}
-            </div>
-          </>
-        )}
+        <Flex>
+          {isBackgroundsLoaded ? (
+            <span>Backgrounds loaded</span>
+          ) : (
+            <span>Loading backgrounds...</span>
+          )}
+        </Flex>
+
+        <Flex>
+          {mapBounds ? (
+            <span>Map bounds loaded</span>
+          ) : (
+            <span>Calculating map bounds...</span>
+          )}
+        </Flex>
       </div>
     );
   }
@@ -66,9 +76,10 @@ export const NoitaMapPage = () => {
     <NoitaMapContainer
       biomes={data.biomes}
       backgrounds={backgrounds}
-      streamInfo={streamInfo}
-      worldPixelScenes={worldPixelScenes}
       dataWakBuffer={dataWakBuffer}
+      petriFileCollection={petriFileCollection}
+      entityFileCollection={entityFileCollection}
+      mapBounds={mapBounds}
     />
   );
 };

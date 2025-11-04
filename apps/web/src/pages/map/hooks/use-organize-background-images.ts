@@ -6,16 +6,14 @@ import { FileSystemDirectoryAccessDataWakMemory } from '@noita-explorer/file-sys
 import { scrape } from '@noita-explorer/scrapers';
 import { useEffect, useState } from 'react';
 import { Buffer } from 'buffer';
+import { useCurrentRunService } from '../../../services/current-run/use-current-run-service.ts';
 
 interface Props {
-  streamInfo: StreamInfoFileFormat | undefined;
   dataWakBuffer: Buffer | undefined;
 }
 
-export const useOrganizeBackgroundImages = ({
-  streamInfo,
-  dataWakBuffer,
-}: Props) => {
+export const useOrganizeBackgroundImages = ({ dataWakBuffer }: Props) => {
+  const { streamInfo } = useCurrentRunService();
   const [backgrounds, setBackgrounds] = useState<
     Record<number, Record<number, StreamInfoBackground[]>>
   >({});

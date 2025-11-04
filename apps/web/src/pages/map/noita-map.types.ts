@@ -12,3 +12,10 @@ export type NoitaPetriFileCollection = Record<
 >;
 
 export type NoitaEntityFileCollection = Record<number, FileSystemFileAccess>;
+
+export interface MapBounds {
+  minY: number;
+  maxY: number;
+  minX: number;
+  maxX: number;
+}

@@ -1,8 +1,6 @@
 import {
   NoitaWakBiomes,
   StreamInfoBackground,
-  StreamInfoFileFormat,
-  WorldPixelSceneFileFormat,
 } from '@noita-explorer/model-noita';
 import L from 'leaflet';
 import { MapContainer } from 'react-leaflet';
@@ -11,40 +9,41 @@ import { NoitaMapBiomeLayerWrapper } from './layers/biome/noita-map-biome-layer-
 import { NoitaMapEntityLazyLoadingLayer } from './layers/entity/noita-map-entity-lazy-loading-layer.tsx';
 import { ThreadsPoolContextProvider } from './map-renderer-threads/threads-pool-context-provider.tsx';
 import { NoitaMapBackgroundLayerWrapper } from './layers/background/noita-map-background-layer-wrapper.tsx';
-import { useOrganizeWorldFiles } from './hooks/use-organize-world-files.ts';
 import { Buffer } from 'buffer';
 import { MapUtilityPanel } from './components/map-utility-panel.tsx';
 import { useRef, useState } from 'react';
 import { MapRef } from 'react-leaflet/MapContainer';
 import { BackgroundThemes } from './layers/background/background-themes.ts';
+import { useCurrentRunService } from '../../services/current-run/use-current-run-service.ts';
+import {
+  MapBounds,
+  NoitaEntityFileCollection,
+  NoitaPetriFileCollection,
+} from './noita-map.types.ts';
 
-export function NoitaMapContainer({
-  worldPixelScenes,
-  streamInfo,
-  biomes,
-  backgrounds,
-  dataWakBuffer,
-}: {
-  worldPixelScenes: WorldPixelSceneFileFormat;
-  streamInfo: StreamInfoFileFormat;
+interface Props {
   biomes: NoitaWakBiomes;
   backgrounds: Record<number, Record<number, StreamInfoBackground[]>>;
   dataWakBuffer: Buffer;
-}) {
+  petriFileCollection: NoitaPetriFileCollection;
+  entityFileCollection: NoitaEntityFileCollection;
+  mapBounds: MapBounds;
+}
+
+export function NoitaMapContainer({
+  biomes,
+  backgrounds,
+  dataWakBuffer,
+  petriFileCollection,
+  entityFileCollection,
+  mapBounds,
+}: Props) {
+  const { worldPixelScenes, streamInfo } = useCurrentRunService();
   const mapRef = useRef<MapRef>(null);
   const mapCenter: L.LatLngExpression = [0, 0];
-  const { petriFileCollection, entityFileCollection, mapBounds } =
-    useOrganizeWorldFiles();
+
   const [backgroundTheme, setBackgroundTheme] =
     useState<BackgroundThemes>('dayMid');
-
-  if (!worldPixelScenes || !streamInfo) {
-    return <div>No current run detected</div>;
-  }
-
-  if (!mapBounds) {
-    return <div>Calculating map bounds...</div>;
-  }
 
   const mapBoundsPadding = 4 * 512;
 
@@ -83,7 +82,9 @@ export function NoitaMapContainer({
               entityFiles={entityFileCollection}
               streamInfo={streamInfo}
             />
-            {Math.random() > 1 && (
+
+            {/* This is not yet available */}
+            {__SSG__ && (
               <NoitaMapEntityLazyLoadingLayer
                 entityFiles={entityFileCollection}
                 streamInfo={streamInfo}

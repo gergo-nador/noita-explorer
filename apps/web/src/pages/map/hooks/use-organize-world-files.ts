@@ -2,16 +2,10 @@ import { useEffect, useState } from 'react';
 import { getSave00FolderHandle } from '../../../utils/browser-noita-api/browser-noita-api.ts';
 import { useSave00Store } from '../../../stores/save00.ts';
 import {
+  MapBounds,
   NoitaEntityFileCollection,
   NoitaPetriFileCollection,
 } from '../noita-map.types.ts';
-
-interface MapBounds {
-  minY: number;
-  maxY: number;
-  minX: number;
-  maxX: number;
-}
 
 export const useOrganizeWorldFiles = () => {
   const { status } = useSave00Store();
