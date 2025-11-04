@@ -37,6 +37,8 @@ import { WikiEnemyDetails } from '../pages/wiki/enemies/wiki-enemy-details.tsx';
 import { WikiMaterialDetails } from '../pages/wiki/materials/wiki-material-details.tsx';
 import { NoitaMapPage } from '../pages/map/noita-map-page.tsx';
 import { DataWakServiceProvider } from '../services/data-wak/data-wak-service.provider.tsx';
+import { CurrentRunServiceProvider } from '../services/current-run/current-run-service.provider.tsx';
+import { Save00ServiceProvider } from '../services/save00/save00-service.provider.tsx';
 
 export const routes: NoitaRouteObject[] = [
   {
@@ -352,7 +354,9 @@ export const routes: NoitaRouteObject[] = [
             />
             <CardPageTemplate returnPath={pages.main}>
               <DataWakServiceProvider>
-                <CurrentRun />
+                <CurrentRunServiceProvider>
+                  <CurrentRun />
+                </CurrentRunServiceProvider>
               </DataWakServiceProvider>
             </CardPageTemplate>
           </>
@@ -367,7 +371,9 @@ export const routes: NoitaRouteObject[] = [
               description='View your previous sessions, find out how many times did you die because of explosion, and check out other statistics.'
             />
             <EmptyPageTemplate returnPath={pages.main}>
-              <NoitaSessions />
+              <Save00ServiceProvider>
+                <NoitaSessions />
+              </Save00ServiceProvider>
             </EmptyPageTemplate>
           </>
         ),
@@ -381,7 +387,9 @@ export const routes: NoitaRouteObject[] = [
               description='Check out your death locations of your previous runs in one map.'
             />
             <CardPageTemplate returnPath={pages.main}>
-              <NoitaDeathMap />
+              <Save00ServiceProvider>
+                <NoitaDeathMap />
+              </Save00ServiceProvider>
             </CardPageTemplate>
           </>
         ),
@@ -396,7 +404,9 @@ export const routes: NoitaRouteObject[] = [
             />
             <CardPageTemplate returnPath={pages.main}>
               <DataWakServiceProvider>
-                <NoitaBonesWands />
+                <Save00ServiceProvider>
+                  <NoitaBonesWands />
+                </Save00ServiceProvider>
               </DataWakServiceProvider>
             </CardPageTemplate>
           </>
@@ -412,7 +422,9 @@ export const routes: NoitaRouteObject[] = [
             />
             <CardPageTemplate returnPath={pages.main}>
               <DataWakServiceProvider>
-                <NoitaMapPage />
+                <CurrentRunServiceProvider>
+                  <NoitaMapPage />
+                </CurrentRunServiceProvider>
               </DataWakServiceProvider>
             </CardPageTemplate>
           </>

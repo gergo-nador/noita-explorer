@@ -3,16 +3,12 @@ import {
   NoitaTooltipWrapper,
 } from '@noita-explorer/noita-component-library';
 import { ProgressBar } from '@noita-explorer/noita-component-library';
-import { useSave00Store } from '../../stores/save00.ts';
 import { mathHelpers } from '@noita-explorer/tools';
 import { Flex } from '@noita-explorer/react-utils';
+import { useCurrentRunService } from '../../services/current-run/use-current-run-service.ts';
 
 export const CurrentRunPlayerStatus = () => {
-  const { currentRun } = useSave00Store();
-
-  if (!currentRun) {
-    return <div>No current run detected.</div>;
-  }
+  const { currentRun } = useCurrentRunService();
 
   const fly = currentRun.playerState.fly;
 

@@ -6,7 +6,6 @@ import {
 import { NoitaProgressIconTable } from '../../../components/noita-progress-icon-table.tsx';
 import { useMemo, useState } from 'react';
 import { NoitaPerk } from '@noita-explorer/model-noita';
-import { useSave00Store } from '../../../stores/save00.ts';
 import { arrayHelpers } from '@noita-explorer/tools';
 import { PerkFilters } from './perk-filters.ts';
 import { PerkFiltersView } from './perk-filters-view.tsx';
@@ -15,6 +14,7 @@ import { Link, Outlet } from 'react-router-dom';
 import { pages } from '../../../routes/pages.ts';
 import { publicPaths } from '../../../utils/public-paths.ts';
 import { useDataWakService } from '../../../services/data-wak/use-data-wak-service.ts';
+import { useSave00Service } from '../../../services/save00/use-save00-service.ts';
 
 export const WikiPerks = () => {
   const { data } = useDataWakService();
@@ -27,7 +27,7 @@ export const WikiPerks = () => {
     protectionId: undefined,
     unlocked: undefined,
   });
-  const { unlockedPerks } = useSave00Store();
+  const { unlockedPerks } = useSave00Service();
 
   const usedProtectionIds = useMemo(() => {
     if (data.perks === undefined) {

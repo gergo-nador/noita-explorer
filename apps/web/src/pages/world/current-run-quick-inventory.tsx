@@ -1,14 +1,12 @@
 import { Flex } from '@noita-explorer/react-utils';
-import { useSave00Store } from '../../stores/save00.ts';
 import { InventoryWand } from './inventory-items/inventory-wand.tsx';
 import { enumerateHelpers } from '@noita-explorer/tools';
 import { InventoryPotion } from './inventory-items/inventory-potion.tsx';
 import { InventoryIcon } from '@noita-explorer/noita-component-library';
+import { useCurrentRunService } from '../../services/current-run/use-current-run-service.ts';
 
 export const CurrentRunQuickInventory = () => {
-  const { currentRun } = useSave00Store();
-
-  if (!currentRun) return;
+  const { currentRun } = useCurrentRunService();
 
   return (
     <Flex gap={5}>

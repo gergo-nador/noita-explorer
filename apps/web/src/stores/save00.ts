@@ -14,14 +14,14 @@ import { noiToast } from '@noita-explorer/noita-component-library';
 import { Dispatch, SetStateAction } from 'react';
 import { sentry } from '../utils/sentry.ts';
 
-interface Save00CurrentRun {
+export interface Save00CurrentRun {
   worldState: NoitaWorldState;
   playerState: NoitaPlayerState;
 }
 
 type Save00Status = 'unset' | 'loading' | 'loaded' | 'failed';
 
-interface Save00StoreState {
+export interface Save00StoreState {
   enemyStatistics: StringKeyDictionary<EnemyStatistic> | undefined;
   unlockedSpells: string[] | undefined;
   unlockedPerks: string[] | undefined;

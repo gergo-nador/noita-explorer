@@ -1,5 +1,4 @@
 import { NoitaMapContainer } from './noita-map-container.tsx';
-import { useSave00Store } from '../../stores/save00.ts';
 import { useDataWakLoader } from './hooks/use-data-wak-loader.ts';
 import 'leaflet-edgebuffer';
 import {
@@ -9,15 +8,11 @@ import {
 import { Flex } from '@noita-explorer/react-utils';
 import { useOrganizeBackgroundImages } from './hooks/use-organize-background-images.ts';
 import { useDataWakService } from '../../services/data-wak/use-data-wak-service.ts';
+import { useCurrentRunService } from '../../services/current-run/use-current-run-service.ts';
 
 export const NoitaMapPage = () => {
   const { data } = useDataWakService();
-  const {
-    worldPixelScenes,
-    streamInfo,
-    currentRun,
-    status: save00Status,
-  } = useSave00Store();
+  const { worldPixelScenes, streamInfo } = useCurrentRunService();
 
   const {
     isError: isDataWakError,
@@ -28,20 +23,6 @@ export const NoitaMapPage = () => {
 
   const { backgrounds, isLoaded: isBackgroundsLoaded } =
     useOrganizeBackgroundImages({ streamInfo, dataWakBuffer });
-
-  if (save00Status === 'unset') {
-    return <div>No save00 folder is set</div>;
-  }
-  if (save00Status === 'failed') {
-    return <div className='text-danger'>Failed to load save00</div>;
-  }
-  if (save00Status === 'loading') {
-    return <div>Loading save00...</div>;
-  }
-
-  if (!worldPixelScenes || !streamInfo || !currentRun) {
-    return <div>No current run detected</div>;
-  }
 
   if (isDataWakError) {
     return <div className='text-danger'>Failed to load assets</div>;

@@ -1,17 +1,13 @@
-import { useSave00Store } from '../../stores/save00.ts';
 import { StringKeyDictionary } from '@noita-explorer/model';
 import { Data, Layout } from 'plotly.js';
 import { arrayHelpers } from '@noita-explorer/tools';
 import { lazy } from 'react';
+import { useSave00Service } from '../../services/save00/use-save00-service.ts';
 
 const NoitaDeathMapPlot = lazy(() => import('./noita-death-map-plot.tsx'));
 
 export const NoitaDeathMap = () => {
-  const { sessions } = useSave00Store();
-
-  if (sessions === undefined) {
-    return <div>No Sessions loaded</div>;
-  }
+  const { sessions } = useSave00Service();
 
   const rangeXLeft = -17800;
   const rangeXRight = 17800;

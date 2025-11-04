@@ -1,4 +1,3 @@
-import { useSave00Store } from '../../stores/save00.ts';
 import {
   Icon,
   NoitaTooltipWrapper,
@@ -7,14 +6,11 @@ import {
 import { Flex } from '@noita-explorer/react-utils';
 import { publicPaths } from '../../utils/public-paths.ts';
 import { useDataWakService } from '../../services/data-wak/use-data-wak-service.ts';
+import { useCurrentRunService } from '../../services/current-run/use-current-run-service.ts';
 
 export const CurrentRunPerksView = () => {
   const { lookup } = useDataWakService();
-  const { currentRun } = useSave00Store();
-
-  if (!lookup || !currentRun) {
-    return <div></div>;
-  }
+  const { currentRun } = useCurrentRunService();
 
   const previewPerks = [...currentRun.worldState.perks.pickedPerks.slice(0, 6)];
 
