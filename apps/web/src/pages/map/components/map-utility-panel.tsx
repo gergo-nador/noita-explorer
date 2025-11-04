@@ -1,6 +1,6 @@
-import { Dispatch, RefObject, useState } from 'react';
+import { Dispatch, RefObject, useEffect, useState } from 'react';
 import L from 'leaflet';
-import { useMapEvents } from 'react-leaflet';
+import { useMap, useMapEvents } from 'react-leaflet';
 import { Flex } from '@noita-explorer/react-utils';
 import { MapRef } from 'react-leaflet/MapContainer';
 import { BackgroundThemes } from '../layers/background/background-themes.ts';
@@ -17,6 +17,7 @@ export const MapUtilityPanel = ({
   setBackgroundThemes,
 }: Props) => {
   const [position, setPosition] = useState<L.LatLng | null>(null);
+  const map = useMap();
 
   useMapEvents({
     mousemove(e) {
@@ -26,6 +27,15 @@ export const MapUtilityPanel = ({
       setPosition(null);
     },
   });
+
+  useEffect(() => {
+    const callback = () => {
+      map.invalidateSize();
+    };
+
+    document.addEventListener('fullscreenchange', callback);
+    return () => document.removeEventListener('fullscreenchange', callback);
+  }, [map]);
 
   return (
     <div
