@@ -46,16 +46,16 @@ export const NoitaMapPage = () => {
               <BooleanIcon value={true} />
             </>
           ) : (
-            <>
+            <Flex gap={10}>
               <span>Loading game assets...</span>
-              <ProgressBar
-                progress={Math.round(
-                  (100 * dataWakProgress.loaded) / dataWakProgress.total,
-                )}
-                barColor='healthBar'
-                width={250}
-              />
-            </>
+              {dataWakProgress !== undefined && (
+                <ProgressBar
+                  progress={dataWakProgress}
+                  barColor='healthBar'
+                  width={250}
+                />
+              )}
+            </Flex>
           )}
         </Flex>
 
