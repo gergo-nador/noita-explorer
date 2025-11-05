@@ -10,7 +10,7 @@
     "lint": "turbo lint",
     "generate-barrels": "turbo generate-barrels",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "generate-dep-graph": "turbo run build --graph --dry | npx graphviz -Tpng -odocs/turbo-graph.png"
+    "generate-dep-graph": "turbo run build --graph --dry | npx graphviz -Tsvg -odocs/turbo-graph.svg"
   },
   "devDependencies": {
     "@eslint/js": "^9.13.0",

@@ -195,7 +195,7 @@ The project is structured in the following way:
 
 
 Dependency Graph:
-<img src="docs/turbo-graph.png">
+<img src="docs/turbo-graph.svg">
 generated with `npm run generate-dep-graph`
 
 
