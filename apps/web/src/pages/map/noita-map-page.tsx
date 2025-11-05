@@ -42,6 +42,11 @@ export const NoitaMapPage = () => {
         <Flex>
           {dataWakBuffer ? (
             <>
+              <span>Assets loaded</span>
+              <BooleanIcon value={true} />
+            </>
+          ) : (
+            <>
               <span>Loading game assets...</span>
               <ProgressBar
                 progress={Math.round(
@@ -50,11 +55,6 @@ export const NoitaMapPage = () => {
                 barColor='healthBar'
                 width={250}
               />
-            </>
-          ) : (
-            <>
-              <span>Assets loaded</span>
-              <BooleanIcon value={true} />
             </>
           )}
         </Flex>
