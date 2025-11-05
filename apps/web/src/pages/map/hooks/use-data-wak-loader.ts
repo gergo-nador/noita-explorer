@@ -23,9 +23,10 @@ const xmlHttpRequestService = (url: string) => {
   };
 };
 
-const xmlHttpRequestServiceInstance = xmlHttpRequestService(
-  import.meta.env.VITE_DATA_WAK_URL,
-);
+let xmlHttpRequestServiceInstance: {
+  xmlHttpRequest: Omit<XMLHttpRequest, 'send'>;
+  send: VoidFunction;
+};
 
 /**
  * Downloads the data.wak file as an array buffer
@@ -38,6 +39,13 @@ export const useDataWakLoader = () => {
   });
 
   useEffect(() => {
+    if (__SSG__) return;
+    if (!xmlHttpRequestServiceInstance) {
+      xmlHttpRequestServiceInstance = xmlHttpRequestService(
+        import.meta.env.VITE_DATA_WAK_URL,
+      );
+    }
+
     const xmlHttpRequest = xmlHttpRequestServiceInstance.xmlHttpRequest;
 
     const onLoad = () => {
