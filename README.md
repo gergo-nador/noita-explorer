@@ -33,8 +33,7 @@ Before many of these features, you need to give access to your noita save folder
 - [Progress > Secrets]: View available orbs
 - [Progress > Secrets > Achievement Pillar]: View all achievement pillars
 
-- [Wiki]: Filter, view details, share the perks, spells and enemies (auto generated from the data.wak file)
-- [Wiki > Materials]: Work in progress
+- [Wiki]: Filter, view details, share the perks, spells, enemies and materials (auto generated from the data.wak file)
 
 - [Holidays]: View in-game holidays and their next start date
 
@@ -44,15 +43,14 @@ Before many of these features, you need to give access to your noita save folder
   - Seconds: forces all time units to be in seconds
 - [Settings > Cursor]: Pick your cursor type (a bit broken, needs a fix)
 
-#### With read access to Noita save folder
-
-!! It's important you select the NollaGamesNoita folder and not the save00 !!
+#### With read access to save00 folder
 
 - [Progress]: View your unlocked (and newly unlocked) perks, spells and enemies
 - [Progress > Secrets]: Inspect the unlocked player decorations
 - [Progress > Secrets]: Check out picked up orbs in the current game
 - [Progress > Secrets > Achievement Pillar]: View unlocked achievement pillars
 - [Sessions]: View statistics of your previous Noita sessions, filter by many options
+- [Map]: View your current world
 - [Death map]: A map of all* the places where you died *(limited to the main world)
 - [Bones wands]: See the bones wands, that can come back in your future runs in a hand of the Kummitus
 
@@ -110,8 +108,10 @@ CI_TRANSLATIONS_URL=https://storage.noita-explorer.com/common.csv
 CI_DISABLED=0
 # skips generating static pages (not needed for development)
 CI_SSG_DISABLED=1
-# skips any CI task that requires internet access (scraping the noita.wiki.gg links)
+# skips any CI task that requires internet access, except download the required data.wak resource
 CI_INTERNET_DISABLED=1
+# used by the map to download assets
+VITE_DATA_WAK_URL=https://storage.noita-explorer.com/data.wak
 # VITE_ENV is set to "production" in the deployed main branch
 # and is set to "preview" in the deployed non-main branches
 VITE_ENV=development
@@ -130,7 +130,7 @@ files from the noita-explorer's hosted storage. More about this in the CI sectio
 npm run build
 ```
 
-Note for Windows devs: the build pipeline includes `.sh` files, which cannot be executed natively on Windows. To run the build command, please use a unix based command line, such as Git Bash.
+Note for Windows devs: the build pipeline runs `.sh` files, which cannot be executed natively on Windows. To run the build command, please use a unix based command line, such as Git Bash.
 
 #### Run the development server
 
@@ -171,24 +171,28 @@ The project is structured in the following way:
   - `apps/web`: website (published)
 
 - Packages
-  - `packages/model`: Base interfaces
-  - `packages/model-noita`: Interfaces and types related to Noita
-  - `packages/tools`: General tools and utility functions
-    - `src/common`: General utility functions
-    - `src/lua`: Wrapper around `luaparse` package
-    - `src/xml`: Wrapper around `xml2js` parsed object structure
-    - `tests/xml`: Unit tests for the xml 
+  - `packages/fastlz`: Web-assembly wrapper for the fastlz c library
   - `packages/file-systems`: File system access is abstracted in this project for flexibility (interfaces in `packages/model/src/file-system`)
     - `src/browser-fallback`: Fallback file using `browser-fs-access` for cases when the File System API is not available
     - `src/browser-file-access-api`: File system used when File System API is available
     - `src/data-wak-memory-filesystem`: Read files directly from the data.wak compressed file without unpacking it
     - `src/node`: Node implementation of the file system access interfaces
+  - `packages/map`: Logic to render the map tiles
+  - `packages/model`: Base interfaces
+  - `packages/model-noita`: Interfaces and types related to Noita
+  - `packages/noita-component-library`: Reusable Noita components
+    - run `npm run dev:storybook` to view the components (not finished)
+  - `packages/react-utils`: Reusable react components and utility functions/hooks
   - `packages/scrapers`: All functions related to scraping and modifying Noita files 
     - `src/actions`: Actions that modify the save files.
     - `src/scrapers`: Functions to scrape data from data.wak or save00 folder. These functions don't modify any files on the disk
-  - `packages/react-utils`: Reusable react components and utility functions/hooks
-  - `packages/noita-component-library`: Reusable Noita components
-    - run `npm run dev:storybook` to view the components (not finished)
+  - `packages/tools`: General tools and utility functions
+    - `src/common`: General utility functions
+    - `src/lua`: Wrapper around `luaparse` package
+    - `src/xml`: Wrapper around `xml2js` parsed object structure
+    - `tests/xml`: Unit tests for the xml
+
+
 
 Dependency Graph:
 <img src="docs/turbo-graph.png">
@@ -202,10 +206,6 @@ The `apps/web` react app is hosted on Cloudflare Pages.
 The official domains of Noita Explorers are:
 - https://noita-explorer.com or https://www.noita-explorer.com (main branch)
 - https://dev.noita-explorer.com (dev branch)
-
-Access site directly:
-- https://noita-explorer.pages.dev (main branch direct cloudflare link)
-- https://dev.noita-explorer.pages.dev (dev branch direct cloudflare link)
 
 ## CI
 
@@ -252,3 +252,11 @@ page under the Extras.
 Sentry logging is only enabled in the deployed pages, both in production and 
 preview environments. It is disabled in development. Please don't enable it
 locally and don't spam the Sentry issues board <3
+
+## Architecture for the Map
+
+Rendering the map uses a lot of CPU resources, which would block interacting with the page if the rendering
+would run in the main thread.
+
+[threads.js](https://threads.js.org/) is utilized to maintain a pool of web workers.
+The rendering tasks are queued, and picked up by the available workers.
