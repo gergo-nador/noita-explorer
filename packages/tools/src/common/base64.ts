@@ -4,6 +4,7 @@ function trimMetadata(base64: string) {
 }
 
 function appendMetadata(base64: string, type = 'image/png') {
+  if (base64.startsWith('data:')) return base64;
   return `data:${type};base64,${base64}`;
 }
 

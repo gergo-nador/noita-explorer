@@ -17,6 +17,7 @@ interface Props {
   onDisabledClick?: () => void;
   disabledToast?: string;
   isInline?: boolean;
+  showUnderline?: boolean;
 }
 
 export const Link = ({
@@ -28,6 +29,7 @@ export const Link = ({
   onDisabledClick,
   disabledToast,
   isInline,
+  showUnderline,
 }: Props) => {
   const toast = useToast();
 
@@ -41,7 +43,7 @@ export const Link = ({
         disabled={disabled ?? false}
         style={{
           color: 'white',
-          textDecoration: 'none',
+          textDecoration: showUnderline ? 'underline' : 'none',
         }}
       >
         <Button

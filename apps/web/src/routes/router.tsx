@@ -16,7 +16,6 @@ import { WikiEnemies } from '../pages/wiki/enemies/wiki-enemies.tsx';
 import { SetupWebPaths } from '../pages/setup/setup-web-paths.tsx';
 import { NoitaSessions } from '../pages/sessions/noita-sessions.tsx';
 import { EmptyPageTemplate } from '../pages/_templates/empty-page-template.tsx';
-import { NoitaDeathMap } from '../pages/death-map/noita-death-map.tsx';
 import { Settings } from '../pages/settings/settings.tsx';
 import { NoitaBonesWands } from '../pages/noita-bones-wands.tsx';
 import { SettingsCursorWandPicker } from '../pages/settings/settings-cursor-wand-picker.tsx';
@@ -35,6 +34,11 @@ import { noitaDataWakStore } from '../stores/noita-data-wak.ts';
 import { WikiSpellDetails } from '../pages/wiki/spells/wiki-spell-details.tsx';
 import { WikiEnemyDetails } from '../pages/wiki/enemies/wiki-enemy-details.tsx';
 import { WikiMaterialDetails } from '../pages/wiki/materials/wiki-material-details.tsx';
+import { NoitaMapPage } from '../pages/map/noita-map-page.tsx';
+import { DataWakServiceProvider } from '../services/data-wak/data-wak-service.provider.tsx';
+import { CurrentRunServiceProvider } from '../services/current-run/current-run-service.provider.tsx';
+import { Save00ServiceProvider } from '../services/save00/save00-service.provider.tsx';
+import { NoitaDeathMap } from '../pages/death-map/noita-death-map.tsx';
 
 export const routes: NoitaRouteObject[] = [
   {
@@ -66,7 +70,11 @@ export const routes: NoitaRouteObject[] = [
       },
       {
         path: 'progress-tracker',
-        element: <Outlet />,
+        element: (
+          <DataWakServiceProvider>
+            <Outlet />
+          </DataWakServiceProvider>
+        ),
         children: [
           {
             path: '',
@@ -130,19 +138,21 @@ export const routes: NoitaRouteObject[] = [
         ssg: false,
         sitemap: false,
         element: (
-          <TabPageTemplate
-            returnPath={pages.main}
-            tabs={[
-              { title: 'Perks', href: pages.wiki.perks },
-              { title: 'Spells', href: pages.wiki.spells },
-              { title: 'Enemies', href: pages.wiki.enemies },
-              { title: 'Materials', href: pages.wiki.materials },
-              ...addIf(__ENV__ !== 'production', {
-                title: 'Materials Tree',
-                href: pages.wiki.materialsTree,
-              }),
-            ]}
-          />
+          <DataWakServiceProvider>
+            <TabPageTemplate
+              returnPath={pages.main}
+              tabs={[
+                { title: 'Perks', href: pages.wiki.perks },
+                { title: 'Spells', href: pages.wiki.spells },
+                { title: 'Enemies', href: pages.wiki.enemies },
+                { title: 'Materials', href: pages.wiki.materials },
+                ...addIf(__ENV__ !== 'production', {
+                  title: 'Materials Tree',
+                  href: pages.wiki.materialsTree,
+                }),
+              ]}
+            />
+          </DataWakServiceProvider>
         ),
         children: [
           {
@@ -327,12 +337,14 @@ export const routes: NoitaRouteObject[] = [
               description='View upcoming in-game holidays in the Noita Holiday Calendar.'
             />
             <CardPageTemplate returnPath={pages.main}>
-              <NoitaHolidays />
+              <DataWakServiceProvider>
+                <NoitaHolidays />
+              </DataWakServiceProvider>
             </CardPageTemplate>
           </>
         ),
       },
-      ...addIf(__ENV__ !== 'production', {
+      {
         path: 'current-run',
         element: (
           <>
@@ -341,11 +353,15 @@ export const routes: NoitaRouteObject[] = [
               description='Check your current run'
             />
             <CardPageTemplate returnPath={pages.main}>
-              <CurrentRun />
+              <DataWakServiceProvider>
+                <CurrentRunServiceProvider>
+                  <CurrentRun />
+                </CurrentRunServiceProvider>
+              </DataWakServiceProvider>
             </CardPageTemplate>
           </>
         ),
-      }),
+      },
       {
         path: 'sessions',
         element: (
@@ -355,7 +371,9 @@ export const routes: NoitaRouteObject[] = [
               description='View your previous sessions, find out how many times did you die because of explosion, and check out other statistics.'
             />
             <EmptyPageTemplate returnPath={pages.main}>
-              <NoitaSessions />
+              <Save00ServiceProvider>
+                <NoitaSessions />
+              </Save00ServiceProvider>
             </EmptyPageTemplate>
           </>
         ),
@@ -369,7 +387,9 @@ export const routes: NoitaRouteObject[] = [
               description='Check out your death locations of your previous runs in one map.'
             />
             <CardPageTemplate returnPath={pages.main}>
-              <NoitaDeathMap />
+              <Save00ServiceProvider>
+                <NoitaDeathMap />
+              </Save00ServiceProvider>
             </CardPageTemplate>
           </>
         ),
@@ -383,7 +403,29 @@ export const routes: NoitaRouteObject[] = [
               description="Scared of your old wand builds haunting you? Don't worry no more!"
             />
             <CardPageTemplate returnPath={pages.main}>
-              <NoitaBonesWands />
+              <DataWakServiceProvider>
+                <Save00ServiceProvider>
+                  <NoitaBonesWands />
+                </Save00ServiceProvider>
+              </DataWakServiceProvider>
+            </CardPageTemplate>
+          </>
+        ),
+      },
+      {
+        path: 'map',
+        element: (
+          <>
+            <SeoDefaultPage
+              title='Map'
+              description='View your world in the browser'
+            />
+            <CardPageTemplate returnPath={pages.main}>
+              <DataWakServiceProvider>
+                <CurrentRunServiceProvider>
+                  <NoitaMapPage />
+                </CurrentRunServiceProvider>
+              </DataWakServiceProvider>
             </CardPageTemplate>
           </>
         ),
@@ -401,7 +443,9 @@ export const routes: NoitaRouteObject[] = [
                   description="This is a settings page. Not a lot, but it's honest work."
                 />
                 <CardPageTemplate returnPath={pages.main}>
-                  <Settings />
+                  <DataWakServiceProvider>
+                    <Settings />
+                  </DataWakServiceProvider>
                 </CardPageTemplate>
               </>
             ),

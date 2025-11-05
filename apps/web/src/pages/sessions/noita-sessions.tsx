@@ -1,4 +1,3 @@
-import { useSave00Store } from '../../stores/save00.ts';
 import { useMemo, useState } from 'react';
 import { arrayHelpers } from '@noita-explorer/tools';
 import { CardPageHeight } from '../../components/card-page-height.tsx';
@@ -6,6 +5,7 @@ import { NoitaSessionsFilter } from './noita-sessions-filter.tsx';
 import { NoitaSessionsList } from './noita-sessions-list.tsx';
 import { NoitaSessionsStatistics } from './noita-sessions-statistics.tsx';
 import { NoitaSession } from '@noita-explorer/model-noita';
+import { useSave00Service } from '../../services/save00/use-save00-service.ts';
 
 export interface NoitaSessionFilters {
   goldInfinite: boolean;
@@ -24,7 +24,7 @@ export interface NoitaSessionOrdering {
 }
 
 export const NoitaSessions = () => {
-  const { sessions } = useSave00Store();
+  const { sessions } = useSave00Service();
   const [noitaSessionFilters, setNoitaSessionFilters] =
     useState<NoitaSessionFilters>({
       goldInfinite: false,
@@ -77,14 +77,10 @@ export const NoitaSessions = () => {
       });
     }
 
-    return sessions?.filter((s) => filters.every((f) => f(s)));
+    return sessions.filter((s) => filters.every((f) => f(s)));
   }, [sessions, noitaSessionFilters]);
 
   const sessionsGrouped = useMemo(() => {
-    if (sessionsFiltered === undefined) {
-      return undefined;
-    }
-
     const temp = [...sessionsFiltered];
 
     if (noitaSessionOrdering.playTime !== undefined) {
@@ -147,14 +143,6 @@ export const NoitaSessions = () => {
       session.startedAt.toLocaleDateString(),
     );
   }, [sessionsFiltered, noitaSessionOrdering]);
-
-  if (sessions === undefined || sessionsGrouped === undefined) {
-    return (
-      <CardPageHeight>
-        <div>Sessions are not loaded</div>
-      </CardPageHeight>
-    );
-  }
 
   return (
     <div

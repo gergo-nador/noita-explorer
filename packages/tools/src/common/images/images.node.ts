@@ -12,6 +12,7 @@ import Color from 'color';
 import { base64Helpers } from '../base64.ts';
 import { colorHelpers } from '../color-util.ts';
 import { throwHelpers } from '../throw.ts';
+import { ImageData } from 'canvas';
 
 function trimWhitespaceBase64(): Promise<string> {
   return throwHelpers.notImplementedInCurrentEnvironment(trimWhitespaceBase64);
@@ -218,6 +219,16 @@ function clamp(v: number) {
   return Math.max(0, Math.min(255, v));
 }
 
+async function base64ToImageData(base64: string): Promise<ImageData> {
+  const image = await getJimpImage(base64);
+
+  const { width, height, data } = image.bitmap;
+  const clamped = new Uint8ClampedArray(data.buffer);
+  const imageData = new ImageData(clamped, width, height);
+
+  return imageData;
+}
+
 export const imageHelpers: ImageHelpersType = {
   trimWhitespaceBase64,
   scaleImageBase64,
@@ -229,4 +240,5 @@ export const imageHelpers: ImageHelpersType = {
   overlayImages,
   flipImage,
   renderMaterialContainer,
+  base64ToImageData,
 };

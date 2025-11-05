@@ -6,7 +6,6 @@ import {
   MultiSelectionBoolean,
 } from '@noita-explorer/noita-component-library';
 import { useMemo } from 'react';
-import { useNoitaDataWakStore } from '../../stores/noita-data-wak.ts';
 import { NoitaProgressIconTable } from '../../components/noita-progress-icon-table.tsx';
 import { NoitaSpellTooltip } from '../../components/tooltips/noita-spell-tooltip.tsx';
 import { NoitaPerkTooltip } from '../../components/tooltips/noita-perk-tooltip.tsx';
@@ -22,9 +21,10 @@ import { pages } from '../../routes/pages.ts';
 import { useQueryParamsBoolean } from '../../hooks/query-params/use-query-params-boolean.ts';
 import { Link } from '../../components/link.tsx';
 import { publicPaths } from '../../utils/public-paths.ts';
+import { useDataWakService } from '../../services/data-wak/use-data-wak-service.ts';
 
 export const NoitaProgressTracker = () => {
-  const { data } = useNoitaDataWakStore();
+  const { data } = useDataWakService();
   const {
     enemyStatistics,
     unlockedPerks,
@@ -48,22 +48,17 @@ export const NoitaProgressTracker = () => {
       : false;
 
   const enemies = useNoitaEnemyGroups({
-    enemies: data?.enemies,
+    enemies: data.enemies,
     enemyStatistics: enemyStatistics,
   });
 
   const unlockedEnemycount = useMemo(() => {
-    if (data?.enemies === undefined) return 0;
     if (enemyStatistics === undefined) return 0;
 
     return data.enemies
       .filter((e) => e.id in enemyStatistics)
       .filter((e) => enemyStatistics[e.id].enemyDeathByPlayer > 0).length;
   }, [data, enemyStatistics]);
-
-  if (!data) {
-    return <div>Noita Data Wak is not loaded.</div>;
-  }
 
   return (
     <>

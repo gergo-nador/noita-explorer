@@ -14,7 +14,7 @@ export const FileSystemDirectoryAccessBrowserApi = (
     path += FILE_PATH_DIVIDER + directoryHandle.name;
   }
 
-  return {
+  const directory = {
     getName: () => directoryHandle.name,
     getFullPath: () => path,
     path: {
@@ -78,7 +78,17 @@ export const FileSystemDirectoryAccessBrowserApi = (
       }
     },
     getFile: async (path) => {
-      const fileHandle = await directoryHandle.getFileHandle(path);
+      const parts = path.split(FILE_PATH_DIVIDER);
+      let currentHandle = directoryHandle;
+      for (let i = 0; i < parts.length - 1; i++) {
+        const part = parts[i];
+        currentHandle = await currentHandle.getDirectoryHandle(part, {
+          create: false,
+        });
+      }
+
+      const lastPart = parts[parts.length - 1];
+      const fileHandle = await currentHandle.getFileHandle(lastPart);
       return FileSystemFileAccessBrowserApi(fileHandle, path);
     },
 
@@ -100,5 +110,11 @@ export const FileSystemDirectoryAccessBrowserApi = (
 
       return FileSystemFileAccessBrowserApi(fileHandle, path);
     },
-  };
+  } satisfies FileSystemDirectoryAccess;
+
+  return {
+    // for easier debugging
+    _path: path,
+    ...directory,
+  } as FileSystemDirectoryAccess;
 };

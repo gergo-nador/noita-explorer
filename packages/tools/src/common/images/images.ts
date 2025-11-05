@@ -7,6 +7,7 @@ import {
   OverlayOptions,
   PixelColorOptions,
 } from './images.types.ts';
+import { ImageData } from 'canvas';
 
 async function getImageHelper() {
   const importStatement = await runtimeEnvironment.pick({
@@ -84,6 +85,11 @@ async function renderMaterialContainer(
   return imageHelper.renderMaterialContainer(containerImage, options);
 }
 
+async function base64ToImageData(base64: string): Promise<ImageData> {
+  const imageHelper = await getImageHelper();
+  return imageHelper.base64ToImageData(base64);
+}
+
 export const imageHelpers: ImageHelpersType = {
   trimWhitespaceBase64,
   scaleImageBase64,
@@ -95,4 +101,5 @@ export const imageHelpers: ImageHelpersType = {
   overlayImages,
   flipImage,
   renderMaterialContainer,
+  base64ToImageData,
 };

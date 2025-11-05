@@ -24,6 +24,7 @@ export const pages = {
   holidays: '/holidays',
   sessions: '/sessions',
   deathMap: '/death-map',
+  map: '/map',
   bonesWands: '/bones-wands',
   settings: {
     index: '/settings',

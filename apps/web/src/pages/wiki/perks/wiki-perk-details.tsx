@@ -1,18 +1,25 @@
 import { useParams } from 'react-router-dom';
-import { useNoitaDataWakStore } from '../../../stores/noita-data-wak.ts';
 import { PerkOverview } from './perk-overview.tsx';
 import { SeoDefaultPage } from '@noita-explorer/react-utils';
 import { publicPaths } from '../../../utils/public-paths.ts';
+import { useDataWakService } from '../../../services/data-wak/use-data-wak-service.ts';
 
 export const WikiPerkDetails = () => {
   const { perkId } = useParams();
-  const { data } = useNoitaDataWakStore();
+  const { lookup } = useDataWakService();
 
-  if (!data?.perks) {
-    return <div>Data wak is loading</div>;
+  if (!perkId) {
+    return <div>Perk Id empty</div>;
   }
 
-  const perk = data.perks.find((perk) => perk.id === perkId);
+  const perk = lookup.perks[perkId];
+  if (!perk) {
+    return (
+      <div>
+        Perk was not found with id <i>{perkId}</i>
+      </div>
+    );
+  }
 
   return (
     <>

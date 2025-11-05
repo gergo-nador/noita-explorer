@@ -1,11 +1,11 @@
 import React, { useMemo } from 'react';
-import { useNoitaDataWakStore } from '../../../stores/noita-data-wak.ts';
 import { arrayHelpers } from '@noita-explorer/tools';
 import { useSave00Store } from '../../../stores/save00.ts';
 import { StringKeyDictionary } from '@noita-explorer/model';
 import { AchievementPerk } from './achievement-perk.ts';
 import { ObtainPerksAchievement } from './achievements/obtain-perks-achievement.tsx';
 import { HaloTransformationAchievement } from './achievements/halo-transformation-achievement.tsx';
+import { useDataWakService } from '../../../services/data-wak/use-data-wak-service.ts';
 
 interface NoitaPillar {
   img: string;
@@ -16,14 +16,10 @@ interface NoitaPillar {
 
 // lua script: data/scripts/biomes/mountain_tree.lua
 export const useNoitaProgressTrackerPillarDefinitions = (): NoitaPillar[][] => {
-  const { data } = useNoitaDataWakStore();
+  const { data } = useDataWakService();
   const { currentRun } = useSave00Store();
 
   const perks: StringKeyDictionary<AchievementPerk> = useMemo(() => {
-    if (!data?.perks) {
-      return {};
-    }
-
     const perkData = data.perks.map((perk) => {
       const pickedPerk = currentRun?.worldState.perks.pickedPerks.find(
         (p) => p.perkId === perk.id,
@@ -33,7 +29,7 @@ export const useNoitaProgressTrackerPillarDefinitions = (): NoitaPillar[][] => {
     });
 
     return arrayHelpers.asDict(perkData, (p) => p.id);
-  }, [data?.perks, currentRun?.worldState.perks.pickedPerks]);
+  }, [data.perks, currentRun?.worldState.perks.pickedPerks]);
 
   const pillar1: NoitaPillar[] = [
     { img: 'pillar_end_01' },

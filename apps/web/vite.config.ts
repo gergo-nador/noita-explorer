@@ -4,6 +4,7 @@ import mkcert from 'vite-plugin-mkcert';
 import { execSync } from 'child_process';
 import { resolve } from 'path';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
+import { crossOriginIsolationWorkers } from './vite-plugins/cross-origin-isolation-workers.ts';
 
 // https://vite.dev/config/
 export default defineConfig(({ mode }): UserConfig => {
@@ -17,6 +18,7 @@ export default defineConfig(({ mode }): UserConfig => {
     plugins: [
       react(),
       mkcert(),
+      crossOriginIsolationWorkers(),
       viteStaticCopy({
         targets: [
           {
@@ -29,6 +31,10 @@ export default defineConfig(({ mode }): UserConfig => {
 
     server: {
       port: 4000,
+      headers: {
+        'Cross-Origin-Opener-Policy': 'same-origin',
+        'Cross-Origin-Embedder-Policy': 'require-corp',
+      },
     },
     define: {
       __DEPLOY_ID__: JSON.stringify(deployInfo.id),
@@ -57,6 +63,9 @@ export default defineConfig(({ mode }): UserConfig => {
         // exclude all
         external: ['jimp', 'omggif', 'canvas', /images\.node-/, /gif\.node-/],
       },
+    },
+    worker: {
+      format: 'es',
     },
   };
 });

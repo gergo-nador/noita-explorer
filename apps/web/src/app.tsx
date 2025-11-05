@@ -1,19 +1,21 @@
+import React, { useEffect } from 'react';
+import { RouterProvider } from 'react-router-dom';
+import 'leaflet/dist/leaflet.css';
+import { loadFull } from 'tsparticles';
+
 import {
   ContextMenuWrapper,
   NoitaToaster,
   DialogWrapper,
 } from '@noita-explorer/noita-component-library';
-import { RouterProvider } from 'react-router-dom';
 import { browserRouter } from './routes/router';
 import { useSettingsStore } from './stores/settings';
-import React, { useEffect } from 'react';
 import { useNoitaDataWakStore } from './stores/noita-data-wak.ts';
 import { useSave00Store } from './stores/save00.ts';
 import { NoitaWandConfig } from '@noita-explorer/model-noita';
 import { imageHelpers, randomHelpers } from '@noita-explorer/tools';
 import { ActionsPanel } from './components/actions/actions-panel.tsx';
 import { initParticlesEngine } from '@tsparticles/react';
-import { loadFull } from 'tsparticles';
 import { loadEmittersPlugin } from '@tsparticles/plugin-emitters';
 import { MobileViewUnsupportedWarning } from './components/mobile-view-unsupported-warning.tsx';
 import { publicPaths } from './utils/public-paths.ts';
@@ -59,18 +61,14 @@ const useInitialLoader = () => {
   const { reload } = useSave00Store();
 
   useEffect(() => {
-    if (!settings.paths.NollaGamesNoita) {
+    if (!settings.paths.save00) {
       return;
     }
 
     reload()
       .then(() => console.log('save00 loaded'))
       .catch((err) => console.error(err));
-  }, [
-    reload,
-    settings.paths.NollaGamesNoita,
-    settings.paths.forceReloadNollaGamesNoitaCounter,
-  ]);
+  }, [reload, settings.paths.save00, settings.paths.forceReloadSave00Counter]);
 
   const { cursor } = settings;
   const { data } = useNoitaDataWakStore();

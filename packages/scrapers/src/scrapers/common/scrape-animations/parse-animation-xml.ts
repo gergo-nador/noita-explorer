@@ -45,7 +45,7 @@ export const parseAnimationXml = ({
       frameActualHeight: shrinkByOnePixel ? frameHeight - 1 : frameHeight,
       frameWidth: frameWidth,
       frameActualWidth: shrinkByOnePixel ? frameWidth - 1 : frameWidth,
-      frameWait: animationElement.getRequiredAttribute('frame_wait').asFloat(),
+      frameWait: animationElement.getAttribute('frame_wait')?.asFloat() ?? 1,
       framesPerRow: animationElement
         .getRequiredAttribute('frames_per_row')
         .asInt(),

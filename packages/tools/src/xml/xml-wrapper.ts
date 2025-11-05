@@ -67,9 +67,7 @@ const XmlWrapperInternal = ({
 
   const getRequiredAttributeInternal = (attributeName: string) => {
     if (!xmlObj.$) {
-      throw new Error(
-        `Could not find attribute ${attributeName} in ${JSON.stringify(xmlObj)}`,
-      );
+      throw new Error(`Could not find attribute ${attributeName}}`);
     }
 
     return getRequiredAttribute(xmlObj as XmlTagDeclaration, attributeName);

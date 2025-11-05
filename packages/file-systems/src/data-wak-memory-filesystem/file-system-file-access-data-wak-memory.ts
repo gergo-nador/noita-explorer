@@ -5,6 +5,7 @@ import {
   extractFileNameWithoutExtension,
   splitTextToLines,
 } from '../common.ts';
+import { Buffer } from 'buffer';
 
 export const FileSystemFileAccessDataWakMemory = (
   file: WakMemoryFile,
@@ -21,13 +22,15 @@ export const FileSystemFileAccessDataWakMemory = (
     getNameWithoutExtension: () => extractFileNameWithoutExtension(fileName),
     read: {
       asText: () => readAsText(),
-      asBuffer: () => promiseHelper.fromValue(file.getFileBytes()),
+      asBuffer: () => {
+        const bytes = file.getFileBytes();
+        const buff = Buffer.from(bytes);
+        return promiseHelper.fromValue(buff);
+      },
       asTextLines: () => readAsText().then(splitTextToLines),
       asImageBase64: async () => {
         const mimeType = getMimeTypeFromExtension(fileName);
-
         const base64String = file.getFileBytes().toString('base64');
-
         return `data:${mimeType};base64,${base64String}`;
       },
     },

@@ -1,19 +1,15 @@
-import { useSave00Store } from '../stores/save00.ts';
 import { NoitaWandCard } from '../components/noita-wand-card.tsx';
 import { Flex } from '@noita-explorer/react-utils';
 import { useMemo } from 'react';
 import { Button } from '@noita-explorer/noita-component-library';
 import { useNoitaActionsStore } from '../stores/actions.ts';
+import { useSave00Service } from '../services/save00/use-save00-service.ts';
 
 export const NoitaBonesWands = () => {
-  const { bonesWands } = useSave00Store();
+  const { bonesWands } = useSave00Service();
   const { actionUtils } = useNoitaActionsStore();
 
   const bonesWandsSorted = useMemo(() => {
-    if (bonesWands === undefined) {
-      return [];
-    }
-
     const arr = [...bonesWands];
 
     // sort by wand card height. not 100% punctual but good enough
@@ -40,10 +36,6 @@ export const NoitaBonesWands = () => {
 
     return arr;
   }, [bonesWands]);
-
-  if (bonesWands === undefined) {
-    return <div>Bones not loaded</div>;
-  }
 
   return (
     <div>

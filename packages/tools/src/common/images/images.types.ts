@@ -1,3 +1,5 @@
+import { ImageData } from 'canvas';
+
 export interface CropImageBase64Options {
   x: number;
   y: number;
@@ -54,4 +56,5 @@ export interface ImageHelpersType {
     containerImage: string,
     options: MaterialContainerOptions,
   ) => Promise<string>;
+  base64ToImageData: (base64: string) => Promise<ImageData>;
 }

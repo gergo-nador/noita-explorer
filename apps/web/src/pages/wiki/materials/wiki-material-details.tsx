@@ -1,19 +1,24 @@
 import { useParams } from 'react-router-dom';
-import { useNoitaDataWakStore } from '../../../stores/noita-data-wak.ts';
 import { SeoDefaultPage } from '@noita-explorer/react-utils';
 import { MaterialOverview } from './material-overview.tsx';
+import { useDataWakService } from '../../../services/data-wak/use-data-wak-service.ts';
 
 export const WikiMaterialDetails = () => {
   const { materialId } = useParams();
-  const { data } = useNoitaDataWakStore();
+  const { lookup } = useDataWakService();
 
-  if (!data?.materials) {
-    return <div>Data wak is loading</div>;
+  if (!materialId) {
+    return <div>Material Id empty</div>;
   }
 
-  const material = data.materials.find(
-    (material) => material.id === materialId,
-  );
+  const material = lookup.materials[materialId];
+  if (!material) {
+    return (
+      <div>
+        Material was not found with id <i>{materialId}</i>
+      </div>
+    );
+  }
 
   return (
     <>

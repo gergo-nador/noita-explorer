@@ -18,7 +18,7 @@ export const HaloTransformationAchievement = ({
   ];
   const plusOneSum = arrayHelpers.sumBy(
     plusOnePerks,
-    (id) => perks[id]?.count ?? 0,
+    (id: string) => perks[id]?.count ?? 0,
   );
 
   const minusOnePerks = [
@@ -29,7 +29,7 @@ export const HaloTransformationAchievement = ({
   ];
   const minusOneSum = arrayHelpers.sumBy(
     minusOnePerks,
-    (id) => perks[id]?.count ?? 0,
+    (id: string) => perks[id]?.count ?? 0,
   );
 
   const diff = plusOneSum - minusOneSum;

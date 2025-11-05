@@ -18,12 +18,12 @@ export const NoitaSessionsStatistics = ({
 
   const statsMostPlayedOneDay = arrayHelpers.maxBy(
     sessionsGroupedByDay,
-    (arr) => arr.length,
+    (arr: NoitaSession[]) => arr.length,
   ).value;
 
   const statsAvgPlayPerDay = arrayHelpers.avgBy(
     sessionsGroupedByDay,
-    (arr) => arr.length,
+    (arr: NoitaSession[]) => arr.length,
   );
 
   const sumPlaytime = arrayHelpers.sumBy(sessions, (s) => s.playTime);
@@ -41,7 +41,7 @@ export const NoitaSessionsStatistics = ({
           <SpaceCharacter />
           {statsFirstDayPlayed?.toLocaleDateString()}
         </li>
-        <li>Most played on one day: {statsMostPlayedOneDay}</li>
+        <li>Most played on a single day: {statsMostPlayedOneDay}</li>
         <li>
           average game per game day:
           <SpaceCharacter />

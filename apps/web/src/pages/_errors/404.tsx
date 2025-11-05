@@ -1,6 +1,5 @@
 import { StringKeyDictionaryComposite } from '@noita-explorer/model';
 import { Flex } from '@noita-explorer/react-utils';
-import { Button } from '@noita-explorer/noita-component-library';
 import { useLocation } from 'react-router-dom';
 import { pages } from '../../routes/pages.ts';
 import { useMemo } from 'react';
@@ -50,8 +49,8 @@ export const Error404 = () => {
           <br />
           <Flex gap={8}>
             <span>Did you mean to go to</span>
-            <Link to={potentialPath}>
-              <Button>{potentialPath}</Button>
+            <Link to={potentialPath} showUnderline>
+              {potentialPath}
             </Link>
             <span>?</span>
           </Flex>
@@ -59,7 +58,9 @@ export const Error404 = () => {
       )}
       <br />
       <div>
-        <Link to={pages.main}>Click here to go to main page</Link>
+        <Link to={pages.main} showUnderline>
+          Click here to go to main page
+        </Link>
       </div>
     </>
   );

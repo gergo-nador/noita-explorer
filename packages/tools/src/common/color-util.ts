@@ -1,4 +1,138 @@
 import color from 'color';
+import { RgbaColor } from '@noita-explorer/model';
+
+/*
+ * Conversions
+ */
+function internalColor(colorRgba: number) {
+  return {
+    toRgbaObj: () => toRgbaObj(colorRgba),
+    toRgbaHexString: () => toRgbaHexString(colorRgba),
+    toRgbaHexHtml: () => toRgbaHexHtml(colorRgba),
+    toRgbaNum: () => toRgbaNum(colorRgba),
+  };
+}
+
+/*
+ * Conversions from
+ */
+function fromArgbString(color: string) {
+  const argbRegex = /^[A-Fa-f0-9]{8}$/;
+
+  if (color.startsWith('#')) {
+    color = color.substring(1);
+  }
+
+  if (!argbRegex.test(color)) {
+    throw new Error(
+      "Invalid ARGB format. Expected 8 hexadecimal characters (e.g., 'AARRGGBB').",
+    );
+  }
+
+  // Extract the alpha, red, green, and blue components
+  const alpha = parseInt(color.slice(0, 2), 16);
+  const red = parseInt(color.slice(2, 4), 16);
+  const green = parseInt(color.slice(4, 6), 16);
+  const blue = parseInt(color.slice(6, 8), 16);
+
+  const colorRgba = (red << 24) | (blue << 16) | (green << 8) | alpha;
+  const unsigned = colorRgba >>> 0;
+  return internalColor(unsigned);
+}
+
+function fromRgbaString(color: string) {
+  const rgbaRegex = /^[A-Fa-f0-9]{8}$/;
+
+  if (color.startsWith('#')) {
+    color = color.substring(1);
+  }
+
+  if (!rgbaRegex.test(color)) {
+    throw new Error(
+      "Invalid RGBA format. Expected 8 hexadecimal characters (e.g., 'RRGGBBAA').",
+    );
+  }
+
+  // Extract the alpha, red, green, and blue components
+  const red = parseInt(color.slice(0, 2), 16);
+  const green = parseInt(color.slice(2, 4), 16);
+  const blue = parseInt(color.slice(4, 6), 16);
+  const alpha = parseInt(color.slice(6, 8), 16);
+
+  const colorRgba = (red << 24) | (green << 16) | (blue << 8) | alpha;
+  const unsigned = colorRgba >>> 0;
+  return internalColor(unsigned);
+}
+
+function fromRgbaNumber(rgba: number) {
+  return internalColor(rgba);
+}
+
+function fromArgbNumber(argb: number) {
+  const alpha = (argb & 0xff000000) >>> 24;
+  const rgb = argb & 0xffffff;
+  const rgba = (rgb << 8) | alpha;
+
+  const unsigned = rgba >>> 0;
+  return internalColor(unsigned);
+}
+
+function fromBgraNumber(bgra: number) {
+  const bb = (bgra >>> 24) & 0xff;
+  const gg = (bgra >>> 16) & 0xff;
+  const rr = (bgra >>> 8) & 0xff;
+  const aa = bgra & 0xff;
+
+  const rgba = (rr << 24) | (gg << 16) | (bb << 8) | aa;
+  const unsigned = rgba >>> 0;
+  return internalColor(unsigned);
+}
+
+function fromAbgrNumber(bgra: number) {
+  const aa = (bgra >>> 24) & 0xff;
+  const bb = (bgra >>> 16) & 0xff;
+  const gg = (bgra >>> 8) & 0xff;
+  const rr = bgra & 0xff;
+
+  const rgba = (rr << 24) | (gg << 16) | (bb << 8) | aa;
+  const unsigned = rgba >>> 0;
+  return internalColor(unsigned);
+}
+
+function fromRgbaVariables(r: number, g: number, b: number, a: number) {
+  const rgba = (r << 24) | (g << 16) | (b << 8) | a;
+  const unsigned = rgba >>> 0;
+  return internalColor(unsigned);
+}
+
+/*
+ * Conversions to
+ */
+
+function toRgbaNum(colorRgba: number) {
+  return colorRgba;
+}
+
+function toRgbaObj(colorRgba: number) {
+  const r = (colorRgba & 0xff000000) >>> 24;
+  const g = (colorRgba & 0x00ff0000) >>> 16;
+  const b = (colorRgba & 0x0000ff00) >>> 8;
+  const a = (colorRgba & 0x000000ff) >>> 0;
+
+  return { r, g, b, a };
+}
+
+function toRgbaHexString(colorRgba: number) {
+  const { r, g, b, a } = toRgbaObj(colorRgba);
+
+  return `${r.toString(16)}${g.toString(16)}${b.toString(16)}${a.toString(16)}`;
+}
+
+function toRgbaHexHtml(colorRgba: number) {
+  const { r, g, b, a } = toRgbaObj(colorRgba);
+
+  return `#${r.toString(16)}${g.toString(16)}${b.toString(16)}${a.toString(16)}`;
+}
 
 /**
  * Converts a color from ARGB format to RGBA format.
@@ -55,12 +189,24 @@ function convertTextRgbColorToNumber(rgb: string): number {
   return (c.red() << 16) | (c.green() << 8) | c.blue();
 }
 
+const emptyColor: RgbaColor = { r: 0, g: 0, b: 0, a: 0 };
+
 export const colorHelpers = {
   conversion: {
+    fromArgbString,
+    fromRgbaNumber,
+    fromArgbNumber,
+    fromRgbaString,
+    fromBgraNumber,
+    fromAbgrNumber,
+    fromRgbaVariables,
+
     argbToRgba: convertARGBToRGBA,
     rgbaToNumber: convertTextRgbaColorToNumber,
     rgbToNumber: convertTextRgbColorToNumber,
   },
+  emptyColor,
+
   getRgbaContractsColor: getContrastColor,
   manipulation: {
     lighten: lightenColor,

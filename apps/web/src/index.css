@@ -76,3 +76,7 @@ body {
 
 .hover-container:hover .hover-display, .hover-hide { visibility: initial }
 .hover-display, .hover-container:hover .hover-hide { visibility: hidden }
+
+.pixelated{
+    image-rendering: pixelated;
+}

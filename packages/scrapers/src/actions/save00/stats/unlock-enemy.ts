@@ -1,7 +1,7 @@
 import { FileSystemDirectoryAccess } from '@noita-explorer/model';
 import { noitaPaths } from '../../../noita-paths.ts';
-import { cryptoSalakieli } from '../../../scrapers/cryptography/salakieli.ts';
-import { encryptedFileKeys } from '../../../scrapers/cryptography/encrypted-file-keys.ts';
+import { cryptoSalakieli } from '../../../scrapers/common/cryptography/salakieli.ts';
+import { encryptedFileKeys } from '../../../scrapers/common/cryptography/encrypted-file-keys.ts';
 import { parseXml, XmlWrapper } from '@noita-explorer/tools/xml';
 import { UnlockEnemyAction } from '@noita-explorer/model-noita';
 

@@ -15,6 +15,8 @@ import {
 } from 'browser-fs-access';
 import { noiToast } from '@noita-explorer/noita-component-library';
 import { runActions } from './run-actions.ts';
+import { fastLzCompressorService } from '../fast-lz-compressor-service.ts';
+import { fetchDataWak } from './fetch-data-wak.ts';
 
 export function browserNoitaApi(): NoitaAPI {
   return {
@@ -35,14 +37,11 @@ export function browserNoitaApi(): NoitaAPI {
     noita: {
       defaultPaths: {
         installPathDefault: throwNotAllowedInThisModeError,
-        nollaGamesNoitaDefault: throwNotAllowedInThisModeError,
+        save00Default: throwNotAllowedInThisModeError,
       },
       dataFile: {
         get: () => {
-          // in case the data structure of the json file changes between deploys,
-          // then it force re-fetches the file
-          const url = `/noita_wak_data.json?id=${__DEPLOY_ID__}`;
-          return fetch(url).then((r) => r.json());
+          return fetchDataWak();
         },
         exists: () => promiseHelper.fromValue(true),
         write: throwNotAllowedInThisModeError,
@@ -51,31 +50,51 @@ export function browserNoitaApi(): NoitaAPI {
       save00: {
         scrapeProgressFlags: async () => {
           const api = await getSave00FolderHandle();
-          return scrape.progressFlags({ save00DirectoryApi: api });
+          return scrape.save00.progressFlags({ save00DirectoryApi: api });
         },
         scrapeEnemyStatistics: async () => {
           const api = await getSave00FolderHandle();
-          return await scrape.enemyStatistics({ save00DirectoryApi: api });
+          return await scrape.save00.enemyStatistics({
+            save00DirectoryApi: api,
+          });
         },
         scrapeSessions: async () => {
           const api = await getSave00FolderHandle();
-          return await scrape.sessions({ save00DirectoryApi: api });
+          return await scrape.save00.sessions({ save00DirectoryApi: api });
         },
         scrapeBonesWands: async () => {
           const api = await getSave00FolderHandle();
-          return await scrape.bonesWands({ save00DirectoryApi: api });
+          return await scrape.save00.bonesWands({ save00DirectoryApi: api });
         },
         scrapeWorldState: async () => {
           const api = await getSave00FolderHandle();
-          return await scrape.worldState({ save00DirectoryApi: api });
+          return await scrape.save00.worldState({ save00DirectoryApi: api });
         },
         scrapePlayerState: async () => {
           const api = await getSave00FolderHandle();
-          return await scrape.playerState({ save00DirectoryApi: api });
+          return await scrape.save00.playerState({ save00DirectoryApi: api });
         },
         scrapeOrbsUnlocked: async () => {
           const api = await getSave00FolderHandle();
-          return await scrape.orbsUnlocked({ save00DirectoryApi: api });
+          return await scrape.save00.orbsUnlocked({ save00DirectoryApi: api });
+        },
+        scrapeStreamInfo: async () => {
+          const api = await getSave00FolderHandle();
+          const fastLzCompressor = await fastLzCompressorService.get();
+
+          return await scrape.save00.streamInfo({
+            save00DirectoryApi: api,
+            fastLzCompressor,
+          });
+        },
+        scrapeWorldPixelScenes: async () => {
+          const api = await getSave00FolderHandle();
+          const fastLzCompressor = await fastLzCompressorService.get();
+
+          return await scrape.save00.worldPixelScenes({
+            save00DirectoryApi: api,
+            fastLzCompressor,
+          });
         },
       },
       launch: {
@@ -202,37 +221,30 @@ const openFolderDialogFallback = async (id: string | undefined) => {
   return name;
 };
 
-const getSave00FolderHandle = async () => {
+export const getSave00FolderHandle = async () => {
   const db = await noitaDb;
   const config = db.config;
 
-  const nollaGamesNoitaFolder = await config.get(
-    'settings.paths.NollaGamesNoita',
-  );
+  const save00Folder = await config.get('settings.paths.save00');
 
-  if (nollaGamesNoitaFolder === undefined) {
-    throw new Error('NollaGamesNoita folder is not set');
+  if (save00Folder === undefined) {
+    throw new Error('save00 folder is not set');
   }
 
   if (!hasFileSystemApi) {
-    const handle = fallbackFolderStorage[nollaGamesNoitaFolder];
+    const handle = fallbackFolderStorage[save00Folder];
     if (handle === undefined) {
-      throw new Error('NollaGamesNoita folder is not set');
+      throw new Error('save00 folder is not set');
     }
 
-    return handle.getDirectory('save00');
+    return handle;
   }
 
   const fileAccessConfig = db.fileAccess;
-  const nollaGamesNoitaBrowserHandle = await fileAccessConfig.get(
-    nollaGamesNoitaFolder,
-  );
-  if (nollaGamesNoitaBrowserHandle?.kind !== 'directory') {
-    throw new Error('NollaGamesNoita folder is not a directory');
+  const save00BrowserHandle = await fileAccessConfig.get(save00Folder);
+  if (save00BrowserHandle?.kind !== 'directory') {
+    throw new Error('save00 folder is not a directory');
   }
-
-  const save00BrowserHandle =
-    await nollaGamesNoitaBrowserHandle.getDirectoryHandle('save00');
 
   return FileSystemDirectoryAccessBrowserApi(save00BrowserHandle);
 };

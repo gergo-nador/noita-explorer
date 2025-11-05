@@ -1,9 +1,9 @@
 import { NoitaPotion, NoitaPotionMaterial } from '@noita-explorer/model-noita';
 import { Card } from '@noita-explorer/noita-component-library';
-import { useNoitaDataWakStore } from '../stores/noita-data-wak.ts';
 import { useMemo } from 'react';
 import { ConditionalWrapper } from '@noita-explorer/react-utils';
 import { sortHelpers } from '@noita-explorer/tools';
+import { useDataWakService } from '../services/data-wak/use-data-wak-service.ts';
 
 interface Props {
   potion: NoitaPotion;
@@ -11,7 +11,7 @@ interface Props {
 }
 
 export const NoitaPotionCard = ({ potion, withoutCardBorder }: Props) => {
-  const { data } = useNoitaDataWakStore();
+  const { lookup } = useDataWakService();
   const materials = useMemo(() => {
     const materials = [...potion.materials];
     materials.sort(
@@ -20,11 +20,9 @@ export const NoitaPotionCard = ({ potion, withoutCardBorder }: Props) => {
 
     return materials.map((potionMaterial) => ({
       potionMaterial,
-      material: data?.materials?.find(
-        (m) => m.id === potionMaterial.materialId,
-      ),
+      material: lookup.materials[potionMaterial.materialId],
     }));
-  }, [potion.materials, data?.materials]);
+  }, [potion.materials, lookup.materials]);
 
   const mainMaterial = materials[0];
 

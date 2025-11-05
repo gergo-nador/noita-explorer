@@ -6,16 +6,12 @@
   "scripts": {
     "predev": "npm run generate-index-html",
     "dev": "vite",
-
     "prebuild": "sh scripts/ci.sh",
     "build": "tsc -b && vite build",
     "postbuild": "sh scripts/ci-post.sh",
-
     "lint": "eslint .",
     "preview": "vite preview",
-
     "production-server-local": "cd dist && python3 ../scripts/http-server.py",
-
     "generate-index-html": "npx tsx scripts/index-html/index.ts -o index.html",
     "data-wak-download": "npx tsx scripts/data-wak/download.ts -o dist-tmp",
     "scrape-data-wak": "npx tsx scripts/data-wak/scrape.ts -t dist-tmp/common.csv --data-wak dist-tmp/data.wak --o-wak public/noita_wak_data.json --o-media dist-tmp/noita_data_media.json",
@@ -25,7 +21,9 @@
     "generate-static-site": "npx tsx scripts/ssg/index.ts"
   },
   "dependencies": {
+    "@noita-explorer/fastlz": "*",
     "@noita-explorer/file-systems": "*",
+    "@noita-explorer/map": "*",
     "@noita-explorer/model": "*",
     "@noita-explorer/model-noita": "*",
     "@noita-explorer/noita-component-library": "*",
@@ -36,15 +34,20 @@
     "@tsparticles/plugin-emitters": "^3.8.1",
     "@tsparticles/react": "^3.0.0",
     "@tsparticles/slim": "^3.8.1",
+    "@types/leaflet": "^1.9.21",
+    "@types/leaflet-imageoverlay-rotated": "^0.1.8",
+    "@uidotdev/usehooks": "^2.4.1",
     "buffer": "^6.0.3",
     "diff": "^8.0.2",
     "idb": "^8.0.1",
-    "plotly.js": "^2.35.3",
+    "leaflet": "^1.9.4",
+    "leaflet-edgebuffer": "^1.0.7",
     "react": "19.1.0",
     "react-dom": "19.1.0",
-    "react-plotly.js": "^2.6.0",
+    "react-leaflet": "^5.0.0",
     "react-router-dom": "^7.0.2",
     "react-use": "^17.6.0",
+    "threads": "^1.7.0",
     "tsparticles": "^3.8.1"
   },
   "devDependencies": {
@@ -54,7 +57,6 @@
     "@types/minimist": "^1.2.5",
     "@types/react": "19.1.8",
     "@types/react-dom": "19.1.6",
-    "@types/react-plotly.js": "^2.6.3",
     "@vitejs/plugin-react": "^4.3.4",
     "dotenv": "^17.0.1",
     "eslint": "^9.15.0",
@@ -66,7 +68,7 @@
     "minimist": "^1.2.8",
     "sharp": "^0.34.2",
     "tsx": "^4.20.3",
-    "typescript": "~5.6.2",
+    "typescript": "5.9.3",
     "typescript-eslint": "^8.15.0",
     "vite": "^6.1.0",
     "vite-plugin-mkcert": "^1.17.6"

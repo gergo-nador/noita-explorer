@@ -19,6 +19,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@noita-explorer/fastlz": "*",
     "@noita-explorer/model": "*",
     "@noita-explorer/model-noita": "*",
     "@noita-explorer/tools": "*",

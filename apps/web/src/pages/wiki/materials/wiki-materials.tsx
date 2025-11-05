@@ -1,4 +1,3 @@
-import { useNoitaDataWakStore } from '../../../stores/noita-data-wak.ts';
 import { NoitaMaterialIcon } from '../../../components/noita-material-icon.tsx';
 import { NoitaProgressIconTable } from '../../../components/noita-progress-icon-table.tsx';
 import {
@@ -13,10 +12,10 @@ import { MaterialFiltersView } from './material-filters-view.tsx';
 import { Flex } from '@noita-explorer/react-utils';
 import { Link, Outlet, useParams } from 'react-router-dom';
 import { pages } from '../../../routes/pages.ts';
-import { WikiMaterialsContext } from './wiki-materials.context.ts';
+import { useDataWakService } from '../../../services/data-wak/use-data-wak-service.ts';
 
 export const WikiMaterials = () => {
-  const { data } = useNoitaDataWakStore();
+  const { data } = useDataWakService();
   const { materialId } = useParams();
 
   const [filters, setFilters] = useState<MaterialFilters>({
@@ -24,18 +23,10 @@ export const WikiMaterials = () => {
   });
 
   const materialsUnique = useMemo(() => {
-    if (!data?.materials) {
-      return [];
-    }
-
     const uniqueMaterials = arrayHelpers.uniqueBy(data.materials, (m) => m.id);
     uniqueMaterials.sort((a, b) => a.name.localeCompare(b.name));
     return uniqueMaterials;
-  }, [data?.materials]);
-
-  const materialsLookup = useMemo(() => {
-    return arrayHelpers.asDict(materialsUnique, (material) => material.id);
-  }, [materialsUnique]);
+  }, [data.materials]);
 
   const allAvailableTags = useMemo(() => {
     const allTags = materialsUnique.map((m) => m.tags).flat();
@@ -44,92 +35,86 @@ export const WikiMaterials = () => {
     return allUniqueTags;
   }, [materialsUnique]);
 
-  if (!data?.materials) {
-    return <div>Noita Data Wak is not loaded.</div>;
-  }
-
   return (
-    <WikiMaterialsContext value={{ materialsLookup: materialsLookup }}>
-      <Flex
-        justify='center'
-        gap={20}
+    <Flex
+      justify='center'
+      gap={20}
+      style={{
+        margin: 'auto',
+        maxHeight: '100%',
+        overflowY: 'auto',
+        padding: 15,
+        boxSizing: 'border-box',
+      }}
+    >
+      <aside
         style={{
-          margin: 'auto',
-          maxHeight: '100%',
-          overflowY: 'auto',
-          padding: 15,
-          boxSizing: 'border-box',
+          maxWidth: '500px',
+          width: '50%',
         }}
       >
-        <aside
-          style={{
-            maxWidth: '500px',
-            width: '50%',
-          }}
+        <MaterialFiltersView
+          setFilters={setFilters}
+          filters={filters}
+          allAvailableTags={allAvailableTags}
+        />
+        <br />
+        <NoitaProgressIconTable
+          count={materialsUnique.length}
+          name={'Materials'}
+          columnCount={9}
+          iconGap={4}
         >
-          <MaterialFiltersView
-            setFilters={setFilters}
-            filters={filters}
-            allAvailableTags={allAvailableTags}
-          />
-          <br />
-          <NoitaProgressIconTable
-            count={materialsUnique.length}
-            name={'Materials'}
-            columnCount={9}
-            iconGap={4}
-          >
-            {materialsUnique.map((material) => {
-              const filter = evaluateFiltersOnMaterials({ material, filters });
+          {materialsUnique.map((material) => {
+            const filter = evaluateFiltersOnMaterials({ material, filters });
 
-              const icon = (
-                <NoitaMaterialIcon material={material} hasInventoryIcon />
-              );
+            const icon = (
+              <NoitaMaterialIcon material={material} hasInventoryIcon />
+            );
 
-              return (
-                <div
-                  key={material.id}
-                  style={{
-                    opacity: filter ? 1 : 0.35,
-                  }}
-                >
-                  {!filter && icon}
-                  {filter && (
-                    <Link to={pages.wiki.materialDetail(material.id)}>
-                      <ActiveIconWrapper
-                        id={'material-' + material.id}
-                        key={'material-' + material.id}
-                        tooltip={
-                          <div>
-                            <div style={{ fontSize: 20 }}>{material.name}</div>
-                          </div>
-                        }
-                        style={{ cursor: 'pointer' }}
-                      >
-                        {icon}
-                      </ActiveIconWrapper>
-                    </Link>
-                  )}
-                </div>
-              );
-            })}
-          </NoitaProgressIconTable>
-        </aside>
+            return (
+              <div
+                key={material.id}
+                style={{
+                  opacity: filter ? 1 : 0.35,
+                }}
+              >
+                {!filter && icon}
+                {filter && (
+                  <Link to={pages.wiki.materialDetail(material.id)}>
+                    <ActiveIconWrapper
+                      id={'material-' + material.id}
+                      key={'material-' + material.id}
+                      tooltip={
+                        <div>
+                          <div style={{ fontSize: 20 }}>{material.name}</div>
+                        </div>
+                      }
+                      style={{ cursor: 'pointer' }}
+                    >
+                      {icon}
+                    </ActiveIconWrapper>
+                  </Link>
+                )}
+              </div>
+            );
+          })}
+        </NoitaProgressIconTable>
+      </aside>
 
-        <Card
-          style={{
-            width: '50%',
-            maxWidth: '600px',
-            maxHeight: '100%',
-            position: 'sticky',
-            top: 0,
-          }}
-          styleContent={materialId ? { padding: 0 } : undefined}
-        >
-          <Outlet />
-        </Card>
-      </Flex>
-    </WikiMaterialsContext>
+      <Card
+        style={{
+          width: '50%',
+          maxWidth: '600px',
+          maxHeight: '100%',
+          position: 'sticky',
+          top: 0,
+        }}
+        styleContent={materialId ? { padding: 0 } : undefined}
+      >
+        <Outlet />
+      </Card>
+    </Flex>
   );
 };
 

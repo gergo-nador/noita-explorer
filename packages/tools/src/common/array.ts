@@ -1,9 +1,15 @@
 import { StringKeyDictionary } from '@noita-explorer/model';
+import {
+  getKeyNumberSelectorValue,
+  getKeyStringSelectorValue,
+  KeyNumberSelector,
+  KeyStringSelector,
+} from '../internal/key-selector.ts';
 
-const groupBy = <T>(items: T[], by: (t: T) => string) => {
+const groupBy = <T>(items: T[], by: KeyStringSelector<T>) => {
   const groups: StringKeyDictionary<T[]> = items.reduce(
     (groups, item) => {
-      const val = by(item);
+      const val = getKeyStringSelectorValue(item, by);
 
       if (!(val in groups)) {
         groups[val] = [];
@@ -23,7 +29,7 @@ const groupBy = <T>(items: T[], by: (t: T) => string) => {
 
 const maxBy = <T>(
   items: T[],
-  by: (t: T) => number,
+  by: KeyNumberSelector<T>,
 ): { item: T | undefined; value: number } => {
   if (items.length === 0) {
     return {
@@ -34,7 +40,7 @@ const maxBy = <T>(
 
   return items.reduce(
     (currentMax, item) => {
-      const val = by(item);
+      const val = getKeyNumberSelectorValue(item, by);
       return currentMax.value > val ? currentMax : { item: item, value: val };
     },
     { item: items[0], value: -Infinity },
@@ -43,7 +49,7 @@ const maxBy = <T>(
 
 const minBy = <T>(
   items: T[],
-  by: (t: T) => number,
+  by: KeyNumberSelector<T>,
 ): { item: T | undefined; value: number } => {
   if (items.length === 0) {
     return {
@@ -54,18 +60,21 @@ const minBy = <T>(
 
   return items.reduce(
     (currentMax, item) => {
-      const val = by(item);
+      const val = getKeyNumberSelectorValue(item, by);
       return currentMax.value < val ? currentMax : { item: item, value: val };
     },
     { item: items[0], value: Infinity },
   );
 };
 
-const sumBy = <T>(items: T[], by: (t: T) => number) => {
-  return items.reduce((sum, item) => sum + by(item), 0);
+const sumBy = <T>(items: T[], by: KeyNumberSelector<T>) => {
+  return items.reduce(
+    (sum, item) => sum + getKeyNumberSelectorValue(item, by),
+    0,
+  );
 };
 
-const avgBy = <T>(items: T[], by: (t: T) => number) => {
+const avgBy = <T>(items: T[], by: KeyNumberSelector<T>) => {
   if (items.length === 0) {
     return undefined;
   }
@@ -89,12 +98,12 @@ const toggleItemInList = <T>(list: T[], item: T) => {
 
 const asDict = <T>(
   items: T[],
-  keySelector: (t: T) => string,
+  keySelector: KeyStringSelector<T>,
 ): StringKeyDictionary<T> => {
   const dict: StringKeyDictionary<T> = {};
 
   for (const item of items) {
-    const key = keySelector(item);
+    const key = getKeyStringSelectorValue(item, keySelector);
     dict[key] = item;
   }
 
@@ -105,11 +114,11 @@ const unique = <T>(items: T[]) => {
   return [...new Set(items)];
 };
 
-const uniqueBy = <T>(items: T[], by: (t: T) => string): T[] => {
+const uniqueBy = <T>(items: T[], by: KeyStringSelector<T>): T[] => {
   const dict: StringKeyDictionary<T> = {};
 
   for (const item of items) {
-    const attribute = by(item);
+    const attribute = getKeyStringSelectorValue(item, by);
     if (attribute in dict) {
       continue;
     }
@@ -144,3 +153,7 @@ export const arrayHelpers = {
   toggleItemInList: toggleItemInList,
   zip: zip,
 };
+
+const arr: string[] = ['', '', ''];
+
+arrayHelpers.sumBy(arr, 'length');

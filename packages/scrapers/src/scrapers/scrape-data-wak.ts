@@ -2,22 +2,23 @@ import {
   NoitaDataWakScrapeResult,
   NoitaDataWakScrapeResultStatus,
   NoitaMaterialReaction,
-  NoitaTranslation,
   NoitaScrapedEnemy,
+  NoitaScrapedMaterial,
   NoitaScrapedMedia,
   NoitaScrapedMediaGif,
   NoitaScrapedMediaImage,
-  NoitaScrapedSpell,
   NoitaScrapedPerk,
-  NoitaScrapedMaterial,
+  NoitaScrapedSpell,
   NoitaScrapedWandConfig,
+  NoitaTranslation,
+  NoitaWakBiomes,
 } from '@noita-explorer/model-noita';
 import {
   FileSystemDirectoryAccess,
   FileSystemFileAccess,
   StringKeyDictionary,
 } from '@noita-explorer/model';
-import { scrape } from './scrape';
+import { scrape } from './main.ts';
 import {
   AnimationInfo,
   AnimationInfoLayer,
@@ -58,6 +59,7 @@ export const scrapeDataWak = async ({
       wandConfigs: statusSkipped,
       materials: statusSkipped,
       materialReactions: statusSkipped,
+      biomes: statusSkipped,
     };
   }
 
@@ -74,7 +76,7 @@ export const scrapeDataWakContent = async ({
   let perks: NoitaScrapedPerk[] = [];
   let perkError: unknown | undefined = undefined;
   try {
-    perks = await scrape.perks({
+    perks = await scrape.dataWak.perks({
       dataWakParentDirectoryApi: dataWakParentDirectory,
       translations: translations,
     });
@@ -85,7 +87,7 @@ export const scrapeDataWakContent = async ({
   let spells: NoitaScrapedSpell[] = [];
   let spellsError: unknown | undefined = undefined;
   try {
-    spells = await scrape.spells({
+    spells = await scrape.dataWak.spells({
       dataWakParentDirectoryApi: dataWakParentDirectory,
       translations: translations,
     });
@@ -96,7 +98,7 @@ export const scrapeDataWakContent = async ({
   let enemies: NoitaScrapedEnemy[] = [];
   let enemiesError: unknown | undefined = undefined;
   try {
-    enemies = await scrape.enemies({
+    enemies = await scrape.dataWak.enemies({
       dataWakParentDirectoryApi: dataWakParentDirectory,
       translations: translations,
     });
@@ -121,7 +123,7 @@ export const scrapeDataWakContent = async ({
   let wandConfigs: NoitaScrapedWandConfig[] = [];
   let wandConfigError: unknown | undefined = undefined;
   try {
-    wandConfigs = await scrape.wandConfigs({
+    wandConfigs = await scrape.dataWak.wandConfigs({
       dataWakParentDirectoryApi: dataWakParentDirectory,
     });
   } catch (err) {
@@ -132,7 +134,7 @@ export const scrapeDataWakContent = async ({
   let materialReactions: NoitaMaterialReaction[] = [];
   let materialError: unknown | undefined = undefined;
   try {
-    const scrapedMaterials = await scrape.materials({
+    const scrapedMaterials = await scrape.dataWak.materials({
       translations: translations,
       dataWakParentDirectoryApi: dataWakParentDirectory,
     });
@@ -145,11 +147,28 @@ export const scrapeDataWakContent = async ({
   let orbs: StringKeyDictionary<NoitaScrapedMediaGif> = {};
   let orbsError: unknown | undefined = undefined;
   try {
-    orbs = await scrape.orbAnimations({
+    orbs = await scrape.dataWak.orbAnimations({
       dataWakParentDirectoryApi: dataWakParentDirectory,
     });
   } catch (err) {
     orbsError = err;
+  }
+
+  let biomes: NoitaWakBiomes = {
+    biomeMap: {
+      biomeOffset: { x: 0, y: 0 },
+      biomeSize: { x: 0, y: 0 },
+      biomeIndices: [],
+    },
+    biomes: [],
+  };
+  let biomesError: unknown | undefined = undefined;
+  try {
+    biomes = await scrape.dataWak.biomes({
+      dataWakParentDirectoryApi: dataWakParentDirectory,
+    });
+  } catch (err) {
+    biomesError = err;
   }
 
   return {
@@ -222,6 +241,14 @@ export const scrapeDataWakContent = async ({
           : NoitaDataWakScrapeResultStatus.FAILED,
       data: orbs,
       error: orbsError,
+    },
+    biomes: {
+      status:
+        biomesError === undefined && biomes.biomes.length !== 0
+          ? NoitaDataWakScrapeResultStatus.SUCCESS
+          : NoitaDataWakScrapeResultStatus.FAILED,
+      data: biomes,
+      error: biomesError,
     },
   };
 };
@@ -409,7 +436,7 @@ const scrapeEnemyMedia = async ({
     ...extraAnimationInfos,
   ];
 
-  const animations = await scrape.enemyAnimations({
+  const animations = await scrape.dataWak.enemyAnimations({
     dataWakParentDirectoryApi: dataWakParentDirectory,
     animationInfos: allAnimationInfos,
   });

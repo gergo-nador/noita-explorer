@@ -1,4 +1,5 @@
 import { FileSystemFileAccess } from '@noita-explorer/model';
+import { Buffer } from 'buffer';
 import {
   extractFileNameWithoutExtension,
   splitTextToLines,
@@ -14,7 +15,7 @@ export const FileSystemFileAccessBrowserApi = (
     return fileHandle.getFile().then((f) => f.text());
   };
 
-  return {
+  const file = {
     getFullPath: () => path,
     getName: () => fileHandle.name,
     getNameWithoutExtension: () =>
@@ -31,8 +32,11 @@ export const FileSystemFileAccessBrowserApi = (
           reader.readAsDataURL(blob);
         });
       },
-      asBuffer: async () =>
-        fileHandle.getFile().then((f) => f.arrayBuffer()) as Promise<Buffer>,
+      asBuffer: async () => {
+        const file = await fileHandle.getFile();
+        const arrayBuffer = await file.arrayBuffer();
+        return Buffer.from(arrayBuffer);
+      },
     },
     delete: async () => {
       // @ts-expect-error .remove() function exists, the IDE doesn't know about it
@@ -50,5 +54,10 @@ export const FileSystemFileAccessBrowserApi = (
         await writable.close();
       },
     },
-  };
+  } satisfies FileSystemFileAccess;
+
+  return {
+    _path: path,
+    ...file,
+  } as FileSystemFileAccess;
 };

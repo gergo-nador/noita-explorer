@@ -25,11 +25,11 @@ export const SetupWebPaths = () => {
                 <ul>
                   <li>
                     Windows:
-                    C:/Users/[You_Windows_Username]/AppData/LocalLow/Nolla_Games_Noita/
+                    C:/Users/[You_Windows_Username]/AppData/LocalLow/Nolla_Games_Noita/save00
                   </li>
                   <li>
                     Linux:
-                    ~/.steam/steam/steamapps/compatdata/881100/pfx/drive_c/users/steamuser/AppData/LocalLow/Nolla_Games_Noita/
+                    ~/.steam/steam/steamapps/compatdata/881100/pfx/drive_c/users/steamuser/AppData/LocalLow/Nolla_Games_Noita/save00
                   </li>
                 </ul>
               </div>
@@ -37,23 +37,21 @@ export const SetupWebPaths = () => {
           >
             <PathInput
               type='directory'
-              displayPath={
-                paths.NollaGamesNoita ?? 'Select the NollaGamesNoita folder'
-              }
-              dialogTitle='Select the NollaGamesNoita folder'
-              path={paths.NollaGamesNoita}
+              displayPath={paths.save00 ?? 'Select the save00 folder'}
+              dialogTitle='Select the save00 folder'
+              path={paths.save00}
               setPath={(path) => {
                 setPaths(
                   (state) =>
                     (state.paths = {
                       ...paths,
-                      NollaGamesNoita: path,
-                      forceReloadNollaGamesNoitaCounter:
-                        state.paths.forceReloadNollaGamesNoitaCounter + 1,
+                      save00: path,
+                      forceReloadSave00Counter:
+                        state.paths.forceReloadSave00Counter + 1,
                     }),
                 );
               }}
-              fileSystemDialogId='nolla_games_noita'
+              fileSystemDialogId='save00'
             />
           </NoitaTooltipWrapper>
 

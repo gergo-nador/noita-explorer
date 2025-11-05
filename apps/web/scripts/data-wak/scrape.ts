@@ -1,4 +1,4 @@
-import { scrapeDataWak, scrapeUtils } from '@noita-explorer/scrapers';
+import { scrapeUtils } from '@noita-explorer/scrapers';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as process from 'node:process';
@@ -10,6 +10,8 @@ import {
 } from '@noita-explorer/file-systems';
 import { args } from '../utils/process-args';
 import { scrapeMedia } from './scrape-media';
+import { NoitaDataWakScrapeResultPart } from '@noita-explorer/model-noita';
+import { data } from 'react-router-dom';
 
 /**
  * Scrapes the data.wak file.
@@ -56,12 +58,14 @@ async function runScrape(args: Record<string, string>) {
   buffer = Buffer.from(buffer);
   const dataWakParentDirectory = FileSystemDirectoryAccessDataWakMemory(buffer);
 
-  const dataWakResult = await scrapeDataWak({
+  const dataWakResult = await scrapeUtils.scrapeDataWak({
     translationFile: translationFile,
     dataWakParentDirectory: dataWakParentDirectory,
   });
 
-  const errors = Object.values(dataWakResult).filter((v) => v.error);
+  const errors = Object.values(dataWakResult).filter(
+    (v: NoitaDataWakScrapeResultPart<unknown>) => v.error,
+  );
   if (errors.length > 0) {
     console.error('Error happened during scraping data wak content:', errors);
     console.error('Aborting!');

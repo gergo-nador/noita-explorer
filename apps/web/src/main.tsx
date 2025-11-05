@@ -6,9 +6,10 @@ import { sentry } from './utils/sentry.ts';
 import { noitaAPI } from './utils/noita-api.ts';
 import { noitaDataWakStore } from './stores/noita-data-wak.ts';
 
-const loadDataWakPromise = noitaAPI.noita.dataFile.get().then((data) => {
-  noitaDataWakStore.getState().load(data);
-});
+const loadDataFile = () =>
+  noitaAPI.noita.dataFile.get().then((data) => {
+    noitaDataWakStore.getState().load(data);
+  });
 
 let rootErrorHandling: RootOptions = {
   onUncaughtError: (
@@ -81,7 +82,7 @@ if (sentry.isSentryEnabled && sentryDsn) {
 }
 
 async function startApp() {
-  await loadDataWakPromise;
+  await loadDataFile();
 
   const container = document.getElementById('root')!;
   if (container.hasChildNodes()) {

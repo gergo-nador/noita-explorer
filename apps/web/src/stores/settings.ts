@@ -1,20 +1,22 @@
 import { create } from 'zustand';
 import { noitaAPI } from '../utils/noita-api.ts';
 import { sentry } from '../utils/sentry.ts';
+import { objectHelpers } from '@noita-explorer/tools';
 
 export type SettingsUnitsType = 'default' | 'frames' | 'seconds';
 export type SettingsCursorType = 'default' | 'noita-cursor' | 'wand';
 export type SettingsNoitaCursorType =
   | 'mouse_cursor_big'
   | 'mouse_cursor_big_system';
+export type SettingsMapWorkerAmountType = 'auto' | 'custom';
 
 export interface Settings {
   paths: {
     // noita install folder path
     install: string | undefined;
     // master data folder for noita saves
-    NollaGamesNoita: string | undefined;
-    forceReloadNollaGamesNoitaCounter: number;
+    save00: string | undefined;
+    forceReloadSave00Counter: number;
   };
   units: {
     time: SettingsUnitsType;
@@ -23,6 +25,11 @@ export interface Settings {
     type: SettingsCursorType;
     noitaCursor: SettingsNoitaCursorType;
     wandSpriteId: string | undefined;
+  };
+  map: {
+    initialPopupSeen: boolean;
+    customWorkerCount: number;
+    workerAmountType: SettingsMapWorkerAmountType;
   };
   progressDisplayDebugData: boolean;
   sentry: {
@@ -54,8 +61,8 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
   settings: {
     paths: {
       install: undefined,
-      NollaGamesNoita: undefined,
-      forceReloadNollaGamesNoitaCounter: 0,
+      save00: undefined,
+      forceReloadSave00Counter: 0,
     },
     units: {
       time: 'default',
@@ -64,6 +71,11 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
       type: 'default',
       noitaCursor: 'mouse_cursor_big',
       wandSpriteId: undefined,
+    },
+    map: {
+      initialPopupSeen: false,
+      workerAmountType: 'custom',
+      customWorkerCount: Math.min(4, navigator.hardwareConcurrency),
     },
     progressDisplayDebugData: false,
     sentry: {
@@ -80,15 +92,14 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
 
       let settings = state.settings;
       settings = await loadSettings(settings);
-      // make a deep copy to trigger updates
-      settings = JSON.parse(JSON.stringify(settings));
+      settings = objectHelpers.deepCopy(settings);
 
       // reset file paths if the new file access api is not supported
       if (noitaAPI.environment.web?.isFileSystemApiUnSupported) {
         settings.paths = {
           install: undefined,
-          NollaGamesNoita: undefined,
-          forceReloadNollaGamesNoitaCounter: 0,
+          save00: undefined,
+          forceReloadSave00Counter: 0,
         };
       }
 

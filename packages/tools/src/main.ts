@@ -1,5 +1,9 @@
 export { arrayHelpers } from './common/array';
 export { base64Helpers } from './common/base64.ts';
+export { bufferHelpers } from './common/buffer-util.ts';
+export { createBufferReader } from './common/buffer-reader/buffer-reader.ts';
+export type { BufferReader } from './common/buffer-reader/buffer-reader.types.ts';
+export type { BufferReaderIteratorCallback } from './common/buffer-reader/buffer-reader-iterator-callback.ts';
 export { colorHelpers } from './common/color-util';
 export { cryptographyHelpers } from './common/cryptography';
 export { dateHelpers } from './common/date';
@@ -23,3 +27,10 @@ export { stringHelpers } from './common/string';
 export { switchStatement } from './common/switch';
 export { throwHelpers } from './common/throw.ts';
 export { timeHelpers } from './common/time';
+
+// internal types
+export type {
+  KeyNumberSelector,
+  KeyStringSelector,
+  KeySelector,
+} from './internal/key-selector.ts';
