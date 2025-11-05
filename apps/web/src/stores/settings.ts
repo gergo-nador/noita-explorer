@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { noitaAPI } from '../utils/noita-api.ts';
 import { sentry } from '../utils/sentry.ts';
+import { objectHelpers } from '@noita-explorer/tools';
 
 export type SettingsUnitsType = 'default' | 'frames' | 'seconds';
 export type SettingsCursorType = 'default' | 'noita-cursor' | 'wand';
@@ -91,8 +92,7 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
 
       let settings = state.settings;
       settings = await loadSettings(settings);
-      // make a deep copy to trigger updates
-      settings = JSON.parse(JSON.stringify(settings));
+      settings = objectHelpers.deepCopy(settings);
 
       // reset file paths if the new file access api is not supported
       if (noitaAPI.environment.web?.isFileSystemApiUnSupported) {
