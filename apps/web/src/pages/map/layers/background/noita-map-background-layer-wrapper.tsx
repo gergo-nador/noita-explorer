@@ -44,9 +44,6 @@ export const NoitaMapBackgroundLayerWrapper = ({
         ...defaultLayerBufferSettings,
         ...defaultLayerMiscSettings,
 
-        // for some reason edgeBufferTiles > 0 makes the background buggy, and tiles are not showing up randomly
-        edgeBufferTiles: 0,
-
         // custom props
         renderPool: threadsPool?.pool,
         backgroundTheme,

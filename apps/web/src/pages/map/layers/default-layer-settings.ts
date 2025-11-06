@@ -6,7 +6,7 @@ export const defaultLayerZoomSettings = {
 } as const;
 
 export const defaultLayerBufferSettings = {
-  keepBuffer: 3,
+  keepBuffer: 0,
   edgeBufferTiles: 1,
 } as const;
 
