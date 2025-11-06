@@ -9,12 +9,14 @@ interface Props {
   mapRef: RefObject<MapRef>;
   backgroundThemes: BackgroundThemes;
   setBackgroundThemes: Dispatch<BackgroundThemes>;
+  redraw: VoidFunction;
 }
 
 export const MapUtilityPanel = ({
   mapRef,
   backgroundThemes,
   setBackgroundThemes,
+  redraw,
 }: Props) => {
   const [position, setPosition] = useState<L.LatLng | null>(null);
   const map = useMap();
@@ -71,6 +73,7 @@ export const MapUtilityPanel = ({
         onChange={(newValue) =>
           setBackgroundThemes(newValue.target.value as BackgroundThemes)
         }
+        style={{ width: '100%' }}
       >
         <option value='dayStart'>Day 1</option>
         <option value='dayMid'>Day 2</option>
@@ -82,24 +85,28 @@ export const MapUtilityPanel = ({
         <option value='sunriseMid'>Sunrise 2</option>
       </select>
 
-      {document.fullscreenEnabled &&
-        (document.fullscreenElement ? (
-          <button onClick={() => document.exitFullscreen()}>
-            Exit Full Screen
-          </button>
-        ) : (
-          <button
-            onClick={() => {
-              if (!mapRef.current) return;
+      <div>
+        {document.fullscreenEnabled &&
+          (document.fullscreenElement ? (
+            <button onClick={() => document.exitFullscreen()}>
+              Exit Full Screen
+            </button>
+          ) : (
+            <button
+              onClick={() => {
+                if (!mapRef.current) return;
 
-              // @ts-expect-error _container is a non-public property, but we'll access it anyway
-              const element = mapRef.current._container as HTMLDivElement;
-              element?.requestFullscreen();
-            }}
-          >
-            Full Screen
-          </button>
-        ))}
+                // @ts-expect-error _container is a non-public property, but we'll access it anyway
+                const element = mapRef.current._container as HTMLDivElement;
+                element?.requestFullscreen();
+              }}
+            >
+              Full Screen
+            </button>
+          ))}
+
+        <button onClick={() => redraw()}>Force redraw</button>
+      </div>
     </div>
   );
 };

@@ -14,9 +14,13 @@ import { BackgroundThemes } from './background-themes.ts';
 
 interface Props {
   backgroundTheme: BackgroundThemes;
+  redrawCounter: number;
 }
 
-export const NoitaMapBackgroundLayerWrapper = ({ backgroundTheme }: Props) => {
+export const NoitaMapBackgroundLayerWrapper = ({
+  backgroundTheme,
+  redrawCounter,
+}: Props) => {
   const map = useMap();
   const pane = useMapPane({
     name: 'noita-background',
@@ -66,7 +70,7 @@ export const NoitaMapBackgroundLayerWrapper = ({ backgroundTheme }: Props) => {
     // @ts-expect-error custom option
     layerRef.current.options.backgroundTheme = backgroundTheme;
     layerRef.current.redraw();
-  }, [backgroundTheme]);
+  }, [backgroundTheme, redrawCounter]);
 
   return null;
 };

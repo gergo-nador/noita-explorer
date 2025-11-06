@@ -39,6 +39,7 @@ export function NoitaMapContainer({
   mapBounds,
 }: Props) {
   const { worldPixelScenes, streamInfo } = useCurrentRunService();
+  const [forceRedrawCounter, setForceRedrawCounter] = useState(0);
   const mapRef = useRef<MapRef>(null);
   const mapCenter: L.LatLngExpression = [0, 0];
 
@@ -70,17 +71,22 @@ export function NoitaMapContainer({
       >
         {!__SSG__ && (
           <>
-            <NoitaMapBackgroundLayerWrapper backgroundTheme={backgroundTheme} />
+            <NoitaMapBackgroundLayerWrapper
+              backgroundTheme={backgroundTheme}
+              redrawCounter={forceRedrawCounter}
+            />
             <NoitaMapBiomeLayerWrapper
               worldPixelScenes={worldPixelScenes}
               streamInfo={streamInfo}
               biomes={biomes}
               backgrounds={backgrounds}
+              redrawCounter={forceRedrawCounter}
             />
             <NoitaMapTerrainLayerWrapper
               petriFiles={petriFileCollection}
               entityFiles={entityFileCollection}
               streamInfo={streamInfo}
+              redrawCounter={forceRedrawCounter}
             />
 
             {/* This is not yet available */}
@@ -96,6 +102,7 @@ export function NoitaMapContainer({
           mapRef={mapRef}
           backgroundThemes={backgroundTheme}
           setBackgroundThemes={setBackgroundTheme}
+          redraw={() => setForceRedrawCounter((c) => c + 1)}
         />
       </MapContainer>
     </ThreadsPoolContextProvider>

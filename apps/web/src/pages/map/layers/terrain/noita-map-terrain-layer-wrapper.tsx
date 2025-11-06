@@ -16,15 +16,19 @@ import {
   defaultLayerZoomSettings,
 } from '../default-layer-settings.ts';
 
+interface Props {
+  petriFiles: NoitaPetriFileCollection;
+  entityFiles: NoitaEntityFileCollection;
+  streamInfo: StreamInfoFileFormat;
+  redrawCounter: number;
+}
+
 export function NoitaMapTerrainLayerWrapper({
   petriFiles,
   entityFiles,
   streamInfo,
-}: {
-  petriFiles: NoitaPetriFileCollection;
-  entityFiles: NoitaEntityFileCollection;
-  streamInfo: StreamInfoFileFormat;
-}) {
+  redrawCounter,
+}: Props) {
   const map = useMap();
   const pane = useMapPane({ name: 'noita-terrain', zIndex: 7 });
   const layerRef = useRef<L.GridLayer | null>(null);
@@ -68,6 +72,11 @@ export function NoitaMapTerrainLayerWrapper({
     threadsPool?.pool,
     threadsPool?.isLoaded,
   ]);
+
+  useEffect(() => {
+    if (!layerRef.current) return;
+    layerRef.current.redraw();
+  }, [redrawCounter]);
 
   return null;
 }

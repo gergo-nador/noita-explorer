@@ -22,6 +22,7 @@ interface Props {
   streamInfo: StreamInfoFileFormat;
   biomes: NoitaWakBiomes;
   backgrounds: Record<number, Record<number, StreamInfoBackground[]>>;
+  redrawCounter: number;
 }
 
 export const NoitaMapBiomeLayerWrapper = ({
@@ -29,6 +30,7 @@ export const NoitaMapBiomeLayerWrapper = ({
   streamInfo,
   biomes,
   backgrounds,
+  redrawCounter,
 }: Props) => {
   const map = useMap();
   const pane = useMapPane({ name: 'noita-biome', zIndex: 6 });
@@ -75,6 +77,11 @@ export const NoitaMapBiomeLayerWrapper = ({
     backgrounds,
     pane.name,
   ]);
+
+  useEffect(() => {
+    if (!layerRef.current) return;
+    layerRef.current.redraw();
+  }, [redrawCounter]);
 
   return null;
 };
