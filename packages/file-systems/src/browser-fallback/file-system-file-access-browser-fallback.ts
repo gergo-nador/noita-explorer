@@ -4,6 +4,7 @@ import {
   extractFileNameWithoutExtension,
   splitTextToLines,
 } from '../common.ts';
+import { Buffer } from 'buffer';
 
 export const FileSystemFileAccessBrowserFallback = (
   file: FileWithDirectoryAndFileHandle,
@@ -24,7 +25,7 @@ export const FileSystemFileAccessBrowserFallback = (
         }),
       asBuffer: async () => {
         const buffer = await file.arrayBuffer();
-        return buffer as Buffer;
+        return Buffer.from(buffer);
       },
     },
     delete: () => {
