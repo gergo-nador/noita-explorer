@@ -80,7 +80,7 @@ const MaterialTreeNodeComponent = ({
   const [textBackgroundColor, setTextBackgroundColor] = useState<string>();
 
   useEffect(() => {
-    if (Math.random() === 2) {
+    if (__FALSE__) {
       //imageHelpers
       //  .getAverageColorBase64(node.graphicsImageBase64)
       //  .then((color) => {

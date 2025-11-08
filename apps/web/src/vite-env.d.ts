@@ -4,6 +4,7 @@ declare const __DEPLOY_ID__: string;
 declare const __DEPLOY_TIME__: string;
 declare const __ENV__: EnvironmentType;
 declare const __SSG__: boolean;
+declare const __FALSE__: boolean;
 
 type EnvironmentType = 'development' | 'preview' | 'production';
 

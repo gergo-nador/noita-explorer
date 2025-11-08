@@ -2,7 +2,7 @@ import { PixelatedImage } from '@noita-explorer/noita-component-library';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { pages } from '../routes/pages.ts';
-import { ifStatement } from '@noita-explorer/tools';
+import { ifStatement, randomHelpers } from '@noita-explorer/tools';
 import { zIndexManager } from '../utils/z-index-manager.ts';
 import { publicPaths } from '../utils/public-paths.ts';
 
@@ -16,9 +16,11 @@ const bgImages = {
   theWorkRegular: publicPaths.static.backgrounds('the_work_regular.webp'),
 };
 
-const random = Math.random();
-const regularBgImage = ifStatement(random < 0.99, bgImages.altarNightBg)
-  .elseIf(random < 0.999, bgImages.theWorkRegular)
+const regularBgImage = ifStatement(
+  randomHelpers.chance(0.99),
+  bgImages.altarNightBg,
+)
+  .elseIf(randomHelpers.chance(0.999), bgImages.theWorkRegular)
   .else(bgImages.theWork);
 
 const decideWhichBg = () => {

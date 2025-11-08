@@ -93,7 +93,7 @@ export function NoitaMapContainer({
             />
 
             {/* This is not yet available */}
-            {__SSG__ && (
+            {__FALSE__ && (
               <NoitaMapEntityLazyLoadingLayer
                 entityFiles={entityFileCollection}
                 streamInfo={streamInfo}
