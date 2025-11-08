@@ -1,8 +1,5 @@
 import L from 'leaflet';
-import {
-  StreamInfoBackground,
-  StreamInfoFileFormat,
-} from '@noita-explorer/model-noita';
+import { StreamInfoBackground } from '@noita-explorer/model-noita';
 import {
   MapRendererPool,
   MapRendererWorker,
@@ -11,16 +8,15 @@ import {
 import { mapConstants } from '@noita-explorer/map';
 import { setErrorTile } from '../_shared/set-error-tile.ts';
 import { createUnexploredTile } from '../_shared/create-unexplored-tile.ts';
+import { ChunkInfoCollection } from '../../noita-map.types.ts';
 
 export const BiomeLayer = L.GridLayer.extend({
   createTile: function (coords: L.Coords, done: L.DoneCallback): HTMLElement {
-    const streamInfo: StreamInfoFileFormat = this.options.streamInfo;
-    const chunkInfo = streamInfo.chunkInfo.find(
-      (chunk) => chunk.position.x === coords.x && chunk.position.y === coords.y,
-    );
+    const chunkInfos: ChunkInfoCollection = this.options.chunkInfos;
+    const chunkInfo = chunkInfos[coords.x]?.[coords.y];
 
     if (!chunkInfo?.loaded) {
-      const tile = createUnexploredTile({ coords, streamInfo });
+      const tile = createUnexploredTile({ coords, chunkInfos });
 
       // `done` needs to be called after returning
       setTimeout(() => done(undefined, tile), 0);

@@ -16,6 +16,7 @@ import { MapRef } from 'react-leaflet/MapContainer';
 import { BackgroundThemes } from './layers/background/background-themes.ts';
 import { useCurrentRunService } from '../../services/current-run/use-current-run-service.ts';
 import {
+  ChunkInfoCollection,
   MapBounds,
   NoitaEntityFileCollection,
   NoitaPetriFileCollection,
@@ -28,6 +29,7 @@ interface Props {
   petriFileCollection: NoitaPetriFileCollection;
   entityFileCollection: NoitaEntityFileCollection;
   mapBounds: MapBounds;
+  chunkInfos: ChunkInfoCollection;
 }
 
 export function NoitaMapContainer({
@@ -37,6 +39,7 @@ export function NoitaMapContainer({
   petriFileCollection,
   entityFileCollection,
   mapBounds,
+  chunkInfos,
 }: Props) {
   const { worldPixelScenes, streamInfo } = useCurrentRunService();
   const [forceRedrawCounter, setForceRedrawCounter] = useState(0);
@@ -77,10 +80,10 @@ export function NoitaMapContainer({
             />
             <NoitaMapBiomeLayerWrapper
               worldPixelScenes={worldPixelScenes}
-              streamInfo={streamInfo}
               biomes={biomes}
               backgrounds={backgrounds}
               redrawCounter={forceRedrawCounter}
+              chunkInfos={chunkInfos}
             />
             <NoitaMapTerrainLayerWrapper
               petriFiles={petriFileCollection}

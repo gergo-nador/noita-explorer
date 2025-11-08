@@ -5,7 +5,6 @@ import { BiomeLayer } from './biome-layer.ts';
 import {
   NoitaWakBiomes,
   StreamInfoBackground,
-  StreamInfoFileFormat,
   WorldPixelSceneFileFormat,
 } from '@noita-explorer/model-noita';
 import { useThreadsPool } from '../../map-renderer-threads/use-threads-pool.ts';
@@ -16,21 +15,22 @@ import {
   defaultLayerSize,
   defaultLayerZoomSettings,
 } from '../default-layer-settings.ts';
+import { ChunkInfoCollection } from '../../noita-map.types.ts';
 
 interface Props {
   worldPixelScenes: WorldPixelSceneFileFormat;
-  streamInfo: StreamInfoFileFormat;
   biomes: NoitaWakBiomes;
   backgrounds: Record<number, Record<number, StreamInfoBackground[]>>;
   redrawCounter: number;
+  chunkInfos: ChunkInfoCollection;
 }
 
 export const NoitaMapBiomeLayerWrapper = ({
   worldPixelScenes,
-  streamInfo,
   biomes,
   backgrounds,
   redrawCounter,
+  chunkInfos,
 }: Props) => {
   const map = useMap();
   const pane = useMapPane({ name: 'noita-biome', zIndex: 6 });
@@ -51,10 +51,10 @@ export const NoitaMapBiomeLayerWrapper = ({
 
         // custom props
         worldPixelScenes,
-        streamInfo,
         biomes,
         renderPool: threadsPool?.pool,
         backgrounds,
+        chunkInfos,
       });
 
       map.addLayer(gridLayer);
@@ -70,12 +70,12 @@ export const NoitaMapBiomeLayerWrapper = ({
   }, [
     biomes,
     map,
-    streamInfo,
     threadsPool?.pool,
     threadsPool?.isLoaded,
     worldPixelScenes,
     backgrounds,
     pane.name,
+    chunkInfos,
   ]);
 
   useEffect(() => {

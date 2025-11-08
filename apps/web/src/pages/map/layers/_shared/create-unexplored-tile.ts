@@ -2,26 +2,34 @@ import { Vector2d } from '@noita-explorer/model';
 import L from 'leaflet';
 import { publicPaths } from '../../../../utils/public-paths.ts';
 import { mapConstants } from '@noita-explorer/map';
-import { StreamInfoFileFormat } from '@noita-explorer/model-noita';
+import { ChunkInfoCollection } from '../../noita-map.types.ts';
 
 interface Props {
   coords: Vector2d;
-  streamInfo: StreamInfoFileFormat;
+  chunkInfos: ChunkInfoCollection;
 }
 
-export const createUnexploredTile = ({ coords, streamInfo }: Props) => {
+export const createUnexploredTile = ({ coords, chunkInfos }: Props) => {
   if (coords.y < 0) {
     return L.DomUtil.create('div', 'leaflet-tile');
   }
 
-  const hasTileLoadedAroundIt = streamInfo.chunkInfo.some((chunk) => {
-    if (!chunk.loaded) return false;
+  let hasTileLoadedAroundIt = false;
 
-    if (chunk.position.x < coords.x - 1 || chunk.position.x > coords.x + 1)
-      return false;
+  for (let x = coords.x - 1; x <= coords.x + 1; x++) {
+    for (let y = coords.y - 1; y <= coords.y + 1; y++) {
+      const chunk = chunkInfos[x]?.[y];
+      if (!chunk) continue;
 
-    return chunk.position.y <= coords.y + 1 && chunk.position.y >= coords.y - 1;
-  });
+      if (chunk.loaded) {
+        hasTileLoadedAroundIt = true;
+        break;
+      }
+    }
+
+    if (hasTileLoadedAroundIt) break;
+  }
+
   if (hasTileLoadedAroundIt) {
     const imgTile = L.DomUtil.create('img', 'leaflet-tile');
     imgTile.src = publicPaths.static.map.unexplored();

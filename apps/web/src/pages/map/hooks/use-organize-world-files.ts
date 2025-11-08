@@ -2,18 +2,22 @@ import { useEffect, useState } from 'react';
 import { getSave00FolderHandle } from '../../../utils/browser-noita-api/browser-noita-api.ts';
 import { useSave00Store } from '../../../stores/save00.ts';
 import {
+  ChunkInfoCollection,
   MapBounds,
   NoitaEntityFileCollection,
   NoitaPetriFileCollection,
 } from '../noita-map.types.ts';
+import { useCurrentRunService } from '../../../services/current-run/use-current-run-service.ts';
 
 export const useOrganizeWorldFiles = () => {
   const { status } = useSave00Store();
+  const { streamInfo } = useCurrentRunService();
 
   const [petriFileCollection, setPetriFileCollection] =
     useState<NoitaPetriFileCollection>({});
   const [entityFileCollection, setEntityFileCollection] =
     useState<NoitaEntityFileCollection>({});
+  const [chunkInfos, setChunkInfos] = useState<ChunkInfoCollection>({});
   const [mapBounds, setMapBounds] = useState<MapBounds | undefined>();
 
   useEffect(() => {
@@ -23,6 +27,7 @@ export const useOrganizeWorldFiles = () => {
       .then((folder) => folder.getDirectory('world'))
       .then((folder) => folder.listFiles())
       .then(async (files) => {
+        // petri files
         const petriFiles = files
           .filter((file) => file.getName().endsWith('.png_petri'))
           .map((file) => {
@@ -35,6 +40,7 @@ export const useOrganizeWorldFiles = () => {
             };
           });
 
+        // map bounds
         const bounds: MapBounds = { minX: 0, maxY: 0, minY: 0, maxX: 0 };
 
         const petriFileCollection: NoitaPetriFileCollection = {};
@@ -67,6 +73,7 @@ export const useOrganizeWorldFiles = () => {
         setPetriFileCollection(petriFileCollection);
         setMapBounds(bounds);
 
+        // entity files
         const entityFiles = files
           .filter(
             (file) =>
@@ -90,13 +97,28 @@ export const useOrganizeWorldFiles = () => {
           entityFileCollection[num] = file.file;
         }
         setEntityFileCollection(entityFileCollection);
+
+        // chunk infos
+        const chunkInfos: ChunkInfoCollection = {};
+        for (const streamInfoChunkInfo of streamInfo.chunkInfo) {
+          const x = streamInfoChunkInfo.position.x;
+          if (!(x in chunkInfos)) {
+            chunkInfos[x] = {};
+          }
+
+          const y = streamInfoChunkInfo.position.y;
+          chunkInfos[x][y] = streamInfoChunkInfo;
+        }
+
+        setChunkInfos(chunkInfos);
       });
-  }, [status]);
+  }, [status, streamInfo]);
 
   return {
     petriFileCollection,
     entityFileCollection,
     mapBounds,
+    chunkInfos,
   };
 };
 

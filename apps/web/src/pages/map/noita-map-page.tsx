@@ -21,11 +21,9 @@ export const NoitaMapPage = () => {
     progress: dataWakProgress,
     dataWakBuffer,
   } = useDataWakLoader();
-
   const { backgrounds, isLoaded: isBackgroundsLoaded } =
     useOrganizeBackgroundImages({ dataWakBuffer });
-
-  const { petriFileCollection, entityFileCollection, mapBounds } =
+  const { petriFileCollection, entityFileCollection, mapBounds, chunkInfos } =
     useOrganizeWorldFiles();
 
   if (!settings.map.initialPopupSeen) {
@@ -36,10 +34,16 @@ export const NoitaMapPage = () => {
     return <div className='text-danger'>Failed to load assets</div>;
   }
 
-  if (!dataWakBuffer || !isBackgroundsLoaded || !mapBounds) {
+  if (
+    !dataWakBuffer ||
+    !isBackgroundsLoaded ||
+    !mapBounds ||
+    !petriFileCollection ||
+    !chunkInfos
+  ) {
     return (
-      <div>
-        <Flex>
+      <Flex column gap={4}>
+        <Flex gap={8}>
           {dataWakBuffer ? (
             <>
               <span>Assets loaded</span>
@@ -59,22 +63,48 @@ export const NoitaMapPage = () => {
           )}
         </Flex>
 
-        <Flex>
+        <Flex gap={8}>
           {isBackgroundsLoaded ? (
-            <span>Backgrounds loaded</span>
+            <>
+              <span>Backgrounds loaded</span>
+              <BooleanIcon value={true} />
+            </>
           ) : (
             <span>Loading backgrounds...</span>
           )}
         </Flex>
 
-        <Flex>
+        <Flex gap={8}>
           {mapBounds ? (
-            <span>Map bounds loaded</span>
+            <>
+              <span>Map bounds loaded</span>
+              <BooleanIcon value={true} />
+            </>
           ) : (
             <span>Calculating map bounds...</span>
           )}
         </Flex>
-      </div>
+        <Flex gap={8}>
+          {petriFileCollection ? (
+            <>
+              <span>Petri files loaded</span>
+              <BooleanIcon value={true} />
+            </>
+          ) : (
+            <span>Loading petri files...</span>
+          )}
+        </Flex>
+        <Flex gap={8}>
+          {chunkInfos ? (
+            <>
+              <span>Chunk infos loaded</span>
+              <BooleanIcon value={true} />
+            </>
+          ) : (
+            <span>Loading chunk infos...</span>
+          )}
+        </Flex>
+      </Flex>
     );
   }
 
@@ -86,6 +116,7 @@ export const NoitaMapPage = () => {
       petriFileCollection={petriFileCollection}
       entityFileCollection={entityFileCollection}
       mapBounds={mapBounds}
+      chunkInfos={chunkInfos}
     />
   );
 };
