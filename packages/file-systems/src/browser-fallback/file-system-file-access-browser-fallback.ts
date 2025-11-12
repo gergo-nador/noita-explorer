@@ -13,6 +13,7 @@ export const FileSystemFileAccessBrowserFallback = (
     getFullPath: () => file.webkitRelativePath,
     getName: () => file.name,
     getNameWithoutExtension: () => extractFileNameWithoutExtension(file.name),
+    supportsTransferable: () => undefined,
     read: {
       asText: () => file.text(),
       asTextLines: () => file.text().then(splitTextToLines),

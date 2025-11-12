@@ -20,6 +20,7 @@ export const FileSystemFileAccessBrowserApi = (
     getName: () => fileHandle.name,
     getNameWithoutExtension: () =>
       extractFileNameWithoutExtension(fileHandle.name),
+    supportsTransferable: () => fileHandle,
     read: {
       asText: async () => readAsText(),
       asTextLines: async () => readAsText().then(splitTextToLines),

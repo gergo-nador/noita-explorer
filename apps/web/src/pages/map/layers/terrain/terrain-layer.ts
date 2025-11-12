@@ -6,6 +6,7 @@ import {
   Transfer,
 } from '../../map-renderer-threads/threads-pool.types.ts';
 import { setErrorTile } from '../_shared/set-error-tile.ts';
+import { WebTransferable } from '@noita-explorer/model';
 
 export const TerrainLayer = L.GridLayer.extend({
   createTile: function (coords: L.Coords, done: L.DoneCallback): HTMLElement {
@@ -35,7 +36,13 @@ export const TerrainLayer = L.GridLayer.extend({
 
     renderPool
       .queue(async (worker: MapRendererWorker) => {
-        const array: Uint8Array = await petriFile.read.asBuffer();
+        let transferable = petriFile.supportsTransferable();
+        // fallback: read file as buffer
+        if (!transferable) {
+          const array: Uint8Array = await petriFile.read.asBuffer();
+          transferable = Transfer(array.buffer);
+        }
+
         const offscreenCanvas = canvas.transferControlToOffscreen();
 
         return worker.renderTerrainTile(
@@ -43,7 +50,7 @@ export const TerrainLayer = L.GridLayer.extend({
             chunkCoordinates: coords,
           },
           Transfer(offscreenCanvas),
-          Transfer(array.buffer),
+          transferable as WebTransferable,
         );
       })
       .then(() => tile.appendChild(canvas))

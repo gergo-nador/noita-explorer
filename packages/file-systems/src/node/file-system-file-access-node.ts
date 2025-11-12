@@ -16,6 +16,7 @@ export const FileSystemFileAccessNode = (
     getFullPath: () => filePath,
     getName: () => parsedPath.base,
     getNameWithoutExtension: () => parsedPath.name,
+    supportsTransferable: () => undefined,
     read: {
       asText: () => nodeFileSystemHelpers.readFileAsText(filePath),
       asImageBase64: () => nodeFileSystemHelpers.readImageAsBase64(filePath),

@@ -1,7 +1,10 @@
+import { WebTransferable } from './web-transferable.ts';
+
 export interface FileSystemFileAccess {
   getFullPath: () => string;
   getName: () => string;
   getNameWithoutExtension: () => string;
+  supportsTransferable: () => WebTransferable | undefined;
   read: {
     asText: () => Promise<string>;
     asTextLines: () => Promise<string[]>;

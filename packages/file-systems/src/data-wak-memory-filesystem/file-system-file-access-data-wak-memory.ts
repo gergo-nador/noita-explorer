@@ -20,6 +20,7 @@ export const FileSystemFileAccessDataWakMemory = (
     getFullPath: () => file.path,
     getName: () => fileName,
     getNameWithoutExtension: () => extractFileNameWithoutExtension(fileName),
+    supportsTransferable: () => undefined,
     read: {
       asText: () => readAsText(),
       asBuffer: () => {

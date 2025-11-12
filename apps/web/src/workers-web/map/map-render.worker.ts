@@ -83,8 +83,17 @@ const mapRenderer: MapRenderType = {
         offScreenCanvas.height,
       );
 
+      let buffer: Buffer | undefined = undefined;
+      if (petriBuffer instanceof FileSystemFileHandle) {
+        const file = await petriBuffer.getFile();
+        const arrayBuffer = await file.arrayBuffer();
+        buffer = Buffer.from(arrayBuffer);
+      } else {
+        buffer = Buffer.from(petriBuffer);
+      }
+
       const petriContent = await scrape.save00.pngPetriFile({
-        pngPetriFile: petriBuffer,
+        pngPetriFile: buffer,
         fastLzCompressor: setupData.fastLzCompressor,
       });
 

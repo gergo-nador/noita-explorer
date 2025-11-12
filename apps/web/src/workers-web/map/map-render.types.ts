@@ -1,7 +1,6 @@
 import { ChunkBorders, NoitaBackgroundTheme } from '@noita-explorer/map';
 import { StreamInfoBackground } from '@noita-explorer/model-noita';
-import { Buffer } from 'buffer';
-import { Vector2d } from '@noita-explorer/model';
+import { Vector2d, WebTransferable } from '@noita-explorer/model';
 
 export interface MapRenderType {
   renderBiomeTile: (
@@ -19,7 +18,7 @@ export interface MapRenderType {
     },
     // has to be top level argument for transferable
     canvas: OffscreenCanvas,
-    petriFileBuffer: Buffer,
+    petriFileBuffer: WebTransferable,
   ) => Promise<void>;
   renderBackgroundTile: (
     props: {
