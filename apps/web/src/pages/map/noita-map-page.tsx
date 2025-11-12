@@ -51,21 +51,21 @@ export const NoitaMapPage = () => {
   ) {
     return (
       <Flex column gap={4}>
-        <Flex gap={8}>
+        <Flex gap={8} key='data-wak'>
           <DataWakLoader
             progress={dataWakProgress}
             dataWakBuffer={dataWakBuffer}
           />
         </Flex>
 
-        <Flex gap={8}>
+        <Flex gap={8} key='backgrounds'>
           <BackgroundsLoader
             backgrounds={backgrounds}
             isLoaded={isBackgroundsLoaded}
           />
         </Flex>
 
-        <Flex gap={8}>
+        <Flex gap={8} key='map-bounds'>
           {mapBounds ? (
             <>
               <span>Map bounds loaded</span>
@@ -75,10 +75,10 @@ export const NoitaMapPage = () => {
             <span>Calculating map bounds...</span>
           )}
         </Flex>
-        <Flex gap={8}>
+        <Flex gap={8} key='petri-files'>
           <PetriFilesLoader petriFileCollection={petriFileCollection} />
         </Flex>
-        <Flex gap={8}>
+        <Flex gap={8} key='chunk-infos'>
           {chunkInfos ? (
             <>
               <span>Chunk infos loaded</span>
@@ -88,7 +88,7 @@ export const NoitaMapPage = () => {
             <span>Loading chunk infos...</span>
           )}
         </Flex>
-        <Flex gap={8}>
+        <Flex gap={8} key='workers'>
           <WorkersLoader />
         </Flex>
       </Flex>
