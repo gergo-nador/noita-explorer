@@ -4,6 +4,7 @@ import {
   renderBiomeTile,
   renderTerrainTile,
   renderBackgroundTile,
+  parseEntityFile,
 } from '@noita-explorer/map';
 import { MapRenderType } from './map-render.types.ts';
 import {
@@ -17,6 +18,7 @@ import {
 import { scrape } from '@noita-explorer/scrapers';
 import { Buffer } from 'buffer';
 import { FileSystemDirectoryAccessDataWakMemory } from '@noita-explorer/file-systems/data-wak-memory-fs';
+import { convertWebTransferableToBuffer } from './map-render.utils.ts';
 
 let dataWakDirectory: FileSystemDirectoryAccess | undefined = undefined;
 let setupData: MapRendererSetupData | undefined = undefined;
@@ -83,14 +85,7 @@ const mapRenderer: MapRenderType = {
         offScreenCanvas.height,
       );
 
-      let buffer: Buffer | undefined = undefined;
-      if (petriBuffer instanceof FileSystemFileHandle) {
-        const file = await petriBuffer.getFile();
-        const arrayBuffer = await file.arrayBuffer();
-        buffer = Buffer.from(arrayBuffer);
-      } else {
-        buffer = Buffer.from(petriBuffer);
-      }
+      const buffer = await convertWebTransferableToBuffer(petriBuffer);
 
       const petriContent = await scrape.save00.pngPetriFile({
         pngPetriFile: buffer,
@@ -135,6 +130,21 @@ const mapRenderer: MapRenderType = {
       console.error('Error during rendering background tile', props, error);
       throw error;
     }
+  },
+  async parseEntityFile(props, entityFileBuffer) {
+    if (!dataWakDirectory || !setupData) {
+      throw new Error('[Worker] setup not done');
+    }
+
+    const buffer = await convertWebTransferableToBuffer(entityFileBuffer);
+
+    const entities = await parseEntityFile({
+      fastLzCompressor: setupData.fastLzCompressor,
+      entityBuffer: buffer,
+      schema: props.schema,
+    });
+
+    return entities;
   },
 };
 

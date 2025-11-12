@@ -1,0 +1,36 @@
+import { ChunkEntity, ChunkEntityComponent } from '@noita-explorer/model-noita';
+import {
+  ChunkRenderableEntity,
+  ChunkRenderableEntitySprite,
+} from '../../../interfaces/chunk-renderable-entity.ts';
+
+interface Props {
+  entity: ChunkEntity;
+  renderableEntity: ChunkRenderableEntity;
+  sprites: ChunkEntityComponent[];
+}
+
+export async function parseEntitySprites({
+  entity,
+  renderableEntity,
+  sprites,
+}: Props) {
+  for (const sprite of sprites) {
+    const imageFile = sprite.data?.image_file;
+    if (typeof imageFile === 'string' && imageFile.length > 0) {
+      const renderableSprite: ChunkRenderableEntitySprite = {
+        position: entity.position,
+        rotation: entity.rotation,
+        offset: {
+          x: (sprite.data.offset_x ?? 0) as number,
+          y: (sprite.data.offset_y ?? 0) as number,
+        },
+        scale: entity.scale,
+        mediaPath: imageFile,
+        isBackgroundComponent: false,
+      };
+
+      renderableEntity.sprites.push(renderableSprite);
+    }
+  }
+}

@@ -1,5 +1,12 @@
-import { ChunkBorders, NoitaBackgroundTheme } from '@noita-explorer/map';
-import { StreamInfoBackground } from '@noita-explorer/model-noita';
+import {
+  ChunkBorders,
+  ChunkRenderableEntity,
+  NoitaBackgroundTheme,
+} from '@noita-explorer/map';
+import {
+  NoitaEntitySchema,
+  StreamInfoBackground,
+} from '@noita-explorer/model-noita';
 import { Vector2d, WebTransferable } from '@noita-explorer/model';
 
 export interface MapRenderType {
@@ -28,4 +35,8 @@ export interface MapRenderType {
     // has to be top level argument for transferable
     canvas: OffscreenCanvas,
   ) => Promise<void>;
+  parseEntityFile: (
+    props: { schema: NoitaEntitySchema },
+    entityFileBuffer: WebTransferable,
+  ) => Promise<{ entities: ChunkRenderableEntity[] }>;
 }

@@ -1,7 +1,7 @@
-import { Vector2d } from '@noita-explorer/model';
+/*import { Vector2d } from '@noita-explorer/model';
 import { renderTileRenderable } from '../utils/render-tile-renderable.ts';
 import { ChunkRenderable } from '../interfaces/chunk-renderable.ts';
-import { ChunkRenderableEntity } from './chunk-renderable-entity.ts';
+import { ChunkRenderableEntity } from '../interfaces/chunk-renderable-entity.ts';
 
 interface Props {
   entities: ChunkRenderableEntity[];
@@ -45,3 +45,4 @@ export function renderChunkEntities({
     }
   }
 }
+*/
