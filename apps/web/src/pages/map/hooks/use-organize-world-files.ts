@@ -4,7 +4,6 @@ import { useSave00Store } from '../../../stores/save00.ts';
 import {
   ChunkInfoCollection,
   MapBounds,
-  NoitaEntityFileCollection,
   NoitaPetriFileCollection,
 } from '../noita-map.types.ts';
 import { useCurrentRunService } from '../../../services/current-run/use-current-run-service.ts';
@@ -15,8 +14,6 @@ export const useOrganizeWorldFiles = () => {
 
   const [petriFileCollection, setPetriFileCollection] =
     useState<NoitaPetriFileCollection>({});
-  const [entityFileCollection, setEntityFileCollection] =
-    useState<NoitaEntityFileCollection>({});
   const [chunkInfos, setChunkInfos] = useState<ChunkInfoCollection>({});
   const [mapBounds, setMapBounds] = useState<MapBounds | undefined>();
 
@@ -74,6 +71,7 @@ export const useOrganizeWorldFiles = () => {
         setMapBounds(bounds);
 
         // entity files
+        /*
         const entityFiles = files
           .filter(
             (file) =>
@@ -87,16 +85,7 @@ export const useOrganizeWorldFiles = () => {
             }
 
             return { num, file };
-          });
-
-        const entityFileCollection: NoitaEntityFileCollection = {};
-        for (const file of entityFiles) {
-          if (!file) continue;
-
-          const num = file.num;
-          entityFileCollection[num] = file.file;
-        }
-        setEntityFileCollection(entityFileCollection);
+          });*/
 
         // chunk infos
         const chunkInfos: ChunkInfoCollection = {};
@@ -116,7 +105,6 @@ export const useOrganizeWorldFiles = () => {
 
   return {
     petriFileCollection,
-    entityFileCollection,
     mapBounds,
     chunkInfos,
   };
@@ -148,7 +136,7 @@ function extractDoubleFileNumbers(inputString: string) {
  * @param {string} inputString The string to extract the number from.
  * @returns {number|null} The number
  */
-function extractSingularFileNumber(inputString: string) {
+/*function extractSingularFileNumber(inputString: string) {
   const regex = /_(-?\d+)/;
 
   const match = inputString.match(regex);
@@ -160,3 +148,4 @@ function extractSingularFileNumber(inputString: string) {
 
   return undefined;
 }
+*/

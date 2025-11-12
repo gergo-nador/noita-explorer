@@ -1,12 +1,8 @@
-import { StreamInfoFileFormat } from '@noita-explorer/model-noita';
 import { useMap } from 'react-leaflet';
 import { useEffect, useRef } from 'react';
 import L from 'leaflet';
 import { TerrainLayer } from './terrain-layer.ts';
-import {
-  NoitaEntityFileCollection,
-  NoitaPetriFileCollection,
-} from '../../noita-map.types.ts';
+import { NoitaPetriFileCollection } from '../../noita-map.types.ts';
 import { useThreadsPool } from '../../map-renderer-threads/use-threads-pool.ts';
 import { useMapPane } from '../../hooks/use-map-pane.ts';
 import {
@@ -18,15 +14,11 @@ import {
 
 interface Props {
   petriFiles: NoitaPetriFileCollection;
-  entityFiles: NoitaEntityFileCollection;
-  streamInfo: StreamInfoFileFormat;
   redrawCounter: number;
 }
 
 export function NoitaMapTerrainLayerWrapper({
   petriFiles,
-  entityFiles,
-  streamInfo,
   redrawCounter,
 }: Props) {
   const map = useMap();
@@ -47,8 +39,6 @@ export function NoitaMapTerrainLayerWrapper({
         ...defaultLayerMiscSettings,
 
         petriFiles,
-        entityFiles,
-        streamInfo,
         renderPool: threadsPool?.pool,
       });
 
@@ -63,15 +53,7 @@ export function NoitaMapTerrainLayerWrapper({
         layerRef.current = null;
       }
     };
-  }, [
-    map,
-    petriFiles,
-    entityFiles,
-    streamInfo,
-    pane.name,
-    threadsPool?.pool,
-    threadsPool?.isLoaded,
-  ]);
+  }, [map, petriFiles, pane.name, threadsPool?.pool, threadsPool?.isLoaded]);
 
   useEffect(() => {
     if (!layerRef.current) return;

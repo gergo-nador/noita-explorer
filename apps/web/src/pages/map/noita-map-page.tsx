@@ -1,29 +1,36 @@
 import { NoitaMapContainer } from './noita-map-container.tsx';
 import { useDataWakLoader } from './hooks/use-data-wak-loader.ts';
 import 'leaflet-edgebuffer';
-import {
-  BooleanIcon,
-  ProgressBar,
-} from '@noita-explorer/noita-component-library';
+import { BooleanIcon } from '@noita-explorer/noita-component-library';
 import { Flex } from '@noita-explorer/react-utils';
 import { useOrganizeBackgroundImages } from './hooks/use-organize-background-images.ts';
 import { useDataWakService } from '../../services/data-wak/use-data-wak-service.ts';
 import { useOrganizeWorldFiles } from './hooks/use-organize-world-files.ts';
 import { useSettingsStore } from '../../stores/settings.ts';
 import { MapInitialPopup } from './components/map-initial-popup.tsx';
+import { useThreadsPool } from './map-renderer-threads/use-threads-pool.ts';
+import { DataWakLoader } from './components/loaders/data-wak-loader.tsx';
+import { BackgroundsLoader } from './components/loaders/backgrounds-loader.tsx';
+import { PetriFilesLoader } from './components/loaders/petri-files-loader.tsx';
+import { WorkersLoader } from './components/loaders/workers-loader.tsx';
 
 export const NoitaMapPage = () => {
   const { data } = useDataWakService();
   const { settings } = useSettingsStore();
 
+  const { init: initThreadsPool, isLoaded: isThreadsPoolLoaded } =
+    useThreadsPool();
   const {
     isError: isDataWakError,
     progress: dataWakProgress,
     dataWakBuffer,
-  } = useDataWakLoader();
+  } = useDataWakLoader({
+    onLoaded: (dataWakBuffer) => initThreadsPool(dataWakBuffer),
+  });
+
   const { backgrounds, isLoaded: isBackgroundsLoaded } =
     useOrganizeBackgroundImages({ dataWakBuffer });
-  const { petriFileCollection, entityFileCollection, mapBounds, chunkInfos } =
+  const { petriFileCollection, mapBounds, chunkInfos } =
     useOrganizeWorldFiles();
 
   if (!settings.map.initialPopupSeen) {
@@ -39,39 +46,23 @@ export const NoitaMapPage = () => {
     !isBackgroundsLoaded ||
     !mapBounds ||
     !petriFileCollection ||
-    !chunkInfos
+    !chunkInfos ||
+    !isThreadsPoolLoaded
   ) {
     return (
       <Flex column gap={4}>
         <Flex gap={8}>
-          {dataWakBuffer ? (
-            <>
-              <span>Assets loaded</span>
-              <BooleanIcon value={true} />
-            </>
-          ) : (
-            <Flex gap={10}>
-              <span>Loading game assets...</span>
-              {dataWakProgress !== undefined && (
-                <ProgressBar
-                  progress={dataWakProgress}
-                  barColor='healthBar'
-                  width={250}
-                />
-              )}
-            </Flex>
-          )}
+          <DataWakLoader
+            progress={dataWakProgress}
+            dataWakBuffer={dataWakBuffer}
+          />
         </Flex>
 
         <Flex gap={8}>
-          {isBackgroundsLoaded ? (
-            <>
-              <span>Backgrounds loaded</span>
-              <BooleanIcon value={true} />
-            </>
-          ) : (
-            <span>Loading backgrounds...</span>
-          )}
+          <BackgroundsLoader
+            backgrounds={backgrounds}
+            isLoaded={isBackgroundsLoaded}
+          />
         </Flex>
 
         <Flex gap={8}>
@@ -85,14 +76,7 @@ export const NoitaMapPage = () => {
           )}
         </Flex>
         <Flex gap={8}>
-          {petriFileCollection ? (
-            <>
-              <span>Petri files loaded</span>
-              <BooleanIcon value={true} />
-            </>
-          ) : (
-            <span>Loading petri files...</span>
-          )}
+          <PetriFilesLoader petriFileCollection={petriFileCollection} />
         </Flex>
         <Flex gap={8}>
           {chunkInfos ? (
@@ -104,6 +88,9 @@ export const NoitaMapPage = () => {
             <span>Loading chunk infos...</span>
           )}
         </Flex>
+        <Flex gap={8}>
+          <WorkersLoader />
+        </Flex>
       </Flex>
     );
   }
@@ -112,9 +99,7 @@ export const NoitaMapPage = () => {
     <NoitaMapContainer
       biomes={data.biomes}
       backgrounds={backgrounds}
-      dataWakBuffer={dataWakBuffer}
       petriFileCollection={petriFileCollection}
-      entityFileCollection={entityFileCollection}
       mapBounds={mapBounds}
       chunkInfos={chunkInfos}
     />
