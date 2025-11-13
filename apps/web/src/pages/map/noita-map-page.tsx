@@ -14,6 +14,7 @@ import { BackgroundsLoader } from './components/loaders/backgrounds-loader.tsx';
 import { PetriFilesLoader } from './components/loaders/petri-files-loader.tsx';
 import { WorkersLoader } from './components/loaders/workers-loader.tsx';
 import { useEntityLoader } from './hooks/use-entity-loader.ts';
+import { EntitiesLoader } from './components/loaders/entities-loader.tsx';
 
 export const NoitaMapPage = () => {
   const { data } = useDataWakService();
@@ -33,7 +34,11 @@ export const NoitaMapPage = () => {
     useOrganizeBackgroundImages();
   const { petriFileCollection, mapBounds, chunkInfos } =
     useOrganizeWorldFiles();
-  const {} = useEntityLoader();
+  const {
+    total: totalEntityFiles,
+    processed: processedEntityFiles,
+    error: entityError,
+  } = useEntityLoader();
 
   if (!settings.map.initialPopupSeen) {
     return <MapInitialPopup />;
@@ -49,7 +54,8 @@ export const NoitaMapPage = () => {
     !mapBounds ||
     !petriFileCollection ||
     !chunkInfos ||
-    !isThreadsPoolLoaded
+    !isThreadsPoolLoaded ||
+    totalEntityFiles !== processedEntityFiles
   ) {
     return (
       <Flex column gap={4}>
@@ -92,6 +98,13 @@ export const NoitaMapPage = () => {
         </Flex>
         <Flex gap={8} key='workers'>
           <WorkersLoader />
+        </Flex>
+        <Flex gap={8} key='entities'>
+          <EntitiesLoader
+            total={totalEntityFiles}
+            processed={processedEntityFiles}
+            error={entityError}
+          />
         </Flex>
       </Flex>
     );

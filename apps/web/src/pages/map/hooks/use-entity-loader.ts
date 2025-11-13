@@ -51,7 +51,7 @@ export const useEntityLoader = () => {
 
         const allProcessedEntities: ChunkRenderableEntity[][] = [];
 
-        for (const file of entityFiles) {
+        const result = entityFiles.map(async (file) => {
           const parsedEntities: ChunkRenderableEntity[] = await pool
             .queue(async (worker: MapRendererWorker) => {
               const entityFile = await convertFileToWebTransferable(file);
@@ -68,7 +68,9 @@ export const useEntityLoader = () => {
 
           allProcessedEntities.push(parsedEntities);
           setState((state) => ({ ...state, processed: state.processed + 1 }));
-        }
+        });
+
+        await Promise.all(result);
 
         const allEntities = allProcessedEntities
           .flat()
