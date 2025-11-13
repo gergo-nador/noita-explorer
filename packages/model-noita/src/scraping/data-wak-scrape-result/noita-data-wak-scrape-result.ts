@@ -1,5 +1,5 @@
 import { NoitaDataWakScrapeResultPart } from './noita-data-wak-scrape-result-part.ts';
-import { StringKeyDictionary } from '@noita-explorer/model';
+import { ImagePngDimension, StringKeyDictionary } from '@noita-explorer/model';
 import { NoitaTranslation } from '../noita-translation.ts';
 import { NoitaMaterialReaction } from '../../common/noita-material-reaction.ts';
 import { NoitaScrapedEnemy } from '../data-wak/noita-scraped-enemy.ts';
@@ -30,4 +30,7 @@ export interface NoitaDataWakScrapeResult {
   materials: NoitaDataWakScrapeResultPart<NoitaScrapedMaterial[]>;
   materialReactions: NoitaDataWakScrapeResultPart<NoitaMaterialReaction[]>;
   biomes: NoitaDataWakScrapeResultPart<NoitaWakBiomes>;
+  mediaDimensions: NoitaDataWakScrapeResultPart<
+    StringKeyDictionary<ImagePngDimension>
+  >;
 }

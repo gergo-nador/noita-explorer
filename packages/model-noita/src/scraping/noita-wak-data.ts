@@ -1,7 +1,7 @@
 import { NoitaPerk } from '../common/noita-perk.ts';
 import { NoitaSpell } from '../common/spell/noita-spell.ts';
 import { NoitaTranslation } from './noita-translation.ts';
-import { StringKeyDictionary } from '@noita-explorer/model';
+import { ImagePngDimension, StringKeyDictionary } from '@noita-explorer/model';
 import { NoitaWandConfig } from '../common/wand/noita-wand-config.ts';
 import { NoitaMaterial } from '../common/noita-material.ts';
 import { NoitaMaterialReaction } from '../common/noita-material-reaction.ts';
@@ -21,4 +21,5 @@ export interface NoitaWakData {
   materials: NoitaMaterial[];
   materialReactions: NoitaMaterialReaction[];
   biomes: NoitaWakBiomes;
+  mediaDimensions: StringKeyDictionary<ImagePngDimension>;
 }

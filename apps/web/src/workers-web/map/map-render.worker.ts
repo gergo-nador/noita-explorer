@@ -142,6 +142,7 @@ const mapRenderer: MapRenderType = {
       fastLzCompressor: setupData.fastLzCompressor,
       entityBuffer: buffer,
       schema: props.schema,
+      mediaDimensions: setupData.mediaDimensions,
     });
 
     return entities;

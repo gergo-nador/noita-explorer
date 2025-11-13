@@ -10,7 +10,7 @@ interface Props<T> {
   }[];
 }
 
-export function organizeFilesInto2dChunks<T>({ items }: Props<T>) {
+export function organizeItemsInto2dChunks<T>({ items }: Props<T>) {
   const storage: Map2dOrganizedObject<T[]> = {};
 
   for (const item of items) {

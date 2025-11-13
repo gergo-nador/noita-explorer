@@ -2,19 +2,14 @@ import {
   StreamInfoBackground,
   StreamInfoFileFormat,
 } from '@noita-explorer/model-noita';
-import { FileSystemDirectoryAccessDataWakMemory } from '@noita-explorer/file-systems/data-wak-memory-fs';
-import { scrape } from '@noita-explorer/scrapers';
 import { useEffect, useState } from 'react';
-import { Buffer } from 'buffer';
 import { useCurrentRunService } from '../../../services/current-run/use-current-run-service.ts';
 import { Map2dOrganizedObject } from '../noita-map.types.ts';
-import { organizeFilesInto2dChunks } from '../utils/organize-files-into-2d-chunks.ts';
+import { organizeItemsInto2dChunks } from '../utils/organize-items-into-2d-chunks.ts';
+import { useDataWakService } from '../../../services/data-wak/use-data-wak-service.ts';
 
-interface Props {
-  dataWakBuffer: Buffer | undefined;
-}
-
-export const useOrganizeBackgroundImages = ({ dataWakBuffer }: Props) => {
+export const useOrganizeBackgroundImages = () => {
+  const { data } = useDataWakService();
   const { streamInfo } = useCurrentRunService();
   const [backgrounds, setBackgrounds] = useState<
     Map2dOrganizedObject<StreamInfoBackground[]>
@@ -22,17 +17,10 @@ export const useOrganizeBackgroundImages = ({ dataWakBuffer }: Props) => {
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
   useEffect(() => {
-    if (!dataWakBuffer || !streamInfo) return;
+    if (!streamInfo) return;
 
-    async function load(
-      dataWakBuffer: Buffer,
-      streamInfo: StreamInfoFileFormat,
-    ) {
-      const dataWakFs = FileSystemDirectoryAccessDataWakMemory(dataWakBuffer);
-      const imgDimensions = await scrape.dataWak.imageDimensions({
-        dataWakParentDirectoryApi: dataWakFs,
-      });
-
+    async function load(streamInfo: StreamInfoFileFormat) {
+      const imgDimensions = data.mediaDimensions;
       const backgrounds = streamInfo.backgrounds;
 
       const availableBackgrounds = backgrounds
@@ -49,7 +37,7 @@ export const useOrganizeBackgroundImages = ({ dataWakBuffer }: Props) => {
           y: bg.background.position.y,
         }));
 
-      const chunkOrganized = organizeFilesInto2dChunks({
+      const chunkOrganized = organizeItemsInto2dChunks({
         items: availableBackgrounds,
       });
 
@@ -57,8 +45,8 @@ export const useOrganizeBackgroundImages = ({ dataWakBuffer }: Props) => {
       setBackgrounds(chunkOrganized);
     }
 
-    void load(dataWakBuffer, streamInfo);
-  }, [streamInfo, dataWakBuffer]);
+    void load(streamInfo);
+  }, [data.mediaDimensions, streamInfo]);
 
   return { backgrounds, isLoaded };
 };

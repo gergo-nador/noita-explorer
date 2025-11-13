@@ -16,6 +16,7 @@ import {
 import {
   FileSystemDirectoryAccess,
   FileSystemFileAccess,
+  ImagePngDimension,
   StringKeyDictionary,
 } from '@noita-explorer/model';
 import { scrape } from './main.ts';
@@ -60,6 +61,7 @@ export const scrapeDataWak = async ({
       materials: statusSkipped,
       materialReactions: statusSkipped,
       biomes: statusSkipped,
+      mediaDimensions: statusSkipped,
     };
   }
 
@@ -171,6 +173,16 @@ export const scrapeDataWakContent = async ({
     biomesError = err;
   }
 
+  let mediaDimensions: StringKeyDictionary<ImagePngDimension> = {};
+  let mediaDimensionsError: unknown | undefined = undefined;
+  try {
+    mediaDimensions = await scrape.dataWak.imageDimensions({
+      dataWakParentDirectoryApi: dataWakParentDirectory,
+    });
+  } catch (err) {
+    mediaDimensionsError = err;
+  }
+
   return {
     translations: {
       status: NoitaDataWakScrapeResultStatus.SUCCESS,
@@ -249,6 +261,15 @@ export const scrapeDataWakContent = async ({
           : NoitaDataWakScrapeResultStatus.FAILED,
       data: biomes,
       error: biomesError,
+    },
+    mediaDimensions: {
+      status:
+        mediaDimensionsError === undefined &&
+        Object.keys(mediaDimensions).length !== 0
+          ? NoitaDataWakScrapeResultStatus.SUCCESS
+          : NoitaDataWakScrapeResultStatus.FAILED,
+      data: mediaDimensions,
+      error: mediaDimensionsError,
     },
   };
 };

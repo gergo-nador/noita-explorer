@@ -13,6 +13,7 @@ import { DataWakLoader } from './components/loaders/data-wak-loader.tsx';
 import { BackgroundsLoader } from './components/loaders/backgrounds-loader.tsx';
 import { PetriFilesLoader } from './components/loaders/petri-files-loader.tsx';
 import { WorkersLoader } from './components/loaders/workers-loader.tsx';
+import { useEntityLoader } from './hooks/use-entity-loader.ts';
 
 export const NoitaMapPage = () => {
   const { data } = useDataWakService();
@@ -29,9 +30,10 @@ export const NoitaMapPage = () => {
   });
 
   const { backgrounds, isLoaded: isBackgroundsLoaded } =
-    useOrganizeBackgroundImages({ dataWakBuffer });
+    useOrganizeBackgroundImages();
   const { petriFileCollection, mapBounds, chunkInfos } =
     useOrganizeWorldFiles();
+  const {} = useEntityLoader();
 
   if (!settings.map.initialPopupSeen) {
     return <MapInitialPopup />;

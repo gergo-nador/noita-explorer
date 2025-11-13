@@ -1,6 +1,7 @@
 import { arrayHelpers } from '@noita-explorer/tools';
 import {
   FileSystemDirectoryAccess,
+  ImagePngDimension,
   StringKeyDictionary,
 } from '@noita-explorer/model';
 import { fetchDataWak } from '../../utils/browser-noita-api/fetch-data-wak.ts';
@@ -19,6 +20,7 @@ export interface MapRendererSetupData {
   materialColorCache: StringKeyDictionary<ImageData>;
   fastLzCompressor: FastLZCompressor;
   biomes: NoitaWakBiomes;
+  mediaDimensions: StringKeyDictionary<ImagePngDimension>;
 }
 
 export async function mapRendererSetup({
@@ -63,6 +65,7 @@ export async function mapRendererSetup({
     materialColorCache,
     fastLzCompressor,
     biomes: noitaDataWak.biomes,
+    mediaDimensions: noitaDataWak.mediaDimensions,
   };
 }
 

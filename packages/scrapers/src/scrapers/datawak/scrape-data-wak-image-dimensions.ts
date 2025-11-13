@@ -3,6 +3,7 @@ import {
   ImagePngDimension,
 } from '@noita-explorer/model';
 import { createBufferReader, stringHelpers } from '@noita-explorer/tools';
+import { parseXml, XmlWrapper } from '@noita-explorer/tools/xml';
 
 interface Props {
   dataWakParentDirectoryApi: FileSystemDirectoryAccess;
@@ -22,8 +23,8 @@ export async function scrapeDataWakImageDimensions({
     const subDirs = await currentDir.listDirectories();
     dirQueue = dirQueue.concat(subDirs);
 
-    // check file sizes
     const files = await currentDir.listFiles();
+    // check for png files
     const pngFiles = files.filter((f) => f.getName().endsWith('.png'));
 
     for (const pngFile of pngFiles) {
@@ -37,6 +38,59 @@ export async function scrapeDataWakImageDimensions({
       try {
         const pngHeader = bufferReader.readPngHeader();
         imgDimensionsTemp[path] = pngHeader;
+      } catch {
+        // do nothing
+      }
+    }
+
+    // check for xml sprite files
+    const xmlFiles = files.filter((f) => f.getName().endsWith('.xml'));
+
+    for (const file of xmlFiles) {
+      try {
+        const xmlText = await file.read.asText();
+        const parsedXml = await parseXml(xmlText);
+        const xml = XmlWrapper(parsedXml);
+
+        const sprite = xml.findNthTag('Sprite');
+        if (!sprite) continue;
+
+        let width: number | undefined = undefined;
+        let height: number | undefined = undefined;
+
+        const rectAnimation = sprite.findNthTag('RectAnimation');
+        if (rectAnimation) {
+          width = rectAnimation.getAttribute('frame_width')?.asInt();
+          height = rectAnimation.getAttribute('frame_height')?.asInt();
+        } else {
+          // if there is no RectAnimation tag in sprite, the dimensions are the same as the image
+          const imgFileName = sprite.getRequiredAttribute('filename').asText();
+          const imgFile = await dataWakParentDirectoryApi.getFile(imgFileName);
+          if (!imgFile) {
+            continue;
+          }
+
+          const imgBuffer = await imgFile.read.asBuffer();
+          const bufferReader = createBufferReader(imgBuffer);
+          const dimensions = bufferReader.readPngHeader();
+
+          width = dimensions.width;
+          height = dimensions.height;
+        }
+
+        if (!width || !height) {
+          continue;
+        }
+
+        const path = stringHelpers.trim({
+          text: file.getFullPath(),
+          fromStart: dataWakParentDirectoryApi.getFullPath() + '/',
+        });
+
+        imgDimensionsTemp[path] = {
+          width,
+          height,
+        };
       } catch {
         // do nothing
       }

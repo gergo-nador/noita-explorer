@@ -70,23 +70,6 @@ export const useOrganizeWorldFiles = () => {
         setPetriFileCollection(petriFileCollection);
         setMapBounds(bounds);
 
-        // entity files
-        /*
-        const entityFiles = files
-          .filter(
-            (file) =>
-              file.getName().startsWith('entities_') &&
-              file.getName().endsWith('.bin'),
-          )
-          .map((file) => {
-            const num = extractSingularFileNumber(file.getName());
-            if (num === undefined) {
-              return undefined;
-            }
-
-            return { num, file };
-          });*/
-
         // chunk infos
         const chunkInfos: ChunkInfoCollection = {};
         for (const streamInfoChunkInfo of streamInfo.chunkInfo) {
@@ -129,23 +112,3 @@ function extractDoubleFileNumbers(inputString: string) {
 
   return undefined;
 }
-
-/**
- * Extracts one number from a string with the format 'entity_NUM1.bin'.
- *
- * @param {string} inputString The string to extract the number from.
- * @returns {number|null} The number
- */
-/*function extractSingularFileNumber(inputString: string) {
-  const regex = /_(-?\d+)/;
-
-  const match = inputString.match(regex);
-
-  if (match) {
-    const num1 = parseInt(match[1], 10);
-    return num1;
-  }
-
-  return undefined;
-}
-*/
