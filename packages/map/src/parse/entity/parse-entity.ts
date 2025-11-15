@@ -8,6 +8,7 @@ import { arrayHelpers } from '@noita-explorer/tools';
 import { parseEntityPixelSprites } from './sprites/parse-entity-pixel-sprites.ts';
 import { parseEntitySprites } from './sprites/parse-entity-sprites.ts';
 import { StringKeyDictionary } from '@noita-explorer/model';
+import { parseEntityPhysicsImageShapeComponent } from './sprites/parse-entity-physics-image-shape-component.ts';
 
 interface Props {
   entity: ChunkEntity;
@@ -34,7 +35,7 @@ export async function parseEntity({
 
   if ('PixelSpriteComponent' in components) {
     const pixelSprites = components['PixelSpriteComponent'];
-    await parseEntityPixelSprites({
+    parseEntityPixelSprites({
       entity,
       pixelSprites,
       renderableEntity,
@@ -43,13 +44,24 @@ export async function parseEntity({
   }
   if ('SpriteComponent' in components) {
     const sprites = components['SpriteComponent'];
-    await parseEntitySprites({
+    parseEntitySprites({
       sprites,
       entity,
       renderableEntity,
       mediaIndex,
     });
   }
+  if ('PhysicsImageShapeComponent' in components) {
+    const imageShapeComponents = components['PhysicsImageShapeComponent'];
+    parseEntityPhysicsImageShapeComponent({
+      components: imageShapeComponents,
+      renderableEntity,
+      mediaIndex,
+      entity,
+    });
+  }
+
+  //if (renderableEntity.sprites.length === 0) debugger;
 
   return renderableEntity;
 }

@@ -17,13 +17,15 @@ interface Props {
   mediaIndex: StringKeyDictionary<DataWakMediaIndex>;
 }
 
-export async function parseEntityPixelSprites({
+export function parseEntityPixelSprites({
   entity,
   renderableEntity,
   pixelSprites,
   mediaIndex,
 }: Props) {
   for (const pixelSprite of pixelSprites) {
+    if (!pixelSprite.enabled) continue;
+
     let imageFile = pixelSprite.data?.image_file as string | undefined;
 
     const offset: Vector2d = {

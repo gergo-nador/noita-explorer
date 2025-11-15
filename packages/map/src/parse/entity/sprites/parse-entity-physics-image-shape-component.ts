@@ -7,55 +7,49 @@ import {
   ChunkRenderableEntity,
   ChunkRenderableEntitySprite,
 } from '../../../interfaces/chunk-renderable-entity.ts';
-import { StringKeyDictionary } from '@noita-explorer/model';
+import { StringKeyDictionary, Vector2d } from '@noita-explorer/model';
 import { subtractRotatedVector } from '../../../utils/subtract-rotated-vector.ts';
 
 interface Props {
   entity: ChunkEntity;
   renderableEntity: ChunkRenderableEntity;
-  sprites: ChunkEntityComponent[];
+  components: ChunkEntityComponent[];
   mediaIndex: StringKeyDictionary<DataWakMediaIndex>;
 }
 
-export function parseEntitySprites({
+export function parseEntityPhysicsImageShapeComponent({
   entity,
-  renderableEntity,
-  sprites,
   mediaIndex,
+  components,
+  renderableEntity,
 }: Props) {
-  for (const sprite of sprites) {
-    if (!sprite.enabled) continue;
+  for (const component of components) {
+    const imageFile = component.data.image_file as string | undefined;
 
-    const imageFile = sprite.data?.image_file;
-    if (typeof imageFile === 'string' && imageFile.length > 0) {
+    if (imageFile) {
       const mediaDimension = mediaIndex[imageFile];
       if (!mediaDimension) continue;
 
-      const offset = {
-        x: (sprite.data.offset_x ?? 0) as number,
-        y: (sprite.data.offset_y ?? 0) as number,
+      const offset: Vector2d = {
+        x: (component.data.offset_x ?? 0) as number,
+        y: (component.data.offset_y ?? 0) as number,
       };
 
-      if (offset.x === 0 && mediaDimension.offset?.x)
-        offset.x += mediaDimension.offset.x;
-      if (offset.y === 0 && mediaDimension.offset?.y)
-        offset.y += mediaDimension.offset.y;
-
-      const renderableSprite: ChunkRenderableEntitySprite = {
+      const sprite: ChunkRenderableEntitySprite = {
         position: subtractRotatedVector(
           entity.position,
           offset,
           entity.rotation,
         ),
         rotation: entity.rotation,
-        size: { x: mediaDimension.size.width, y: mediaDimension.size.height },
         offset: offset,
+        size: { x: mediaDimension.size.width, y: mediaDimension.size.height },
         scale: entity.scale,
         mediaPath: imageFile,
         isBackgroundComponent: false,
       };
 
-      renderableEntity.sprites.push(renderableSprite);
+      renderableEntity.sprites.push(sprite);
     }
   }
 }
