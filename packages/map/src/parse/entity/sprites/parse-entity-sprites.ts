@@ -8,6 +8,7 @@ import {
   ChunkRenderableEntitySprite,
 } from '../../../interfaces/chunk-renderable-entity.ts';
 import { StringKeyDictionary } from '@noita-explorer/model';
+import { subtractRotatedVector } from '../../../utils/subtract-rotated-vector.ts';
 
 interface Props {
   entity: ChunkEntity;
@@ -41,10 +42,11 @@ export async function parseEntitySprites({
         offset.y += mediaDimension.offset.y;
 
       const renderableSprite: ChunkRenderableEntitySprite = {
-        position: {
-          x: entity.position.x - offset.x,
-          y: entity.position.y - offset.y,
-        },
+        position: subtractRotatedVector(
+          entity.position,
+          offset,
+          entity.rotation,
+        ),
         rotation: entity.rotation,
         size: { x: mediaDimension.size.width, y: mediaDimension.size.height },
         offset: offset,
