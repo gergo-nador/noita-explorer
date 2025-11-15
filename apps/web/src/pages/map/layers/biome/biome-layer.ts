@@ -31,11 +31,6 @@ export const BiomeLayer = L.GridLayer.extend({
     canvas.width = mapConstants.chunkWidth;
     canvas.height = mapConstants.chunkHeight;
 
-    const chunkLeftBorderX = coords.x * mapConstants.chunkWidth;
-    const chunkRightBorderX = (coords.x + 1) * mapConstants.chunkWidth;
-    const chunkTopBorderY = coords.y * mapConstants.chunkHeight;
-    const chunkBottomBorderY = (coords.y + 1) * mapConstants.chunkHeight;
-
     const allBackgrounds: Record<
       number,
       Record<number, StreamInfoBackground[]>
@@ -53,12 +48,6 @@ export const BiomeLayer = L.GridLayer.extend({
           {
             tileCoords: coords,
             backgrounds: currentBackgrounds,
-            chunkBorders: {
-              leftX: chunkLeftBorderX,
-              rightX: chunkRightBorderX,
-              topY: chunkTopBorderY,
-              bottomY: chunkBottomBorderY,
-            },
           },
           Transfer(offscreenCanvas),
         )

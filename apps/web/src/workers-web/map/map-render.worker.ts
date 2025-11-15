@@ -57,7 +57,6 @@ const mapRenderer: MapRenderType = {
     try {
       await renderBiomeTile({
         ctx,
-        chunkBorders: props.chunkBorders,
         backgroundItems: props.backgrounds,
         biomeCoords: props.tileCoords,
         biomes: setupData.biomes,

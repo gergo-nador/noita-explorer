@@ -1,5 +1,4 @@
 import {
-  ChunkBorders,
   ChunkRenderableEntity,
   ChunkRenderableEntitySprite,
   NoitaBackgroundTheme,
@@ -13,7 +12,6 @@ import { Vector2d, WebTransferable } from '@noita-explorer/model';
 export interface MapRenderType {
   renderBiomeTile: (
     props: {
-      chunkBorders: ChunkBorders;
       backgrounds: StreamInfoBackground[];
       tileCoords: Vector2d;
     },

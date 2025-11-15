@@ -3,7 +3,6 @@ import {
   StreamInfoBackground,
 } from '@noita-explorer/model-noita';
 import { CAVE_LIMIT_Y, mapConstants } from '../../map-constants.ts';
-import { ChunkBorders } from '../../interfaces/chunk-borders.ts';
 import { FileSystemDirectoryAccess, Vector2d } from '@noita-explorer/model';
 import { createNoitaWakBiomesHelper } from './noita-wak-biomes-helper.ts';
 import { renderObjectOntoTile } from '../../utils/render-object-onto-tile.ts';
@@ -13,7 +12,6 @@ interface Props {
   backgroundItems: StreamInfoBackground[];
   biomeCoords: Vector2d;
   ctx: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D;
-  chunkBorders: ChunkBorders;
   biomes: NoitaWakBiomes;
   dataWakDirectory: FileSystemDirectoryAccess;
 }
@@ -22,7 +20,6 @@ export async function renderBiomeTile({
   ctx,
   biomeCoords,
   backgroundItems,
-  chunkBorders,
   biomes,
   dataWakDirectory,
 }: Props) {
@@ -30,6 +27,13 @@ export async function renderBiomeTile({
   const biome = biomeHelpers.getBiome(biomeCoords);
 
   const bgImagePath = biome.bgImagePath;
+
+  const chunkBorders = {
+    leftX: biomeCoords.x * mapConstants.chunkWidth,
+    rightX: (biomeCoords.x + 1) * mapConstants.chunkWidth,
+    topY: biomeCoords.y * mapConstants.chunkHeight,
+    bottomY: (biomeCoords.y + 1) * mapConstants.chunkHeight,
+  };
 
   if (bgImagePath) {
     const img = await getDataWakImage({
