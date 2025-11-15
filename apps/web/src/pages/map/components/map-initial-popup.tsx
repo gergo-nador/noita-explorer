@@ -16,8 +16,7 @@ export const MapInitialPopup = () => {
       <br />
       <div>
         The Map is still in Beta, we are still fixing issues, improving
-        performance, and adding new features, such as entities (enemies and
-        others).
+        performance, and adding new features.
       </div>
       <br />
       <div>

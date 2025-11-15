@@ -47,6 +47,7 @@ export * from "./common/wand/noita-wand-spell";
 export * from "./common/wand/noita-wand";
 export * from "./scraping/noita-translation";
 export * from "./scraping/noita-wak-data";
+export * from "./scraping/data-wak/data-wak-media-index";
 export * from "./scraping/data-wak/noita-scraped-enemy";
 export * from "./scraping/data-wak/noita-scraped-gif";
 export * from "./scraping/data-wak/noita-scraped-material";

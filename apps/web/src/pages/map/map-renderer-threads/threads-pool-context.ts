@@ -1,5 +1,6 @@
 import { createContext } from 'react';
 import { MapRendererPool } from './threads-pool.types.ts';
+import { Buffer } from 'buffer';
 
 export interface WorkerStatus {
   id: number;
@@ -7,8 +8,9 @@ export interface WorkerStatus {
 }
 
 interface Props {
-  pool: MapRendererPool;
+  pool: MapRendererPool | undefined;
   status: Record<number, WorkerStatus>;
   isLoaded: boolean;
+  init: (dataWakBuffer: Buffer) => void;
 }
-export const ThreadsPoolContext = createContext<Props | undefined>(undefined);
+export const ThreadsPoolContext = createContext<Props>({} as Props);

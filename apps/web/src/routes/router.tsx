@@ -39,6 +39,7 @@ import { DataWakServiceProvider } from '../services/data-wak/data-wak-service.pr
 import { CurrentRunServiceProvider } from '../services/current-run/current-run-service.provider.tsx';
 import { Save00ServiceProvider } from '../services/save00/save00-service.provider.tsx';
 import { NoitaDeathMap } from '../pages/death-map/noita-death-map.tsx';
+import { ThreadsPoolContextProvider } from '../pages/map/map-renderer-threads/threads-pool-context-provider.tsx';
 
 export const routes: NoitaRouteObject[] = [
   {
@@ -423,7 +424,9 @@ export const routes: NoitaRouteObject[] = [
             <CardPageTemplate returnPath={pages.main}>
               <DataWakServiceProvider>
                 <CurrentRunServiceProvider>
-                  <NoitaMapPage />
+                  <ThreadsPoolContextProvider>
+                    <NoitaMapPage />
+                  </ThreadsPoolContextProvider>
                 </CurrentRunServiceProvider>
               </DataWakServiceProvider>
             </CardPageTemplate>

@@ -31,7 +31,9 @@ let xmlHttpRequestServiceInstance: {
 /**
  * Downloads the data.wak file as an array buffer
  */
-export const useDataWakLoader = () => {
+export const useDataWakLoader = (props?: {
+  onLoaded?: (dataWakBuffer: Buffer) => void;
+}) => {
   const [state, setState] = useState({
     dataWakBuffer: undefined as Buffer | undefined,
     isError: false,
@@ -68,6 +70,7 @@ export const useDataWakLoader = () => {
         isError: false,
         dataWakBuffer: dataWakBuffer,
       }));
+      props?.onLoaded?.(dataWakBuffer);
     };
 
     if (xmlHttpRequest.readyState === 4) {

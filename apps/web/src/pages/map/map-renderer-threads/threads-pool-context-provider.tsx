@@ -10,19 +10,33 @@ import { useSettingsStore } from '../../../stores/settings.ts';
 
 interface Props {
   children: React.ReactNode;
-  dataWakBuffer: Buffer;
 }
 
-export const ThreadsPoolContextProvider = ({
-  children,
-  dataWakBuffer,
-}: Props) => {
+export const ThreadsPoolContextProvider = ({ children }: Props) => {
   const { settings } = useSettingsStore();
-  const [pool, setPool] = useState<MapRendererPool>();
+  const [workerPool, setPool] = useState<MapRendererPool | undefined>();
   const [status, setStatus] = useState<Record<number, WorkerStatus>>({});
   const [isLoaded, setIsLoaded] = useState(false);
 
-  useEffect(() => {
+  function setWorkerStatus(workerId: number, status: Partial<WorkerStatus>) {
+    setStatus((prevState) => {
+      const newState = { ...prevState };
+
+      newState[workerId] = {
+        ...prevState[workerId],
+        ...status,
+        id: workerId,
+      };
+
+      return newState;
+    });
+  }
+
+  async function init(dataWakBuffer: Buffer) {
+    if (workerPool !== undefined) {
+      return;
+    }
+
     const numberOfWorkersToInitialize =
       settings.map.workerAmountType === 'auto'
         ? navigator.hardwareConcurrency
@@ -35,20 +49,7 @@ export const ThreadsPoolContextProvider = ({
         concurrency: 2,
       },
     );
-
-    function setWorkerStatus(workerId: number, status: Partial<WorkerStatus>) {
-      setStatus((prevState) => {
-        const newState = { ...prevState };
-
-        newState[workerId] = {
-          ...prevState[workerId],
-          ...status,
-          id: workerId,
-        };
-
-        return newState;
-      });
-    }
+    setPool(pool);
 
     let numberOfWorkersLoaded = 0;
 
@@ -102,16 +103,20 @@ export const ThreadsPoolContextProvider = ({
         })
         .catch(() => setWorkerStatus(workerId, { state: 'error' }));
     }
+  }
 
-    setPool(pool);
-
+  useEffect(() => {
     return () => {
-      pool.terminate(true);
+      if (workerPool) {
+        void workerPool.terminate(true);
+      }
     };
   }, []);
 
   return (
-    <ThreadsPoolContext.Provider value={{ pool, status, isLoaded }}>
+    <ThreadsPoolContext.Provider
+      value={{ pool: workerPool, status, isLoaded, init: (args) => init(args) }}
+    >
       {children}
     </ThreadsPoolContext.Provider>
   );

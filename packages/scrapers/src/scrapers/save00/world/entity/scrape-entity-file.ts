@@ -3,23 +3,23 @@ import { createBufferReader } from '@noita-explorer/tools';
 import { readBufferString } from '../../../../utils/buffer-reader-utils/read-buffer-string.ts';
 import { ChunkEntity, NoitaEntitySchema } from '@noita-explorer/model-noita';
 import { readBufferArray } from '../../../../utils/buffer-reader-utils/read-buffer-array.ts';
-import { FileSystemFileAccess } from '@noita-explorer/model';
-import { uncompressNoitaFile } from '../../../../utils/noita-file-uncompress/uncompress-noita-file.ts';
+import { Buffer } from 'buffer';
 import { FastLZCompressor } from '@noita-explorer/fastlz';
+import { uncompressNoitaBuffer } from '../../../../utils/noita-file-uncompress/uncompress-noita-buffer.ts';
 
 interface Props {
-  entityFile: FileSystemFileAccess;
+  entityBuffer: Buffer;
   schema: NoitaEntitySchema;
   fastLzCompressor: FastLZCompressor;
 }
 
 export async function scrapeEntityFile({
-  entityFile,
+  entityBuffer,
   schema,
   fastLzCompressor,
 }: Props) {
-  const uncompressedEntityBuffer = await uncompressNoitaFile(
-    entityFile,
+  const uncompressedEntityBuffer = await uncompressNoitaBuffer(
+    entityBuffer,
     fastLzCompressor,
   );
   const bufferReader = createBufferReader(uncompressedEntityBuffer);
@@ -33,7 +33,12 @@ export async function scrapeEntityFile({
   }
 
   // schema hash, not used
-  readBufferString(bufferReader);
+  const schemaHash = readBufferString(bufferReader);
+  if (schemaHash !== schema.hash) {
+    throw new Error(
+      `Invalid schema received. Expected ${schemaHash}, but got ${schema.hash}`,
+    );
+  }
 
   const entitiesOut = readBufferArray(bufferReader).iterate((bufferReader) =>
     scrapeEntityArray({ bufferReader, entitySchema: schema }),

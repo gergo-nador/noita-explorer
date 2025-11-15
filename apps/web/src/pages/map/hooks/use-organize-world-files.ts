@@ -4,7 +4,6 @@ import { useSave00Store } from '../../../stores/save00.ts';
 import {
   ChunkInfoCollection,
   MapBounds,
-  NoitaEntityFileCollection,
   NoitaPetriFileCollection,
 } from '../noita-map.types.ts';
 import { useCurrentRunService } from '../../../services/current-run/use-current-run-service.ts';
@@ -15,8 +14,6 @@ export const useOrganizeWorldFiles = () => {
 
   const [petriFileCollection, setPetriFileCollection] =
     useState<NoitaPetriFileCollection>({});
-  const [entityFileCollection, setEntityFileCollection] =
-    useState<NoitaEntityFileCollection>({});
   const [chunkInfos, setChunkInfos] = useState<ChunkInfoCollection>({});
   const [mapBounds, setMapBounds] = useState<MapBounds | undefined>();
 
@@ -73,31 +70,6 @@ export const useOrganizeWorldFiles = () => {
         setPetriFileCollection(petriFileCollection);
         setMapBounds(bounds);
 
-        // entity files
-        const entityFiles = files
-          .filter(
-            (file) =>
-              file.getName().startsWith('entities_') &&
-              file.getName().endsWith('.bin'),
-          )
-          .map((file) => {
-            const num = extractSingularFileNumber(file.getName());
-            if (num === undefined) {
-              return undefined;
-            }
-
-            return { num, file };
-          });
-
-        const entityFileCollection: NoitaEntityFileCollection = {};
-        for (const file of entityFiles) {
-          if (!file) continue;
-
-          const num = file.num;
-          entityFileCollection[num] = file.file;
-        }
-        setEntityFileCollection(entityFileCollection);
-
         // chunk infos
         const chunkInfos: ChunkInfoCollection = {};
         for (const streamInfoChunkInfo of streamInfo.chunkInfo) {
@@ -116,7 +88,6 @@ export const useOrganizeWorldFiles = () => {
 
   return {
     petriFileCollection,
-    entityFileCollection,
     mapBounds,
     chunkInfos,
   };
@@ -137,25 +108,6 @@ function extractDoubleFileNumbers(inputString: string) {
     const num1 = parseInt(match[1], 10);
     const num2 = parseInt(match[2], 10);
     return { num1, num2 };
-  }
-
-  return undefined;
-}
-
-/**
- * Extracts one number from a string with the format 'entity_NUM1.bin'.
- *
- * @param {string} inputString The string to extract the number from.
- * @returns {number|null} The number
- */
-function extractSingularFileNumber(inputString: string) {
-  const regex = /_(-?\d+)/;
-
-  const match = inputString.match(regex);
-
-  if (match) {
-    const num1 = parseInt(match[1], 10);
-    return num1;
   }
 
   return undefined;

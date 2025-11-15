@@ -16,6 +16,7 @@ import {
   defaultLayerZoomSettings,
 } from '../default-layer-settings.ts';
 import { ChunkInfoCollection } from '../../noita-map.types.ts';
+import { zIndexManager } from '../../../../utils/z-index-manager.ts';
 
 interface Props {
   worldPixelScenes: WorldPixelSceneFileFormat;
@@ -33,7 +34,10 @@ export const NoitaMapBiomeLayerWrapper = ({
   chunkInfos,
 }: Props) => {
   const map = useMap();
-  const pane = useMapPane({ name: 'noita-biome', zIndex: 6 });
+  const pane = useMapPane({
+    name: 'noita-biome',
+    zIndex: zIndexManager.maps.biome,
+  });
   const threadsPool = useThreadsPool();
   const layerRef = useRef<L.GridLayer | null>(null);
 
