@@ -15,7 +15,6 @@ export interface MapRenderType {
       backgrounds: StreamInfoBackground[];
       tileCoords: Vector2d;
     },
-    // has to be top level argument for transferable
     canvas: OffscreenCanvas,
   ) => Promise<void>;
   renderTerrainTile: (
@@ -23,7 +22,6 @@ export interface MapRenderType {
       tileCoords: Vector2d;
       backgroundEntities: ChunkRenderableEntitySprite[];
     },
-    // has to be top level argument for transferable
     canvas: OffscreenCanvas,
     petriFileBuffer: WebTransferable,
   ) => Promise<void>;
@@ -32,7 +30,6 @@ export interface MapRenderType {
       coords: Vector2d;
       theme: NoitaBackgroundTheme;
     },
-    // has to be top level argument for transferable
     canvas: OffscreenCanvas,
   ) => Promise<void>;
   parseEntityFile: (
@@ -44,7 +41,6 @@ export interface MapRenderType {
       tileCoords: Vector2d;
       entities: ChunkRenderableEntitySprite[];
     },
-    // has to be top level argument for transferable
     canvas: OffscreenCanvas,
   ) => Promise<void>;
 }
