@@ -33,6 +33,10 @@ export async function convertDataWakFileToImageData({ file, ctx, cut }: Props) {
     cut?.position?.y ?? 0,
     cut?.size?.width ?? imageBitmap.width,
     cut?.size?.height ?? imageBitmap.height,
+    0,
+    0,
+    offscreenCanvas.width,
+    offscreenCanvas.height,
   );
 
   const imageData = ctx.getImageData(
