@@ -38,6 +38,8 @@ export const NoitaMapPage = () => {
     total: totalEntityFiles,
     processed: processedEntityFiles,
     error: entityError,
+    backgroundEntities,
+    foregroundEntities,
   } = useEntityLoader();
 
   if (!settings.map.initialPopupSeen) {
@@ -110,6 +112,10 @@ export const NoitaMapPage = () => {
     );
   }
 
+  if (!backgroundEntities || !foregroundEntities) {
+    return <div>Failed to load entities</div>;
+  }
+
   return (
     <NoitaMapContainer
       biomes={data.biomes}
@@ -117,6 +123,8 @@ export const NoitaMapPage = () => {
       petriFileCollection={petriFileCollection}
       mapBounds={mapBounds}
       chunkInfos={chunkInfos}
+      backgroundEntities={backgroundEntities}
+      foregroundEntities={foregroundEntities}
     />
   );
 };

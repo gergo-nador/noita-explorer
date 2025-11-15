@@ -1,5 +1,8 @@
 import L from 'leaflet';
-import { NoitaPetriFileCollection } from '../../noita-map.types.ts';
+import {
+  Map2dOrganizedObject,
+  NoitaPetriFileCollection,
+} from '../../noita-map.types.ts';
 import {
   MapRendererPool,
   MapRendererWorker,
@@ -8,6 +11,7 @@ import {
 import { setErrorTile } from '../_shared/set-error-tile.ts';
 import { WebTransferable } from '@noita-explorer/model';
 import { convertFileToWebTransferable } from '../../utils/convertFileToWebTransferable.ts';
+import { ChunkRenderableEntitySprite } from '@noita-explorer/map';
 
 export const TerrainLayer = L.GridLayer.extend({
   createTile: function (coords: L.Coords, done: L.DoneCallback): HTMLElement {
@@ -21,6 +25,12 @@ export const TerrainLayer = L.GridLayer.extend({
       done(undefined, tile);
       return tile;
     }
+
+    const backgroundEntitiesCollection: Map2dOrganizedObject<
+      ChunkRenderableEntitySprite[]
+    > = this.options.backgroundEntities;
+    const backgroundEntities =
+      backgroundEntitiesCollection?.[coords.x]?.[coords.y] ?? [];
 
     const renderPool: MapRendererPool = this.options.renderPool;
 
@@ -37,6 +47,7 @@ export const TerrainLayer = L.GridLayer.extend({
         return worker.renderTerrainTile(
           {
             chunkCoordinates: coords,
+            backgroundEntities: backgroundEntities,
           },
           Transfer(offscreenCanvas),
           transferable as WebTransferable,

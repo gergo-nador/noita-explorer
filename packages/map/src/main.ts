@@ -10,3 +10,5 @@ export { renderBiomeTile } from './render/biomes/render-biome-tile.ts';
 export { renderTerrainTile } from './render/terrain/render-terrain-tile.ts';
 export { renderBackgroundTile } from './render/background/render-background-tile.ts';
 export { parseEntityFile } from './parse/entity/parse-entity-file.ts';
+export { renderEntities } from './render/entities/render-entities.ts';
+export { convertDataWakFileToImageData } from './utils/convert-data-wak-file-to-image-data.ts';

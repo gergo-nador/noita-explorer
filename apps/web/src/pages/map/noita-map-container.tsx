@@ -14,9 +14,11 @@ import { BackgroundThemes } from './layers/background/background-themes.ts';
 import { useCurrentRunService } from '../../services/current-run/use-current-run-service.ts';
 import {
   ChunkInfoCollection,
+  Map2dOrganizedObject,
   MapBounds,
   NoitaPetriFileCollection,
 } from './noita-map.types.ts';
+import { ChunkRenderableEntitySprite } from '@noita-explorer/map';
 
 interface Props {
   biomes: NoitaWakBiomes;
@@ -24,6 +26,8 @@ interface Props {
   petriFileCollection: NoitaPetriFileCollection;
   mapBounds: MapBounds;
   chunkInfos: ChunkInfoCollection;
+  backgroundEntities: Map2dOrganizedObject<ChunkRenderableEntitySprite[]>;
+  foregroundEntities: Map2dOrganizedObject<ChunkRenderableEntitySprite[]>;
 }
 
 export function NoitaMapContainer({
@@ -32,6 +36,7 @@ export function NoitaMapContainer({
   petriFileCollection,
   mapBounds,
   chunkInfos,
+  backgroundEntities,
 }: Props) {
   const { worldPixelScenes } = useCurrentRunService();
   const [forceRedrawCounter, setForceRedrawCounter] = useState(0);
@@ -73,6 +78,7 @@ export function NoitaMapContainer({
           <NoitaMapTerrainLayerWrapper
             petriFiles={petriFileCollection}
             redrawCounter={forceRedrawCounter}
+            backgroundEntities={backgroundEntities}
           />
         </>
       )}

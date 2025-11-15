@@ -5,6 +5,7 @@ import {
   renderTerrainTile,
   renderBackgroundTile,
   parseEntityFile,
+  renderEntities,
 } from '@noita-explorer/map';
 import { MapRenderType } from './map-render.types.ts';
 import {
@@ -99,6 +100,12 @@ const mapRenderer: MapRenderType = {
         materials: setupData.materials,
         materialColorCache,
         materialImageCache: setupData.materialColorCache,
+      });
+
+      renderEntities({
+        imageData,
+        chunkCoordinates: props.chunkCoordinates,
+        entities: props.backgroundEntities,
       });
 
       ctx.putImageData(imageData, 0, 0);

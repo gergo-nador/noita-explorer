@@ -1,6 +1,7 @@
 import {
   ChunkBorders,
   ChunkRenderableEntity,
+  ChunkRenderableEntitySprite,
   NoitaBackgroundTheme,
 } from '@noita-explorer/map';
 import {
@@ -22,6 +23,7 @@ export interface MapRenderType {
   renderTerrainTile: (
     props: {
       chunkCoordinates: Vector2d;
+      backgroundEntities: ChunkRenderableEntitySprite[];
     },
     // has to be top level argument for transferable
     canvas: OffscreenCanvas,
