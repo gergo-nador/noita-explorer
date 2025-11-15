@@ -1,21 +1,32 @@
 import { FileSystemFileAccess } from '@noita-explorer/model';
 import { convertDataWakFileToImageData } from './convert-data-wak-file-to-image-data.ts';
+import { DataWakMediaIndex } from '@noita-explorer/model-noita';
 
 interface Props {
   file: FileSystemFileAccess;
   ctx: OffscreenCanvasRenderingContext2D;
+  mediaIndex: DataWakMediaIndex;
 }
 
-export async function convertEntityMediaToImageData({ file, ctx }: Props) {
-  const isPng = file.getName().endsWith('.png');
-  if (isPng) {
+export async function convertEntityMediaToImageData({
+  file,
+  ctx,
+  mediaIndex,
+}: Props) {
+  if (mediaIndex.type === 'png' || mediaIndex.type === 'xml-png') {
     return convertDataWakFileToImageData({ file, ctx });
   }
 
-  const isXml = file.getName().endsWith('.xml');
-  if (isXml) {
-    // todo finish this
+  if (mediaIndex.type === 'xml-gif' && mediaIndex.xmlGifFirstFrame) {
+    return convertDataWakFileToImageData({
+      file,
+      ctx,
+      cut: {
+        size: mediaIndex.xmlGifFirstFrame.size,
+        position: mediaIndex.xmlGifFirstFrame.position,
+      },
+    });
   }
 
-  throw new Error('invalid entity media file extension: ' + file.getName());
+  throw new Error(`Invalid media index: ${JSON.stringify(mediaIndex)}`);
 }

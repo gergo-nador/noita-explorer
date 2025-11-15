@@ -1,4 +1,5 @@
 import {
+  DataWakMediaIndex,
   NoitaDataWakScrapeResult,
   NoitaDataWakScrapeResultStatus,
   NoitaMaterialReaction,
@@ -16,7 +17,6 @@ import {
 import {
   FileSystemDirectoryAccess,
   FileSystemFileAccess,
-  ImagePngDimension,
   StringKeyDictionary,
 } from '@noita-explorer/model';
 import { scrape } from './main.ts';
@@ -61,7 +61,7 @@ export const scrapeDataWak = async ({
       materials: statusSkipped,
       materialReactions: statusSkipped,
       biomes: statusSkipped,
-      mediaDimensions: statusSkipped,
+      mediaIndex: statusSkipped,
     };
   }
 
@@ -173,14 +173,14 @@ export const scrapeDataWakContent = async ({
     biomesError = err;
   }
 
-  let mediaDimensions: StringKeyDictionary<ImagePngDimension> = {};
-  let mediaDimensionsError: unknown | undefined = undefined;
+  let mediaIndex: StringKeyDictionary<DataWakMediaIndex> = {};
+  let mediaIndexError: unknown | undefined = undefined;
   try {
-    mediaDimensions = await scrape.dataWak.imageDimensions({
+    mediaIndex = await scrape.dataWak.mediaIndex({
       dataWakParentDirectoryApi: dataWakParentDirectory,
     });
   } catch (err) {
-    mediaDimensionsError = err;
+    mediaIndexError = err;
   }
 
   return {
@@ -262,14 +262,13 @@ export const scrapeDataWakContent = async ({
       data: biomes,
       error: biomesError,
     },
-    mediaDimensions: {
+    mediaIndex: {
       status:
-        mediaDimensionsError === undefined &&
-        Object.keys(mediaDimensions).length !== 0
+        mediaIndexError === undefined && Object.keys(mediaIndex).length !== 0
           ? NoitaDataWakScrapeResultStatus.SUCCESS
           : NoitaDataWakScrapeResultStatus.FAILED,
-      data: mediaDimensions,
-      error: mediaDimensionsError,
+      data: mediaIndex,
+      error: mediaIndexError,
     },
   };
 };

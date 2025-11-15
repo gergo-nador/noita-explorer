@@ -1,18 +1,22 @@
-import { ChunkEntity, ChunkEntityComponent } from '@noita-explorer/model-noita';
+import {
+  ChunkEntity,
+  ChunkEntityComponent,
+  DataWakMediaIndex,
+} from '@noita-explorer/model-noita';
 import { ChunkRenderableEntity } from '../../interfaces/chunk-renderable-entity.ts';
 import { arrayHelpers } from '@noita-explorer/tools';
 import { parseEntityPixelSprites } from './sprites/parse-entity-pixel-sprites.ts';
 import { parseEntitySprites } from './sprites/parse-entity-sprites.ts';
-import { ImagePngDimension, StringKeyDictionary } from '@noita-explorer/model';
+import { StringKeyDictionary } from '@noita-explorer/model';
 
 interface Props {
   entity: ChunkEntity;
-  mediaDimensions: StringKeyDictionary<ImagePngDimension>;
+  mediaIndex: StringKeyDictionary<DataWakMediaIndex>;
 }
 
 export async function parseEntity({
   entity,
-  mediaDimensions,
+  mediaIndex,
 }: Props): Promise<ChunkRenderableEntity | undefined> {
   const renderableEntity: ChunkRenderableEntity = {
     name: entity.name,
@@ -34,7 +38,7 @@ export async function parseEntity({
       entity,
       pixelSprites,
       renderableEntity,
-      mediaDimensions,
+      mediaIndex,
     });
   }
   if ('SpriteComponent' in components) {
@@ -43,7 +47,7 @@ export async function parseEntity({
       sprites,
       entity,
       renderableEntity,
-      mediaDimensions,
+      mediaIndex,
     });
   }
 

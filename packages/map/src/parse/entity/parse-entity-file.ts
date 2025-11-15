@@ -1,23 +1,26 @@
 import { scrape } from '@noita-explorer/scrapers';
-import { NoitaEntitySchema } from '@noita-explorer/model-noita';
+import {
+  DataWakMediaIndex,
+  NoitaEntitySchema,
+} from '@noita-explorer/model-noita';
 import { FastLZCompressor } from '@noita-explorer/fastlz';
 import { ChunkRenderableEntity } from '../../interfaces/chunk-renderable-entity.ts';
 import { parseEntity } from './parse-entity.ts';
 import { Buffer } from 'buffer';
-import { ImagePngDimension, StringKeyDictionary } from '@noita-explorer/model';
+import { StringKeyDictionary } from '@noita-explorer/model';
 
 interface Props {
   entityBuffer: Buffer;
   fastLzCompressor: FastLZCompressor;
   schema: NoitaEntitySchema;
-  mediaDimensions: StringKeyDictionary<ImagePngDimension>;
+  mediaIndex: StringKeyDictionary<DataWakMediaIndex>;
 }
 
 export async function parseEntityFile({
   entityBuffer,
   fastLzCompressor,
   schema,
-  mediaDimensions,
+  mediaIndex,
 }: Props): Promise<{ entities: ChunkRenderableEntity[] }> {
   const entityFileContent = await scrape.save00.entityFile({
     entityBuffer: entityBuffer,
@@ -27,7 +30,7 @@ export async function parseEntityFile({
 
   const renderableEntities: ChunkRenderableEntity[] = [];
   for (const entity of entityFileContent.entities) {
-    const renderableEntity = await parseEntity({ entity, mediaDimensions });
+    const renderableEntity = await parseEntity({ entity, mediaIndex });
     if (!renderableEntity) continue;
 
     renderableEntities.push(renderableEntity);

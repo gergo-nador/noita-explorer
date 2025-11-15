@@ -1,19 +1,17 @@
-import {
-  FileSystemDirectoryAccess,
-  ImagePngDimension,
-} from '@noita-explorer/model';
+import { FileSystemDirectoryAccess } from '@noita-explorer/model';
 import { createBufferReader, stringHelpers } from '@noita-explorer/tools';
 import { parseXml, XmlWrapper } from '@noita-explorer/tools/xml';
+import { DataWakMediaIndex } from '@noita-explorer/model-noita';
 
 interface Props {
   dataWakParentDirectoryApi: FileSystemDirectoryAccess;
 }
 
-export async function scrapeDataWakImageDimensions({
+export async function scrapeDataWakMediaIndex({
   dataWakParentDirectoryApi,
 }: Props) {
   let dirQueue = [dataWakParentDirectoryApi];
-  const imgDimensionsTemp: Record<string, ImagePngDimension> = {};
+  const imgDimensionsTemp: Record<string, DataWakMediaIndex> = {};
 
   while (true) {
     const currentDir = dirQueue.shift();
@@ -37,7 +35,11 @@ export async function scrapeDataWakImageDimensions({
       });
       try {
         const pngHeader = bufferReader.readPngHeader();
-        imgDimensionsTemp[path] = pngHeader;
+        imgDimensionsTemp[path] = {
+          size: pngHeader,
+          type: 'png',
+          pngPath: path,
+        };
       } catch {
         // do nothing
       }
@@ -59,12 +61,13 @@ export async function scrapeDataWakImageDimensions({
         let height: number | undefined = undefined;
 
         const rectAnimation = sprite.findNthTag('RectAnimation');
+        const imgFileName = sprite.getRequiredAttribute('filename').asText();
+
         if (rectAnimation) {
           width = rectAnimation.getAttribute('frame_width')?.asInt();
           height = rectAnimation.getAttribute('frame_height')?.asInt();
         } else {
           // if there is no RectAnimation tag in sprite, the dimensions are the same as the image
-          const imgFileName = sprite.getRequiredAttribute('filename').asText();
           const imgFile = await dataWakParentDirectoryApi.getFile(imgFileName);
           if (!imgFile) {
             continue;
@@ -88,8 +91,16 @@ export async function scrapeDataWakImageDimensions({
         });
 
         imgDimensionsTemp[path] = {
-          width,
-          height,
+          size: { width, height },
+          type: rectAnimation ? 'xml-gif' : 'xml-png',
+          xmlGifFirstFrame: rectAnimation && {
+            position: {
+              x: rectAnimation.getRequiredAttribute('pos_x').asInt(),
+              y: rectAnimation.getRequiredAttribute('pos_y').asInt(),
+            },
+            size: { width, height },
+          },
+          pngPath: imgFileName,
         };
       } catch {
         // do nothing

@@ -105,11 +105,11 @@ export const convertScrapeResultsToDataWak = (
     throw new Error('Biomes are undefined');
   }
 
-  // image dimensions
-  const mediaDimensions = results.mediaDimensions.data;
+  // image index
+  const mediaIndex = results.mediaIndex.data;
   if (
-    results.mediaDimensions.status !== NoitaDataWakScrapeResultStatus.SUCCESS ||
-    !mediaDimensions
+    results.mediaIndex.status !== NoitaDataWakScrapeResultStatus.SUCCESS ||
+    !mediaIndex
   ) {
     throw new Error('Failed to parse media dimensions');
   }
@@ -130,7 +130,7 @@ export const convertScrapeResultsToDataWak = (
     materials: materials,
     materialReactions: materialReactions,
     biomes: biomes,
-    mediaDimensions: mediaDimensions,
+    mediaIndex: mediaIndex,
   };
 };
 

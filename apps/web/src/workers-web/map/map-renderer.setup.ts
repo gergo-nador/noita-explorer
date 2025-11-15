@@ -1,7 +1,6 @@
 import { arrayHelpers } from '@noita-explorer/tools';
 import {
   FileSystemDirectoryAccess,
-  ImagePngDimension,
   StringKeyDictionary,
 } from '@noita-explorer/model';
 import { fetchDataWak } from '../../utils/browser-noita-api/fetch-data-wak.ts';
@@ -9,8 +8,12 @@ import {
   createFastLzCompressor,
   FastLZCompressor,
 } from '@noita-explorer/fastlz';
-import { NoitaMaterial, NoitaWakBiomes } from '@noita-explorer/model-noita';
-import { convertBufferToImageData } from '@noita-explorer/map';
+import {
+  DataWakMediaIndex,
+  NoitaMaterial,
+  NoitaWakBiomes,
+} from '@noita-explorer/model-noita';
+import { convertDataWakFileToImageData } from '@noita-explorer/map';
 
 interface Props {
   dataWakDirectory: FileSystemDirectoryAccess;
@@ -21,7 +24,7 @@ export interface MapRendererSetupData {
   materialColorCache: StringKeyDictionary<ImageData>;
   fastLzCompressor: FastLZCompressor;
   biomes: NoitaWakBiomes;
-  mediaDimensions: StringKeyDictionary<ImagePngDimension>;
+  mediaIndex: StringKeyDictionary<DataWakMediaIndex>;
 }
 
 export async function mapRendererSetup({
@@ -45,9 +48,9 @@ export async function mapRendererSetup({
       continue;
     }
 
-    const imageBitmap = await convertBufferToImageData({
-      dataWakDirectory,
-      path: material.graphicsImagePath,
+    const file = await dataWakDirectory.getFile(material.graphicsImagePath);
+    const imageBitmap = await convertDataWakFileToImageData({
+      file,
       ctx,
     });
 
@@ -65,6 +68,6 @@ export async function mapRendererSetup({
     materialColorCache,
     fastLzCompressor,
     biomes: noitaDataWak.biomes,
-    mediaDimensions: noitaDataWak.mediaDimensions,
+    mediaIndex: noitaDataWak.mediaIndex,
   };
 }

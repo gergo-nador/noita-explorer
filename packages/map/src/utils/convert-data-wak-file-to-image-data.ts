@@ -1,11 +1,19 @@
-import { FileSystemFileAccess } from '@noita-explorer/model';
+import {
+  FileSystemFileAccess,
+  ImagePngDimension,
+  Vector2d,
+} from '@noita-explorer/model';
 
 interface Props {
   file: FileSystemFileAccess;
   ctx: OffscreenCanvasRenderingContext2D;
+  cut?: {
+    size: ImagePngDimension;
+    position: Vector2d;
+  };
 }
 
-export async function convertDataWakFileToImageData({ file, ctx }: Props) {
+export async function convertDataWakFileToImageData({ file, ctx, cut }: Props) {
   const fileBuffer = await file.read.asBuffer();
   const arrayBuffer = fileBuffer.buffer as ArrayBuffer;
 
@@ -14,12 +22,18 @@ export async function convertDataWakFileToImageData({ file, ctx }: Props) {
 
   const offscreenCanvas = ctx.canvas;
 
-  offscreenCanvas.width = imageBitmap.width;
-  offscreenCanvas.height = imageBitmap.height;
+  offscreenCanvas.width = cut?.size?.width ?? imageBitmap.width;
+  offscreenCanvas.height = cut?.size?.height ?? imageBitmap.height;
 
   ctx.clearRect(0, 0, offscreenCanvas.width, offscreenCanvas.height);
 
-  ctx.drawImage(imageBitmap, 0, 0);
+  ctx.drawImage(
+    imageBitmap,
+    cut?.position?.x ?? 0,
+    cut?.position?.y ?? 0,
+    cut?.size?.width ?? imageBitmap.width,
+    cut?.size?.height ?? imageBitmap.height,
+  );
 
   const imageData = ctx.getImageData(
     0,

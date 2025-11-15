@@ -93,6 +93,14 @@ const mapRenderer: MapRenderType = {
         fastLzCompressor: setupData.fastLzCompressor,
       });
 
+      await renderEntities({
+        imageData,
+        chunkCoordinates: props.chunkCoordinates,
+        entities: props.backgroundEntities,
+        dataWakDirectory: dataWakDirectory,
+        mediaIndex: setupData.mediaIndex,
+      });
+
       renderTerrainTile({
         imageData,
         chunk: petriContent,
@@ -100,12 +108,6 @@ const mapRenderer: MapRenderType = {
         materials: setupData.materials,
         materialColorCache,
         materialImageCache: setupData.materialColorCache,
-      });
-
-      renderEntities({
-        imageData,
-        chunkCoordinates: props.chunkCoordinates,
-        entities: props.backgroundEntities,
       });
 
       ctx.putImageData(imageData, 0, 0);
@@ -149,7 +151,7 @@ const mapRenderer: MapRenderType = {
       fastLzCompressor: setupData.fastLzCompressor,
       entityBuffer: buffer,
       schema: props.schema,
-      mediaDimensions: setupData.mediaDimensions,
+      mediaIndex: setupData.mediaIndex,
     });
 
     return entities;

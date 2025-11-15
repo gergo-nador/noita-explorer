@@ -1,35 +1,39 @@
-import { ChunkEntity, ChunkEntityComponent } from '@noita-explorer/model-noita';
+import {
+  ChunkEntity,
+  ChunkEntityComponent,
+  DataWakMediaIndex,
+} from '@noita-explorer/model-noita';
 import {
   ChunkRenderableEntity,
   ChunkRenderableEntitySprite,
 } from '../../../interfaces/chunk-renderable-entity.ts';
-import { ImagePngDimension, StringKeyDictionary } from '@noita-explorer/model';
+import { StringKeyDictionary } from '@noita-explorer/model';
 
 interface Props {
   entity: ChunkEntity;
   renderableEntity: ChunkRenderableEntity;
   pixelSprites: ChunkEntityComponent[];
-  mediaDimensions: StringKeyDictionary<ImagePngDimension>;
+  mediaIndex: StringKeyDictionary<DataWakMediaIndex>;
 }
 
 export async function parseEntityPixelSprites({
   entity,
   renderableEntity,
   pixelSprites,
-  mediaDimensions,
+  mediaIndex,
 }: Props) {
   for (const pixelSprite of pixelSprites) {
     const imageFile = pixelSprite.data?.image_file;
 
     if (typeof imageFile === 'string' && imageFile.length > 0) {
-      const mediaDimension = mediaDimensions[imageFile];
+      const mediaDimension = mediaIndex[imageFile];
       if (!mediaDimension) continue;
 
       const sprite: ChunkRenderableEntitySprite = {
         position: entity.position,
         rotation: entity.rotation,
         offset: { x: 0, y: 0 },
-        size: { x: mediaDimension.width, y: mediaDimension.height },
+        size: { x: mediaDimension.size.width, y: mediaDimension.size.height },
         scale: entity.scale,
         mediaPath: imageFile,
         isBackgroundComponent: Boolean(

@@ -20,19 +20,19 @@ export const useOrganizeBackgroundImages = () => {
     if (!streamInfo) return;
 
     async function load(streamInfo: StreamInfoFileFormat) {
-      const imgDimensions = data.mediaDimensions;
+      const mediaIndex = data.mediaIndex;
       const backgrounds = streamInfo.backgrounds;
 
       const availableBackgrounds = backgrounds
         .map((bg) => ({
           background: bg,
-          imgSize: imgDimensions[bg.fileName],
+          imgSize: mediaIndex[bg.fileName]?.size,
         }))
         .filter((bg) => bg.imgSize)
         .map((bg) => ({
           instance: bg.background,
-          width: bg.imgSize.width,
-          height: bg.imgSize.height,
+          width: bg.imgSize?.width ?? 0,
+          height: bg.imgSize?.height ?? 0,
           x: bg.background.position.x,
           y: bg.background.position.y,
         }));
@@ -46,7 +46,7 @@ export const useOrganizeBackgroundImages = () => {
     }
 
     void load(streamInfo);
-  }, [data.mediaDimensions, streamInfo]);
+  }, [data.mediaIndex, streamInfo]);
 
   return { backgrounds, isLoaded };
 };
