@@ -61,7 +61,5 @@ export async function parseEntity({
     });
   }
 
-  //if (renderableEntity.sprites.length === 0) debugger;
-
   return renderableEntity;
 }
