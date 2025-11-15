@@ -1,4 +1,4 @@
-import { FileSystemDirectoryAccess } from '@noita-explorer/model';
+import { FileSystemDirectoryAccess, Vector2d } from '@noita-explorer/model';
 import { createBufferReader, stringHelpers } from '@noita-explorer/tools';
 import { parseXml, XmlWrapper } from '@noita-explorer/tools/xml';
 import { DataWakMediaIndex } from '@noita-explorer/model-noita';
@@ -90,16 +90,22 @@ export async function scrapeDataWakMediaIndex({
           fromStart: dataWakParentDirectoryApi.getFullPath() + '/',
         });
 
+        const offset: Vector2d = {
+          x: sprite.getAttribute('offset_x')?.asInt() ?? 0,
+          y: sprite.getAttribute('offset_y')?.asInt() ?? 0,
+        };
+
         imgDimensionsTemp[path] = {
           size: { width, height },
           type: rectAnimation ? 'xml-gif' : 'xml-png',
           xmlGifFirstFrame: rectAnimation && {
             position: {
-              x: rectAnimation.getRequiredAttribute('pos_x').asInt(),
-              y: rectAnimation.getRequiredAttribute('pos_y').asInt(),
+              x: rectAnimation.getRequiredAttribute('pos_x').asFloat(),
+              y: rectAnimation.getRequiredAttribute('pos_y').asFloat(),
             },
             size: { width, height },
           },
+          offset: offset,
           pngPath: imgFileName,
         };
       } catch {

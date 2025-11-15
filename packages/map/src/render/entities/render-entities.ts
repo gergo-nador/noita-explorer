@@ -56,7 +56,7 @@ export async function renderEntities({
         const a = img.data[colorIndex + 3];
 
         const color = (r << 24) | (g << 16) | (b << 8) | a;
-        return color;
+        return color >>> 0;
       },
     };
 
