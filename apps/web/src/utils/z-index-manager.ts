@@ -11,4 +11,10 @@ export const zIndexManager = {
     hoveredTab: 1,
     defaultTab: 0,
   },
+  maps: {
+    background: 5,
+    biome: 6,
+    terrain: 7,
+    entity: 8,
+  },
 };

@@ -46,20 +46,20 @@ const mapRenderer: MapRenderType = {
       throw new Error('[Worker] data wak not set');
     }
 
-    try {
-      const ctx = offScreenCanvas.getContext('2d', {
-        alpha: true,
-        willReadFrequently: true,
-      });
-      if (!ctx) {
-        throw new Error('OffscreenCanvasRenderingContext2D not supported');
-      }
+    const ctx = offScreenCanvas.getContext('2d', {
+      alpha: true,
+      willReadFrequently: true,
+    });
+    if (!ctx) {
+      throw new Error('OffscreenCanvasRenderingContext2D not supported');
+    }
 
+    try {
       await renderBiomeTile({
         ctx,
         chunkBorders: props.chunkBorders,
         backgroundItems: props.backgrounds,
-        biomeCoords: props.biomeCoords,
+        biomeCoords: props.tileCoords,
         biomes: setupData.biomes,
         dataWakDirectory,
       });
@@ -73,12 +73,12 @@ const mapRenderer: MapRenderType = {
       throw new Error('[Worker] data wak not set');
     }
 
-    try {
-      const ctx = offScreenCanvas.getContext('2d');
-      if (!ctx) {
-        throw new Error('OffscreenCanvasRenderingContext2D not supported');
-      }
+    const ctx = offScreenCanvas.getContext('2d');
+    if (!ctx) {
+      throw new Error('OffscreenCanvasRenderingContext2D not supported');
+    }
 
+    try {
       const imageData = ctx.getImageData(
         0,
         0,
@@ -95,7 +95,7 @@ const mapRenderer: MapRenderType = {
 
       await renderEntities({
         imageData,
-        chunkCoordinates: props.chunkCoordinates,
+        chunkCoordinates: props.tileCoords,
         entities: props.backgroundEntities,
         dataWakDirectory: dataWakDirectory,
         mediaIndex: setupData.mediaIndex,
@@ -104,7 +104,7 @@ const mapRenderer: MapRenderType = {
       renderTerrainTile({
         imageData,
         chunk: petriContent,
-        chunkCoordinates: props.chunkCoordinates,
+        chunkCoordinates: props.tileCoords,
         materials: setupData.materials,
         materialColorCache,
         materialImageCache: setupData.materialColorCache,
@@ -121,12 +121,12 @@ const mapRenderer: MapRenderType = {
       throw new Error('[Worker] data wak not set');
     }
 
-    try {
-      const ctx = offScreenCanvas.getContext('2d');
-      if (!ctx) {
-        throw new Error('OffscreenCanvasRenderingContext2D not supported');
-      }
+    const ctx = offScreenCanvas.getContext('2d');
+    if (!ctx) {
+      throw new Error('OffscreenCanvasRenderingContext2D not supported');
+    }
 
+    try {
       ctx.imageSmoothingEnabled = false;
 
       await renderBackgroundTile({
@@ -155,6 +155,38 @@ const mapRenderer: MapRenderType = {
     });
 
     return entities;
+  },
+  async renderEntityTile(props, offScreenCanvas) {
+    if (!dataWakDirectory || !setupData) {
+      throw new Error('[Worker] setup not done');
+    }
+
+    const ctx = offScreenCanvas.getContext('2d');
+    if (!ctx) {
+      throw new Error('OffscreenCanvasRenderingContext2D not supported');
+    }
+
+    try {
+      const imageData = ctx.getImageData(
+        0,
+        0,
+        offScreenCanvas.width,
+        offScreenCanvas.height,
+      );
+
+      await renderEntities({
+        imageData,
+        chunkCoordinates: props.tileCoords,
+        entities: props.entities,
+        dataWakDirectory: dataWakDirectory,
+        mediaIndex: setupData.mediaIndex,
+      });
+
+      ctx.putImageData(imageData, 0, 0);
+    } catch (error) {
+      console.error('Error during rendering entity tile', props, error);
+      throw error;
+    }
   },
 };
 

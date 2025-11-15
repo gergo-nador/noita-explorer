@@ -46,7 +46,7 @@ export const TerrainLayer = L.GridLayer.extend({
 
         return worker.renderTerrainTile(
           {
-            chunkCoordinates: coords,
+            tileCoords: coords,
             backgroundEntities: backgroundEntities,
           },
           Transfer(offscreenCanvas),

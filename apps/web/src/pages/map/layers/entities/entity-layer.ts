@@ -1,22 +1,23 @@
 import L from 'leaflet';
-import { StreamInfoBackground } from '@noita-explorer/model-noita';
+import {
+  ChunkInfoCollection,
+  Map2dOrganizedObject,
+} from '../../noita-map.types.ts';
+import { ChunkRenderableEntitySprite, mapConstants } from '@noita-explorer/map';
 import {
   MapRendererPool,
   MapRendererWorker,
   Transfer,
 } from '../../map-renderer-threads/threads-pool.types.ts';
-import { mapConstants } from '@noita-explorer/map';
 import { setErrorTile } from '../_shared/set-error-tile.ts';
-import { createUnexploredTile } from '../_shared/create-unexplored-tile.ts';
-import { ChunkInfoCollection } from '../../noita-map.types.ts';
 
-export const BiomeLayer = L.GridLayer.extend({
+export const EntityLayer = L.GridLayer.extend({
   createTile: function (coords: L.Coords, done: L.DoneCallback): HTMLElement {
     const chunkInfos: ChunkInfoCollection = this.options.chunkInfos;
     const chunkInfo = chunkInfos[coords.x]?.[coords.y];
 
     if (!chunkInfo?.loaded) {
-      const tile = createUnexploredTile({ coords, chunkInfos });
+      const tile = L.DomUtil.create('div', 'leaflet-tile');
 
       // `done` needs to be called after returning
       setTimeout(() => done(undefined, tile), 0);
@@ -31,34 +32,21 @@ export const BiomeLayer = L.GridLayer.extend({
     canvas.width = mapConstants.chunkWidth;
     canvas.height = mapConstants.chunkHeight;
 
-    const chunkLeftBorderX = coords.x * mapConstants.chunkWidth;
-    const chunkRightBorderX = (coords.x + 1) * mapConstants.chunkWidth;
-    const chunkTopBorderY = coords.y * mapConstants.chunkHeight;
-    const chunkBottomBorderY = (coords.y + 1) * mapConstants.chunkHeight;
-
-    const allBackgrounds: Record<
-      number,
-      Record<number, StreamInfoBackground[]>
-    > = this.options.backgrounds;
-
-    const currentBackgrounds = allBackgrounds[coords.x]?.[coords.y] ?? [];
-
     const renderPool: MapRendererPool = this.options.renderPool;
+    const foregroundEntities: Map2dOrganizedObject<
+      ChunkRenderableEntitySprite[]
+    > = this.options.foregroundEntities;
+
+    const chunkEntities = foregroundEntities?.[coords.x]?.[coords.y] ?? [];
 
     renderPool.queue((worker: MapRendererWorker) => {
       const offscreenCanvas = canvas.transferControlToOffscreen();
 
       worker
-        .renderBiomeTile(
+        .renderEntityTile(
           {
             tileCoords: coords,
-            backgrounds: currentBackgrounds,
-            chunkBorders: {
-              leftX: chunkLeftBorderX,
-              rightX: chunkRightBorderX,
-              topY: chunkTopBorderY,
-              bottomY: chunkBottomBorderY,
-            },
+            entities: chunkEntities,
           },
           Transfer(offscreenCanvas),
         )

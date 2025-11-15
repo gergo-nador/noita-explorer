@@ -1,31 +1,37 @@
-import { useEffect, useRef } from 'react';
-import { BackgroundLayer } from './background-layer.ts';
-import L from 'leaflet';
 import { useMap } from 'react-leaflet';
 import { useMapPane } from '../../hooks/use-map-pane.ts';
 import { useThreadsPool } from '../../map-renderer-threads/use-threads-pool.ts';
+import { useEffect, useRef } from 'react';
+import L from 'leaflet';
+import { zIndexManager } from '../../../../utils/z-index-manager.ts';
 import {
   defaultLayerBufferSettings,
   defaultLayerMiscSettings,
+  defaultLayerSize,
   defaultLayerZoomSettings,
 } from '../default-layer-settings.ts';
-import { backgroundLayerSize } from './background-layer-size.ts';
-import { BackgroundThemes } from './background-themes.ts';
-import { zIndexManager } from '../../../../utils/z-index-manager.ts';
+import {
+  ChunkInfoCollection,
+  Map2dOrganizedObject,
+} from '../../noita-map.types.ts';
+import { EntityLayer } from './entity-layer.ts';
+import { ChunkRenderableEntitySprite } from '@noita-explorer/map';
 
 interface Props {
-  backgroundTheme: BackgroundThemes;
   redrawCounter: number;
+  chunkInfos: ChunkInfoCollection;
+  foregroundEntities: Map2dOrganizedObject<ChunkRenderableEntitySprite[]>;
 }
 
-export const NoitaMapBackgroundLayerWrapper = ({
-  backgroundTheme,
+export const NoitaMapEntityLayerWrapper = ({
   redrawCounter,
+  chunkInfos,
+  foregroundEntities,
 }: Props) => {
   const map = useMap();
   const pane = useMapPane({
-    name: 'noita-background',
-    zIndex: zIndexManager.maps.background,
+    name: 'noita-entity',
+    zIndex: zIndexManager.maps.entity,
   });
   const threadsPool = useThreadsPool();
   const layerRef = useRef<L.GridLayer | null>(null);
@@ -35,19 +41,17 @@ export const NoitaMapBackgroundLayerWrapper = ({
 
     if (!layerRef.current) {
       // @ts-expect-error typescript doesn't know we can pass parameters
-      const gridLayer = new BackgroundLayer({
+      const gridLayer = new EntityLayer({
         pane: pane.name,
-        tileSize: L.point(
-          backgroundLayerSize.width,
-          backgroundLayerSize.height,
-        ),
+        ...defaultLayerSize,
         ...defaultLayerZoomSettings,
         ...defaultLayerBufferSettings,
         ...defaultLayerMiscSettings,
 
         // custom props
         renderPool: threadsPool?.pool,
-        backgroundTheme,
+        chunkInfos,
+        foregroundEntities,
       });
 
       map.addLayer(gridLayer);
@@ -60,15 +64,19 @@ export const NoitaMapBackgroundLayerWrapper = ({
         layerRef.current = null;
       }
     };
-  }, [map, pane.name, threadsPool?.pool, threadsPool?.isLoaded]);
+  }, [
+    map,
+    threadsPool?.pool,
+    threadsPool?.isLoaded,
+    pane.name,
+    foregroundEntities,
+    chunkInfos,
+  ]);
 
   useEffect(() => {
     if (!layerRef.current) return;
-
-    // @ts-expect-error custom option
-    layerRef.current.options.backgroundTheme = backgroundTheme;
     layerRef.current.redraw();
-  }, [backgroundTheme, redrawCounter]);
+  }, [redrawCounter]);
 
   return null;
 };

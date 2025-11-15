@@ -15,6 +15,7 @@ import {
   defaultLayerZoomSettings,
 } from '../default-layer-settings.ts';
 import { ChunkRenderableEntitySprite } from '@noita-explorer/map';
+import { zIndexManager } from '../../../../utils/z-index-manager.ts';
 
 interface Props {
   petriFiles: NoitaPetriFileCollection;
@@ -28,7 +29,10 @@ export function NoitaMapTerrainLayerWrapper({
   backgroundEntities,
 }: Props) {
   const map = useMap();
-  const pane = useMapPane({ name: 'noita-terrain', zIndex: 7 });
+  const pane = useMapPane({
+    name: 'noita-terrain',
+    zIndex: zIndexManager.maps.terrain,
+  });
   const layerRef = useRef<L.GridLayer | null>(null);
   const threadsPool = useThreadsPool();
 

@@ -15,14 +15,14 @@ export interface MapRenderType {
     props: {
       chunkBorders: ChunkBorders;
       backgrounds: StreamInfoBackground[];
-      biomeCoords: Vector2d;
+      tileCoords: Vector2d;
     },
     // has to be top level argument for transferable
     canvas: OffscreenCanvas,
   ) => Promise<void>;
   renderTerrainTile: (
     props: {
-      chunkCoordinates: Vector2d;
+      tileCoords: Vector2d;
       backgroundEntities: ChunkRenderableEntitySprite[];
     },
     // has to be top level argument for transferable
@@ -41,4 +41,12 @@ export interface MapRenderType {
     props: { schema: NoitaEntitySchema },
     entityFileBuffer: WebTransferable,
   ) => Promise<{ entities: ChunkRenderableEntity[] }>;
+  renderEntityTile: (
+    props: {
+      tileCoords: Vector2d;
+      entities: ChunkRenderableEntitySprite[];
+    },
+    // has to be top level argument for transferable
+    canvas: OffscreenCanvas,
+  ) => Promise<void>;
 }
