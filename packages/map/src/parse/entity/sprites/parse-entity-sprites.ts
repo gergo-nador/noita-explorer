@@ -23,19 +23,28 @@ export async function parseEntitySprites({
   mediaIndex,
 }: Props) {
   for (const sprite of sprites) {
+    if (!sprite.enabled) continue;
+
     const imageFile = sprite.data?.image_file;
     if (typeof imageFile === 'string' && imageFile.length > 0) {
       const mediaDimension = mediaIndex[imageFile];
       if (!mediaDimension) continue;
 
+      //debugger;
+
+      const offset = {
+        x: (sprite.data.offset_x ?? 0) as number,
+        y: (sprite.data.offset_y ?? 0) as number,
+      };
+
       const renderableSprite: ChunkRenderableEntitySprite = {
-        position: entity.position,
+        position: {
+          x: entity.position.x - offset.x,
+          y: entity.position.y - offset.y,
+        },
         rotation: entity.rotation,
         size: { x: mediaDimension.size.width, y: mediaDimension.size.height },
-        offset: {
-          x: (sprite.data.offset_x ?? 0) as number,
-          y: (sprite.data.offset_y ?? 0) as number,
-        },
+        offset: offset,
         scale: entity.scale,
         mediaPath: imageFile,
         isBackgroundComponent: false,
