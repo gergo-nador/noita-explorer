@@ -14,10 +14,12 @@ export const Sandbox = () => {
 
         for (const areaFile of areaFiles) {
           const buff = await areaFile.read.asBuffer();
-          await scrape.save00.areaFile({
+          const res = await scrape.save00.areaFile({
             areaBuffer: buff,
             fastLzCompressor: result[0],
           });
+
+          console.log(res);
         }
       },
     );

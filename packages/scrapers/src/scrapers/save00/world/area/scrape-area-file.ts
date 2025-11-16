@@ -42,6 +42,7 @@ export async function scrapeAreaFile({
 
     // there are two additional unknown numbers here, if you know what
     // they represent, please create an issue and explain it to me <3
+    bufferReader.jumpBytes(8);
 
     return { filePath };
   });
