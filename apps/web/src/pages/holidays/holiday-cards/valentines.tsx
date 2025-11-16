@@ -2,10 +2,11 @@ import { Card, Icon } from '@noita-explorer/noita-component-library';
 import Particles from '@tsparticles/react';
 import { ISourceOptions } from '@tsparticles/engine';
 import { NoitaMaterialLink } from '../../../components/noita-material-link.tsx';
+import { publicPaths } from '../../../utils/public-paths.ts';
 
 export const Valentines = () => {
-  const heartGif = '/images/holidays/Heart_extrahp_default.gif';
-  const heartImage = '/images/holidays/charm-high-res.png';
+  const heartGif = publicPaths.static.holidays('Heart_extrahp_default.gif');
+  const heartImage = publicPaths.static.holidays('charm-high-res.png');
 
   // https://particles.js.org/docs/interfaces/tsParticles_Engine.Options_Interfaces_IOptions.IOptions.html
   const particlesPermanentOptions: ISourceOptions = {

@@ -18,6 +18,7 @@ export const publicPaths = {
       unexplored: () => '/images/map/unexplored.png',
       tileError: () => '/images/map/tile-render-error-image.png',
     },
+    holidays: (file: string) => '/images/holidays/' + file,
   },
   generated: {
     orbs: ({ orbId }: { orbId: string }) => {

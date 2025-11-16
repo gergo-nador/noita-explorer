@@ -120,6 +120,33 @@ export const Credits = () => {
         </div>
       )}
       <br />
+      <Header title='Sponsor'>
+        <div>
+          We would greatly appreciate if you would help us paying the domain
+          name registry bills by donating using the link below.
+          <Icon
+            src={publicPaths.static.holidays('charm-high-res.png')}
+            size={20}
+            style={{ marginLeft: '8px' }}
+          />
+          <Icon
+            src='/images/hamis-pet.gif'
+            width={18}
+            height={28}
+            style={{ marginLeft: '8px' }}
+          />
+        </div>
+
+        <br />
+        <Link
+          to='https://buymeacoffee.com/noita.explorer'
+          external
+          buttonDecoration='right'
+        >
+          https://buymeacoffee.com/noita.explorer
+        </Link>
+      </Header>
+      <br />
       <Header title='Thank you'>
         <p>
           Thank you for these amazing projects, wiki and users who heavily
