@@ -11,7 +11,7 @@ export const noitaSchemaManager = (() => {
   function downloadSchema(hash: string) {
     if (hasSchema(hash)) return;
 
-    const url = `${import.meta.env.VITE_SCHEMA_URL}/schemas/${hash}.xml`;
+    const url = `${import.meta.env.VITE_SCHEMA_URL}/${hash}.xml`;
     const schemaResponsePromise = fetch(url)
       .then((response) => {
         if (!response.ok) {
