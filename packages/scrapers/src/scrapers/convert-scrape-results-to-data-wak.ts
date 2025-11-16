@@ -1,5 +1,6 @@
 import {
   NoitaDataWakScrapeResult,
+  NoitaDataWakScrapeResultStatus,
   NoitaEnemy,
   NoitaEnemyGif,
   NoitaEnemyImageMedia,
@@ -104,6 +105,15 @@ export const convertScrapeResultsToDataWak = (
     throw new Error('Biomes are undefined');
   }
 
+  // image index
+  const mediaIndex = results.mediaIndex.data;
+  if (
+    results.mediaIndex.status !== NoitaDataWakScrapeResultStatus.SUCCESS ||
+    !mediaIndex
+  ) {
+    throw new Error('Failed to parse media dimensions');
+  }
+
   // finalize data wak
   const now = new Date();
 
@@ -120,6 +130,7 @@ export const convertScrapeResultsToDataWak = (
     materials: materials,
     materialReactions: materialReactions,
     biomes: biomes,
+    mediaIndex: mediaIndex,
   };
 };
 

@@ -11,6 +11,7 @@ import {
 } from '../default-layer-settings.ts';
 import { backgroundLayerSize } from './background-layer-size.ts';
 import { BackgroundThemes } from './background-themes.ts';
+import { zIndexManager } from '../../../../utils/z-index-manager.ts';
 
 interface Props {
   backgroundTheme: BackgroundThemes;
@@ -24,7 +25,7 @@ export const NoitaMapBackgroundLayerWrapper = ({
   const map = useMap();
   const pane = useMapPane({
     name: 'noita-background',
-    zIndex: 5,
+    zIndex: zIndexManager.maps.background,
   });
   const threadsPool = useThreadsPool();
   const layerRef = useRef<L.GridLayer | null>(null);

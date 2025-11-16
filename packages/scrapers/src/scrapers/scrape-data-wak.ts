@@ -1,4 +1,5 @@
 import {
+  DataWakMediaIndex,
   NoitaDataWakScrapeResult,
   NoitaDataWakScrapeResultStatus,
   NoitaMaterialReaction,
@@ -60,6 +61,7 @@ export const scrapeDataWak = async ({
       materials: statusSkipped,
       materialReactions: statusSkipped,
       biomes: statusSkipped,
+      mediaIndex: statusSkipped,
     };
   }
 
@@ -171,6 +173,16 @@ export const scrapeDataWakContent = async ({
     biomesError = err;
   }
 
+  let mediaIndex: StringKeyDictionary<DataWakMediaIndex> = {};
+  let mediaIndexError: unknown | undefined = undefined;
+  try {
+    mediaIndex = await scrape.dataWak.mediaIndex({
+      dataWakParentDirectoryApi: dataWakParentDirectory,
+    });
+  } catch (err) {
+    mediaIndexError = err;
+  }
+
   return {
     translations: {
       status: NoitaDataWakScrapeResultStatus.SUCCESS,
@@ -249,6 +261,14 @@ export const scrapeDataWakContent = async ({
           : NoitaDataWakScrapeResultStatus.FAILED,
       data: biomes,
       error: biomesError,
+    },
+    mediaIndex: {
+      status:
+        mediaIndexError === undefined && Object.keys(mediaIndex).length !== 0
+          ? NoitaDataWakScrapeResultStatus.SUCCESS
+          : NoitaDataWakScrapeResultStatus.FAILED,
+      data: mediaIndex,
+      error: mediaIndexError,
     },
   };
 };

@@ -7,6 +7,7 @@ import { NoitaMaterial } from '../common/noita-material.ts';
 import { NoitaMaterialReaction } from '../common/noita-material-reaction.ts';
 import { NoitaEnemy } from '../common/enemy/noita-enemy.ts';
 import { NoitaWakBiomes } from '../common/biomes/noita-wak-biomes.ts';
+import { DataWakMediaIndex } from './data-wak/data-wak-media-index.ts';
 
 export interface NoitaWakData {
   scrapedAt: string;
@@ -21,4 +22,5 @@ export interface NoitaWakData {
   materials: NoitaMaterial[];
   materialReactions: NoitaMaterialReaction[];
   biomes: NoitaWakBiomes;
+  mediaIndex: StringKeyDictionary<DataWakMediaIndex>;
 }

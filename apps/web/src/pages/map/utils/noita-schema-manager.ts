@@ -11,10 +11,10 @@ export const noitaSchemaManager = (() => {
   function downloadSchema(hash: string) {
     if (hasSchema(hash)) return;
 
-    const schemaResponsePromise = fetch(`/schemas/${hash}.xml`)
+    const url = `${import.meta.env.VITE_SCHEMA_URL}/${hash}.xml`;
+    const schemaResponsePromise = fetch(url)
       .then((response) => {
         if (!response.ok) {
-          console.log('schema not ok', response);
           throw new Error('Could not find schema ' + hash);
         }
         return response.text();

@@ -12,6 +12,7 @@ import { NoitaScrapedPerk } from '../data-wak/noita-scraped-perk.ts';
 import { NoitaScrapedMaterial } from '../data-wak/noita-scraped-material.ts';
 import { NoitaScrapedWandConfig } from '../data-wak/noita-scraped-wand-config.ts';
 import { NoitaWakBiomes } from '../../common/biomes/noita-wak-biomes.ts';
+import { DataWakMediaIndex } from '../data-wak/data-wak-media-index.ts';
 
 export interface NoitaDataWakScrapeResult {
   translations: NoitaDataWakScrapeResultPart<
@@ -30,4 +31,7 @@ export interface NoitaDataWakScrapeResult {
   materials: NoitaDataWakScrapeResultPart<NoitaScrapedMaterial[]>;
   materialReactions: NoitaDataWakScrapeResultPart<NoitaMaterialReaction[]>;
   biomes: NoitaDataWakScrapeResultPart<NoitaWakBiomes>;
+  mediaIndex: NoitaDataWakScrapeResultPart<
+    StringKeyDictionary<DataWakMediaIndex>
+  >;
 }

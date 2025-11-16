@@ -1,61 +1,61 @@
 import { useMap } from 'react-leaflet';
+import { useMapPane } from '../../hooks/use-map-pane.ts';
+import { useThreadsPool } from '../../map-renderer-threads/use-threads-pool.ts';
 import { useEffect, useRef } from 'react';
 import L from 'leaflet';
-import { TerrainLayer } from './terrain-layer.ts';
-import {
-  Map2dOrganizedObject,
-  NoitaPetriFileCollection,
-} from '../../noita-map.types.ts';
-import { useThreadsPool } from '../../map-renderer-threads/use-threads-pool.ts';
-import { useMapPane } from '../../hooks/use-map-pane.ts';
+import { zIndexManager } from '../../../../utils/z-index-manager.ts';
 import {
   defaultLayerBufferSettings,
   defaultLayerMiscSettings,
   defaultLayerSize,
   defaultLayerZoomSettings,
 } from '../default-layer-settings.ts';
+import {
+  ChunkInfoCollection,
+  Map2dOrganizedObject,
+} from '../../noita-map.types.ts';
+import { EntityLayer } from './entity-layer.ts';
 import { ChunkRenderableEntitySprite } from '@noita-explorer/map';
-import { zIndexManager } from '../../../../utils/z-index-manager.ts';
 
 interface Props {
-  petriFiles: NoitaPetriFileCollection;
   redrawCounter: number;
-  backgroundEntities:
+  chunkInfos: ChunkInfoCollection;
+  foregroundEntities:
     | Map2dOrganizedObject<ChunkRenderableEntitySprite[]>
     | undefined;
 }
 
-export function NoitaMapTerrainLayerWrapper({
-  petriFiles,
+export const NoitaMapEntityLayerWrapper = ({
   redrawCounter,
-  backgroundEntities,
-}: Props) {
+  chunkInfos,
+  foregroundEntities,
+}: Props) => {
   const map = useMap();
   const pane = useMapPane({
-    name: 'noita-terrain',
-    zIndex: zIndexManager.maps.terrain,
+    name: 'noita-entity',
+    zIndex: zIndexManager.maps.entity,
   });
-  const layerRef = useRef<L.GridLayer | null>(null);
   const threadsPool = useThreadsPool();
+  const layerRef = useRef<L.GridLayer | null>(null);
 
   useEffect(() => {
     if (!threadsPool?.isLoaded) return;
 
     if (!layerRef.current) {
       // @ts-expect-error typescript doesn't know we can pass parameters
-      const gridLayer = new TerrainLayer({
+      const gridLayer = new EntityLayer({
         pane: pane.name,
         ...defaultLayerSize,
         ...defaultLayerZoomSettings,
         ...defaultLayerBufferSettings,
         ...defaultLayerMiscSettings,
 
-        petriFiles,
+        // custom props
         renderPool: threadsPool?.pool,
-        backgroundEntities: backgroundEntities ?? {},
+        chunkInfos,
+        foregroundEntities: foregroundEntities ?? {},
       });
 
-      // Add the layer to the map
       map.addLayer(gridLayer);
       layerRef.current = gridLayer;
     }
@@ -68,11 +68,11 @@ export function NoitaMapTerrainLayerWrapper({
     };
   }, [
     map,
-    petriFiles,
-    pane.name,
     threadsPool?.pool,
     threadsPool?.isLoaded,
-    backgroundEntities,
+    pane.name,
+    foregroundEntities,
+    chunkInfos,
   ]);
 
   useEffect(() => {
@@ -81,4 +81,4 @@ export function NoitaMapTerrainLayerWrapper({
   }, [redrawCounter]);
 
   return null;
-}
+};

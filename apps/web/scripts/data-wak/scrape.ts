@@ -11,7 +11,6 @@ import {
 import { args } from '../utils/process-args';
 import { scrapeMedia } from './scrape-media';
 import { NoitaDataWakScrapeResultPart } from '@noita-explorer/model-noita';
-import { data } from 'react-router-dom';
 
 /**
  * Scrapes the data.wak file.

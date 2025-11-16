@@ -112,6 +112,8 @@ CI_SSG_DISABLED=1
 CI_INTERNET_DISABLED=1
 # used by the map to download assets
 VITE_DATA_WAK_URL=https://storage.noita-explorer.com/data.wak
+# used by the map to get the schemas from: `${VITE_SCHEMA_URL}/${hash}.xml`
+VITE_SCHEMA_URL=https://storage.noita-explorer.com/schemas
 # VITE_ENV is set to "production" in the deployed main branch
 # and is set to "preview" in the deployed non-main branches
 VITE_ENV=development

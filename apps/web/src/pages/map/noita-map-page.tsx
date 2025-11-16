@@ -1,30 +1,48 @@
 import { NoitaMapContainer } from './noita-map-container.tsx';
 import { useDataWakLoader } from './hooks/use-data-wak-loader.ts';
 import 'leaflet-edgebuffer';
-import {
-  BooleanIcon,
-  ProgressBar,
-} from '@noita-explorer/noita-component-library';
+import { BooleanIcon } from '@noita-explorer/noita-component-library';
 import { Flex } from '@noita-explorer/react-utils';
 import { useOrganizeBackgroundImages } from './hooks/use-organize-background-images.ts';
 import { useDataWakService } from '../../services/data-wak/use-data-wak-service.ts';
 import { useOrganizeWorldFiles } from './hooks/use-organize-world-files.ts';
 import { useSettingsStore } from '../../stores/settings.ts';
 import { MapInitialPopup } from './components/map-initial-popup.tsx';
+import { useThreadsPool } from './map-renderer-threads/use-threads-pool.ts';
+import { DataWakLoader } from './components/loaders/data-wak-loader.tsx';
+import { BackgroundsLoader } from './components/loaders/backgrounds-loader.tsx';
+import { PetriFilesLoader } from './components/loaders/petri-files-loader.tsx';
+import { WorkersLoader } from './components/loaders/workers-loader.tsx';
+import { useEntityLoader } from './hooks/use-entity-loader.ts';
+import { EntitiesLoader } from './components/loaders/entities-loader.tsx';
+import { useState } from 'react';
 
 export const NoitaMapPage = () => {
   const { data } = useDataWakService();
   const { settings } = useSettingsStore();
+  const [ignoreEntityError, setIgnoreEntityError] = useState(false);
 
+  const { init: initThreadsPool, isLoaded: isThreadsPoolLoaded } =
+    useThreadsPool();
   const {
     isError: isDataWakError,
     progress: dataWakProgress,
     dataWakBuffer,
-  } = useDataWakLoader();
+  } = useDataWakLoader({
+    onLoaded: (dataWakBuffer) => initThreadsPool(dataWakBuffer),
+  });
+
   const { backgrounds, isLoaded: isBackgroundsLoaded } =
-    useOrganizeBackgroundImages({ dataWakBuffer });
-  const { petriFileCollection, entityFileCollection, mapBounds, chunkInfos } =
+    useOrganizeBackgroundImages();
+  const { petriFileCollection, mapBounds, chunkInfos } =
     useOrganizeWorldFiles();
+  const {
+    total: totalEntityFiles,
+    processed: processedEntityFiles,
+    error: entityError,
+    backgroundEntities,
+    foregroundEntities,
+  } = useEntityLoader();
 
   if (!settings.map.initialPopupSeen) {
     return <MapInitialPopup />;
@@ -39,42 +57,27 @@ export const NoitaMapPage = () => {
     !isBackgroundsLoaded ||
     !mapBounds ||
     !petriFileCollection ||
-    !chunkInfos
+    !chunkInfos ||
+    !isThreadsPoolLoaded ||
+    (totalEntityFiles !== processedEntityFiles && !ignoreEntityError)
   ) {
     return (
-      <Flex column gap={4}>
-        <Flex gap={8}>
-          {dataWakBuffer ? (
-            <>
-              <span>Assets loaded</span>
-              <BooleanIcon value={true} />
-            </>
-          ) : (
-            <Flex gap={10}>
-              <span>Loading game assets...</span>
-              {dataWakProgress !== undefined && (
-                <ProgressBar
-                  progress={dataWakProgress}
-                  barColor='healthBar'
-                  width={250}
-                />
-              )}
-            </Flex>
-          )}
+      <Flex column gap={10}>
+        <Flex gap={8} key='data-wak'>
+          <DataWakLoader
+            progress={dataWakProgress}
+            dataWakBuffer={dataWakBuffer}
+          />
         </Flex>
 
-        <Flex gap={8}>
-          {isBackgroundsLoaded ? (
-            <>
-              <span>Backgrounds loaded</span>
-              <BooleanIcon value={true} />
-            </>
-          ) : (
-            <span>Loading backgrounds...</span>
-          )}
+        <Flex gap={8} key='backgrounds'>
+          <BackgroundsLoader
+            backgrounds={backgrounds}
+            isLoaded={isBackgroundsLoaded}
+          />
         </Flex>
 
-        <Flex gap={8}>
+        <Flex gap={8} key='map-bounds'>
           {mapBounds ? (
             <>
               <span>Map bounds loaded</span>
@@ -84,17 +87,10 @@ export const NoitaMapPage = () => {
             <span>Calculating map bounds...</span>
           )}
         </Flex>
-        <Flex gap={8}>
-          {petriFileCollection ? (
-            <>
-              <span>Petri files loaded</span>
-              <BooleanIcon value={true} />
-            </>
-          ) : (
-            <span>Loading petri files...</span>
-          )}
+        <Flex gap={8} key='petri-files'>
+          <PetriFilesLoader petriFileCollection={petriFileCollection} />
         </Flex>
-        <Flex gap={8}>
+        <Flex gap={8} key='chunk-infos'>
           {chunkInfos ? (
             <>
               <span>Chunk infos loaded</span>
@@ -104,6 +100,17 @@ export const NoitaMapPage = () => {
             <span>Loading chunk infos...</span>
           )}
         </Flex>
+        <Flex gap={8} key='workers'>
+          <WorkersLoader />
+        </Flex>
+        <Flex gap={8} key='entities'>
+          <EntitiesLoader
+            total={totalEntityFiles}
+            processed={processedEntityFiles}
+            error={entityError}
+            onErrorContinueAnyway={() => setIgnoreEntityError(true)}
+          />
+        </Flex>
       </Flex>
     );
   }
@@ -112,11 +119,11 @@ export const NoitaMapPage = () => {
     <NoitaMapContainer
       biomes={data.biomes}
       backgrounds={backgrounds}
-      dataWakBuffer={dataWakBuffer}
       petriFileCollection={petriFileCollection}
-      entityFileCollection={entityFileCollection}
       mapBounds={mapBounds}
       chunkInfos={chunkInfos}
+      backgroundEntities={backgroundEntities}
+      foregroundEntities={foregroundEntities}
     />
   );
 };

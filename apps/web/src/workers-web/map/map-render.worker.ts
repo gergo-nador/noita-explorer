@@ -4,6 +4,8 @@ import {
   renderBiomeTile,
   renderTerrainTile,
   renderBackgroundTile,
+  parseEntityFile,
+  renderEntities,
 } from '@noita-explorer/map';
 import { MapRenderType } from './map-render.types.ts';
 import {
@@ -17,6 +19,7 @@ import {
 import { scrape } from '@noita-explorer/scrapers';
 import { Buffer } from 'buffer';
 import { FileSystemDirectoryAccessDataWakMemory } from '@noita-explorer/file-systems/data-wak-memory-fs';
+import { convertWebTransferableToBuffer } from './map-render.utils.ts';
 
 let dataWakDirectory: FileSystemDirectoryAccess | undefined = undefined;
 let setupData: MapRendererSetupData | undefined = undefined;
@@ -43,20 +46,19 @@ const mapRenderer: MapRenderType = {
       throw new Error('[Worker] data wak not set');
     }
 
-    try {
-      const ctx = offScreenCanvas.getContext('2d', {
-        alpha: true,
-        willReadFrequently: true,
-      });
-      if (!ctx) {
-        throw new Error('OffscreenCanvasRenderingContext2D not supported');
-      }
+    const ctx = offScreenCanvas.getContext('2d', {
+      alpha: true,
+      willReadFrequently: true,
+    });
+    if (!ctx) {
+      throw new Error('OffscreenCanvasRenderingContext2D not supported');
+    }
 
+    try {
       await renderBiomeTile({
         ctx,
-        chunkBorders: props.chunkBorders,
         backgroundItems: props.backgrounds,
-        biomeCoords: props.biomeCoords,
+        biomeCoords: props.tileCoords,
         biomes: setupData.biomes,
         dataWakDirectory,
       });
@@ -70,12 +72,12 @@ const mapRenderer: MapRenderType = {
       throw new Error('[Worker] data wak not set');
     }
 
-    try {
-      const ctx = offScreenCanvas.getContext('2d');
-      if (!ctx) {
-        throw new Error('OffscreenCanvasRenderingContext2D not supported');
-      }
+    const ctx = offScreenCanvas.getContext('2d');
+    if (!ctx) {
+      throw new Error('OffscreenCanvasRenderingContext2D not supported');
+    }
 
+    try {
       const imageData = ctx.getImageData(
         0,
         0,
@@ -83,24 +85,25 @@ const mapRenderer: MapRenderType = {
         offScreenCanvas.height,
       );
 
-      let buffer: Buffer | undefined = undefined;
-      if (petriBuffer instanceof FileSystemFileHandle) {
-        const file = await petriBuffer.getFile();
-        const arrayBuffer = await file.arrayBuffer();
-        buffer = Buffer.from(arrayBuffer);
-      } else {
-        buffer = Buffer.from(petriBuffer);
-      }
+      const buffer = await convertWebTransferableToBuffer(petriBuffer);
 
       const petriContent = await scrape.save00.pngPetriFile({
         pngPetriFile: buffer,
         fastLzCompressor: setupData.fastLzCompressor,
       });
 
+      await renderEntities({
+        imageData,
+        chunkCoordinates: props.tileCoords,
+        entities: props.backgroundEntities,
+        dataWakDirectory: dataWakDirectory,
+        mediaIndex: setupData.mediaIndex,
+      });
+
       renderTerrainTile({
         imageData,
         chunk: petriContent,
-        chunkCoordinates: props.chunkCoordinates,
+        chunkCoordinates: props.tileCoords,
         materials: setupData.materials,
         materialColorCache,
         materialImageCache: setupData.materialColorCache,
@@ -117,12 +120,12 @@ const mapRenderer: MapRenderType = {
       throw new Error('[Worker] data wak not set');
     }
 
-    try {
-      const ctx = offScreenCanvas.getContext('2d');
-      if (!ctx) {
-        throw new Error('OffscreenCanvasRenderingContext2D not supported');
-      }
+    const ctx = offScreenCanvas.getContext('2d');
+    if (!ctx) {
+      throw new Error('OffscreenCanvasRenderingContext2D not supported');
+    }
 
+    try {
       ctx.imageSmoothingEnabled = false;
 
       await renderBackgroundTile({
@@ -133,6 +136,54 @@ const mapRenderer: MapRenderType = {
       });
     } catch (error) {
       console.error('Error during rendering background tile', props, error);
+      throw error;
+    }
+  },
+  async parseEntityFile(props, entityFileBuffer) {
+    if (!dataWakDirectory || !setupData) {
+      throw new Error('[Worker] setup not done');
+    }
+
+    const buffer = await convertWebTransferableToBuffer(entityFileBuffer);
+
+    const entities = await parseEntityFile({
+      fastLzCompressor: setupData.fastLzCompressor,
+      entityBuffer: buffer,
+      schema: props.schema,
+      mediaIndex: setupData.mediaIndex,
+    });
+
+    return entities;
+  },
+  async renderEntityTile(props, offScreenCanvas) {
+    if (!dataWakDirectory || !setupData) {
+      throw new Error('[Worker] setup not done');
+    }
+
+    const ctx = offScreenCanvas.getContext('2d');
+    if (!ctx) {
+      throw new Error('OffscreenCanvasRenderingContext2D not supported');
+    }
+
+    try {
+      const imageData = ctx.getImageData(
+        0,
+        0,
+        offScreenCanvas.width,
+        offScreenCanvas.height,
+      );
+
+      await renderEntities({
+        imageData,
+        chunkCoordinates: props.tileCoords,
+        entities: props.entities,
+        dataWakDirectory: dataWakDirectory,
+        mediaIndex: setupData.mediaIndex,
+      });
+
+      ctx.putImageData(imageData, 0, 0);
+    } catch (error) {
+      console.error('Error during rendering entity tile', props, error);
       throw error;
     }
   },

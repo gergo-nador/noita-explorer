@@ -8,7 +8,12 @@ import {
   createFastLzCompressor,
   FastLZCompressor,
 } from '@noita-explorer/fastlz';
-import { NoitaMaterial, NoitaWakBiomes } from '@noita-explorer/model-noita';
+import {
+  DataWakMediaIndex,
+  NoitaMaterial,
+  NoitaWakBiomes,
+} from '@noita-explorer/model-noita';
+import { convertDataWakFileToImageData } from '@noita-explorer/map';
 
 interface Props {
   dataWakDirectory: FileSystemDirectoryAccess;
@@ -19,6 +24,7 @@ export interface MapRendererSetupData {
   materialColorCache: StringKeyDictionary<ImageData>;
   fastLzCompressor: FastLZCompressor;
   biomes: NoitaWakBiomes;
+  mediaIndex: StringKeyDictionary<DataWakMediaIndex>;
 }
 
 export async function mapRendererSetup({
@@ -42,10 +48,9 @@ export async function mapRendererSetup({
       continue;
     }
 
-    const imageBitmap = await decodeImage({
-      dataWakDirectory,
-      path: material.graphicsImagePath,
-      offscreenCanvas,
+    const file = await dataWakDirectory.getFile(material.graphicsImagePath);
+    const imageBitmap = await convertDataWakFileToImageData({
+      file,
       ctx,
     });
 
@@ -63,42 +68,6 @@ export async function mapRendererSetup({
     materialColorCache,
     fastLzCompressor,
     biomes: noitaDataWak.biomes,
+    mediaIndex: noitaDataWak.mediaIndex,
   };
-}
-
-async function decodeImage({
-  dataWakDirectory,
-  path,
-  offscreenCanvas,
-  ctx,
-}: {
-  dataWakDirectory: FileSystemDirectoryAccess;
-  path: string;
-  offscreenCanvas: OffscreenCanvas;
-  ctx: OffscreenCanvasRenderingContext2D;
-}) {
-  const file = await dataWakDirectory.getFile(path);
-  const fileBuffer = await file.read.asBuffer();
-  const arrayBuffer = fileBuffer.buffer as ArrayBuffer;
-
-  const blob = new Blob([arrayBuffer], { type: 'image/png' });
-  const imageBitmap = await createImageBitmap(blob);
-
-  offscreenCanvas.width = imageBitmap.width;
-  offscreenCanvas.height = imageBitmap.height;
-
-  ctx.clearRect(0, 0, offscreenCanvas.width, offscreenCanvas.height);
-
-  ctx.drawImage(imageBitmap, 0, 0);
-
-  const imageData = ctx.getImageData(
-    0,
-    0,
-    offscreenCanvas.width,
-    offscreenCanvas.height,
-  );
-
-  imageBitmap.close();
-
-  return imageData;
 }
