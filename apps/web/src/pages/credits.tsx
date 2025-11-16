@@ -122,8 +122,8 @@ export const Credits = () => {
       <br />
       <Header title='Sponsor'>
         <div>
-          We would greatly appreciate if you would help us paying the domain
-          name registry bills by donating using the link below.
+          It would be greatly appreciate if you would help with paying the
+          domain name registry bills by donating using the link below.
           <Icon
             src={publicPaths.static.holidays('charm-high-res.png')}
             size={20}
