@@ -20,7 +20,9 @@ import { zIndexManager } from '../../../../utils/z-index-manager.ts';
 interface Props {
   petriFiles: NoitaPetriFileCollection;
   redrawCounter: number;
-  backgroundEntities: Map2dOrganizedObject<ChunkRenderableEntitySprite[]>;
+  backgroundEntities:
+    | Map2dOrganizedObject<ChunkRenderableEntitySprite[]>
+    | undefined;
 }
 
 export function NoitaMapTerrainLayerWrapper({
@@ -50,7 +52,7 @@ export function NoitaMapTerrainLayerWrapper({
 
         petriFiles,
         renderPool: threadsPool?.pool,
-        backgroundEntities,
+        backgroundEntities: backgroundEntities ?? {},
       });
 
       // Add the layer to the map

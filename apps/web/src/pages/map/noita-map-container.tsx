@@ -27,8 +27,12 @@ interface Props {
   petriFileCollection: NoitaPetriFileCollection;
   mapBounds: MapBounds;
   chunkInfos: ChunkInfoCollection;
-  backgroundEntities: Map2dOrganizedObject<ChunkRenderableEntitySprite[]>;
-  foregroundEntities: Map2dOrganizedObject<ChunkRenderableEntitySprite[]>;
+  backgroundEntities:
+    | Map2dOrganizedObject<ChunkRenderableEntitySprite[]>
+    | undefined;
+  foregroundEntities:
+    | Map2dOrganizedObject<ChunkRenderableEntitySprite[]>
+    | undefined;
 }
 
 export function NoitaMapContainer({
@@ -82,11 +86,13 @@ export function NoitaMapContainer({
             redrawCounter={forceRedrawCounter}
             backgroundEntities={backgroundEntities}
           />
-          <NoitaMapEntityLayerWrapper
-            chunkInfos={chunkInfos}
-            redrawCounter={forceRedrawCounter}
-            foregroundEntities={foregroundEntities}
-          />
+          {foregroundEntities && (
+            <NoitaMapEntityLayerWrapper
+              chunkInfos={chunkInfos}
+              redrawCounter={forceRedrawCounter}
+              foregroundEntities={foregroundEntities}
+            />
+          )}
         </>
       )}
       <MapUtilityPanel

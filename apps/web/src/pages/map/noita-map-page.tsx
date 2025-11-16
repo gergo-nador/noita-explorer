@@ -15,10 +15,12 @@ import { PetriFilesLoader } from './components/loaders/petri-files-loader.tsx';
 import { WorkersLoader } from './components/loaders/workers-loader.tsx';
 import { useEntityLoader } from './hooks/use-entity-loader.ts';
 import { EntitiesLoader } from './components/loaders/entities-loader.tsx';
+import { useState } from 'react';
 
 export const NoitaMapPage = () => {
   const { data } = useDataWakService();
   const { settings } = useSettingsStore();
+  const [ignoreEntityError, setIgnoreEntityError] = useState(false);
 
   const { init: initThreadsPool, isLoaded: isThreadsPoolLoaded } =
     useThreadsPool();
@@ -57,10 +59,10 @@ export const NoitaMapPage = () => {
     !petriFileCollection ||
     !chunkInfos ||
     !isThreadsPoolLoaded ||
-    totalEntityFiles !== processedEntityFiles
+    (totalEntityFiles !== processedEntityFiles && !ignoreEntityError)
   ) {
     return (
-      <Flex column gap={4}>
+      <Flex column gap={10}>
         <Flex gap={8} key='data-wak'>
           <DataWakLoader
             progress={dataWakProgress}
@@ -106,14 +108,11 @@ export const NoitaMapPage = () => {
             total={totalEntityFiles}
             processed={processedEntityFiles}
             error={entityError}
+            onErrorContinueAnyway={() => setIgnoreEntityError(true)}
           />
         </Flex>
       </Flex>
     );
-  }
-
-  if (!backgroundEntities || !foregroundEntities) {
-    return <div>Failed to load entities</div>;
   }
 
   return (

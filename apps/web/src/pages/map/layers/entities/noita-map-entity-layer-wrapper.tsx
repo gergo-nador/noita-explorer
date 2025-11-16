@@ -20,7 +20,9 @@ import { ChunkRenderableEntitySprite } from '@noita-explorer/map';
 interface Props {
   redrawCounter: number;
   chunkInfos: ChunkInfoCollection;
-  foregroundEntities: Map2dOrganizedObject<ChunkRenderableEntitySprite[]>;
+  foregroundEntities:
+    | Map2dOrganizedObject<ChunkRenderableEntitySprite[]>
+    | undefined;
 }
 
 export const NoitaMapEntityLayerWrapper = ({
@@ -51,7 +53,7 @@ export const NoitaMapEntityLayerWrapper = ({
         // custom props
         renderPool: threadsPool?.pool,
         chunkInfos,
-        foregroundEntities,
+        foregroundEntities: foregroundEntities ?? {},
       });
 
       map.addLayer(gridLayer);

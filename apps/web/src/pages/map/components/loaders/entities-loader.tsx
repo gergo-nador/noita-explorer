@@ -1,14 +1,25 @@
-import { BooleanIcon } from '@noita-explorer/noita-component-library';
+import { BooleanIcon, Button } from '@noita-explorer/noita-component-library';
 
 interface Props {
   total: number;
   processed: number;
   error?: string;
+  onErrorContinueAnyway: VoidFunction;
 }
 
-export const EntitiesLoader = ({ total, processed, error }: Props) => {
+export const EntitiesLoader = ({
+  total,
+  processed,
+  error,
+  onErrorContinueAnyway,
+}: Props) => {
   if (error) {
-    return <div>Entity load error: {error}</div>;
+    return (
+      <div>
+        <div className='text-danger'>Entity load error: {error}</div>
+        <Button onClick={onErrorContinueAnyway}>Continue anyway</Button>
+      </div>
+    );
   }
 
   if (processed !== total) {
