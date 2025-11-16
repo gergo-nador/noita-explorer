@@ -97,18 +97,18 @@ export const MainPage = () => {
             Current Run
           </Link>
           <Link
-            to={pages.sessions}
-            disabled={save00Status !== 'loaded'}
-            disabledToast='To view sessions you need to set up read permission for the save00 folder.'
-          >
-            Sessions
-          </Link>
-          <Link
             to={pages.map}
             disabled={save00Status !== 'loaded'}
             disabledToast='To view map you need to set up read permission for the save00 folder..'
           >
             Map
+          </Link>
+          <Link
+            to={pages.sessions}
+            disabled={save00Status !== 'loaded'}
+            disabledToast='To view sessions you need to set up read permission for the save00 folder.'
+          >
+            Sessions
           </Link>
           <Link
             to={pages.deathMap}
