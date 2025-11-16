@@ -8,7 +8,7 @@ export function getKeySelectorValue<T>(item: T, keySelector: KeySelector<T>) {
   return item[keySelector];
 }
 
-type OnlyStringKeys<T> = {
+export type OnlyStringKeys<T> = {
   [K in keyof T]: T[K] extends string ? K : never;
 };
 export type KeyStringSelector<T> =
@@ -22,7 +22,7 @@ export function getKeyStringSelectorValue<T>(
   return getKeySelectorValue(item, keySelector) as string;
 }
 
-type OnlyNumberKeys<T> = {
+export type OnlyNumberKeys<T> = {
   [K in keyof T]: T[K] extends number ? K : never;
 };
 export type KeyNumberSelector<T> =
@@ -34,4 +34,19 @@ export function getKeyNumberSelectorValue<T>(
   keySelector: KeyNumberSelector<T>,
 ): number {
   return getKeySelectorValue(item, keySelector as KeySelector<T>) as number;
+}
+
+export type ObjectKey = string | number;
+export type OnlyObjectKeys<T> = {
+  [K in keyof T]: T[K] extends ObjectKey ? K : never;
+};
+export type ObjectKeySelector<T> =
+  | ((item: T) => ObjectKey)
+  | OnlyObjectKeys<T>[keyof T];
+
+export function getObjectKeySelectorValue<T>(
+  item: T,
+  keySelector: ObjectKeySelector<T>,
+): ObjectKey {
+  return getKeySelectorValue(item, keySelector as KeySelector<T>) as ObjectKey;
 }

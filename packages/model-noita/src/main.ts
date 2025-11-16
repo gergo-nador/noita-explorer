@@ -59,6 +59,8 @@ export * from "./scraping/data-wak/noita-scraped-wand-config";
 export * from "./scraping/data-wak-scrape-result/noita-data-wak-scrape-result-part";
 export * from "./scraping/data-wak-scrape-result/noita-data-wak-scrape-result-status";
 export * from "./scraping/data-wak-scrape-result/noita-data-wak-scrape-result";
+export * from "./scraping/save00/world/area/area-bin-entity";
+export * from "./scraping/save00/world/area/area-bin-file-format";
 export * from "./scraping/save00/world/entity/chunk-entity-component";
 export * from "./scraping/save00/world/entity/chunk-entity";
 export * from "./scraping/save00/world/png-petri/chunk-file-format";

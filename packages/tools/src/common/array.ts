@@ -2,8 +2,11 @@ import { StringKeyDictionary } from '@noita-explorer/model';
 import {
   getKeyNumberSelectorValue,
   getKeyStringSelectorValue,
+  getObjectKeySelectorValue,
   KeyNumberSelector,
   KeyStringSelector,
+  ObjectKey,
+  ObjectKeySelector,
 } from '../internal/key-selector.ts';
 
 const groupBy = <T>(items: T[], by: KeyStringSelector<T>) => {
@@ -98,12 +101,12 @@ const toggleItemInList = <T>(list: T[], item: T) => {
 
 const asDict = <T>(
   items: T[],
-  keySelector: KeyStringSelector<T>,
-): StringKeyDictionary<T> => {
+  keySelector: ObjectKeySelector<T>,
+): Record<ObjectKey, T> => {
   const dict: StringKeyDictionary<T> = {};
 
   for (const item of items) {
-    const key = getKeyStringSelectorValue(item, keySelector);
+    const key = getObjectKeySelectorValue(item, keySelector);
     dict[key] = item;
   }
 
