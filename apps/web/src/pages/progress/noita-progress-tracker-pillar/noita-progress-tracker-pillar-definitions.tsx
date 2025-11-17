@@ -7,7 +7,7 @@ import { ObtainPerksAchievement } from './achievements/obtain-perks-achievement.
 import { HaloTransformationAchievement } from './achievements/halo-transformation-achievement.tsx';
 import { useDataWakService } from '../../../services/data-wak/use-data-wak-service.ts';
 
-interface NoitaPillar {
+export interface NoitaPillar {
   img: string;
   title?: string;
   flag?: string;
@@ -424,7 +424,7 @@ export const useNoitaProgressTrackerPillarDefinitions = (): NoitaPillar[][] => {
     { img: 'pillar_part_fade' },
   ];
 
-  return [pillar1, pillar2, pillar3, pillar4, pillar5, pillar6].map((pillar) =>
-    [...pillar, ...pillarBottom].reverse(),
+  return [pillar1, pillar2, pillar3, pillar4, pillar5, pillar6].map(
+    (pillar) => [...pillar, ...pillarBottom],
   );
 };

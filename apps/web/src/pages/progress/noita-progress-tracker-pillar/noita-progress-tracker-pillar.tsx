@@ -1,97 +1,26 @@
 import { useNoitaProgressTrackerPillarDefinitions } from './noita-progress-tracker-pillar-definitions.tsx';
-import { enumerateHelpers } from '@noita-explorer/tools';
-import { useSave00Store } from '../../../stores/save00.ts';
-import { NoitaTooltipWrapper } from '@noita-explorer/noita-component-library';
 import { Flex } from '@noita-explorer/react-utils';
-import { useNoitaActionsStore } from '../../../stores/actions.ts';
+import { NoitaProgressTrackerPillarItem } from './noita-progress-tracker-pillar-item.tsx';
 
 export const NoitaProgressTrackerPillar = () => {
-  const { flags, status } = useSave00Store();
-  const { actionUtils } = useNoitaActionsStore();
   const pillarColumns = useNoitaProgressTrackerPillarDefinitions();
-  const longestPillar = pillarColumns.reduce(
-    (tallest, current) => (tallest > current.length ? tallest : current.length),
-    0,
-  );
 
   return (
-    <div style={{ padding: 10 }}>
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: `repeat(${pillarColumns.length}, 1fr)`,
-        }}
-      >
-        {enumerateHelpers.rangeTo(longestPillar + 1).map((row) => {
-          return pillarColumns.map((column, columnIndex) => {
-            const uniquePillarId = row * longestPillar + columnIndex;
-            const index = longestPillar - row;
-            const pillar = column[index];
-
-            if (!pillar) {
-              return <div key={uniquePillarId}></div>;
-            }
-
-            const shouldBeColored =
-              !flags || !pillar.flag || flags?.has(pillar.flag ?? '');
-
-            const isOnActionUnlockedList = pillar.flag
-              ? actionUtils.flagUnlock.isOnList(pillar.flag)
-              : false;
-
-            const onImageClick = () => {
-              if (!pillar.flag) return;
-              if (status !== 'loaded') return;
-              if (flags?.has(pillar.flag)) return;
-
-              const existingAction = actionUtils.flagUnlock.get(pillar.flag);
-
-              // remove action
-              if (existingAction) {
-                actionUtils.removeAction(existingAction);
-                return;
-              }
-
-              actionUtils.flagUnlock.create(
-                pillar.flag,
-                'Unlock achievement pillar ' + pillar.title,
-              );
-            };
-
-            const imagePath = `/images/data-wak/achievement-pillars/${pillar.img}.png`;
-
-            return (
-              <NoitaTooltipWrapper
-                key={uniquePillarId}
-                placement='right'
-                content={pillar.info}
-              >
-                <Flex height={140}>
-                  <img
-                    src={imagePath}
-                    alt={pillar.title}
-                    title={pillar.title}
-                    height={140}
-                    style={{
-                      imageRendering: 'pixelated',
-                      filter: isOnActionUnlockedList
-                        ? 'brightness(1.5)'
-                        : shouldBeColored
-                          ? ''
-                          : 'grayscale()',
-                      cursor:
-                        isOnActionUnlockedList || !shouldBeColored
-                          ? 'pointer'
-                          : 'initial',
-                    }}
-                    onClick={onImageClick}
-                  />
-                </Flex>
-              </NoitaTooltipWrapper>
-            );
-          });
+    <Flex justify='center' style={{ padding: 10 }}>
+      <Flex justify='space-around' width='100%' style={{ maxWidth: '1200px' }}>
+        {pillarColumns.map((pillarColumn, columnIndex) => {
+          return (
+            <Flex column justify='end' key={String(columnIndex)}>
+              {pillarColumn.map((pillar, pillarIndex) => (
+                <NoitaProgressTrackerPillarItem
+                  pillar={pillar}
+                  key={`${pillar.title}-${pillarIndex}-${columnIndex}`}
+                />
+              ))}
+            </Flex>
+          );
         })}
-      </div>
-    </div>
+      </Flex>
+    </Flex>
   );
 };
