@@ -25,7 +25,7 @@ import { scrapeWorldPixelScenes } from './save00/world/world-pixel-scenes/scrape
 import { scrapeEntityFile } from './save00/world/entity/scrape-entity-file.ts';
 import { scrapePngPetriFile } from './save00/world/png-petri/scrape-png-petri-file.ts';
 import { scrapeBiomes } from './datawak/biomes/scrape-biomes.ts';
-import { scrapeDataWakMediaIndex } from './datawak/scrape-data-wak-media-index.ts';
+import { scrapeDataWakMediaIndex } from './datawak/media/scrape-data-wak-media-index.ts';
 import { scrapeAreaFile } from './save00/world/area/scrape-area-file.ts';
 
 export type {

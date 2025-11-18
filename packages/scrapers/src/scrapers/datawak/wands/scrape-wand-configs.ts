@@ -40,7 +40,7 @@ const scrapeWandConfigsXml = async ({
   const wands: NoitaScrapedWandConfig[] = [];
 
   for await (const file of fileEnumerator) {
-    // basic checks to see whether the file is a wand fiel
+    // basic checks to see whether the file is a wand file
     {
       const isXmlFile = file.getName().endsWith('.xml');
       if (!isXmlFile) continue;
@@ -65,7 +65,7 @@ const scrapeWandConfigsXml = async ({
       file: file,
     });
 
-    const xml = mergeResult.xml;
+    const xml = mergeResult.entityXml;
 
     const abilityComponent = xml.findNthTag('AbilityComponent');
     if (!abilityComponent) continue;

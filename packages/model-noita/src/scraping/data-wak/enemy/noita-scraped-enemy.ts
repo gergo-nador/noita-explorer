@@ -1,11 +1,11 @@
 import {
   NoitaScrapedPhysicsImageShapeComponent,
   NoitaScrapedSprite,
-} from './noita-scraped-sprite.ts';
+} from '../media/noita-scraped-sprite.ts';
 import {
   NoitaEnemy,
   NoitaEnemyVariant,
-} from '../../common/enemy/noita-enemy.ts';
+} from '../../../common/enemy/noita-enemy.ts';
 
 export type NoitaScrapedEnemy = Omit<NoitaEnemy, 'media' | 'variants'> & {
   imageBase64: string;

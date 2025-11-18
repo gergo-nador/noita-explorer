@@ -8,6 +8,7 @@ import {
   XmlWrapperType,
 } from '@noita-explorer/tools/xml';
 import { joinNoitaEntityTags, splitNoitaEntityTags } from './tags.ts';
+import { arrayHelpers } from '@noita-explorer/tools';
 
 interface Props {
   file: FileSystemFileAccess;
@@ -72,18 +73,16 @@ const mergeXmlBaseFilesInternal = async ({
         filePathsTraversed: filePathsTraversed,
       });
 
-      const baseXml = overrideBaseXml({
-        baseFileXml: baseFileXml.xml,
+      const baseFileXmlEntity = baseFileXml.entityXml;
+      const entityXml = overrideBaseXml({
+        baseEntityTag: baseFileXmlEntity,
         baseTag: baseTag,
         mainEntityTag: rootEntity,
       });
 
       baseTag.remove();
 
-      const baseXmlEntity = baseXml.findNthTag('Entity');
-      if (!baseXmlEntity) continue;
-
-      const baseXmlChildren = baseXmlEntity.getAllChildren();
+      const baseXmlChildren = entityXml.getAllChildren();
 
       for (const [name, children] of Object.entries(baseXmlChildren)) {
         for (let i = 0; i < children.length; i++) {
@@ -93,27 +92,22 @@ const mergeXmlBaseFilesInternal = async ({
     }
   }
 
-  return { xml: xmlWrapper, filePathsTraversed };
+  return { entityXml: rootEntity, filePathsTraversed };
 };
 
 const overrideBaseXml = ({
-  baseFileXml,
+  baseEntityTag,
   baseTag,
   mainEntityTag,
 }: {
-  baseFileXml: XmlWrapperType;
+  baseEntityTag: XmlWrapperType;
   baseTag: XmlWrapperType;
   mainEntityTag: XmlWrapperType;
 }): XmlWrapperType => {
-  const baseFileXmlEntity = baseFileXml.findNthTag('Entity');
-  if (!baseFileXmlEntity) {
-    throw new Error(`Base file does not contain Entity tag`);
-  }
-
-  overrideXmlChildren({ xmlFrom: baseTag, xmlTo: baseFileXmlEntity });
+  overrideXmlChildren({ xmlFrom: baseTag, xmlTo: baseEntityTag });
 
   // Copy Entity tags
-  const baseEntityTags = baseFileXmlEntity?.getAttribute('tags')?.asText();
+  const baseEntityTags = baseEntityTag?.getAttribute('tags')?.asText();
   if (baseEntityTags) {
     const mainEntityTags = mainEntityTag.getAttribute('tags')?.asText();
     if (!mainEntityTags) {
@@ -124,13 +118,13 @@ const overrideBaseXml = ({
         ...splitNoitaEntityTags(mainEntityTags),
       ];
 
-      const uniqueTags = [...new Set(allTags)];
+      const uniqueTags = arrayHelpers.unique(allTags);
       const newTags = joinNoitaEntityTags(uniqueTags);
       mainEntityTag.setAttribute('tags', newTags);
     }
   }
 
-  return baseFileXml;
+  return baseEntityTag;
 };
 
 const overrideXmlChildren = ({

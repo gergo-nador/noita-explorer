@@ -193,10 +193,9 @@ const scrapeEnemyMain = async ({
     dataWakParentDirectoryApi: dataWakParentDirectoryApi,
   });
 
-  const xml = enemyXml.xml;
   enemy.debug.fileHierarchy = enemyXml.filePathsTraversed;
 
-  const entityTag = xml.findNthTag('Entity');
+  const entityTag = enemyXml.entityXml;
   if (entityTag === undefined) {
     return undefined;
   }
