@@ -5,6 +5,7 @@ import {
 import { EntityMediaStructure } from '@noita-explorer/model-noita';
 import { parseXml, XmlWrapper } from '@noita-explorer/tools/xml';
 import { mergeXmlBaseFiles } from '../../common/merge-xml-base-files.ts';
+import { scrapeEntityMediaXml } from './scrape-entity-media-xml.ts';
 
 interface Props {
   file: FileSystemFileAccess;
@@ -24,5 +25,15 @@ export async function scrapeEntityMediaFile({
   const rootEntity = xml.getChild('Entity');
   if (!rootEntity) return;
 
-  await mergeXmlBaseFiles({ file, dataWakParentDirectoryApi });
+  const { entityXml } = await mergeXmlBaseFiles({
+    file,
+    dataWakParentDirectoryApi,
+  });
+
+  const entityMediaStructure = await scrapeEntityMediaXml({
+    xml: entityXml,
+    dataWakParentDirectoryApi,
+  });
+
+  return entityMediaStructure;
 }

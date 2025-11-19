@@ -21,6 +21,8 @@ interface Props {
  *
  * This utility function traverses through the <Base> tag hierarchy, and
  * assembles a single XML declaration.
+ *
+ * Merges child Entity tags as well.
  * @param file
  * @param dataWakParentDirectoryApi
  */
@@ -36,10 +38,12 @@ export const mergeXmlBaseFiles = async ({
 
 const mergeXmlBaseFilesInternal = async ({
   file,
+  entityXmlTag,
   dataWakParentDirectoryApi,
   filePathsTraversed,
 }: {
   file: FileSystemFileAccess;
+  entityXmlTag?: XmlWrapperType;
   dataWakParentDirectoryApi: FileSystemDirectoryAccess;
   filePathsTraversed?: string[];
 }) => {
@@ -50,16 +54,18 @@ const mergeXmlBaseFilesInternal = async ({
     .substring(dataWakParentDirectoryApi.getFullPath().length);
   filePathsTraversed.push(filePath);
 
-  const xmlText = await file.read.asText();
-  const xmlObj = await parseXml(xmlText);
-  const xmlWrapper = XmlWrapper(xmlObj);
+  if (!entityXmlTag) {
+    const xmlText = await file.read.asText();
+    const xmlObj = await parseXml(xmlText);
+    const xmlWrapper = XmlWrapper(xmlObj);
 
-  const rootEntity = xmlWrapper.findNthTag('Entity');
-  if (!rootEntity) {
-    throw new Error('rootEntity is undefined');
+    entityXmlTag = xmlWrapper.findNthTag('Entity');
+    if (!entityXmlTag) {
+      throw new Error('rootEntity is undefined');
+    }
   }
 
-  const children = rootEntity.getAllChildren();
+  const children = entityXmlTag.getAllChildren();
 
   if ('Base' in children) {
     const baseTags = children['Base'];
@@ -74,25 +80,40 @@ const mergeXmlBaseFilesInternal = async ({
       });
 
       const baseFileXmlEntity = baseFileXml.entityXml;
-      const entityXml = overrideBaseXml({
+      const overriddenXml = overrideBaseXml({
         baseEntityTag: baseFileXmlEntity,
         baseTag: baseTag,
-        mainEntityTag: rootEntity,
+        mainEntityTag: entityXmlTag,
       });
 
       baseTag.remove();
 
-      const baseXmlChildren = entityXml.getAllChildren();
+      const baseXmlChildren = overriddenXml.getAllChildren();
 
       for (const [name, children] of Object.entries(baseXmlChildren)) {
         for (let i = 0; i < children.length; i++) {
-          rootEntity.addExistingChildNode(name, children[i], i);
+          entityXmlTag.addExistingChildNode(name, children[i], i);
         }
       }
     }
   }
 
-  return { entityXml: rootEntity, filePathsTraversed };
+  if ('Entity' in children) {
+    const childEntities = children['Entity'];
+    for (const entity of childEntities) {
+      await mergeXmlBaseFilesInternal({
+        file,
+        entityXmlTag: entity,
+        dataWakParentDirectoryApi,
+        filePathsTraversed: filePathsTraversed,
+      });
+    }
+  }
+
+  return {
+    entityXml: entityXmlTag,
+    filePathsTraversed: arrayHelpers.unique(filePathsTraversed),
+  };
 };
 
 const overrideBaseXml = ({
